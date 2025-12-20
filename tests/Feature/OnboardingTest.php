@@ -10,6 +10,7 @@ uses(RefreshDatabase::class);
 
 test('allows user to complete onboarding without password', function () {
     $gender = Gender::MALE->value;
+
     post('/api/v2/onboarding', [
         'email' => $email = "test-{$gender}@example.com",
         'name' => 'Test User',
@@ -28,6 +29,7 @@ test('allows user to complete onboarding without password', function () {
     assertDatabaseHas('users', [
         'email' => $email,
     ]);
+
     assertDatabaseHas('user_profiles', [
         'weight_kg' => $weight,
         'height_cm' => $height,

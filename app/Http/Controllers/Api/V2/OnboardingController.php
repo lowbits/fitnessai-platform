@@ -2,6 +2,13 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Enums\ActivityLevel;
+use App\Enums\BodyGoal;
+use App\Enums\DietType;
+use App\Enums\Gender;
+use App\Enums\SkillLevel;
+use App\Enums\TrainingPlace;
+use App\Events\OnboardingCompleted;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -9,12 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Enum;
-use App\Enums\Gender;
-use App\Enums\BodyGoal;
-use App\Enums\SkillLevel;
-use App\Enums\ActivityLevel;
-use App\Enums\TrainingPlace;
-use App\Enums\DietType;
 
 class OnboardingController extends Controller
 {
@@ -68,7 +69,7 @@ class OnboardingController extends Controller
             $plan = $user->plans()->create([
                 'plan_name' => ucfirst($validated['body_goal']) . ' Plan',
                 'start_date' => now(),
-                'end_date' => now()->addDays(7),
+                'end_date' => now()->addDays(3),
                 'daily_calories' => $dailyCalories,
                 'daily_protein_g' => $macros['protein_g'],
                 'daily_carbs_g' => $macros['carbs_g'],
@@ -84,6 +85,9 @@ class OnboardingController extends Controller
                 'has_password' => isset($validated['password']),
             ];
         });
+
+        // Fire event to trigger meal plan generation
+        OnboardingCompleted::dispatch($result['user'], $result['plan']);
 
         // Build response
         $response = [

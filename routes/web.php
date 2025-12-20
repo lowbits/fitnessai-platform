@@ -18,7 +18,9 @@ Route::get('dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::get('/api/v2/me', function () {
-    $user = User::with(['profile', 'plans'])->first();
+    $user = User::with(['profile', 'plans'])->latest()->first();
+
+    Log::debug("Returning user with id $user->id...");
 
     if (!$user) {
         return response()->json(['error' => 'No user found in database'], 404);
@@ -98,17 +100,29 @@ Route::get('/api/v2/me', function () {
 });
 
 Route::get('/api/v2/plan/day/{date}', function ($date) {
-    log::info("Request with date $date...");
+    Log::info("Request for meal plan with date $date...");
+
+    // Get first user with active plan (TODO: use auth()->user())
+    $user = User::with(['profile', 'plans'])->latest()->first();
+
+    if (!$user) {
+        return response()->json(['error' => 'No user found'], 404);
+    }
+
+    $plan = $user->plans()->where('status', 'active')->first();
+
+    if (!$plan) {
+        return response()->json(['error' => 'No active plan found'], 404);
+    }
 
     // Parse the date
     $requestDate = Carbon::parse($date);
 
-    // Plan configuration
-    $planStartDate = Carbon::parse('2025-12-18');
-    $dayOfPlan = $planStartDate->diffInDays($requestDate) + 1;
+    // Calculate day number based on plan start date
+    $dayOfPlan = $plan->start_date->diffInDays($requestDate) + 1;
 
-    // Check if locked (free users only get first 14 days)
-    $userSubscription = 'free'; // TODO: Get from auth()->user()
+    // Check if locked (free users only get first 4 days)
+    $userSubscription = 'free'; // TODO: Get from auth()->user()->subscription
     $maxFreeDays = 4;
     $isLocked = $dayOfPlan > $maxFreeDays;
 
@@ -136,278 +150,140 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
         ], 403);
     }
 
-    // Calculate which day of week (0 = Monday, 6 = Sunday)
-    $dayOfWeek = $requestDate->dayOfWeekIso - 1; // 0-6
+    // Get meal plan for this day
+    $mealPlan = \App\Models\MealPlan::with('meals')
+        ->where('plan_id', $plan->id)
+        ->where('day_number', $dayOfPlan)
+        ->first();
 
-    // Meal rotation (7-day cycle)
-    $mealCycle = [
-        // Monday
-        [
-            'breakfast' => ['name' => 'Protein Oatmeal', 'image' => 'breakfast', 'calories' => 520, 'protein' => 35, 'carbs' => 65, 'fat' => 12],
-            'lunch' => ['name' => 'Grilled Chicken Bowl', 'image' => 'lunch', 'calories' => 650, 'protein' => 55, 'carbs' => 70, 'fat' => 18],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Salmon & Sweet Potato', 'image' => 'dinner', 'calories' => 680, 'protein' => 48, 'carbs' => 75, 'fat' => 22],
-        ],
-        // Tuesday
-        [
-            'breakfast' => ['name' => 'Greek Yogurt Parfait', 'image' => 'breakfast', 'calories' => 480, 'protein' => 32, 'carbs' => 58, 'fat' => 14],
-            'lunch' => ['name' => 'Turkey Wrap', 'image' => 'lunch', 'calories' => 620, 'protein' => 48, 'carbs' => 68, 'fat' => 16],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Beef Stir Fry', 'image' => 'dinner_alt', 'calories' => 720, 'protein' => 52, 'carbs' => 78, 'fat' => 24],
-        ],
-        // Wednesday
-        [
-            'breakfast' => ['name' => 'Scrambled Eggs & Toast', 'image' => 'breakfast', 'calories' => 510, 'protein' => 30, 'carbs' => 62, 'fat' => 16],
-            'lunch' => ['name' => 'Tuna Salad', 'image' => 'lunch', 'calories' => 580, 'protein' => 45, 'carbs' => 55, 'fat' => 18],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Chicken Pasta', 'image' => 'dinner_alt', 'calories' => 740, 'protein' => 50, 'carbs' => 85, 'fat' => 20],
-        ],
-        // Thursday
-        [
-            'breakfast' => ['name' => 'Protein Pancakes', 'image' => 'breakfast', 'calories' => 500, 'protein' => 33, 'carbs' => 60, 'fat' => 14],
-            'lunch' => ['name' => 'Chicken Caesar Salad', 'image' => 'lunch', 'calories' => 630, 'protein' => 50, 'carbs' => 52, 'fat' => 22],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Grilled Fish Tacos', 'image' => 'breakfast', 'calories' => 690, 'protein' => 46, 'carbs' => 72, 'fat' => 20],
-        ],
-        // Friday
-        [
-            'breakfast' => ['name' => 'Avocado Toast & Eggs', 'image' => 'breakfast', 'calories' => 530, 'protein' => 28, 'carbs' => 58, 'fat' => 22],
-            'lunch' => ['name' => 'Quinoa Bowl', 'image' => 'breakfast', 'calories' => 600, 'protein' => 42, 'carbs' => 72, 'fat' => 16],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Steak & Veggies', 'image' => 'dinner', 'calories' => 750, 'protein' => 55, 'carbs' => 68, 'fat' => 26],
-        ],
-        // Saturday
-        [
-            'breakfast' => ['name' => 'Breakfast Burrito', 'image' => 'breakfast_alt', 'calories' => 550, 'protein' => 35, 'carbs' => 65, 'fat' => 18],
-            'lunch' => ['name' => 'Poke Bowl', 'image' => 'lunch_alt', 'calories' => 620, 'protein' => 48, 'carbs' => 70, 'fat' => 16],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack_alt', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'BBQ Chicken', 'image' => 'dinner_alt', 'calories' => 700, 'protein' => 52, 'carbs' => 74, 'fat' => 20],
-        ],
-        // Sunday
-        [
-            'breakfast' => ['name' => 'Protein French Toast', 'image' => 'breakfast', 'calories' => 520, 'protein' => 32, 'carbs' => 68, 'fat' => 14],
-            'lunch' => ['name' => 'Mediterranean Bowl', 'image' => 'lunch', 'calories' => 640, 'protein' => 45, 'carbs' => 75, 'fat' => 18],
-            'snack' => ['name' => 'Schoko-Mandel-Proteinballs', 'image' => 'snack', 'calories' => 120, 'protein' => 12, 'carbs' => 45, 'fat' => 12],
-            'dinner' => ['name' => 'Salmon Teriyaki', 'image' => 'dinner', 'calories' => 680, 'protein' => 50, 'carbs' => 72, 'fat' => 20],
-        ],
-    ];
-
-    // Workout split (7-day cycle: Upper/Rest/Lower/Rest/Push/Rest/Pull)
-    $workoutSplit = [
-        ['name' => 'Upper Body Strength', 'duration' => 45, 'exercises' => 8],
-        null, // Rest
-        ['name' => 'Lower Body Power', 'duration' => 50, 'exercises' => 7],
-        null, // Rest
-        ['name' => 'Push Day', 'duration' => 45, 'exercises' => 8],
-        null, // Rest
-        ['name' => 'Pull Day', 'duration' => 45, 'exercises' => 8],
-    ];
-
-    $todayMeals = $mealCycle[$dayOfWeek];
-
-    Log::debug("TODAY MEALS", $todayMeals);
-    $todayWorkout = $workoutSplit[$dayOfWeek];
-
-    // Format meals
-    $meals = [];
-    Log::debug("Day of playn $dayOfPlan...");
-    foreach (['breakfast', 'lunch', 'snack', 'dinner'] as $type) {
-        $meal = $todayMeals[$type];
-        $meals[] = [
-            'id' => 'meal_' . $dayOfPlan . '_' . $type,
-            'name' => $meal['name'],
-            'type' => ucfirst($type),
-            'image' => $meal['image'],
-            'calories' => $meal['calories'],
-            'protein_g' => $meal['protein'],
-            'carbs_g' => $meal['carbs'],
-            'fat_g' => $meal['fat'],
-        ];
+    // If no meal plan found or still pending/failed, show message
+    if (!$mealPlan) {
+        return response()->json([
+            'plan_id' => $plan->id,
+            'plan_day' => $dayOfPlan,
+            'total_days' => 28,
+            'date' => $requestDate->toDateString(),
+            'day_name' => $requestDate->format('l'),
+            'locked' => false,
+            'status' => 'not_generated',
+            'message' => 'Meal plan for this day has not been generated yet. Please check back soon.',
+            'meals' => [],
+            'workout' => null,
+        ]);
     }
 
-    // Format workout
+    if ($mealPlan->status === 'pending') {
+        return response()->json([
+            'plan_id' => $plan->id,
+            'plan_day' => $dayOfPlan,
+            'total_days' => 28,
+            'date' => $requestDate->toDateString(),
+            'day_name' => $requestDate->format('l'),
+            'locked' => false,
+            'status' => 'generating',
+            'message' => 'Your meal plan is being generated. This may take a few moments.',
+            'meals' => [],
+            'workout' => null,
+        ]);
+    }
+
+    if ($mealPlan->status === 'failed') {
+        return response()->json([
+            'plan_id' => $plan->id,
+            'plan_day' => $dayOfPlan,
+            'total_days' => 28,
+            'date' => $requestDate->toDateString(),
+            'day_name' => $requestDate->format('l'),
+            'locked' => false,
+            'status' => 'failed',
+            'message' => 'Failed to generate meal plan. Please contact support.',
+            'meals' => [],
+            'workout' => null,
+        ], 500);
+    }
+
+    // Format meals from database
+    $meals = $mealPlan->meals->map(function ($meal) {
+        return [
+            'id' => $meal->id,
+            'name' => $meal->name,
+            'type' => ucfirst($meal->type),
+            'image' => $meal->image ?? $meal->type, // Fallback to type if no image
+            'calories' => $meal->calories,
+            'protein_g' => $meal->protein_g,
+            'carbs_g' => $meal->carbs_g,
+            'fat_g' => $meal->fat_g,
+        ];
+    })->values()->all();
+
+    // TODO: Add workout data from database when workout generation is implemented
     $workout = null;
-    if ($todayWorkout !== null) {
-        $workout = [
-            'id' => 'workout_' . $dayOfPlan,
-            'name' => $todayWorkout['name'],
-            'type' => 'strength',
-            'duration_minutes' => $todayWorkout['duration'],
-            'exercises_count' => $todayWorkout['exercises'],
-            'difficulty' => 'intermediate',
-        ];
-    }
 
     return response()->json([
-        'plan_id' => 'plan_' . uniqid(),
+        'plan_id' => $plan->id,
         'plan_day' => $dayOfPlan,
         'total_days' => 28,
         'date' => $requestDate->toDateString(),
         'day_name' => $requestDate->format('l'),
         'locked' => false,
+        'status' => 'generated',
 
         'meals' => $meals,
         'workout' => $workout,
 
+        'daily_totals' => [
+            'calories' => $mealPlan->total_calories,
+            'protein_g' => $mealPlan->total_protein_g,
+            'carbs_g' => $mealPlan->total_carbs_g,
+            'fat_g' => $mealPlan->total_fat_g,
+        ],
+
         'stats' => [
-            'days_completed' => min($dayOfPlan - 1, 2),
-            'workouts_completed' => 3,
-            'meals_logged' => 12,
-            'streak' => 2,
+            'days_completed' => max(0, $plan->current_day - 1),
+            'workouts_completed' => 0, // TODO: Implement workout tracking
+            'meals_logged' => 0, // TODO: Implement meal logging
+            'streak' => 0, // TODO: Implement streak tracking
         ],
     ]);
 });
 
 
 Route::get('/api/v2/meals/{mealId}', function ($mealId) {
-    // Parse meal ID to extract info (format: meal_3_breakfast)
-    // For now, return mockup data
+    // Get meal from database
+    $meal = \App\Models\Meal::find($mealId);
 
-    $meals = [
-        'meal_3_breakfast' => [
-            'id' => 'meal_3_breakfast',
-            'name' => 'Scrambled Eggs & Toast',
-            'type' => 'Breakfast',
-            'image' => 'breakfast',
-            'description' => 'High-protein breakfast with whole grain toast, perfect for starting your day with sustained energy.',
+    if (!$meal) {
+        return response()->json(['error' => 'Meal not found'], 404);
+    }
 
-            'nutrition' => [
-                'calories' => 510,
-                'protein_g' => 30,
-                'carbs_g' => 62,
-                'fat_g' => 16,
-                'fiber_g' => 8,
-                'sugar_g' => 6,
-            ],
+    return response()->json([
+        'id' => $meal->id,
+        'name' => $meal->name,
+        'type' => ucfirst($meal->type),
+        'image' => $meal->image ?? $meal->type,
+        'description' => $meal->description,
 
-            'ingredients' => [
-                ['name' => 'Eggs (large)', 'amount' => '3', 'unit' => 'pcs'],
-                ['name' => 'Whole grain bread', 'amount' => '2', 'unit' => 'slices'],
-                ['name' => 'Butter', 'amount' => '1', 'unit' => 'tbsp'],
-                ['name' => 'Milk', 'amount' => '50', 'unit' => 'ml'],
-                ['name' => 'Cherry tomatoes', 'amount' => '100', 'unit' => 'g'],
-                ['name' => 'Fresh spinach', 'amount' => '50', 'unit' => 'g'],
-                ['name' => 'Salt & pepper', 'amount' => 'to taste', 'unit' => ''],
-            ],
-
-            'instructions' => [
-                'Toast the whole grain bread until golden brown.',
-                'Crack eggs into a bowl, add milk, salt, and pepper. Whisk well.',
-                'Heat butter in a non-stick pan over medium heat.',
-                'Add spinach and cook until wilted, about 1 minute.',
-                'Pour in egg mixture and gently scramble for 2-3 minutes.',
-                'Serve scrambled eggs on toast with cherry tomatoes on the side.',
-            ],
-
-            'prep_time_minutes' => 5,
-            'cook_time_minutes' => 10,
-            'total_time_minutes' => 15,
-            'difficulty' => 'Easy',
-            'servings' => 1,
-
-            'tags' => ['High-Protein', 'Quick', 'Vegetarian'],
-            'allergens' => ['Eggs', 'Dairy', 'Gluten'],
+        'nutrition' => [
+            'calories' => $meal->calories,
+            'protein_g' => $meal->protein_g,
+            'carbs_g' => $meal->carbs_g,
+            'fat_g' => $meal->fat_g,
+            'fiber_g' => $meal->fiber_g,
+            'sugar_g' => $meal->sugar_g,
         ],
 
-        'meal_3_lunch' => [
-            'id' => 'meal_3_lunch',
-            'name' => 'Tuna Salad',
-            'type' => 'Lunch',
-            'image' => 'lunch',
-            'description' => 'Light and refreshing tuna salad packed with protein and healthy fats.',
+        'ingredients' => $meal->ingredients ?? [],
+        'instructions' => $meal->instructions ?? [],
 
-            'nutrition' => [
-                'calories' => 580,
-                'protein_g' => 45,
-                'carbs_g' => 55,
-                'fat_g' => 18,
-                'fiber_g' => 12,
-                'sugar_g' => 8,
-            ],
+        'prep_time_minutes' => $meal->prep_time_minutes,
+        'cook_time_minutes' => $meal->cook_time_minutes,
+        'total_time_minutes' => ($meal->prep_time_minutes ?? 0) + ($meal->cook_time_minutes ?? 0),
+        'difficulty' => $meal->difficulty ?? 'Medium',
+        'servings' => $meal->servings ?? 1,
 
-            'ingredients' => [
-                ['name' => 'Canned tuna (in water)', 'amount' => '200', 'unit' => 'g'],
-                ['name' => 'Mixed salad greens', 'amount' => '150', 'unit' => 'g'],
-                ['name' => 'Quinoa (cooked)', 'amount' => '100', 'unit' => 'g'],
-                ['name' => 'Cherry tomatoes', 'amount' => '100', 'unit' => 'g'],
-                ['name' => 'Cucumber', 'amount' => '100', 'unit' => 'g'],
-                ['name' => 'Red onion', 'amount' => '30', 'unit' => 'g'],
-                ['name' => 'Olive oil', 'amount' => '1', 'unit' => 'tbsp'],
-                ['name' => 'Lemon juice', 'amount' => '2', 'unit' => 'tbsp'],
-                ['name' => 'Salt & pepper', 'amount' => 'to taste', 'unit' => ''],
-            ],
-
-            'instructions' => [
-                'Drain the tuna and place in a large bowl.',
-                'Add cooked quinoa to the bowl.',
-                'Chop cherry tomatoes, cucumber, and red onion.',
-                'Add all vegetables to the bowl with salad greens.',
-                'Drizzle with olive oil and lemon juice.',
-                'Season with salt and pepper, toss well and serve.',
-            ],
-
-            'prep_time_minutes' => 10,
-            'cook_time_minutes' => 0,
-            'total_time_minutes' => 10,
-            'difficulty' => 'Easy',
-            'servings' => 1,
-
-            'tags' => ['High-Protein', 'Quick', 'Low-Carb', 'Gluten-Free'],
-            'allergens' => ['Fish'],
-        ],
-
-        'meal_3_dinner' => [
-            'id' => 'meal_3_dinner',
-            'name' => 'Chicken Pasta',
-            'type' => 'Dinner',
-            'image' => 'dinner',
-            'description' => 'Satisfying pasta dish with grilled chicken breast and a light tomato sauce.',
-
-            'nutrition' => [
-                'calories' => 740,
-                'protein_g' => 50,
-                'carbs_g' => 85,
-                'fat_g' => 20,
-                'fiber_g' => 10,
-                'sugar_g' => 9,
-            ],
-
-            'ingredients' => [
-                ['name' => 'Chicken breast', 'amount' => '200', 'unit' => 'g'],
-                ['name' => 'Whole wheat pasta', 'amount' => '100', 'unit' => 'g'],
-                ['name' => 'Crushed tomatoes', 'amount' => '200', 'unit' => 'g'],
-                ['name' => 'Garlic cloves', 'amount' => '2', 'unit' => 'pcs'],
-                ['name' => 'Fresh basil', 'amount' => '10', 'unit' => 'g'],
-                ['name' => 'Olive oil', 'amount' => '1', 'unit' => 'tbsp'],
-                ['name' => 'Parmesan cheese', 'amount' => '20', 'unit' => 'g'],
-                ['name' => 'Salt & pepper', 'amount' => 'to taste', 'unit' => ''],
-            ],
-
-            'instructions' => [
-                'Cook pasta according to package instructions. Drain and set aside.',
-                'Season chicken breast with salt and pepper.',
-                'Heat olive oil in a pan and cook chicken for 6-7 minutes per side.',
-                'Remove chicken and let rest. Slice when ready.',
-                'In the same pan, sauté minced garlic until fragrant.',
-                'Add crushed tomatoes and simmer for 5 minutes.',
-                'Add cooked pasta to the sauce and toss well.',
-                'Serve pasta topped with sliced chicken, basil, and parmesan.',
-            ],
-
-            'prep_time_minutes' => 10,
-            'cook_time_minutes' => 20,
-            'total_time_minutes' => 30,
-            'difficulty' => 'Medium',
-            'servings' => 1,
-
-            'tags' => ['High-Protein', 'Comfort-Food'],
-            'allergens' => ['Gluten', 'Dairy'],
-        ],
-    ];
-
-    $meal = $meals[$mealId] ?? $meals['meal_3_breakfast'];
-
-    return response()->json($meal);
+        'tags' => $meal->tags ?? [],
+        'allergens' => $meal->allergens ?? [],
+    ]);
 });
 
 require __DIR__ . '/settings.php';
