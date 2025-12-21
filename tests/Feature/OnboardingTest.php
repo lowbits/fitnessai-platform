@@ -2,13 +2,19 @@
 
 use App\Enums\ActivityLevel;
 use App\Enums\Gender;
+use App\Events\OnboardingCompleted;
+use App\Jobs\GenerateUserMealPlan;
+use App\Jobs\GenerateUserWorkoutPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
 
 uses(RefreshDatabase::class);
 
 test('allows user to complete onboarding without password', function () {
+    Bus::fake();
+    Event::fake([OnboardingCompleted::class]);
     $gender = Gender::MALE->value;
 
     post('/api/v2/onboarding', [
@@ -26,6 +32,8 @@ test('allows user to complete onboarding without password', function () {
         'training_sessions' => 4,
     ])->assertCreated();
 
+    Event::assertDispatched(OnboardingCompleted::class);
+
     assertDatabaseHas('users', [
         'email' => $email,
     ]);
@@ -41,4 +49,5 @@ test('allows user to complete onboarding without password', function () {
         'daily_carbs_g' => 242,
         'daily_fat_g' => 60
     ]);
+
 });
