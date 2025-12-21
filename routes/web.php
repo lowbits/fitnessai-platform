@@ -208,7 +208,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
             'id' => $meal->id,
             'name' => $meal->name,
             'type' => ucfirst($meal->type),
-            'image' => $meal->image ?? $meal->type, // Fallback to type if no image
+            'image' => $meal->image ?? "{$meal->type}_alt", // Fallback to type if no image
             'calories' => $meal->calories,
             'protein_g' => $meal->protein_g,
             'carbs_g' => $meal->carbs_g,
@@ -216,8 +216,32 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
         ];
     })->values()->all();
 
-    // TODO: Add workout data from database when workout generation is implemented
+    // Get workout plan for this day
+    $workoutPlan = \App\Models\WorkoutPlan::with('exercises')
+        ->where('plan_id', $plan->id)
+        ->where('day_number', $dayOfPlan)
+        ->first();
+
     $workout = null;
+    if ($workoutPlan && $workoutPlan->status === 'generated') {
+        $workout = [
+            'id' => $workoutPlan->id,
+            'name' => $workoutPlan->workout_name,
+            'type' => $workoutPlan->workout_type,
+            'description' => $workoutPlan->description,
+            'duration_minutes' => $workoutPlan->estimated_duration_minutes,
+            'exercises_count' => $workoutPlan->exercises->count(),
+            'exercises' => $workoutPlan->exercises->pluck('name'),
+            'difficulty' => $workoutPlan->difficulty,
+            'muscle_groups' => $workoutPlan->muscle_groups,
+            'status' => $workoutPlan->status,
+        ];
+    } elseif ($workoutPlan && $workoutPlan->status === 'pending') {
+        $workout = [
+            'status' => 'generating',
+            'message' => 'Workout is being generated...',
+        ];
+    }
 
     return response()->json([
         'plan_id' => $plan->id,
@@ -283,6 +307,52 @@ Route::get('/api/v2/meals/{mealId}', function ($mealId) {
 
         'tags' => $meal->tags ?? [],
         'allergens' => $meal->allergens ?? [],
+    ]);
+});
+
+Route::get('/api/v2/workouts/{workoutId}', function ($workoutId) {
+    // Get workout from database with exercises
+    $workout = \App\Models\WorkoutPlan::with('exercises')->find($workoutId);
+
+    if (!$workout) {
+        return response()->json(['error' => 'Workout not found'], 404);
+    }
+
+    // Format exercises
+    $exercises = $workout->exercises->map(function ($exercise) {
+        return [
+            'id' => $exercise->id,
+            'order' => $exercise->order,
+            'name' => $exercise->name,
+            'type' => $exercise->type,
+            'description' => $exercise->description,
+            'sets' => $exercise->sets,
+            'reps' => $exercise->reps,
+            'duration_seconds' => $exercise->duration_seconds,
+            'rest_seconds' => $exercise->rest_seconds,
+            'tempo' => $exercise->tempo,
+            'weight_recommendation' => $exercise->weight_recommendation,
+            'muscle_groups' => $exercise->muscle_groups ?? [],
+            'equipment' => $exercise->equipment ?? [],
+            'form_cues' => $exercise->form_cues,
+            'alternatives' => $exercise->alternatives ?? [],
+            'difficulty' => $exercise->difficulty,
+            'video_url' => $exercise->video_url,
+            'image' => $exercise->image,
+        ];
+    })->values()->all();
+
+    return response()->json([
+        'id' => $workout->id,
+        'name' => $workout->workout_name,
+        'type' => $workout->workout_type,
+        'description' => $workout->description,
+        'estimated_duration_minutes' => $workout->estimated_duration_minutes,
+        'estimated_calories_burned' => $workout->estimated_calories_burned,
+        'difficulty' => $workout->difficulty,
+        'muscle_groups' => $workout->muscle_groups ?? [],
+        'exercises' => $exercises,
+        'exercises_count' => count($exercises),
     ]);
 });
 

@@ -42,5 +42,10 @@ class Plan extends Model
     {
         return $this->hasMany(MealPlan::class);
     }
+
+    public function workoutPlans(): HasMany
+    {
+        return $this->hasMany(WorkoutPlan::class);
+    }
 }
 
