@@ -59,7 +59,7 @@ Route::get('/api/v2/me', function () {
             'created_at' => $currentPlan->created_at->toIso8601String(),
             'start_date' => $currentPlan->start_date->format('Y-m-d'),
             'current_day' => $currentPlan->current_day,
-            'total_days' => 28,
+            'total_days' => config('plans.duration_days'),
             'goal' => $profile?->body_goal?->value ?? 'maintenance',
             'diet_type' => $profile?->diet_type?->value ?? 'balanced',
             'fitness_level' => $profile?->skill_level?->value ?? 'beginner',
@@ -138,7 +138,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
 
     // Check if locked (free users only get first 4 days)
     $userSubscription = 'free'; // TODO: Get from auth()->user()->subscription
-    $maxFreeDays = 4;
+    $maxFreeDays = config('plans.duration_days');
     $isLocked = $dayOfPlan > $maxFreeDays;
 
     if ($isLocked) {
@@ -148,10 +148,10 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
             'date' => $requestDate->toDateString(),
             'unlock_required' => [
                 'title' => '🔒 Day ' . $dayOfPlan . ' Locked',
-                'message' => 'Upgrade to Premium to unlock all 28 days',
+                'message' => 'Upgrade to Premium to unlock all ' . config('plans.duration_days') . ' days',
                 'price' => '€3.99/month',
                 'benefits' => [
-                    'Access to all 28 days',
+                    'Access to all ' . config('plans.duration_days') . ' days',
                     'Unlimited plan regeneration',
                     'Meal alternatives',
                     'Exercise substitutions',
@@ -176,7 +176,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
         return response()->json([
             'plan_id' => $plan->id,
             'plan_day' => $dayOfPlan,
-            'total_days' => 28,
+            'total_days' => config('plans.duration_days'),
             'date' => $requestDate->toDateString(),
             'day_name' => $requestDate->format('l'),
             'locked' => false,
@@ -191,7 +191,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
         return response()->json([
             'plan_id' => $plan->id,
             'plan_day' => $dayOfPlan,
-            'total_days' => 28,
+            'total_days' => config('plans.duration_days'),
             'date' => $requestDate->toDateString(),
             'day_name' => $requestDate->format('l'),
             'locked' => false,
@@ -206,7 +206,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
         return response()->json([
             'plan_id' => $plan->id,
             'plan_day' => $dayOfPlan,
-            'total_days' => 28,
+            'total_days' => config('plans.duration_days'),
             'date' => $requestDate->toDateString(),
             'day_name' => $requestDate->format('l'),
             'locked' => false,
@@ -261,7 +261,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
     return response()->json([
         'plan_id' => $plan->id,
         'plan_day' => $dayOfPlan,
-        'total_days' => 28,
+        'total_days' => config('plans.duration_days'),
         'date' => $requestDate->toDateString(),
         'day_name' => $requestDate->format('l'),
         'locked' => false,

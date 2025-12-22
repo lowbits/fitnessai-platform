@@ -37,8 +37,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
         $client = OpenAI::client(config('services.openai.api_key'));
 
-        // Generate workout plans (28 days, but respecting rest days)
-        $totalDays = 3; // For testing, change to 28 for production
+        // Generate workout plans for configured number of days (respecting rest days)
+        $totalDays = config('plans.duration_days');
         $workoutsPerWeek = $this->plan->workouts_per_week ?? 3;
 
         for ($day = 1; $day <= $totalDays; $day++) {

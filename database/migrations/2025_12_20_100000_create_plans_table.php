@@ -19,7 +19,7 @@ return new class extends Migration
 
             $table->date('start_date');
             $table->date('end_date')->nullable();
-            $table->integer('duration_days')->default(28);
+            $table->integer('duration_days');
 
             $table->integer('daily_calories');
             $table->integer('daily_protein_g');

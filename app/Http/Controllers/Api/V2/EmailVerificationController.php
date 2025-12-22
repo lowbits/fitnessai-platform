@@ -41,7 +41,7 @@ class EmailVerificationController extends Controller
             event(new EmailVerified($user, $plan));
         }
 
-        $status = $this->getStatus($plan->id);
+        $status = $this->getStatus($plan);
 
 
         // Render plan generation page with polling
@@ -64,31 +64,19 @@ class EmailVerificationController extends Controller
     /**
      * Get plan generation status for polling.
      */
-    private function getStatus($planId)
+    private function getStatus(Plan $plan)
     {
-        $plan = Plan::with(['mealPlans', 'workoutPlans'])->findOrFail($planId);
-
-        $totalDays = 3;
-        $mealPlansGenerated = $plan->mealPlans()->where('status', 'generated')->count();
-        $mealPlansFailed = $plan->mealPlans()->where('status', 'failed')->count();
-        $workoutPlansGenerated = $plan->workoutPlans()->where('status', 'generated')->count();
-        $workoutPlansFailed = $plan->workoutPlans()->where('status', 'failed')->count();
-
-
-        $allGenerated = ($mealPlansGenerated === $totalDays) && ($workoutPlansGenerated === $totalDays);
-        $hasFailed = ($mealPlansFailed > 0) || ($workoutPlansFailed > 0);
+        $allGenerated = $plan->generation_completed_at !== null;
 
         $status = 'generating';
+
         if ($allGenerated) {
             $status = 'completed';
-        } elseif ($hasFailed) {
-            $status = 'partial_failure';
         }
 
         return [
             'status' => $status,
-            'is_complete' => $allGenerated,
-            'has_failures' => $hasFailed,
+            'is_complete' => $allGenerated
         ];
     }
 }

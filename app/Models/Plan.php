@@ -15,6 +15,7 @@ class Plan extends Model
         'user_id',
         'plan_name',
         'status',
+        'duration_days',
         'start_date',
         'end_date',
         'current_day',
@@ -23,6 +24,7 @@ class Plan extends Model
         'daily_carbs_g',
         'daily_fat_g',
         'workouts_per_week',
+        'generation_completed_at',
     ];
 
     protected function casts(): array
@@ -30,6 +32,7 @@ class Plan extends Model
         return [
             'start_date' => 'date',
             'end_date' => 'date',
+            'generation_completed_at' => 'datetime',
         ];
     }
 

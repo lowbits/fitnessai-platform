@@ -64,12 +64,15 @@ class OnboardingController extends Controller
             $dailyCalories = $profile->calculateDailyCalories();
             $macros = $profile->calculateMacros();
 
+            $totalDays = (int) config('plans.duration_days');
+
 
             // Create plan
             $plan = $user->plans()->create([
                 'plan_name' => ucfirst($validated['body_goal']) . ' Plan',
                 'start_date' => now(),
-                'end_date' => now()->addDays(3),
+                'duration_days' => $totalDays,
+                'end_date' => now()->addDays($totalDays),
                 'daily_calories' => $dailyCalories,
                 'daily_protein_g' => $macros['protein_g'],
                 'daily_carbs_g' => $macros['carbs_g'],
@@ -86,10 +89,10 @@ class OnboardingController extends Controller
             ];
         });
 
-        // Send verification email (will trigger plan generation after verification)
+        // Send verification email
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
-        // Build response
+
         $response = [
             'success' => true,
             'message' => 'Onboarding completed successfully. Please check your email to verify your account and start generating your personalized plan.',
@@ -100,7 +103,6 @@ class OnboardingController extends Controller
                 'email_verified' => false,
             ],
             'profile' => $result['profile'],
-            'next_step' => 'verify_email',
         ];
 
         return response()->json($response, 201);

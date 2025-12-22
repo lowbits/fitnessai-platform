@@ -37,8 +37,8 @@ class GenerateUserMealPlan implements ShouldQueue
 
         $client = OpenAI::client(config('services.openai.api_key'));
 
-        // Generate meal plans for all 28 days
-        $totalDays = 3;
+        // Generate meal plans for configured number of days
+        $totalDays = config('plans.duration_days');
 
         for ($day = 1; $day <= $totalDays; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
@@ -75,7 +75,7 @@ class GenerateUserMealPlan implements ShouldQueue
                         ],
                         [
                             'role' => 'user',
-                            'content' => "Generate a complete day meal plan for day {$day} of 28. Include breakfast, lunch, snack, and dinner. Ensure variety across the 28-day plan.",
+                            'content' => "Generate a complete day meal plan for day {$day} of {$totalDays}. Include breakfast, lunch, snack, and dinner. Ensure variety across the $totalDays-day plan.",
                         ],
                     ],
                     'tools' => [
@@ -172,6 +172,7 @@ class GenerateUserMealPlan implements ShouldQueue
 
     private function buildSystemPrompt($profile): string
     {
+        $totalDays = config('plans.duration_days');
         $metabolismData = $profile->getMetabolismData();
 
         return <<<PROMPT
@@ -197,7 +198,7 @@ You are an expert nutritionist and meal planner. Create personalized meal plans 
 1. All meals must fit the user's diet type ({$profile->diet_type->value})
 2. Total daily nutrition should match the targets (±5% tolerance)
 3. Recipes should be practical, with clear ingredients and instructions
-4. Provide variety across the 28-day plan - avoid repetitive meals
+4. Provide variety across the $totalDays-day plan - avoid repetitive meals
 5. Consider the user's body goal when planning meals
 6. All measurements in metric (grams, ml)
 7. Use German language for meal names and instructions
