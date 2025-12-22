@@ -8,9 +8,9 @@ use App\Enums\DietType;
 use App\Enums\Gender;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
-use App\Events\OnboardingCompleted;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -86,19 +86,21 @@ class OnboardingController extends Controller
             ];
         });
 
-        // Fire event to trigger meal plan generation
-        OnboardingCompleted::dispatch($result['user'], $result['plan']);
+        // Send verification email (will trigger plan generation after verification)
+        $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
         // Build response
         $response = [
             'success' => true,
-            'message' => 'Onboarding completed successfully',
+            'message' => 'Onboarding completed successfully. Please check your email to verify your account and start generating your personalized plan.',
             'user' => [
                 'id' => $result['user']->id,
                 'email' => $result['user']->email,
                 'name' => $result['user']->name,
+                'email_verified' => false,
             ],
             'profile' => $result['profile'],
+            'next_step' => 'verify_email',
         ];
 
         return response()->json($response, 201);

@@ -47,15 +47,25 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             // Determine if this is a workout day or rest day
             $isRestDay = $this->isRestDay($day, $workoutsPerWeek);
 
-            // Create workout plan record
-            $workoutPlan = WorkoutPlan::create([
-                'plan_id' => $this->plan->id,
-                'date' => $date,
-                'day_number' => $day,
-                'status' => 'pending',
-                'workout_name' => $isRestDay ? 'Rest Day' : 'Workout Day',
-                'workout_type' => $isRestDay ? 'rest' : 'strength',
-            ]);
+            // Create workout plan record (or find existing)
+            $workoutPlan = WorkoutPlan::firstOrCreate(
+                [
+                    'plan_id' => $this->plan->id,
+                    'day_number' => $day,
+                ],
+                [
+                    'date' => $date,
+                    'status' => 'pending',
+                    'workout_name' => $isRestDay ? 'Rest Day' : 'Workout Day',
+                    'workout_type' => $isRestDay ? 'rest' : 'strength',
+                ]
+            );
+
+
+            if ($workoutPlan->status === 'generated') {
+                Log::info("Workout plan for day {$day} already generated, skipping", ['workout_plan_id' => $workoutPlan->id]);
+                continue;
+            }
 
             if ($isRestDay) {
                 // Simple rest day - no AI generation needed

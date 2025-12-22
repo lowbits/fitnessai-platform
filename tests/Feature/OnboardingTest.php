@@ -2,22 +2,20 @@
 
 use App\Enums\ActivityLevel;
 use App\Enums\Gender;
-use App\Events\OnboardingCompleted;
-use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
+use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Facades\Notification;
 use function Pest\Laravel\assertDatabaseHas;
 use function Pest\Laravel\post;
 
 uses(RefreshDatabase::class);
 
 test('allows user to complete onboarding without password', function () {
-    Bus::fake();
-    Event::fake([OnboardingCompleted::class]);
+    Notification::fake();
+
     $gender = Gender::MALE->value;
 
-    post('/api/v2/onboarding', [
+    $response = post('/api/v2/onboarding', [
         'email' => $email = "test-{$gender}@example.com",
         'name' => 'Test User',
         'age' => 28,
@@ -32,10 +30,9 @@ test('allows user to complete onboarding without password', function () {
         'training_sessions' => 4,
     ])->assertCreated();
 
-    Event::assertDispatched(OnboardingCompleted::class);
-
     assertDatabaseHas('users', [
         'email' => $email,
+        'email_verified_at' => null, // Not yet verified
     ]);
 
     assertDatabaseHas('user_profiles', [
@@ -50,4 +47,17 @@ test('allows user to complete onboarding without password', function () {
         'daily_fat_g' => 60
     ]);
 
+    // Verify notification was sent
+    Notification::assertSentTo(
+        \App\Models\User::where('email', $email)->first(),
+        OnboardingCompleteVerifyEmail::class
+    );
+
+    // Verify response includes next_step
+    $response->assertJson([
+        'next_step' => 'verify_email',
+        'user' => [
+            'email_verified' => false,
+        ],
+    ]);
 });

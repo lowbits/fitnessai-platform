@@ -43,13 +43,23 @@ class GenerateUserMealPlan implements ShouldQueue
         for ($day = 1; $day <= $totalDays; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
 
-            // Create meal plan record
-            $mealPlan = MealPlan::create([
-                'plan_id' => $this->plan->id,
-                'date' => $date,
-                'day_number' => $day,
-                'status' => 'pending',
-            ]);
+            // Create meal plan record (or find existing)
+            $mealPlan = MealPlan::firstOrCreate(
+                [
+                    'plan_id' => $this->plan->id,
+                    'day_number' => $day,
+                ],
+                [
+                    'date' => $date,
+                    'status' => 'pending',
+                ]
+            );
+
+            // Skip if already generated
+            if ($mealPlan->status === 'generated') {
+                Log::info("Meal plan for day {$day} already generated, skipping", ['meal_plan_id' => $mealPlan->id]);
+                continue;
+            }
 
             try {
                 // Create system prompt with user profile data

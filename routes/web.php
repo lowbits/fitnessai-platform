@@ -1,11 +1,19 @@
 <?php
 
+use App\Http\Controllers\Api\V2\EmailVerificationController;
+use App\Models\Meal;
+use App\Models\MealPlan;
 use App\Models\User;
+use App\Models\WorkoutPlan;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 use Laravel\Fortify\Features;
+
+Route::get('/imprint', function () {
+    return Inertia::render('Imprint');
+})->name('imprint');
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -16,6 +24,13 @@ Route::get('/', function () {
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Email verification routes
+Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->name('verification.verify-onboarding');
+
+Route::get('/api/v2/plans/{planId}/generation-status', [EmailVerificationController::class, 'status'])
+    ->name('plans.generation-status');
 
 Route::get('/api/v2/me', function () {
     $user = User::with(['profile', 'plans'])->latest()->first();
@@ -151,7 +166,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
     }
 
     // Get meal plan for this day
-    $mealPlan = \App\Models\MealPlan::with('meals')
+    $mealPlan = MealPlan::with('meals')
         ->where('plan_id', $plan->id)
         ->where('day_number', $dayOfPlan)
         ->first();
@@ -217,7 +232,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
     })->values()->all();
 
     // Get workout plan for this day
-    $workoutPlan = \App\Models\WorkoutPlan::with('exercises')
+    $workoutPlan = WorkoutPlan::with('exercises')
         ->where('plan_id', $plan->id)
         ->where('day_number', $dayOfPlan)
         ->first();
@@ -274,7 +289,7 @@ Route::get('/api/v2/plan/day/{date}', function ($date) {
 
 Route::get('/api/v2/meals/{mealId}', function ($mealId) {
     // Get meal from database
-    $meal = \App\Models\Meal::find($mealId);
+    $meal = Meal::find($mealId);
 
     if (!$meal) {
         return response()->json(['error' => 'Meal not found'], 404);
@@ -312,7 +327,7 @@ Route::get('/api/v2/meals/{mealId}', function ($mealId) {
 
 Route::get('/api/v2/workouts/{workoutId}', function ($workoutId) {
     // Get workout from database with exercises
-    $workout = \App\Models\WorkoutPlan::with('exercises')->find($workoutId);
+    $workout = WorkoutPlan::with('exercises')->find($workoutId);
 
     if (!$workout) {
         return response()->json(['error' => 'Workout not found'], 404);

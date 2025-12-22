@@ -2,18 +2,23 @@
 
 namespace App\Listeners;
 
-use App\Events\OnboardingCompleted;
+use App\Events\EmailVerified;
 use App\Jobs\GenerateUserMealPlan;
-use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Cache;
 
-class GenerateMealPlan implements ShouldQueue
+class GenerateMealPlan
 {
     /**
      * Handle the event.
      */
-    public function handle(OnboardingCompleted $event): void
+    public function __invoke(EmailVerified $event): void
     {
-        // Dispatch job to generate meal plans for all 28 days
+        $lockKey = "meal_plan_generation_{$event->plan->id}";
+
+        if (!Cache::add($lockKey, true, now()->addMinutes(10))) {
+            return;
+        }
+
         GenerateUserMealPlan::dispatch($event->user, $event->plan);
     }
 }
