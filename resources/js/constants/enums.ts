@@ -2,8 +2,7 @@
 export const GENDERS = [
     { value: 'male', label: 'Male' },
     { value: 'female', label: 'Female' },
-    { value: 'other', label: 'Other' },
-    { value: 'prefer_not_to_say', label: 'Prefer not to say' },
+    { value: 'other', label: 'Diverse' },
 ] as const;
 
 export const BODY_GOALS = [

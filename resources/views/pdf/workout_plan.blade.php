@@ -257,10 +257,10 @@
         <div class="info-box">
             <h3 style="margin-top: 0;">Your Training Overview</h3>
             <ul style="list-style: none; padding-left: 0;">
+                <li><strong>Goal:</strong> {{ $user->profile->body_goal?->label() ?? 'Not specified' }}</li>
                 <li><strong>Workouts per Week:</strong> {{ $plan->workouts_per_week }}</li>
-                <li><strong>Training Place:</strong> {{ ucfirst($user->profile->training_place?->value ?? 'gym') }}</li>
-                <li><strong>Skill Level:</strong> {{ ucfirst($user->profile->skill_level?->value ?? 'beginner') }}</li>
-                <li><strong>Goal:</strong> {{ ucfirst($user->profile->body_goal?->value ?? 'maintenance') }}</li>
+                <li><strong>Training Place:</strong> {{ $user->profile->training_place?->label() ?? 'Gym' }}</li>
+                <li><strong>Skill Level:</strong> {{ $user->profile->skill_level?->label() ?? 'Beginner' }}</li>
             </ul>
         </div>
 

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import { ref, computed } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { ref, computed, reactive } from 'vue';
 
 import {
     GENDERS,
@@ -22,12 +21,16 @@ import NumberInput from '@/components/form/NumberInput.vue';
 import RadioGroup from '@/components/form/RadioGroup.vue';
 import { Input } from '@/components/ui/input';
 
+defineProps<{
+    totalDays: number;
+}>();
+
 // State
 const activeStep = ref(0);
 const showSuccessMessage = ref(false);
 const userEmail = ref('');
 
-const form = useForm({
+const form = reactive({
     email: '',
     name: '',
     age: '',
@@ -42,7 +45,22 @@ const form = useForm({
     activity_level: '',
     signup_newsletter: false,
     agree_terms: false,
+    processing: false,
+    errors: {} as Record<string, string>,
 });
+
+// Helper methods for form
+const clearErrors = () => {
+    form.errors = {};
+};
+
+const setError = (field: string | Record<string, string>, message?: string) => {
+    if (typeof field === 'string' && message) {
+        form.errors[field] = message;
+    } else if (typeof field === 'object') {
+        form.errors = { ...form.errors, ...field };
+    }
+};
 
 // Helpers
 const getRecommendedTrainingSessions = (skillLevel: string): string => {
@@ -82,12 +100,12 @@ const setDefaultValues = () => {
 
 // Validation
 const validateStep = (step: number): boolean => {
-    form.clearErrors();
+    clearErrors();
 
     switch (step) {
         case 0: // Gender
             if (!form.gender) {
-                form.setError('gender', 'Please select your gender');
+                setError('gender', 'Please select your gender');
                 return false;
             }
             break;
@@ -99,7 +117,7 @@ const validateStep = (step: number): boolean => {
             if (!form.weight) errors.weight = 'Please add your weight';
 
             if (Object.keys(errors).length > 0) {
-                form.setError(errors);
+                setError(errors);
                 return false;
             }
             break;
@@ -109,31 +127,25 @@ const validateStep = (step: number): boolean => {
 
         case 3: // Activity Level & Skill Level
             if (!form.activity_level) {
-                form.setError(
-                    'activity_level',
-                    'Please select your activity level',
-                );
+                setError('activity_level', 'Please select your activity level');
                 return false;
             }
             if (!form.skill_level) {
-                form.setError('skill_level', 'Please select your skill level');
+                setError('skill_level', 'Please select your skill level');
                 return false;
             }
             break;
 
         case 4: // Body Goal
             if (!form.body_goal) {
-                form.setError('body_goal', 'Please select your goal');
+                setError('body_goal', 'Please select your goal');
                 return false;
             }
             break;
 
         case 5: // Training Place
             if (!form.training_place) {
-                form.setError(
-                    'training_place',
-                    'Please select your training place',
-                );
+                setError('training_place', 'Please select your training place');
                 return false;
             }
             // Auto-set recommended sessions
@@ -147,7 +159,7 @@ const validateStep = (step: number): boolean => {
                 !form.training_sessions ||
                 parseInt(form.training_sessions) < 1
             ) {
-                form.setError(
+                setError(
                     'training_sessions',
                     'Please set how often you want to train',
                 );
@@ -173,17 +185,58 @@ const goToStep = (index: number) => {
 };
 
 // Submit
-const submit = () => {
-    userEmail.value = form.email;
+const submit = async () => {
+    if (form.processing) return;
 
-    form.post('/api/v2/onboarding', {
-        onSuccess: () => {
-            showSuccessMessage.value = true;
-        },
-        onError: (errors) => {
-            console.error('Onboarding failed:', errors);
-        },
-    });
+    userEmail.value = form.email;
+    form.processing = true;
+    clearErrors();
+
+    try {
+        const response = await fetch('/api/v2/onboarding', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json',
+                'X-CSRF-TOKEN':
+                    document
+                        .querySelector('meta[name="csrf-token"]')
+                        ?.getAttribute('content') || '',
+            },
+            body: JSON.stringify({
+                email: form.email,
+                name: form.name,
+                age: parseInt(form.age),
+                gender: form.gender,
+                weight: parseFloat(form.weight),
+                height: parseFloat(form.height),
+                body_goal: form.body_goal,
+                skill_level: form.skill_level,
+                diet_type: form.diet_type,
+                training_place: form.training_place,
+                training_sessions: parseInt(form.training_sessions),
+                activity_level: form.activity_level,
+            }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            if (data.errors) {
+                setError(data.errors);
+            } else {
+                console.error('Onboarding failed:', data);
+            }
+            form.processing = false;
+            return;
+        }
+
+        // Success
+        showSuccessMessage.value = true;
+    } catch (error) {
+        console.error('Onboarding failed:', error);
+        form.processing = false;
+    }
 };
 </script>
 
@@ -209,19 +262,17 @@ const submit = () => {
                         ></path>
                     </svg>
                 </div>
-                <h3 class="text-3xl font-bold text-white">
-                    Check Your Email! 📧
-                </h3>
+                <h3 class="text-3xl font-bold text-white">Check Your Email</h3>
             </div>
 
             <div class="space-y-4 text-center">
                 <p class="text-lg text-gray-200">
-                    Thank you for completing the onboarding! 🎉
+                    Thank you for completing the onboarding!
                 </p>
 
                 <div class="rounded-xl bg-dark-surfaces-500 p-6 text-left">
                     <p class="mb-3 font-semibold text-white">
-                        📬 We've sent a verification email to:
+                        We've sent a verification email to:
                     </p>
                     <p class="mb-4 text-lg font-bold text-primary-400">
                         {{ userEmail }}
@@ -249,10 +300,10 @@ const submit = () => {
                         class="rounded-lg border border-blue-500/20 bg-blue-900/20 p-4"
                     >
                         <p class="text-sm text-blue-200">
-                            <strong>⏱️ Generation Time:</strong> Your complete
-                            28-day plan (meals + workouts) will be ready in
-                            approximately <strong>3-5 minutes</strong> after
-                            verification.
+                            <strong>Generation Time:</strong> Your complete
+                            {{ totalDays }}-day plan (meals + workouts) will be
+                            ready in approximately
+                            <strong>3-5 minutes</strong> after verification.
                         </p>
                     </div>
                 </div>
@@ -285,7 +336,7 @@ const submit = () => {
     <!-- Form -->
     <form v-else @submit.prevent="submit" class="w-full flex-1 space-y-4">
         <!-- Dev Helper -->
-        <div v-if="true" class="absolute right-0">
+        <div v-if="false" class="absolute right-0">
             <button
                 type="button"
                 class="rounded border border-primary-500 bg-transparent px-4 py-2 text-primary-400"
@@ -532,7 +583,7 @@ const submit = () => {
                                     v-model="form.name"
                                     placeholder="Alex"
                                     required
-                                    class="w-full rounded-xl border border-dark-surfaces-25 bg-transparent px-3 py-2  text-green-600 transition-colors outline-none placeholder:text-secondary-200 focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                                    class="w-full rounded-xl border border-dark-surfaces-25 bg-transparent px-3 py-2 text-green-600 transition-colors outline-none placeholder:text-secondary-200 focus:border-green-500 focus:ring-green-500 focus:outline-none"
                                 />
                             </div>
                         </LabeledInput>

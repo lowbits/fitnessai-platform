@@ -17,13 +17,11 @@ Route::get('/imprint', function () {
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
-        'canRegister' => Features::enabled(Features::registration()),
+        'durationDays' => config('plans.duration_days'),
     ]);
 })->name('home');
 
-Route::get('dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
 
 // Email verification routes
 Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])

@@ -40,6 +40,9 @@ return [
 
         // Use reduced duration in development
         'use_dev_mode' => env('PLAN_USE_DEV_MODE', false),
+
+        // Language for generated content (en, de)
+        'language' => env('PLAN_LANGUAGE', 'en'),
     ],
 
 ];

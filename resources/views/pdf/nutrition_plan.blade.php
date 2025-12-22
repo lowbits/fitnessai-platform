@@ -245,6 +245,8 @@
         <div style="background-color: #e6eef5; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
             <h3 style="margin-top: 0;">Your Daily Nutrition Targets</h3>
             <ul style="list-style: none; padding-left: 0;">
+                <li><strong>Goal:</strong> {{ $user->profile->body_goal?->label() ?? 'Not specified' }}</li>
+                <li><strong>Diet Type:</strong> {{ $user->profile->diet_type?->label() ?? 'Not specified' }}</li>
                 <li><strong>Calories:</strong> {{ $plan->daily_calories }} kcal</li>
                 <li><strong>Protein:</strong> {{ $plan->daily_protein_g }}g</li>
                 <li><strong>Carbohydrates:</strong> {{ $plan->daily_carbs_g }}g</li>

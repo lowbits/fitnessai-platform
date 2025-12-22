@@ -201,10 +201,24 @@ You are an expert nutritionist and meal planner. Create personalized meal plans 
 4. Provide variety across the $totalDays-day plan - avoid repetitive meals
 5. Consider the user's body goal when planning meals
 6. All measurements in metric (grams, ml)
-7. Use German language for meal names and instructions
+7. Use {$this->getLanguageInstruction()} for meal names, descriptions, and instructions
 
 Generate complete, practical meal plans that the user can easily follow.
 PROMPT;
+    }
+
+    /**
+     * Get language instruction for OpenAI prompt
+     */
+    private function getLanguageInstruction(): string
+    {
+        $language = config('plans.generation.language');
+
+        return match($language) {
+            'de' => 'German language',
+            'en' => 'English language',
+            default => 'English language',
+        };
     }
 
     private function saveMeals(MealPlan $mealPlan, array $meals): void

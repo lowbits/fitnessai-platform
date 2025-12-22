@@ -339,7 +339,7 @@ You are an expert personal trainer and workout programmer specializing in eviden
 5. Today's focus: {$targetMuscleGroups}
 6. Include warmup (5-8 min) and cooldown (5 min)
 7. Provide clear form cues for each exercise
-8. Use German language for exercise names and instructions
+8. Use {$this->getLanguageInstruction()} for exercise names, descriptions, and instructions
 9. Main workout: 6-8 exercises for {$skillLevel} level
 10. Specify sets, reps, rest periods, tempo, and RPE
 
@@ -349,6 +349,20 @@ You are an expert personal trainer and workout programmer specializing in eviden
 **Critical: Output Format**
 You MUST use the create_workout_plan function with ALL required fields.
 PROMPT;
+    }
+
+    /**
+     * Get language instruction for OpenAI prompt
+     */
+    private function getLanguageInstruction(): string
+    {
+        $language = config('plans.generation.language');
+
+        return match($language) {
+            'de' => 'German language',
+            'en' => 'English language',
+            default => 'English language',
+        };
     }
 
     private function saveExercises(WorkoutPlan $workoutPlan, array $exercises): void
