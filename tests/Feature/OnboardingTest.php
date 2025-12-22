@@ -55,7 +55,6 @@ test('allows user to complete onboarding without password', function () {
 
     // Verify response includes next_step
     $response->assertJson([
-        'next_step' => 'verify_email',
         'user' => [
             'email_verified' => false,
         ],

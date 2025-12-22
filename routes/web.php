@@ -5,11 +5,10 @@ use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Carbon;
 use Inertia\Inertia;
-use Laravel\Fortify\Features;
 
 Route::get('/imprint', function () {
     return Inertia::render('Imprint');
@@ -368,5 +367,3 @@ Route::get('/api/v2/workouts/{workoutId}', function ($workoutId) {
         'exercises_count' => count($exercises),
     ]);
 });
-
-require __DIR__ . '/settings.php';
