@@ -38,18 +38,19 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
         $verificationUrl = $this->verificationUrl($notifiable);
 
         return (new MailMessage)
-            ->subject('Verify Your Email - Start Your Fitness Journey!')
-            ->greeting('Welcome to FitnessAI, ' . $notifiable->name . '! 🎉')
-            ->line('Thank you for completing your onboarding!')
-            ->line('We\'re excited to create your personalized 28-day fitness and meal plan.')
-            ->line('To get started, please verify your email address by clicking the button below:')
-            ->action('Verify Email & Generate My Plan', $verificationUrl)
-            ->line('Once verified, we\'ll immediately start generating:')
-            ->line('✅ Personalized meal plans (4 meals per day)')
-            ->line('✅ Custom workout plans tailored to your goals')
-            ->line('✅ 28 days of complete nutrition and exercise guidance')
-            ->line('This usually takes just a few minutes.')
-            ->line('If you did not create an account, no further action is required.');
+            ->subject('One Step Away from Your Personal Fitness Plan')
+            ->greeting('Hi ' . $notifiable->name . ',')
+            ->line('Thanks for signing up! You\'re one click away from getting your personalized ' . config('plans.duration_days') . '-day plan.')
+            ->line('Just verify your email address to get started:')
+            ->action('Verify Email Address', $verificationUrl)
+            ->line('**What happens next:**')
+            ->line('• We\'ll create your custom meal and workout plans')
+            ->line('• You\'ll receive everything as PDF attachments')
+            ->line('• Ready to use in about 3-5 minutes')
+            ->line('The verification link is valid for 24 hours.')
+            ->line('')
+            ->line('Didn\'t sign up? You can safely ignore this email.')
+            ->salutation('See you soon!');
     }
 
     /**

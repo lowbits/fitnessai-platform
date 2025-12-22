@@ -258,74 +258,123 @@
 
                 @if($mealPlan->status === 'generated' && $mealPlan->meals->count() > 0)
                     @foreach($mealPlan->meals as $meal)
-                        <div class="meal-card" style="margin-bottom: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 8px;">
-                            <h3>{{ strtoupper($meal->type) }}: {{ $meal->name }}</h3>
+                        <table style="width: 100%; margin-bottom: 25px; border-collapse: collapse; border: 1px solid #ddd;">
+                            <thead>
+                                <tr>
+                                    <th colspan="2" style="text-align: left; padding: 16px 20px; background-color: #08233e; color: white; font-size: 13px; font-weight: bold; border-bottom: 3px solid #48D670;">
+                                        {{ strtoupper($meal->type) }}: {{ $meal->name }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody style="background-color: #ffffff;">
+                                <tr>
+                                    <td colspan="2" style="padding: 15px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                        <table style="width: 100%; border-collapse: collapse;">
+                                            <tr>
+                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                    <strong>Calories:</strong> {{ $meal->calories }} kcal
+                                                </td>
+                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                    <strong>Protein:</strong> {{ $meal->protein_g }}g
+                                                </td>
+                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                    <strong>Carbs:</strong> {{ $meal->carbs_g }}g
+                                                </td>
+                                                <td style="padding: 5px 0; font-size: 11px; color: #333;">
+                                                    <strong>Fat:</strong> {{ $meal->fat_g }}g
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
 
-                            <div class="nutrition-info" style="display: flex; gap: 20px; margin: 10px 0; font-size: 11px;">
-                                <span><strong>Calories:</strong> {{ $meal->calories }} kcal</span>
-                                <span><strong>Protein:</strong> {{ $meal->protein_g }}g</span>
-                                <span><strong>Carbs:</strong> {{ $meal->carbs_g }}g</span>
-                                <span><strong>Fat:</strong> {{ $meal->fat_g }}g</span>
-                            </div>
-
-                            @if($meal->prep_time_minutes || $meal->cook_time_minutes)
-                                <div class="nutrition-info" style="margin: 10px 0; font-size: 11px; color: #666; padding: 8px; background-color: #fff; border-radius: 4px;">
-                                    @if($meal->prep_time_minutes)
-                                        <span><strong>Prep Time:</strong> {{ $meal->prep_time_minutes }} min</span>
-                                    @endif
-                                    @if($meal->cook_time_minutes)
-                                        <span style="margin-left: 15px;"><strong>Cook Time:</strong> {{ $meal->cook_time_minutes }} min</span>
-                                    @endif
-                                </div>
-                            @endif
-
-                            @if($meal->description)
-                                <p style="margin: 10px 0; font-style: italic; color: #555;">{{ $meal->description }}</p>
-                            @endif
-
-                            @if($meal->ingredients && is_array($meal->ingredients) && count($meal->ingredients) > 0)
-                                <div class="ingredients-section">
-                                    <h4 style="margin-top: 20px; margin-bottom: 8px; color: #08233e; page-break-after: avoid;">Ingredients:</h4>
-                                    <ul style="margin: 0; padding-left: 25px; font-size: 11px;">
-                                        @foreach($meal->ingredients as $ingredient)
-                                            @if(is_array($ingredient) || is_object($ingredient))
-                                                @php
-                                                    $ing = is_array($ingredient) ? $ingredient : (array)$ingredient;
-                                                @endphp
-                                                <li style="page-break-inside: avoid;">
-                                                    {{ $ing['name'] ?? 'Unknown' }}
-                                                    @if(isset($ing['amount']) && isset($ing['unit']))
-                                                        - {{ $ing['amount'] }}{{ $ing['unit'] }}
+                                @if($meal->prep_time_minutes || $meal->cook_time_minutes)
+                                    <tr>
+                                        <td colspan="2" style="padding: 12px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                <tr>
+                                                    @if($meal->prep_time_minutes)
+                                                        <td style="padding: 0; font-size: 11px; color: #666;">
+                                                            <strong>Prep Time:</strong> {{ $meal->prep_time_minutes }} min
+                                                        </td>
                                                     @endif
-                                                </li>
-                                            @else
-                                                <li style="page-break-inside: avoid;">{{ $ingredient }}</li>
-                                            @endif
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
+                                                    @if($meal->cook_time_minutes)
+                                                        <td style="padding: 0; font-size: 11px; color: #666;">
+                                                            <strong>Cook Time:</strong> {{ $meal->cook_time_minutes }} min
+                                                        </td>
+                                                    @endif
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                @endif
 
-                            @if($meal->instructions && is_array($meal->instructions) && count($meal->instructions) > 0)
-                                <div class="instructions-section">
-                                    <h4 style="margin-top: 20px; margin-bottom: 8px; color: #08233e; page-break-after: avoid;">Instructions:</h4>
-                                    <ol style="margin: 0; padding-left: 25px; font-size: 11px;">
-                                        @foreach($meal->instructions as $instruction)
-                                            <li style="margin-bottom: 5px; page-break-inside: avoid;">{{ is_string($instruction) ? $instruction : json_encode($instruction) }}</li>
-                                        @endforeach
-                                    </ol>
-                                </div>
-                            @endif
+                                @if($meal->description)
+                                    <tr>
+                                        <td colspan="2" style="padding: 15px 20px; font-style: italic; color: #666; font-size: 11px; line-height: 1.6; border-bottom: 1px solid #e0e0e0;">
+                                            {{ $meal->description }}
+                                        </td>
+                                    </tr>
+                                @endif
 
-                            @if($meal->allergens && is_array($meal->allergens) && count($meal->allergens) > 0)
-                                <div style="margin-top: 12px; padding: 8px 12px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
-                                    <strong style="color: #856404; font-size: 11px;">Allergens:</strong>
-                                    <span style="color: #856404; font-size: 11px;">
-                                        {{ implode(', ', array_map(function($item) { return is_string($item) ? ucfirst($item) : json_encode($item); }, $meal->allergens)) }}
-                                    </span>
-                                </div>
-                            @endif
-                        </div>
+                                @if($meal->ingredients && is_array($meal->ingredients) && count($meal->ingredients) > 0)
+                                    <tr>
+                                        <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
+                                            <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">Ingredients</strong>
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                @foreach($meal->ingredients as $ingredient)
+                                                    <tr>
+                                                        <td style="padding: 4px 0; font-size: 11px; vertical-align: top; width: 15px; color: #999;">•</td>
+                                                        <td style="padding: 4px 0; font-size: 11px; color: #333; line-height: 1.5;">
+                                                            @if(is_array($ingredient) || is_object($ingredient))
+                                                                @php
+                                                                    $ing = is_array($ingredient) ? $ingredient : (array)$ingredient;
+                                                                @endphp
+                                                                {{ $ing['name'] ?? 'Unknown' }}
+                                                                @if(isset($ing['amount']) && isset($ing['unit']))
+                                                                    <span style="color: #666;"> - {{ $ing['amount'] }}{{ $ing['unit'] }}</span>
+                                                                @endif
+                                                            @else
+                                                                {{ $ingredient }}
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </table>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                @if($meal->instructions && is_array($meal->instructions) && count($meal->instructions) > 0)
+                                    <tr>
+                                        <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
+                                            <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">Instructions</strong>
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                @foreach($meal->instructions as $index => $instruction)
+                                                    <tr>
+                                                        <td style="padding: 5px 10px 5px 0; font-size: 11px; vertical-align: top; width: 30px; color: #666; font-weight: bold;">{{ $index + 1 }}.</td>
+                                                        <td style="padding: 5px 0; font-size: 11px; color: #333; line-height: 1.6;">
+                                                            {{ is_string($instruction) ? $instruction : json_encode($instruction) }}
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </table>
+                                        </td>
+                                    </tr>
+                                @endif
+
+                                @if($meal->allergens && is_array($meal->allergens) && count($meal->allergens) > 0)
+                                    <tr>
+                                        <td colspan="2" style="padding: 12px 20px; background-color: #fff3cd; border-left: 4px solid #ffc107;">
+                                            <strong style="color: #856404; font-size: 11px;">Allergens:</strong>
+                                            <span style="color: #856404; font-size: 11px; margin-left: 8px;">
+                                                {{ implode(', ', array_map(function($item) { return is_string($item) ? ucfirst($item) : json_encode($item); }, $meal->allergens)) }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                @endif
+                            </tbody>
+                        </table>
                     @endforeach
 
                     <div style="background-color: #e6eef5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;">

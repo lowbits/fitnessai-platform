@@ -307,56 +307,92 @@
                     @endif
 
                     @if($workoutPlan->exercises->count() > 0)
-                        <h3 style="margin-top: 25px; color: #08233e;">Exercises:</h3>
+                        <h3 style="margin-top: 25px; margin-bottom: 15px; color: #08233e; font-size: 16px; border-bottom: 2px solid #48D670; padding-bottom: 8px;">Exercises</h3>
 
                         @foreach($workoutPlan->exercises as $exercise)
-                            <div class="exercise-item">
-                                <h4 style="margin-top: 0; color: #333; font-size: 14px;">
-                                    {{ $loop->iteration }}. {{ $exercise->name }}
-                                </h4>
+                            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; border: 1px solid #ddd;">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2" style="text-align: left; padding: 16px 18px; background-color: #08233e; color: white; font-size: 13px; font-weight: bold; border-bottom: 3px solid #48D670;">
+                                            {{ $loop->iteration }}. {{ $exercise->name }}
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody style="background-color: #ffffff;">
+                                    <tr>
+                                        <td colspan="2" style="padding: 12px 18px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                <tr>
+                                                    @if($exercise->sets)
+                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                            <strong>Sets:</strong> {{ $exercise->sets }}
+                                                        </td>
+                                                    @endif
+                                                    @if($exercise->reps)
+                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                            <strong>Reps:</strong> {{ $exercise->reps }}
+                                                        </td>
+                                                    @endif
+                                                    @if($exercise->duration_seconds)
+                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                            <strong>Duration:</strong> {{ $exercise->duration_seconds }}s
+                                                        </td>
+                                                    @endif
+                                                    @if($exercise->rest_seconds)
+                                                        <td style="padding: 5px 0; font-size: 11px; color: #333;">
+                                                            <strong>Rest:</strong> {{ $exercise->rest_seconds }}s
+                                                        </td>
+                                                    @endif
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
 
-                                <div class="exercise-sets">
-                                    @if($exercise->sets)
-                                        <span><strong>Sets:</strong> {{ $exercise->sets }}</span>
+                                    @if($exercise->description)
+                                        <tr>
+                                            <td colspan="2" style="padding: 12px 18px; color: #666; font-size: 11px; line-height: 1.6; border-bottom: 1px solid #e0e0e0;">
+                                                {{ $exercise->description }}
+                                            </td>
+                                        </tr>
                                     @endif
-                                    @if($exercise->reps)
-                                        <span><strong>Reps:</strong> {{ $exercise->reps }}</span>
+
+                                    @if($exercise->form_cues && is_array($exercise->form_cues) && count($exercise->form_cues) > 0)
+                                        <tr>
+                                            <td colspan="2" style="padding: 15px 18px; vertical-align: top; background-color: #fff; border-bottom: 1px solid #e0e0e0;">
+                                                <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 8px;">Form Cues</strong>
+                                                <table style="width: 100%; border-collapse: collapse;">
+                                                    @foreach($exercise->form_cues as $cue)
+                                                        <tr>
+                                                            <td style="padding: 3px 0; font-size: 11px; vertical-align: top; width: 15px; color: #999;">•</td>
+                                                            <td style="padding: 3px 0; font-size: 11px; color: #333; line-height: 1.5;">
+                                                                {{ is_string($cue) ? $cue : json_encode($cue) }}
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </table>
+                                            </td>
+                                        </tr>
                                     @endif
-                                    @if($exercise->duration_seconds)
-                                        <span><strong>Duration:</strong> {{ $exercise->duration_seconds }}s</span>
+
+                                    @if($exercise->equipment && is_array($exercise->equipment) && count($exercise->equipment) > 0)
+                                        <tr>
+                                            <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                                <strong style="color: #333;">Equipment:</strong>
+                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->equipment)) }}</span>
+                                            </td>
+                                        </tr>
                                     @endif
-                                    @if($exercise->rest_seconds)
-                                        <span><strong>Rest:</strong> {{ $exercise->rest_seconds }}s</span>
+
+                                    @if($exercise->alternatives && is_array($exercise->alternatives) && count($exercise->alternatives) > 0)
+                                        <tr>
+                                            <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9;">
+                                                <strong style="color: #333;">Alternatives:</strong>
+                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->alternatives)) }}</span>
+                                            </td>
+                                        </tr>
                                     @endif
-                                </div>
-
-                                @if($exercise->description)
-                                    <p style="margin: 10px 0; color: #555;">{{ $exercise->description }}</p>
-                                @endif
-
-                                @if($exercise->form_cues && is_array($exercise->form_cues) && count($exercise->form_cues) > 0)
-                                    <div class="form-cues-section" style="margin-top: 10px;">
-                                        <strong style="color: #08233e; font-size: 11px;">Form Cues:</strong>
-                                        <ul style="margin: 5px 0; padding-left: 20px; font-size: 11px;">
-                                            @foreach($exercise->form_cues as $cue)
-                                                <li>{{ is_string($cue) ? $cue : json_encode($cue) }}</li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                @endif
-
-                                @if($exercise->equipment && is_array($exercise->equipment) && count($exercise->equipment) > 0)
-                                    <div style="margin-top: 8px; font-size: 11px; color: #666;">
-                                        <strong>Equipment:</strong> {{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->equipment)) }}
-                                    </div>
-                                @endif
-
-                                @if($exercise->alternatives && is_array($exercise->alternatives) && count($exercise->alternatives) > 0)
-                                    <div style="margin-top: 8px; font-size: 11px; color: #666;">
-                                        <strong>Alternatives:</strong> {{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->alternatives)) }}
-                                    </div>
-                                @endif
-                            </div>
+                                </tbody>
+                            </table>
                         @endforeach
                     @endif
 
