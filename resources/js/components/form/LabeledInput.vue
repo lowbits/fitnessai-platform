@@ -19,7 +19,7 @@ const hasError = computed(() => props.errors?.length)
         <label :for="name" class="mb-2">{{ label }}</label>
         <slot :hasError="hasError"/>
 
-        <span v-if="hint" class="mt-1 text-sm leading-2 text-gray-600">{{ hint }}</span>
+        <span v-if="hint" class="mt-1 text-sm leading-6 text-gray-600">{{ hint }}</span>
         <span class="absolute -bottom-4 text-xs leading-none text-red-400" v-if="hasError">{{ props.errors }}</span>
     </div>
 </template>

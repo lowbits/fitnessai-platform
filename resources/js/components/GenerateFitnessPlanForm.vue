@@ -336,7 +336,7 @@ const submit = async () => {
     <!-- Form -->
     <form v-else @submit.prevent="submit" class="w-full flex-1 space-y-4">
         <!-- Dev Helper -->
-        <div v-if="false" class="absolute right-0">
+        <div v-if="true" class="absolute right-0">
             <button
                 type="button"
                 class="rounded border border-primary-500 bg-transparent px-4 py-2 text-primary-400"
@@ -577,29 +577,28 @@ const submit = async () => {
                 <!-- Step 8: Email & Submit -->
                 <TabPanel>
                     <FormGroup wrap>
-                        <LabeledInput name="name" label="Deine Name">
+                        <LabeledInput name="name" label="Your Name">
                             <div class="relative">
                                 <Input
                                     v-model="form.name"
                                     placeholder="Alex"
                                     required
-                                    class="w-full rounded-xl border border-dark-surfaces-25 bg-transparent px-3 py-2 text-green-600 transition-colors outline-none placeholder:text-secondary-200 focus:border-green-500 focus:ring-green-500 focus:outline-none"
                                 />
                             </div>
                         </LabeledInput>
-                        <LabeledInput name="email" label="E-Mail Address">
+                        <LabeledInput name="email" label="Email Address">
                             <div class="relative">
                                 <span
                                     class="absolute inset-y-0 flex items-center pl-3"
                                 >
                                     <Email />
                                 </span>
-                                <input
+                                <Input
                                     v-model="form.email"
                                     type="email"
                                     placeholder="your@email.com"
                                     required
-                                    class="w-full rounded-xl border border-dark-surfaces-25 bg-transparent px-3 py-2 pl-10 text-green-600 transition-colors outline-none placeholder:text-secondary-200 focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                                    class="pl-10"
                                 />
                             </div>
                         </LabeledInput>
@@ -614,7 +613,7 @@ const submit = async () => {
                             v-model="form.agree_terms"
                             type="checkbox"
                             required
-                            class="border-transparent bg-white text-green-600 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                            class="border-transparent bg-white text-green-600 accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
                         />
                         <label for="terms">
                             I agree to the fitnessAI.me User Agreement and
@@ -630,7 +629,7 @@ const submit = async () => {
                             id="newsletter"
                             v-model="form.signup_newsletter"
                             type="checkbox"
-                            class="border-transparent bg-white text-green-600 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                            class="border-transparent bg-white accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
                         />
                         <label for="newsletter">
                             By checking, you'll sign up for our newsletter and

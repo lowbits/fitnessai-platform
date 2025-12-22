@@ -30,7 +30,7 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
             class="gap-4 mt-2"
             :class="{
                 'space-y-4': !isHorizontal,
-                'flex justify-evenly items-center': isHorizontal
+                'flex flex-col md:flex-row justify-evenly items-center': isHorizontal
             }"
         >
             <RadioGroupOption

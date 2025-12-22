@@ -15,7 +15,7 @@ const model = defineModel<string>();
             v-model="model"
             :name="name"
             required
-            class="w-full bg-transparent px-3 py-2  border border-dark-surfaces-25 outline-none focus:outline-none focus:ring-green-500 transition-colors focus:border-green-500 rounded-xl placeholder:text-secondary-200 text-green-600"
+            class="w-full bg-transparent px-3 py-2  border border-dark-surfaces-25 outline-none focus:outline-none focus:ring-green-500 transition-colors focus:border-green-500 rounded-xl placeholder:text-secondary-200/20 text-green-600"
             :class="{'pr-14': suffix}"
             type="number"
             v-bind="$attrs"
