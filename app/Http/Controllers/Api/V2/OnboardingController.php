@@ -10,11 +10,13 @@ use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\NewOnboardingStarted;
 use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules\Enum;
 
 class OnboardingController extends Controller
@@ -92,6 +94,8 @@ class OnboardingController extends Controller
         // Send verification email
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
+        // Notify admin(s) about new onboarding
+        $this->notifyAdmins($result['user'], $validated);
 
         $response = [
             'success' => true,
@@ -106,5 +110,17 @@ class OnboardingController extends Controller
         ];
 
         return response()->json($response, 201);
+    }
+
+    /**
+     * Notify admin(s) about new onboarding.
+     */
+    private function notifyAdmins(User $user, array $profileData): void
+    {
+        $adminEmails = config('app.admin_emails');
+
+        Notification::route('mail', $adminEmails)
+            ->notify(new NewOnboardingStarted($user, $profileData));
+
     }
 }

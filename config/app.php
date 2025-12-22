@@ -123,4 +123,18 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Email Addresses
+    |--------------------------------------------------------------------------
+    |
+    | Email addresses that should receive admin notifications (e.g., new user
+    | onboarding, plan generations, etc.). Can be a single email or array.
+    |
+    */
+
+    'admin_emails' => env('ADMIN_EMAILS')
+        ? explode(',', env('ADMIN_EMAILS'))
+        : ['hallo+fitnessai@tobiaslobitz.de'],
+
 ];
