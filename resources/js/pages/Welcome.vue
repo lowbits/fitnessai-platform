@@ -16,14 +16,13 @@ defineProps<{
     durationDays: number;
 }>();
 
-const {t} = useI18n()
+const { t } = useI18n();
 
 const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'FitnessAI',
-    description:
-        t('welcome.meta.structured_data.description'),
+    description: t('welcome.meta.structured_data.description'),
     url: 'https://fitnessai.me',
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web Browser',
@@ -54,13 +53,15 @@ const structuredData = {
         </nav>
     </header>
     <main>
-        <div class="h-full w-full px-6 pb-10 md:px-0">
+        <div class="h-full w-full px-6 pb-10 md:px-0 overflow-hidden">
             <div
                 class="container mx-auto flex flex-col justify-between space-y-10 pt-14 md:flex-row md:space-y-0"
             >
                 <section class="w-full md:w-1/2 md:pt-20">
                     <article class="max-w-2xl">
-                        <h1 class="font-display text-4xl md:text-6xl font-bold text-white wrap-break-word">
+                        <h1
+                            class="font-display text-4xl font-bold wrap-break-word text-white md:text-6xl"
+                        >
                             {{ $t('welcome.hero.title') }}
                             <span
                                 class="bg-gradient-to-r from-primary-400 via-primary-500 to-white bg-clip-text font-display font-bold tracking-tight text-primary-400 text-transparent"
@@ -75,13 +76,24 @@ const structuredData = {
                     </article>
                 </section>
 
-                <FormCard class="flex flex-1 justify-end">
-                    <GenerateFitnessPlanForm :total-days="durationDays" />
-                </FormCard>
+                <div class="relative flex flex-1">
+                    <div
+                        class="absolute inset-0 z-0 -mr-32 -mt-20 xl:-mr-64 xl:-mt-10 flex items-center justify-center"
+                    >
+                        <img
+                            src="/assets/gradient_form.png"
+                            alt=""
+                            class="h-auto w-full max-w-4xl object-contain opacity-50"
+                        />
+                    </div>
+                    <FormCard class="flex flex-1 justify-end">
+                        <GenerateFitnessPlanForm :total-days="durationDays" />
+                    </FormCard>
+                </div>
             </div>
 
-            <div class="container mx-auto mt-20">
-                <div class="flex flex-col justify-between gap-4 md:flex-row">
+            <div class="container mx-auto mt-24">
+                <div class="flex flex-col justify-between gap-8 md:flex-row">
                     <ConvinceCard
                         :headline="$t('welcome.convince.research.headline')"
                         :body="$t('welcome.convince.research.body')"
@@ -111,7 +123,7 @@ const structuredData = {
 
             <div class="relative mx-auto mt-48">
                 <!-- Background Gradient Image -->
-                <div class="absolute inset-0 flex items-center justify-center">
+                <div class="absolute inset-0 z-0 flex items-center justify-center">
                     <img
                         src="/assets/gradient.png"
                         alt=""
@@ -121,7 +133,7 @@ const structuredData = {
 
                 <div class="mx-auto max-w-xl">
                     <h2
-                        class="text-center text-5xl font-bold tracking-tight text-white"
+                        class="text-center z-10 text-5xl font-bold tracking-tight text-white"
                     >
                         {{ $t('welcome.cta.title') }}
                     </h2>
@@ -136,7 +148,9 @@ const structuredData = {
 
             <section id="features" class="container mx-auto mt-32">
                 <div class="mt-20 space-y-5 text-white">
-                    <p class="text-sm text-primary-500">{{ $t('welcome.features.label') }}</p>
+                    <p class="text-sm text-primary-500">
+                        {{ $t('welcome.features.label') }}
+                    </p>
                     <h3 class="text-3xl font-bold tracking-tight text-white">
                         {{ $t('welcome.features.title') }}
                     </h3>
@@ -147,7 +161,7 @@ const structuredData = {
                 </div>
 
                 <div
-                    class="mt-12 flex flex-col justify-between gap-4 md:flex-row"
+                    class="mt-12 flex flex-col justify-between gap-8 md:flex-row"
                 >
                     <FeatureCard
                         :headline="$t('welcome.features.plans.headline')"
@@ -193,7 +207,9 @@ const structuredData = {
                         <p>
                             {{ $t('welcome.faq.contact') }}
                             <a href="mailto:hello@fitnessai.me"
-                                ><strong>{{ $t('welcome.faq.contactLink') }}</strong></a
+                                ><strong>{{
+                                    $t('welcome.faq.contactLink')
+                                }}</strong></a
                             >.
                         </p>
                     </header>

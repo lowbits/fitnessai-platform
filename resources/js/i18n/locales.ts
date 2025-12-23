@@ -115,9 +115,14 @@ export const locales = {
             steps: {
                 gender: {
                     label: 'Gender',
+                    headline: "Let's start with the basics",
+                    subline: 'This helps us personalize your plan',
                     error: 'Please select your gender',
                 },
                 personal: {
+                    headline: 'Tell us about yourself',
+                    subline:
+                        'We need these details to calculate your calorie needs',
                     age: 'Age',
                     height: 'Height',
                     weight: 'Weight',
@@ -126,10 +131,14 @@ export const locales = {
                     weightError: 'Please add your weight',
                 },
                 diet: {
+                    headline: "What's your diet preference?",
+                    subline: "We'll create meals that match your lifestyle",
                     label: 'Dietary Preferences',
                     placeholder: 'Select Diet Type',
                 },
                 activity: {
+                    headline: 'How active are you?',
+                    subline: 'This helps us understand your daily energy needs',
                     activityLabel: 'Activity Level',
                     activityHint: "What's your activity on an average day?",
                     activityPlaceholder: 'Select Activity Level',
@@ -140,26 +149,36 @@ export const locales = {
                     skillError: 'Please select your skill level',
                 },
                 goal: {
+                    headline: "What's your main goal?",
+                    subline: 'Your entire plan will be built around this',
                     label: 'Fitness Goal',
                     placeholder: 'Select Goal',
                     error: 'Please select your goal',
                 },
                 training: {
-                    placeLabel: 'Where do you train?',
+                    headline: 'Where do you prefer to train?',
+                    subline:
+                        "We'll design workouts based on your available equipment",
+                    placeLabel: 'Training Location',
                     placeError: 'Please select your training place',
-                    sessionsLabel: 'How often do you train?',
+                    sessionsHeadline: 'How many days per week?',
+                    sessionsSubline:
+                        "More isn't always better - consistency is key",
+                    sessionsLabel: 'Training Days',
                     sessionsError: 'Please set how often you want to train',
                     sessionsSuffix: 'times',
                     recommended: '(✨ recommended)',
                 },
                 final: {
+                    headline: 'Almost there!',
+                    subline: "We'll send your personalized plan to this email",
                     name: 'Your Name',
                     email: 'Email Address',
                     terms: 'I agree to the fitnessAI.me User Agreement and Privacy Policy.',
                     newsletter:
                         "By checking, you'll sign up for our newsletter and receive your first",
                     newsletterHighlight: 'nutrition and workout plan for free',
-                    submit: 'Generate',
+                    submit: 'Generate plan',
                     submitting: 'Generating...',
                 },
             },
@@ -381,9 +400,15 @@ export const locales = {
             steps: {
                 gender: {
                     label: 'Geschlecht',
+                    headline: 'Basics',
+                    subline:
+                        'So können wir deinen Trainingsplan optimal anpassen',
                     error: 'Bitte wähle dein Geschlecht',
                 },
                 personal: {
+                    headline: 'Über dich',
+                    subline:
+                        'Diese Angaben nutzen wir, um deinen Kalorienbedarf exakt zu berechnen',
                     age: 'Alter',
                     height: 'Größe',
                     weight: 'Gewicht',
@@ -392,35 +417,52 @@ export const locales = {
                     weightError: 'Bitte gib dein Gewicht an',
                 },
                 diet: {
+                    headline: 'Ernährung',
+                    subline:
+                        'Wir erstellen Mahlzeiten, die zu deinem Alltag passen',
                     label: 'Ernährungspräferenzen',
                     placeholder: 'Diät-Typ auswählen',
                 },
                 activity: {
+                    headline: 'Aktivität',
+                    subline: 'So bestimmen wir deinen täglichen Energiebedarf',
                     activityLabel: 'Aktivitätslevel',
                     activityHint:
                         'Wie aktiv bist du an einem durchschnittlichen Tag?',
                     activityPlaceholder: 'Aktivitätslevel auswählen',
                     activityError: 'Bitte wähle dein Aktivitätslevel',
                     skillLabel: 'Erfahrungslevel',
-                    skillHint: 'Wie erfahren bist du im Fitness-Bereich?',
+                    skillHint: 'Wie viel Trainingserfahrung hast du?',
                     skillPlaceholder: 'Erfahrungslevel auswählen',
                     skillError: 'Bitte wähle dein Erfahrungslevel',
                 },
                 goal: {
+                    headline: 'Dein Ziel',
+                    subline:
+                        'Dein kompletter Trainingsplan richtet sich danach',
                     label: 'Fitnessziel',
                     placeholder: 'Ziel auswählen',
                     error: 'Bitte wähle dein Ziel',
                 },
                 training: {
-                    placeLabel: 'Wo trainierst du?',
+                    headline: 'Training',
+                    subline:
+                        'Wir passen die Übungen an dein verfügbares Equipment an',
+                    placeLabel: 'Trainingsort',
                     placeError: 'Bitte wähle deinen Trainingsort',
-                    sessionsLabel: 'Wie oft trainierst du?',
+                    sessionsHeadline: 'Trainingstage pro Woche',
+                    sessionsSubline:
+                        'Mehr ist nicht immer besser – Konstanz schlägt alles',
+                    sessionsLabel: 'Trainingstage',
                     sessionsError:
                         'Bitte gib an, wie oft du trainieren möchtest',
                     sessionsSuffix: 'mal',
                     recommended: '(✨ empfohlen)',
                 },
                 final: {
+                    headline: 'Fast geschafft!',
+                    subline:
+                        'Wir schicken dir deinen persönlichen Plan per E-Mail',
                     name: 'Dein Name',
                     email: 'E-Mail-Adresse',
                     terms: 'Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung von fitnessAI.me zu.',
@@ -428,7 +470,7 @@ export const locales = {
                         'Durch Aktivieren meldest du dich für unseren Newsletter an und erhältst deinen ersten',
                     newsletterHighlight:
                         'Ernährungs- und Trainingsplan kostenlos',
-                    submit: 'Generieren',
+                    submit: 'Plan generieren',
                     submitting: 'Wird generiert...',
                 },
             },

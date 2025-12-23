@@ -42,8 +42,8 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
             >
                 <div
                     :class="[
-                        checked ? 'z-10 border-primary-200' : 'border-dark-surfaces-25',
-                        'rounded-lg relative justify-between w-full whitespace-nowrap flex cursor-pointer border p-4 focus:outline-none transition-colors'
+                        checked ? 'z-10 border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5' : 'border-dark-surfaces-25',
+                        'rounded-2xl relative justify-between w-full whitespace-nowrap flex cursor-pointer border p-4 focus:outline-none transition-colors'
                     ]"
                 >
                     <span class="ml-3 flex flex-col">

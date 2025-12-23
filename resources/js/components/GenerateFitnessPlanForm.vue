@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import { ref, computed, reactive } from 'vue';
-import { useI18n } from 'vue-i18n';
 import { useTranslatedEnums } from '@/composables/useTranslatedEnums';
+import { computed, reactive, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-import FormPanel from '@/components/form/FormPanel.vue';
-import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
 import FormGroup from '@/components/form/FormGroup.vue';
-import LabeledInput from '@/components/form/LabeledInput.vue';
-import Email from '@/components/icons/email.vue';
+import FormPanel from '@/components/form/FormPanel.vue';
 import FormTab from '@/components/form/FormTab.vue';
-import SelectInput from '@/components/form/SelectInput.vue';
+import LabeledInput from '@/components/form/LabeledInput.vue';
 import NumberInput from '@/components/form/NumberInput.vue';
 import RadioGroup from '@/components/form/RadioGroup.vue';
+import SelectInput from '@/components/form/SelectInput.vue';
+import Email from '@/components/icons/email.vue';
 import { Input } from '@/components/ui/input';
+import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
 
 defineProps<{
     totalDays: number;
@@ -60,12 +60,15 @@ const clearErrors = () => {
     form.errors = {};
 };
 
-const setError = (field: string | Record<string, string | string[]>, message?: string) => {
+const setError = (
+    field: string | Record<string, string | string[]>,
+    message?: string,
+) => {
     if (typeof field === 'string' && message) {
         form.errors[field] = message;
     } else if (typeof field === 'object') {
         // Handle Laravel validation errors (arrays)
-        Object.keys(field).forEach(key => {
+        Object.keys(field).forEach((key) => {
             const error = field[key];
             // If error is array, take first message
             form.errors[key] = Array.isArray(error) ? error[0] : error;
@@ -124,8 +127,10 @@ const validateStep = (step: number): boolean => {
         case 1: // Age, Height, Weight
             const errors: Record<string, string> = {};
             if (!form.age) errors.age = t('form.validation.ageRequired');
-            if (!form.height) errors.height = t('form.validation.heightRequired');
-            if (!form.weight) errors.weight = t('form.validation.weightRequired');
+            if (!form.height)
+                errors.height = t('form.validation.heightRequired');
+            if (!form.weight)
+                errors.weight = t('form.validation.weightRequired');
 
             if (Object.keys(errors).length > 0) {
                 setError(errors);
@@ -138,11 +143,17 @@ const validateStep = (step: number): boolean => {
 
         case 3: // Activity Level & Skill Level
             if (!form.activity_level) {
-                setError('activity_level', t('form.validation.activityLevelRequired'));
+                setError(
+                    'activity_level',
+                    t('form.validation.activityLevelRequired'),
+                );
                 return false;
             }
             if (!form.skill_level) {
-                setError('skill_level', t('form.validation.skillLevelRequired'));
+                setError(
+                    'skill_level',
+                    t('form.validation.skillLevelRequired'),
+                );
                 return false;
             }
             break;
@@ -156,7 +167,10 @@ const validateStep = (step: number): boolean => {
 
         case 5: // Training Place
             if (!form.training_place) {
-                setError('training_place', t('form.validation.trainingPlaceRequired'));
+                setError(
+                    'training_place',
+                    t('form.validation.trainingPlaceRequired'),
+                );
                 return false;
             }
             // Auto-set recommended sessions
@@ -279,7 +293,9 @@ const submit = async () => {
                         ></path>
                     </svg>
                 </div>
-                <h3 class="text-3xl font-bold text-white">{{ $t('form.success.title') }}</h3>
+                <h3 class="text-3xl font-bold text-white">
+                    {{ $t('form.success.title') }}
+                </h3>
             </div>
 
             <div class="space-y-4 text-center">
@@ -297,7 +313,9 @@ const submit = async () => {
 
                     <div class="mb-4 rounded-lg bg-dark-surfaces-800 p-4">
                         <p class="mb-2 text-sm text-secondary-200">
-                            <strong class="text-white">{{ $t('form.success.whatNext') }}</strong>
+                            <strong class="text-white">{{
+                                $t('form.success.whatNext')
+                            }}</strong>
                         </p>
                         <ol
                             class="list-inside list-decimal space-y-2 text-sm text-secondary-200"
@@ -312,15 +330,25 @@ const submit = async () => {
                         class="rounded-lg border border-blue-500/20 bg-blue-900/20 p-4"
                     >
                         <p class="text-sm text-blue-200">
-                            <strong>{{ $t('form.success.generationTime') }}</strong>
-                            {{ $t('form.success.generationText', { days: totalDays, time: $t('form.success.minutes') }) }}
+                            <strong>{{
+                                $t('form.success.generationTime')
+                            }}</strong>
+                            {{
+                                $t('form.success.generationText', {
+                                    days: totalDays,
+                                    time: $t('form.success.minutes'),
+                                })
+                            }}
                         </p>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <p class="text-sm text-secondary-300">
-                        <strong class="text-white">{{ $t('form.success.didntReceive') }}</strong><br />
+                        <strong class="text-white">{{
+                            $t('form.success.didntReceive')
+                        }}</strong
+                        ><br />
                         {{ $t('form.success.checkSpam') }}
                         <a
                             class="font-bold text-primary-400 transition hover:text-primary-300"
@@ -333,7 +361,11 @@ const submit = async () => {
 
                 <div class="pt-6">
                     <p class="text-sm text-secondary-200">
-                        {{ $t('form.success.linkValid', { hours: $t('form.success.hours') }) }}
+                        {{
+                            $t('form.success.linkValid', {
+                                hours: $t('form.success.hours'),
+                            })
+                        }}
                     </p>
                 </div>
             </div>
@@ -354,9 +386,13 @@ const submit = async () => {
         </div>
 
         <TabGroup :selectedIndex="activeStep" @change="goToStep">
-            <TabPanels class="mt-2">
+            <TabPanels class="mt-2 min-h-[550px] flex flex-col">
                 <!-- Step 1: Gender -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.gender.headline')"
+                    :subline="$t('form.steps.gender.subline')"
+                    @click:next="nextStep"
+                >
                     <RadioGroup
                         v-model="form.gender"
                         name="gender"
@@ -376,7 +412,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 2: Age, Height, Weight -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.personal.headline')"
+                    :subline="$t('form.steps.personal.subline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup wrap>
                         <LabeledInput
                             full-width
@@ -442,7 +482,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 3: Diet Type -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.diet.headline')"
+                    :subline="$t('form.steps.diet.subline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup class="mt-4">
                         <LabeledInput
                             full-width
@@ -469,7 +513,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 4: Activity & Skill Level -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.activity.headline')"
+                    :subline="$t('form.steps.activity.subline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup wrap class="mt-8">
                         <LabeledInput
                             full-width
@@ -520,7 +568,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 5: Body Goal -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.goal.headline')"
+                    :subline="$t('form.steps.goal.subline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup class="mt-8">
                         <LabeledInput
                             full-width
@@ -547,7 +599,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 6: Training Place -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.training.headline')"
+                    :subline="$t('form.steps.training.subline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup class="mt-8">
                         <LabeledInput
                             full-width
@@ -574,7 +630,11 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 7: Training Sessions -->
-                <FormPanel @click:next="nextStep">
+                <FormPanel
+                    :headline="$t('form.steps.training.sessionsHeadline')"
+                    :subline="$t('form.steps.training.sessionsSubline')"
+                    @click:next="nextStep"
+                >
                     <FormGroup class="relative mt-8">
                         <LabeledInput
                             full-width
@@ -605,76 +665,93 @@ const submit = async () => {
                 </FormPanel>
 
                 <!-- Step 8: Email & Submit -->
-                <TabPanel>
-                    <FormGroup wrap>
-                        <LabeledInput name="name" :label="$t('form.steps.final.name')" :errors="form.errors.name">
-                            <div class="relative">
-                                <Input
-                                    v-model="form.name"
-                                    placeholder="Alex"
-                                    required
-                                />
-                            </div>
-                        </LabeledInput>
-                        <LabeledInput name="email" :label="$t('form.steps.final.email')" :errors="form.errors.email">
-                            <div class="relative">
-                                <span
-                                    class="absolute inset-y-0 flex items-center pl-3"
-                                >
-                                    <Email />
-                                </span>
-                                <Input
-                                    v-model="form.email"
-                                    type="email"
-                                    placeholder="your@email.com"
-                                    required
-                                    class="pl-10"
-                                />
-                            </div>
-                        </LabeledInput>
-                    </FormGroup>
-
-                    <!-- Terms -->
-                    <div
-                        class="mt-5 flex items-center gap-4 px-3 py-1 text-sm leading-none font-semibold text-secondary-200"
-                    >
-                        <input
-                            id="terms"
-                            v-model="form.agree_terms"
-                            type="checkbox"
-                            required
-                            class="border-transparent bg-white text-green-600 accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
-                        />
-                        <label for="terms">
-                            {{ $t('form.steps.final.terms') }}
-                        </label>
+                <TabPanel class="flex min-h-[550px] flex-col">
+                    <div class="shrink-0">
+                        <h4 class="text-center font-display text-3xl font-semibold">
+                            {{ $t('form.steps.final.headline') }}
+                        </h4>
+                        <p class="mt-2 text-center font-display text-base leading-6 text-secondary-300">
+                            {{ $t('form.steps.final.subline') }}
+                        </p>
                     </div>
 
-                    <!-- Newsletter -->
-                    <div
-                        class="mt-1 flex items-center gap-4 px-3 py-1 text-sm leading-none font-semibold text-secondary-200"
-                    >
-                        <input
-                            id="newsletter"
-                            v-model="form.signup_newsletter"
-                            type="checkbox"
-                            class="border-transparent bg-white accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
-                        />
-                        <label for="newsletter">
-                            {{ $t('form.steps.final.newsletter') }}
-                            <strong class="text-base leading-none font-bold">
-                                {{ $t('form.steps.final.newsletterHighlight') }}</strong
-                            >.
-                        </label>
+                    <div class="mt-8 grow">
+                        <FormGroup wrap>
+                            <LabeledInput name="name" :label="$t('form.steps.final.name')" :errors="form.errors.name">
+                                <div class="relative">
+                                    <Input
+                                        v-model="form.name"
+                                        placeholder="Alex"
+                                        required
+                                    />
+                                </div>
+                            </LabeledInput>
+                            <LabeledInput name="email" :label="$t('form.steps.final.email')" :errors="form.errors.email">
+                                <div class="relative">
+                                    <span
+                                        class="absolute inset-y-0 flex items-center pl-3"
+                                    >
+                                        <Email />
+                                    </span>
+                                    <Input
+                                        v-model="form.email"
+                                        type="email"
+                                        placeholder="your@email.com"
+                                        required
+                                        class="pl-10"
+                                    />
+                                </div>
+                            </LabeledInput>
+                        </FormGroup>
+
+                        <!-- Terms -->
+                        <div
+                            class="mt-5 flex items-center gap-4 px-3 py-1 text-sm leading-none font-semibold text-secondary-200"
+                        >
+                            <input
+                                id="terms"
+                                v-model="form.agree_terms"
+                                type="checkbox"
+                                required
+                                class="border-transparent bg-white text-green-600 accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                            />
+                            <label for="terms">
+                                {{ $t('form.steps.final.terms') }}
+                            </label>
+                        </div>
+
+                        <!-- Newsletter -->
+                        <div
+                            class="mt-1 flex items-center gap-4 px-3 py-1 text-sm leading-none font-semibold text-secondary-200"
+                        >
+                            <input
+                                id="newsletter"
+                                v-model="form.signup_newsletter"
+                                type="checkbox"
+                                class="border-transparent bg-white accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
+                            />
+                            <label for="newsletter">
+                                {{ $t('form.steps.final.newsletter') }}
+                                <strong class="text-base leading-none font-bold">
+                                    {{
+                                        $t('form.steps.final.newsletterHighlight')
+                                    }}</strong
+                                >.
+                            </label>
+                        </div>
                     </div>
 
                     <!-- Submit -->
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="mt-8 inline-flex w-full justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50"
+                        class="mt-10 inline-flex w-full justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50 flex-shrink-0"
                     >
-                        {{ form.processing ? $t('form.steps.final.submitting') : $t('form.steps.final.submit') }}
+                        {{
+                            form.processing
+                                ? $t('form.steps.final.submitting')
+                                : $t('form.steps.final.submit')
+                        }}
                     </button>
                 </TabPanel>
 
