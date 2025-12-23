@@ -10,15 +10,19 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/imprint', function () {
-    return Inertia::render('Imprint');
-})->name('imprint');
+Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => [ 'localizationRedirect', 'localeSessionRedirect', 'localeViewPath' ]], function()
+{
+    /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
+    Route::get('/', function () {
+        return Inertia::render('Welcome', [
+            'durationDays' => config('plans.duration_days'),
+        ]);
+    })->name('home');
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'durationDays' => config('plans.duration_days'),
-    ]);
-})->name('home');
+    Route::get('/imprint', function () {
+        return Inertia::render('Imprint');
+    })->name('imprint');
+});
 
 
 

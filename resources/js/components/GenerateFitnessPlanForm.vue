@@ -1,14 +1,7 @@
 <script lang="ts" setup>
 import { ref, computed, reactive } from 'vue';
-
-import {
-    GENDERS,
-    BODY_GOALS,
-    SKILL_LEVELS,
-    ACTIVITY_LEVELS,
-    TRAINING_PLACES,
-    DIET_TYPES,
-} from '@/constants/enums';
+import { useI18n } from 'vue-i18n';
+import { useTranslatedEnums } from '@/composables/useTranslatedEnums';
 
 import FormPanel from '@/components/form/FormPanel.vue';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
@@ -24,6 +17,19 @@ import { Input } from '@/components/ui/input';
 defineProps<{
     totalDays: number;
 }>();
+
+// i18n
+const { t } = useI18n();
+
+// Translated Enums
+const {
+    GENDERS,
+    BODY_GOALS,
+    SKILL_LEVELS,
+    ACTIVITY_LEVELS,
+    TRAINING_PLACES,
+    DIET_TYPES,
+} = useTranslatedEnums();
 
 // State
 const activeStep = ref(0);
@@ -82,19 +88,19 @@ const isRecommendedTrainingSessions = computed(
 // Development helper
 const setDefaultValues = () => {
     const random = (max: number) => Math.floor(Math.random() * max);
-    const randomItem = <T,>(arr: readonly T[]): T => arr[random(arr.length)];
+    const randomItem = <T,>(arr: T[]): T => arr[random(arr.length)];
 
     form.email = `test${random(1000)}@example.com`;
     form.name = 'Test User';
     form.age = String(random(30 - 18) + 18);
-    form.gender = randomItem(GENDERS).value;
+    form.gender = randomItem(GENDERS.value).value;
     form.height = String(random(190 - 130) + 130);
     form.weight = String(parseInt(form.height) - 100);
-    form.body_goal = randomItem(BODY_GOALS).value;
-    form.activity_level = randomItem(ACTIVITY_LEVELS).value;
-    form.skill_level = randomItem(SKILL_LEVELS).value;
-    form.diet_type = randomItem(DIET_TYPES).value;
-    form.training_place = randomItem(TRAINING_PLACES).value;
+    form.body_goal = randomItem(BODY_GOALS.value).value;
+    form.activity_level = randomItem(ACTIVITY_LEVELS.value).value;
+    form.skill_level = randomItem(SKILL_LEVELS.value).value;
+    form.diet_type = randomItem(DIET_TYPES.value).value;
+    form.training_place = randomItem(TRAINING_PLACES.value).value;
     form.training_sessions = getRecommendedTrainingSessions(form.skill_level);
 };
 
@@ -105,16 +111,16 @@ const validateStep = (step: number): boolean => {
     switch (step) {
         case 0: // Gender
             if (!form.gender) {
-                setError('gender', 'Please select your gender');
+                setError('gender', t('form.validation.genderRequired'));
                 return false;
             }
             break;
 
         case 1: // Age, Height, Weight
             const errors: Record<string, string> = {};
-            if (!form.age) errors.age = 'Please add your age';
-            if (!form.height) errors.height = 'Please add your height';
-            if (!form.weight) errors.weight = 'Please add your weight';
+            if (!form.age) errors.age = t('form.validation.ageRequired');
+            if (!form.height) errors.height = t('form.validation.heightRequired');
+            if (!form.weight) errors.weight = t('form.validation.weightRequired');
 
             if (Object.keys(errors).length > 0) {
                 setError(errors);
@@ -127,25 +133,25 @@ const validateStep = (step: number): boolean => {
 
         case 3: // Activity Level & Skill Level
             if (!form.activity_level) {
-                setError('activity_level', 'Please select your activity level');
+                setError('activity_level', t('form.validation.activityLevelRequired'));
                 return false;
             }
             if (!form.skill_level) {
-                setError('skill_level', 'Please select your skill level');
+                setError('skill_level', t('form.validation.skillLevelRequired'));
                 return false;
             }
             break;
 
         case 4: // Body Goal
             if (!form.body_goal) {
-                setError('body_goal', 'Please select your goal');
+                setError('body_goal', t('form.validation.bodyGoalRequired'));
                 return false;
             }
             break;
 
         case 5: // Training Place
             if (!form.training_place) {
-                setError('training_place', 'Please select your training place');
+                setError('training_place', t('form.validation.trainingPlaceRequired'));
                 return false;
             }
             // Auto-set recommended sessions
@@ -161,7 +167,7 @@ const validateStep = (step: number): boolean => {
             ) {
                 setError(
                     'training_sessions',
-                    'Please set how often you want to train',
+                    t('form.validation.trainingSessionsRequired'),
                 );
                 return false;
             }
@@ -262,17 +268,17 @@ const submit = async () => {
                         ></path>
                     </svg>
                 </div>
-                <h3 class="text-3xl font-bold text-white">Check Your Email</h3>
+                <h3 class="text-3xl font-bold text-white">{{ $t('form.success.title') }}</h3>
             </div>
 
             <div class="space-y-4 text-center">
                 <p class="text-lg text-gray-200">
-                    Thank you for completing the onboarding!
+                    {{ $t('form.success.thankYou') }}
                 </p>
 
                 <div class="rounded-xl bg-dark-surfaces-500 p-6 text-left">
                     <p class="mb-3 font-semibold text-white">
-                        We've sent a verification email to:
+                        {{ $t('form.success.emailSent') }}
                     </p>
                     <p class="mb-4 text-lg font-bold text-primary-400">
                         {{ userEmail }}
@@ -280,19 +286,14 @@ const submit = async () => {
 
                     <div class="mb-4 rounded-lg bg-dark-surfaces-800 p-4">
                         <p class="mb-2 text-sm text-secondary-200">
-                            <strong class="text-white"
-                                >What happens next:</strong
-                            >
+                            <strong class="text-white">{{ $t('form.success.whatNext') }}</strong>
                         </p>
                         <ol
                             class="list-inside list-decimal space-y-2 text-sm text-secondary-200"
                         >
-                            <li>Check your inbox (and spam folder)</li>
-                            <li>Click the verification link in the email</li>
-                            <li>
-                                We'll immediately start generating your
-                                personalized plan
-                            </li>
+                            <li>{{ $t('form.success.steps.inbox') }}</li>
+                            <li>{{ $t('form.success.steps.verify') }}</li>
+                            <li>{{ $t('form.success.steps.generate') }}</li>
                         </ol>
                     </div>
 
@@ -300,20 +301,16 @@ const submit = async () => {
                         class="rounded-lg border border-blue-500/20 bg-blue-900/20 p-4"
                     >
                         <p class="text-sm text-blue-200">
-                            <strong>Generation Time:</strong> Your complete
-                            {{ totalDays }}-day plan (meals + workouts) will be
-                            ready in approximately
-                            <strong>3-5 minutes</strong> after verification.
+                            <strong>{{ $t('form.success.generationTime') }}</strong>
+                            {{ $t('form.success.generationText', { days: totalDays, time: $t('form.success.minutes') }) }}
                         </p>
                     </div>
                 </div>
 
                 <div class="pt-4">
                     <p class="text-sm text-secondary-300">
-                        <strong class="text-white"
-                            >Didn't receive the email?</strong
-                        ><br />
-                        Please check your spam folder or contact us at
+                        <strong class="text-white">{{ $t('form.success.didntReceive') }}</strong><br />
+                        {{ $t('form.success.checkSpam') }}
                         <a
                             class="font-bold text-primary-400 transition hover:text-primary-300"
                             href="mailto:hello@fitnessai.me"
@@ -325,8 +322,7 @@ const submit = async () => {
 
                 <div class="pt-6">
                     <p class="text-sm text-secondary-200">
-                        The verification link is valid for
-                        <strong class="text-white">24 hours</strong>.
+                        {{ $t('form.success.linkValid', { hours: $t('form.success.hours') }) }}
                     </p>
                 </div>
             </div>
@@ -336,13 +332,13 @@ const submit = async () => {
     <!-- Form -->
     <form v-else @submit.prevent="submit" class="w-full flex-1 space-y-4">
         <!-- Dev Helper -->
-        <div v-if="true" class="absolute right-0">
+        <div v-if="false" class="absolute right-0">
             <button
                 type="button"
                 class="rounded border border-primary-500 bg-transparent px-4 py-2 text-primary-400"
                 @click="setDefaultValues"
             >
-                🪄 Set Form
+                🪄 {{ $t('form.devHelper') }}
             </button>
         </div>
 
@@ -353,7 +349,7 @@ const submit = async () => {
                     <RadioGroup
                         v-model="form.gender"
                         name="gender"
-                        label="Gender"
+                        :label="$t('form.steps.gender.label')"
                         :items="GENDERS.map((g) => g.value)"
                     >
                         <template #default="{ item }">
@@ -374,7 +370,7 @@ const submit = async () => {
                         <LabeledInput
                             full-width
                             name="age"
-                            label="Age"
+                            :label="$t('form.steps.personal.age')"
                             :errors="form.errors.age"
                         >
                             <NumberInput
@@ -388,7 +384,7 @@ const submit = async () => {
                         <LabeledInput
                             full-width
                             name="height"
-                            label="Height"
+                            :label="$t('form.steps.personal.height')"
                             :errors="form.errors.height"
                         >
                             <NumberInput
@@ -403,7 +399,7 @@ const submit = async () => {
                         <LabeledInput
                             full-width
                             name="weight"
-                            label="Weight"
+                            :label="$t('form.steps.personal.weight')"
                             :errors="form.errors.weight"
                         >
                             <NumberInput
@@ -422,7 +418,7 @@ const submit = async () => {
                     <FormGroup class="mt-4">
                         <LabeledInput
                             full-width
-                            label="Dietary Preferences"
+                            :label="$t('form.steps.diet.label')"
                             name="diet_type"
                             :errors="form.errors.diet_type"
                         >
@@ -430,7 +426,7 @@ const submit = async () => {
                                 id="diet_type"
                                 name="diet_type"
                                 v-model="form.diet_type"
-                                default-label="Select Diet Type"
+                                :default-label="$t('form.steps.diet.placeholder')"
                             >
                                 <option
                                     v-for="diet in DIET_TYPES"
@@ -449,16 +445,16 @@ const submit = async () => {
                     <FormGroup wrap class="mt-8">
                         <LabeledInput
                             full-width
-                            label="Activity Level"
+                            :label="$t('form.steps.activity.activityLabel')"
                             name="activity_level"
-                            hint="What's your activity on an average day?"
+                            :hint="$t('form.steps.activity.activityHint')"
                             :errors="form.errors.activity_level"
                         >
                             <SelectInput
                                 id="activity_level"
                                 name="activity_level"
                                 v-model="form.activity_level"
-                                default-label="Select Activity Level"
+                                :default-label="$t('form.steps.activity.activityPlaceholder')"
                             >
                                 <option
                                     v-for="activity in ACTIVITY_LEVELS"
@@ -472,16 +468,16 @@ const submit = async () => {
 
                         <LabeledInput
                             full-width
-                            label="Skill Level"
+                            :label="$t('form.steps.activity.skillLabel')"
                             name="skill_level"
-                            hint="How experienced are you in fitness?"
+                            :hint="$t('form.steps.activity.skillHint')"
                             :errors="form.errors.skill_level"
                         >
                             <SelectInput
                                 id="skill_level"
                                 name="skill_level"
                                 v-model="form.skill_level"
-                                default-label="Select Skill Level"
+                                :default-label="$t('form.steps.activity.skillPlaceholder')"
                             >
                                 <option
                                     v-for="skill in SKILL_LEVELS"
@@ -500,7 +496,7 @@ const submit = async () => {
                     <FormGroup class="mt-8">
                         <LabeledInput
                             full-width
-                            label="Fitness Goal"
+                            :label="$t('form.steps.goal.label')"
                             name="body_goal"
                             :errors="form.errors.body_goal"
                         >
@@ -508,7 +504,7 @@ const submit = async () => {
                                 id="body_goal"
                                 name="body_goal"
                                 v-model="form.body_goal"
-                                default-label="Select Goal"
+                                :default-label="$t('form.steps.goal.placeholder')"
                             >
                                 <option
                                     v-for="goal in BODY_GOALS"
@@ -528,7 +524,7 @@ const submit = async () => {
                         <LabeledInput
                             full-width
                             name="training_place"
-                            label="Where do you train?"
+                            :label="$t('form.steps.training.placeLabel')"
                             :errors="form.errors.training_place"
                         >
                             <RadioGroup
@@ -555,21 +551,21 @@ const submit = async () => {
                         <LabeledInput
                             full-width
                             name="training_sessions"
-                            label="How often do you train?"
+                            :label="$t('form.steps.training.sessionsLabel')"
                             :errors="form.errors.training_sessions"
                         >
                             <NumberInput
                                 id="training_sessions"
                                 name="training_sessions"
                                 v-model="form.training_sessions"
-                                suffix="times"
+                                :suffix="$t('form.steps.training.sessionsSuffix')"
                             />
                         </LabeledInput>
                         <p
                             v-if="isRecommendedTrainingSessions"
                             class="absolute top-11 left-8 text-xs text-secondary-300"
                         >
-                            (✨ recommended)
+                            {{ $t('form.steps.training.recommended') }}
                         </p>
                     </FormGroup>
                 </FormPanel>
@@ -577,7 +573,7 @@ const submit = async () => {
                 <!-- Step 8: Email & Submit -->
                 <TabPanel>
                     <FormGroup wrap>
-                        <LabeledInput name="name" label="Your Name">
+                        <LabeledInput name="name" :label="$t('form.steps.final.name')">
                             <div class="relative">
                                 <Input
                                     v-model="form.name"
@@ -586,7 +582,7 @@ const submit = async () => {
                                 />
                             </div>
                         </LabeledInput>
-                        <LabeledInput name="email" label="Email Address">
+                        <LabeledInput name="email" :label="$t('form.steps.final.email')">
                             <div class="relative">
                                 <span
                                     class="absolute inset-y-0 flex items-center pl-3"
@@ -616,8 +612,7 @@ const submit = async () => {
                             class="border-transparent bg-white text-green-600 accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
                         />
                         <label for="terms">
-                            I agree to the fitnessAI.me User Agreement and
-                            Privacy Policy.
+                            {{ $t('form.steps.final.terms') }}
                         </label>
                     </div>
 
@@ -632,10 +627,9 @@ const submit = async () => {
                             class="border-transparent bg-white accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
                         />
                         <label for="newsletter">
-                            By checking, you'll sign up for our newsletter and
-                            receive your first
+                            {{ $t('form.steps.final.newsletter') }}
                             <strong class="text-base leading-none font-bold">
-                                nutrition and workout plan for free </strong
+                                {{ $t('form.steps.final.newsletterHighlight') }}</strong
                             >.
                         </label>
                     </div>
@@ -646,7 +640,7 @@ const submit = async () => {
                         :disabled="form.processing"
                         class="mt-8 inline-flex w-full justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50"
                     >
-                        {{ form.processing ? 'Generating...' : 'Generate' }}
+                        {{ form.processing ? $t('form.steps.final.submitting') : $t('form.steps.final.submit') }}
                     </button>
                 </TabPanel>
 

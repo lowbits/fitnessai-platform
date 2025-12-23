@@ -6,7 +6,7 @@ import PrimaryButton from '@/components/PrimaryButton.vue';
 <template>
     <TabPanel>
         <slot />
-        <PrimaryButton class="mt-10 w-full" @click="$emit('click:next')" type="button">Continue</PrimaryButton>
+        <PrimaryButton class="mt-10 w-full" @click="$emit('click:next')" type="button">{{$t('form_panel.submit')}}</PrimaryButton>
     </TabPanel>
 </template>
 

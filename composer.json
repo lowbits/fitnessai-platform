@@ -17,6 +17,7 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
+        "mcamara/laravel-localization": "^2.3",
         "openai-php/client": "^0.18.0"
     },
     "require-dev": {
