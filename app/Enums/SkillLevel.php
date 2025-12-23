@@ -21,12 +21,7 @@ enum SkillLevel: string
      */
     public function label(): string
     {
-        return match($this) {
-            self::BEGINNER => 'Beginner',
-            self::INTERMEDIATE => 'Intermediate',
-            self::ADVANCED => 'Advanced',
-            self::ELITE => 'Elite',
-        };
+        return __('enums.skillLevel.' . $this->value);
     }
 
     /**

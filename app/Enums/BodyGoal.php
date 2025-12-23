@@ -22,13 +22,7 @@ enum BodyGoal: string
      */
     public function label(): string
     {
-        return match($this) {
-            self::MUSCLE_GAIN => 'Muscle Gain',
-            self::WEIGHT_LOSS => 'Weight Loss',
-            self::MAINTENANCE => 'Maintenance',
-            self::ENDURANCE => 'Endurance',
-            self::STRENGTH => 'Strength',
-        };
+        return __('enums.bodyGoal.' . $this->value);
     }
 
     /**

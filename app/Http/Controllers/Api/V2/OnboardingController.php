@@ -46,6 +46,7 @@ class OnboardingController extends Controller
                 'password' => isset($validated['password'])
                     ? Hash::make($validated['password'])
                     : null,
+                'locale' => app()->getLocale(),
             ]);
 
 

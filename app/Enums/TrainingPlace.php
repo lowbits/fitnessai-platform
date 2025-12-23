@@ -20,12 +20,7 @@ enum TrainingPlace: string
      */
     public function label(): string
     {
-        return match ($this) {
-            self::GYM => 'Gym',
-            self::HOME => 'Home',
-            self::OUTDOOR => 'Outdoor',
-            self::NO_PREFERENCE => 'No Preference',
-        };
+        return __('enums.trainingPlace.' . $this->value);
     }
 
     /**

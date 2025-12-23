@@ -20,12 +20,7 @@ enum ActivityLevel: string
      */
     public function label(): string
     {
-        return match ($this) {
-            self::MAINLY_SITTING => 'Mainly Sitting',
-            self::MAINLY_STANDING => 'Mainly Standing',
-            self::MAINLY_WALKING => 'Mainly Walking',
-            self::HARD_WORKING => 'Hard Physical Work',
-        };
+        return __('enums.activityLevel.' . $this->value);
     }
 
     /**

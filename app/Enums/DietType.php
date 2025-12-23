@@ -31,18 +31,7 @@ enum DietType: string
      */
     public function label(): string
     {
-        return match ($this) {
-            self::OMNIVORE => 'Omnivore',
-            self::VEGETARIAN => 'Vegetarian',
-            self::PESCATARIAN => 'Pescatarian',
-            self::VEGAN => 'Vegan',
-            self::HIGH_PROTEIN => 'High Protein',
-            self::LOW_CARB => 'Low Carb',
-            self::KETOGENIC => 'Ketogenic',
-            self::PALEO => 'Paleo',
-            self::MEDITERRANEAN => 'Mediterranean',
-            self::INTERMITTENT_FASTING => 'Intermittent Fasting',
-        };
+        return __('enums.dietType.' . $this->value);
     }
 
     /**

@@ -3,9 +3,13 @@
 namespace App\Console\Commands;
 
 use App\Models\Plan;
+use App\Models\User;
+use App\Notifications\NewOnboardingStarted;
 use App\Notifications\PlanGenerationComplete;
+use App\Notifications\PlanReadyForDelivery;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class CheckCompletedPlans extends Command
 {
@@ -66,6 +70,7 @@ class CheckCompletedPlans extends Command
 
             // Send notification
             try {
+                $this->notifyAdmins($plan);
                 $plan->user->notify(new PlanGenerationComplete($plan));
 
                 // Mark as notified (add this column via migration)
@@ -83,6 +88,22 @@ class CheckCompletedPlans extends Command
         $this->info("Completed! Notified {$notifiedCount} users.");
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Notify admin(s) about new onboarding.
+     */
+    private function notifyAdmins(Plan $plan): void
+    {
+        $adminEmails = config('app.admin_emails');
+
+        try {
+            Notification::route('mail', $adminEmails)
+                ->notify(new PlanReadyForDelivery($plan));
+        }catch (\Exception $e) {
+            $this->error("✗ Failed to notify admins $adminEmails: {$e->getMessage()}");
+        }
+
     }
 }
 

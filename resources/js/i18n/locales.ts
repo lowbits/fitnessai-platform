@@ -83,34 +83,32 @@ export const locales = {
         },
         form: {
             validation: {
-                genderRequired: 'Please select your gender',
-                ageRequired: 'Please add your age',
-                heightRequired: 'Please add your height',
-                weightRequired: 'Please add your weight',
-                activityLevelRequired: 'Please select your activity level',
-                skillLevelRequired: 'Please select your skill level',
-                bodyGoalRequired: 'Please select your goal',
-                trainingPlaceRequired: 'Please select your training place',
-                trainingSessionsRequired:
-                    'Please set how often you want to train',
+                genderRequired: 'Select your gender',
+                ageRequired: 'Enter your age',
+                heightRequired: 'Enter your height',
+                weightRequired: 'Enter your weight',
+                activityLevelRequired: 'Select your activity level',
+                skillLevelRequired: 'Select your experience level',
+                bodyGoalRequired: 'Select your goal',
+                trainingPlaceRequired: 'Select your training location',
+                trainingSessionsRequired: 'Choose how often you want to train',
             },
             success: {
-                title: 'Check Your Email',
-                thankYou: 'Thank you for completing the onboarding!',
-                emailSent: "We've sent a verification email to:",
-                whatNext: 'What happens next:',
+                title: 'Almost there',
+                thankYou: 'Your details have been saved.',
+                emailSent: "We've just sent a verification email to:",
+                whatNext: 'Here’s what happens next:',
                 steps: {
-                    inbox: 'Check your inbox (and spam folder)',
-                    verify: 'Click the verification link in the email',
-                    generate:
-                        "We'll immediately start generating your personalized plan",
+                    inbox: 'Open your email inbox (and check spam if needed)',
+                    verify: 'Verify your email address using the link',
+                    generate: 'We’ll then prepare your personal plan',
                 },
-                generationTime: 'Generation Time:',
+                generationTime: 'Estimated time',
                 generationText:
-                    'Your complete {days}-day plan (meals + workouts) will be ready in approximately {time} after verification.',
-                minutes: '3-5 minutes',
-                didntReceive: "Didn't receive the email?",
-                checkSpam: 'Please check your spam folder or contact us at',
+                    'Your full {days}-day training and meal plan will be ready shortly after verification.',
+                minutes: '3–5 minutes',
+                didntReceive: 'Can’t find the email?',
+                checkSpam: 'Check your spam folder or contact us at',
                 linkValid: 'The verification link is valid for {hours}.',
                 hours: '24 hours',
             },
@@ -167,11 +165,59 @@ export const locales = {
             },
             devHelper: 'Set Form',
         },
+        emailVerification: {
+            generating: {
+                verified: 'Email Verified!',
+                welcome: 'Welcome, {name}!',
+                title: 'Generating Your Personalized Plan',
+                description:
+                    'This may take a few minutes. You can close this page, we will inform you when your plan is ready.',
+                complete: '✅ Your plan is ready! Check your emails...',
+                hasFailures:
+                    "⚠️ Some items failed to generate. We'll continue with what we have.",
+                generating: 'Generating your personalized plan...',
+                loadingStatus: 'Loading status...',
+                planLabel: 'Plan:',
+                startDateLabel: 'Start Date:',
+            },
+            expired: {
+                title: 'Verification Link Expired',
+                description:
+                    'This verification link has expired. Verification links are valid for 24 hours.',
+                whatToDo: 'What to do:',
+                steps: {
+                    contact:
+                        'Contact us at {email} to request a new verification email',
+                    include: 'Include your email address in the message',
+                },
+                backHome: 'Back to Home',
+            },
+            invalid: {
+                title: 'Invalid Verification Link',
+                description:
+                    'This verification link is invalid or has already been used.',
+                possibleReasons: 'Possible reasons:',
+                reasons: {
+                    alreadyVerified: 'Your email is already verified',
+                    invalidLink: 'The link is malformed or incorrect',
+                    alreadyUsed: 'This link has already been used',
+                },
+                whatToDo: 'What to do:',
+                steps: {
+                    tryLogin:
+                        'Try logging in - your email might already be verified',
+                    contact:
+                        'Contact us at {email} if you continue to have issues',
+                },
+                backHome: 'Back to Home',
+            },
+        },
         enums: {
             gender: {
                 male: 'Male',
                 female: 'Female',
                 other: 'Other',
+                prefer_not_to_say: 'Prefer not to say',
             },
             bodyGoal: {
                 muscle_gain: 'Muscle Gain',
@@ -190,7 +236,7 @@ export const locales = {
                 mainly_sitting: 'Mainly Sitting',
                 mainly_standing: 'Mainly Standing',
                 mainly_walking: 'Mainly Walking',
-                hard_working: 'Hard Working',
+                hard_working: 'Hard Physical Work',
             },
             trainingPlace: {
                 gym: 'Gym',
@@ -301,33 +347,32 @@ export const locales = {
         },
         form: {
             validation: {
-                genderRequired: 'Bitte wähle dein Geschlecht',
-                ageRequired: 'Bitte gib dein Alter an',
-                heightRequired: 'Bitte gib deine Größe an',
-                weightRequired: 'Bitte gib dein Gewicht an',
-                activityLevelRequired: 'Bitte wähle dein Aktivitätslevel',
-                skillLevelRequired: 'Bitte wähle dein Erfahrungslevel',
-                bodyGoalRequired: 'Bitte wähle dein Ziel',
-                trainingPlaceRequired: 'Bitte wähle deinen Trainingsort',
-                trainingSessionsRequired:
-                    'Bitte gib an, wie oft du trainieren möchtest',
+                genderRequired: 'Geschlecht auswählen',
+                ageRequired: 'Alter angeben',
+                heightRequired: 'Größe angeben',
+                weightRequired: 'Gewicht angeben',
+                activityLevelRequired: 'Aktivitätslevel auswählen',
+                skillLevelRequired: 'Erfahrungslevel auswählen',
+                bodyGoalRequired: 'Ziel auswählen',
+                trainingPlaceRequired: 'Trainingsort auswählen',
+                trainingSessionsRequired: 'Trainingshäufigkeit auswählen',
             },
             success: {
-                title: 'Prüfe deine E-Mails',
-                thankYou: 'Vielen Dank für das Ausfüllen des Onboardings!',
-                emailSent: 'Wir haben eine Bestätigungs-E-Mail gesendet an:',
-                whatNext: 'Was passiert als Nächstes:',
+                title: 'Fast geschafft',
+                thankYou: 'Deine Angaben sind gespeichert.',
+                emailSent:
+                    'Wir haben dir gerade eine Bestätigungs-E-Mail gesendet an:',
+                whatNext: 'So geht es weiter:',
                 steps: {
-                    inbox: 'Prüfe deinen Posteingang (und Spam-Ordner)',
-                    verify: 'Klicke auf den Bestätigungslink in der E-Mail',
-                    generate:
-                        'Wir beginnen sofort mit der Erstellung deines personalisierten Plans',
+                    inbox: 'Öffne dein E-Mail-Postfach (ggf. auch den Spam-Ordner)',
+                    verify: 'Bestätige deine E-Mail-Adresse über den Link',
+                    generate: 'Danach erstellen wir deinen persönlichen Plan',
                 },
-                generationTime: 'Generierungszeit:',
+                generationTime: 'Dauer',
                 generationText:
-                    'Dein kompletter {days}-Tage-Plan (Mahlzeiten + Workouts) ist in etwa {time} nach der Bestätigung fertig.',
-                minutes: '3-5 Minuten',
-                didntReceive: 'Keine E-Mail erhalten?',
+                    'Dein kompletter {days}-Tage-Plan mit Training & Ernährung ist kurz nach der Bestätigung für dich bereit.',
+                minutes: '3–5 Minuten',
+                didntReceive: 'Keine E-Mail gefunden?',
                 checkSpam:
                     'Bitte prüfe deinen Spam-Ordner oder kontaktiere uns unter',
                 linkValid: 'Der Bestätigungslink ist {hours} gültig.',
@@ -389,11 +434,59 @@ export const locales = {
             },
             devHelper: 'Formular füllen',
         },
+        emailVerification: {
+            generating: {
+                verified: 'E-Mail verifiziert!',
+                welcome: 'Willkommen, {name}!',
+                title: 'Dein personalisierter Plan wird erstellt',
+                description:
+                    'Dies kann einige Minuten dauern. Du kannst diese Seite schließen, wir informieren dich, wenn dein Plan fertig ist.',
+                complete: '✅ Dein Plan ist fertig! Prüfe deine E-Mails...',
+                hasFailures:
+                    '⚠️ Einige Elemente konnten nicht generiert werden. Wir fahren mit dem fort, was wir haben.',
+                generating: 'Dein personalisierter Plan wird erstellt...',
+                loadingStatus: 'Status wird geladen...',
+                planLabel: 'Plan:',
+                startDateLabel: 'Startdatum:',
+            },
+            expired: {
+                title: 'Bestätigungslink abgelaufen',
+                description:
+                    'Dieser Bestätigungslink ist abgelaufen. Bestätigungslinks sind 24 Stunden gültig.',
+                whatToDo: 'Was tun:',
+                steps: {
+                    contact:
+                        'Kontaktiere uns unter {email}, um eine neue Bestätigungs-E-Mail anzufordern',
+                    include: 'Gib deine E-Mail-Adresse in der Nachricht an',
+                },
+                backHome: 'Zurück zur Startseite',
+            },
+            invalid: {
+                title: 'Ungültiger Bestätigungslink',
+                description:
+                    'Dieser Bestätigungslink ist ungültig oder wurde bereits verwendet.',
+                possibleReasons: 'Mögliche Gründe:',
+                reasons: {
+                    alreadyVerified: 'Deine E-Mail ist bereits verifiziert',
+                    invalidLink: 'Der Link ist fehlerhaft oder falsch',
+                    alreadyUsed: 'Dieser Link wurde bereits verwendet',
+                },
+                whatToDo: 'Was tun:',
+                steps: {
+                    tryLogin:
+                        'Versuche dich anzumelden - deine E-Mail könnte bereits verifiziert sein',
+                    contact:
+                        'Kontaktiere uns unter {email}, falls du weiterhin Probleme hast',
+                },
+                backHome: 'Zurück zur Startseite',
+            },
+        },
         enums: {
             gender: {
                 male: 'Männlich',
                 female: 'Weiblich',
                 other: 'Divers',
+                prefer_not_to_say: 'Keine Angabe',
             },
             bodyGoal: {
                 muscle_gain: 'Muskelaufbau',
@@ -441,4 +534,3 @@ export const locales = {
 
 export type Locale = keyof typeof locales;
 export type TranslationKeys = typeof locales.en;
-

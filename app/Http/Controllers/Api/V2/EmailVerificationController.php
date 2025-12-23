@@ -14,7 +14,7 @@ class EmailVerificationController extends Controller
     /**
      * Verify user email and trigger plan generation.
      */
-    public function verify(Request $request, $id, $hash)
+    public function verify(Request $request, string $_locale, $id, $hash)
     {
         $user = User::findOrFail($id);
 

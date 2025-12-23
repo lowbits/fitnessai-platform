@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+
 interface Props {
     message: string;
 }
@@ -18,28 +20,34 @@ defineProps<Props>();
                 </div>
 
                 <!-- Title -->
-                <h1 class="text-3xl font-bold text-white mb-4">Invalid Link</h1>
+                <h1 class="text-3xl font-bold text-white mb-4">{{ $t('emailVerification.invalid.title') }}</h1>
 
                 <!-- Message -->
-                <p class="text-gray-400 mb-8">{{ message }}</p>
+                <p class="text-gray-400 mb-8">{{ $t('emailVerification.invalid.description') }}</p>
 
                 <!-- Info -->
                 <div class="bg-gray-750 rounded-lg p-4 mb-6 text-left">
-                    <p class="text-sm text-gray-300">This verification link is invalid. This could happen if:</p>
-                    <ul class="mt-2 text-sm text-gray-400 space-y-1">
-                        <li>• The link was copied incorrectly</li>
-                        <li>• The link has been tampered with</li>
-                        <li>• Your email address was changed</li>
+                    <p class="text-sm font-semibold text-gray-300 mb-2">{{ $t('emailVerification.invalid.possibleReasons') }}</p>
+                    <ul class="text-sm text-gray-400 space-y-1">
+                        <li>• {{ $t('emailVerification.invalid.reasons.alreadyVerified') }}</li>
+                        <li>• {{ $t('emailVerification.invalid.reasons.invalidLink') }}</li>
+                        <li>• {{ $t('emailVerification.invalid.reasons.alreadyUsed') }}</li>
+                    </ul>
+
+                    <p class="text-sm font-semibold text-gray-300 mt-4 mb-2">{{ $t('emailVerification.invalid.whatToDo') }}</p>
+                    <ul class="text-sm text-gray-400 space-y-1">
+                        <li>• {{ $t('emailVerification.invalid.steps.tryLogin') }}</li>
+                        <li>• {{ $t('emailVerification.invalid.steps.contact', { email: 'hello@fitnessai.me' }) }}</li>
                     </ul>
                 </div>
 
                 <!-- Action Button -->
-                <a
+                <Link
                     href="/"
                     class="inline-block px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition"
                 >
-                    Return to Home
-                </a>
+                    {{ $t('emailVerification.invalid.backHome') }}
+                </Link>
             </div>
         </div>
     </div>

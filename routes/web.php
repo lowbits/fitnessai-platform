@@ -24,10 +24,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => [ 'l
     })->name('imprint');
 });
 
-
-
 // Email verification routes
-Route::get('/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware(['signed'])
     ->name('verification.verify-onboarding');
 
 Route::get('/api/v2/plans/{planId}/generation-status', [EmailVerificationController::class, 'status'])
@@ -101,7 +100,7 @@ Route::get('/api/v2/me', function () {
             'meal_reminders' => true,
             'reminder_time' => '08:00',
             'metric_system' => 'metric',
-            'language' => 'de',
+            'language' => $user->locale ?? 'en', // Use user's saved locale
             'theme' => 'dark',
         ],
 

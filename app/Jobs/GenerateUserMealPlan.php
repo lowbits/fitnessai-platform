@@ -212,7 +212,7 @@ PROMPT;
      */
     private function getLanguageInstruction(): string
     {
-        $language = config('plans.generation.language');
+        $language = $this->user->locale;
 
         return match($language) {
             'de' => 'German language',

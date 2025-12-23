@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -224,39 +224,39 @@
         <img src="{{public_path('apple-touch-icon.png')}}" width="40" alt="fitness ai logo">
 
         <div>
-            <h1>Meal Plan</h1>
-            <span>powered by fitnessai.me</span>
+            <h1>{{ __('pdf.nutrition_plan.title') }}</h1>
+            <span>{{ __('pdf.nutrition_plan.powered_by') }}</span>
         </div>
     </div>
 
     <div class="plan-infos">
-        <p>User: <strong>{{ $user->name }}</strong></p>
-        <p>Email: <strong>{{ $user->email }}</strong></p>
-        <p>Plan: <strong>{{ $plan->plan_name }}</strong></p>
-        <p>Duration: <strong>{{ $plan->start_date->format('M d, Y') }} - {{ $plan->end_date->format('M d, Y') }}</strong></p>
-        <p>Generated: <strong>{{ now()->format('M d, Y') }}</strong></p>
+        <p>{{ __('pdf.nutrition_plan.user') }}: <strong>{{ $user->name }}</strong></p>
+        <p>{{ __('pdf.nutrition_plan.email') }}: <strong>{{ $user->email }}</strong></p>
+        <p>{{ __('pdf.nutrition_plan.plan') }}: <strong>{{ $plan->plan_name }}</strong></p>
+        <p>{{ __('pdf.nutrition_plan.duration') }}: <strong>{{ $plan->start_date->translatedFormat('M d, Y') }} - {{ $plan->end_date->translatedFormat('M d, Y') }}</strong></p>
+        <p>{{ __('pdf.nutrition_plan.generated') }}: <strong>{{ now()->translatedFormat('M d, Y') }}</strong></p>
     </div>
 </header>
 
 <main>
     <div id="content">
-        <h2 style="text-align: center; color: #08233e; margin-bottom: 30px;">Your Personalized {{ config('plans.duration_days', 28) }}-Day Meal Plan</h2>
+        <h2 style="text-align: center; color: #08233e; margin-bottom: 30px;">{{ __('pdf.nutrition_plan.personalized_title', ['days' => config('plans.duration_days', 28)]) }}</h2>
 
         <div style="background-color: #e6eef5; padding: 15px; border-radius: 8px; margin-bottom: 30px;">
-            <h3 style="margin-top: 0;">Your Daily Nutrition Targets</h3>
+            <h3 style="margin-top: 0;">{{ __('pdf.nutrition_plan.daily_targets') }}</h3>
             <ul style="list-style: none; padding-left: 0;">
-                <li><strong>Goal:</strong> {{ $user->profile->body_goal?->label() ?? 'Not specified' }}</li>
-                <li><strong>Diet Type:</strong> {{ $user->profile->diet_type?->label() ?? 'Not specified' }}</li>
-                <li><strong>Calories:</strong> {{ $plan->daily_calories }} kcal</li>
-                <li><strong>Protein:</strong> {{ $plan->daily_protein_g }}g</li>
-                <li><strong>Carbohydrates:</strong> {{ $plan->daily_carbs_g }}g</li>
-                <li><strong>Fat:</strong> {{ $plan->daily_fat_g }}g</li>
+                <li><strong>{{ __('pdf.nutrition_plan.goal') }}:</strong> {{ $user->profile->body_goal?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
+                <li><strong>{{ __('pdf.nutrition_plan.diet_type') }}:</strong> {{ $user->profile->diet_type?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
+                <li><strong>{{ __('pdf.nutrition_plan.calories') }}:</strong> {{ $plan->daily_calories }} kcal</li>
+                <li><strong>{{ __('pdf.nutrition_plan.protein') }}:</strong> {{ $plan->daily_protein_g }}g</li>
+                <li><strong>{{ __('pdf.nutrition_plan.carbohydrates') }}:</strong> {{ $plan->daily_carbs_g }}g</li>
+                <li><strong>{{ __('pdf.nutrition_plan.fat') }}:</strong> {{ $plan->daily_fat_g }}g</li>
             </ul>
         </div>
 
         @foreach($mealPlans as $mealPlan)
             <div class="day-container" style="page-break-inside: avoid; margin-bottom: 30px;">
-                <h2>Day {{ $mealPlan->day_number }} - {{ $mealPlan->date->format('l, M d, Y') }}</h2>
+                <h2>{{ __('pdf.nutrition_plan.day') }} {{ $mealPlan->day_number }} - {{ $mealPlan->date->translatedFormat('l, M d, Y') }}</h2>
 
                 @if($mealPlan->status === 'generated' && $mealPlan->meals->count() > 0)
                     @foreach($mealPlan->meals as $meal)
@@ -269,47 +269,47 @@
                                 </tr>
                             </thead>
                             <tbody style="background-color: #ffffff;">
+                            <tr>
+                                <td colspan="2" style="padding: 15px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                <strong>{{ __('pdf.nutrition_plan.calories') }}:</strong> {{ $meal->calories }} kcal
+                                            </td>
+                                            <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                <strong>{{ __('pdf.nutrition_plan.protein') }}:</strong> {{ $meal->protein_g }}g
+                                            </td>
+                                            <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
+                                                <strong>{{ __('pdf.nutrition_plan.carbs') }}:</strong> {{ $meal->carbs_g }}g
+                                            </td>
+                                            <td style="padding: 5px 0; font-size: 11px; color: #333;">
+                                                <strong>{{ __('pdf.nutrition_plan.fat') }}:</strong> {{ $meal->fat_g }}g
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+
+                            @if($meal->prep_time_minutes || $meal->cook_time_minutes)
                                 <tr>
-                                    <td colspan="2" style="padding: 15px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
+                                    <td colspan="2" style="padding: 12px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
                                         <table style="width: 100%; border-collapse: collapse;">
                                             <tr>
-                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                    <strong>Calories:</strong> {{ $meal->calories }} kcal
-                                                </td>
-                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                    <strong>Protein:</strong> {{ $meal->protein_g }}g
-                                                </td>
-                                                <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                    <strong>Carbs:</strong> {{ $meal->carbs_g }}g
-                                                </td>
-                                                <td style="padding: 5px 0; font-size: 11px; color: #333;">
-                                                    <strong>Fat:</strong> {{ $meal->fat_g }}g
-                                                </td>
+                                                @if($meal->prep_time_minutes)
+                                                    <td style="padding: 0; font-size: 11px; color: #666;">
+                                                        <strong>{{ __('pdf.nutrition_plan.prep_time') }}:</strong> {{ $meal->prep_time_minutes }} {{ __('pdf.nutrition_plan.min') }}
+                                                    </td>
+                                                @endif
+                                                @if($meal->cook_time_minutes)
+                                                    <td style="padding: 0; font-size: 11px; color: #666;">
+                                                        <strong>{{ __('pdf.nutrition_plan.cook_time') }}:</strong> {{ $meal->cook_time_minutes }} {{ __('pdf.nutrition_plan.min') }}
+                                                    </td>
+                                                @endif
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
-
-                                @if($meal->prep_time_minutes || $meal->cook_time_minutes)
-                                    <tr>
-                                        <td colspan="2" style="padding: 12px 20px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
-                                            <table style="width: 100%; border-collapse: collapse;">
-                                                <tr>
-                                                    @if($meal->prep_time_minutes)
-                                                        <td style="padding: 0; font-size: 11px; color: #666;">
-                                                            <strong>Prep Time:</strong> {{ $meal->prep_time_minutes }} min
-                                                        </td>
-                                                    @endif
-                                                    @if($meal->cook_time_minutes)
-                                                        <td style="padding: 0; font-size: 11px; color: #666;">
-                                                            <strong>Cook Time:</strong> {{ $meal->cook_time_minutes }} min
-                                                        </td>
-                                                    @endif
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                @endif
+                            @endif
 
                                 @if($meal->description)
                                     <tr>
@@ -319,10 +319,10 @@
                                     </tr>
                                 @endif
 
-                                @if($meal->ingredients && is_array($meal->ingredients) && count($meal->ingredients) > 0)
-                                    <tr>
-                                        <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
-                                            <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">Ingredients</strong>
+                            @if($meal->ingredients && is_array($meal->ingredients) && count($meal->ingredients) > 0)
+                                <tr>
+                                    <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
+                                        <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">{{ __('pdf.nutrition_plan.ingredients') }}</strong>
                                             <table style="width: 100%; border-collapse: collapse;">
                                                 @foreach($meal->ingredients as $ingredient)
                                                     <tr>
@@ -347,10 +347,10 @@
                                     </tr>
                                 @endif
 
-                                @if($meal->instructions && is_array($meal->instructions) && count($meal->instructions) > 0)
-                                    <tr>
-                                        <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
-                                            <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">Instructions</strong>
+                            @if($meal->instructions && is_array($meal->instructions) && count($meal->instructions) > 0)
+                                <tr>
+                                    <td colspan="2" style="padding: 18px 20px; vertical-align: top; background-color: #ffffff; border-bottom: 1px solid #e0e0e0;">
+                                        <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 10px;">{{ __('pdf.nutrition_plan.instructions') }}</strong>
                                             <table style="width: 100%; border-collapse: collapse;">
                                                 @foreach($meal->instructions as $index => $instruction)
                                                     <tr>
@@ -365,29 +365,29 @@
                                     </tr>
                                 @endif
 
-                                @if($meal->allergens && is_array($meal->allergens) && count($meal->allergens) > 0)
-                                    <tr>
-                                        <td colspan="2" style="padding: 12px 20px; background-color: #fff3cd; border-left: 4px solid #ffc107;">
-                                            <strong style="color: #856404; font-size: 11px;">Allergens:</strong>
-                                            <span style="color: #856404; font-size: 11px; margin-left: 8px;">
-                                                {{ implode(', ', array_map(function($item) { return is_string($item) ? ucfirst($item) : json_encode($item); }, $meal->allergens)) }}
-                                            </span>
-                                        </td>
-                                    </tr>
-                                @endif
+                            @if($meal->allergens && is_array($meal->allergens) && count($meal->allergens) > 0)
+                                <tr>
+                                    <td colspan="2" style="padding: 12px 20px; background-color: #fff3cd; border-left: 4px solid #ffc107;">
+                                        <strong style="color: #856404; font-size: 11px;">{{ __('pdf.nutrition_plan.allergens') }}:</strong>
+                                        <span style="color: #856404; font-size: 11px; margin-left: 8px;">
+                                            {{ implode(', ', array_map(function($item) { return is_string($item) ? ucfirst($item) : json_encode($item); }, $meal->allergens)) }}
+                                        </span>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                         </table>
                     @endforeach
 
                     <div style="background-color: #e6eef5; padding: 10px 15px; border-radius: 5px; margin-top: 15px;">
-                        <strong>Daily Totals:</strong>
+                        <strong>{{ __('pdf.nutrition_plan.daily_totals') }}:</strong>
                         {{ $mealPlan->total_calories }} kcal |
-                        {{ $mealPlan->total_protein_g }}g protein |
-                        {{ $mealPlan->total_carbs_g }}g carbs |
-                        {{ $mealPlan->total_fat_g }}g fat
+                        {{ $mealPlan->total_protein_g }}g {{ strtolower(__('pdf.nutrition_plan.protein')) }} |
+                        {{ $mealPlan->total_carbs_g }}g {{ strtolower(__('pdf.nutrition_plan.carbs')) }} |
+                        {{ $mealPlan->total_fat_g }}g {{ strtolower(__('pdf.nutrition_plan.fat')) }}
                     </div>
                 @else
-                    <p style="color: #999; font-style: italic;">Meal plan for this day is being generated...</p>
+                    <p style="color: #999; font-style: italic;">{{ __('pdf.nutrition_plan.generating') }}</p>
                 @endif
 
                 <hr style="margin: 30px 0; border: none; border-top: 1px solid #ddd;">
@@ -395,8 +395,8 @@
         @endforeach
 
         <div style="margin-top: 40px; padding: 20px; background-color: #e6eef5; border-radius: 8px; text-align: center;">
-            <p style="margin: 0; font-size: 14px;"><strong>Need help or have questions?</strong></p>
-            <p style="margin: 5px 0 0 0;">Contact us at <strong>hello@fitnessai.me</strong></p>
+            <p style="margin: 0; font-size: 14px;"><strong>{{ __('pdf.nutrition_plan.help') }}</strong></p>
+            <p style="margin: 5px 0 0 0;">{{ __('pdf.nutrition_plan.contact') }} <strong>hello@fitnessai.me</strong></p>
         </div>
     </div>
 </main>

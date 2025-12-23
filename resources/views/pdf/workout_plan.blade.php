@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ app()->getLocale() }}">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -236,31 +236,31 @@
         <img src="{{public_path('apple-touch-icon.png')}}" width="40" alt="fitness ai logo">
 
         <div>
-            <h1>Workout Plan</h1>
-            <span>powered by fitnessai.me</span>
+            <h1>{{ __('pdf.workout_plan.title') }}</h1>
+            <span>{{ __('pdf.workout_plan.powered_by') }}</span>
         </div>
     </div>
 
     <div class="plan-infos">
-        <p>User: <strong>{{ $user->name }}</strong></p>
-        <p>Email: <strong>{{ $user->email }}</strong></p>
-        <p>Plan: <strong>{{ $plan->plan_name }}</strong></p>
-        <p>Duration: <strong>{{ $plan->start_date->format('M d, Y') }} - {{ $plan->end_date->format('M d, Y') }}</strong></p>
-        <p>Generated: <strong>{{ now()->format('M d, Y') }}</strong></p>
+        <p>{{ __('pdf.workout_plan.user') }}: <strong>{{ $user->name }}</strong></p>
+        <p>{{ __('pdf.workout_plan.email') }}: <strong>{{ $user->email }}</strong></p>
+        <p>{{ __('pdf.workout_plan.plan') }}: <strong>{{ $plan->plan_name }}</strong></p>
+        <p>{{ __('pdf.workout_plan.duration') }}: <strong>{{ $plan->start_date->translatedFormat('M d, Y') }} - {{ $plan->end_date->translatedFormat('M d, Y') }}</strong></p>
+        <p>{{ __('pdf.workout_plan.generated') }}: <strong>{{ now()->translatedFormat('M d, Y') }}</strong></p>
     </div>
 </header>
 
 <main>
     <div id="content">
-        <h2 style="text-align: center; color: #08233e; margin-bottom: 30px;">Your Personalized {{ config('plans.duration_days', 28) }}-Day Workout Plan</h2>
+        <h2 style="text-align: center; color: #08233e; margin-bottom: 30px;">{{ __('pdf.workout_plan.personalized_title', ['days' => config('plans.duration_days', 28)]) }}</h2>
 
         <div class="info-box">
-            <h3 style="margin-top: 0;">Your Training Overview</h3>
+            <h3 style="margin-top: 0;">{{ __('pdf.workout_plan.training_overview') }}</h3>
             <ul style="list-style: none; padding-left: 0;">
-                <li><strong>Goal:</strong> {{ $user->profile->body_goal?->label() ?? 'Not specified' }}</li>
-                <li><strong>Workouts per Week:</strong> {{ $plan->workouts_per_week }}</li>
-                <li><strong>Training Place:</strong> {{ $user->profile->training_place?->label() ?? 'Gym' }}</li>
-                <li><strong>Skill Level:</strong> {{ $user->profile->skill_level?->label() ?? 'Beginner' }}</li>
+                <li><strong>{{ __('pdf.workout_plan.goal') }}:</strong> {{ $user->profile->body_goal?->label() ?? __('pdf.workout_plan.not_specified') }}</li>
+                <li><strong>{{ __('pdf.workout_plan.workouts_per_week') }}:</strong> {{ $plan->workouts_per_week }}</li>
+                <li><strong>{{ __('pdf.workout_plan.training_place') }}:</strong> {{ $user->profile->training_place?->label() ?? 'Gym' }}</li>
+                <li><strong>{{ __('pdf.workout_plan.skill_level') }}:</strong> {{ $user->profile->skill_level?->label() ?? 'Beginner' }}</li>
             </ul>
         </div>
 
@@ -269,29 +269,29 @@
                 @if($workoutPlan->workout_type === 'rest')
                     <div class="rest-day">
                         <h2 style="border: none; margin: 0; color: #08233e;">
-                            Day {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->format('l, M d, Y') }}
+                            {{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}
                         </h2>
-                        <h3 style="margin: 10px 0;">Rest & Recovery Day</h3>
-                        <p style="margin: 10px 0 0 0;">Take this day to rest and allow your muscles to recover. Light stretching or walking is encouraged.</p>
+                        <h3 style="margin: 10px 0;">{{ __('pdf.workout_plan.rest_day') }}</h3>
+                        <p style="margin: 10px 0 0 0;">{{ __('pdf.workout_plan.rest_description') }}</p>
                     </div>
                 @elseif($workoutPlan->status === 'generated')
                     <div class="workout-header">
                         <h2 style="border: none; margin: 0; padding: 0; color: white;">
-                            Day {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->format('l, M d, Y') }}
+                            {{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}
                         </h2>
                         <h3 style="margin: 10px 0 0 0; color: white;">{{ $workoutPlan->workout_name }}</h3>
                     </div>
 
                     <div class="workout-meta">
-                        <span><strong>Type:</strong> {{ ucfirst($workoutPlan->workout_type) }}</span>
+                        <span><strong>{{ __('pdf.workout_plan.type') }}:</strong> {{ ucfirst($workoutPlan->workout_type) }}</span>
                         @if($workoutPlan->difficulty)
-                            <span><strong>Difficulty:</strong> {{ ucfirst($workoutPlan->difficulty) }}</span>
+                            <span><strong>{{ __('pdf.workout_plan.difficulty') }}:</strong> {{ ucfirst($workoutPlan->difficulty) }}</span>
                         @endif
                         @if($workoutPlan->estimated_duration_minutes)
-                            <span><strong>Duration:</strong> ~{{ $workoutPlan->estimated_duration_minutes }} min</span>
+                            <span><strong>{{ __('pdf.workout_plan.duration') }}:</strong> ~{{ $workoutPlan->estimated_duration_minutes }} min</span>
                         @endif
                         @if($workoutPlan->exercises->count() > 0)
-                            <span><strong>Exercises:</strong> {{ $workoutPlan->exercises->count() }}</span>
+                            <span><strong>{{ __('pdf.workout_plan.exercises') }}:</strong> {{ $workoutPlan->exercises->count() }}</span>
                         @endif
                     </div>
 
@@ -301,13 +301,13 @@
 
                     @if($workoutPlan->muscle_groups && is_array($workoutPlan->muscle_groups) && count($workoutPlan->muscle_groups) > 0)
                         <div style="margin: 15px 0;">
-                            <strong>Target Muscle Groups:</strong>
+                            <strong>{{ __('pdf.workout_plan.target_muscle_groups') }}:</strong>
                             <span style="color: #48D670;">{{ implode(', ', array_map('ucfirst', $workoutPlan->muscle_groups)) }}</span>
                         </div>
                     @endif
 
                     @if($workoutPlan->exercises->count() > 0)
-                        <h3 style="margin-top: 25px; margin-bottom: 15px; color: #08233e; font-size: 16px; border-bottom: 2px solid #48D670; padding-bottom: 8px;">Exercises</h3>
+                        <h3 style="margin-top: 25px; margin-bottom: 15px; color: #08233e; font-size: 16px; border-bottom: 2px solid #48D670; padding-bottom: 8px;">{{ __('pdf.workout_plan.exercises') }}</h3>
 
                         @foreach($workoutPlan->exercises as $exercise)
                             <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; border: 1px solid #ddd;">
@@ -325,22 +325,22 @@
                                                 <tr>
                                                     @if($exercise->sets)
                                                         <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>Sets:</strong> {{ $exercise->sets }}
+                                                            <strong>{{ __('pdf.workout_plan.sets') }}:</strong> {{ $exercise->sets }}
                                                         </td>
                                                     @endif
                                                     @if($exercise->reps)
                                                         <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>Reps:</strong> {{ $exercise->reps }}
+                                                            <strong>{{ __('pdf.workout_plan.reps') }}:</strong> {{ $exercise->reps }}
                                                         </td>
                                                     @endif
                                                     @if($exercise->duration_seconds)
                                                         <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>Duration:</strong> {{ $exercise->duration_seconds }}s
+                                                            <strong>{{ __('pdf.workout_plan.duration') }}:</strong> {{ $exercise->duration_seconds }}s
                                                         </td>
                                                     @endif
                                                     @if($exercise->rest_seconds)
                                                         <td style="padding: 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>Rest:</strong> {{ $exercise->rest_seconds }}s
+                                                            <strong>{{ __('pdf.workout_plan.rest') }}:</strong> {{ $exercise->rest_seconds }}s
                                                         </td>
                                                     @endif
                                                 </tr>
@@ -359,7 +359,7 @@
                                     @if($exercise->form_cues && is_array($exercise->form_cues) && count($exercise->form_cues) > 0)
                                         <tr>
                                             <td colspan="2" style="padding: 15px 18px; vertical-align: top; background-color: #fff; border-bottom: 1px solid #e0e0e0;">
-                                                <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 8px;">Form Cues</strong>
+                                                <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 8px;">{{ __('pdf.workout_plan.form_cues') }}</strong>
                                                 <table style="width: 100%; border-collapse: collapse;">
                                                     @foreach($exercise->form_cues as $cue)
                                                         <tr>
@@ -377,7 +377,7 @@
                                     @if($exercise->equipment && is_array($exercise->equipment) && count($exercise->equipment) > 0)
                                         <tr>
                                             <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
-                                                <strong style="color: #333;">Equipment:</strong>
+                                                <strong style="color: #333;">{{ __('pdf.workout_plan.equipment') }}:</strong>
                                                 <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->equipment)) }}</span>
                                             </td>
                                         </tr>
@@ -386,7 +386,7 @@
                                     @if($exercise->alternatives && is_array($exercise->alternatives) && count($exercise->alternatives) > 0)
                                         <tr>
                                             <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9;">
-                                                <strong style="color: #333;">Alternatives:</strong>
+                                                <strong style="color: #333;">{{ __('pdf.workout_plan.alternatives') }}:</strong>
                                                 <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->alternatives)) }}</span>
                                             </td>
                                         </tr>
@@ -398,13 +398,13 @@
 
                     @if($workoutPlan->notes)
                         <div class="info-box" style="margin-top: 20px;">
-                            <strong>Notes:</strong>
+                            <strong>{{ __('pdf.workout_plan.notes') }}:</strong>
                             <p style="margin: 5px 0 0 0;">{{ $workoutPlan->notes }}</p>
                         </div>
                     @endif
                 @else
-                    <h2>Day {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->format('l, M d, Y') }}</h2>
-                    <p style="color: #999; font-style: italic;">Workout plan for this day is being generated...</p>
+                    <h2>{{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}</h2>
+                    <p style="color: #999; font-style: italic;">{{ __('pdf.workout_plan.generating') }}</p>
                 @endif
             </div>
 
@@ -412,11 +412,8 @@
         @endforeach
 
         <div style="margin-top: 40px; padding: 20px; background-color: #e6eef5; border-radius: 8px; text-align: center;">
-            <p style="margin: 0; font-size: 14px;"><strong>Need help or have questions?</strong></p>
-            <p style="margin: 5px 0 0 0;">Contact us at <strong>hello@fitnessai.me</strong></p>
-            <p style="margin: 10px 0 0 0; font-size: 11px; color: #666;">
-                Tip: Always warm up before starting your workout and cool down afterwards!
-            </p>
+            <p style="margin: 0; font-size: 14px;"><strong>{{ __('pdf.workout_plan.help') }}</strong></p>
+            <p style="margin: 5px 0 0 0;">{{ __('pdf.workout_plan.contact') }} <strong>hello@fitnessai.me</strong></p>
         </div>
     </div>
 </main>

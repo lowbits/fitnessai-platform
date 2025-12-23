@@ -73,9 +73,9 @@ const { stop: stopPolling } = usePoll(3000, {
                     </svg>
                 </div>
                 <h1 class="mb-2 text-4xl font-bold text-white">
-                    Email Verified!
+                    {{ $t('emailVerification.generating.verified') }}
                 </h1>
-                <p class="text-xl text-gray-300">Welcome, {{ user.name }}!</p>
+                <p class="text-xl text-gray-300">{{ $t('emailVerification.generating.welcome', { name: user.name }) }}</p>
             </div>
 
 
@@ -85,11 +85,10 @@ const { stop: stopPolling } = usePoll(3000, {
             >
                 <div class="mb-8 text-center">
                     <h2 class="mb-2 text-2xl font-semibold text-white">
-                        Generating Your Personalized Plan
+                        {{ $t('emailVerification.generating.title') }}
                     </h2>
                     <p class="text-gray-400">
-                        This may take a few minutes. You can close this Page, we
-                        will Inform you when your Plan is ready.
+                        {{ $t('emailVerification.generating.description') }}
                     </p>
                 </div>
 
@@ -99,20 +98,19 @@ const { stop: stopPolling } = usePoll(3000, {
                         v-if="status.is_complete"
                         class="text-lg font-medium text-green-400"
                     >
-                        ✅ Your plan is ready! Check your emails...
+                        {{ $t('emailVerification.generating.complete') }}
                     </div>
                     <div
                         v-else-if="status.has_failures"
                         class="font-medium text-yellow-400"
                     >
-                        ⚠️ Some items failed to generate. We'll continue with
-                        what we have.
+                        {{ $t('emailVerification.generating.hasFailures') }}
                     </div>
                     <div v-else class="text-gray-400">
                         <div
                             class="mr-2 inline-block h-5 w-5 animate-spin rounded-full border-b-2 border-primary-500"
                         ></div>
-                        Generating your personalized plan...
+                        {{ $t('emailVerification.generating.generating') }}
                     </div>
                 </div>
 
@@ -121,17 +119,17 @@ const { stop: stopPolling } = usePoll(3000, {
                     <div
                         class="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-primary-500"
                     ></div>
-                    <p class="mt-4 text-gray-400">Loading status...</p>
+                    <p class="mt-4 text-gray-400">{{ $t('emailVerification.generating.loadingStatus') }}</p>
                 </div>
             </div>
 
             <!-- Plan Details -->
             <div class="mt-6 text-center text-sm text-gray-500">
                 <p>
-                    Plan: <span class="text-gray-300">{{ plan.name }}</span>
+                    {{ $t('emailVerification.generating.planLabel') }} <span class="text-gray-300">{{ plan.name }}</span>
                 </p>
                 <p>
-                    Start Date:
+                    {{ $t('emailVerification.generating.startDateLabel') }}
                     <span class="text-gray-300">{{ plan.start_date }}</span>
                 </p>
             </div>

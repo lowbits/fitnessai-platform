@@ -35,22 +35,26 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        // Set locale for email based on user's preference
+        app()->setLocale($notifiable->locale ?? 'en');
+
         $verificationUrl = $this->verificationUrl($notifiable);
+        $days = config('plans.duration_days');
 
         return (new MailMessage)
-            ->subject('One Step Away from Your Personal Fitness Plan')
-            ->greeting('Hi ' . $notifiable->name . ',')
-            ->line('Thanks for signing up! You\'re one click away from getting your personalized ' . config('plans.duration_days') . '-day plan.')
-            ->line('Just verify your email address to get started:')
-            ->action('Verify Email Address', $verificationUrl)
-            ->line('**What happens next:**')
-            ->line('• We\'ll create your custom meal and workout plans')
-            ->line('• You\'ll receive everything as PDF attachments')
-            ->line('• Ready to use in about 3-5 minutes')
-            ->line('The verification link is valid for 24 hours.')
+            ->subject(__('emails.verify_email.subject'))
+            ->greeting(__('emails.verify_email.greeting', ['name' => $notifiable->name]))
+            ->line(__('emails.verify_email.thanks', ['days' => $days]))
+            ->line(__('emails.verify_email.verify_text'))
+            ->action(__('emails.verify_email.verify_button'), $verificationUrl)
+            ->line(__('emails.verify_email.what_next'))
+            ->line('• ' . __('emails.verify_email.steps.create'))
+            ->line('• ' . __('emails.verify_email.steps.receive'))
+            ->line('• ' . __('emails.verify_email.steps.ready'))
+            ->line(__('emails.verify_email.valid'))
             ->line('')
-            ->line('Didn\'t sign up? You can safely ignore this email.')
-            ->salutation('See you soon!');
+            ->line(__('emails.verify_email.ignore'))
+            ->salutation(__('emails.verify_email.signature'));
     }
 
     /**
@@ -62,6 +66,7 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
             'verification.verify-onboarding',
             now()->addHours(24),
             [
+                'locale' => $notifiable->locale ?? 'en',
                 'id' => $notifiable->getKey(),
                 'hash' => sha1($notifiable->getEmailForVerification()),
                 'plan_id' => $this->plan->id,
