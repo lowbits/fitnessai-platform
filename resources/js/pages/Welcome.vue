@@ -60,7 +60,7 @@ const structuredData = {
             >
                 <section class="w-full md:w-1/2 md:pt-20">
                     <article class="max-w-2xl">
-                        <h1 class="font-display text-6xl font-bold text-white">
+                        <h1 class="font-display text-4xl md:text-6xl font-bold text-white wrap-break-word">
                             {{ $t('welcome.hero.title') }}
                             <span
                                 class="bg-gradient-to-r from-primary-400 via-primary-500 to-white bg-clip-text font-display font-bold tracking-tight text-primary-400 text-transparent"
