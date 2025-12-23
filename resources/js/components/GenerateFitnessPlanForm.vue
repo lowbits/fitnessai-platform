@@ -60,11 +60,16 @@ const clearErrors = () => {
     form.errors = {};
 };
 
-const setError = (field: string | Record<string, string>, message?: string) => {
+const setError = (field: string | Record<string, string | string[]>, message?: string) => {
     if (typeof field === 'string' && message) {
         form.errors[field] = message;
     } else if (typeof field === 'object') {
-        form.errors = { ...form.errors, ...field };
+        // Handle Laravel validation errors (arrays)
+        Object.keys(field).forEach(key => {
+            const error = field[key];
+            // If error is array, take first message
+            form.errors[key] = Array.isArray(error) ? error[0] : error;
+        });
     }
 };
 
@@ -228,8 +233,14 @@ const submit = async () => {
         const data = await response.json();
 
         if (!response.ok) {
-            if (data.errors) {
+            if (response.status === 422 && data.errors) {
+                // Validation errors (e.g., email already in use)
                 setError(data.errors);
+
+                // If email error exists, navigate back to email step (step 7)
+                if (data.errors.email) {
+                    activeStep.value = 7;
+                }
             } else {
                 console.error('Onboarding failed:', data);
             }
@@ -378,6 +389,12 @@ const submit = async () => {
                                 name="age"
                                 placeholder="23"
                                 v-model="form.age"
+                                type="number"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                step="1"
+                                min="18"
+                                max="100"
                             />
                         </LabeledInput>
 
@@ -393,6 +410,12 @@ const submit = async () => {
                                 placeholder="172"
                                 v-model="form.height"
                                 suffix="cm"
+                                type="number"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                step="1"
+                                min="100"
+                                max="250"
                             />
                         </LabeledInput>
 
@@ -404,10 +427,15 @@ const submit = async () => {
                         >
                             <NumberInput
                                 id="weight"
-                                Name="weight"
+                                name="weight"
                                 placeholder="70"
                                 v-model="form.weight"
                                 suffix="kg"
+                                type="number"
+                                inputmode="decimal"
+                                step="0.5"
+                                min="30"
+                                max="300"
                             />
                         </LabeledInput>
                     </FormGroup>
@@ -559,6 +587,12 @@ const submit = async () => {
                                 name="training_sessions"
                                 v-model="form.training_sessions"
                                 :suffix="$t('form.steps.training.sessionsSuffix')"
+                                type="number"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
+                                step="1"
+                                min="1"
+                                max="7"
                             />
                         </LabeledInput>
                         <p
@@ -573,7 +607,7 @@ const submit = async () => {
                 <!-- Step 8: Email & Submit -->
                 <TabPanel>
                     <FormGroup wrap>
-                        <LabeledInput name="name" :label="$t('form.steps.final.name')">
+                        <LabeledInput name="name" :label="$t('form.steps.final.name')" :errors="form.errors.name">
                             <div class="relative">
                                 <Input
                                     v-model="form.name"
@@ -582,7 +616,7 @@ const submit = async () => {
                                 />
                             </div>
                         </LabeledInput>
-                        <LabeledInput name="email" :label="$t('form.steps.final.email')">
+                        <LabeledInput name="email" :label="$t('form.steps.final.email')" :errors="form.errors.email">
                             <div class="relative">
                                 <span
                                     class="absolute inset-y-0 flex items-center pl-3"
