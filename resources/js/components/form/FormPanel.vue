@@ -9,7 +9,7 @@ defineProps<{
 </script>
 <template>
     <TabPanel class="flex min-h-[500px] flex-col">
-        <div class="flex-shrink-0">
+        <div class="shrink-0">
             <h4 class="text-center font-display text-3xl font-semibold">
                 {{ headline }}
             </h4>
@@ -17,11 +17,11 @@ defineProps<{
                 {{subline}}
             </p>
         </div>
-        <div class="mt-8 flex-grow">
+        <div class="mt-8 grow">
             <slot />
         </div>
         <PrimaryButton
-            class="mt-10 w-full flex-shrink-0"
+            class="mt-10 w-full shrink-0"
             @click="$emit('click:next')"
             type="button"
             >{{ $t('form_panel.submit') }}</PrimaryButton

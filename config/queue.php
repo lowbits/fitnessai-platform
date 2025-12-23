@@ -109,6 +109,31 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Queue Names
+    |--------------------------------------------------------------------------
+    |
+    | FitnessAI uses separate queues for different job types to enable
+    | parallel processing and better resource management:
+    |
+    | - default: General application jobs (emails, notifications, etc.)
+    | - nutrition: AI generation of nutrition plans (long-running)
+    | - workouts: AI generation of workout plans (long-running)
+    |
+    | Run workers for each queue:
+    | php artisan queue:work --queue=default
+    | php artisan queue:work --queue=nutrition --timeout=1800
+    | php artisan queue:work --queue=workouts --timeout=1800
+    |
+    */
+
+    'queues' => [
+        'default' => 'default',
+        'meal_plans' => 'nutrition',
+        'workout_plans' => 'workouts',
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Failed Queue Jobs
     |--------------------------------------------------------------------------
     |

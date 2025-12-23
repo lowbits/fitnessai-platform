@@ -19,6 +19,6 @@ class GenerateMealPlan
             return;
         }
 
-        GenerateUserMealPlan::dispatch($event->user, $event->plan);
+        GenerateUserMealPlan::dispatch($event->user, $event->plan)->onQueue('nutrition');
     }
 }

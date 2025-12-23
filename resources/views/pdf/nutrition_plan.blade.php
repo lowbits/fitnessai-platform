@@ -264,7 +264,7 @@
                             <thead>
                                 <tr>
                                     <th colspan="2" style="text-align: left; padding: 16px 20px; background-color: #08233e; color: white; font-size: 13px; font-weight: bold; border-bottom: 3px solid #48D670;">
-                                        {{ strtoupper($meal->type) }}: {{ $meal->name }}
+                                        {{ strtoupper(__("pdf.nutrition_plan.meal_type.$meal->type")) }}: {{ $meal->name }}
                                     </th>
                                 </tr>
                             </thead>

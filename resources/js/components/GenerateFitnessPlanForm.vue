@@ -102,8 +102,8 @@ const setDefaultValues = () => {
     form.name = 'Test User';
     form.age = String(random(30 - 18) + 18);
     form.gender = randomItem(GENDERS.value).value;
-    form.height = String(random(190 - 130) + 130);
-    form.weight = String(parseInt(form.height) - 100);
+    form.height = String(random(210 - 155) + 155);
+    form.weight = String(parseInt(form.height) - 100 + random(41) - 10);
     form.body_goal = randomItem(BODY_GOALS.value).value;
     form.activity_level = randomItem(ACTIVITY_LEVELS.value).value;
     form.skill_level = randomItem(SKILL_LEVELS.value).value;
@@ -375,7 +375,7 @@ const submit = async () => {
     <!-- Form -->
     <form v-else @submit.prevent="submit" class="w-full flex-1 space-y-4">
         <!-- Dev Helper -->
-        <div v-if="false" class="absolute right-0">
+        <div v-if="$page.props.server.isLocal" class="absolute right-0">
             <button
                 type="button"
                 class="rounded border border-primary-500 bg-transparent px-4 py-2 text-primary-400"
@@ -386,7 +386,7 @@ const submit = async () => {
         </div>
 
         <TabGroup :selectedIndex="activeStep" @change="goToStep">
-            <TabPanels class="mt-2 min-h-[550px] flex flex-col">
+            <TabPanels class="mt-2 flex min-h-[550px] flex-col">
                 <!-- Step 1: Gender -->
                 <FormPanel
                     :headline="$t('form.steps.gender.headline')"
@@ -498,7 +498,9 @@ const submit = async () => {
                                 id="diet_type"
                                 name="diet_type"
                                 v-model="form.diet_type"
-                                :default-label="$t('form.steps.diet.placeholder')"
+                                :default-label="
+                                    $t('form.steps.diet.placeholder')
+                                "
                             >
                                 <option
                                     v-for="diet in DIET_TYPES"
@@ -530,7 +532,11 @@ const submit = async () => {
                                 id="activity_level"
                                 name="activity_level"
                                 v-model="form.activity_level"
-                                :default-label="$t('form.steps.activity.activityPlaceholder')"
+                                :default-label="
+                                    $t(
+                                        'form.steps.activity.activityPlaceholder',
+                                    )
+                                "
                             >
                                 <option
                                     v-for="activity in ACTIVITY_LEVELS"
@@ -553,7 +559,9 @@ const submit = async () => {
                                 id="skill_level"
                                 name="skill_level"
                                 v-model="form.skill_level"
-                                :default-label="$t('form.steps.activity.skillPlaceholder')"
+                                :default-label="
+                                    $t('form.steps.activity.skillPlaceholder')
+                                "
                             >
                                 <option
                                     v-for="skill in SKILL_LEVELS"
@@ -584,7 +592,9 @@ const submit = async () => {
                                 id="body_goal"
                                 name="body_goal"
                                 v-model="form.body_goal"
-                                :default-label="$t('form.steps.goal.placeholder')"
+                                :default-label="
+                                    $t('form.steps.goal.placeholder')
+                                "
                             >
                                 <option
                                     v-for="goal in BODY_GOALS"
@@ -646,7 +656,9 @@ const submit = async () => {
                                 id="training_sessions"
                                 name="training_sessions"
                                 v-model="form.training_sessions"
-                                :suffix="$t('form.steps.training.sessionsSuffix')"
+                                :suffix="
+                                    $t('form.steps.training.sessionsSuffix')
+                                "
                                 type="number"
                                 inputmode="numeric"
                                 pattern="[0-9]*"
@@ -667,17 +679,25 @@ const submit = async () => {
                 <!-- Step 8: Email & Submit -->
                 <TabPanel class="flex min-h-[550px] flex-col">
                     <div class="shrink-0">
-                        <h4 class="text-center font-display text-3xl font-semibold">
+                        <h4
+                            class="text-center font-display text-3xl font-semibold"
+                        >
                             {{ $t('form.steps.final.headline') }}
                         </h4>
-                        <p class="mt-2 text-center font-display text-base leading-6 text-secondary-300">
+                        <p
+                            class="mt-2 text-center font-display text-base leading-6 text-secondary-300"
+                        >
                             {{ $t('form.steps.final.subline') }}
                         </p>
                     </div>
 
                     <div class="mt-8 grow">
                         <FormGroup wrap>
-                            <LabeledInput name="name" :label="$t('form.steps.final.name')" :errors="form.errors.name">
+                            <LabeledInput
+                                name="name"
+                                :label="$t('form.steps.final.name')"
+                                :errors="form.errors.name"
+                            >
                                 <div class="relative">
                                     <Input
                                         v-model="form.name"
@@ -686,7 +706,11 @@ const submit = async () => {
                                     />
                                 </div>
                             </LabeledInput>
-                            <LabeledInput name="email" :label="$t('form.steps.final.email')" :errors="form.errors.email">
+                            <LabeledInput
+                                name="email"
+                                :label="$t('form.steps.final.email')"
+                                :errors="form.errors.email"
+                            >
                                 <div class="relative">
                                     <span
                                         class="absolute inset-y-0 flex items-center pl-3"
@@ -732,9 +756,13 @@ const submit = async () => {
                             />
                             <label for="newsletter">
                                 {{ $t('form.steps.final.newsletter') }}
-                                <strong class="text-base leading-none font-bold">
+                                <strong
+                                    class="text-base leading-none font-bold"
+                                >
                                     {{
-                                        $t('form.steps.final.newsletterHighlight')
+                                        $t(
+                                            'form.steps.final.newsletterHighlight',
+                                        )
                                     }}</strong
                                 >.
                             </label>
@@ -745,7 +773,7 @@ const submit = async () => {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="mt-10 inline-flex w-full justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50 flex-shrink-0"
+                        class="mt-10 inline-flex w-full flex-shrink-0 justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {{
                             form.processing

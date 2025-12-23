@@ -3,16 +3,16 @@
 return [
     'nutrition_plan' => [
         'title' => 'Ernährungsplan',
-        'powered_by' => 'powered by fitnessai.me',
+        'powered_by' => 'Bereitgestellt von fitnessai.me',
         'user' => 'Name',
         'email' => 'E-Mail',
         'plan' => 'Plan',
         'duration' => 'Dauer',
         'generated' => 'Erstellt am',
-        'personalized_title' => 'Dein personalisierter :days-Tage-Ernährungsplan',
-        'daily_targets' => 'Tägliche Nährstoffziele',
+        'personalized_title' => 'Dein persönlicher Ernährungsplan für :days Tage',
+        'daily_targets' => 'Tägliche Kalorien & Makros',
         'goal' => 'Ziel',
-        'diet_type' => 'Ernährungsform',
+        'diet_type' => 'Ernährungsstil',
         'not_specified' => 'Nicht angegeben',
         'calories' => 'Kalorien',
         'protein' => 'Protein',
@@ -26,10 +26,16 @@ return [
         'ingredients' => 'Zutaten',
         'instructions' => 'Zubereitung',
         'allergens' => 'Allergene',
-        'daily_totals' => 'Tagesgesamtwerte',
+        'daily_totals' => 'Gesamt',
         'generating' => 'Ernährungsplan wird erstellt …',
         'help' => 'Fragen oder Unterstützung?',
         'contact' => 'Kontaktiere uns unter',
+        "meal_type" => [
+            'breakfast' => 'Frühstück',
+            'lunch' => 'Mittagessen',
+            'dinner' => 'Abendessen',
+            'snack' => 'Snack',
+        ],
     ],
 
     'workout_plan' => [

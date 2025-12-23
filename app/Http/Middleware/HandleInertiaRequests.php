@@ -44,7 +44,9 @@ class HandleInertiaRequests extends Middleware
             ],
             'currentLocale' => app()->getLocale(),
             'locales' => LaravelLocalization::getSupportedLocales(),
-            'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'server' => [
+                'isLocal' => config('app.env') === 'local'
+            ],
         ];
     }
 }

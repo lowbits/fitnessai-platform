@@ -35,17 +35,44 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return;
         }
 
+        Log::info('Starting workout plan generation', [
+            'user_id' => $this->user->id,
+            'plan_id' => $this->plan->id,
+            'locale' => $this->user->locale,
+        ]);
+
         $client = OpenAI::client(config('services.openai.api_key'));
 
         // Generate workout plans for configured number of days (respecting rest days)
         $totalDays = config('plans.duration_days');
         $workoutsPerWeek = $this->plan->workouts_per_week ?? 3;
 
+        // Build system prompt ONCE
+        $systemPrompt = [
+            'role' => 'system',
+            'content' => $this->buildSystemPrompt($profile),
+        ];
+
+        // Track generated workouts for lightweight context
+        $generatedWorkoutsSummary = [];
+
+        Log::debug('System prompt created', [
+            'prompt_length' => strlen($systemPrompt['content']),
+            'total_days' => $totalDays,
+            'workouts_per_week' => $workoutsPerWeek,
+        ]);
+
         for ($day = 1; $day <= $totalDays; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
 
             // Determine if this is a workout day or rest day
             $isRestDay = $this->isRestDay($day, $workoutsPerWeek);
+
+            Log::debug("Processing day {$day}/{$totalDays}", [
+                'day' => $day,
+                'date' => $date->format('Y-m-d'),
+                'is_rest_day' => $isRestDay,
+            ]);
 
             // Create workout plan record (or find existing)
             $workoutPlan = WorkoutPlan::firstOrCreate(
@@ -61,9 +88,20 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 ]
             );
 
-
+            // Skip if already generated
             if ($workoutPlan->status === 'generated') {
-                Log::info("Workout plan for day {$day} already generated, skipping", ['workout_plan_id' => $workoutPlan->id]);
+                Log::info("Workout plan for day {$day} already generated, skipping", [
+                    'workout_plan_id' => $workoutPlan->id,
+                    'existing_exercises_count' => $workoutPlan->exercises()->count(),
+                ]);
+
+                // Add to summary for lightweight context
+                if (!$isRestDay) {
+                    $exercises = $workoutPlan->exercises()->get();
+                    $exerciseNames = $exercises->pluck('name')->take(3)->implode(', ');
+                    $generatedWorkoutsSummary[] = "Day {$day}: {$workoutPlan->workout_name} ({$exerciseNames}...)";
+                }
+
                 continue;
             }
 
@@ -81,22 +119,37 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             }
 
             try {
-                // Create system prompt with user profile data
-                $systemPrompt = $this->buildSystemPrompt($profile, $day, $totalDays);
+                // Build context-aware user message with recent workouts
+                $contextMessage = "Generate a complete workout plan for day {$day} of {$totalDays}. Consider the workout split and ensure proper muscle group rotation.";
 
-                // Call OpenAI with tool calling
+                // Add recent workouts context (last 5 workouts)
+                if (count($generatedWorkoutsSummary) > 0) {
+                    $recentWorkouts = array_slice($generatedWorkoutsSummary, -5);
+                    $contextMessage .= "\n\nRecent workouts (ensure variety):\n" . implode("\n", $recentWorkouts);
+                }
+
+                // CONSTANT size: only system + current request
+                $requestMessages = [
+                    $systemPrompt,
+                    [
+                        'role' => 'user',
+                        'content' => $contextMessage,
+                    ],
+                ];
+
+                Log::debug("Calling OpenAI for day {$day}", [
+                    'model' => 'gpt-5-mini',
+                    'messages_count' => count($requestMessages),
+                    'context_workouts_count' => count($recentWorkouts ?? []),
+                ]);
+
+                $startTime = microtime(true);
+
+                // Use Tool Calls (more reliable than JSON Schema!)
                 $response = $client->chat()->create([
                     'model' => 'gpt-5-mini',
-                    'messages' => [
-                        [
-                            'role' => 'system',
-                            'content' => $systemPrompt,
-                        ],
-                        [
-                            'role' => 'user',
-                            'content' => "Generate a complete workout plan for day {$day}. Consider the workout split and ensure proper muscle group rotation across the week.",
-                        ],
-                    ],
+                    'reasoning_effort' => 'minimal',
+                    'messages' => $requestMessages,
                     'tools' => [
                         [
                             'type' => 'function',
@@ -111,10 +164,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                         'description' => ['type' => 'string'],
                                         'estimated_duration_minutes' => ['type' => 'integer'],
                                         'difficulty' => ['type' => 'string', 'enum' => ['Beginner', 'Intermediate', 'Advanced']],
-                                        'muscle_groups' => [
-                                            'type' => 'array',
-                                            'items' => ['type' => 'string'],
-                                        ],
+                                        'muscle_groups' => ['type' => 'array', 'items' => ['type' => 'string']],
                                         'exercises' => [
                                             'type' => 'array',
                                             'items' => [
@@ -129,19 +179,10 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                                     'rest_seconds' => ['type' => 'string'],
                                                     'tempo' => ['type' => 'string'],
                                                     'weight_recommendation' => ['type' => 'string'],
-                                                    'muscle_groups' => [
-                                                        'type' => 'array',
-                                                        'items' => ['type' => 'string'],
-                                                    ],
-                                                    'equipment' => [
-                                                        'type' => 'array',
-                                                        'items' => ['type' => 'string'],
-                                                    ],
+                                                    'muscle_groups' => ['type' => 'array', 'items' => ['type' => 'string']],
+                                                    'equipment' => ['type' => 'array', 'items' => ['type' => 'string']],
                                                     'form_cues' => ['type' => 'string'],
-                                                    'alternatives' => [
-                                                        'type' => 'array',
-                                                        'items' => ['type' => 'string'],
-                                                    ],
+                                                    'alternatives' => ['type' => 'array', 'items' => ['type' => 'string']],
                                                     'difficulty' => ['type' => 'string', 'enum' => ['Beginner', 'Intermediate', 'Advanced']],
                                                 ],
                                                 'required' => ['name', 'type'],
@@ -156,10 +197,29 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     'tool_choice' => ['type' => 'function', 'function' => ['name' => 'create_workout_plan']],
                 ]);
 
+                $duration = microtime(true) - $startTime;
+
+                Log::debug("OpenAI response received for day {$day}", [
+                    'duration_seconds' => round($duration, 2),
+                    'finish_reason' => $response->choices[0]->finishReason ?? 'unknown',
+                    'usage' => [
+                        'prompt_tokens' => $response->usage->promptTokens ?? 0,
+                        'completion_tokens' => $response->usage->completionTokens ?? 0,
+                        'total_tokens' => $response->usage->totalTokens ?? 0,
+                    ],
+                ]);
+
+                // Parse tool call (more reliable than JSON parsing!)
                 $toolCall = $response->choices[0]->message->toolCalls[0] ?? null;
 
                 if ($toolCall && $toolCall->function->name === 'create_workout_plan') {
                     $arguments = json_decode($toolCall->function->arguments, true);
+
+                    Log::debug("Tool call received for day {$day}", [
+                        'exercises_count' => count($arguments['exercises'] ?? []),
+                        'workout_name' => $arguments['workout_name'] ?? 'unknown',
+                        'muscle_groups' => $arguments['muscle_groups'] ?? [],
+                    ]);
 
                     // Update workout plan with details
                     $workoutPlan->update([
@@ -175,17 +235,48 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     // Save exercises
                     $this->saveExercises($workoutPlan, $arguments['exercises']);
 
-                    Log::info("Generated workout plan for day {$day}", ['workout_plan_id' => $workoutPlan->id]);
+                    // Add workout to summary for next iterations (lightweight context)
+                    $exerciseNames = array_slice(array_column($arguments['exercises'], 'name'), 0, 3);
+                    $generatedWorkoutsSummary[] = "Day {$day}: {$arguments['workout_name']} (" . implode(', ', $exerciseNames) . "...)";
+
+                    Log::info("Generated workout plan for day {$day}", [
+                        'workout_plan_id' => $workoutPlan->id,
+                        'exercises_created' => count($arguments['exercises']),
+                        'workout_name' => $arguments['workout_name'],
+                        'duration_seconds' => round($duration, 2),
+                        'total_workouts_in_summary' => count($generatedWorkoutsSummary),
+                    ]);
+                } else {
+                    Log::warning("No tool call received for day {$day}", [
+                        'response' => json_encode($response->choices[0] ?? 'empty'),
+                    ]);
                 }
             } catch (\Exception $e) {
                 Log::error("Failed to generate workout plan for day {$day}", [
                     'error' => $e->getMessage(),
+                    'error_class' => get_class($e),
                     'workout_plan_id' => $workoutPlan->id,
+                    'trace' => $e->getTraceAsString(),
                 ]);
 
                 $workoutPlan->update(['status' => 'failed']);
+
+                // Don't break the loop - continue with next day
+                continue;
             }
         }
+
+        Log::info('Workout plan generation completed', [
+            'user_id' => $this->user->id,
+            'plan_id' => $this->plan->id,
+            'total_days' => $totalDays,
+            'generated_count' => WorkoutPlan::where('plan_id', $this->plan->id)
+                ->where('status', 'generated')
+                ->count(),
+            'failed_count' => WorkoutPlan::where('plan_id', $this->plan->id)
+                ->where('status', 'failed')
+                ->count(),
+        ]);
     }
 
     private function isRestDay(int $day, int $workoutsPerWeek): bool
@@ -302,19 +393,16 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         };
     }
 
-    private function buildSystemPrompt($profile, int $currentDay, int $totalDays): string
+    private function buildSystemPrompt($profile): string
     {
+        $totalDays = config('plans.duration_days');
         $trainingPlace = $profile->training_place->value;
         $skillLevel = $profile->skill_level->value;
         $bodyGoal = $profile->body_goal->value;
-
-        // ✅ ADD: Calculate workout split and target muscle groups
         $workoutSplit = $this->getWorkoutSplit($profile->training_sessions_per_week);
-        $targetMuscleGroups = $this->getTargetMuscleGroups($currentDay, $profile->training_sessions_per_week);
-        $workoutDayNumber = $this->getWorkoutDayNumber($currentDay, $profile->training_sessions_per_week);
 
         return <<<PROMPT
-You are an expert personal trainer and workout programmer specializing in evidence-based training methods. Create a personalized workout plan based on the user profile below.
+You are an expert personal trainer and workout programmer specializing in evidence-based training methods. Create personalized workout plans based on the user profile below.
 
 **User Profile:**
 - Age: {$profile->age} years
@@ -324,20 +412,15 @@ You are an expert personal trainer and workout programmer specializing in eviden
 - Training Place: {$trainingPlace}
 - Activity Level: {$profile->activity_level->value}
 - Training Sessions per Week: {$profile->training_sessions_per_week}
-
-**Workout Context:**
-- Current Day: {$currentDay} of {$totalDays}
-- Training Day: {$workoutDayNumber} of {$profile->training_sessions_per_week} this week
 - Workout Split: {$workoutSplit}
-- Focus Today: {$targetMuscleGroups}
 
 **Requirements:**
 1. All exercises MUST be suitable for {$trainingPlace} training
 2. ONLY use equipment available in {$trainingPlace}
 3. Difficulty should match {$skillLevel} level
 4. Workouts should align with {$bodyGoal} goal
-5. Today's focus: {$targetMuscleGroups}
-6. Include warmup (5-8 min) and cooldown (5 min)
+5. Ensure proper muscle group distribution across the {$totalDays}-day plan
+6. Include warmup (5-8 min) and cooldown (5 min) when appropriate
 7. Provide clear form cues for each exercise
 8. Use {$this->getLanguageInstruction()} for exercise names, descriptions, and instructions
 9. Main workout: 6-8 exercises for {$skillLevel} level
@@ -346,8 +429,11 @@ You are an expert personal trainer and workout programmer specializing in eviden
 **Workout Programming by Goal:**
 {$this->getGoalGuidelines($bodyGoal)}
 
-**Critical: Output Format**
-You MUST use the create_workout_plan function with ALL required fields.
+**Output Format:**
+Return a valid JSON object with workout_name, workout_type, description, estimated_duration_minutes, difficulty, muscle_groups, and exercises array.
+Each exercise must include: name, type, description, sets, reps (or duration_seconds), rest_seconds, equipment, and form_cues.
+
+Generate complete, safe, and effective workout plans that the user can easily follow.
 PROMPT;
     }
 
@@ -360,7 +446,6 @@ PROMPT;
 
         return match($language) {
             'de' => 'German language',
-            'en' => 'English language',
             default => 'English language',
         };
     }

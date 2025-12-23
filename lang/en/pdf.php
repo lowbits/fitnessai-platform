@@ -30,6 +30,12 @@ return [
         'generating' => 'Generating meal plan...',
         'help' => 'Need help or have questions?',
         'contact' => 'Contact us at',
+        "meal_type" => [
+            'breakfast' => 'Breakfast',
+            'lunch' => 'Lunch',
+            'dinner' => 'Dinner',
+            'snack' => 'Snack',
+        ],
     ],
 
     'workout_plan' => [
