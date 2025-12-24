@@ -2,9 +2,22 @@ export const locales = {
     en: {
         welcome: {
             meta: {
-                title: 'Personalized AI Workout & Meal Plans in 60 Seconds | FitnessAI',
+                locale: 'en',
+                title: 'Free Workout & Nutrition Plan Generator | FitnessAI',
+                title_short: 'Create Free Workout & Nutrition Plan | FitnessAI',
                 description:
-                    'Get a personalized AI workout and meal plan in 60 seconds. Tailored to your goals, fitness level, and equipment. Start free today.',
+                    'Create your free 7-day workout & nutrition plan as PDF. AI-powered, personalized & no signup required. Start now!',
+                description_social:
+                    'Free 7-day workout & nutrition plan as PDF. Generated with AI – personalized for muscle gain, fat loss or endurance.',
+                theme_color: '#667eea',
+                og: {
+                    type: 'website',
+                    site_name: 'fitnessAI.me',
+                },
+                twitter: {
+                    card: 'summary_large_image',
+                    site: '@fitnessai',
+                },
                 structured_data: {
                     description:
                         'Personalized AI workout and meal plans tailored to your fitness goals, level, and available equipment.',
@@ -276,16 +289,66 @@ export const locales = {
                 intermittent_fasting: 'Intermittent Fasting',
             },
         },
+        workout_plan: {
+            hero: {
+                free_badge: '100% Free',
+                weeks: 'Weeks',
+                times_per_week: '× per Week',
+                minutes: 'Minutes',
+                level: 'Level',
+                cta_button: 'Create Your Personalized Plan Now',
+            },
+            week_overview: {
+                heading: 'Your Workout Plan in Detail',
+                equipment_heading: 'Required Equipment',
+                progression_heading: 'Progression',
+                tips_heading: 'Tips for Maximum Success',
+                sets: 'Sets',
+                reps: 'Reps',
+                rest: 'Rest',
+            },
+            faq: {
+                heading: 'Frequently Asked Questions',
+            },
+            related: {
+                heading: 'More Workout Plans',
+                view_plan: 'View Plan',
+            },
+            cta: {
+                heading: 'Ready for Your Personalized Plan?',
+                description: 'Create your individual workout and nutrition plan now, based on your goals and requirements.',
+                button: 'Create Plan',
+            },
+        },
         form_panel: {
             submit: 'Continue',
+        },
+        footer: {
+            description:
+                'Personalized AI workout and meal plans tailored to you.',
+            copyright: '© {year} fitnessAI.me. Alle rights reserved',
         },
     },
     de: {
         welcome: {
             meta: {
+                locale: 'de',
                 title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | FitnessAI',
+                title_short:
+                    'Kostenlosen Trainings- & Ernährungsplan erstellen | FitnessAI',
                 description:
                     'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung. Jetzt starten!',
+                description_social:
+                    'Kostenloser 7-Tage Trainings- & Ernährungsplan als PDF. Erstellt mit KI – individuell für Muskelaufbau, Fettabbau oder Ausdauer.',
+                theme_color: '#667eea',
+                og: {
+                    type: 'website',
+                    site_name: 'fitnessAI.me',
+                },
+                twitter: {
+                    card: 'summary_large_image',
+                    site: '@fitnessai',
+                },
                 structured_data: {
                     description:
                         'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung.',
@@ -568,8 +631,45 @@ export const locales = {
                 intermittent_fasting: 'Intervallfasten',
             },
         },
+        workout_plan: {
+            hero: {
+                free_badge: '100% Kostenlos',
+                weeks: 'Wochen',
+                times_per_week: '× pro Woche',
+                minutes: 'Minuten',
+                level: 'Level',
+                cta_button: 'Jetzt personalisierten Plan erstellen',
+            },
+            week_overview: {
+                heading: 'Dein Trainingsplan im Detail',
+                equipment_heading: 'Benötigtes Equipment',
+                progression_heading: 'Progression',
+                tips_heading: 'Tipps für maximalen Erfolg',
+                sets: 'Sätze',
+                reps: 'Wdh.',
+                rest: 'Pause',
+            },
+            faq: {
+                heading: 'Häufig gestellte Fragen',
+            },
+            related: {
+                heading: 'Weitere Trainingspläne',
+                view_plan: 'Plan ansehen',
+            },
+            cta: {
+                heading: 'Bereit für deinen personalisierten Plan?',
+                description: 'Erstelle jetzt deinen individuellen Trainings- und Ernährungsplan basierend auf deinen Zielen und Voraussetzungen.',
+                button: 'Plan erstellen',
+            },
+        },
         form_panel: {
             submit: 'Weiter',
+        },
+        footer: {
+            description:
+                'KI-gestützte Trainings- und Ernährungspläne für deine Fitnessziele.',
+            rights: 'All rights reserved.',
+            copyright: '© {year} fitnessAI.me. Alle Rechte vorbehalten',
         },
     },
 } as const;

@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Events\EmailVerified;
-use App\Events\OnboardingCompleted;
 use App\Listeners\GenerateMealPlan;
 use App\Listeners\GenerateWorkoutPlan;
 use Illuminate\Support\Facades\Event;

@@ -9,8 +9,10 @@ import FlagIcon from '@/components/icons/FlagIcon.vue';
 import GhostIcon from '@/components/icons/GhostIcon.vue';
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import Footer from '@/components/Footer.vue';
+import Header from '@/components/Header.vue';
 
 defineProps<{
     durationDays: number;
@@ -36,24 +38,53 @@ const structuredData = {
 
 <template>
     <Head :title="$t('welcome.meta.title')">
+        <meta name="description" :content="$t('welcome.meta.description')" />
+        <link
+            rel="canonical"
+            :href="`https://fitnessai.me/${$t('welcome.meta.locale')}`"
+        />
+
+        <!-- Open Graph -->
+        <meta property="og:type" :content="$t('welcome.meta.og.type')" />
+        <meta property="og:title" :content="$t('welcome.meta.title_short')" />
+        <meta
+            property="og:description"
+            :content="$t('welcome.meta.description_social')"
+        />
+        <meta
+            property="og:url"
+            :content="`https://fitnessai.me/${$t('welcome.meta.locale')}`"
+        />
+        <meta
+            property="og:image"
+            content="https://fitnessai.me/fitness-plan.png"
+        />
+        <meta
+            property="og:site_name"
+            :content="$t('welcome.meta.og.site_name')"
+        />
+
+        <!-- Twitter -->
+        <meta name="twitter:card" :content="$t('welcome.meta.twitter.card')" />
+        <meta name="twitter:title" :content="$t('welcome.meta.title')" />
+        <meta
+            name="twitter:description"
+            :content="$t('welcome.meta.description_social')"
+        />
+        <meta
+            name="twitter:image"
+            content="https://fitnessai.me/fitness-plan.png"
+        />
+
+        <!-- Structured Data -->
         <component :is="'script'" type="application/ld+json">
             {{ JSON.stringify(structuredData) }}
         </component>
     </Head>
 
-    <header class="w-full border-b border-dark-surfaces-25">
-        <nav class="container mx-auto px-3 py-4">
-            <Link href="/">
-                <img
-                    class="h-auto w-40"
-                    src="/fitness-ai-me-logo.svg"
-                    alt="fitnessAi.me logo"
-                />
-            </Link>
-        </nav>
-    </header>
+    <Header />
     <main>
-        <div class="h-full w-full px-6 pb-10 md:px-0 overflow-hidden">
+        <div class="h-full w-full overflow-hidden px-6 pb-10 md:px-0">
             <div
                 class="container mx-auto flex flex-col justify-between space-y-10 pt-14 md:flex-row md:space-y-0"
             >
@@ -78,7 +109,7 @@ const structuredData = {
 
                 <div class="relative flex flex-1">
                     <div
-                        class="absolute inset-0 z-0 -mr-32 -mt-20 xl:-mr-64 xl:-mt-10 flex items-center justify-center"
+                        class="absolute inset-0 z-0 -mt-20 -mr-32 flex items-center justify-center xl:-mt-10 xl:-mr-64"
                     >
                         <img
                             src="/assets/gradient_form.png"
@@ -123,7 +154,9 @@ const structuredData = {
 
             <div class="relative mx-auto mt-48">
                 <!-- Background Gradient Image -->
-                <div class="absolute inset-0 z-0 flex items-center justify-center">
+                <div
+                    class="absolute inset-0 z-0 flex items-center justify-center"
+                >
                     <img
                         src="/assets/gradient.png"
                         alt=""
@@ -133,7 +166,7 @@ const structuredData = {
 
                 <div class="mx-auto max-w-xl">
                     <h2
-                        class="text-center z-10 text-5xl font-bold tracking-tight text-white"
+                        class="z-10 text-center text-5xl font-bold tracking-tight text-white"
                     >
                         {{ $t('welcome.cta.title') }}
                     </h2>
@@ -262,10 +295,5 @@ const structuredData = {
             </section>
         </div>
     </main>
-    <footer class="bg-dark-surfaces-800 p-8 text-primary-200">
-        <nav class="container mx-auto flex justify-between">
-            <Link href="/">fitnessai.me</Link>
-            <Link href="/imprint">{{ $t('welcome.footer.imprint') }}</Link>
-        </nav>
-    </footer>
+    <Footer />
 </template>

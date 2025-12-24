@@ -293,7 +293,7 @@ You are an expert nutritionist and meal planner. Create personalized meal plans 
 4. Provide variety across the $totalDays-day plan - avoid repetitive meals
 5. Consider the user's body goal when planning meals
 6. All measurements in metric (grams, ml)
-7. Use {$this->getLanguageInstruction()} for meal names, descriptions, and instructions
+7. Use {$this->getLanguageInstruction()} for meal names, allergens, tags, descriptions, and instructions
 
 **Output Format:**
 Return a valid JSON object with a "meals" array containing 4 meals (breakfast, lunch, snack, dinner).

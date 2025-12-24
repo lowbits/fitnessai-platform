@@ -15,13 +15,20 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => [ 'l
     /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
     Route::get('/', function () {
         return Inertia::render('Welcome', [
-            'durationDays' => config('plans.duration_days'),
+            'durationDays' => (int) config('plans.duration_days'),
         ]);
     })->name('home');
 
-    Route::get('/imprint', function () {
+    Route::get(LaravelLocalization::transRoute('routes.imprint'), function () {
         return Inertia::render('Imprint');
     })->name('imprint');
+
+    // Public Workout Plan Pages (SEO-optimized)
+    Route::get(LaravelLocalization::transRoute('routes.workout_plans_index'), [App\Http\Controllers\WorkoutPlanController::class, 'index'])
+        ->name('workout-plan.index');
+
+    Route::get(LaravelLocalization::transRoute('routes.workout_plans_type'), [App\Http\Controllers\WorkoutPlanController::class, 'show'])
+        ->name('workout-plan.show');
 });
 
 // Email verification routes
