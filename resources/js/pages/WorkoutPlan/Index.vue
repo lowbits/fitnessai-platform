@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
-import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import { Button } from '@/components/ui/button';
+import Header from '@/components/Header.vue';
 import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
+import { Button } from '@/components/ui/button';
+import { Head, Link } from '@inertiajs/vue3';
 
 interface Props {
     plans: Array<{

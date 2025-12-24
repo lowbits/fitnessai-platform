@@ -9,41 +9,40 @@
 
 @theme inline {
     --font-display:
-        Nunito, ui-sans-serif, system-ui, sans-serif,
-        'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-        'Noto Color Emoji';
+        Nunito, ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+        'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
 
     --radius-lg: var(--radius);
     --radius-md: calc(var(--radius) - 2px);
     --radius-sm: calc(var(--radius) - 4px);
 
     /* Custom Gray Colors */
-    --color-gray-25: #FCFCFD;
-    --color-gray-50: #F9FAFB;
-    --color-gray-100: #FCFCFD;
-    --color-gray-200: #F2F4F7;
+    --color-gray-25: #fcfcfd;
+    --color-gray-50: #f9fafb;
+    --color-gray-100: #fcfcfd;
+    --color-gray-200: #f2f4f7;
     --color-gray-600: #475467;
 
     /* Dark Surfaces */
-    --color-dark-surfaces-25: #383D42;
-    --color-dark-surfaces-200: #2E3439;
-    --color-dark-surfaces-300: #9AF2B2;
-    --color-dark-surfaces-500: #252A30;
-    --color-dark-surfaces-800: #191F25;
-    --color-dark-surfaces-900: #12181E;
+    --color-dark-surfaces-25: #383d42;
+    --color-dark-surfaces-200: #2e3439;
+    --color-dark-surfaces-300: #9af2b2;
+    --color-dark-surfaces-500: #252a30;
+    --color-dark-surfaces-800: #191f25;
+    --color-dark-surfaces-900: #12181e;
 
     /* Primary Colors */
-    --color-primary-25: #F5FFF8;
-    --color-primary-200: #9AF2B2;
-    --color-primary-300: #9AF2B2;
-    --color-primary-400: #56E97F;
-    --color-primary-500: #48D670;
+    --color-primary-25: #f5fff8;
+    --color-primary-200: #9af2b2;
+    --color-primary-300: #9af2b2;
+    --color-primary-400: #56e97f;
+    --color-primary-500: #48d670;
 
     /* Secondary Colors */
-    --color-secondary-100: #CCDBE9;
-    --color-secondary-200: #9EB9D4;
-    --color-secondary-300: #7098BE;
-    --color-secondary-900: #08233E;
+    --color-secondary-100: #ccdbe9;
+    --color-secondary-200: #9eb9d4;
+    --color-secondary-300: #7098be;
+    --color-secondary-900: #08233e;
 
     --color-background: var(--background);
     --color-foreground: var(--foreground);
@@ -111,9 +110,8 @@
     body,
     html {
         --font-display:
-            'Nunito', ui-sans-serif, system-ui, sans-serif,
-            'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
-            'Noto Color Emoji';
+            'Nunito', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+            'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
     }
 }
 

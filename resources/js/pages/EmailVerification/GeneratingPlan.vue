@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { usePoll } from '@inertiajs/vue3';
 import GuestLayout from '@/layouts/GuestLayout.vue';
+import { usePoll } from '@inertiajs/vue3';
 
 interface Props {
     user: {
@@ -75,9 +75,14 @@ const { stop: stopPolling } = usePoll(3000, {
                 <h1 class="mb-2 text-4xl font-bold text-white">
                     {{ $t('emailVerification.generating.verified') }}
                 </h1>
-                <p class="text-xl text-gray-300">{{ $t('emailVerification.generating.welcome', { name: user.name }) }}</p>
+                <p class="text-xl text-gray-300">
+                    {{
+                        $t('emailVerification.generating.welcome', {
+                            name: user.name,
+                        })
+                    }}
+                </p>
             </div>
-
 
             <!-- Progress Card -->
             <div
@@ -119,14 +124,17 @@ const { stop: stopPolling } = usePoll(3000, {
                     <div
                         class="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-primary-500"
                     ></div>
-                    <p class="mt-4 text-gray-400">{{ $t('emailVerification.generating.loadingStatus') }}</p>
+                    <p class="mt-4 text-gray-400">
+                        {{ $t('emailVerification.generating.loadingStatus') }}
+                    </p>
                 </div>
             </div>
 
             <!-- Plan Details -->
             <div class="mt-6 text-center text-sm text-gray-500">
                 <p>
-                    {{ $t('emailVerification.generating.planLabel') }} <span class="text-gray-300">{{ plan.name }}</span>
+                    {{ $t('emailVerification.generating.planLabel') }}
+                    <span class="text-gray-300">{{ plan.name }}</span>
                 </p>
                 <p>
                     {{ $t('emailVerification.generating.startDateLabel') }}

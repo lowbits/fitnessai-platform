@@ -42,10 +42,9 @@ export const DIET_TYPES = [
 ] as const;
 
 // Type exports for TypeScript safety
-export type Gender = typeof GENDERS[number]['value'];
-export type BodyGoal = typeof BODY_GOALS[number]['value'];
-export type SkillLevel = typeof SKILL_LEVELS[number]['value'];
-export type ActivityLevel = typeof ACTIVITY_LEVELS[number]['value'];
-export type TrainingPlace = typeof TRAINING_PLACES[number]['value'];
-export type DietType = typeof DIET_TYPES[number]['value'];
-
+export type Gender = (typeof GENDERS)[number]['value'];
+export type BodyGoal = (typeof BODY_GOALS)[number]['value'];
+export type SkillLevel = (typeof SKILL_LEVELS)[number]['value'];
+export type ActivityLevel = (typeof ACTIVITY_LEVELS)[number]['value'];
+export type TrainingPlace = (typeof TRAINING_PLACES)[number]['value'];
+export type DietType = (typeof DIET_TYPES)[number]['value'];

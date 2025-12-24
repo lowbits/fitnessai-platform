@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import ConvinceCard from '@/components/ConvinceCard.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
+import Footer from '@/components/Footer.vue';
 import FormCard from '@/components/FormCard.vue';
 import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
+import Header from '@/components/Header.vue';
 import AtomIcon from '@/components/icons/AtomIcon.vue';
 import FingerprintIcon from '@/components/icons/FingerprintIcon.vue';
 import FlagIcon from '@/components/icons/FlagIcon.vue';
@@ -11,8 +13,6 @@ import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
 import { Head } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
-import Footer from '@/components/Footer.vue';
-import Header from '@/components/Header.vue';
 
 defineProps<{
     durationDays: number;
@@ -113,8 +113,10 @@ const structuredData = {
                     >
                         <img
                             src="/assets/gradient_form.png"
-                            alt=""
+                            alt="Decorative gradient background"
                             class="h-auto w-full max-w-4xl object-contain opacity-50"
+                            loading="lazy"
+                            decoding="async"
                         />
                     </div>
                     <FormCard class="flex flex-1 justify-end">
@@ -159,8 +161,10 @@ const structuredData = {
                 >
                     <img
                         src="/assets/gradient.png"
-                        alt=""
+                        alt="Abstract gradient background"
                         class="h-auto w-full max-w-7xl object-contain opacity-50"
+                        loading="lazy"
+                        decoding="async"
                     />
                 </div>
 

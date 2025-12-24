@@ -3,9 +3,9 @@ import PrimaryButton from '@/components/PrimaryButton.vue';
 import { TabPanel } from '@headlessui/vue';
 
 defineProps<{
-    headline: string
-    subline: string
-}>()
+    headline: string;
+    subline: string;
+}>();
 </script>
 <template>
     <TabPanel class="flex min-h-[500px] flex-col">
@@ -13,8 +13,10 @@ defineProps<{
             <h4 class="text-center font-display text-3xl font-semibold">
                 {{ headline }}
             </h4>
-            <p class="mt-2 text-center font-display text-base leading-6 text-secondary-300">
-                {{subline}}
+            <p
+                class="mt-2 text-center font-display text-base leading-6 text-secondary-300"
+            >
+                {{ subline }}
             </p>
         </div>
         <div class="mt-8 grow">

@@ -17,10 +17,10 @@ const model = defineModel<string>();
         :id="id"
         :name="name"
         v-model="model"
-        class="w-full border px-3 py-2 bg-transparent border-dark-surfaces-25 outline-none focus:outline-none focus:ring-green-500 transition-colors disabled:text-secondary-200 focus:border-green-500 rounded-xl"
+        class="w-full rounded-xl border border-dark-surfaces-25 bg-transparent px-3 py-2 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none disabled:text-secondary-200"
         :class="{
             'text-primary-500': model && model !== '',
-            'text-secondary-200': !model || model === ''
+            'text-secondary-200': !model || model === '',
         }"
     >
         <option value="" disabled selected hidden>

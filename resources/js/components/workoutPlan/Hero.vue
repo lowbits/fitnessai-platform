@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
+
 interface Props {
     title: string;
     intro: string;
@@ -11,7 +13,7 @@ interface Props {
 }
 
 defineProps<Props>();
-const emit = defineEmits<{
+defineEmits<{
     openForm: [];
 }>();
 </script>
@@ -26,8 +28,10 @@ const emit = defineEmits<{
         >
             <img
                 src="/assets/gradient.png"
-                alt=""
+                alt="Abstract gradient background"
                 class="h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
             />
         </div>
 
@@ -72,49 +76,57 @@ const emit = defineEmits<{
                     <div class="text-3xl font-bold text-primary-300">
                         {{ workoutDetails.weeks }}
                     </div>
-                    <div class="mt-1 text-sm text-gray-400">{{ $t('workout_plan.hero.weeks') }}</div>
+                    <div class="mt-1 text-sm text-gray-400">
+                        {{ $t('workout_plan.hero.weeks') }}
+                    </div>
                 </div>
                 <div class="rounded-xl bg-dark-surfaces-500/30 p-4">
                     <div class="text-3xl font-bold text-primary-300">
                         {{ workoutDetails.workoutsPerWeek }}
                     </div>
-                    <div class="mt-1 text-sm text-gray-400">{{ $t('workout_plan.hero.times_per_week') }}</div>
+                    <div class="mt-1 text-sm text-gray-400">
+                        {{ $t('workout_plan.hero.times_per_week') }}
+                    </div>
                 </div>
                 <div class="rounded-xl bg-dark-surfaces-500/30 p-4">
                     <div class="text-3xl font-bold text-primary-300">
                         {{ workoutDetails.durationMinutes }}
                     </div>
-                    <div class="mt-1 text-sm text-gray-400">{{ $t('workout_plan.hero.minutes') }}</div>
+                    <div class="mt-1 text-sm text-gray-400">
+                        {{ $t('workout_plan.hero.minutes') }}
+                    </div>
                 </div>
                 <div class="rounded-xl bg-dark-surfaces-500/30 p-4">
                     <div class="text-sm font-medium text-primary-300">
                         {{ workoutDetails.level }}
                     </div>
-                    <div class="mt-1 text-sm text-gray-400">{{ $t('workout_plan.hero.level') }}</div>
+                    <div class="mt-1 text-sm text-gray-400">
+                        {{ $t('workout_plan.hero.level') }}
+                    </div>
                 </div>
             </div>
-
-            <!-- CTA Button -->
-            <button
-                @click="emit('openForm')"
-                class="mt-10 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-white transition hover:bg-primary-400"
-            >
-                {{ $t('workout_plan.hero.cta_button') }}
-                <svg
-                    class="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+            <GenerateFitnessPlanModal #default="{ open }">
+                <!-- CTA Button -->
+                <button
+                    @click="open"
+                    class="mt-10 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-white transition hover:bg-primary-400"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                </svg>
-            </button>
+                    {{ $t('workout_plan.hero.cta_button') }}
+                    <svg
+                        class="h-5 w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M17 8l4 4m0 0l-4 4m4-4H3"
+                        />
+                    </svg>
+                </button>
+            </GenerateFitnessPlanModal>
         </div>
     </section>
 </template>
-

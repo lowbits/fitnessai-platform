@@ -4,6 +4,7 @@ import { computed } from 'vue';
 
 import Footer from '@/components/Footer.vue';
 import Header from '@/components/Header.vue';
+import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 import AuthorBox from '@/components/workoutPlan/AuthorBox.vue';
 import CommonMistakes from '@/components/workoutPlan/CommonMistakes.vue';
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
@@ -11,7 +12,6 @@ import Hero from '@/components/workoutPlan/Hero.vue';
 import RelatedPlans from '@/components/workoutPlan/RelatedPlans.vue';
 import WeekOverview from '@/components/workoutPlan/WeekOverview.vue';
 import WhyItWorks from '@/components/workoutPlan/WhyItWorks.vue';
-import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 
 interface Props {
     type: string;
@@ -94,7 +94,11 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <title>{{ meta.title }}</title>
         <meta name="description" :content="meta.description" />
         <link rel="canonical" :href="meta.canonical" />
-        <meta v-if="meta.keywords?.length" name="keywords" :content="meta.keywords?.join(', ')" />
+        <meta
+            v-if="meta.keywords?.length"
+            name="keywords"
+            :content="meta.keywords?.join(', ')"
+        />
         <meta property="og:title" :content="meta.title" />
         <meta property="og:description" :content="meta.description" />
         <meta property="og:url" :content="meta.canonical" />
@@ -123,7 +127,6 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
                 durationMinutes: workout.duration_minutes,
                 level: workout.level,
             }"
-            @open-form="openForm"
         />
 
         <!-- Author Box Section -->

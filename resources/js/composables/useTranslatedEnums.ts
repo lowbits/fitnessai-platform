@@ -1,5 +1,5 @@
-import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export interface EnumOption {
     value: string;
@@ -75,4 +75,3 @@ export function useTranslatedEnums() {
         DIET_TYPES,
     };
 }
-

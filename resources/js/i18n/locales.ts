@@ -316,18 +316,21 @@ export const locales = {
             },
             cta: {
                 heading: 'Ready for Your Personalized Plan?',
-                description: 'Create your individual workout and nutrition plan now, based on your goals and requirements.',
+                description:
+                    'Create your individual workout and nutrition plan now, based on your goals and requirements.',
                 button: 'Create Plan',
             },
             why_it_works: {
                 heading: 'Why This Plan Works',
-                subheading: 'Science-based principles that guarantee your success',
+                subheading:
+                    'Science-based principles that guarantee your success',
                 show_more: 'Show {count} more reasons',
                 show_less: 'Show less',
             },
             common_mistakes: {
                 heading: 'Avoid Common Mistakes',
-                subheading: 'Avoid these typical beginner mistakes for better results',
+                subheading:
+                    'Avoid these typical beginner mistakes for better results',
                 problem: 'Problem',
                 consequence: 'Consequences',
                 solution: 'Solution',
@@ -339,7 +342,8 @@ export const locales = {
                 last_updated: 'Last updated',
                 reviewed_by: 'Professionally reviewed by',
                 about_content: 'About our content',
-                disclosure: 'This workout plan was created with AI assistance and reviewed by certified professionals. All recommendations are based on current sports science and evidence-based principles.',
+                disclosure:
+                    'This workout plan was created with AI assistance and reviewed by certified professionals. All recommendations are based on current sports science and evidence-based principles.',
             },
         },
         form_panel: {
@@ -680,18 +684,21 @@ export const locales = {
             },
             cta: {
                 heading: 'Bereit für deinen personalisierten Plan?',
-                description: 'Erstelle jetzt deinen individuellen Trainings- und Ernährungsplan basierend auf deinen Zielen und Voraussetzungen.',
+                description:
+                    'Erstelle jetzt deinen individuellen Trainings- und Ernährungsplan basierend auf deinen Zielen und Voraussetzungen.',
                 button: 'Plan erstellen',
             },
             why_it_works: {
                 heading: 'Warum dieser Plan funktioniert',
-                subheading: 'Wissenschaftlich fundierte Prinzipien, die deinen Erfolg garantieren',
+                subheading:
+                    'Wissenschaftlich fundierte Prinzipien, die deinen Erfolg garantieren',
                 show_more: '{count} weitere Gründe anzeigen',
                 show_less: 'Weniger anzeigen',
             },
             common_mistakes: {
                 heading: 'Häufige Fehler vermeiden',
-                subheading: 'Vermeide diese typischen Anfängerfehler für bessere Ergebnisse',
+                subheading:
+                    'Vermeide diese typischen Anfängerfehler für bessere Ergebnisse',
                 problem: 'Problem',
                 consequence: 'Folgen',
                 solution: 'Lösung',
@@ -703,7 +710,8 @@ export const locales = {
                 last_updated: 'Zuletzt aktualisiert',
                 reviewed_by: 'Fachlich geprüft von',
                 about_content: 'Über unsere Inhalte',
-                disclosure: 'Dieser Trainingsplan wurde mit KI-Unterstützung erstellt und von zertifizierten Fachleuten überprüft. Alle Empfehlungen basieren auf aktueller Sportforschung und evidenzbasierten Prinzipien.',
+                disclosure:
+                    'Dieser Trainingsplan wurde mit KI-Unterstützung erstellt und von zertifizierten Fachleuten überprüft. Alle Empfehlungen basieren auf aktueller Sportforschung und evidenzbasierten Prinzipien.',
             },
         },
         form_panel: {

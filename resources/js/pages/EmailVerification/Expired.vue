@@ -38,19 +38,33 @@ defineProps<Props>();
                 </div>
 
                 <!-- Title -->
-                <h1 class="mb-4 text-3xl font-bold text-white">{{ $t('emailVerification.expired.title') }}</h1>
+                <h1 class="mb-4 text-3xl font-bold text-white">
+                    {{ $t('emailVerification.expired.title') }}
+                </h1>
 
                 <!-- Message -->
-                <p class="mb-8 text-gray-400">{{ $t('emailVerification.expired.description') }}</p>
+                <p class="mb-8 text-gray-400">
+                    {{ $t('emailVerification.expired.description') }}
+                </p>
 
                 <!-- Info -->
                 <div class="bg-gray-750 mb-6 rounded-lg p-4 text-left">
                     <p class="mb-2 text-sm font-semibold text-gray-300">
                         {{ $t('emailVerification.expired.whatToDo') }}
                     </p>
-                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-400">
-                        <li>{{ $t('emailVerification.expired.steps.contact', { email: 'hello@fitnessai.me' }) }}</li>
-                        <li>{{ $t('emailVerification.expired.steps.include') }}</li>
+                    <ul
+                        class="list-inside list-disc space-y-1 text-sm text-gray-400"
+                    >
+                        <li>
+                            {{
+                                $t('emailVerification.expired.steps.contact', {
+                                    email: 'hello@fitnessai.me',
+                                })
+                            }}
+                        </li>
+                        <li>
+                            {{ $t('emailVerification.expired.steps.include') }}
+                        </li>
                     </ul>
                 </div>
 

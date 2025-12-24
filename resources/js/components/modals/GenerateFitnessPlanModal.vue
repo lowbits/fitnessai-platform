@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
-import { ref } from 'vue';
 import CTASection from '@/components/workoutPlan/CTASection.vue';
+import { ref } from 'vue';
 
 const showForm = ref(false);
 
@@ -14,7 +14,7 @@ const closeForm = () => {
 };
 </script>
 <template>
-    <slot v-bind="{open: openForm }">
+    <slot v-bind="{ open: openForm }">
         <CTASection @open-form="openForm" />
     </slot>
     <Teleport to="body">

@@ -28,7 +28,7 @@ interface FooterLinks {
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
 const selectedLanguage = ref(page.props.currentLocale as string);
 
-const getPathFromUrl = (url:string) => {
+const getPathFromUrl = (url: string) => {
     return url.replace(/^https?:\/\/[^\/]+/, '');
 };
 
@@ -130,7 +130,7 @@ watch(selectedLanguage, (newLocale) => {
                                 :class="{
                                     'font-semibold text-secondary-200':
                                         $page.url === '/',
-                                    'text-gray-300 transition hover:text-se-300':
+                                    'hover:text-se-300 text-gray-300 transition':
                                         $page.url !== '/',
                                 }"
                             >

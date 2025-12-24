@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed } from 'vue';
-import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import CheckIcon from '@/components/icons/CheckIcon.vue';
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
+import { computed } from 'vue';
 
 interface Props {
     label?: string;
@@ -27,10 +27,11 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
         </RadioGroupLabel>
 
         <div
-            class="gap-4 mt-2"
+            class="mt-2 gap-4"
             :class="{
                 'space-y-4': !isHorizontal,
-                'flex flex-col md:flex-row justify-evenly items-center': isHorizontal
+                'flex flex-col items-center justify-evenly md:flex-row':
+                    isHorizontal,
             }"
         >
             <RadioGroupOption
@@ -42,14 +43,16 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
             >
                 <div
                     :class="[
-                        checked ? 'z-10 border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5' : 'border-dark-surfaces-25',
-                        'rounded-2xl relative justify-between w-full whitespace-nowrap flex cursor-pointer border p-4 focus:outline-none transition-colors'
+                        checked
+                            ? 'z-10 border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5'
+                            : 'border-dark-surfaces-25',
+                        'relative flex w-full cursor-pointer justify-between rounded-2xl border p-4 whitespace-nowrap transition-colors focus:outline-none',
                     ]"
                 >
                     <span class="ml-3 flex flex-col">
                         <RadioGroupLabel
                             as="span"
-                            class="text-white capitalize block font-medium"
+                            class="block font-medium text-white capitalize"
                         >
                             <slot :item="item">
                                 {{ item }}
@@ -59,9 +62,13 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
 
                     <span
                         :class="[
-                            checked ? 'bg-primary-500 border-transparent' : 'bg-dark-surfaces-900 border-dark-surfaces-25',
-                            active ? 'ring-1 ring-offset-1 ring-primary-300' : '',
-                            'mt-0.5 h-4 w-4 shrink-0 rounded-full border flex items-center justify-center transition-all'
+                            checked
+                                ? 'border-transparent bg-primary-500'
+                                : 'border-dark-surfaces-25 bg-dark-surfaces-900',
+                            active
+                                ? 'ring-1 ring-primary-300 ring-offset-1'
+                                : '',
+                            'mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-all',
                         ]"
                         aria-hidden="true"
                     >
@@ -72,4 +79,3 @@ const isHorizontal = computed(() => props.alignment === 'horizontal');
         </div>
     </RadioGroup>
 </template>
-

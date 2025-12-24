@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import { Link } from '@inertiajs/vue3';
 
 defineProps<{
@@ -20,7 +19,7 @@ defineProps<{
             </Link>
         </nav>
     </header>
-    <main class="flex flex-col min-h-[85vh]">
+    <main class="flex min-h-[85vh] flex-col">
         <slot />
     </main>
     <footer class="bg-dark-surfaces-800 p-8 text-primary-200">
