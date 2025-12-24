@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { Head } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 
 import Footer from '@/components/Footer.vue';
-import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
 import Header from '@/components/Header.vue';
 import AuthorBox from '@/components/workoutPlan/AuthorBox.vue';
 import CommonMistakes from '@/components/workoutPlan/CommonMistakes.vue';
-import CTASection from '@/components/workoutPlan/CTASection.vue';
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import Hero from '@/components/workoutPlan/Hero.vue';
 import RelatedPlans from '@/components/workoutPlan/RelatedPlans.vue';
@@ -88,9 +86,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-
 const schemaJson = computed(() => JSON.stringify(props.schema));
-
 </script>
 
 <template>
@@ -106,6 +102,10 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" :content="meta.title" />
         <meta name="twitter:description" :content="meta.description" />
+        <meta
+            property="og:image"
+            content="https://fitnessai.me/fitness-plan.png"
+        />
 
         <component :is="'script'" type="application/ld+json">
             {{ schemaJson }}
@@ -113,7 +113,6 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
     </Head>
     <main class="min-h-screen bg-dark-surfaces-900">
         <Header />
-
 
         <Hero
             :title="meta.h1"
@@ -127,9 +126,11 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
             @open-form="openForm"
         />
 
-
         <!-- Author Box Section -->
-        <section v-if="author" class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <section
+            v-if="author"
+            class="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8"
+        >
             <AuthorBox
                 :author="author"
                 :reviewer="reviewer"
@@ -162,7 +163,6 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
 
         <FAQSection :faqs="faqs" />
         <RelatedPlans :plans="relatedPlans" />
-
 
         <GenerateFitnessPlanModal />
     </main>

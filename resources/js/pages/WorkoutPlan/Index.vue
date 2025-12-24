@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
-import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
 import { Button } from '@/components/ui/button';
 import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 
@@ -34,11 +32,6 @@ interface Props {
 }
 
 const props = defineProps<Props>();
-const showForm = ref(false);
-
-const openForm = () => {
-    showForm.value = true;
-};
 </script>
 
 <template>
@@ -60,6 +53,10 @@ const openForm = () => {
             <meta
                 name="twitter:description"
                 :content="props.meta.description"
+            />
+            <meta
+                property="og:image"
+                content="https://fitnessai.me/fitness-plan.png"
             />
         </Head>
 
