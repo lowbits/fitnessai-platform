@@ -56,8 +56,8 @@
           href="{{ LaravelLocalization::getLocalizedURL(config('app.fallback_locale'), null, [], true) }}" />
 
     {{-- Inertia will inject page-specific meta tags here --}}
-    @inertiaHead
     @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
+    @inertiaHead
 </head>
 <body class="font-sans antialiased bg-dark-surfaces-900">
 @inertia
