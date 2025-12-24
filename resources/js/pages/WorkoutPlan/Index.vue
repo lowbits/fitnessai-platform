@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { Head, Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import Header from '@/components/Header.vue';
 import Footer from '@/components/Footer.vue';
+import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
+import { Button } from '@/components/ui/button';
+import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 
 interface Props {
     plans: Array<{
@@ -25,10 +29,16 @@ interface Props {
         viewPlan: string;
         ctaHeading: string;
         ctaText: string;
+        ctaButton: string;
     };
 }
 
 const props = defineProps<Props>();
+const showForm = ref(false);
+
+const openForm = () => {
+    showForm.value = true;
+};
 </script>
 
 <template>
@@ -47,7 +57,10 @@ const props = defineProps<Props>();
             <!-- Twitter -->
             <meta name="twitter:card" content="summary_large_image" />
             <meta name="twitter:title" :content="props.meta.title" />
-            <meta name="twitter:description" :content="props.meta.description" />
+            <meta
+                name="twitter:description"
+                :content="props.meta.description"
+            />
         </Head>
 
         <Header />
@@ -55,10 +68,12 @@ const props = defineProps<Props>();
         <main class="container mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
             <!-- Hero Section -->
             <section class="mb-16 text-center">
-                <h1 class="text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+                <h1
+                    class="text-4xl font-bold text-white md:text-5xl lg:text-6xl"
+                >
                     {{ props.labels.heading }}
                 </h1>
-                <p class="mt-4 text-lg text-gray-300 max-w-3xl mx-auto">
+                <p class="mx-auto mt-4 max-w-3xl text-lg text-gray-300">
                     {{ props.labels.intro }}
                 </p>
             </section>
@@ -71,10 +86,10 @@ const props = defineProps<Props>();
                     class="group relative overflow-hidden rounded-2xl bg-dark-surfaces-800 p-6 transition-all hover:bg-dark-surfaces-500"
                 >
                     <div class="relative z-10">
-                        <h2 class="text-2xl font-bold text-white mb-3">
+                        <h2 class="mb-3 text-2xl font-bold text-white">
                             {{ plan.title }}
                         </h2>
-                        <p class="text-gray-300 mb-6 line-clamp-3">
+                        <p class="mb-6 line-clamp-3 text-gray-300">
                             {{ plan.description }}
                         </p>
                         <Link
@@ -82,29 +97,46 @@ const props = defineProps<Props>();
                             class="inline-flex items-center gap-2 rounded-lg bg-primary-500 px-6 py-3 font-semibold text-white transition hover:bg-primary-400"
                         >
                             {{ props.labels.viewPlan }}
-                            <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            <svg
+                                class="h-5 w-5"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
                             </svg>
                         </Link>
                     </div>
 
                     <!-- Hover Effect -->
-                    <div class="absolute inset-0 z-0 bg-gradient-to-br from-primary-500/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <div
+                        class="absolute inset-0 z-0 bg-gradient-to-br from-primary-500/10 to-transparent opacity-0 transition-opacity group-hover:opacity-100"
+                    />
                 </div>
             </section>
 
             <!-- CTA Section -->
-            <section class="mt-16 rounded-2xl bg-gradient-to-r from-primary-500/20 to-primary-400/10 p-8 text-center">
-                <h2 class="text-3xl font-bold text-white mb-4">
+            <section
+                class="mt-16 rounded-2xl bg-gradient-to-r from-primary-500/20 to-primary-400/10 p-8 text-center"
+            >
+                <h2 class="mb-4 text-3xl font-bold text-white">
                     {{ props.labels.ctaHeading }}
                 </h2>
-                <p class="text-gray-300 mb-6 max-w-2xl mx-auto">
+                <p class="mx-auto mb-6 max-w-2xl text-gray-300">
                     {{ props.labels.ctaText }}
                 </p>
+
+                <GenerateFitnessPlanModal #default="{ open }">
+                    <Button @click="open">{{ props.labels.ctaButton }}</Button>
+                </GenerateFitnessPlanModal>
             </section>
         </main>
 
         <Footer />
     </div>
 </template>
-

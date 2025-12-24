@@ -17,6 +17,16 @@ class WorkoutPlanController extends Controller
         return config("freeWorkouts.{$locale}", []);
     }
 
+
+    /**
+     * Get default author based on current locale
+     */
+    private function getDefaultAuthor(): array
+    {
+        $locale = app()->getLocale();
+        return config("freeWorkouts.default_author.{$locale}", []);
+    }
+
     /**
      * Show hub page with all plan types
      */
@@ -78,6 +88,9 @@ class WorkoutPlanController extends Controller
 
         $planData = $planTypes[$type];
         $internalType = $planData['internal_type'];
+        $author = $planData['author'] ?? $this->getDefaultAuthor();
+        $reviewer = $planData['reviewer'] ?? null;
+        $lastUpdated = $planData['last_updated_at'] ?? now();
 
         // Generate canonical URL dynamically based on current locale and type
         $basePath = trans('routes.workout_plans_index', [], $locale);
@@ -88,15 +101,20 @@ class WorkoutPlanController extends Controller
         $relatedPlans = $this->getRelatedPlans($type, $locale);
         $alternateUrls = $this->generateAlternateUrls($internalType);
 
-
         return Inertia::render('WorkoutPlan/Show', [
             'type' => $type,
             'meta' => $planData,
+            'author' => $author,
+            'reviewer' => $reviewer,
+            'lastUpdated' => now()->parse($lastUpdated)->toFormattedDateString(),
+            'published' => now()->parse($planData['published_at'])->toFormattedDateString(),
+            'whyItWorks' => $planData['why_it_works'] ?? [],
+            'commonMistakes' => $planData['common_mistakes'] ?? [],
             'workout' => $exampleWorkout,
             'faqs' => $faqs,
             'relatedPlans' => $relatedPlans,
             'alternateUrls' => $alternateUrls,
-            'schema' => $this->generateSchemaMarkup($type, $planData, $exampleWorkout, $faqs),
+            'schema' => $this->generateSchemaMarkup($type, $planData, $exampleWorkout, $faqs, $author, $reviewer),
         ]);
     }
 
@@ -187,31 +205,58 @@ class WorkoutPlanController extends Controller
     /**
      * Generate Schema.org markup for SEO
      */
-    private function generateSchemaMarkup(string $type, array $planData, array $workout, array $faqs): array
+    private function generateSchemaMarkup(string $type, array $planData, array $workout, array $faqs, array $author, ?array $reviewer): array
     {
+        $schemaGraph = [
+            // Article Schema with Author & Reviewer
+            [
+                '@type' => 'Article',
+                'headline' => $planData['h1'],
+                'description' => $planData['intro'],
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => $author['name'],
+                    'jobTitle' => $author['title'],
+                    'image' => url($author['image']),
+                ],
+                'datePublished' => now()->parse($planData['published_at'])->toIso8601String() ?? now()->toIso8601String(),
+                'dateModified' => now()->parse($planData['last_updated_at'])->toIso8601String(),
+            ],
+            // HowTo Schema
+            [
+                '@type' => 'HowTo',
+                'name' => $planData['h1'],
+                'description' => $planData['intro'],
+                'totalTime' => 'P' . $workout['weeks'] . 'W',
+            ],
+            // FAQ Schema
+            [
+                '@type' => 'FAQPage',
+                'mainEntity' => collect($faqs)->map(function ($faq) {
+                    return [
+                        '@type' => 'Question',
+                        'name' => $faq['question'],
+                        'acceptedAnswer' => [
+                            '@type' => 'Answer',
+                            'text' => $faq['answer'],
+                        ],
+                    ];
+                })->all(),
+            ],
+        ];
+
+        // Add Reviewer if available
+        if ($reviewer) {
+            $schemaGraph[0]['reviewedBy'] = [
+                '@type' => 'Person',
+                'name' => $reviewer['name'],
+                'jobTitle' => $reviewer['title'],
+            ];
+        }
+
         return [
             '@context' => 'https://schema.org',
-            '@graph' => [
-                [
-                    '@type' => 'HowTo',
-                    'name' => $planData['h1'],
-                    'description' => $planData['intro'],
-                    'totalTime' => 'P' . $workout['weeks'] . 'W',
-                ],
-                [
-                    '@type' => 'FAQPage',
-                    'mainEntity' => collect($faqs)->map(function ($faq) {
-                        return [
-                            '@type' => 'Question',
-                            'name' => $faq['question'],
-                            'acceptedAnswer' => [
-                                '@type' => 'Answer',
-                                'text' => $faq['answer'],
-                            ],
-                        ];
-                    })->all(),
-                ],
-            ],
+            '@graph' => $schemaGraph,
         ];
     }
 }

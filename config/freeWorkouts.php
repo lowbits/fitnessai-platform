@@ -1,6 +1,20 @@
 <?php
 
 return [
+    'default_author' => [
+        'de'=> [
+            'name' => 'Tobias Lobitz',
+            'title' => 'Gründer & Software-Entwickler',
+            'bio' => 'Entwickelt seit 2018 Fitness-Software. Eigene Trainings-Erfahrung: 15 Jahre Krafttraining.',
+            'image' => '/assets/authors/tobias.jpeg',
+        ],
+        'en' => [
+            'name' => 'Tobias Lobitz',
+            'title' => 'Founder & Software Developer',
+            'bio' => 'Developing fitness software since 2018. Personal training experience: 15 years of strength training.',
+            'image' => '/assets/authors/tobias.jpeg',
+        ],
+    ],
     'index_labels' => [
         'de' => [
             'heading' => 'Kostenlose Trainingspläne',
@@ -8,6 +22,7 @@ return [
             'viewPlan' => 'Plan ansehen',
             'ctaHeading' => 'Bereit für dein Training?',
             'ctaText' => 'Wähle den passenden Plan für dein Ziel und starte noch heute mit deinem kostenlosen, wissenschaftlich fundierten Trainingsprogramm.',
+            'ctaButton' => 'Personalisierten Plan erstellen',
         ],
         'en' => [
             'heading' => 'Free Workout Plans',
@@ -15,6 +30,7 @@ return [
             'viewPlan' => 'View Plan',
             'ctaHeading' => 'Ready for Your Training?',
             'ctaText' => 'Choose the right plan for your goal and start today with your free, science-based training program.',
+            'ctaButton' => 'Generate Personalized Plan',
         ],
     ],
 
@@ -28,6 +44,8 @@ return [
             'h1' => 'Trainingsplan zum Abnehmen – nachhaltig Fett verlieren',
             'intro' => 'Dieser strukturierte 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio, um Fett abzubauen, Muskeln zu erhalten und den Stoffwechsel nachhaltig zu steigern.',
             'internal_type' => 'weight_loss',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan beim Abnehmen funktioniert',
                 'content' => [
@@ -189,6 +207,91 @@ return [
             'h1' => 'Muskelaufbau Trainingsplan – systematisch stärker werden',
             'intro' => 'Dieser 12-Wochen-Trainingsplan basiert auf progressiver Überlastung und kombiniert Muskelwachstum, Kraftsteigerung und ausreichende Regeneration.',
             'internal_type' => 'muscle_gain',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Warum dieser Muskelaufbau-Trainingsplan funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Progressive Überlastung treibt Muskelwachstum',
+                        'text' => 'Muskelwachstum entsteht nur, wenn der Körper regelmäßig mit steigenden Belastungen konfrontiert wird. Dieser Plan basiert auf progressiver Überlastung – also dem gezielten Steigern von Gewicht, Wiederholungen oder Trainingsvolumen. Dieses Prinzip gilt als der wichtigste Faktor für Hypertrophie und ist wissenschaftlich eindeutig belegt.'
+                    ],
+                    [
+                        'heading' => 'Optimales Trainingsvolumen und Frequenz',
+                        'text' => 'Jede Muskelgruppe wird etwa zwei Mal pro Woche trainiert. Studien zeigen, dass diese Frequenz das beste Verhältnis aus Trainingsreiz und Regeneration bietet und deutlich effektiver ist als einmalige, sehr hohe Belastungen.'
+                    ],
+                    [
+                        'heading' => 'Grundübungen maximieren den Wachstumsreiz',
+                        'text' => 'Der Trainingsplan setzt bewusst auf komplexe Mehrgelenksübungen wie Kniebeugen, Bankdrücken, Rudern und Klimmzüge. Diese aktivieren große Muskelgruppen, erzeugen hohe mechanische Spannung und fördern einen starken Wachstumsreiz.'
+                    ],
+                    [
+                        'heading' => 'Geplante Regeneration verhindert Übertraining',
+                        'text' => 'Muskeln wachsen nicht im Training, sondern in der Erholung. Durch sinnvolle Splits, Pausentage und kontrollierte Trainingsfrequenz erhält dein Körper ausreichend Zeit zur Regeneration – ein entscheidender Faktor für langfristigen Muskelaufbau.'
+                    ],
+                    [
+                        'heading' => 'Training und Ernährung sind aufeinander abgestimmt',
+                        'text' => 'Der Plan ist darauf ausgelegt, mit einem moderaten Kalorienüberschuss und ausreichender Proteinzufuhr kombiniert zu werden. So stehen deinem Körper alle notwendigen Bausteine zur Verfügung, um Muskulatur effektiv aufzubauen.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die 7 häufigsten Fehler beim Muskelaufbau – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Kein progressiver Trainingsfortschritt',
+                        'problem' => 'Wochenlang mit denselben Gewichten und Wiederholungen trainieren.',
+                        'consequence' => 'Der Körper passt sich an, Muskelwachstum stagniert und Fortschritte bleiben aus.',
+                        'solution' => 'Dokumentiere dein Training und steigere gezielt Gewicht, Wiederholungen oder Volumen.',
+                        'example' => 'Woche 1: Bankdrücken 3×8 mit 60 kg → Woche 2: 3×9 oder 62,5 kg.'
+                    ],
+                    [
+                        'title' => 'Zu geringe Kalorienzufuhr',
+                        'problem' => 'Muskelaufbau bei Erhaltungsbedarf oder sogar Kaloriendefizit.',
+                        'consequence' => 'Dem Körper fehlt Energie für Regeneration und Muskelaufbau.',
+                        'solution' => 'Halte einen moderaten Kalorienüberschuss von 300–500 kcal pro Tag.',
+                        'example' => 'Bei Erhaltungsbedarf von 2.400 kcal: Ziel sind 2.700–2.900 kcal.'
+                    ],
+                    [
+                        'title' => 'Zu wenig Protein',
+                        'problem' => 'Unregelmäßige oder zu niedrige Proteinzufuhr.',
+                        'consequence' => 'Muskelregeneration verlangsamt sich, Muskelaufbau bleibt hinter dem Potenzial zurück.',
+                        'solution' => 'Ziel: 2,0–2,2 g Protein pro kg Körpergewicht täglich, gleichmäßig verteilt.',
+                        'example' => 'Bei 80 kg Körpergewicht: etwa 160–175 g Protein pro Tag.'
+                    ],
+                    [
+                        'title' => 'Schlechte Übungsausführung',
+                        'problem' => 'Zu hohe Gewichte auf Kosten der Technik.',
+                        'consequence' => 'Zielmuskulatur wird schlechter belastet, Verletzungsrisiko steigt.',
+                        'solution' => 'Saubere Technik und voller Bewegungsumfang haben immer Vorrang vor Gewicht.',
+                        'example' => 'Gewicht reduzieren, wenn Schwung oder verkürzte Bewegung nötig wird.'
+                    ],
+                    [
+                        'title' => 'Zu viel Trainingsvolumen, zu wenig Erholung',
+                        'problem' => 'Täglich hartes Training ohne ausreichende Pausen.',
+                        'consequence' => 'Überlastung, Leistungsabfall, stagnierender Muskelaufbau.',
+                        'solution' => 'Halte dich an strukturierte Trainingspläne und respektiere Ruhetage.',
+                        'example' => '4 fokussierte Trainingstage sind effektiver als 6 schlecht regenerierte.'
+                    ],
+                    [
+                        'title' => 'Schlaf wird unterschätzt',
+                        'problem' => 'Weniger als 6–7 Stunden Schlaf bei intensivem Training.',
+                        'consequence' => 'Schlechtere Regeneration, niedrigere Testosteronwerte, geringerer Muskelaufbau.',
+                        'solution' => '7–9 Stunden Schlaf pro Nacht unterstützen Hormone und Muskelwachstum.',
+                        'example' => 'Studien zeigen deutlich reduzierte Muskelproteinsynthese bei Schlafmangel.'
+                    ],
+                    [
+                        'title' => 'Ständiger Trainingsplan-Wechsel',
+                        'problem' => 'Alle paar Wochen ein neues Trainingsprogramm beginnen.',
+                        'consequence' => 'Keine messbare Progression, keine Anpassung, kein konstanter Muskelaufbau.',
+                        'solution' => 'Bleibe mindestens 8–12 Wochen bei einem strukturierten Plan.',
+                        'example' => 'Erst nach Abschluss des 12-Wochen-Zyklus bewerten und anpassen.'
+                    ],
+                ],
+                'summary' => 'Muskelaufbau scheitert selten an fehlenden Übungen, sondern fast immer an fehlender Struktur, Regeneration und Konsequenz. Vermeidest du diese Fehler, wird Fortschritt planbar.'
+            ],
+
 
             'workout' => [
                 'weeks' => 12,
@@ -282,6 +385,77 @@ return [
             'h1' => 'Trainingsplan für Anfänger – sicher & effektiv starten',
             'intro' => 'Dieser 6-Wochen-Anfängerplan hilft dir, grundlegende Bewegungen zu erlernen, Kraft aufzubauen und eine stabile Trainingsroutine zu entwickeln.',
             'internal_type' => 'beginner',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Warum dieser Trainingsplan für Anfänger funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Sicherer Einstieg ohne Überforderung',
+                        'text' => 'Der Plan ist speziell für Einsteiger konzipiert. Die Übungen sind technisch einfach, gut skalierbar und belasten Gelenke sowie das Nervensystem nicht übermäßig. So kann sich dein Körper schrittweise an Bewegung und Krafttraining gewöhnen.'
+                    ],
+                    [
+                        'heading' => 'Grundbewegungen statt komplizierter Übungen',
+                        'text' => 'Statt isolierter oder komplexer Übungen setzt der Plan auf grundlegende Bewegungsmuster wie Kniebeugen, Drücken, Ziehen und Stabilisation. Diese bilden die Basis für jedes weitere Training und verbessern Kraft, Koordination und Körpergefühl.'
+                    ],
+                    [
+                        'heading' => 'Optimale Trainingsfrequenz für Anpassung',
+                        'text' => 'Mit 2–3 Trainingseinheiten pro Woche erhält dein Körper genügend Reize, ohne überfordert zu werden. Studien zeigen, dass diese Frequenz für Anfänger ideal ist, um Fortschritte zu erzielen und gleichzeitig ausreichend zu regenerieren.'
+                    ],
+                    [
+                        'heading' => 'Progression ohne Leistungsdruck',
+                        'text' => 'Der Plan steigert sich behutsam über Wiederholungen, Dauer oder Übungsvarianten – nicht über hohe Gewichte. So entsteht Fortschritt ohne Stress oder Verletzungsrisiko.'
+                    ],
+                    [
+                        'heading' => 'Fokus auf Gewohnheiten statt Perfektion',
+                        'text' => 'Langfristiger Trainingserfolg entsteht durch Regelmäßigkeit. Dieser Plan hilft dir, eine feste Trainingsroutine aufzubauen – ein entscheidender Faktor für nachhaltige Fitness.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die häufigsten Anfängerfehler – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Zu schnell zu viel wollen',
+                        'problem' => 'Motiviert starten viele Anfänger mit zu hoher Intensität oder zu vielen Einheiten.',
+                        'consequence' => 'Muskelkater, Erschöpfung oder Frust führen oft dazu, dass das Training wieder abgebrochen wird.',
+                        'solution' => 'Starte bewusst langsam und halte dich an den Plan – Fortschritt kommt automatisch.',
+                        'example' => 'Lieber 3 kurze Einheiten pro Woche als 5 überambitionierte.'
+                    ],
+                    [
+                        'title' => 'Falsche oder unsaubere Technik',
+                        'problem' => 'Übungen werden ohne Körperkontrolle oder mit Schwung ausgeführt.',
+                        'consequence' => 'Geringerer Trainingseffekt und erhöhtes Verletzungsrisiko.',
+                        'solution' => 'Führe jede Bewegung kontrolliert und sauber aus – Qualität vor Quantität.',
+                        'example' => 'Lieber 10 saubere Kniebeugen als 20 unsaubere.'
+                    ],
+                    [
+                        'title' => 'Zu seltenes Training',
+                        'problem' => 'Große Pausen zwischen den Einheiten verhindern Anpassung.',
+                        'consequence' => 'Der Körper beginnt jedes Mal wieder bei Null.',
+                        'solution' => 'Plane feste Trainingstage pro Woche ein.',
+                        'example' => 'Montag, Mittwoch, Freitag als feste Termine.'
+                    ],
+                    [
+                        'title' => 'Zu wenig Erholung',
+                        'problem' => 'Kein Schlaf oder Training an aufeinanderfolgenden Tagen ohne Pause.',
+                        'consequence' => 'Müdigkeit, Leistungsabfall und fehlende Motivation.',
+                        'solution' => 'Mindestens ein Ruhetag zwischen den Einheiten einhalten.',
+                        'example' => 'Training jeden zweiten Tag.'
+                    ],
+                    [
+                        'title' => 'Ungeduld bei Ergebnissen',
+                        'problem' => 'Erwartung sichtbarer Veränderungen nach wenigen Tagen.',
+                        'consequence' => 'Frust und vorzeitiger Abbruch.',
+                        'solution' => 'Konzentriere dich auf Energie, Beweglichkeit und Routine – sichtbare Ergebnisse folgen.',
+                        'example' => 'Erste Verbesserungen nach 2–3 Wochen sind völlig normal.'
+                    ],
+                ],
+                'summary' => 'Als Anfänger zählt nicht Perfektion, sondern Kontinuität. Wer diese typischen Fehler vermeidet, legt die beste Grundlage für langfristige Fitness.'
+            ],
+
 
             'workout' => [
                 'weeks' => 6,
@@ -360,6 +534,77 @@ return [
             'h1' => 'Trainingsplan für Zuhause: Effektiv ohne Geräte',
             'intro' => 'Dieser 8-Wochen-Trainingsplan zeigt dir, wie du mit reinem Körpergewicht zuhause Kraft, Ausdauer und Muskulatur aufbaust – ganz ohne Fitnessstudio.',
             'internal_type' => 'home',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Warum dieser Trainingsplan für Zuhause funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Körpergewichtstraining ist hochwirksam',
+                        'text' => 'Dieser Plan nutzt dein eigenes Körpergewicht als Widerstand. Studien zeigen, dass Bodyweight-Training Kraft, Muskelspannung und Ausdauer effektiv verbessert – vorausgesetzt, Intensität und Ausführung stimmen.'
+                    ],
+                    [
+                        'heading' => 'Ganzkörperbelastung ohne Geräte',
+                        'text' => 'Durch Mehrgelenksübungen wie Liegestütze, Squats und Ausfallschritte werden mehrere Muskelgruppen gleichzeitig trainiert. Das erhöht den Kalorienverbrauch und spart Zeit – ideal für Home Workouts.'
+                    ],
+                    [
+                        'heading' => 'Progression ohne zusätzliche Gewichte',
+                        'text' => 'Der Plan steigert sich über Wiederholungen, Tempo, Pausenlänge und Übungsvarianten. So erzielst du Fortschritt, auch ohne Hanteln oder Maschinen.'
+                    ],
+                    [
+                        'heading' => 'Konstante Trainingsfrequenz ohne Hürden',
+                        'text' => 'Da du weder Anfahrt noch Equipment brauchst, fällt die größte Trainingshürde weg. Das erhöht die Wahrscheinlichkeit, dass du regelmäßig trainierst – der wichtigste Faktor für Ergebnisse.'
+                    ],
+                    [
+                        'heading' => 'Gelenkschonend und alltagstauglich',
+                        'text' => 'Alle Übungen lassen sich an dein Fitnesslevel anpassen. Dadurch ist der Plan sowohl für Anfänger als auch für Fortgeschrittene geeignet – ohne unnötiges Verletzungsrisiko.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die häufigsten Fehler beim Training zuhause – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Zu geringe Intensität',
+                        'problem' => 'Viele unterschätzen Bodyweight-Training und trainieren zu locker.',
+                        'consequence' => 'Der Trainingsreiz ist zu gering, Fortschritte bleiben aus.',
+                        'solution' => 'Trainiere kontrolliert, halte Spannungen und verkürze Pausen.',
+                        'example' => 'Langsame Liegestütze mit Körperspannung statt schnelles „Abspulen“.'
+                    ],
+                    [
+                        'title' => 'Fehlende Progression',
+                        'problem' => 'Wochenlang dieselben Übungen mit gleicher Intensität.',
+                        'consequence' => 'Der Körper passt sich an, Fortschritt stagniert.',
+                        'solution' => 'Steigere Wiederholungen, Tempo oder wähle schwierigere Varianten.',
+                        'example' => 'Von normalen Squats zu Squats mit Pause unten.'
+                    ],
+                    [
+                        'title' => 'Ablenkung während des Trainings',
+                        'problem' => 'Training nebenbei mit Handy, Fernsehen oder Unterbrechungen.',
+                        'consequence' => 'Geringerer Trainingseffekt und längere Einheiten.',
+                        'solution' => 'Plane feste, ungestörte Trainingszeiten.',
+                        'example' => '30 Minuten Fokus-Training statt 60 Minuten mit Ablenkung.'
+                    ],
+                    [
+                        'title' => 'Unsaubere Technik',
+                        'problem' => 'Bewegungen werden schnell und ohne Kontrolle ausgeführt.',
+                        'consequence' => 'Erhöhtes Verletzungsrisiko und geringere Wirkung.',
+                        'solution' => 'Saubere Technik hat Priorität – auch ohne Spiegel.',
+                        'example' => 'Plank mit Körperspannung statt durchhängendem Rücken.'
+                    ],
+                    [
+                        'title' => 'Zu wenig Regeneration',
+                        'problem' => 'Tägliches Training ohne Pausen.',
+                        'consequence' => 'Erschöpfung, Leistungsabfall, Motivationsverlust.',
+                        'solution' => 'Mindestens 1–2 Resttage pro Woche einplanen.',
+                        'example' => '4 Trainingstage + 3 aktive Erholungstage.'
+                    ],
+                ],
+                'summary' => 'Zuhause erfolgreich zu trainieren hängt nicht von Geräten ab, sondern von Struktur, Intensität und Konsequenz. Wer diese Fehler vermeidet, erzielt auch ohne Fitnessstudio starke Ergebnisse.'
+            ],
+
 
             'workout' => [
                 'weeks' => 8,
@@ -447,6 +692,77 @@ return [
             'h1' => 'Trainingsplan für Frauen: Straff & Stark',
             'intro' => 'Dieser 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio gezielt für Straffung, Definition und einen starken, femininen Körper.',
             'internal_type' => 'women',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Warum dieser Trainingsplan für Frauen funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Krafttraining formt statt aufzublähen',
+                        'text' => 'Frauen haben deutlich niedrigere Testosteronwerte als Männer. Krafttraining führt daher nicht zu „massigen“ Muskeln, sondern zu Straffung, Definition und einer verbesserten Körperform. Genau darauf ist dieser Plan ausgelegt.'
+                    ],
+                    [
+                        'heading' => 'Gezielte Übungsauswahl für typische Zielzonen',
+                        'text' => 'Der Trainingsplan setzt Schwerpunkte auf Beine, Gesäß, Core und Oberkörper. Diese Muskelgruppen beeinflussen Haltung, Figur und Kraft im Alltag besonders stark.'
+                    ],
+                    [
+                        'heading' => 'Kombination aus Kraft und Cardio',
+                        'text' => 'Krafttraining erhöht den Grundumsatz und formt den Körper, Cardio unterstützt die Fettverbrennung. Die Kombination sorgt für sichtbare Ergebnisse ohne extremes Training.'
+                    ],
+                    [
+                        'heading' => 'Hormonfreundliche Trainingsstruktur',
+                        'text' => 'Moderate Intensität, ausreichende Pausen und sinnvolle Trainingsfrequenz unterstützen einen stabilen Hormonhaushalt – besonders wichtig für langfristige Ergebnisse und Wohlbefinden.'
+                    ],
+                    [
+                        'heading' => 'Stärkung von Selbstvertrauen und Körpergefühl',
+                        'text' => 'Regelmäßiges Krafttraining verbessert nicht nur die körperliche Leistungsfähigkeit, sondern auch das Selbstbewusstsein. Viele Frauen berichten von mehr Energie, besserer Haltung und höherem Körpervertrauen.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die häufigsten Trainingsfehler bei Frauen – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Angst vor Krafttraining',
+                        'problem' => 'Viele Frauen meiden Gewichte aus Sorge, zu muskulös zu werden.',
+                        'consequence' => 'Der Körper wird zwar leichter, aber nicht straffer oder stärker.',
+                        'solution' => 'Krafttraining bewusst integrieren – es ist der Schlüssel zu Form und Stabilität.',
+                        'example' => '2–3 Krafteinheiten pro Woche statt ausschließlich Cardio.'
+                    ],
+                    [
+                        'title' => 'Zu viel Cardio, zu wenig Kraft',
+                        'problem' => 'Stundenlanges Ausdauertraining ohne Krafttraining.',
+                        'consequence' => 'Muskelabbau, stagnierender Stoffwechsel und wenig Körperform.',
+                        'solution' => 'Krafttraining priorisieren, Cardio ergänzend einsetzen.',
+                        'example' => '3 Kraft-Einheiten + 1–2 lockere Cardio-Sessions.'
+                    ],
+                    [
+                        'title' => 'Zu geringe Trainingsintensität',
+                        'problem' => 'Sehr leichte Gewichte oder kaum muskuläre Ermüdung.',
+                        'consequence' => 'Der Trainingsreiz reicht nicht aus, um Veränderungen auszulösen.',
+                        'solution' => 'Übungen sollten fordern, aber technisch sauber bleiben.',
+                        'example' => 'Letzte 2 Wiederholungen sollten anstrengend sein.'
+                    ],
+                    [
+                        'title' => 'Vernachlässigung des Oberkörpers',
+                        'problem' => 'Fokus nur auf Beine und Po.',
+                        'consequence' => 'Haltungsprobleme, Schulter- und Nackenschmerzen.',
+                        'solution' => 'Oberkörpertraining gezielt integrieren.',
+                        'example' => 'Rudern, Schulterdrücken und Planks regelmäßig einbauen.'
+                    ],
+                    [
+                        'title' => 'Zu wenig Regeneration',
+                        'problem' => 'Training trotz Erschöpfung oder Schlafmangel.',
+                        'consequence' => 'Leistungsabfall, hormonelle Dysbalance, Demotivation.',
+                        'solution' => 'Ausreichend Schlaf und Ruhetage einplanen.',
+                        'example' => 'Mindestens 1–2 trainingsfreie Tage pro Woche.'
+                    ],
+                ],
+                'summary' => 'Erfolgreiches Training für Frauen bedeutet nicht „mehr Cardio“, sondern smartere Kombination aus Kraft, Bewegung und Regeneration.'
+            ],
+
 
             'workout' => [
                 'weeks' => 8,
@@ -534,6 +850,76 @@ return [
             'h1' => 'Neujahrs Trainingsplan: Dein 6-Wochen Fitness Reset',
             'intro' => 'Dieser 6-Wochen Fitness Reset hilft dir, nach Pausen oder einem Neustart wieder in eine nachhaltige Trainingsroutine zu finden. Fokus auf Kraft, Ausdauer, Beweglichkeit und langfristigen Fortschritt.',
             'internal_type' => 'new_year_reset',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+            'why_it_works' => [
+                'title' => 'Warum der Neujahrs-Trainingsplan funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Reset statt Überforderung',
+                        'text' => 'Nach längeren Pausen braucht der Körper keinen Extremplan, sondern Struktur. Dieser 6-Wochen-Reset setzt bewusst auf kontrollierte Belastung, um Kraft, Ausdauer und Beweglichkeit wieder aufzubauen – ohne Verletzungsrisiko.'
+                    ],
+                    [
+                        'heading' => 'Feste Struktur schlägt Motivation',
+                        'text' => 'Motivation schwankt, Routinen bleiben. Mit klar definierten Trainingstagen und überschaubarem Umfang wird Training zu einem festen Bestandteil deines Alltags – unabhängig von Tagesform.'
+                    ],
+                    [
+                        'heading' => 'Ganzheitlicher Ansatz',
+                        'text' => 'Der Plan kombiniert Krafttraining, Cardio, Core-Stabilität und Mobility. So werden nicht nur Muskeln aufgebaut, sondern auch Herz-Kreislauf-System, Gelenke und Beweglichkeit verbessert.'
+                    ],
+                    [
+                        'heading' => 'Progression ohne Leistungsdruck',
+                        'text' => 'Die Intensität steigt schrittweise über Volumen, Übungsauswahl und Belastung. Das verhindert Plateaus und sorgt für messbare Fortschritte – auch nach längeren Trainingspausen.'
+                    ],
+                    [
+                        'heading' => 'Ideal für Körperkomposition',
+                        'text' => 'Krafttraining erhält Muskulatur, Cardio erhöht den Kalorienverbrauch. In Kombination mit moderater Ernährung unterstützt der Plan gleichzeitig Fettabbau und Muskelaufbau.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die häufigsten Fehler beim Neustart – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Zu ambitionierter Start',
+                        'problem' => 'Viele starten im Januar mit 5–6 Trainingstagen pro Woche.',
+                        'consequence' => 'Überlastung, Muskelkater, Motivationseinbruch nach 1–2 Wochen.',
+                        'solution' => 'Starte kontrolliert mit 3–4 Einheiten pro Woche.',
+                        'example' => 'Lieber konstant 4 Wochen trainieren als nach 10 Tagen abbrechen.'
+                    ],
+                    [
+                        'title' => 'Alles auf einmal ändern',
+                        'problem' => 'Training, Diät, Schlaf, Alltag – alles gleichzeitig.',
+                        'consequence' => 'Überforderung und schnelle Erschöpfung.',
+                        'solution' => 'Fokus zuerst auf Training, danach Ernährung optimieren.',
+                        'example' => 'Erst Trainingsroutine etablieren, dann Kalorien feinjustieren.'
+                    ],
+                    [
+                        'title' => 'Fehlende Regeneration',
+                        'problem' => 'Kein Ruhetag trotz Trainingspause in den letzten Monaten.',
+                        'consequence' => 'Leistungsabfall, Verletzungsrisiko, Müdigkeit.',
+                        'solution' => 'Regeneration als festen Bestandteil des Plans sehen.',
+                        'example' => 'Mindestens 1 Mobility- oder Resttag pro Woche.'
+                    ],
+                    [
+                        'title' => 'Unrealistische Erwartungen',
+                        'problem' => 'Erwartung sichtbarer Transformation nach 1–2 Wochen.',
+                        'consequence' => 'Frust und Abbruch.',
+                        'solution' => 'Fortschritt an Energie, Routine und Leistungsfähigkeit messen.',
+                        'example' => 'Besser schlafen, stärker fühlen, mehr Bewegung im Alltag.'
+                    ],
+                    [
+                        'title' => 'Kein klarer Trainingsrhythmus',
+                        'problem' => 'Training „wenn Zeit ist“.',
+                        'consequence' => 'Unregelmäßigkeit und fehlende Anpassung.',
+                        'solution' => 'Feste Trainingstage einplanen.',
+                        'example' => 'Montag, Mittwoch, Freitag als feste Termine.'
+                    ],
+                ],
+                'summary' => 'Ein erfolgreicher Neustart scheitert selten am Willen, sondern an falschen Erwartungen. Dieser Plan setzt auf Struktur, Geduld und nachhaltigen Fortschritt.'
+            ],
+
 
             'workout' => [
                 'weeks' => 6,
@@ -621,7 +1007,8 @@ return [
             'h1' => 'Weight Loss Workout Plan – Lose Fat Sustainably',
             'intro' => 'This structured 8-week workout plan combines strength training and cardio to reduce body fat, preserve muscle mass, and improve metabolic health.',
             'internal_type' => 'weight_loss',
-
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
             'workout' => [
                 'weeks' => 8,
                 'workouts_per_week' => 3,
@@ -671,7 +1058,87 @@ return [
                     'Increase daily movement outside of workouts',
                 ],
             ],
+            'why_it_works' => [
+                'title' => 'Why This Weight Loss Workout Plan Works',
+                'content' => [
+                    [
+                        'heading' => 'Combining Strength and Cardio Maximizes Fat Loss',
+                        'text' => 'This plan uses a proven approach: strength training preserves muscle mass during a calorie deficit, while HIIT sessions maximize calorie burn. Studies show that this combination can be up to 40% more effective for fat loss than cardio-only training.'
+                    ],
+                    [
+                        'heading' => 'The Afterburn Effect (EPOC) Works in Your Favor',
+                        'text' => 'Intense strength training and HIIT intervals increase post-exercise oxygen consumption (EPOC). This means your body continues to burn additional calories for up to 48 hours after training — even at rest. This so-called "afterburn effect" can increase total calorie expenditure by 6–15%.'
+                    ],
+                    [
+                        'heading' => 'Preserving Muscle Prevents the Yo-Yo Effect',
+                        'text' => 'Unlike diet-only approaches, this plan maintains muscle mass. This is crucial: each kilogram of muscle burns roughly 13 kcal per day at rest. Losing muscle through extreme dieting lowers your metabolic rate and significantly increases the risk of weight regain.'
+                    ],
+                    [
+                        'heading' => 'Progressive Structure Prevents Plateaus',
+                        'text' => 'The 8-week structure with systematic progression (more reps, shorter rest periods, increased intensity) continuously challenges your body. This helps prevent the common plateau many people experience after 3–4 weeks with less structured plans.'
+                    ],
+                    [
+                        'heading' => 'Scientifically Supported Training Frequency',
+                        'text' => 'Three training sessions per week provide the optimal balance between stimulus and recovery. Research from the American College of Sports Medicine shows that this frequency supports sustainable fat loss of 0.5–1 kg per week without overloading the body or risking muscle loss.'
+                    ],
+                ],
+            ],
 
+            'common_mistakes' => [
+                'title' => 'The 7 Most Common Weight Loss Mistakes — and How to Avoid Them',
+                'mistakes' => [
+                    [
+                        'title' => 'An Excessive Calorie Deficit',
+                        'problem' => 'Many people rely on extreme diets with only 800–1,000 kcal per day, expecting rapid results.',
+                        'consequence' => 'Your body enters “starvation mode”: metabolism slows down, muscle mass is lost, and energy levels drop — making training ineffective.',
+                        'solution' => 'Maintain a moderate calorie deficit of 300–500 kcal. This results in a sustainable weight loss of 0.5–0.7 kg per week without muscle loss.',
+                        'example' => 'If your maintenance level is 2,000 kcal: eat 1,500–1,700 kcal instead of 1,000.'
+                    ],
+                    [
+                        'title' => 'Too Little Protein Intake',
+                        'problem' => 'Protein is underestimated and replaced by excessive carbohydrates.',
+                        'consequence' => 'Muscle mass decreases, hunger increases, and metabolic rate drops. You lose weight — but mainly muscle instead of fat.',
+                        'solution' => 'Aim for 1.6–2.0 g of protein per kg of body weight daily. Prioritize protein-rich foods at every meal.',
+                        'example' => 'At 75 kg body weight: 120–150 g protein daily (e.g. 200 g chicken, 200 g low-fat quark, 3 eggs, 1 protein shake).'
+                    ],
+                    [
+                        'title' => 'Cardio Without Strength Training',
+                        'problem' => 'Only jogging or cycling, with no strength training.',
+                        'consequence' => 'Calories are burned, but muscles are not preserved. The result is “skinny fat”: low body weight but high body fat percentage and weak musculature.',
+                        'solution' => 'Prioritize strength training (at least twice per week) and use cardio as a supplement. This plan is built exactly that way.',
+                        'example' => 'Instead of running 5 times per week: 3 sessions of this plan (strength + HIIT) plus 2 light walks.'
+                    ],
+                    [
+                        'title' => 'Inconsistent Training',
+                        'problem' => 'Monday: highly motivated. Thursday: no motivation. Next week: starting over again.',
+                        'consequence' => 'No physical adaptation, no muscle development, no progress. Fat loss requires consistency over several weeks.',
+                        'solution' => 'Schedule fixed training days (e.g. Mon/Wed/Fri). Even a 20-minute session is better than skipping. Use habit stacking: train immediately after work.',
+                        'example' => 'Instead of “when I have time”: block “Monday 6:00 PM – Training” in your calendar like an important meeting.'
+                    ],
+                    [
+                        'title' => 'Lack of Sleep',
+                        'problem' => 'Only 5–6 hours of sleep per night while training hard and dieting.',
+                        'consequence' => 'Cortisol (stress hormone) increases, testosterone decreases, and hunger hormones become imbalanced (higher ghrelin = more hunger). Fat loss stalls.',
+                        'solution' => 'Aim for 7–9 hours of sleep per night. Studies show that adequate sleep can improve fat loss by up to 55% with identical training.',
+                        'example' => 'With 6 hours of sleep: ~60% of weight loss comes from muscle. With 8 hours: ~80% comes from fat.'
+                    ],
+                    [
+                        'title' => 'Excessively Long Rest Periods',
+                        'problem' => 'Scrolling on your phone or chatting — turning 60 seconds of rest into 3–5 minutes.',
+                        'consequence' => 'Calorie burn drops significantly, training effectiveness (especially EPOC) decreases, and a 45-minute workout turns into 90 minutes.',
+                        'solution' => 'Use a timer and stick to prescribed rest periods (60s for strength, 30–45s for HIIT). This is a major difference-maker.',
+                        'example' => 'Use your smartphone timer or gym clock — start the timer after every set.'
+                    ],
+                    [
+                        'title' => 'Lack of Daily Movement',
+                        'problem' => 'Training 3 times per week, but sitting for 12 hours per day (office, car, couch).',
+                        'consequence' => 'NEAT (Non-Exercise Activity Thermogenesis) remains minimal. The effect of “3 workouts per week” is lost with fewer than 3,000 daily steps.',
+                        'solution' => 'Aim for 8,000–10,000 steps per day. That adds an extra 200–400 kcal burn without additional workouts.',
+                        'example' => '15-minute walk during lunch, walking while on calls, stairs instead of elevators, parking 500 m farther away.'
+                    ],
+                ],
+                'summary' => 'Most people fail not because of training, but because of these hidden mistakes. Avoid them, and your success becomes highly predictable.'
+            ],
             'faqs' => [
                 [
                     'question' => 'How often should I train to lose weight?',
@@ -695,6 +1162,89 @@ return [
             'intro' => 'This 12-week muscle building program is designed to systematically increase strength and muscle mass through progressive overload and structured training.',
             'keywords' => ['muscle building workout plan', 'hypertrophy training', 'strength training program', 'build muscle'],
             'internal_type' => 'muscle_gain',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+            'why_it_works' => [
+                'title' => 'Why This Muscle Building Plan Works',
+                'content' => [
+                    [
+                        'heading' => 'Progressive Overload Drives Muscle Growth',
+                        'text' => 'Muscle growth only happens when your body is exposed to increasing demands over time. This plan is built around progressive overload — gradually increasing weights, reps, or training volume — which is the most proven driver of hypertrophy according to decades of strength training research.'
+                    ],
+                    [
+                        'heading' => 'Optimal Training Volume and Frequency',
+                        'text' => 'Training each muscle group 2 times per week provides the optimal balance between stimulus and recovery. Scientific reviews show that moderate-to-high weekly volume distributed across multiple sessions leads to significantly more muscle growth than single, high-volume workouts.'
+                    ],
+                    [
+                        'heading' => 'Compound Exercises Maximize Hormonal Response',
+                        'text' => 'The plan prioritizes compound movements like squats, presses, rows, and pull-ups. These exercises recruit large amounts of muscle mass, increase mechanical tension, and stimulate anabolic hormones — all key factors for efficient muscle growth.'
+                    ],
+                    [
+                        'heading' => 'Sufficient Recovery Is Built In',
+                        'text' => 'Muscles grow during recovery, not during training. Rest days, intelligent splits, and controlled training frequency allow your nervous system and muscles to recover fully, reducing injury risk and supporting consistent long-term progress.'
+                    ],
+                    [
+                        'heading' => 'Nutrition and Training Are Aligned',
+                        'text' => 'The plan is designed to work alongside a moderate calorie surplus and adequate protein intake. This alignment ensures your body has the necessary building blocks to repair and grow muscle tissue efficiently after each training session.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The 7 Most Common Muscle Building Mistakes — and How to Avoid Them',
+                'mistakes' => [
+                    [
+                        'title' => 'Training Without Progressive Overload',
+                        'problem' => 'Using the same weights and reps week after week without increasing difficulty.',
+                        'consequence' => 'Your body adapts quickly and muscle growth stalls. Without progression, training becomes maintenance rather than growth.',
+                        'solution' => 'Track your workouts and aim to improve one variable each week: weight, reps, sets, or tempo.',
+                        'example' => 'Week 1: Bench Press 3×8 at 60 kg → Week 2: 3×9 or 62.5 kg.'
+                    ],
+                    [
+                        'title' => 'Too Little Food Intake',
+                        'problem' => 'Trying to build muscle while eating at maintenance or in a calorie deficit.',
+                        'consequence' => 'The body lacks energy and building material, leading to slow or nonexistent muscle gains.',
+                        'solution' => 'Maintain a calorie surplus of 300–500 kcal per day to support muscle protein synthesis.',
+                        'example' => 'If maintenance is 2,400 kcal, aim for 2,700–2,900 kcal daily.'
+                    ],
+                    [
+                        'title' => 'Insufficient Protein Intake',
+                        'problem' => 'Protein intake is inconsistent or too low to support muscle repair.',
+                        'consequence' => 'Recovery is impaired and muscle protein synthesis remains suboptimal.',
+                        'solution' => 'Consume 2.0–2.2 g of protein per kg of body weight daily, spread evenly across meals.',
+                        'example' => 'At 80 kg body weight: 160–175 g protein per day.'
+                    ],
+                    [
+                        'title' => 'Poor Exercise Technique',
+                        'problem' => 'Using excessive weight at the cost of proper form.',
+                        'consequence' => 'Target muscles are under-stimulated while injury risk increases significantly.',
+                        'solution' => 'Prioritize controlled execution and full range of motion before increasing weight.',
+                        'example' => 'Lower the weight if range of motion shortens or momentum takes over.'
+                    ],
+                    [
+                        'title' => 'Too Much Volume, Not Enough Recovery',
+                        'problem' => 'Training every muscle group hard every day without adequate rest.',
+                        'consequence' => 'Chronic fatigue, stalled progress, joint pain, and increased injury risk.',
+                        'solution' => 'Follow a structured split and respect rest days. More is not always better.',
+                        'example' => '4 focused training days outperform 6 poorly recovered sessions.'
+                    ],
+                    [
+                        'title' => 'Ignoring Sleep Quality',
+                        'problem' => 'Sleeping less than 6–7 hours per night while training intensely.',
+                        'consequence' => 'Reduced testosterone, impaired recovery, slower muscle growth.',
+                        'solution' => 'Aim for 7–9 hours of quality sleep per night to maximize hormonal recovery.',
+                        'example' => 'Studies show up to 30% lower muscle protein synthesis with sleep deprivation.'
+                    ],
+                    [
+                        'title' => 'Constant Program Hopping',
+                        'problem' => 'Switching training programs every 2–3 weeks.',
+                        'consequence' => 'No measurable progression, no adaptation, no reliable muscle growth.',
+                        'solution' => 'Stick to one structured plan for at least 8–12 weeks before making changes.',
+                        'example' => 'Finish the full 12-week cycle before evaluating results.'
+                    ],
+                ],
+                'summary' => 'Muscle building fails not because of bad exercises, but because of poor execution, recovery, and consistency. Avoid these mistakes and your progress becomes predictable.'
+            ],
 
             'workout' => [
                 'weeks' => 12,
@@ -784,6 +1334,77 @@ return [
             'intro' => 'This 6-week beginner workout plan helps you learn fundamental movements, build basic strength and establish a sustainable training routine.',
             'keywords' => ['beginner workout plan', 'fitness for beginners', 'starter workout plan', 'beginner fitness'],
             'internal_type' => 'beginner',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Why this beginner workout plan works',
+                'content' => [
+                    [
+                        'heading' => 'Safe and sustainable entry into training',
+                        'text' => 'This plan is designed specifically for beginners. Exercises are simple, scalable and joint-friendly, allowing your body to adapt gradually to regular training without overload.'
+                    ],
+                    [
+                        'heading' => 'Focus on fundamental movement patterns',
+                        'text' => 'Instead of complex exercises, the plan emphasizes basic movements like squatting, pushing, pulling and core stability. These movements build a solid foundation for all future training.'
+                    ],
+                    [
+                        'heading' => 'Optimal training frequency for beginners',
+                        'text' => 'With 2–3 workouts per week, your body receives enough stimulus to improve while still having sufficient time to recover. This frequency is considered ideal for beginners by sports science research.'
+                    ],
+                    [
+                        'heading' => 'Progression without pressure',
+                        'text' => 'Progress is achieved through small increases in repetitions, duration or exercise difficulty—not heavy weights. This ensures steady improvement without unnecessary stress.'
+                    ],
+                    [
+                        'heading' => 'Building habits, not chasing perfection',
+                        'text' => 'Consistency is the key to long-term success. This plan helps you establish a regular training routine, which is far more important than short-term intensity.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The most common beginner mistakes – and how to avoid them',
+                'mistakes' => [
+                    [
+                        'title' => 'Doing too much too soon',
+                        'problem' => 'Many beginners start with excessive intensity or too many sessions.',
+                        'consequence' => 'Soreness, fatigue and frustration often lead to quitting early.',
+                        'solution' => 'Start slow and stick to the plan. Progress comes with consistency.',
+                        'example' => '3 short, consistent workouts beat 5 overly intense sessions.'
+                    ],
+                    [
+                        'title' => 'Poor exercise technique',
+                        'problem' => 'Exercises are performed with momentum instead of control.',
+                        'consequence' => 'Reduced results and higher injury risk.',
+                        'solution' => 'Focus on controlled, clean movement execution.',
+                        'example' => '10 quality reps are better than 20 sloppy ones.'
+                    ],
+                    [
+                        'title' => 'Training too infrequently',
+                        'problem' => 'Long gaps between workouts prevent adaptation.',
+                        'consequence' => 'Your body keeps restarting from scratch.',
+                        'solution' => 'Schedule fixed workout days each week.',
+                        'example' => 'Monday, Wednesday and Friday as non-negotiable training days.'
+                    ],
+                    [
+                        'title' => 'Neglecting recovery',
+                        'problem' => 'Too little sleep or training on consecutive days without rest.',
+                        'consequence' => 'Fatigue, loss of motivation and stalled progress.',
+                        'solution' => 'Allow at least one rest day between workouts.',
+                        'example' => 'Training every other day works best for beginners.'
+                    ],
+                    [
+                        'title' => 'Expecting instant results',
+                        'problem' => 'Beginners expect visible changes within days.',
+                        'consequence' => 'Disappointment and early dropout.',
+                        'solution' => 'Focus on energy levels, mobility and consistency first.',
+                        'example' => 'Noticeable improvements usually appear after 2–3 weeks.'
+                    ],
+                ],
+                'summary' => 'Beginners don’t fail because of lack of effort, but because of unrealistic expectations. Avoid these mistakes and your progress will follow naturally.'
+            ],
+
 
             'workout' => [
                 'weeks' => 6,
@@ -860,6 +1481,77 @@ return [
             'intro' => 'This 8-week home workout plan uses bodyweight exercises only. It helps you build strength, improve endurance and stay consistent without needing a gym.',
             'keywords' => ['home workout plan', 'bodyweight training', 'no equipment workout', 'home fitness'],
             'internal_type' => 'home',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Why this home workout plan works',
+                'content' => [
+                    [
+                        'heading' => 'Bodyweight training is highly effective',
+                        'text' => 'This plan uses your own body weight as resistance. Research shows that bodyweight training can significantly improve strength, muscle tone and endurance when performed with proper intensity.'
+                    ],
+                    [
+                        'heading' => 'Full-body stimulus without equipment',
+                        'text' => 'Compound movements like push-ups, squats and lunges activate multiple muscle groups at once. This increases calorie burn and efficiency—perfect for home workouts.'
+                    ],
+                    [
+                        'heading' => 'Progression without weights',
+                        'text' => 'Progress is achieved through more repetitions, controlled tempo, shorter rest periods and harder exercise variations—no equipment required.'
+                    ],
+                    [
+                        'heading' => 'Lower barriers, higher consistency',
+                        'text' => 'Without commuting or equipment setup, training becomes easier to integrate into daily life. This significantly increases long-term consistency.'
+                    ],
+                    [
+                        'heading' => 'Joint-friendly and scalable',
+                        'text' => 'All exercises can be adapted to your fitness level, making the plan suitable for beginners and advanced trainees alike while minimizing injury risk.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The most common home workout mistakes – and how to avoid them',
+                'mistakes' => [
+                    [
+                        'title' => 'Training with too little intensity',
+                        'problem' => 'Bodyweight workouts are often underestimated and performed too easily.',
+                        'consequence' => 'The training stimulus is insufficient, resulting in little to no progress.',
+                        'solution' => 'Use controlled movements, maintain tension and shorten rest periods.',
+                        'example' => 'Slow, controlled push-ups instead of rushing through reps.'
+                    ],
+                    [
+                        'title' => 'No progression over time',
+                        'problem' => 'Repeating the same exercises with the same intensity for weeks.',
+                        'consequence' => 'The body adapts and progress stalls.',
+                        'solution' => 'Increase reps, slow down tempo or choose more challenging variations.',
+                        'example' => 'Adding pauses at the bottom of squats.'
+                    ],
+                    [
+                        'title' => 'Distractions during workouts',
+                        'problem' => 'Training while checking your phone or watching TV.',
+                        'consequence' => 'Reduced effectiveness and longer workout times.',
+                        'solution' => 'Schedule focused, distraction-free sessions.',
+                        'example' => '30 minutes of focused training instead of 60 minutes of interruptions.'
+                    ],
+                    [
+                        'title' => 'Poor movement quality',
+                        'problem' => 'Exercises are performed without control or proper alignment.',
+                        'consequence' => 'Higher injury risk and reduced results.',
+                        'solution' => 'Prioritize clean, controlled movement.',
+                        'example' => 'A solid plank with core tension instead of a sagging lower back.'
+                    ],
+                    [
+                        'title' => 'Insufficient recovery',
+                        'problem' => 'Training every day without rest.',
+                        'consequence' => 'Fatigue, declining performance and loss of motivation.',
+                        'solution' => 'Plan at least 1–2 rest days per week.',
+                        'example' => '4 workout days combined with active recovery.'
+                    ],
+                ],
+                'summary' => 'Effective home training is not about equipment—it’s about structure, intensity and consistency. Avoid these mistakes and you can achieve excellent results at home.'
+            ],
+
 
             'workout' => [
                 'weeks' => 8,
@@ -948,6 +1640,77 @@ return [
             'intro' => 'This 8-week workout plan is designed specifically for women and combines strength training and cardio to improve muscle tone, definition and overall fitness.',
             'keywords' => ['workout plan for women', 'women fitness training', 'female workout plan', 'toning workout'],
             'internal_type' => 'women',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+
+            'why_it_works' => [
+                'title' => 'Why this workout plan for women works',
+                'content' => [
+                    [
+                        'heading' => 'Strength training shapes instead of bulks',
+                        'text' => 'Women have significantly lower testosterone levels than men. As a result, strength training leads to toning and definition—not bulky muscles. This plan is designed specifically with that in mind.'
+                    ],
+                    [
+                        'heading' => 'Targeted exercises for key areas',
+                        'text' => 'The program focuses on legs, glutes, core and upper body—areas that strongly influence posture, body shape and everyday strength.'
+                    ],
+                    [
+                        'heading' => 'Balanced combination of strength and cardio',
+                        'text' => 'Strength training increases resting metabolism and shapes the body, while cardio supports fat loss. Together, they deliver visible and sustainable results.'
+                    ],
+                    [
+                        'heading' => 'Hormone-friendly training structure',
+                        'text' => 'Moderate intensity, adequate recovery and a sensible training frequency help support hormonal balance—crucial for long-term success and overall well-being.'
+                    ],
+                    [
+                        'heading' => 'Improved confidence and body awareness',
+                        'text' => 'Regular strength training not only improves physical performance but also boosts confidence. Many women experience higher energy levels, better posture and stronger body awareness.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The most common training mistakes women make – and how to avoid them',
+                'mistakes' => [
+                    [
+                        'title' => 'Fear of lifting weights',
+                        'problem' => 'Many women avoid strength training out of fear of getting bulky.',
+                        'consequence' => 'Weight may drop, but the body does not become toned or strong.',
+                        'solution' => 'Include strength training consistently—it is essential for shaping and strength.',
+                        'example' => '2–3 strength workouts per week instead of cardio-only routines.'
+                    ],
+                    [
+                        'title' => 'Too much cardio, not enough strength',
+                        'problem' => 'Excessive cardio with little or no resistance training.',
+                        'consequence' => 'Muscle loss, slower metabolism and limited body shaping.',
+                        'solution' => 'Prioritize strength training and use cardio as a supplement.',
+                        'example' => '3 strength sessions plus 1–2 light cardio workouts.'
+                    ],
+                    [
+                        'title' => 'Training with too little intensity',
+                        'problem' => 'Using very light weights or stopping far from muscle fatigue.',
+                        'consequence' => 'Insufficient stimulus for physical change.',
+                        'solution' => 'Exercises should feel challenging while maintaining good form.',
+                        'example' => 'The last 2 reps should feel demanding.'
+                    ],
+                    [
+                        'title' => 'Neglecting upper body training',
+                        'problem' => 'Only focusing on legs and glutes.',
+                        'consequence' => 'Poor posture and increased risk of neck and shoulder discomfort.',
+                        'solution' => 'Include upper body exercises regularly.',
+                        'example' => 'Rows, shoulder presses and planks in weekly workouts.'
+                    ],
+                    [
+                        'title' => 'Insufficient recovery',
+                        'problem' => 'Training despite fatigue or lack of sleep.',
+                        'consequence' => 'Declining performance, hormonal imbalance and loss of motivation.',
+                        'solution' => 'Plan adequate sleep and rest days.',
+                        'example' => 'At least 1–2 non-training days per week.'
+                    ],
+                ],
+                'summary' => 'Effective training for women is not about endless cardio—it’s about a smart balance of strength, movement and recovery.'
+            ],
+
 
             'workout' => [
                 'weeks' => 8,
@@ -1035,6 +1798,76 @@ return [
             'intro' => 'This 6-week fitness reset focuses on structure instead of motivation hacks. Strength training, cardio and recovery are combined into a sustainable system to rebuild consistency and performance.',
             'keywords' => ['new year workout plan', 'fitness reset', 'workout restart', 'new year fitness'],
             'internal_type' => 'new_year_reset',
+            'published_at' => '2025-12-24',
+            'last_updated_at' => '2025-12-24',
+            'why_it_works' => [
+                'title' => 'Why the New Year workout reset works',
+                'content' => [
+                    [
+                        'heading' => 'A reset instead of overload',
+                        'text' => 'After longer breaks, your body doesn’t need extreme workouts. This 6-week reset focuses on controlled training to rebuild strength, endurance and mobility safely.'
+                    ],
+                    [
+                        'heading' => 'Structure beats motivation',
+                        'text' => 'Motivation comes and goes, routines stay. With clearly defined training days and manageable sessions, training becomes a habit rather than a struggle.'
+                    ],
+                    [
+                        'heading' => 'Holistic training approach',
+                        'text' => 'The plan combines strength, cardio, core stability and mobility. This improves not only muscle strength but also cardiovascular health, joint function and overall movement quality.'
+                    ],
+                    [
+                        'heading' => 'Progression without pressure',
+                        'text' => 'Intensity increases gradually through volume, exercise selection and workload. This prevents plateaus and supports steady progress after time off.'
+                    ],
+                    [
+                        'heading' => 'Optimized for body recomposition',
+                        'text' => 'Strength training preserves muscle mass while cardio increases calorie expenditure. Together, they support fat loss and muscle gain when paired with sensible nutrition.'
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The most common restart mistakes – and how to avoid them',
+                'mistakes' => [
+                    [
+                        'title' => 'Starting too aggressively',
+                        'problem' => 'Many people begin the year with 5–6 workouts per week.',
+                        'consequence' => 'Overuse, soreness and loss of motivation after 1–2 weeks.',
+                        'solution' => 'Start with 3–4 structured sessions per week.',
+                        'example' => 'Consistency for 6 weeks beats intensity for 10 days.'
+                    ],
+                    [
+                        'title' => 'Changing everything at once',
+                        'problem' => 'Training, diet, sleep and lifestyle all change simultaneously.',
+                        'consequence' => 'Mental and physical overload.',
+                        'solution' => 'Build training consistency first, then optimize nutrition.',
+                        'example' => 'Establish workouts before cutting calories aggressively.'
+                    ],
+                    [
+                        'title' => 'Ignoring recovery',
+                        'problem' => 'No rest days after months of inactivity.',
+                        'consequence' => 'Fatigue, declining performance and injury risk.',
+                        'solution' => 'Treat recovery as part of the program.',
+                        'example' => 'At least one mobility or rest-focused day per week.'
+                    ],
+                    [
+                        'title' => 'Unrealistic expectations',
+                        'problem' => 'Expecting visible transformation within 1–2 weeks.',
+                        'consequence' => 'Frustration and early dropout.',
+                        'solution' => 'Measure progress through energy, routine and performance.',
+                        'example' => 'Better sleep, more daily movement and improved strength.'
+                    ],
+                    [
+                        'title' => 'No fixed training schedule',
+                        'problem' => 'Training only “when there’s time”.',
+                        'consequence' => 'Inconsistency and lack of adaptation.',
+                        'solution' => 'Schedule fixed training days.',
+                        'example' => 'Monday, Wednesday and Friday as non-negotiable sessions.'
+                    ],
+                ],
+                'summary' => 'Most New Year restarts fail due to unrealistic expectations. This plan succeeds by prioritizing structure, patience and sustainable progress.'
+            ],
+
 
             'workout' => [
                 'weeks' => 6,

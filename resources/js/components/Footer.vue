@@ -28,6 +28,10 @@ interface FooterLinks {
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
 const selectedLanguage = ref(page.props.currentLocale as string);
 
+const getPathFromUrl = (url:string) => {
+    return url.replace(/^https?:\/\/[^\/]+/, '');
+};
+
 // Watch for language changes and redirect
 watch(selectedLanguage, (newLocale) => {
     if (newLocale && newLocale !== page.props.currentLocale) {
@@ -87,7 +91,16 @@ watch(selectedLanguage, (newLocale) => {
                         >
                             <Link
                                 :href="link.url"
-                                class="transition hover:text-primary-300"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(link.url),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(link.url),
+                                        ),
+                                }"
                             >
                                 {{ link.label }}
                             </Link>
@@ -114,7 +127,12 @@ watch(selectedLanguage, (newLocale) => {
                         <li>
                             <Link
                                 href="/"
-                                class="transition hover:text-primary-300"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url === '/',
+                                    'text-gray-300 transition hover:text-se-300':
+                                        $page.url !== '/',
+                                }"
                             >
                                 {{ footerLinks.labels.home }}
                             </Link>
@@ -122,7 +140,20 @@ watch(selectedLanguage, (newLocale) => {
                         <li>
                             <Link
                                 :href="footerLinks.indexUrl"
-                                class="transition hover:text-primary-300"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.indexUrl,
+                                            ),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.indexUrl,
+                                            ),
+                                        ),
+                                }"
                             >
                                 {{ footerLinks.labels.heading }}
                             </Link>
@@ -141,7 +172,20 @@ watch(selectedLanguage, (newLocale) => {
                         <li>
                             <Link
                                 :href="footerLinks.imprintUrl"
-                                class="transition hover:text-primary-300"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.imprintUrl,
+                                            ),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.imprintUrl,
+                                            ),
+                                        ),
+                                }"
                             >
                                 {{ footerLinks.labels.imprint }}
                             </Link>
