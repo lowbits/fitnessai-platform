@@ -94,7 +94,7 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <title>{{ meta.title }}</title>
         <meta name="description" :content="meta.description" />
         <link rel="canonical" :href="meta.canonical" />
-        <meta name="keywords" :content="meta.keywords?.join(', ')" />
+        <meta v-if="meta.keywords?.length" name="keywords" :content="meta.keywords?.join(', ')" />
         <meta property="og:title" :content="meta.title" />
         <meta property="og:description" :content="meta.description" />
         <meta property="og:url" :content="meta.canonical" />

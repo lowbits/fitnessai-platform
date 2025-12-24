@@ -39,7 +39,7 @@ return [
            Abnehmen
         ============================ */
         'abnehmen' => [
-            'title' => 'Kostenloser Trainingsplan zum Abnehmen – 8 Wochen | fitnessAI.me',
+            'title' => 'Kostenloser Trainingsplan zum Abnehmen – 8 Wochen',
             'description' => 'Kostenloser 8-Wochen-Trainingsplan zum Abnehmen. Kraft- & Cardio-Training für nachhaltigen Fettabbau – Zuhause & Gym.',
             'h1' => 'Trainingsplan zum Abnehmen – nachhaltig Fett verlieren',
             'intro' => 'Dieser strukturierte 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio, um Fett abzubauen, Muskeln zu erhalten und den Stoffwechsel nachhaltig zu steigern.',
@@ -202,7 +202,7 @@ return [
            MUSKELAUFBAU
         ============================ */
         'muskelaufbau' => [
-            'title' => 'Trainingsplan Muskelaufbau – 12 Wochen | fitnessAI.me',
+            'title' => 'Trainingsplan Muskelaufbau – 12 Wochen',
             'description' => 'Kostenloser 12-Wochen-Trainingsplan für Muskelaufbau mit progressiver Belastungssteigerung. Ideal für Anfänger und Fortgeschrittene.',
             'h1' => 'Muskelaufbau Trainingsplan – systematisch stärker werden',
             'intro' => 'Dieser 12-Wochen-Trainingsplan basiert auf progressiver Überlastung und kombiniert Muskelwachstum, Kraftsteigerung und ausreichende Regeneration.',
@@ -380,7 +380,7 @@ return [
            Anfänger
         ============================ */
         'anfaenger' => [
-            'title' => 'Trainingsplan für Anfänger – 6 Wochen | fitnessAI.me',
+            'title' => 'Trainingsplan für Anfänger – 6 Wochen',
             'description' => 'Der perfekte Einstieg ins Training. Sicher, strukturiert und nachhaltig – ideal für Anfänger ohne Vorerfahrung.',
             'h1' => 'Trainingsplan für Anfänger – sicher & effektiv starten',
             'intro' => 'Dieser 6-Wochen-Anfängerplan hilft dir, grundlegende Bewegungen zu erlernen, Kraft aufzubauen und eine stabile Trainingsroutine zu entwickeln.',
@@ -529,7 +529,7 @@ return [
            Zuhause
         ============================ */
         'zuhause' => [
-            'title' => 'Trainingsplan für Zuhause – Ohne Geräte effektiv trainieren | fitnessAI.me',
+            'title' => 'Trainingsplan für Zuhause – Ohne Geräte effektiv trainieren',
             'description' => 'Effektives Home Workout ohne Geräte. Bodyweight Training für jedes Fitnesslevel – 8 Wochen strukturiert & kostenlos.',
             'h1' => 'Trainingsplan für Zuhause: Effektiv ohne Geräte',
             'intro' => 'Dieser 8-Wochen-Trainingsplan zeigt dir, wie du mit reinem Körpergewicht zuhause Kraft, Ausdauer und Muskulatur aufbaust – ganz ohne Fitnessstudio.',
@@ -687,7 +687,7 @@ return [
            Frauen
         ============================ */
         'frauen' => [
-            'title' => 'Trainingsplan für Frauen – Gezielt & Effektiv | fitnessAI.me',
+            'title' => 'Trainingsplan für Frauen – Gezielt & Effektiv',
             'description' => 'Strukturierter Kraft- & Cardio-Trainingsplan speziell für Frauen. Fokus auf Straffung, Definition & Fettabbau – 8 Wochen.',
             'h1' => 'Trainingsplan für Frauen: Straff & Stark',
             'intro' => 'Dieser 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio gezielt für Straffung, Definition und einen starken, femininen Körper.',
@@ -845,7 +845,7 @@ return [
            NEUJAHR
         ============================ */
         'neujahrs-trainingsplan' => [
-            'title' => 'Neujahrs Trainingsplan – 6 Wochen Fitness Reset | fitnessAI.me',
+            'title' => 'Neujahrs Trainingsplan – 6 Wochen Fitness Reset',
             'description' => 'Der ideale Trainingsplan für deinen Neustart ins neue Jahr. ✓ 6 Wochen Reset ✓ Kraft, Cardio & Mobility ✓ Nachhaltig & sicher',
             'h1' => 'Neujahrs Trainingsplan: Dein 6-Wochen Fitness Reset',
             'intro' => 'Dieser 6-Wochen Fitness Reset hilft dir, nach Pausen oder einem Neustart wieder in eine nachhaltige Trainingsroutine zu finden. Fokus auf Kraft, Ausdauer, Beweglichkeit und langfristigen Fortschritt.',
@@ -1002,7 +1002,7 @@ return [
 
     'en' => [
         'weight-loss' => [
-            'title' => 'Free Weight Loss Workout Plan – 8 Weeks | fitnessAI.me',
+            'title' => 'Free Weight Loss Workout Plan – 8 Weeks',
             'description' => 'Free 8-week weight loss workout plan. Structured strength and cardio training for sustainable fat loss – suitable for home or gym.',
             'h1' => 'Weight Loss Workout Plan – Lose Fat Sustainably',
             'intro' => 'This structured 8-week workout plan combines strength training and cardio to reduce body fat, preserve muscle mass, and improve metabolic health.',
@@ -1156,7 +1156,7 @@ return [
         ],
 
         'muscle-gain' => [
-            'title' => 'Free Muscle Building Workout Plan – 12 Weeks | fitnessAI.me',
+            'title' => 'Free Muscle Building Workout Plan – 12 Weeks',
             'description' => 'Free 12-week muscle building workout plan. Structured strength training with progressive overload for sustainable muscle growth.',
             'h1' => 'Muscle Building Workout Plan – Build Strength & Muscle',
             'intro' => 'This 12-week muscle building program is designed to systematically increase strength and muscle mass through progressive overload and structured training.',
@@ -1328,7 +1328,7 @@ return [
         ],
 
         'beginner' => [
-            'title' => 'Beginner Workout Plan – 6 Weeks | fitnessAI.me',
+            'title' => 'Beginner Workout Plan – 6 Weeks',
             'description' => 'The ideal beginner workout plan. Safe, structured and easy to follow – perfect for starting fitness training at home or in the gym.',
             'h1' => 'Beginner Workout Plan – Start Training Safely',
             'intro' => 'This 6-week beginner workout plan helps you learn fundamental movements, build basic strength and establish a sustainable training routine.',
@@ -1475,7 +1475,7 @@ return [
         ],
 
         'home' => [
-            'title' => 'Home Workout Plan – Train Effectively Without Equipment | fitnessAI.me',
+            'title' => 'Home Workout Plan – Train Effectively Without Equipment',
             'description' => 'Effective 8-week home workout plan with no equipment required. Structured bodyweight training for all fitness levels.',
             'h1' => 'Home Workout Plan – Train Effectively Without a Gym',
             'intro' => 'This 8-week home workout plan uses bodyweight exercises only. It helps you build strength, improve endurance and stay consistent without needing a gym.',
@@ -1634,7 +1634,7 @@ return [
         ],
 
         'women' => [
-            'title' => 'Workout Plan for Women – Targeted & Effective | fitnessAI.me',
+            'title' => 'Workout Plan for Women – Targeted & Effective',
             'description' => 'Structured 8-week workout plan for women. Strength and cardio training for toning, definition and overall fitness.',
             'h1' => 'Workout Plan for Women – Strength, Tone & Balance',
             'intro' => 'This 8-week workout plan is designed specifically for women and combines strength training and cardio to improve muscle tone, definition and overall fitness.',
@@ -1792,7 +1792,7 @@ return [
         ],
 
         'new-year-reset' => [
-            'title' => 'New Year Workout Plan – Your 6-Week Fitness Reset | fitnessAI.me',
+            'title' => 'New Year Workout Plan – Your 6-Week Fitness Reset',
             'description' => 'Start the new year strong with a structured 6-week workout plan. Build strength, burn fat and create sustainable habits – home or gym.',
             'h1' => 'New Year Workout Plan – Your 6-Week Fitness Reset',
             'intro' => 'This 6-week fitness reset focuses on structure instead of motivation hacks. Strength training, cardio and recovery are combined into a sustainable system to rebuild consistency and performance.',
