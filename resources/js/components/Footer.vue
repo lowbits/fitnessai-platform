@@ -8,7 +8,7 @@ const page = usePage();
 interface FooterLinks {
     workoutPlans: Record<string, { url: string; label: string }>;
     indexUrl: string;
-    imprintUrl: string;
+    legalLinks: Record<string, { url: string; label: string }>;
     languages: Record<
         string,
         { name: string; code: string; url: string; active: boolean }
@@ -18,7 +18,7 @@ interface FooterLinks {
         all: string;
         product: string;
         home: string;
-        imprint: string;
+        legal: string;
         language: string;
         description: string;
         copyright: string;
@@ -166,28 +166,27 @@ watch(selectedLanguage, (newLocale) => {
                     <h3
                         class="mb-4 text-sm font-semibold tracking-wider text-white uppercase"
                     >
-                        Legal
+                        {{ footerLinks.labels.legal }}
                     </h3>
                     <ul class="space-y-2 text-sm">
-                        <li>
+                        <li
+                            v-for="(link, key) in footerLinks.legalLinks"
+                            :key="key"
+                        >
                             <Link
-                                :href="footerLinks.imprintUrl"
+                                :href="link.url"
                                 :class="{
                                     'font-semibold text-secondary-200':
                                         $page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.imprintUrl,
-                                            ),
+                                            getPathFromUrl(link.url),
                                         ),
                                     'text-gray-300 transition hover:text-secondary-100':
                                         !$page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.imprintUrl,
-                                            ),
+                                            getPathFromUrl(link.url),
                                         ),
                                 }"
                             >
-                                {{ footerLinks.labels.imprint }}
+                                {{ link.label }}
                             </Link>
                         </li>
                     </ul>

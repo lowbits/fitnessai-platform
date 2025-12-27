@@ -144,7 +144,9 @@ return [
     */
 
     'features' => [
-
+        /*
+       Features::resetPasswords(),
+        */
     ],
 
 ];

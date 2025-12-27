@@ -1,6 +1,9 @@
 <?php
 return [
     'imprint' => 'impressum',
+    'data_privacy' => 'datenschutz',
+    'terms' => 'agb',
+    "disclaimer" => "haftungsausschluss",
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 

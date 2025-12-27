@@ -238,7 +238,20 @@ class GenerateUserMealPlan implements ShouldQueue
                 Log::error("Failed to generate meal plan for day {$day}", [
                     'error' => $e->getMessage(),
                     'error_class' => get_class($e),
+                    'error_file' => $e->getFile(),
+                    'error_line' => $e->getLine(),
                     'meal_plan_id' => $mealPlan->id,
+                    'day' => $day,
+                    'date' => $date->format('Y-m-d'),
+                    'user_id' => $this->user->id,
+                    'plan_id' => $this->plan->id,
+                    'attempt' => property_exists($this, 'attempts') ? $this->attempts() : 'unknown',
+                    'openai_model' => 'gpt-5-mini',
+                    'context' => [
+                        'profile_exists' => isset($profile),
+                        'meals_summary_count' => count($generatedMealsSummary),
+                        'system_prompt_length' => strlen($systemPrompt['content'] ?? ''),
+                    ],
                     'trace' => $e->getTraceAsString(),
                 ]);
 
@@ -351,5 +364,42 @@ PROMPT;
             'carbs_g' => array_sum(array_column($meals, 'carbs_g')),
             'fat_g' => array_sum(array_column($meals, 'fat_g')),
         ];
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('🚨 GenerateUserMealPlan FINAL FAILURE - Job has been attempted too many times', [
+            'user_id' => $this->user->id,
+            'user_email' => $this->user->email,
+            'plan_id' => $this->plan->id,
+            'plan_start_date' => $this->plan->start_date->format('Y-m-d'),
+            'exception_message' => $exception->getMessage(),
+            'exception_class' => get_class($exception),
+            'exception_file' => $exception->getFile(),
+            'exception_line' => $exception->getLine(),
+            'stack_trace' => $exception->getTraceAsString(),
+            'user_profile' => [
+                'age' => $this->user->profile->age ?? null,
+                'gender' => $this->user->profile->gender->value ?? null,
+                'body_goal' => $this->user->profile->body_goal->value ?? null,
+                'diet_type' => $this->user->profile->diet_type->value ?? null,
+                'locale' => $this->user->locale,
+            ],
+            'meal_plans_status' => [
+                'total' => MealPlan::where('plan_id', $this->plan->id)->count(),
+                'generated' => MealPlan::where('plan_id', $this->plan->id)->where('status', 'generated')->count(),
+                'pending' => MealPlan::where('plan_id', $this->plan->id)->where('status', 'pending')->count(),
+                'failed' => MealPlan::where('plan_id', $this->plan->id)->where('status', 'failed')->count(),
+            ],
+            'timestamp' => now()->toDateTimeString(),
+        ]);
+
+        // Mark any pending meal plans as failed
+        MealPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'pending')
+            ->update(['status' => 'failed']);
     }
 }

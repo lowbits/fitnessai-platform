@@ -255,7 +255,22 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 Log::error("Failed to generate workout plan for day {$day}", [
                     'error' => $e->getMessage(),
                     'error_class' => get_class($e),
+                    'error_file' => $e->getFile(),
+                    'error_line' => $e->getLine(),
                     'workout_plan_id' => $workoutPlan->id,
+                    'day' => $day,
+                    'date' => $date->format('Y-m-d'),
+                    'is_rest_day' => $isRestDay,
+                    'user_id' => $this->user->id,
+                    'plan_id' => $this->plan->id,
+                    'attempt' => property_exists($this, 'attempts') ? $this->attempts() : 'unknown',
+                    'openai_model' => 'gpt-5-mini',
+                    'context' => [
+                        'profile_exists' => isset($profile),
+                        'workouts_summary_count' => count($generatedWorkoutsSummary),
+                        'system_prompt_length' => strlen($systemPrompt['content'] ?? ''),
+                        'workouts_per_week' => $workoutsPerWeek,
+                    ],
                     'trace' => $e->getTraceAsString(),
                 ]);
 
@@ -472,6 +487,46 @@ PROMPT;
                 'difficulty' => $exerciseData['difficulty'] ?? null,
             ]);
         }
+    }
+
+    /**
+     * Handle a job failure.
+     */
+    public function failed(\Throwable $exception): void
+    {
+        Log::error('🚨 GenerateUserWorkoutPlan FINAL FAILURE - Job has been attempted too many times', [
+            'user_id' => $this->user->id,
+            'user_email' => $this->user->email,
+            'plan_id' => $this->plan->id,
+            'plan_start_date' => $this->plan->start_date->format('Y-m-d'),
+            'workouts_per_week' => $this->plan->workouts_per_week ?? 3,
+            'exception_message' => $exception->getMessage(),
+            'exception_class' => get_class($exception),
+            'exception_file' => $exception->getFile(),
+            'exception_line' => $exception->getLine(),
+            'stack_trace' => $exception->getTraceAsString(),
+            'user_profile' => [
+                'age' => $this->user->profile->age ?? null,
+                'gender' => $this->user->profile->gender->value ?? null,
+                'body_goal' => $this->user->profile->body_goal->value ?? null,
+                'skill_level' => $this->user->profile->skill_level->value ?? null,
+                'training_place' => $this->user->profile->training_place->value ?? null,
+                'training_sessions_per_week' => $this->user->profile->training_sessions_per_week ?? null,
+                'locale' => $this->user->locale,
+            ],
+            'workout_plans_status' => [
+                'total' => WorkoutPlan::where('plan_id', $this->plan->id)->count(),
+                'generated' => WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'generated')->count(),
+                'pending' => WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'pending')->count(),
+                'failed' => WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'failed')->count(),
+            ],
+            'timestamp' => now()->toDateTimeString(),
+        ]);
+
+        // Mark any pending workout plans as failed
+        WorkoutPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'pending')
+            ->update(['status' => 'failed']);
     }
 }
 

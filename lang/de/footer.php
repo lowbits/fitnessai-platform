@@ -20,6 +20,9 @@ return [
     'legal' => [
         'heading' => 'Legal',
         'imprint' => 'Impressum',
+        'data_privacy' => 'Datenschutz',
+        'terms' => 'AGB',
+        'disclaimer' => 'Haftungsausschluss',
     ],
     'language' => [
         'heading' => 'Sprache',

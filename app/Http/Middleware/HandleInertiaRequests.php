@@ -96,15 +96,30 @@ class HandleInertiaRequests extends Middleware
             'all' => trans('footer.workout_plans.all', [], $locale),
             'product' => trans('footer.product.heading', [], $locale),
             'home' => trans('footer.product.home', [], $locale),
-            'imprint' => trans('footer.legal.imprint', [], $locale),
+            'legal' => trans('footer.legal.heading', [], $locale),
             'language' => trans('footer.language.heading', [], $locale),
             'description' => trans('footer.description', [], $locale),
             'copyright' => trans('footer.copyright', ['year' => date('Y')], $locale),
         ];
 
-        // Add imprint URL
-        $imprintPath = trans('routes.imprint', [], $locale);
-        $links['imprintUrl'] = LaravelLocalization::localizeURL("/{$imprintPath}", $locale);
+        // Add legal links (imprint, data privacy, etc.)
+        $links['legalLinks'] = [];
+
+        $legalPages = ['imprint', 'data_privacy', 'terms', 'disclaimer'];
+        foreach ($legalPages as $page) {
+            $routeKey = "routes.{$page}";
+            $labelKey = "footer.legal.{$page}";
+
+            $routePath = trans($routeKey, [], $locale);
+
+            // Only add if translation exists
+            if ($routePath !== $routeKey) {
+                $links['legalLinks'][$page] = [
+                    'url' => LaravelLocalization::localizeURL("/{$routePath}", $locale),
+                    'label' => trans($labelKey, [], $locale),
+                ];
+            }
+        }
 
         // Add language switcher data
         $links['languages'] = [];

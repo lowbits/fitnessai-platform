@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
+import Footer from '@/components/Footer.vue';
 
 defineProps<{
     title?: string;
@@ -22,10 +23,5 @@ defineProps<{
     <main class="flex min-h-[85vh] flex-col">
         <slot />
     </main>
-    <footer class="bg-dark-surfaces-800 p-8 text-primary-200">
-        <nav class="container mx-auto flex justify-between">
-            <Link href="/">fitnessai.me</Link>
-            <Link href="/imprint">Imprint</Link>
-        </nav>
-    </footer>
+    <Footer />
 </template>

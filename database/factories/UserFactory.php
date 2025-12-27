@@ -46,6 +46,16 @@ class UserFactory extends Factory
     }
 
     /**
+     * Indicate that the model does not have a password set.
+     */
+    public function withoutPassword(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'password' => null,
+        ]);
+    }
+
+    /**
      * Indicate that the model does not have two-factor authentication configured.
      */
     public function withoutTwoFactor(): static
