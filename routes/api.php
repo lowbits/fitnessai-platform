@@ -18,9 +18,8 @@ Route::prefix('v2')->group(function () {
         Route::post('/login', [AuthController::class, 'login'])
             ->middleware('throttle:5,1');
 
-        // Your existing set-password routes
         Route::post('/set-password', [NewPasswordController::class, 'store'])
-            ->middleware('throttle:5,1')->name('set-password.request');
+            ->middleware('throttle:5,1')->name('set-password');
         Route::post('/set-password/request', [SetPasswordRequestTokenController::class, 'store'])
             ->middleware('throttle:5,1')->name('set-password.request');
 

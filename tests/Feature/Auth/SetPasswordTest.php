@@ -1,69 +1,53 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 
 
-
-test('set password link can be requested', function () {
-    Notification::fake();
-
+test('password can be set with valid token', function () {
     $user = User::factory()->create();
 
-    $this->post(route('password.email'), ['email' => $user->email]);
+    $token = Password::createToken($user);
 
-    Notification::assertSentTo($user, ResetPassword::class);
-});
-
-test('reset password screen can be rendered', function () {
-    Notification::fake();
-
-    $user = User::factory()->create();
-
-    $this->post(route('password.email'), ['email' => $user->email]);
-
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) {
-        $response = $this->get(route('password.reset', $notification->token));
-
-        $response->assertStatus(200);
-
-        return true;
-    });
-});
-
-test('password can be reset with valid token', function () {
-    Notification::fake();
-
-    $user = User::factory()->create();
-
-    $this->post(route('password.email'), ['email' => $user->email]);
-
-    Notification::assertSentTo($user, ResetPassword::class, function ($notification) use ($user) {
-        $response = $this->post(route('password.update'), [
-            'token' => $notification->token,
-            'email' => $user->email,
-            'password' => 'password',
-            'password_confirmation' => 'password',
-        ]);
-
-        $response
-            ->assertSessionHasNoErrors()
-            ->assertRedirect(route('login'));
-
-        return true;
-    });
-});
-
-test('password cannot be reset with invalid token', function () {
-    $user = User::factory()->create();
-
-    $response = $this->post(route('password.update'), [
-        'token' => 'invalid-token',
+    $response = $this->postJson(route('set-password'), [
+        'token' => $token,
         'email' => $user->email,
-        'password' => 'newpassword123',
-        'password_confirmation' => 'newpassword123',
+        'password' => 'NewPassword123!',
+        'password_confirmation' => 'NewPassword123!',
     ]);
 
-    $response->assertSessionHasErrors('email');
+    $response->assertStatus(200);
+
+    // Verify password was updated
+    $this->assertTrue(
+        \Hash::check('NewPassword123!', $user->fresh()->password)
+    );
+});
+
+test('password cannot be set with invalid token', function () {
+    $user = User::factory()->create();
+
+    $response = $this->postJson(route('set-password'), [
+        'token' => 'invalid-token',
+        'email' => $user->email,
+        'password' => 'NewPassword123!',
+        'password_confirmation' => 'NewPassword123!',
+    ]);
+
+    $response->assertStatus(422);
+});
+
+test('password cannot be set without matching confirmation', function () {
+    $user = User::factory()->create();
+
+    $token = Password::createToken($user);
+
+    $response = $this->postJson(route('set-password'), [
+        'token' => $token,
+        'email' => $user->email,
+        'password' => 'NewPassword123!',
+        'password_confirmation' => 'DifferentPassword123!',
+    ]);
+
+    $response->assertStatus(422);
 });
