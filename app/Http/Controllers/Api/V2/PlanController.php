@@ -171,6 +171,7 @@ class PlanController extends Controller
             return [
                 'status' => 'generating',
                 'message' => 'Workout is being generated...',
+                'workouts'=> []
             ];
         }
 

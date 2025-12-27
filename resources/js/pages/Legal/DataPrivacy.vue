@@ -15,11 +15,13 @@ const { t } = useI18n();
     </Head>
     <GuestLayout>
         <div
-            class="text-pron container mx-auto mt-10 flex-1 space-y-5 text-white"
+            class="text-pron container mx-auto mt-10 flex-1 space-y-5 px-6 text-white md:px-0"
         >
-            <h1 class="mb-8 text-3xl font-bold">{{ t('legal.data_privacy.title') }}</h1>
+            <h1 class="mb-8 text-3xl font-bold">
+                {{ t('legal.data_privacy.title') }}
+            </h1>
 
-            <div class="max-w-prose space-y-8 mb-10">
+            <div class="mb-10 max-w-prose space-y-8">
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
                         1. Datenschutz auf einen Blick
@@ -316,8 +318,7 @@ const { t } = useI18n();
                         Ihre Daten werden gelöscht, sobald sie für die
                         Erreichung des Zweckes ihrer Erhebung nicht mehr
                         erforderlich sind. Sie können jederzeit die Löschung
-                        Ihrer Daten per E-Mail an hello@fitnessai.me
-                        beantragen.
+                        Ihrer Daten per E-Mail an hello@fitnessai.me beantragen.
                     </p>
                 </section>
 

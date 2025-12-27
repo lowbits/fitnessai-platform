@@ -23,7 +23,7 @@ const getTranslationArray = (key: string): string[] => {
         />
     </Head>
     <GuestLayout>
-        <div class="container mx-auto mt-10 flex-1 space-y-5 text-white">
+        <div class="container px-6 md:px-0 mx-auto mt-10 flex-1 space-y-5 text-white">
             <h1 class="mb-8 text-3xl font-bold">
                 {{ t('legal.disclaimer.title') }}
             </h1>

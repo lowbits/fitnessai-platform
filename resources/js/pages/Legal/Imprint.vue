@@ -15,16 +15,18 @@ const { t } = useI18n();
     </Head>
     <GuestLayout>
         <div
-            class="container mx-auto  mt-10 flex-1 space-y-5 text-white"
+            class="container mx-auto mt-10 flex-1 space-y-5 px-6 text-white md:px-0"
         >
-            <h1 class="mb-8 text-3xl font-bold ">{{ t('legal.imprint.title') }}</h1>
+            <h1 class="mb-8 text-3xl font-bold">
+                {{ t('legal.imprint.title') }}
+            </h1>
 
-            <div class="space-y-6 max-w-prose mb-10">
+            <div class="mb-10 max-w-prose space-y-6">
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
+                    <h2 class="mb-3 text-xl font-semibold">
                         Angaben gemäß § 5 TMG
                     </h2>
-                    <div class="space-y-1 ">
+                    <div class="space-y-1">
                         <p class="font-medium">Tobias Lobitz</p>
                         <p>Annastraße 7</p>
                         <p>40477 Düsseldorf</p>
@@ -32,10 +34,8 @@ const { t } = useI18n();
                 </section>
 
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
-                        Kontakt
-                    </h2>
-                    <div class="space-y-1 ">
+                    <h2 class="mb-3 text-xl font-semibold">Kontakt</h2>
+                    <div class="space-y-1">
                         <p>
                             E-Mail:
                             <a
@@ -48,9 +48,7 @@ const { t } = useI18n();
                 </section>
 
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
-                        Umsatzsteuer-ID
-                    </h2>
+                    <h2 class="mb-3 text-xl font-semibold">Umsatzsteuer-ID</h2>
                     <p class="">
                         Umsatzsteuer-Identifikationsnummer gemäß § 27 a
                         Umsatzsteuergesetz:<br />
@@ -59,7 +57,7 @@ const { t } = useI18n();
                 </section>
 
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
+                    <h2 class="mb-3 text-xl font-semibold">
                         EU-Streitschlichtung
                     </h2>
                     <p class="">
@@ -73,13 +71,13 @@ const { t } = useI18n();
                             >https://ec.europa.eu/consumers/odr/</a
                         >
                     </p>
-                    <p class="mt-2 ">
+                    <p class="mt-2">
                         Unsere E-Mail-Adresse finden Sie oben im Impressum.
                     </p>
                 </section>
 
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
+                    <h2 class="mb-3 text-xl font-semibold">
                         Verbraucherstreitbeilegung
                     </h2>
                     <p class="">
@@ -90,14 +88,12 @@ const { t } = useI18n();
                 </section>
 
                 <section>
-                    <h2 class="mb-3 text-xl font-semibold ">
+                    <h2 class="mb-3 text-xl font-semibold">
                         Haftungsausschluss
                     </h2>
 
-                    <h3 class="mt-4 mb-2 font-semibold ">
-                        Haftung für Inhalte
-                    </h3>
-                    <p class="text-sm ">
+                    <h3 class="mt-4 mb-2 font-semibold">Haftung für Inhalte</h3>
+                    <p class="text-sm">
                         Die Inhalte unserer Seiten wurden mit größter Sorgfalt
                         erstellt. Für die Richtigkeit, Vollständigkeit und
                         Aktualität der Inhalte können wir jedoch keine Gewähr
@@ -111,10 +107,8 @@ const { t } = useI18n();
                         hinweisen.
                     </p>
 
-                    <h3 class="mt-4 mb-2 font-semibold ">
-                        Haftung für Links
-                    </h3>
-                    <p class="text-sm ">
+                    <h3 class="mt-4 mb-2 font-semibold">Haftung für Links</h3>
+                    <p class="text-sm">
                         Unser Angebot enthält Links zu externen Websites
                         Dritter, auf deren Inhalte wir keinen Einfluss haben.
                         Deshalb können wir für diese fremden Inhalte auch keine
@@ -123,10 +117,8 @@ const { t } = useI18n();
                         Seiten verantwortlich.
                     </p>
 
-                    <h3 class="mt-4 mb-2 font-semibold ">
-                        Urheberrecht
-                    </h3>
-                    <p class="text-sm ">
+                    <h3 class="mt-4 mb-2 font-semibold">Urheberrecht</h3>
+                    <p class="text-sm">
                         Die durch die Seitenbetreiber erstellten Inhalte und
                         Werke auf diesen Seiten unterliegen dem deutschen
                         Urheberrecht. Die Vervielfältigung, Bearbeitung,
