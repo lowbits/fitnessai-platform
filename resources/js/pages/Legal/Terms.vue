@@ -1,11 +1,22 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
+import { useI18n } from 'vue-i18n';
+import { Head } from '@inertiajs/vue3';
+
+const { t } = useI18n();
 </script>
 <template>
+    <Head>
+        <title>{{ t('legal.terms.meta.title') }}</title>
+        <meta
+            name="description"
+            :content="t('legal.terms.meta.description')"
+        />
+    </Head>
     <GuestLayout>
         <div class="container mx-auto mt-10 flex-1 space-y-5 text-white">
             <h1 class="mb-8 text-3xl font-bold">
-                Allgemeine Geschäftsbedingungen (AGB)
+                {{ t('legal.terms.title') }}
             </h1>
 
             <div class="mb-10 max-w-prose space-y-6">

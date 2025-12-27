@@ -1,17 +1,38 @@
 <script setup lang="ts">
+import { useGuestCountry } from '@/composables/useGuestCountry';
+
 import GuestLayout from '@/layouts/GuestLayout.vue';
+import { Head } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+const { t, tm } = useI18n();
+const { isUS, isEU } = useGuestCountry();
+
+const getTranslationArray = (key: string): string[] => {
+    const value = tm(key);
+    return Array.isArray(value) ? value : [];
+};
 </script>
+
 <template>
+    <Head>
+        <title>{{ t('legal.disclaimer.meta.title') }}</title>
+        <meta
+            name="description"
+            :content="t('legal.disclaimer.meta.description')"
+        />
+    </Head>
     <GuestLayout>
         <div class="container mx-auto mt-10 flex-1 space-y-5 text-white">
             <h1 class="mb-8 text-3xl font-bold">
-                Haftungsausschluss & Gesundheitshinweise
+                {{ t('legal.disclaimer.title') }}
             </h1>
 
             <div class="mb-10 max-w-prose space-y-6">
+                <!-- Warning Box -->
                 <div class="mb-8 border-l-4 border-yellow-400 bg-yellow-50 p-6">
                     <div class="flex">
-                        <div class="flex-shrink-0">
+                        <div class="shrink-0">
                             <svg
                                 class="h-6 w-6 text-yellow-400"
                                 fill="none"
@@ -28,306 +49,672 @@ import GuestLayout from '@/layouts/GuestLayout.vue';
                         </div>
                         <div class="ml-4">
                             <h2 class="text-lg font-semibold text-yellow-800">
-                                Wichtiger Hinweis
+                                {{ t('legal.disclaimer.warning.title') }}
                             </h2>
                             <p class="mt-2 text-yellow-700">
-                                Bitte lesen Sie diese Hinweise sorgfältig, bevor
-                                Sie die Plattform nutzen.
+                                {{ t('legal.disclaimer.warning.description') }}
                             </p>
                         </div>
                     </div>
                 </div>
 
-
-                <div class="space-y-8 ">
+                <div class="space-y-8">
+                    <!-- Not Professional Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Kein Ersatz für professionelle Beratung
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_professional.title',
+                                )
+                            }}
                         </h2>
                         <p class="mb-4 font-semibold">
-                            Die über FitnessAI bereitgestellten Trainings- und
-                            Ernährungspläne ersetzen NICHT die Beratung durch
-                            qualifizierte Fachkräfte wie Ärzte,
-                            Ernährungsberater, Personal Trainer oder andere
-                            Gesundheitsexperten.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_professional.subtitle',
+                                )
+                            }}
                         </p>
                         <p class="mb-4">
-                            Die Inhalte dienen ausschließlich zu allgemeinen
-                            Informationszwecken. Sie stellen keine medizinische
-                            Diagnose, Behandlung oder professionelle
-                            Gesundheitsberatung dar.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_professional.content_1',
+                                )
+                            }}
                         </p>
                         <p>
-                            Konsultieren Sie immer einen Arzt oder
-                            qualifizierten Gesundheitsdienstleister, bevor Sie
-                            mit einem neuen Trainings- oder Ernährungsprogramm
-                            beginnen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_professional.content_2',
+                                )
+                            }}
                         </p>
                     </section>
 
+                    <!-- 🆕 NOT LICENSED Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Medizinische Vorerkrankungen & Risiken
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_licensed.title',
+                                )
+                            }}
+                        </h2>
+                        <p class="mb-4 font-semibold text-red-800">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_licensed.content_1',
+                                )
+                            }}
+                        </p>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_licensed.content_2',
+                                )
+                            }}
+                        </p>
+                        <p>
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.not_licensed.content_3',
+                                )
+                            }}
+                        </p>
+                    </section>
+
+                    <!-- Medical Conditions Section -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.medical_conditions.title',
+                                )
+                            }}
                         </h2>
                         <div
                             class="mb-4 rounded border border-red-200 bg-red-50 p-4"
                         >
                             <p class="mb-2 font-semibold text-red-800">
-                                Konsultieren Sie unbedingt einen Arzt, wenn Sie:
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.medical_conditions.warning_title',
+                                    )
+                                }}
                             </p>
                             <ul
                                 class="list-inside list-disc space-y-1 text-red-700"
                             >
-                                <li>
-                                    An Herz-Kreislauf-Erkrankungen leiden oder
-                                    litten
-                                </li>
-                                <li>
-                                    Diabetes oder Stoffwechselstörungen haben
-                                </li>
-                                <li>
-                                    Gelenkprobleme, Rückenschmerzen oder
-                                    Verletzungen haben
-                                </li>
-                                <li>Schwanger sind oder stillen</li>
-                                <li>Essstörungen haben oder hatten</li>
-                                <li>
-                                    Bluthochdruck oder andere chronische
-                                    Erkrankungen haben
-                                </li>
-                                <li>
-                                    Medikamente einnehmen, die durch Sport oder
-                                    Ernährung beeinflusst werden können
-                                </li>
-                                <li>
-                                    Über 40 Jahre alt sind und lange nicht
-                                    trainiert haben
-                                </li>
-                                <li>
-                                    Sich unsicher über Ihren Gesundheitszustand
-                                    sind
+                                <li
+                                    v-for="(
+                                        condition, index
+                                    ) in getTranslationArray(
+                                        'legal.disclaimer.sections.medical_conditions.conditions',
+                                    )"
+                                    :key="index"
+                                >
+                                    {{ condition }}
                                 </li>
                             </ul>
                         </div>
                         <p>
-                            Das Ignorieren gesundheitlicher Probleme kann zu
-                            schweren Verletzungen oder gesundheitlichen
-                            Komplikationen führen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.medical_conditions.warning_note',
+                                )
+                            }}
                         </p>
                     </section>
 
+                    <!-- 🆕 EMERGENCY Section - SEHR PROMINENT! -->
+                    <section>
+                        <div
+                            class="rounded-lg border-2 border-red-500 bg-red-50 p-6"
+                        >
+                            <div class="flex items-start gap-3">
+                                <span class="text-3xl">{{
+                                    t(
+                                        'legal.disclaimer.sections.emergency.icon_warning',
+                                    )
+                                }}</span>
+                                <div class="flex-1">
+                                    <h2
+                                        class="mb-4 text-2xl font-bold text-red-900"
+                                    >
+                                        {{
+                                            t(
+                                                'legal.disclaimer.sections.emergency.title',
+                                            )
+                                        }}
+                                    </h2>
+                                    <p class="mb-4 font-semibold text-red-800">
+                                        {{
+                                            t(
+                                                'legal.disclaimer.sections.emergency.content_1',
+                                            )
+                                        }}
+                                    </p>
+                                    <ul
+                                        class="mb-4 list-inside list-disc space-y-1 text-red-700"
+                                    >
+                                        <li
+                                            v-for="(
+                                                symptom, index
+                                            ) in getTranslationArray(
+                                                'legal.disclaimer.sections.emergency.symptoms',
+                                            )"
+                                            :key="index"
+                                        >
+                                            {{ symptom }}
+                                        </li>
+                                    </ul>
+                                    <p class="font-semibold text-red-900">
+                                        {{
+                                            t(
+                                                'legal.disclaimer.sections.emergency.content_2',
+                                            )
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- AI Content Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            KI-generierte Inhalte
+                            {{
+                                t('legal.disclaimer.sections.ai_content.title')
+                            }}
                         </h2>
                         <p class="mb-4">
-                            Die Trainings- und Ernährungspläne werden mittels
-                            Künstlicher Intelligenz (KI) erstellt. Obwohl wir
-                            uns bemühen, qualitativ hochwertige Empfehlungen zu
-                            liefern, können KI-Systeme Fehler machen oder
-                            ungeeignete Vorschläge generieren.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.ai_content.content_1',
+                                )
+                            }}
                         </p>
                         <p class="mb-4 font-semibold">
-                            Die KI kennt nicht Ihre vollständige medizinische
-                            Geschichte, aktuelle Beschwerden oder individuellen
-                            körperlichen Einschränkungen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.ai_content.content_2',
+                                )
+                            }}
                         </p>
                         <p>
-                            Nutzen Sie Ihren gesunden Menschenverstand und hören
-                            Sie auf Ihren Körper. Wenn etwas schmerzhaft ist
-                            oder sich falsch anfühlt, STOPPEN Sie sofort.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.ai_content.content_3',
+                                )
+                            }}
                         </p>
                     </section>
 
+                    <!-- 🆕 NO MEDICAL RELATIONSHIP -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Eigenverantwortung
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_medical_relationship.title',
+                                )
+                            }}
                         </h2>
                         <p class="mb-4">
-                            Sie tragen die volle Verantwortung für die Umsetzung
-                            der bereitgestellten Pläne. Sie entscheiden selbst,
-                            ob und wie Sie die Empfehlungen befolgen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_medical_relationship.content_1',
+                                )
+                            }}
                         </p>
                         <p class="mb-4">
-                            Der Anbieter übernimmt keine Verantwortung für:
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_medical_relationship.content_2',
+                                )
+                            }}
+                        </p>
+                        <p>
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_medical_relationship.content_3',
+                                )
+                            }}
+                        </p>
+                    </section>
+
+                    <!-- Responsibility Section -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.responsibility.title',
+                                )
+                            }}
+                        </h2>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.responsibility.content_1',
+                                )
+                            }}
+                        </p>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.responsibility.content_2',
+                                )
+                            }}
                         </p>
                         <ul class="mb-4 list-inside list-disc space-y-2">
-                            <li>Verletzungen, die durch Training entstehen</li>
-                            <li>
-                                Gesundheitliche Probleme durch
-                                Ernährungsumstellungen
-                            </li>
-                            <li>
-                                Allergische Reaktionen auf empfohlene
-                                Lebensmittel
-                            </li>
-                            <li>Unerwünschte Gewichtsveränderungen</li>
-                            <li>
-                                Verschlechterung bestehender Gesundheitsprobleme
-                            </li>
-                            <li>
-                                Fehlerhafte oder unvollständige KI-Empfehlungen
+                            <li
+                                v-for="(item, index) in getTranslationArray(
+                                    'legal.disclaimer.sections.responsibility.items',
+                                )"
+                                :key="index"
+                            >
+                                {{ item }}
                             </li>
                         </ul>
                     </section>
 
+                    <!-- 🆕 ASSUMPTION OF RISK -->
+                    <section>
+                        <div
+                            class="rounded border border-red-200 bg-red-50 p-4"
+                        >
+                            <h2
+                                class="mb-4 text-2xl font-semibold text-red-900"
+                            >
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.assumption_of_risk.title',
+                                    )
+                                }}
+                            </h2>
+                            <p class="mb-4 text-red-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.assumption_of_risk.content_1',
+                                    )
+                                }}
+                            </p>
+                            <p class="mb-2 font-semibold text-red-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.assumption_of_risk.content_2',
+                                    )
+                                }}
+                            </p>
+                            <ul
+                                class="mb-4 list-inside list-disc space-y-1 text-red-700"
+                            >
+                                <li
+                                    v-for="(risk, index) in getTranslationArray(
+                                        'legal.disclaimer.sections.assumption_of_risk.risks',
+                                    )"
+                                    :key="index"
+                                >
+                                    {{ risk }}
+                                </li>
+                            </ul>
+                            <p class="font-semibold text-red-900">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.assumption_of_risk.content_3',
+                                    )
+                                }}
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Nutrition Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Ernährungshinweise
+                            {{ t('legal.disclaimer.sections.nutrition.title') }}
                         </h2>
                         <p class="mb-4">
-                            Ernährungspläne sind allgemeine Vorschläge und
-                            berücksichtigen möglicherweise nicht:
+                            {{
+                                t('legal.disclaimer.sections.nutrition.content')
+                            }}
                         </p>
                         <ul class="mb-4 list-inside list-disc space-y-1">
-                            <li>
-                                Lebensmittelallergien oder Unverträglichkeiten
-                            </li>
-                            <li>
-                                Spezifische diätetische Anforderungen aufgrund
-                                von Erkrankungen
-                            </li>
-                            <li>Medikamenten-Nahrungsmittel-Interaktionen</li>
-                            <li>Individuelle Stoffwechselbesonderheiten</li>
-                            <li>
-                                Kulturelle oder religiöse
-                                Ernährungsanforderungen
+                            <li
+                                v-for="(item, index) in getTranslationArray(
+                                    'legal.disclaimer.sections.nutrition.items',
+                                )"
+                                :key="index"
+                            >
+                                {{ item }}
                             </li>
                         </ul>
                         <p>
-                            Informieren Sie sich über die vorgeschlagenen
-                            Lebensmittel und prüfen Sie, ob diese für Sie
-                            geeignet sind.
+                            {{ t('legal.disclaimer.sections.nutrition.note') }}
                         </p>
                     </section>
 
+                    <!-- Training Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Trainingshinweise
+                            {{ t('legal.disclaimer.sections.training.title') }}
                         </h2>
                         <p class="mb-4">
-                            Trainingsübungen können bei falscher Ausführung zu
-                            Verletzungen führen.
+                            {{
+                                t('legal.disclaimer.sections.training.content')
+                            }}
                         </p>
                         <div
                             class="mb-4 rounded border border-blue-200 bg-blue-50 p-4"
                         >
                             <p class="mb-2 font-semibold text-blue-900">
-                                Wichtige Sicherheitshinweise:
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.training.safety_title',
+                                    )
+                                }}
                             </p>
                             <ul
                                 class="list-inside list-disc space-y-1 text-blue-800"
                             >
-                                <li>
-                                    Beginnen Sie langsam und steigern Sie die
-                                    Intensität schrittweise
-                                </li>
-                                <li>
-                                    Lernen Sie die korrekte Übungsausführung
-                                    (ggf. mit Trainer)
-                                </li>
-                                <li>
-                                    Verwenden Sie angemessene Gewichte -
-                                    Ego-Lifting führt zu Verletzungen
-                                </li>
-                                <li>Wärmen Sie sich vor dem Training auf</li>
-                                <li>Achten Sie auf ausreichende Erholung</li>
-                                <li>Stoppen Sie bei Schmerzen sofort</li>
-                                <li>
-                                    Trainieren Sie nicht krank oder übermüdet
+                                <li
+                                    v-for="(tip, index) in getTranslationArray(
+                                        'legal.disclaimer.sections.training.tips',
+                                    )"
+                                    :key="index"
+                                >
+                                    {{ tip }}
                                 </li>
                             </ul>
                         </div>
                     </section>
 
+                    <!-- No Guarantee Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Keine Garantie für Ergebnisse
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_guarantee.title',
+                                )
+                            }}
                         </h2>
                         <p class="mb-4">
-                            Der Anbieter gibt keine Garantie oder Zusicherung
-                            für bestimmte Ergebnisse (Gewichtsverlust,
-                            Muskelaufbau, Leistungssteigerung etc.).
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_guarantee.content_1',
+                                )
+                            }}
                         </p>
                         <p>
-                            Individuelle Ergebnisse variieren stark abhängig von
-                            Faktoren wie Genetik, Ausgangszustand, Konsistenz,
-                            Schlaf, Stress und vielen weiteren Variablen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_guarantee.content_2',
+                                )
+                            }}
                         </p>
                     </section>
 
+                    <!-- 🆕 NO WARRANTIES -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Haftungsausschluss
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_warranties.title',
+                                )
+                            }}
                         </h2>
                         <p class="mb-4 font-semibold">
-                            Der Anbieter haftet nicht für Schäden jeglicher Art
-                            (einschließlich, aber nicht beschränkt auf direkte,
-                            indirekte, zufällige oder Folgeschäden), die aus der
-                            Nutzung oder der Unfähigkeit zur Nutzung der
-                            bereitgestellten Inhalte entstehen.
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_warranties.content_1',
+                                )
+                            }}
                         </p>
-                        <p class="mb-4">Dies gilt insbesondere für:</p>
+                        <p class="mb-2">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.no_warranties.content_2',
+                                )
+                            }}
+                        </p>
                         <ul class="mb-4 list-inside list-disc space-y-1">
-                            <li>Gesundheitliche Schäden oder Verletzungen</li>
-                            <li>Verschlechterung bestehender Erkrankungen</li>
-                            <li>
-                                Ausbleibende oder nicht erwartete
-                                Trainingsergebnisse
+                            <li
+                                v-for="(item, index) in getTranslationArray(
+                                    'legal.disclaimer.sections.no_warranties.items',
+                                )"
+                                :key="index"
+                            >
+                                {{ item }}
                             </li>
-                            <li>
-                                Unerwünschte Nebenwirkungen von
-                                Ernährungsumstellungen
-                            </li>
-                            <li>Fehler in den KI-generierten Empfehlungen</li>
                         </ul>
-                        <p>
-                            Die gesetzlichen Haftungsbeschränkungen bleiben
-                            unberührt (siehe AGB).
-                        </p>
                     </section>
 
+                    <!-- Liability Section -->
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            Aktualisierungen
+                            {{ t('legal.disclaimer.sections.liability.title') }}
                         </h2>
+                        <p class="mb-4 font-semibold">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.liability.content_1',
+                                )
+                            }}
+                        </p>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.liability.content_2',
+                                )
+                            }}
+                        </p>
+                        <ul class="mb-4 list-inside list-disc space-y-1">
+                            <li
+                                v-for="(item, index) in getTranslationArray(
+                                    'legal.disclaimer.sections.liability.items',
+                                )"
+                                :key="index"
+                            >
+                                {{ item }}
+                            </li>
+                        </ul>
                         <p>
-                            Dieser Haftungsausschluss kann jederzeit
-                            aktualisiert werden. Die jeweils aktuelle Version
-                            ist auf der Website einsehbar.
+                            {{ t('legal.disclaimer.sections.liability.note') }}
                         </p>
                     </section>
 
+                    <!-- 🆕 INDEMNIFICATION -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.indemnification.title',
+                                )
+                            }}
+                        </h2>
+                        <p>
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.indemnification.content',
+                                )
+                            }}
+                        </p>
+                    </section>
+
+                    <!-- 🆕 FDA DISCLAIMER (nur für US-User) -->
+                    <section v-if="isUS">
+                        <div
+                            class="border-l-4 border-yellow-400 bg-yellow-50 p-4"
+                        >
+                            <h2
+                                class="mb-4 text-2xl font-semibold text-yellow-900"
+                            >
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.fda_disclaimer.title',
+                                    )
+                                }}
+                            </h2>
+                            <p class="mb-2 text-yellow-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.fda_disclaimer.content_1',
+                                    )
+                                }}
+                            </p>
+                            <p class="mb-2 text-yellow-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.fda_disclaimer.content_2',
+                                    )
+                                }}
+                            </p>
+                            <p class="text-yellow-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.fda_disclaimer.content_3',
+                                    )
+                                }}
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- 🆕 JURISDICTION -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.jurisdiction.title',
+                                )
+                            }}
+                        </h2>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.jurisdiction.content_1',
+                                )
+                            }}
+                        </p>
+                        <p class="mb-4">
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.jurisdiction.content_2',
+                                )
+                            }}
+                        </p>
+                        <p>
+                            {{
+                                t(
+                                    'legal.disclaimer.sections.jurisdiction.content_3',
+                                )
+                            }}
+                        </p>
+                    </section>
+
+                    <!-- 🆕 INTERNATIONAL USERS (nur für Non-EU) -->
+                    <section v-if="!isEU">
+                        <div
+                            class="rounded border border-blue-200 bg-blue-50 p-4"
+                        >
+                            <h2
+                                class="mb-4 text-2xl font-semibold text-blue-900"
+                            >
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.international_users.title',
+                                    )
+                                }}
+                            </h2>
+                            <p class="mb-4 text-blue-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.international_users.content_1',
+                                    )
+                                }}
+                            </p>
+                            <p class="mb-2 text-blue-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.international_users.content_2',
+                                    )
+                                }}
+                            </p>
+                            <ul
+                                class="mb-4 list-inside list-disc space-y-1 text-blue-700"
+                            >
+                                <li
+                                    v-for="(item, index) in getTranslationArray(
+                                        'legal.disclaimer.sections.international_users.items',
+                                    )"
+                                    :key="index"
+                                >
+                                    {{ item }}
+                                </li>
+                            </ul>
+                            <p class="text-blue-800">
+                                {{
+                                    t(
+                                        'legal.disclaimer.sections.international_users.content_3',
+                                    )
+                                }}
+                            </p>
+                        </div>
+                    </section>
+
+                    <!-- Updates Section -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{ t('legal.disclaimer.sections.updates.title') }}
+                        </h2>
+                        <p>
+                            {{ t('legal.disclaimer.sections.updates.content') }}
+                        </p>
+                    </section>
+
+                    <!-- 🆕 CHANGES -->
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{ t('legal.disclaimer.sections.changes.title') }}
+                        </h2>
+                        <p class="mb-2">
+                            {{
+                                t('legal.disclaimer.sections.changes.content_1')
+                            }}
+                        </p>
+                        <p class="mb-2">
+                            {{
+                                t('legal.disclaimer.sections.changes.content_2')
+                            }}
+                        </p>
+                        <p>
+                            {{
+                                t('legal.disclaimer.sections.changes.content_3')
+                            }}
+                        </p>
+                    </section>
+
+                    <!-- Confirmation Box -->
                     <div class="mt-8 border-t border-gray-200 pt-6">
                         <div class="rounded bg-dark-surfaces-500 p-6">
                             <p class="mb-2 font-semibold">
-                                Durch die Nutzung von FitnessAI bestätigen Sie,
-                                dass Sie:
+                                {{ t('legal.disclaimer.confirmation.title') }}
                             </p>
-                            <ul
-                                class="list-inside list-disc space-y-1 "
-                            >
-                                <li>
-                                    Diese Hinweise vollständig gelesen und
-                                    verstanden haben
-                                </li>
-                                <li>Die Risiken verstehen und akzeptieren</li>
-                                <li>
-                                    Die volle Verantwortung für Ihre Gesundheit
-                                    übernehmen
-                                </li>
-                                <li>
-                                    Im Zweifelsfall professionelle Beratung
-                                    einholen werden
+                            <ul class="list-inside list-disc space-y-1">
+                                <li
+                                    v-for="(item, index) in getTranslationArray(
+                                        'legal.disclaimer.confirmation.items',
+                                    )"
+                                    :key="index"
+                                >
+                                    {{ item }}
                                 </li>
                             </ul>
                         </div>
                     </div>
 
+                    <!-- Last Updated -->
                     <div
                         class="mt-8 border-t border-gray-200 pt-6 text-sm text-gray-500"
                     >
-                        <p>Stand: Dezember 2024</p>
+                        <p>{{ t('legal.disclaimer.last_updated') }}</p>
                     </div>
                 </div>
             </div>

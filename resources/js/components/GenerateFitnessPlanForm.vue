@@ -13,6 +13,7 @@ import SelectInput from '@/components/form/SelectInput.vue';
 import Email from '@/components/icons/email.vue';
 import { Input } from '@/components/ui/input';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
+import { Link } from '@inertiajs/vue3';
 
 defineProps<{
     totalDays: number;
@@ -740,7 +741,60 @@ const submit = async () => {
                                 class="border-transparent bg-white text-green-600 accent-primary-500 transition-colors outline-none focus:border-green-500 focus:ring-green-500 focus:outline-none"
                             />
                             <label for="terms">
-                                {{ $t('form.steps.final.terms') }}
+                                <label class="terms-label">
+                                    <i18n-t
+                                        keypath="form.steps.final.terms"
+                                        tag="span"
+                                    >
+                                        <template #termsLink>
+                                            <Link
+                                                :href="
+                                                    $page.props.footerLinks
+                                                        .legalLinks.terms.url
+                                                "
+                                                class="link underline hover:text-secondary-300"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'form.steps.final.termsLinkText',
+                                                    )
+                                                }}
+                                            </Link>
+                                        </template>
+                                        <template #disclaimerLink>
+                                            <Link
+                                                :href="
+                                                    $page.props.footerLinks
+                                                        .legalLinks.disclaimer
+                                                        .url
+                                                "
+                                                class="link underline hover:text-secondary-300"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'form.steps.final.disclaimerLinkText',
+                                                    )
+                                                }}
+                                            </Link>
+                                        </template>
+                                        <template #privacyLink>
+                                            <Link
+                                                :href="
+                                                    $page.props.footerLinks
+                                                        .legalLinks.data_privacy
+                                                        .url
+                                                "
+                                                class="link underline hover:text-secondary-300"
+                                            >
+                                                {{
+                                                    $t(
+                                                        'form.steps.final.privacyLinkText',
+                                                    )
+                                                }}
+                                            </Link>
+                                        </template>
+                                    </i18n-t>
+                                </label>
                             </label>
                         </div>
 
@@ -756,15 +810,6 @@ const submit = async () => {
                             />
                             <label for="newsletter">
                                 {{ $t('form.steps.final.newsletter') }}
-                                <strong
-                                    class="text-base leading-none font-bold"
-                                >
-                                    {{
-                                        $t(
-                                            'form.steps.final.newsletterHighlight',
-                                        )
-                                    }}</strong
-                                >.
                             </label>
                         </div>
                     </div>

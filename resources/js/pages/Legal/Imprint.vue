@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
+import { useI18n } from 'vue-i18n';
+import { Head } from '@inertiajs/vue3';
+
+const { t } = useI18n();
 </script>
 <template>
+    <Head>
+        <title>{{ t('legal.imprint.meta.title') }}</title>
+        <meta
+            name="description"
+            :content="t('legal.imprint.meta.description')"
+        />
+    </Head>
     <GuestLayout>
         <div
             class="container mx-auto  mt-10 flex-1 space-y-5 text-white"
         >
-            <h1 class="mb-8 text-3xl font-bold ">Impressum</h1>
+            <h1 class="mb-8 text-3xl font-bold ">{{ t('legal.imprint.title') }}</h1>
 
             <div class="space-y-6 max-w-prose mb-10">
                 <section>

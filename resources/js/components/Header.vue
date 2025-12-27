@@ -4,7 +4,7 @@ import { Link } from '@inertiajs/vue3';
 
 <template>
     <header class="w-full border-b border-dark-surfaces-25">
-        <nav class="container mx-auto px-3 py-4">
+        <nav class="px-6 md:px-0 py-4 container mx-auto">
             <Link href="/">
                 <img
                     class="h-auto w-40"

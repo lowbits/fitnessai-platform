@@ -1,12 +1,23 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
+import { useI18n } from 'vue-i18n';
+import { Head } from '@inertiajs/vue3';
+
+const { t } = useI18n();
 </script>
 <template>
+    <Head>
+        <title>{{ t('legal.data_privacy.meta.title') }}</title>
+        <meta
+            name="description"
+            :content="t('legal.data_privacy.meta.description')"
+        />
+    </Head>
     <GuestLayout>
         <div
             class="text-pron container mx-auto mt-10 flex-1 space-y-5 text-white"
         >
-            <h1 class="mb-8 text-3xl font-bold">Datenschutzerklärung</h1>
+            <h1 class="mb-8 text-3xl font-bold">{{ t('legal.data_privacy.title') }}</h1>
 
             <div class="max-w-prose space-y-8 mb-10">
                 <section>

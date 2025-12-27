@@ -187,10 +187,11 @@ export const locales = {
                     subline: "We'll send your personalized plan to this email",
                     name: 'Your Name',
                     email: 'Email Address',
-                    terms: 'I agree to the fitnessAI.me User Agreement and Privacy Policy.',
+                    terms: 'I have taken note of the {termsLink}, {disclaimerLink} and {privacyLink} and accept them.',
+                    termsLinkText: 'Terms & Conditions',
+                    disclaimerLinkText: 'Disclaimer',
                     newsletter:
-                        "By checking, you'll sign up for our newsletter and receive your first",
-                    newsletterHighlight: 'nutrition and workout plan for free',
+                        'I would like to subscribe to the free newsletter and regularly receive fitness tips, workout ideas, and exclusive content.',
                     submit: 'Generate plan',
                     submitting: 'Generating...',
                 },
@@ -348,6 +349,301 @@ export const locales = {
         },
         form_panel: {
             submit: 'Continue',
+        },
+        legal: {
+            disclaimer: {
+                meta: {
+                    title: 'Disclaimer & Health Information | FitnessAI',
+                    description:
+                        'Important health and safety information for using FitnessAI workout and nutrition plans.',
+                },
+                title: 'Disclaimer & Health Information',
+                warning: {
+                    title: 'Important Notice',
+                    description:
+                        'Please read these notices carefully before using the platform.',
+                },
+                sections: {
+                    not_professional: {
+                        title: 'Not a Replacement for Professional Advice',
+                        subtitle:
+                            'The workout and nutrition plans provided through FitnessAI do NOT replace consultation with qualified professionals such as doctors, nutritionists, personal trainers, or other health experts.',
+                        content_1:
+                            'The content is for general informational purposes only. It does not constitute medical diagnosis, treatment, or professional health advice.',
+                        content_2:
+                            'Always consult a doctor or qualified healthcare provider before starting any new workout or nutrition program.',
+                    },
+                    medical_conditions: {
+                        title: 'Medical Conditions & Risks',
+                        warning_title: 'Consult a doctor if you:',
+                        conditions: [
+                            'Have or had cardiovascular disease',
+                            'Have diabetes or metabolic disorders',
+                            'Have joint problems, back pain, or injuries',
+                            'Are pregnant or nursing',
+                            'Have or had eating disorders',
+                            'Have high blood pressure or other chronic conditions',
+                            'Take medications that may be affected by exercise or nutrition',
+                            'Are over 40 and have not exercised in a long time',
+                            'Are unsure about your health status',
+                        ],
+                        warning_note:
+                            'Ignoring health problems can lead to serious injuries or health complications.',
+                    },
+                    ai_content: {
+                        title: 'AI-Generated Content',
+                        content_1:
+                            'Workout and nutrition plans are created using Artificial Intelligence (AI). While we strive to deliver high-quality recommendations, AI systems can make mistakes or generate unsuitable suggestions.',
+                        content_2:
+                            'The AI does not know your complete medical history, current complaints, or individual physical limitations.',
+                        content_3:
+                            'Use common sense and listen to your body. If something is painful or feels wrong, STOP immediately.',
+                    },
+                    responsibility: {
+                        title: 'Personal Responsibility',
+                        content_1:
+                            'You bear full responsibility for implementing the provided plans. You decide whether and how to follow the recommendations.',
+                        content_2:
+                            'The provider assumes no responsibility for:',
+                        items: [
+                            'Injuries resulting from training',
+                            'Health problems from dietary changes',
+                            'Allergic reactions to recommended foods',
+                            'Unwanted weight changes',
+                            'Worsening of existing health problems',
+                            'Incorrect or incomplete AI recommendations',
+                        ],
+                    },
+                    nutrition: {
+                        title: 'Nutrition Information',
+                        content:
+                            'Nutrition plans are general suggestions and may not consider:',
+                        items: [
+                            'Food allergies or intolerances',
+                            'Specific dietary requirements due to illnesses',
+                            'Medication-food interactions',
+                            'Individual metabolic characteristics',
+                            'Cultural or religious dietary requirements',
+                        ],
+                        note: 'Inform yourself about suggested foods and check if they are suitable for you.',
+                    },
+                    training: {
+                        title: 'Training Information',
+                        content:
+                            'Training exercises can lead to injuries if performed incorrectly.',
+                        safety_title: 'Important Safety Tips:',
+                        tips: [
+                            'Start slowly and increase intensity gradually',
+                            'Learn correct exercise execution (with trainer if needed)',
+                            'Use appropriate weights - ego lifting leads to injuries',
+                            'Warm up before training',
+                            'Ensure adequate recovery',
+                            'Stop immediately if in pain',
+                            'Do not train when sick or overtired',
+                        ],
+                    },
+                    no_guarantee: {
+                        title: 'No Guarantee of Results',
+                        content_1:
+                            'The provider gives no guarantee or assurance for specific results (weight loss, muscle gain, performance improvement, etc.).',
+                        content_2:
+                            'Individual results vary greatly depending on factors such as genetics, starting condition, consistency, sleep, stress, and many other variables.',
+                    },
+                    liability: {
+                        title: 'Limitation of Liability',
+                        content_1:
+                            'The provider is not liable for damages of any kind (including but not limited to direct, indirect, incidental, or consequential damages) arising from the use or inability to use the provided content.',
+                        content_2: 'This applies in particular to:',
+                        items: [
+                            'Health damage or injuries',
+                            'Worsening of existing conditions',
+                            'Lack of or unexpected training results',
+                            'Unwanted side effects from dietary changes',
+                            'Errors in AI-generated recommendations',
+                        ],
+                        note: 'Statutory liability limitations remain unaffected (see Terms & Conditions).',
+                    },
+                    fda_disclaimer: {
+                        title: 'FDA Disclaimer (United States)',
+                        content_1:
+                            'These statements have not been evaluated by the Food and Drug Administration (FDA).',
+                        content_2:
+                            'This service is not intended to diagnose, treat, cure, or prevent any disease or medical condition.',
+                        content_3:
+                            'The information provided is for educational and informational purposes only and should not be construed as medical advice.',
+                    },
+
+                    not_licensed: {
+                        title: 'No Professional License',
+                        content_1:
+                            'The provider is NOT a licensed medical professional, registered dietitian, certified nutritionist, or certified personal trainer.',
+                        content_2:
+                            'This service does not provide professional medical advice, professional nutritional counseling, or professional fitness training.',
+                        content_3:
+                            'You should consult with licensed professionals before making any health, nutrition, or fitness decisions.',
+                    },
+
+                    emergency: {
+                        title: 'Medical Emergency',
+                        icon_warning: '🚨',
+                        content_1:
+                            'If you experience any of the following during exercise, STOP IMMEDIATELY and seek emergency medical care:',
+                        symptoms: [
+                            'Chest pain or pressure',
+                            'Severe shortness of breath',
+                            'Dizziness or lightheadedness',
+                            'Unusual or irregular heartbeat',
+                            'Severe joint or muscle pain',
+                            'Nausea or vomiting',
+                            'Any symptom that concerns you',
+                        ],
+                        content_2:
+                            'Emergency numbers: 911 (US/Canada), 112 (EU), 999 (UK), or your local emergency number.',
+                    },
+
+                    jurisdiction: {
+                        title: 'Jurisdiction & Applicable Law',
+                        content_1:
+                            'These terms and services are provided under German law. The provider is based in Germany and operates under German jurisdiction.',
+                        content_2:
+                            'For users outside Germany: Additional local laws, regulations, and consumer protection rights may apply in your country. It is your responsibility to ensure compliance with your local laws.',
+                        content_3:
+                            'By using this service from outside Germany, you acknowledge that you understand and accept that German law applies to this agreement.',
+                    },
+
+                    international_users: {
+                        title: 'Notice for International Users',
+                        content_1:
+                            'This service is primarily designed for users in Germany and the European Union.',
+                        content_2:
+                            'If you are using this service from outside the EU:',
+                        items: [
+                            "Nutritional recommendations may not align with your country's dietary guidelines",
+                            'Exercise recommendations may not comply with local fitness standards',
+                            'Measurement units (metric) may differ from your local standards',
+                            'Language and cultural context may be different',
+                        ],
+                        content_3:
+                            'You are responsible for adapting any recommendations to your local context and regulations.',
+                    },
+
+                    no_medical_relationship: {
+                        title: 'No Doctor-Patient or Professional Relationship',
+                        content_1:
+                            'Use of this service does NOT create a doctor-patient relationship, nutritionist-client relationship, or trainer-client relationship.',
+                        content_2:
+                            'The AI-generated recommendations are automated and not reviewed by licensed professionals.',
+                        content_3:
+                            'No confidentiality or professional duty of care exists between you and the provider.',
+                    },
+
+                    third_party_disclaimer: {
+                        title: 'Third-Party Health Information',
+                        content:
+                            'This service may provide links or references to third-party health information, products, or services. The provider does not endorse, guarantee, or assume responsibility for any third-party content, recommendations, or services.',
+                    },
+
+                    assumption_of_risk: {
+                        title: 'Assumption of Risk',
+                        content_1:
+                            'You expressly acknowledge and agree that use of this service and implementation of any recommendations is at your sole risk.',
+                        content_2:
+                            'You understand that physical exercise and dietary changes involve inherent risks including, but not limited to:',
+                        risks: [
+                            'Muscle strains, sprains, and tears',
+                            'Joint injuries',
+                            'Cardiovascular events',
+                            'Metabolic complications',
+                            'Allergic reactions',
+                            'Nutritional deficiencies',
+                            'Psychological distress',
+                            'Death (in extreme cases)',
+                        ],
+                        content_3:
+                            'You voluntarily assume all risks associated with using this service.',
+                    },
+
+                    indemnification: {
+                        title: 'Indemnification',
+                        content:
+                            'You agree to indemnify, defend, and hold harmless the provider, its owners, employees, and affiliates from any claims, damages, losses, liabilities, and expenses (including legal fees) arising from your use of this service or violation of these terms.',
+                    },
+
+                    no_warranties: {
+                        title: 'No Warranties',
+                        content_1:
+                            'This service is provided "AS IS" and "AS AVAILABLE" without warranties of any kind, either express or implied.',
+                        content_2:
+                            'The provider makes no warranties regarding:',
+                        items: [
+                            'Accuracy, reliability, or completeness of AI-generated content',
+                            'Fitness for a particular purpose',
+                            'Merchantability',
+                            'Non-infringement',
+                            'Uninterrupted or error-free service',
+                            'Results or outcomes from using the service',
+                        ],
+                    },
+
+                    // 11. SEVERABILITY
+                    severability: {
+                        title: 'Severability',
+                        content:
+                            'If any provision of this disclaimer is found to be unenforceable or invalid under applicable law, such unenforceability or invalidity shall not render this disclaimer unenforceable or invalid as a whole. Such provisions shall be deleted without affecting the remaining provisions.',
+                    },
+
+                    // 12. CHANGES TO DISCLAIMER
+                    changes: {
+                        title: 'Changes to This Disclaimer',
+                        content_1:
+                            'The provider reserves the right to modify this disclaimer at any time without prior notice.',
+                        content_2:
+                            'Your continued use of the service after changes constitutes acceptance of the modified disclaimer.',
+                        content_3:
+                            'It is your responsibility to review this disclaimer periodically.',
+                    },
+                    updates: {
+                        title: 'Updates',
+                        content:
+                            'This disclaimer may be updated at any time. The current version is available on the website.',
+                    },
+                },
+                confirmation: {
+                    title: 'By using FitnessAI, you confirm that you:',
+                    items: [
+                        'Have read and understood these notices completely',
+                        'Understand and accept the risks',
+                        'Take full responsibility for your health',
+                        'Will seek professional advice if in doubt',
+                    ],
+                },
+
+                last_updated: 'Last updated: December 2024',
+            },
+            imprint: {
+                meta: {
+                    title: 'Imprint | FitnessAI',
+                    description:
+                        'Legal information and contact details for FitnessAI.',
+                },
+                title: 'Imprint',
+            },
+            data_privacy: {
+                meta: {
+                    title: 'Privacy Policy | FitnessAI',
+                    description:
+                        'Information about how we collect, use, and protect your personal data.',
+                },
+                title: 'Privacy Policy',
+            },
+            terms: {
+                meta: {
+                    title: 'Terms & Conditions | FitnessAI',
+                    description:
+                        'Terms and conditions for using FitnessAI services.',
+                },
+                title: 'Terms & Conditions',
+            },
         },
         footer: {
             description:
@@ -554,11 +850,12 @@ export const locales = {
                         'Wir schicken dir deinen persönlichen Plan per E-Mail',
                     name: 'Dein Name',
                     email: 'E-Mail-Adresse',
-                    terms: 'Ich stimme den Nutzungsbedingungen und der Datenschutzerklärung von fitnessAI.me zu.',
+                    terms: 'Ich habe von den {termsLink}, dem {disclaimerLink} und der {privacyLink} Kenntnis genommen und erkenne diese an.',
+                    termsLinkText: 'AGB',
+                    disclaimerLinkText: 'Haftungsausschluss',
+                    privacyLinkText: 'Datenschutzerklärung',
                     newsletter:
-                        'Durch Aktivieren meldest du dich für unseren Newsletter an und erhältst deinen ersten',
-                    newsletterHighlight:
-                        'Ernährungs- und Trainingsplan kostenlos',
+                        'Ich möchte den kostenlosen Newsletter abonnieren und regelmäßig Fitness-Tipps, Trainingsideen und exklusive Inhalte erhalten.',
                     submit: 'Plan generieren',
                     submitting: 'Wird generiert...',
                 },
@@ -716,6 +1013,309 @@ export const locales = {
         },
         form_panel: {
             submit: 'Weiter',
+        },
+        legal: {
+            disclaimer: {
+                meta: {
+                    title: 'Haftungsausschluss & Gesundheitshinweise | FitnessAI',
+                    description:
+                        'Wichtige Gesundheits- und Sicherheitsinformationen zur Nutzung von FitnessAI Trainings- und Ernährungsplänen.',
+                },
+                title: 'Haftungsausschluss & Gesundheitshinweise',
+                warning: {
+                    title: 'Wichtiger Hinweis',
+                    description:
+                        'Bitte lesen Sie diese Hinweise sorgfältig, bevor Sie die Plattform nutzen.',
+                },
+                sections: {
+                    not_professional: {
+                        title: 'Kein Ersatz für professionelle Beratung',
+                        subtitle:
+                            'Die über FitnessAI bereitgestellten Trainings- und Ernährungspläne ersetzen NICHT die Beratung durch qualifizierte Fachkräfte wie Ärzte, Ernährungsberater, Personal Trainer oder andere Gesundheitsexperten.',
+                        content_1:
+                            'Die Inhalte dienen ausschließlich zu allgemeinen Informationszwecken. Sie stellen keine medizinische Diagnose, Behandlung oder professionelle Gesundheitsberatung dar.',
+                        content_2:
+                            'Konsultieren Sie immer einen Arzt oder qualifizierten Gesundheitsdienstleister, bevor Sie mit einem neuen Trainings- oder Ernährungsprogramm beginnen.',
+                    },
+                    medical_conditions: {
+                        title: 'Medizinische Vorerkrankungen & Risiken',
+                        warning_title:
+                            'Konsultieren Sie unbedingt einen Arzt, wenn Sie:',
+                        conditions: [
+                            'An Herz-Kreislauf-Erkrankungen leiden oder litten',
+                            'Diabetes oder Stoffwechselstörungen haben',
+                            'Gelenkprobleme, Rückenschmerzen oder Verletzungen haben',
+                            'Schwanger sind oder stillen',
+                            'Essstörungen haben oder hatten',
+                            'Bluthochdruck oder andere chronische Erkrankungen haben',
+                            'Medikamente einnehmen, die durch Sport oder Ernährung beeinflusst werden können',
+                            'Über 40 Jahre alt sind und lange nicht trainiert haben',
+                            'Sich unsicher über Ihren Gesundheitszustand sind',
+                        ],
+                        warning_note:
+                            'Das Ignorieren gesundheitlicher Probleme kann zu schweren Verletzungen oder gesundheitlichen Komplikationen führen.',
+                    },
+                    ai_content: {
+                        title: 'KI-generierte Inhalte',
+                        content_1:
+                            'Die Trainings- und Ernährungspläne werden mittels Künstlicher Intelligenz (KI) erstellt. Obwohl wir uns bemühen, qualitativ hochwertige Empfehlungen zu liefern, können KI-Systeme Fehler machen oder ungeeignete Vorschläge generieren.',
+                        content_2:
+                            'Die KI kennt nicht Ihre vollständige medizinische Geschichte, aktuelle Beschwerden oder individuellen körperlichen Einschränkungen.',
+                        content_3:
+                            'Nutzen Sie Ihren gesunden Menschenverstand und hören Sie auf Ihren Körper. Wenn etwas schmerzhaft ist oder sich falsch anfühlt, STOPPEN Sie sofort.',
+                    },
+                    responsibility: {
+                        title: 'Eigenverantwortung',
+                        content_1:
+                            'Sie tragen die volle Verantwortung für die Umsetzung der bereitgestellten Pläne. Sie entscheiden selbst, ob und wie Sie die Empfehlungen befolgen.',
+                        content_2:
+                            'Der Anbieter übernimmt keine Verantwortung für:',
+                        items: [
+                            'Verletzungen, die durch Training entstehen',
+                            'Gesundheitliche Probleme durch Ernährungsumstellungen',
+                            'Allergische Reaktionen auf empfohlene Lebensmittel',
+                            'Unerwünschte Gewichtsveränderungen',
+                            'Verschlechterung bestehender Gesundheitsprobleme',
+                            'Fehlerhafte oder unvollständige KI-Empfehlungen',
+                        ],
+                    },
+                    nutrition: {
+                        title: 'Ernährungshinweise',
+                        content:
+                            'Ernährungspläne sind allgemeine Vorschläge und berücksichtigen möglicherweise nicht:',
+                        items: [
+                            'Lebensmittelallergien oder Unverträglichkeiten',
+                            'Spezifische diätetische Anforderungen aufgrund von Erkrankungen',
+                            'Medikamenten-Nahrungsmittel-Interaktionen',
+                            'Individuelle Stoffwechselbesonderheiten',
+                            'Kulturelle oder religiöse Ernährungsanforderungen',
+                        ],
+                        note: 'Informieren Sie sich über die vorgeschlagenen Lebensmittel und prüfen Sie, ob diese für Sie geeignet sind.',
+                    },
+                    training: {
+                        title: 'Trainingshinweise',
+                        content:
+                            'Trainingsübungen können bei falscher Ausführung zu Verletzungen führen.',
+                        safety_title: 'Wichtige Sicherheitshinweise:',
+                        tips: [
+                            'Beginnen Sie langsam und steigern Sie die Intensität schrittweise',
+                            'Lernen Sie die korrekte Übungsausführung (ggf. mit Trainer)',
+                            'Verwenden Sie angemessene Gewichte - Ego-Lifting führt zu Verletzungen',
+                            'Wärmen Sie sich vor dem Training auf',
+                            'Achten Sie auf ausreichende Erholung',
+                            'Stoppen Sie bei Schmerzen sofort',
+                            'Trainieren Sie nicht krank oder übermüdet',
+                        ],
+                    },
+                    no_guarantee: {
+                        title: 'Keine Garantie für Ergebnisse',
+                        content_1:
+                            'Der Anbieter gibt keine Garantie oder Zusicherung für bestimmte Ergebnisse (Gewichtsverlust, Muskelaufbau, Leistungssteigerung etc.).',
+                        content_2:
+                            'Individuelle Ergebnisse variieren stark abhängig von Faktoren wie Genetik, Ausgangszustand, Konsistenz, Schlaf, Stress und vielen weiteren Variablen.',
+                    },
+                    liability: {
+                        title: 'Haftungsausschluss',
+                        content_1:
+                            'Der Anbieter haftet nicht für Schäden jeglicher Art (einschließlich, aber nicht beschränkt auf direkte, indirekte, zufällige oder Folgeschäden), die aus der Nutzung oder der Unfähigkeit zur Nutzung der bereitgestellten Inhalte entstehen.',
+                        content_2: 'Dies gilt insbesondere für:',
+                        items: [
+                            'Gesundheitliche Schäden oder Verletzungen',
+                            'Verschlechterung bestehender Erkrankungen',
+                            'Ausbleibende oder nicht erwartete Trainingsergebnisse',
+                            'Unerwünschte Nebenwirkungen von Ernährungsumstellungen',
+                            'Fehler in den KI-generierten Empfehlungen',
+                        ],
+                        note: 'Die gesetzlichen Haftungsbeschränkungen bleiben unberührt (siehe AGB).',
+                    },
+                    fda_disclaimer: {
+                        title: 'FDA-Hinweis (USA)',
+                        content_1:
+                            'Diese Aussagen wurden nicht von der Food and Drug Administration (FDA) bewertet.',
+                        content_2:
+                            'Dieser Service ist nicht dazu bestimmt, Krankheiten oder medizinische Zustände zu diagnostizieren, zu behandeln, zu heilen oder zu verhindern.',
+                        content_3:
+                            'Die bereitgestellten Informationen dienen ausschließlich Bildungs- und Informationszwecken und sind nicht als medizinischer Rat zu verstehen.',
+                    },
+
+                    // 2. KEINE BERUFLICHE LIZENZ
+                    not_licensed: {
+                        title: 'Keine berufliche Qualifikation',
+                        content_1:
+                            'Der Anbieter ist KEIN zugelassener Arzt, Ernährungsberater, zertifizierter Trainer oder sonstiger Gesundheitsexperte.',
+                        content_2:
+                            'Dieser Service bietet keine professionelle medizinische Beratung, professionelle Ernährungsberatung oder professionelles Fitnesstraining.',
+                        content_3:
+                            'Sie sollten vor gesundheitlichen, ernährungsbezogenen oder fitnessbezogenen Entscheidungen lizenzierte Fachkräfte konsultieren.',
+                    },
+
+                    // 3. NOTFALL-WARNUNG
+                    emergency: {
+                        title: 'Medizinischer Notfall',
+                        icon_warning: '🚨',
+                        content_1:
+                            'Wenn Sie während des Trainings eines der folgenden Symptome verspüren, STOPPEN Sie SOFORT und suchen Sie notärztliche Hilfe:',
+                        symptoms: [
+                            'Brustschmerzen oder Druckgefühl',
+                            'Schwere Atemnot',
+                            'Schwindel oder Benommenheit',
+                            'Ungewöhnlicher oder unregelmäßiger Herzschlag',
+                            'Starke Gelenk- oder Muskelschmerzen',
+                            'Übelkeit oder Erbrechen',
+                            'Jedes Symptom, das Sie beunruhigt',
+                        ],
+                        content_2:
+                            'Notrufnummern: 112 (EU/Deutschland), 911 (USA/Kanada), 999 (UK) oder Ihre lokale Notrufnummer.',
+                    },
+
+                    // 4. GERICHTSSTAND & ANWENDBARES RECHT
+                    jurisdiction: {
+                        title: 'Gerichtsstand & Anwendbares Recht',
+                        content_1:
+                            'Diese Bedingungen und Leistungen werden nach deutschem Recht erbracht. Der Anbieter hat seinen Sitz in Deutschland und unterliegt der deutschen Gerichtsbarkeit.',
+                        content_2:
+                            'Für Nutzer außerhalb Deutschlands: Zusätzliche lokale Gesetze, Vorschriften und Verbraucherschutzrechte können in Ihrem Land gelten. Sie sind dafür verantwortlich, die Einhaltung Ihrer lokalen Gesetze sicherzustellen.',
+                        content_3:
+                            'Durch die Nutzung dieses Services außerhalb Deutschlands bestätigen Sie, dass Sie verstehen und akzeptieren, dass deutsches Recht für diese Vereinbarung gilt.',
+                    },
+
+                    // 5. HINWEIS FÜR INTERNATIONALE NUTZER
+                    international_users: {
+                        title: 'Hinweis für internationale Nutzer',
+                        content_1:
+                            'Dieser Service ist primär für Nutzer in Deutschland und der Europäischen Union konzipiert.',
+                        content_2:
+                            'Wenn Sie diesen Service außerhalb der EU nutzen:',
+                        items: [
+                            'Ernährungsempfehlungen entsprechen möglicherweise nicht den Ernährungsrichtlinien Ihres Landes',
+                            'Trainingsempfehlungen entsprechen möglicherweise nicht lokalen Fitnessstandards',
+                            'Maßeinheiten (metrisch) können von Ihren lokalen Standards abweichen',
+                            'Sprache und kultureller Kontext können unterschiedlich sein',
+                        ],
+                        content_3:
+                            'Sie sind dafür verantwortlich, Empfehlungen an Ihren lokalen Kontext und Ihre Vorschriften anzupassen.',
+                    },
+
+                    // 6. KEINE MEDIZINISCHE BEZIEHUNG
+                    no_medical_relationship: {
+                        title: 'Keine Arzt-Patienten- oder professionelle Beziehung',
+                        content_1:
+                            'Die Nutzung dieses Services begründet KEINE Arzt-Patienten-Beziehung, Ernährungsberater-Klienten-Beziehung oder Trainer-Klienten-Beziehung.',
+                        content_2:
+                            'Die KI-generierten Empfehlungen sind automatisiert und werden nicht von lizenzierten Fachkräften überprüft.',
+                        content_3:
+                            'Es besteht keine Vertraulichkeit oder professionelle Sorgfaltspflicht zwischen Ihnen und dem Anbieter.',
+                    },
+
+                    // 7. DRITTANBIETER-GESUNDHEITSINFORMATIONEN
+                    third_party_disclaimer: {
+                        title: 'Gesundheitsinformationen von Drittanbietern',
+                        content:
+                            'Dieser Service kann Links oder Verweise auf Gesundheitsinformationen, Produkte oder Dienstleistungen von Drittanbietern bereitstellen. Der Anbieter befürwortet, garantiert oder übernimmt keine Verantwortung für Inhalte, Empfehlungen oder Dienstleistungen von Drittanbietern.',
+                    },
+
+                    // 8. RISIKOÜBERNAHME
+                    assumption_of_risk: {
+                        title: 'Risikoübernahme',
+                        content_1:
+                            'Sie erkennen ausdrücklich an und stimmen zu, dass die Nutzung dieses Services und die Umsetzung von Empfehlungen auf Ihr alleiniges Risiko erfolgt.',
+                        content_2:
+                            'Sie verstehen, dass körperliche Bewegung und Ernährungsumstellungen inhärente Risiken beinhalten, einschließlich, aber nicht beschränkt auf:',
+                        risks: [
+                            'Muskelzerrungen, Verstauchungen und Risse',
+                            'Gelenkverletzungen',
+                            'Kardiovaskuläre Ereignisse',
+                            'Stoffwechselkomplikationen',
+                            'Allergische Reaktionen',
+                            'Nährstoffmängel',
+                            'Psychische Belastungen',
+                            'Tod (in extremen Fällen)',
+                        ],
+                        content_3:
+                            'Sie übernehmen freiwillig alle Risiken, die mit der Nutzung dieses Services verbunden sind.',
+                    },
+
+                    // 9. FREISTELLUNG
+                    indemnification: {
+                        title: 'Freistellung',
+                        content:
+                            'Sie verpflichten sich, den Anbieter, seine Eigentümer, Mitarbeiter und verbundenen Unternehmen von allen Ansprüchen, Schäden, Verlusten, Verbindlichkeiten und Kosten (einschließlich Anwaltskosten) freizustellen, die aus Ihrer Nutzung dieses Services oder der Verletzung dieser Bedingungen entstehen.',
+                    },
+
+                    // 10. KEINE GEWÄHRLEISTUNG
+                    no_warranties: {
+                        title: 'Keine Gewährleistung',
+                        content_1:
+                            'Dieser Service wird "WIE BESEHEN" und "WIE VERFÜGBAR" ohne Gewährleistungen jeglicher Art bereitgestellt, weder ausdrücklich noch stillschweigend.',
+                        content_2:
+                            'Der Anbieter übernimmt keine Gewährleistung für:',
+                        items: [
+                            'Richtigkeit, Zuverlässigkeit oder Vollständigkeit KI-generierter Inhalte',
+                            'Eignung für einen bestimmten Zweck',
+                            'Marktgängigkeit',
+                            'Nichtverletzung von Rechten',
+                            'Unterbrechungsfreien oder fehlerfreien Service',
+                            'Ergebnisse oder Resultate aus der Nutzung des Services',
+                        ],
+                    },
+
+                    // 11. SALVATORISCHE KLAUSEL
+                    severability: {
+                        title: 'Salvatorische Klausel',
+                        content:
+                            'Sollte eine Bestimmung dieses Haftungsausschlusses nach geltendem Recht nicht durchsetzbar oder ungültig sein, wird dadurch die Durchsetzbarkeit oder Gültigkeit des Haftungsausschlusses als Ganzes nicht berührt. Solche Bestimmungen werden gestrichen, ohne die verbleibenden Bestimmungen zu beeinträchtigen.',
+                    },
+                    updates: {
+                        title: 'Aktualisierungen',
+                        content:
+                            'Dieser Haftungsausschluss kann jederzeit aktualisiert werden. Die jeweils aktuelle Version ist auf der Website einsehbar.',
+                    },
+                },
+                confirmation: {
+                    title: 'Durch die Nutzung von FitnessAI bestätigen Sie, dass Sie:',
+                    items: [
+                        'Diese Hinweise vollständig gelesen und verstanden haben',
+                        'Die Risiken verstehen und akzeptieren',
+                        'Die volle Verantwortung für Ihre Gesundheit übernehmen',
+                        'Im Zweifelsfall professionelle Beratung einholen werden',
+                    ],
+                },
+
+                changes: {
+                    title: 'Änderungen dieses Haftungsausschlusses',
+                    content_1:
+                        'Der Anbieter behält sich das Recht vor, diesen Haftungsausschluss jederzeit ohne vorherige Ankündigung zu ändern.',
+                    content_2:
+                        'Ihre fortgesetzte Nutzung des Services nach Änderungen gilt als Annahme des geänderten Haftungsausschlusses.',
+                    content_3:
+                        'Es liegt in Ihrer Verantwortung, diesen Haftungsausschluss regelmäßig zu überprüfen.',
+                },
+                last_updated: 'Stand: Dezember 2024',
+            },
+            imprint: {
+                meta: {
+                    title: 'Impressum | FitnessAI',
+                    description:
+                        'Rechtliche Informationen und Kontaktdaten von FitnessAI.',
+                },
+                title: 'Impressum',
+            },
+            data_privacy: {
+                meta: {
+                    title: 'Datenschutzerklärung | FitnessAI',
+                    description:
+                        'Informationen darüber, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen.',
+                },
+                title: 'Datenschutzerklärung',
+            },
+            terms: {
+                meta: {
+                    title: 'AGB | FitnessAI',
+                    description:
+                        'Allgemeine Geschäftsbedingungen für die Nutzung von FitnessAI-Diensten.',
+                },
+                title: 'Allgemeine Geschäftsbedingungen',
+            },
         },
         footer: {
             description:
