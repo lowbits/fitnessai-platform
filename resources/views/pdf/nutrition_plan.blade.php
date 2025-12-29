@@ -396,7 +396,7 @@
 
         <div style="margin-top: 40px; padding: 20px; background-color: #e6eef5; border-radius: 8px; text-align: center;">
             <p style="margin: 0; font-size: 14px;"><strong>{{ __('pdf.nutrition_plan.help') }}</strong></p>
-            <p style="margin: 5px 0 0 0;">{{ __('pdf.nutrition_plan.contact') }} <strong>hello@fitnessai.me</strong></p>
+            <p style="margin: 5px 0 0 0;">{{ __('pdf.nutrition_plan.contact') }} <strong>hello@fytrr.com</strong></p>
         </div>
     </div>
 </main>

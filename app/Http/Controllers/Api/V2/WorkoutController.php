@@ -17,14 +17,8 @@ class WorkoutController extends Controller
         $user = $request->user();
 
         // Get workout from database with exercises
-        $workout = WorkoutPlan::with('exercises')->find($workoutId);
+        $workout = WorkoutPlan::with('exercises')->findOrFail($workoutId);
 
-        if (!$workout) {
-            return response()->json([
-                'error' => 'Workout not found',
-                'message' => 'The requested workout does not exist',
-            ], 404);
-        }
 
         // Verify the workout belongs to user's plan
         if ($workout->plan->user_id !== $user->id) {
@@ -40,8 +34,10 @@ class WorkoutController extends Controller
                 'id' => $exercise->id,
                 'order' => $exercise->order,
                 'name' => $exercise->name,
+                'original_name' => $exercise->original_name,
                 'type' => $exercise->type,
                 'description' => $exercise->description,
+                'instructions' => $exercise->instructions,
                 'sets' => $exercise->sets,
                 'reps' => $exercise->reps,
                 'duration_seconds' => $exercise->duration_seconds,

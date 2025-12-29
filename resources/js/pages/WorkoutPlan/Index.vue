@@ -56,7 +56,7 @@ const props = defineProps<Props>();
             />
             <meta
                 property="og:image"
-                content="https://fitnessai.me/fitness-plan.png"
+                content="https://fytrr.com/fitness-plan.png"
             />
         </Head>
 

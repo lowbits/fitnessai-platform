@@ -50,19 +50,23 @@ class PlanController extends Controller
         // Validate day is within plan range
         if ($dayOfPlan < 1) {
             return response()->json([
-                'error' => 'Invalid date',
-                'message' => 'This date is before your plan start date',
+                'error' => 'access_denied',
+                'reason' => 'date_before_plan_start',
+                'message' => 'This date is before your plan start date.',
                 'plan_start_date' => $plan->start_date->format('Y-m-d'),
-            ], 400);
+            ], 403);
         }
 
         $totalDays = config('plans.duration_days');
         if ($dayOfPlan > $totalDays) {
             return response()->json([
-                'error' => 'Invalid date',
-                'message' => 'This date is beyond your plan duration',
+                'error' => 'access_denied',
+                'reason' => 'plan_expired',
+                'message' => 'This date is beyond your plan duration. Please upgrade to access more days.',
                 'plan_end_date' => $plan->start_date->copy()->addDays($totalDays - 1)->format('Y-m-d'),
-            ], 400);
+                'requested_day' => $dayOfPlan,
+                'total_days' => $totalDays,
+            ], 403);
         }
 
         // TODO: Check subscription and lock status for premium features

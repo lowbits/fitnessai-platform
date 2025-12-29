@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -49,6 +50,32 @@ class Plan extends Model
     public function workoutPlans(): HasMany
     {
         return $this->hasMany(WorkoutPlan::class);
+    }
+
+    /**
+     * Get the current day index based on start date (1-based)
+     */
+    protected function currentDay(): Attribute
+    {
+        return Attribute::make(
+            get: function (): int {
+                if (!$this->start_date) {
+                    return 0;
+                }
+
+                $daysSinceStart = $this->start_date->diffInDays(now(), false);
+
+                if ($daysSinceStart < 0) {
+                    return 0;
+                }
+
+                if ($this->end_date && now()->isAfter($this->end_date)) {
+                    return $this->duration_days;
+                }
+
+                return min((int)$daysSinceStart + 1, $this->duration_days);
+            }
+        );
     }
 }
 

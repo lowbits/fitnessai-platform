@@ -2,42 +2,21 @@
 
 namespace App\Http\Controllers\Api\V2;
 
-use App\Enums\ActivityLevel;
-use App\Enums\BodyGoal;
-use App\Enums\DietType;
-use App\Enums\Gender;
-use App\Enums\SkillLevel;
-use App\Enums\TrainingPlace;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\OnboardingRequest;
 use App\Models\User;
 use App\Notifications\NewOnboardingStarted;
 use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Validation\Rules\Enum;
 
 class OnboardingController extends Controller
 {
-    public function store(Request $request): JsonResponse
+    public function store(OnboardingRequest $request): JsonResponse
     {
-        $validated = $request->validate([
-            'email' => ['required', 'email', 'unique:users'],
-            'name' => ['required', 'string', 'max:255'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
-            'age' => ['required', 'integer', 'min:13', 'max:120'],
-            'gender' => ['required', new Enum(Gender::class)],
-            'weight' => ['required', 'numeric', 'min:30', 'max:300'],
-            'height' => ['required', 'numeric', 'min:100', 'max:250'],
-            'body_goal' => ['required', new Enum(BodyGoal::class)],
-            'skill_level' => ['required', new Enum(SkillLevel::class)],
-            'activity_level' => ['required', new Enum(ActivityLevel::class)],
-            'training_place' => ['required', new Enum(TrainingPlace::class)],
-            'diet_type' => ['required', new Enum(DietType::class)],
-            'training_sessions' => ['required', 'integer', 'min:1', 'max:7'],
-        ]);
+        $validated = $request->validated();
 
         $result = DB::transaction(function () use ($validated) {
             $user = User::create([

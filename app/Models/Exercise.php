@@ -8,14 +8,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Exercise extends Model
 {
-    use HasFactory;
 
     protected $fillable = [
         'workout_plan_id',
         'order',
         'name',
+        'original_name',
         'type',
         'description',
+        'instructions',
         'video_url',
         'image',
         'sets',
@@ -37,6 +38,7 @@ class Exercise extends Model
             'muscle_groups' => 'array',
             'equipment' => 'array',
             'alternatives' => 'array',
+            'instructions' => 'array',
         ];
     }
 

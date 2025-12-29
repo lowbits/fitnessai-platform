@@ -3,8 +3,8 @@ export const locales = {
         welcome: {
             meta: {
                 locale: 'en',
-                title: 'Free Workout & Nutrition Plan Generator | FitnessAI',
-                title_short: 'Create Free Workout & Nutrition Plan | FitnessAI',
+                title: 'Free Workout & Nutrition Plan Generator | fytrr',
+                title_short: 'Create Free Workout & Nutrition Plan | fytrr',
                 description:
                     'Create your free 7-day workout & nutrition plan as PDF. AI-powered, personalized & no signup required. Start now!',
                 description_social:
@@ -12,11 +12,11 @@ export const locales = {
                 theme_color: '#667eea',
                 og: {
                     type: 'website',
-                    site_name: 'fitnessAI.me',
+                    site_name: 'fytrr.com',
                 },
                 twitter: {
                     card: 'summary_large_image',
-                    site: '@fitnessai',
+                    site: '@fytrr',
                 },
                 structured_data: {
                     description:
@@ -278,7 +278,7 @@ export const locales = {
                 no_preference: 'No Preference',
             },
             dietType: {
-                omnivore: 'Omnivore',
+                omnivore: 'Classic',
                 vegetarian: 'Vegetarian',
                 pescatarian: 'Pescatarian',
                 vegan: 'Vegan',
@@ -353,9 +353,9 @@ export const locales = {
         legal: {
             disclaimer: {
                 meta: {
-                    title: 'Disclaimer & Health Information | FitnessAI',
+                    title: 'Disclaimer & Health Information | fytrr',
                     description:
-                        'Important health and safety information for using FitnessAI workout and nutrition plans.',
+                        'Important health and safety information for using fytrr workout and nutrition plans.',
                 },
                 title: 'Disclaimer & Health Information',
                 warning: {
@@ -367,7 +367,7 @@ export const locales = {
                     not_professional: {
                         title: 'Not a Replacement for Professional Advice',
                         subtitle:
-                            'The workout and nutrition plans provided through FitnessAI do NOT replace consultation with qualified professionals such as doctors, nutritionists, personal trainers, or other health experts.',
+                            'The workout and nutrition plans provided through fytrr do NOT replace consultation with qualified professionals such as doctors, nutritionists, personal trainers, or other health experts.',
                         content_1:
                             'The content is for general informational purposes only. It does not constitute medical diagnosis, treatment, or professional health advice.',
                         content_2:
@@ -609,7 +609,7 @@ export const locales = {
                     },
                 },
                 confirmation: {
-                    title: 'By using FitnessAI, you confirm that you:',
+                    title: 'By using fytrr, you confirm that you:',
                     items: [
                         'Have read and understood these notices completely',
                         'Understand and accept the risks',
@@ -622,15 +622,15 @@ export const locales = {
             },
             imprint: {
                 meta: {
-                    title: 'Imprint | FitnessAI',
+                    title: 'Imprint | fytrr',
                     description:
-                        'Legal information and contact details for FitnessAI.',
+                        'Legal information and contact details for fytrr.',
                 },
                 title: 'Imprint',
             },
             data_privacy: {
                 meta: {
-                    title: 'Privacy Policy | FitnessAI',
+                    title: 'Privacy Policy | fytrr',
                     description:
                         'Information about how we collect, use, and protect your personal data.',
                 },
@@ -638,9 +638,9 @@ export const locales = {
             },
             terms: {
                 meta: {
-                    title: 'Terms & Conditions | FitnessAI',
+                    title: 'Terms & Conditions | fytrr',
                     description:
-                        'Terms and conditions for using FitnessAI services.',
+                        'Terms and conditions for using fytrr services.',
                 },
                 title: 'Terms & Conditions',
             },
@@ -648,16 +648,16 @@ export const locales = {
         footer: {
             description:
                 'Personalized AI workout and meal plans tailored to you.',
-            copyright: '© {year} fitnessAI.me. Alle rights reserved',
+            copyright: '© {year} fytrr.com. Alle rights reserved',
         },
     },
     de: {
         welcome: {
             meta: {
                 locale: 'de',
-                title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | FitnessAI',
+                title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 title_short:
-                    'Kostenlosen Trainings- & Ernährungsplan erstellen | FitnessAI',
+                    'Kostenlosen Trainings- & Ernährungsplan erstellen | fytrr',
                 description:
                     'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung. Jetzt starten!',
                 description_social:
@@ -665,11 +665,11 @@ export const locales = {
                 theme_color: '#667eea',
                 og: {
                     type: 'website',
-                    site_name: 'fitnessAI.me',
+                    site_name: 'fytrr.com',
                 },
                 twitter: {
                     card: 'summary_large_image',
-                    site: '@fitnessai',
+                    site: '@fytrr',
                 },
                 structured_data: {
                     description:
@@ -942,7 +942,7 @@ export const locales = {
                 no_preference: 'Keine Präferenz',
             },
             dietType: {
-                omnivore: 'Omnivor',
+                omnivore: 'Klassisch',
                 vegetarian: 'Vegetarisch',
                 pescatarian: 'Pescetarisch',
                 vegan: 'Vegan',
@@ -1017,9 +1017,9 @@ export const locales = {
         legal: {
             disclaimer: {
                 meta: {
-                    title: 'Haftungsausschluss & Gesundheitshinweise | FitnessAI',
+                    title: 'Haftungsausschluss & Gesundheitshinweise | fytrr',
                     description:
-                        'Wichtige Gesundheits- und Sicherheitsinformationen zur Nutzung von FitnessAI Trainings- und Ernährungsplänen.',
+                        'Wichtige Gesundheits- und Sicherheitsinformationen zur Nutzung von fytrr Trainings- und Ernährungsplänen.',
                 },
                 title: 'Haftungsausschluss & Gesundheitshinweise',
                 warning: {
@@ -1031,7 +1031,7 @@ export const locales = {
                     not_professional: {
                         title: 'Kein Ersatz für professionelle Beratung',
                         subtitle:
-                            'Die über FitnessAI bereitgestellten Trainings- und Ernährungspläne ersetzen NICHT die Beratung durch qualifizierte Fachkräfte wie Ärzte, Ernährungsberater, Personal Trainer oder andere Gesundheitsexperten.',
+                            'Die über fytrr bereitgestellten Trainings- und Ernährungspläne ersetzen NICHT die Beratung durch qualifizierte Fachkräfte wie Ärzte, Ernährungsberater, Personal Trainer oder andere Gesundheitsexperten.',
                         content_1:
                             'Die Inhalte dienen ausschließlich zu allgemeinen Informationszwecken. Sie stellen keine medizinische Diagnose, Behandlung oder professionelle Gesundheitsberatung dar.',
                         content_2:
@@ -1272,7 +1272,7 @@ export const locales = {
                     },
                 },
                 confirmation: {
-                    title: 'Durch die Nutzung von FitnessAI bestätigen Sie, dass Sie:',
+                    title: 'Durch die Nutzung von fytrr bestätigen Sie, dass Sie:',
                     items: [
                         'Diese Hinweise vollständig gelesen und verstanden haben',
                         'Die Risiken verstehen und akzeptieren',
@@ -1294,15 +1294,15 @@ export const locales = {
             },
             imprint: {
                 meta: {
-                    title: 'Impressum | FitnessAI',
+                    title: 'Impressum | fytrr',
                     description:
-                        'Rechtliche Informationen und Kontaktdaten von FitnessAI.',
+                        'Rechtliche Informationen und Kontaktdaten von fytrr.',
                 },
                 title: 'Impressum',
             },
             data_privacy: {
                 meta: {
-                    title: 'Datenschutzerklärung | FitnessAI',
+                    title: 'Datenschutzerklärung | fytrr',
                     description:
                         'Informationen darüber, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen.',
                 },
@@ -1310,9 +1310,9 @@ export const locales = {
             },
             terms: {
                 meta: {
-                    title: 'AGB | FitnessAI',
+                    title: 'AGB | fytrr',
                     description:
-                        'Allgemeine Geschäftsbedingungen für die Nutzung von FitnessAI-Diensten.',
+                        'Allgemeine Geschäftsbedingungen für die Nutzung von fytrr-Diensten.',
                 },
                 title: 'Allgemeine Geschäftsbedingungen',
             },
@@ -1321,7 +1321,7 @@ export const locales = {
             description:
                 'KI-gestützte Trainings- und Ernährungspläne für deine Fitnessziele.',
             rights: 'All rights reserved.',
-            copyright: '© {year} fitnessAI.me. Alle Rechte vorbehalten',
+            copyright: '© {year} fytrr.com. Alle Rechte vorbehalten',
         },
     },
 } as const;

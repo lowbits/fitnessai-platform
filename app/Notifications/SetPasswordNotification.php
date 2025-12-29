@@ -80,7 +80,7 @@ class SetPasswordNotification extends Notification implements ShouldQueue
             'token' => $token,
         ]);
 
-        return 'fitnessai://set-password?' . $params;
+        return 'fytrr://set-password?' . $params;
     }
 
     /**

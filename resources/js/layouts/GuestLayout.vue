@@ -14,8 +14,8 @@ defineProps<{
             <Link href="/">
                 <img
                     class="h-auto w-40"
-                    src="/fitness-ai-me-logo.svg"
-                    alt="fitnessAi.me logo"
+                    src="/fytrr-logo.svg"
+                    alt="fytrr.com logo"
                 />
             </Link>
         </nav>

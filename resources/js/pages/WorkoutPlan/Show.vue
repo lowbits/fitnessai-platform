@@ -108,7 +108,7 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <meta name="twitter:description" :content="meta.description" />
         <meta
             property="og:image"
-            content="https://fitnessai.me/fitness-plan.png"
+            content="https://fytrr.com/fitness-plan.png"
         />
 
         <component :is="'script'" type="application/ld+json">

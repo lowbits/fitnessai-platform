@@ -23,9 +23,9 @@ const { t } = useI18n();
 const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'FitnessAI',
+    name: 'fytrr',
     description: t('welcome.meta.structured_data.description'),
-    url: 'https://fitnessai.me',
+    url: 'https://fytrr.com',
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web Browser',
     offers: {
@@ -41,7 +41,7 @@ const structuredData = {
         <meta name="description" :content="$t('welcome.meta.description')" />
         <link
             rel="canonical"
-            :href="`https://fitnessai.me/${$t('welcome.meta.locale')}`"
+            :href="`https://fytrr.com/${$t('welcome.meta.locale')}`"
         />
 
         <!-- Open Graph -->
@@ -53,11 +53,11 @@ const structuredData = {
         />
         <meta
             property="og:url"
-            :content="`https://fitnessai.me/${$t('welcome.meta.locale')}`"
+            :content="`https://fytrr.com/${$t('welcome.meta.locale')}`"
         />
         <meta
             property="og:image"
-            content="https://fitnessai.me/fitness-plan.png"
+            content="https://fytrr.com/fitness-plan.png"
         />
         <meta
             property="og:site_name"
@@ -73,7 +73,7 @@ const structuredData = {
         />
         <meta
             name="twitter:image"
-            content="https://fitnessai.me/fitness-plan.png"
+            content="https://fytrr.com/fitness-plan.png"
         />
 
         <!-- Structured Data -->
@@ -243,7 +243,7 @@ const structuredData = {
                         </h2>
                         <p>
                             {{ $t('welcome.faq.contact') }}
-                            <a href="mailto:hello@fitnessai.me"
+                            <a href="mailto:hello@fytrr.com"
                                 ><strong>{{
                                     $t('welcome.faq.contactLink')
                                 }}</strong></a

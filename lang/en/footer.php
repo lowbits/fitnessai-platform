@@ -2,7 +2,7 @@
 
 return [
     'description' => 'AI-powered workout and nutrition plans for your fitness goals.',
-    'copyright' => '© :year fitnessAI.me. All rights reserved.',
+    'copyright' => '© :year fytrr.com. All rights reserved.',
     'workout_plans' => [
         'heading' => 'Free Workout Plans',
         'weight_loss' => 'Weight Loss Workout',

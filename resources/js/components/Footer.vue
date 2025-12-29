@@ -68,8 +68,8 @@ watch(selectedLanguage, (newLocale) => {
                     <Link href="/">
                         <img
                             class="h-auto w-[180px]"
-                            src="/fitness-ai-me-logo.png"
-                            alt="Logo fitnessAI.me footer"
+                            src="/fytrr-logo.png"
+                            alt="Logo fytrr.com footer"
                         />
                     </Link>
                     <p class="mt-3 text-sm text-gray-400">

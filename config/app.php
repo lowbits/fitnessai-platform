@@ -135,6 +135,6 @@ return [
 
     'admin_emails' => env('ADMIN_EMAILS')
         ? explode(',', env('ADMIN_EMAILS'))
-        : ['hallo+fitnessai@tobiaslobitz.de'],
+        : ['hallo+fytrr@tobiaslobitz.de'],
 
 ];

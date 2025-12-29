@@ -28,7 +28,7 @@ const { t } = useI18n();
                         <p class="mb-2">
                             (1) Diese Allgemeinen Geschäftsbedingungen
                             (nachfolgend "AGB") gelten für alle Verträge über
-                            die Nutzung der Plattform FitnessAI (nachfolgend
+                            die Nutzung der Plattform fytrr (nachfolgend
                             "Plattform"), die zwischen Tobias Lobitz (nachfolgend
                             "Anbieter") und dem Nutzer (nachfolgend "Kunde")
                             geschlossen werden.
@@ -165,7 +165,7 @@ const { t } = useI18n();
 
                             <p class="mb-4">
                                 Um Ihr Widerrufsrecht auszuüben, müssen Sie uns
-                                (Tobias Lobitz, Annastraße 7, E-Mail: hello@fitnessai.me)
+                                (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com)
                                 mittels einer eindeutigen Erklärung (z.B. per
                                 E-Mail) über Ihren Entschluss, diesen Vertrag zu
                                 widerrufen, informieren.

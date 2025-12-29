@@ -3,7 +3,7 @@
 return [
     'nutrition_plan' => [
         'title' => 'Ernährungsplan',
-        'powered_by' => 'Bereitgestellt von fitnessai.me',
+        'powered_by' => 'Bereitgestellt von fytrr.com',
         'user' => 'Name',
         'email' => 'E-Mail',
         'plan' => 'Plan',
@@ -40,7 +40,7 @@ return [
 
     'workout_plan' => [
         'title' => 'Trainingsplan',
-        'powered_by' => 'powered by fitnessai.me',
+        'powered_by' => 'powered by fytrr.com',
         'user' => 'Name',
         'email' => 'E-Mail',
         'plan' => 'Plan',

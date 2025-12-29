@@ -27,7 +27,7 @@ return [
 
         'signature' => 'Beste Grüße',
 
-        'team' => 'Das fitnessAI Team',
+        'team' => 'Das fytrr Team',
     ],
 
     'verify_email' => [

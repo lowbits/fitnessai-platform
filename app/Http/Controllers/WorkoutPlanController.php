@@ -47,8 +47,8 @@ class WorkoutPlanController extends Controller
 
         $metaData = [
             'title' => $locale === 'de'
-                ? 'Kostenlose Trainingspläne - Für jedes Ziel | fitnessAI.me'
-                : 'Free Workout Plans - For Every Goal | fitnessAI.me',
+                ? 'Kostenlose Trainingspläne - Für jedes Ziel | fytrr.com'
+                : 'Free Workout Plans - For Every Goal | fytrr.com',
             'description' => $locale === 'de'
                 ? 'Entdecke kostenlose, wissenschaftlich fundierte Trainingspläne für jedes Ziel: Abnehmen, Muskelaufbau, Anfänger, Zuhause & mehr. Sofort starten!'
                 : 'Discover free, science-based workout plans for every goal: Weight Loss, Muscle Gain, Beginners, Home & more. Start now!',

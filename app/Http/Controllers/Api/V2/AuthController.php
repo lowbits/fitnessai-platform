@@ -96,6 +96,7 @@ class AuthController extends Controller
         $profile = $user->profile;
         $currentPlan = $user->plans()->where('status', 'active')->first();
 
+
         return response()->json([
             'user' => [
                 'id' => $user->id,
@@ -118,7 +119,7 @@ class AuthController extends Controller
                 'created_at' => $currentPlan->created_at->toIso8601String(),
                 'start_date' => $currentPlan->start_date->format('Y-m-d'),
                 'current_day' => $currentPlan->current_day,
-                'total_days' => config('plans.duration_days'),
+                'total_days' => (int) config('plans.duration_days'),
                 'goal' => $profile?->body_goal?->value ?? 'maintenance',
                 'diet_type' => $profile?->diet_type?->value ?? 'balanced',
                 'fitness_level' => $profile?->skill_level?->value ?? 'beginner',
@@ -133,11 +134,11 @@ class AuthController extends Controller
                 'status' => 'free',
                 'tier' => 'free',
                 'started_at' => $user->created_at->toIso8601String(),
-                'expires_at' => null,
+                'expires_at' => $currentPlan->start_date->addDays((int) config('plans.duration_days'))->toIso8601String(),
                 'will_renew' => false,
                 'features' => [
                     'full_plan_access' => false,
-                    'max_days_accessible' => config('plans.duration_days'),
+                    'max_days_accessible' => (int) config('plans.duration_days'),
                     'unlimited_regeneration' => false,
                     'meal_alternatives' => false,
                     'exercise_alternatives' => false,

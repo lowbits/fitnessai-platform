@@ -127,7 +127,7 @@ const { t } = useI18n();
                         <p>Tobias Lobitz</p>
                         <p>Annastraße 7</p>
                         <p>40477 Düsseldorf</p>
-                        <p>E-Mail: hello@fitnessai.me</p>
+                        <p>E-Mail: hello@fytrr.com</p>
                     </div>
 
                     <h3 class="mb-2 text-lg font-semibold">Speicherdauer</h3>
@@ -318,7 +318,7 @@ const { t } = useI18n();
                         Ihre Daten werden gelöscht, sobald sie für die
                         Erreichung des Zweckes ihrer Erhebung nicht mehr
                         erforderlich sind. Sie können jederzeit die Löschung
-                        Ihrer Daten per E-Mail an hello@fitnessai.me beantragen.
+                        Ihrer Daten per E-Mail an hello@fytrr.com beantragen.
                     </p>
                 </section>
 

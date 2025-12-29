@@ -2,7 +2,7 @@
 
 return [
     'description' => 'KI-gestützte Trainings- und Ernährungspläne für deine Fitnessziele.',
-    'copyright' => '© :year fitnessAI.me. Alle Rechte vorbehalten.',
+    'copyright' => '© :year fytrr.com. Alle Rechte vorbehalten.',
     'workout_plans' => [
         'heading' => 'Kostenlose Trainingspläne',
         'weight_loss' => 'Trainingsplan Abnehmen',

@@ -39,9 +39,9 @@ const { t } = useI18n();
                         <p>
                             E-Mail:
                             <a
-                                href="mailto:hello@fitnessai.me"
+                                href="mailto:hello@fytrr.com"
                                 class="text-primary-500 hover:underline"
-                                >hello@fitnessai.me</a
+                                >hello@fytrr.com</a
                             >
                         </p>
                     </div>

@@ -89,7 +89,7 @@ defineProps<Props>();
                             •
                             {{
                                 $t('emailVerification.invalid.steps.contact', {
-                                    email: 'hello@fitnessai.me',
+                                    email: 'hello@fytrr.com',
                                 })
                             }}
                         </li>

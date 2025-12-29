@@ -109,9 +109,9 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 // Simple rest day - no AI generation needed
                 $workoutPlan->update([
                     'status' => 'generated',
-                    'workout_name' => 'Active Recovery / Rest Day',
+                    'workout_name' => __('workouts.active_recovery', [], $this->user->locale),
                     'workout_type' => 'rest',
-                    'description' => 'Take a rest day to allow your muscles to recover. Light stretching or walking is encouraged.',
+                    'description' => __('workouts.rest_description', [], $this->user->locale),
                     'estimated_duration_minutes' => 0,
                 ]);
                 Log::info("Created rest day for day {$day}", ['workout_plan_id' => $workoutPlan->id]);
@@ -159,40 +159,119 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                 'parameters' => [
                                     'type' => 'object',
                                     'properties' => [
-                                        'workout_name' => ['type' => 'string'],
-                                        'workout_type' => ['type' => 'string', 'enum' => ['strength', 'cardio', 'hiit', 'mobility']],
-                                        'description' => ['type' => 'string'],
-                                        'estimated_duration_minutes' => ['type' => 'integer'],
-                                        'difficulty' => ['type' => 'string', 'enum' => ['Beginner', 'Intermediate', 'Advanced']],
-                                        'muscle_groups' => ['type' => 'array', 'items' => ['type' => 'string']],
+                                        'workout_name' => [
+                                            'type' => 'string',
+                                            'description' => 'Concise workout name focusing on training focus/muscle groups (2-4 words max). NO day numbers, difficulty levels, or body goals.'
+                                        ],
+                                        'workout_type' => [
+                                            'type' => 'string',
+                                            'enum' => ['strength', 'cardio', 'hiit', 'mobility']
+                                        ],
+                                        'description' => [
+                                            'type' => 'string',
+                                            'description' => 'Brief overview of the workout\'s purpose and focus (1-2 sentences)'
+                                        ],
+                                        'estimated_duration_minutes' => [
+                                            'type' => 'integer',
+                                            'description' => 'Total time including warmup, main workout, and cooldown'
+                                        ],
+                                        'difficulty' => [
+                                            'type' => 'string',
+                                            'enum' => ['Beginner', 'Intermediate', 'Advanced']
+                                        ],
+                                        'muscle_groups' => [
+                                            'type' => 'array',
+                                            'items' => ['type' => 'string'],
+                                            'description' => 'Primary muscle groups targeted in this workout'
+                                        ],
                                         'exercises' => [
                                             'type' => 'array',
+                                            'description' => 'List of 6-8 exercises for main workout, plus warmup/cooldown',
                                             'items' => [
                                                 'type' => 'object',
                                                 'properties' => [
-                                                    'name' => ['type' => 'string'],
-                                                    'type' => ['type' => 'string', 'enum' => ['strength', 'cardio', 'warmup', 'cooldown', 'stretch']],
-                                                    'description' => ['type' => 'string'],
-                                                    'sets' => ['type' => 'integer'],
-                                                    'reps' => ['type' => 'integer'],
-                                                    'duration_seconds' => ['type' => 'integer'],
-                                                    'rest_seconds' => ['type' => 'string'],
-                                                    'tempo' => ['type' => 'string'],
-                                                    'weight_recommendation' => ['type' => 'string'],
-                                                    'muscle_groups' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                                    'equipment' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                                    'form_cues' => ['type' => 'string'],
-                                                    'alternatives' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                                    'difficulty' => ['type' => 'string', 'enum' => ['Beginner', 'Intermediate', 'Advanced']],
+                                                    'name' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Clean, simple exercise name in the target language. NO prefixes (like "Dehnung:", "Warmup:"), NO alternatives in parentheses, NO slashes for multiple options. Just the exercise name.'
+                                                    ],
+                                                    'original_name' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Standardized English exercise name for database lookup using standard fitness industry terminology (e.g., "Bench Press", "Pull-ups", "Bicycle Crunch"). Keep consistent naming.'
+                                                    ],
+                                                    'type' => [
+                                                        'type' => 'string',
+                                                        'enum' => ['strength', 'cardio', 'warmup', 'cooldown', 'stretch'],
+                                                        'description' => 'Exercise type - this field indicates the category, so DO NOT include type in the name'
+                                                    ],
+                                                    'description' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Brief description of the exercise and its benefits'
+                                                    ],
+                                                    'instructions' => [
+                                                        'type' => 'array',
+                                                        'items' => ['type' => 'string'],
+                                                        'description' => 'Step-by-step instructions on how to perform the exercise correctly.'
+                                                    ],
+                                                    'sets' => [
+                                                        'type' => 'integer',
+                                                        'description' => 'Number of sets (for strength exercises)'
+                                                    ],
+                                                    'reps' => [
+                                                        'type' => 'integer',
+                                                        'description' => 'Number of repetitions per set (for strength exercises)'
+                                                    ],
+                                                    'duration_seconds' => [
+                                                        'type' => 'integer',
+                                                        'description' => 'Duration in seconds (for cardio, stretches, or time-based exercises)'
+                                                    ],
+                                                    'rest_seconds' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Rest period between sets (e.g., "60-90", "30")'
+                                                    ],
+                                                    'tempo' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Tempo notation (e.g., "3-0-1-0" for eccentric-pause-concentric-pause)'
+                                                    ],
+                                                    'weight_recommendation' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Weight guidance (e.g., "70% 1RM", "Bodyweight", "Moderate")'
+                                                    ],
+                                                    'rpe' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Rate of Perceived Exertion (e.g., "7-8", "6-7")'
+                                                    ],
+                                                    'muscle_groups' => [
+                                                        'type' => 'array',
+                                                        'items' => ['type' => 'string'],
+                                                        'description' => 'Muscle groups targeted by this exercise'
+                                                    ],
+                                                    'equipment' => [
+                                                        'type' => 'array',
+                                                        'items' => ['type' => 'string'],
+                                                        'description' => 'Equipment needed for this exercise'
+                                                    ],
+                                                    'form_cues' => [
+                                                        'type' => 'string',
+                                                        'description' => 'Important form and safety cues for proper execution'
+                                                    ],
+                                                    'alternatives' => [
+                                                        'type' => 'array',
+                                                        'items' => ['type' => 'string'],
+                                                        'description' => 'Alternative exercises if primary exercise cannot be performed. List alternatives HERE, not in the exercise name.'
+                                                    ],
+                                                    'difficulty' => [
+                                                        'type' => 'string',
+                                                        'enum' => ['Beginner', 'Intermediate', 'Advanced']
+                                                    ],
                                                 ],
-                                                'required' => ['name', 'type'],
+                                                'required' => ['name', 'original_name', 'type'],
                                             ],
                                         ],
                                     ],
                                     'required' => ['workout_name', 'workout_type', 'exercises'],
                                 ],
                             ],
-                        ],
+                        ]
                     ],
                     'tool_choice' => ['type' => 'function', 'function' => ['name' => 'create_workout_plan']],
                 ]);
@@ -369,42 +448,70 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     {
         return match($bodyGoal) {
             'muscle_gain' => "
-**Muscle Gain Protocol:**
-- Sets: 3-4 per exercise
-- Rep range: 8-12 reps (hypertrophy)
-- Rest: 60-90 seconds
-- Tempo: 3-0-1-0 (controlled eccentric, explosive concentric)
-- RPE: 7-9 (leave 1-3 reps in reserve)
-- Exercise selection: 70% compound, 30% isolation
+**Muscle Gain (Hypertrophy) Protocol:**
+- Volume: 3-4 sets per exercise
+- Rep range: 8-12 reps (hypertrophy zone)
+- Rest periods: 60-90 seconds between sets
+- Tempo: 3-0-1-0 (3s eccentric, no pause, 1s concentric, no pause at top)
+- RPE: 7-9 (leave 1-3 reps in reserve on most sets)
+- Exercise selection: 70% compound movements, 30% isolation
+- Progressive overload: Increase weight when RPE drops below 7
+- Focus on time under tension and muscle connection
         ",
             'weight_loss' => "
-**Weight Loss Protocol:**
-- Sets: 3 per exercise
+**Weight Loss (Fat Loss) Protocol:**
+- Volume: 3 sets per exercise
 - Rep range: 12-15 reps
-- Rest: 30-45 seconds (circuit style when possible)
-- Tempo: 2-0-1-0 (moderate pace)
-- RPE: 6-8
-- Include cardio intervals between exercises
+- Rest periods: 30-45 seconds (metabolic conditioning)
+- Tempo: 2-0-1-0 (controlled, steady pace)
+- RPE: 6-8 (sustainable intensity)
+- Circuit-style training when possible to maintain heart rate
+- Include HIIT or cardio intervals between strength exercises
+- Focus on calorie burn and maintaining muscle mass
+- Total workout intensity should feel challenging but sustainable
         ",
             'strength' => "
-**Strength Protocol:**
-- Sets: 4-6 per exercise
-- Rep range: 3-6 reps (strength)
-- Rest: 2-5 minutes (full recovery)
-- Tempo: 1-0-X-0 (explosive concentric)
-- RPE: 8-10
-- 90% compound movements
+**Strength & Power Protocol:**
+- Volume: 4-6 sets per exercise (lower volume, higher intensity)
+- Rep range: 3-6 reps (strength/power zone)
+- Rest periods: 2-5 minutes (complete recovery between sets)
+- Tempo: 1-0-X-0 (controlled eccentric, explosive concentric)
+- RPE: 8-10 (high intensity, near-maximal effort)
+- Exercise selection: 90%+ compound movements (squat, deadlift, bench, press)
+- Progressive overload: Focus on increasing load
+- Prioritize form and complete recovery between sets
         ",
             'endurance' => "
-**Endurance Protocol:**
-- Sets: 2-3 per exercise
-- Rep range: 15-25 reps
-- Rest: 30 seconds or less
-- Tempo: 1-0-1-0 (fast pace)
-- RPE: 5-7
-- Mix strength and cardio
+**Muscular Endurance Protocol:**
+- Volume: 2-3 sets per exercise
+- Rep range: 15-25 reps (or 45-60 seconds time under tension)
+- Rest periods: 30 seconds or less
+- Tempo: 1-0-1-0 (faster, rhythmic pace)
+- RPE: 5-7 (sustainable pace, avoid failure)
+- Mix resistance training with cardio elements
+- Focus on work capacity and cardiovascular conditioning
+- Higher frequency, lower intensity approach
         ",
-            default => "Balanced training protocol with 3 sets, 10-12 reps, 60 seconds rest",
+            'general_fitness' => "
+**General Fitness Protocol:**
+- Volume: 3 sets per exercise
+- Rep range: 10-12 reps
+- Rest periods: 60 seconds
+- Tempo: 2-0-1-0 (controlled, moderate pace)
+- RPE: 6-8 (challenging but sustainable)
+- Balanced mix of compound and isolation exercises
+- Include mobility and flexibility work
+- Focus on movement quality and consistency
+        ",
+            default => "
+**Balanced Training Protocol:**
+- Volume: 3 sets per exercise
+- Rep range: 10-12 reps
+- Rest periods: 60 seconds
+- Tempo: 2-0-1-0 (controlled pace)
+- RPE: 6-8
+- Mix of compound and isolation movements
+        ",
         };
     }
 
@@ -437,18 +544,65 @@ You are an expert personal trainer and workout programmer specializing in eviden
 5. Ensure proper muscle group distribution across the {$totalDays}-day plan
 6. Include warmup (5-8 min) and cooldown (5 min) when appropriate
 7. Provide clear form cues for each exercise
-8. Use {$this->getLanguageInstruction()} for exercise names, descriptions, and instructions
-9. Main workout: 6-8 exercises for {$skillLevel} level
-10. Specify sets, reps, rest periods, tempo, and RPE
+8. Main workout: 6-8 exercises for {$skillLevel} level
+9. Specify sets, reps, rest periods, tempo, and RPE
+
+**Language Instructions:**
+Generate all exercise names, descriptions, instructions, and form cues in {$this->getLanguageInstruction()}
 
 **Workout Programming by Goal:**
 {$this->getGoalGuidelines($bodyGoal)}
 
-**Output Format:**
-Return a valid JSON object with workout_name, workout_type, description, estimated_duration_minutes, difficulty, muscle_groups, and exercises array.
-Each exercise must include: name, type, description, sets, reps (or duration_seconds), rest_seconds, equipment, and form_cues.
+**CRITICAL: Exercise Naming Rules**
 
-Generate complete, safe, and effective workout plans that the user can easily follow.
+The exercise 'name' field must be CLEAN and SIMPLE - just the exercise name in the target language.
+
+❌ NEVER include:
+- Type prefixes ("Stretch", "Warmup", "Cardio", "Cooldown")
+- Alternatives in parentheses ("Pull-ups (or Lat Pulldown)")
+- Multiple options with slashes ("Chest/Lat/Shoulders")
+- Any descriptive additions to the name
+
+✓ CORRECT examples:
+- "Bench Press" (not "Strength: Bench Press")
+- "Chest Stretch" (not "Stretch: Chest")
+- "Dehnung Beine" (not "Cooldown Dehnung Beine")
+- "Pull-ups" (not "Pull-ups (or Lat Pulldown)")
+- "Stationary Bike" (not "Cardio – Bike")
+
+The 'type' field indicates warmup/cooldown/stretch/strength/cardio.
+The 'alternatives' array contains exercise variations.
+
+**Field Guidelines:**
+
+- **workout_name**: Concise name focusing on muscle groups/training focus (2-4 words max)
+  - Examples: "Upper Body Power", "Legs & Core", "Push Day", "Full Body Strength"
+  - DO NOT include: day numbers, difficulty levels, or body goals
+
+- **description**: Brief overview of workout purpose (1-2 sentences)
+
+- **estimated_duration_minutes**: Total time including warmup, main workout, and cooldown
+
+- **exercises**: Array of 6-8 main exercises plus warmup/cooldown
+
+  - **name**: Exercise name in target language - clean and simple (see rules above)
+
+  - **original_name**: Standardized English name using fitness industry terminology
+    - For database lookups and consistency
+    - Examples: "Bench Press", "Pull-ups", "Chest Stretch", "Stationary Bike"
+    - Always use the same spelling (e.g., "Pull-ups" not "Pullups")
+
+  - **description**: What the exercise does and its benefits (1-2 sentences)
+
+  - **instructions**: Step-by-step execution guide
+    - Clear, sequential steps
+    - Include body positioning, movement pattern, and breathing
+
+  - **form_cues**: Key safety and technique points to remember
+
+  - **alternatives**: Array of alternative exercises (use this instead of putting alternatives in the name)
+
+Generate complete, safe, and effective workout plans that users can easily follow.
 PROMPT;
     }
 
@@ -472,8 +626,10 @@ PROMPT;
                 'workout_plan_id' => $workoutPlan->id,
                 'order' => $index + 1,
                 'name' => $exerciseData['name'],
+                'original_name' => $exerciseData['original_name'],
                 'type' => $exerciseData['type'],
                 'description' => $exerciseData['description'] ?? null,
+                'instructions' => $exerciseData['instructions'] ?? [],
                 'sets' => $exerciseData['sets'] ?? null,
                 'reps' => $exerciseData['reps'] ?? null,
                 'duration_seconds' => $exerciseData['duration_seconds'] ?? null,

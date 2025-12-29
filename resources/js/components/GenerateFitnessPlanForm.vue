@@ -364,9 +364,9 @@ const submit = async () => {
                         {{ $t('form.success.checkSpam') }}
                         <a
                             class="font-bold text-primary-400 transition hover:text-primary-300"
-                            href="mailto:hello@fitnessai.me"
+                            href="mailto:hello@fytrr.com"
                         >
-                            hello@fitnessai.me
+                            hello@fytrr.com
                         </a>
                     </p>
                 </div>
