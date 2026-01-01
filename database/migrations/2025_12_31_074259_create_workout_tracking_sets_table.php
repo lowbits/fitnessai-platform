@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->timestamps();
 
-            $table->index(['workout_tracking_exercise_id', 'set_number']);
+            $table->index(['workout_tracking_exercise_id', 'set_number'], 'wts_ex_set_idx');
         });
     }
 
