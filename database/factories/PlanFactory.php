@@ -18,14 +18,15 @@ class PlanFactory extends Factory
     public function definition(): array
     {
         $startDate = fake()->dateTimeBetween('-30 days', 'now');
+        $endDate = fake()->dateTimeBetween($startDate, '+60 days');
 
         return [
             'user_id' => User::factory(),
             'plan_name' => fake()->randomElement(['Muscle Gain Plan', 'Weight Loss Plan', 'Maintenance Plan', 'Strength Plan']),
             'status' => fake()->randomElement(['active', 'paused', 'completed', 'cancelled']),
             'start_date' => $startDate,
-            'end_date' => fake()->dateTimeBetween($startDate, '+60 days'),
-            'current_day' => fake()->numberBetween(1, 28),
+            'end_date' => $endDate,
+            'duration_days' => fake()->numberBetween(14, 90),
             'daily_calories' => fake()->numberBetween(1500, 3500),
             'daily_protein_g' => fake()->numberBetween(100, 200),
             'daily_carbs_g' => fake()->numberBetween(150, 350),

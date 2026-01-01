@@ -42,5 +42,10 @@ class WorkoutPlan extends Model
     {
         return $this->hasMany(Exercise::class)->orderBy('order');
     }
+
+    public function trackings(): HasMany
+    {
+        return $this->hasMany(WorkoutTracking::class);
+    }
 }
 

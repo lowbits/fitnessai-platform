@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
 use App\Http\Controllers\Api\V2\WorkoutController;
+use App\Http\Controllers\Api\V2\WorkoutTrackingController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Http\Controllers\NewPasswordController;
 
@@ -36,5 +37,14 @@ Route::prefix('v2')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
+
+        // Workout tracking routes
+        Route::prefix('track')->group(function () {
+            Route::get('/workouts', [WorkoutTrackingController::class, 'index']);
+            Route::post('/workouts', [WorkoutTrackingController::class, 'store']);
+            Route::get('/workouts/{workoutTracking}', [WorkoutTrackingController::class, 'show']);
+            Route::put('/workouts/{workoutTracking}', [WorkoutTrackingController::class, 'update']);
+            Route::delete('/workouts/{workoutTracking}', [WorkoutTrackingController::class, 'destroy']);
+        });
     });
 });
