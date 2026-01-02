@@ -47,5 +47,10 @@ class WorkoutPlan extends Model
     {
         return $this->hasMany(WorkoutTracking::class);
     }
+
+    public function latestTracking()
+    {
+        return $this->hasOne(WorkoutTracking::class)->latestOfMany('completed_at');
+    }
 }
 

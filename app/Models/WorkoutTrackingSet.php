@@ -25,7 +25,7 @@ class WorkoutTrackingSet extends Model
         return [
             'set_number' => 'integer',
             'reps' => 'integer',
-            'weight' => 'decimal:2',
+            'weight' => 'float',
             'duration' => 'integer',
             'rpe' => 'integer',
         ];
