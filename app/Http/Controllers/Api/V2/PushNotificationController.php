@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V2;
 use App\Http\Controllers\Controller;
 use App\Models\UserDevice;
 use App\Notifications\WorkoutCompletedNotification;
+use App\Notifications\WorkoutReminderNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -103,6 +104,10 @@ class PushNotificationController extends Controller
      */
     public function sendTestNotification(Request $request): JsonResponse
     {
+        if (!app()->environment(['local', 'development'])) {
+            abort(404);
+        }
+
         $user = $request->user();
 
         // Check if user has any devices
@@ -115,12 +120,40 @@ class PushNotificationController extends Controller
             ], 400);
         }
 
-        // Send a test notification (will be sent to all devices)
-        $user->notify(new WorkoutCompletedNotification('Test Workout'));
+        // Get the latest workout plan that is not a rest day
+        $latestWorkout = $user->plans()
+            ->where('status', 'active')
+            ->latest()
+            ->first()
+            ?->workoutPlans()
+            ->where('status', 'generated')
+            ->where('workout_type', '!=', 'rest')
+            ->latest('date')
+            ->first();
+
+
+        if (!$latestWorkout) {
+            return response()->json([
+                'error' => 'No workout found',
+                'message' => 'No active workout plan found (excluding rest days)',
+            ], 404);
+        }
+
+        // Send test notification with actual workout
+        $user->notify(new WorkoutReminderNotification(
+            $latestWorkout->workout_name,
+            $latestWorkout->id
+        ));
 
         return response()->json([
             'message' => 'Test notification sent successfully',
             'sent_to_devices' => $deviceCount,
+            'workout' => [
+                'id' => $latestWorkout->id,
+                'name' => $latestWorkout->workout_name,
+                'type' => $latestWorkout->workout_type,
+                'date' => $latestWorkout->date,
+            ],
         ]);
     }
 

@@ -14,3 +14,20 @@ Schedule::command('plans:check-completed')
     ->withoutOverlapping()
     ->runInBackground();
 
+// ===== WORKOUT REMINDERS =====
+// Check every hour and send to users based on their learned time
+// MVP: 18:00 for new users, 1h before last tracking for others
+Schedule::command('notifications:workout-reminders')
+    ->hourly()
+    ->between('6:00', '23:00') // Only between 6 AM and 11 PM
+    ->withoutOverlapping()
+    ->runInBackground();
+
+// ===== MEAL REMINDERS =====
+// Send ONE daily meal reminder at lunch time (12:00)
+// MVP: Focus on most important meal, avoid spam
+Schedule::command('notifications:meal-reminders')
+    ->dailyAt('12:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+

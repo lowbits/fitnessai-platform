@@ -44,7 +44,11 @@ Route::prefix('v2')->group(function () {
             Route::post('/register-token', [PushNotificationController::class, 'registerToken']);
             Route::delete('/remove-token', [PushNotificationController::class, 'removeToken']);
             Route::get('/token-status', [PushNotificationController::class, 'getTokenStatus']);
-            Route::post('/test', [PushNotificationController::class, 'sendTestNotification']);
+
+            // Test notification - only in local/dev environment
+            if (app()->environment(['local', 'development'])) {
+                Route::post('/test', [PushNotificationController::class, 'sendTestNotification']);
+            }
         });
 
         // Workout tracking routes
