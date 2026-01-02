@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V2\AuthController;
 use App\Http\Controllers\Api\V2\MealController;
 use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
+use App\Http\Controllers\Api\V2\PushNotificationController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
 use App\Http\Controllers\Api\V2\WorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
@@ -37,6 +38,14 @@ Route::prefix('v2')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
+
+        // Push notification routes
+        Route::prefix('notifications')->group(function () {
+            Route::post('/register-token', [PushNotificationController::class, 'registerToken']);
+            Route::delete('/remove-token', [PushNotificationController::class, 'removeToken']);
+            Route::get('/token-status', [PushNotificationController::class, 'getTokenStatus']);
+            Route::post('/test', [PushNotificationController::class, 'sendTestNotification']);
+        });
 
         // Workout tracking routes
         Route::prefix('track')->group(function () {

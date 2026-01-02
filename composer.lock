@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "16980af2e8a2d3c353bf2f3dbfb506cc",
+    "content-hash": "0dc8070ff4b081e2f621b8aa3281b8ac",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -1458,6 +1458,70 @@
                 "source": "https://github.com/inertiajs/inertia-laravel/tree/v2.0.16"
             },
             "time": "2025-12-17T21:57:59+00:00"
+        },
+        {
+            "name": "laravel-notification-channels/expo",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-notification-channels/expo.git",
+                "reference": "e0b297cedfb86df9f14ec3de4151d8db680702eb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-notification-channels/expo/zipball/e0b297cedfb86df9f14ec3de4151d8db680702eb",
+                "reference": "e0b297cedfb86df9f14ec3de4151d8db680702eb",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.1",
+                "illuminate/contracts": "^11.0|^12.0",
+                "illuminate/notifications": "^11.0|^12.0",
+                "illuminate/support": "^11.0|^12.0",
+                "php": "~8.3"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^9.11",
+                "phpunit/phpunit": "^11.0"
+            },
+            "suggest": {
+                "ext-zlib": "Required for compressing payloads exceeding 1 KiB in size."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "NotificationChannels\\Expo\\ExpoServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "NotificationChannels\\Expo\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Muhammed Sari",
+                    "email": "muhammed@dive.be",
+                    "homepage": "https://dive.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Expo Notifications Channel for Laravel",
+            "homepage": "https://github.com/laravel-notification-channels/expo",
+            "support": {
+                "issues": "https://github.com/laravel-notification-channels/expo/issues",
+                "source": "https://github.com/laravel-notification-channels/expo/tree/v2.1.1"
+            },
+            "time": "2025-12-26T11:28:30+00:00"
         },
         {
             "name": "laravel/fortify",

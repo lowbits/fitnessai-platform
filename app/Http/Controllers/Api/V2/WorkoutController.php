@@ -60,7 +60,7 @@ class WorkoutController extends Controller
                                 'set_number' => $set->set_number,
                                 'reps' => $set->reps,
                                 'duration' => $set->duration,
-                                'weight' => $set->weight ? (float) $set->weight : null,
+                                'weight' => $set->weight,
                             ])->all(),
                         ];
                     }

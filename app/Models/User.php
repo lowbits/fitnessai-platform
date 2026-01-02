@@ -55,6 +55,16 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    /**
+     * Route notifications for the Expo channel.
+     * Returns all device tokens for multicasting.
+     *
+     * @return \Illuminate\Support\Collection<int, \NotificationChannels\Expo\ExpoPushToken>
+     */
+    public function routeNotificationForExpo(): \Illuminate\Support\Collection
+    {
+        return $this->devices->pluck('expo_push_token');
+    }
 
     public function profile(): HasOne
     {
@@ -69,5 +79,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function workoutTrackings(): HasMany
     {
         return $this->hasMany(WorkoutTracking::class);
+    }
+
+    public function devices(): HasMany
+    {
+        return $this->hasMany(UserDevice::class);
     }
 }
