@@ -27,4 +27,8 @@ return [
             'body' => 'Time to fuel your body with: :meal',
         ],
     ],
+    'weekly_plans_generated' => [
+        'title' => 'Your Week is Ready!',
+        'body' => "We've prepared your next :days days of workouts and meals. Let's crush it!",
+    ],
 ];

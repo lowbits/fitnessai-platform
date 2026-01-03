@@ -21,7 +21,7 @@ defineProps<{
 }>();
 
 // i18n
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const { trackEvent } = useTracking();
 
@@ -217,6 +217,8 @@ const goToStep = (index: number) => {
     }
 };
 
+console.log("WEW #######", locale.value);
+
 // Submit
 const submit = async () => {
     if (form.processing) return;
@@ -253,6 +255,7 @@ const submit = async () => {
                 training_place: form.training_place,
                 training_sessions: parseInt(form.training_sessions),
                 activity_level: form.activity_level,
+                language: locale.value
             }),
         });
 

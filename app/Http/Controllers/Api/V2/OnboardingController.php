@@ -18,14 +18,14 @@ class OnboardingController extends Controller
     {
         $validated = $request->validated();
 
-        $result = DB::transaction(function () use ($validated) {
+        $result = DB::transaction(function () use ($validated, $request) {
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => isset($validated['password'])
                     ? Hash::make($validated['password'])
                     : null,
-                'locale' => app()->getLocale(),
+                'locale' => $validated['language'] ?? $request->header('Accept-Language', 'en'),
             ]);
 
 

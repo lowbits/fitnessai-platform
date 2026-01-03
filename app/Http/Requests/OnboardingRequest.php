@@ -58,6 +58,7 @@ class OnboardingRequest extends FormRequest
             'training_place' => ['required', new Enum(TrainingPlace::class)],
             'diet_type' => ['required', new Enum(DietType::class)],
             'training_sessions' => ['required', 'integer', 'min:1', 'max:7'],
+            'language' => ['nullable', 'string', 'in:en,de']
         ];
     }
 

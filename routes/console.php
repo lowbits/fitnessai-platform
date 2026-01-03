@@ -14,6 +14,15 @@ Schedule::command('plans:check-completed')
     ->withoutOverlapping()
     ->runInBackground();
 
+// ===== WEEKLY PLAN GENERATION =====
+// Generate next 7 days for users with active subscriptions
+// Runs DAILY and checks each user's individual generation day
+// (3-4 days after their plan start date = mid-week of their cycle)
+Schedule::command('plans:generate-weekly')
+    ->dailyAt('00:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+
 // ===== WORKOUT REMINDERS =====
 // Check every hour and send to users based on their learned time
 // MVP: 18:00 for new users, 1h before last tracking for others
