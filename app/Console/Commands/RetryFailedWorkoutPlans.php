@@ -101,7 +101,7 @@ class RetryFailedWorkoutPlans extends Command
                 ->update(['status' => 'pending']);
 
             // Dispatch the generation job
-            GenerateUserWorkoutPlan::dispatch($plan->user, $plan)->onQueue('workouts');
+            GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
 
             $failedCount = $failedWorkouts->where('plan_id', $planId)->count();
             $this->line("  ✓ Dispatched job for Plan #{$planId} (User #{$plan->user->id}) - {$failedCount} failed workout(s)");

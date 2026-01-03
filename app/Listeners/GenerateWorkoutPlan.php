@@ -19,7 +19,7 @@ class GenerateWorkoutPlan
             return;
         }
 
-        GenerateUserWorkoutPlan::dispatch($event->user, $event->plan)->onQueue('workouts');
+        GenerateUserWorkoutPlan::dispatch($event->user, $event->plan);
     }
 }
 

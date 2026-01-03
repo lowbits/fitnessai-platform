@@ -44,6 +44,7 @@ Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für de
 ```json
 {
   "type": "weekly_plans_generated",
+  "days_generated": 7,
   "start_date": "2026-01-10",
   "end_date": "2026-01-16",
   "screen": "Plans"

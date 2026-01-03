@@ -21,7 +21,9 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     public function __construct(
         public User $user,
         public Plan $plan
-    ) {}
+    ) {
+        $this->onQueue('workouts');
+    }
 
     /**
      * Execute the job.
