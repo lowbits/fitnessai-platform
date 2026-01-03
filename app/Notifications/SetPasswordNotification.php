@@ -65,7 +65,7 @@ class SetPasswordNotification extends Notification implements ShouldQueue
             ->line(__('emails.beta_invite.intro'))
             ->line(__('emails.beta_invite.description'))
             ->line(__('emails.beta_invite.steps_title'))
-            ->line(__('emails.beta_invite.step_1'))
+            ->line(__('emails.beta_invite.step_1', ['app_store_url' => config('app.app_store.ios.url')]))
             ->line(__('emails.beta_invite.step_2'))
             ->line(__('emails.beta_invite.step_3'))
             ->action(__('emails.beta_invite.action'), $setPasswordUrl)

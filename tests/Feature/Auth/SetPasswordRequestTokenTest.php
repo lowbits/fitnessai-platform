@@ -10,8 +10,7 @@ test('set password link can be requested', function () {
     Notification::fake();
 
     $user = User::factory()->withoutPassword()->create();
-
-    $this->post(route('set-password.request'),
+    $this->post(route('api.set-password.request'),
         ['email' => $user->email])->assertOk();
 
     Notification::assertSentTo($user, SetPasswordNotification::class);

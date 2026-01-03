@@ -2,8 +2,9 @@
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { onMounted } from 'vue';
 
-defineProps<{
+const props = defineProps<{
     token: string;
     email: string;
     iosAppStoreUrl: string;

@@ -42,7 +42,7 @@ Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::c
     ->name('verification.verify-onboarding');
 
 // Set password landing page (for email links + universal links)
-Route::get('/{locale}/set-password/{token}', function ($token) {
+Route::get('/{locale}/set-password/{token}', function ($locale, $token) {
     $email = request()->query('email', '');
 
     return Inertia::render('SetPassword', [
