@@ -98,7 +98,7 @@ class GenerateWeeklyPlans extends Command
                 $this->line("   Generation Day: {$generationDay}");
                 $this->line("   Start: {$startDate->format('Y-m-d')} | End: {$endDate->format('Y-m-d')} | Days: {$daysToGenerate}");
 
-                // Send notification at 08:00 AM (not at midnight!)
+                // Send notification at 08:00 AM for push, email immediate
                 $notificationTime = now()->setHour(8)->setMinute(0)->setSecond(0);
 
                 // If it's already past 08:00, send tomorrow at 08:00
@@ -108,6 +108,9 @@ class GenerateWeeklyPlans extends Command
 
                 $delay = now()->diffInSeconds($notificationTime);
 
+                // Send single notification with both channels
+                // - Email: sent immediately (professional, minimal emojis)
+                // - Push: delayed until 08:00 AM
                 $user->notify(
                     (new WeeklyPlansGeneratedNotification(
                         $startDate->format('Y-m-d'),
@@ -115,7 +118,8 @@ class GenerateWeeklyPlans extends Command
                     ))->delay($delay)
                 );
 
-                $this->line("   📱 Notification scheduled for: {$notificationTime->format('Y-m-d H:i')}");
+                $this->line("   📱 Push notification scheduled for: {$notificationTime->format('Y-m-d H:i')}");
+                $this->line("   📧 Email sent immediately");
 
                 $generated++;
             } catch (\Exception $e) {

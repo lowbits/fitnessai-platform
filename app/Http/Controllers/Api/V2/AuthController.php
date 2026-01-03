@@ -92,10 +92,15 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load(['profile', 'plans']);
+        $user = $request->user()->load(['profile', 'plans', 'subscription']);
         $profile = $user->profile;
         $currentPlan = $user->plans()->where('status', 'active')->first();
+        $subscription = $user->subscription;
 
+        // Determine subscription status
+        $hasActiveSubscription = $subscription && $subscription->isActive();
+        $subscriptionTier = $hasActiveSubscription ? $subscription->type : 'free';
+        $subscriptionStatus = $hasActiveSubscription ? 'active' : 'free';
 
         return response()->json([
             'user' => [
@@ -118,8 +123,9 @@ class AuthController extends Controller
                 'name' => $currentPlan->plan_name,
                 'created_at' => $currentPlan->created_at->toIso8601String(),
                 'start_date' => $currentPlan->start_date->format('Y-m-d'),
+                'end_date' => $currentPlan->end_date->format('Y-m-d'),
                 'current_day' => $currentPlan->current_day,
-                'total_days' => (int) config('plans.duration_days'),
+                'total_days' => $currentPlan->duration_days,
                 'goal' => $profile?->body_goal?->value ?? 'maintenance',
                 'diet_type' => $profile?->diet_type?->value ?? 'balanced',
                 'fitness_level' => $profile?->skill_level?->value ?? 'beginner',
@@ -131,18 +137,18 @@ class AuthController extends Controller
                 ],
             ] : null,
             'subscription' => [
-                'status' => 'free',
-                'tier' => 'free',
-                'started_at' => $user->created_at->toIso8601String(),
-                'expires_at' => $currentPlan->start_date->addDays((int) config('plans.duration_days'))->toIso8601String(),
+                'status' => $subscriptionStatus,
+                'tier' => $subscriptionTier,
+                'started_at' => $subscription?->starts_at?->toIso8601String() ?? $user->created_at->toIso8601String(),
+                'expires_at' => $subscription?->ends_at?->toIso8601String() ?? ($currentPlan ? $currentPlan->end_date->toIso8601String() : null),
                 'will_renew' => false,
                 'features' => [
-                    'full_plan_access' => false,
-                    'max_days_accessible' => (int) config('plans.duration_days'),
-                    'unlimited_regeneration' => false,
-                    'meal_alternatives' => false,
-                    'exercise_alternatives' => false,
-                    'ai_coach' => false,
+                    'full_plan_access' => $hasActiveSubscription,
+                    'max_days_accessible' => $hasActiveSubscription ? $currentPlan?->duration_days ?? 30 : 7,
+                    'unlimited_regeneration' => $hasActiveSubscription,
+                    'meal_alternatives' => $hasActiveSubscription,
+                    'exercise_alternatives' => $hasActiveSubscription,
+                    'ai_coach' => $hasActiveSubscription,
                 ],
             ],
             'settings' => [

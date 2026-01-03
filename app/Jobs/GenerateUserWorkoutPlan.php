@@ -37,16 +37,27 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return;
         }
 
+        // Find the highest successfully generated day_number to continue from there
+        // This ensures retries work correctly if a previous run partially failed
+        $lastGeneratedDayNumber = WorkoutPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'generated')
+            ->max('day_number') ?? 0;
+
+        $startDayNumber = $lastGeneratedDayNumber + 1;
+        $daysToGenerate = 7; // Always generate 7 days at a time
+        $endDayNumber = $startDayNumber + $daysToGenerate - 1;
+
         Log::info('Starting workout plan generation', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
             'locale' => $this->user->locale,
+            'last_generated_day' => $lastGeneratedDayNumber,
+            'start_day_number' => $startDayNumber,
+            'end_day_number' => $endDayNumber,
         ]);
 
         $client = OpenAI::client(config('services.openai.api_key'));
 
-        // Generate workout plans for configured number of days (respecting rest days)
-        $totalDays = config('plans.duration_days');
         $workoutsPerWeek = $this->plan->workouts_per_week ?? 3;
 
         // Build system prompt ONCE
@@ -60,17 +71,27 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
         Log::debug('System prompt created', [
             'prompt_length' => strlen($systemPrompt['content']),
-            'total_days' => $totalDays,
+            'days_to_generate' => $daysToGenerate,
             'workouts_per_week' => $workoutsPerWeek,
         ]);
 
-        for ($day = 1; $day <= $totalDays; $day++) {
+        for ($day = $startDayNumber; $day <= $endDayNumber; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
+
+            // Check if we exceed plan end date
+            if ($date->gt($this->plan->end_date)) {
+                Log::info("Reached plan end date, stopping generation", [
+                    'day' => $day,
+                    'date' => $date->format('Y-m-d'),
+                    'plan_end_date' => $this->plan->end_date->format('Y-m-d'),
+                ]);
+                break;
+            }
 
             // Determine if this is a workout day or rest day
             $isRestDay = $this->isRestDay($day, $workoutsPerWeek);
 
-            Log::debug("Processing day {$day}/{$totalDays}", [
+            Log::debug("Processing day {$day}/{$endDayNumber}", [
                 'day' => $day,
                 'date' => $date->format('Y-m-d'),
                 'is_rest_day' => $isRestDay,
@@ -122,7 +143,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
             try {
                 // Build context-aware user message with recent workouts
-                $contextMessage = "Generate a complete workout plan for day {$day} of {$totalDays}. Consider the workout split and ensure proper muscle group rotation.";
+                $contextMessage = "Generate a complete workout plan for day {$day}. Consider the workout split and ensure proper muscle group rotation.";
 
                 // Add recent workouts context (last 5 workouts)
                 if (count($generatedWorkoutsSummary) > 0) {
@@ -365,7 +386,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         Log::info('Workout plan generation completed', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
-            'total_days' => $totalDays,
+            'days_attempted' => $endDayNumber - $startDayNumber + 1,
             'generated_count' => WorkoutPlan::where('plan_id', $this->plan->id)
                 ->where('status', 'generated')
                 ->count(),

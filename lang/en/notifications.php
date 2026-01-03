@@ -30,5 +30,13 @@ return [
     'weekly_plans_generated' => [
         'title' => 'Your Next Week is Ready!',
         'body' => 'We just planned your upcoming week of workouts and meals. Time to crush your goals!',
+        'email' => [
+            'subject' => 'Your Next Week of Training is Ready',
+            'greeting' => 'Hello :name,',
+            'intro' => 'We have prepared your next week of training for you.',
+            'details' => 'Your new workouts and meal plans are now available.',
+            'action' => 'View Plans',
+            'closing' => 'Best of luck with your training!',
+        ],
     ],
 ];

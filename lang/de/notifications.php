@@ -30,6 +30,14 @@ return [
     'weekly_plans_generated' => [
         'title' => 'Deine nächste Woche ist bereit!',
         'body' => 'Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für deine Ziele!',
+        'email' => [
+            'subject' => 'Ihre nächste Trainingswoche ist bereit',
+            'greeting' => 'Hallo :name,',
+            'intro' => 'Wir haben Ihre nächste Trainingswoche für Sie vorbereitet.',
+            'details' => 'Ihre neuen Workouts und Mahlzeitenpläne sind jetzt verfügbar.',
+            'action' => 'Pläne ansehen',
+            'closing' => 'Viel Erfolg bei Ihrem Training!',
+        ],
     ],
 ];
 

@@ -37,16 +37,26 @@ class GenerateUserMealPlan implements ShouldQueue
             return;
         }
 
+        // Find the highest successfully generated day_number to continue from there
+        // This ensures retries work correctly if a previous run partially failed
+        $lastGeneratedDayNumber = MealPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'generated')
+            ->max('day_number') ?? 0;
+
+        $startDayNumber = $lastGeneratedDayNumber + 1;
+        $daysToGenerate = 7; // Always generate 7 days at a time
+        $endDayNumber = $startDayNumber + $daysToGenerate - 1;
+
         Log::info('Starting meal plan generation', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
             'locale' => $this->user->locale,
+            'last_generated_day' => $lastGeneratedDayNumber,
+            'start_day_number' => $startDayNumber,
+            'end_day_number' => $endDayNumber,
         ]);
 
         $client = OpenAI::client(config('services.openai.api_key'));
-
-        // Generate meal plans for configured number of days
-        $totalDays = config('plans.duration_days');
 
         // Build system prompt ONCE
         $systemPrompt = [
@@ -59,13 +69,23 @@ class GenerateUserMealPlan implements ShouldQueue
 
         Log::debug('System prompt created', [
             'prompt_length' => strlen($systemPrompt['content']),
-            'total_days' => $totalDays,
+            'days_to_generate' => $daysToGenerate,
         ]);
 
-        for ($day = 1; $day <= $totalDays; $day++) {
+        for ($day = $startDayNumber; $day <= $endDayNumber; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
 
-            Log::debug("Processing day {$day}/{$totalDays}", [
+            // Check if we exceed plan end date
+            if ($date->gt($this->plan->end_date)) {
+                Log::info("Reached plan end date, stopping generation", [
+                    'day' => $day,
+                    'date' => $date->format('Y-m-d'),
+                    'plan_end_date' => $this->plan->end_date->format('Y-m-d'),
+                ]);
+                break;
+            }
+
+            Log::debug("Processing day {$day}/{$endDayNumber}", [
                 'day' => $day,
                 'date' => $date->format('Y-m-d'),
             ]);
@@ -100,7 +120,7 @@ class GenerateUserMealPlan implements ShouldQueue
 
             try {
                 // Build context-aware user message with recent meals summary
-                $contextMessage = "Generate a complete day meal plan for day {$day} of {$totalDays}. Include breakfast, lunch, snack, and dinner.";
+                $contextMessage = "Generate a complete day meal plan for day {$day}. Include breakfast, lunch, snack, and dinner.";
 
                 // Add recent meals context (last 3 days = 12 meals to keep tokens low)
                 if (count($generatedMealsSummary) > 0) {
@@ -267,7 +287,7 @@ class GenerateUserMealPlan implements ShouldQueue
         Log::info('Meal plan generation completed', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
-            'total_days' => $totalDays,
+            'days_attempted' => $endDayNumber - $startDayNumber + 1,
             'generated_count' => MealPlan::where('plan_id', $this->plan->id)
                 ->where('status', 'generated')
                 ->count(),
