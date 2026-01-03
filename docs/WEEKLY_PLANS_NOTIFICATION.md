@@ -24,22 +24,26 @@ Wenn neue Pläne generiert werden, bekommt der User eine motivierende Push Notif
 
 #### Englisch:
 ```
-🎯 Your Week is Ready!
-We've prepared your next 7 days of workouts and meals. Let's crush it! 💪
+🎯 Your Next Week is Ready!
+We just planned your upcoming week of workouts and meals. Time to crush your goals! 💪
 ```
 
 #### Deutsch:
 ```
-🎯 Deine Woche ist bereit!
-Wir haben die nächsten 7 Tage für dich geplant. Lass uns loslegen! 💪
+🎯 Deine nächste Woche ist bereit!
+Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für deine Ziele! 💪
 ```
+
+**Warum "next week" statt "next 7 days"?**
+- ✅ Klarer: User versteht sofort dass es um die kommende Woche geht
+- ✅ Nicht verwirrend: "7 days" könnte ab morgen verstanden werden
+- ✅ Professioneller: "Your next week" klingt strukturierter
 
 ### 4. Notification Data
 
 ```json
 {
   "type": "weekly_plans_generated",
-  "days_generated": 7,
   "start_date": "2026-01-10",
   "end_date": "2026-01-16",
   "screen": "Plans"

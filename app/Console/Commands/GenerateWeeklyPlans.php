@@ -110,7 +110,6 @@ class GenerateWeeklyPlans extends Command
 
                 $user->notify(
                     (new WeeklyPlansGeneratedNotification(
-                        $daysToGenerate,
                         $startDate->format('Y-m-d'),
                         $endDate->format('Y-m-d')
                     ))->delay($delay)

@@ -344,7 +344,7 @@ test('sends delayed notification when plans are generated', function () {
     $this->artisan('plans:generate-weekly')
         ->assertSuccessful();
 
-    // Should have sent notification
+    // Should have sent notification (message says "next week" not "next 7 days")
     Notification::assertSentTo(
         $user,
         \App\Notifications\WeeklyPlansGeneratedNotification::class

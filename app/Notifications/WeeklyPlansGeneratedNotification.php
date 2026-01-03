@@ -13,7 +13,6 @@ class WeeklyPlansGeneratedNotification extends Notification implements ShouldQue
     use Queueable;
 
     public function __construct(
-        private int $daysGenerated,
         private string $startDate,
         private string $endDate
     ) {}
@@ -29,10 +28,9 @@ class WeeklyPlansGeneratedNotification extends Notification implements ShouldQue
 
         return ExpoMessage::create()
             ->title('🎯 ' . __('notifications.weekly_plans_generated.title', [], $locale))
-            ->body(__('notifications.weekly_plans_generated.body', ['days' => $this->daysGenerated], $locale))
+            ->body(__('notifications.weekly_plans_generated.body', [], $locale))
             ->data([
                 'type' => 'weekly_plans_generated',
-                'days_generated' => $this->daysGenerated,
                 'start_date' => $this->startDate,
                 'end_date' => $this->endDate,
                 'screen' => 'Plans',

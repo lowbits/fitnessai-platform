@@ -28,8 +28,8 @@ return [
         ],
     ],
     'weekly_plans_generated' => [
-        'title' => 'Deine Woche ist bereit!',
-        'body' => 'Wir haben die nächsten :days Tage für dich geplant. Lass uns loslegen!',
+        'title' => 'Deine nächste Woche ist bereit!',
+        'body' => 'Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für deine Ziele!',
     ],
 ];
 

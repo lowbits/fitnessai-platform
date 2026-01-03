@@ -28,7 +28,7 @@ return [
         ],
     ],
     'weekly_plans_generated' => [
-        'title' => 'Your Week is Ready!',
-        'body' => "We've prepared your next :days days of workouts and meals. Let's crush it!",
+        'title' => 'Your Next Week is Ready!',
+        'body' => 'We just planned your upcoming week of workouts and meals. Time to crush your goals!',
     ],
 ];
