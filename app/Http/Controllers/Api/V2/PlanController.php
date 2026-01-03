@@ -57,13 +57,14 @@ class PlanController extends Controller
             ], 403);
         }
 
-        $totalDays = config('plans.duration_days');
+        // Use actual plan duration from database (respects subscription)
+        $totalDays = $plan->duration_days;
         if ($dayOfPlan > $totalDays) {
             return response()->json([
                 'error' => 'access_denied',
                 'reason' => 'plan_expired',
                 'message' => 'This date is beyond your plan duration. Please upgrade to access more days.',
-                'plan_end_date' => $plan->start_date->copy()->addDays($totalDays - 1)->format('Y-m-d'),
+                'plan_end_date' => $plan->end_date->format('Y-m-d'),
                 'requested_day' => $dayOfPlan,
                 'total_days' => $totalDays,
             ], 403);
