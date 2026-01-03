@@ -137,4 +137,10 @@ return [
         ? explode(',', env('ADMIN_EMAILS'))
         : ['hallo+fytrr@tobiaslobitz.de'],
 
+    'app_store'=> [
+        'ios' => [
+            'url' => env('IOS_APP_STORE_URL', 'https://testflight.apple.com/join/q62vmKeD'),
+        ]
+    ]
+
 ];

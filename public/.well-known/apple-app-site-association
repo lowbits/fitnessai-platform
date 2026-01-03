@@ -1,0 +1,11 @@
+{
+    "applinks": {
+        "apps": [],
+        "details": [
+            {
+                "appID": "HXX8GTN8W8.com.fytrr.app",
+                "paths": ["/*/set-password/*", "/set-password/*", "/*/auth/*", "/*/workouts/*", "/*/meals/*"]
+            }
+        ]
+    }
+}

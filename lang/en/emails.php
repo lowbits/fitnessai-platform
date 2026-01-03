@@ -36,5 +36,22 @@ return [
         'ignore' => 'Didn\'t sign up? You can safely ignore this email.',
         'signature' => 'See you soon!',
     ],
+    'beta_invite' => [
+        'subject' => 'Welcome to fytrr – Your Beta Access! 🎉',
+        'greeting' => 'Hey :name!',
+        'intro' => 'You\'re in! We\'re thrilled to welcome you as a beta tester for fytrr.',
+        'description' => 'fytrr is your personal AI fitness coach that guides you through workouts and nutrition. And you\'re among the first to experience it.',
+        'steps_title' => '**Here\'s how to get started:**',
+        'step_1' => '1️⃣ [Download the fytrr app](:app_store_url) from the App Store',
+        'step_2' => '2️⃣ Click the button below to set your password',
+        'step_3' => '3️⃣ Sign in to the app and start your journey!',
+        'action' => 'Set Password',
+        'link_expiry' => 'This link will expire in 24 hours.',
+        'feedback' => '**Your feedback matters!** As a beta tester, you have a unique opportunity to shape fytrr. We can\'t wait to hear what you think.',
+        'instagram' => '📱 Follow us on Instagram [@getfytrr](https://instagram.com/getfytrr) for updates, tips, and behind-the-scenes content.',
+        'support' => 'If you have any questions or run into issues, don\'t hesitate to reach out.',
+        'salutation' => 'Happy training,',
+        'signature' => 'The fytrr Team',
+    ],
 ];
 

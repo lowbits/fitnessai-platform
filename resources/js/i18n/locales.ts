@@ -650,6 +650,21 @@ export const locales = {
                 'Personalized AI workout and meal plans tailored to you.',
             copyright: '© {year} fytrr.com. Alle rights reserved',
         },
+        set_password: {
+            meta: {
+                title: 'Set Your Password - Fytrr',
+            },
+            title: 'Set Your Password',
+            subtitle: 'Your link will automatically open the Fytrr app',
+            description:
+                'Your link will automatically open the Fytrr app. If you don\'t have the app installed yet, download it below.',
+            tip: {
+                label: '👆 Tip:',
+                text: 'If the app didn\'t open automatically, click the \"Open\" button in your browser.',
+            },
+            no_app: 'Don\'t have the app?',
+            download_prompt: 'Download Fytrr to get started',
+        },
     },
     de: {
         welcome: {
@@ -1322,6 +1337,21 @@ export const locales = {
                 'KI-gestützte Trainings- und Ernährungspläne für deine Fitnessziele.',
             rights: 'All rights reserved.',
             copyright: '© {year} fytrr.com. Alle Rechte vorbehalten',
+        },
+        set_password: {
+            meta: {
+                title: 'Passwort festlegen - Fytrr',
+            },
+            title: 'Passwort festlegen',
+            subtitle: 'Dein Link öffnet automatisch die Fytrr App',
+            description:
+                'Dein Link öffnet automatisch die Fytrr App. Falls du die App noch nicht installiert hast, lade sie unten herunter.',
+            tip: {
+                label: '👆 Tipp:',
+                text: 'Falls sich die App nicht automatisch geöffnet hat, klicke auf den "Öffnen"-Button in deinem Browser.',
+            },
+            no_app: 'Hast du die App noch nicht?',
+            download_prompt: 'Lade Fytrr herunter, um loszulegen',
         },
     },
 } as const;

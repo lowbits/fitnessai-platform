@@ -100,4 +100,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->subscription && $this->subscription->isActive();
     }
+
+    public function preferredLocale()
+    {
+        return $this->locale ?? 'en';
+    }
 }

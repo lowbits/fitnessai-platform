@@ -6,6 +6,8 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Log;
+use URL;
 
 class SetPasswordNotification extends Notification implements ShouldQueue
 {
@@ -36,52 +38,48 @@ class SetPasswordNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        $locale = $notifiable->locale ?? 'en';
-        app()->setLocale($locale);
+        // Generate signed URL that expires in 24 hours
+        $setPasswordUrl = URL::temporarySignedRoute(
+            'set-password',
+            now()->addHours(24),
+            [
+                'locale' => $notifiable->preferredLocale(),
+                'token' => $this->token,
+                'email' => $notifiable->email,
+            ]
+        );
 
-        $deepLink = $this->generateDeepLink($notifiable->email, $this->token);
-
-        // Log simulator command in development environment
+        // Log in development
         if (app()->environment('local')) {
-            $simulatorCommand = 'xcrun simctl openurl booted "' . $deepLink . '"';
-            \Log::info('📱 iOS Simulator Deep Link Command:', [
-                'command' => $simulatorCommand,
+            Log::info('🔗 Set Password Link (Signed):', [
+                'url' => $setPasswordUrl,
                 'email' => $notifiable->email,
                 'token' => $this->token,
+                'expires' => now()->addHours(24)->toDateTimeString(),
             ]);
-
-            // Also output to console/stdout
-            echo "\n========================================\n";
-            echo "📱 iOS Simulator Command (click to open):\n";
-            echo $simulatorCommand . "\n";
-            echo "========================================\n\n";
         }
 
         return (new MailMessage)
-            ->subject(__('Set Your Password'))
-            ->greeting(__('Hello :name!', ['name' => $notifiable->name]))
-            ->line(__('You recently created an account with us. To secure your account, please set a password.'))
-            ->line(__('Click the button below to set your password in our mobile app:'))
-            ->action(__('Set Password'), $deepLink)
-            ->line(__('Or use this code in the app: :token', ['token' => $this->token]))
-            ->line(__('This link will expire in 24 hours.'))
-            ->line(__('If you did not create an account, no further action is required.'));
+            ->subject(__('emails.beta_invite.subject'))
+            ->greeting(__('emails.beta_invite.greeting', ['name' => $notifiable->name]))
+            ->line(__('emails.beta_invite.intro'))
+            ->line(__('emails.beta_invite.description'))
+            ->line(__('emails.beta_invite.steps_title'))
+            ->line(__('emails.beta_invite.step_1'))
+            ->line(__('emails.beta_invite.step_2'))
+            ->line(__('emails.beta_invite.step_3'))
+            ->action(__('emails.beta_invite.action'), $setPasswordUrl)
+            ->line(__('emails.beta_invite.link_expiry'))
+            ->line(__('emails.beta_invite.feedback'))
+            ->line(__('emails.beta_invite.instagram'))
+            ->line(__('emails.beta_invite.support'))
+            ->line('')
+            ->line('')
+            ->line(__('emails.beta_invite.salutation'))
+            ->salutation(__('emails.beta_invite.signature'));
+
     }
 
-    /**
-     * Generate a deep link for the mobile app.
-     */
-    private function generateDeepLink(string $email, string $token): string
-    {
-        // This creates a deep link that your React Native app can handle
-        // Format: fitnessai://set-password?email=...&token=...
-        $params = http_build_query([
-            'email' => $email,
-            'token' => $token,
-        ]);
-
-        return 'fytrr://set-password?' . $params;
-    }
 
     /**
      * Get the array representation of the notification.

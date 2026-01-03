@@ -55,5 +55,23 @@ return [
 
         'signature' => 'Bis gleich!',
     ],
+
+    'beta_invite' => [
+        'subject' => 'Willkommen bei fytrr – Deine Beta-Einladung! 🎉',
+        'greeting' => 'Hey :name!',
+        'intro' => 'Du bist dabei! Wir freuen uns riesig, dich als Beta-Tester für fytrr begrüßen zu dürfen.',
+        'description' => 'fytrr ist dein persönlicher KI-Fitness-Coach, der dich bei Training und Ernährung begleitet. Und du gehörst zu den Ersten, die es ausprobieren können.',
+        'steps_title' => '**So geht\'s weiter:**',
+        'step_1' => '1️⃣ [Lade die fytrr App](:app_store_url) aus dem App Store herunter',
+        'step_2' => '2️⃣ Klicke auf den Button unten, um dein Passwort zu setzen',
+        'step_3' => '3️⃣ Melde dich in der App an und leg los!',
+        'action' => 'Passwort setzen',
+        'link_expiry' => 'Dieser Link ist 24 Stunden gültig.',
+        'feedback' => '**Dein Feedback zählt!** Als Beta-Tester hast du die einzigartige Chance, fytrr mitzugestalten. Wir sind gespannt auf deine Meinung.',
+        'instagram' => '📱 Folge uns auf Instagram [@getfytrr](https://instagram.com/getfytrr) für Updates, Tipps und Behind-the-Scenes.',
+        'support' => 'Bei Fragen oder Problemen melde dich jederzeit bei uns.',
+        'salutation' => 'Viel Spaß beim Trainieren,',
+        'signature' => 'Dein fytrr Team',
+    ],
 ];
 

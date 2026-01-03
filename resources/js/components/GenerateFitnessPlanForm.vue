@@ -217,8 +217,6 @@ const goToStep = (index: number) => {
     }
 };
 
-console.log("WEW #######", locale.value);
-
 // Submit
 const submit = async () => {
     if (form.processing) return;

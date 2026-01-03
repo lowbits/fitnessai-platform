@@ -21,9 +21,9 @@ Route::prefix('v2')->group(function () {
             ->middleware('throttle:5,1');
 
         Route::post('/set-password', [NewPasswordController::class, 'store'])
-            ->middleware('throttle:5,1')->name('set-password');
+            ->middleware('throttle:5,1')->name('api.set-password');
         Route::post('/set-password/request', [SetPasswordRequestTokenController::class, 'store'])
-            ->middleware('throttle:5,1')->name('set-password.request');
+            ->middleware('throttle:5,1')->name('api.set-password.request');
 
         Route::middleware('auth:sanctum')->group(function () {
             Route::get('/me', [AuthController::class, 'me']);

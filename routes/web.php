@@ -4,12 +4,11 @@ use App\Http\Controllers\Api\V2\EmailVerificationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => [ 'localizationRedirect', 'localeSessionRedirect', 'localeViewPath' ]], function()
-{
+Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localizationRedirect', 'localeSessionRedirect', 'localeViewPath']], function () {
     /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
     Route::get('/', function () {
         return Inertia::render('Welcome', [
-            'durationDays' => (int) config('plans.duration_days'),
+            'durationDays' => (int)config('plans.duration_days'),
         ]);
     })->name('home');
 
@@ -41,3 +40,16 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => [ 'l
 Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
     ->middleware(['signed'])
     ->name('verification.verify-onboarding');
+
+// Set password landing page (for email links + universal links)
+Route::get('/{locale}/set-password/{token}', function ($token) {
+    $email = request()->query('email', '');
+
+    return Inertia::render('SetPassword', [
+        'iosAppStoreUrl' => config('app.app_store.ios.url'),
+        'token' => $token,
+        'email' => $email,
+    ]);
+})->middleware(['signed'])
+    ->name('set-password');
+
