@@ -87,6 +87,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         return $this->hasMany(CalorieTracking::class);
     }
 
+    public function bodyProgress(): HasMany
+    {
+        return $this->hasMany(BodyProgress::class);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -110,5 +115,17 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
     public function preferredLocale()
     {
         return $this->locale ?? 'en';
+    }
+
+    /**
+     * Get the current weight from the latest body progress entry or user profile.
+     */
+    public function getCurrentWeight(): ?float
+    {
+        $latestProgress = $this->bodyProgress()
+            ->orderBy('recorded_at', 'desc')
+            ->first();
+
+        return $latestProgress?->weight_kg ?? $this->profile?->weight_kg;
     }
 }

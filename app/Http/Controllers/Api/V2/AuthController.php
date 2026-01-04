@@ -110,7 +110,7 @@ class AuthController extends Controller
                 'profile' => [
                     'age' => $user->profile?->age,
                     'height' => $user->profile?->height_cm,
-                    'weight' => $user->profile?->weight_kg,
+                    'weight' => $user->getCurrentWeight(),
                     'body_goal' => $user->profile?->body_goal?->label(),
                     'diet_type' => $user->profile?->diet_type?->label(),
                     'skill_level' => $user->profile?->skill_level?->label(),

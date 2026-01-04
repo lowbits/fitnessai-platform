@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\V2\AuthController;
+use App\Http\Controllers\Api\V2\BodyProgressController;
 use App\Http\Controllers\Api\V2\CalorieTrackingController;
 use App\Http\Controllers\Api\V2\MealController;
 use App\Http\Controllers\Api\V2\OnboardingController;
@@ -66,6 +67,13 @@ Route::prefix('v2')->group(function () {
             Route::get('/calories/{calorieTracking}', [CalorieTrackingController::class, 'show']);
             Route::put('/calories/{calorieTracking}', [CalorieTrackingController::class, 'update']);
             Route::delete('/calories/{calorieTracking}', [CalorieTrackingController::class, 'destroy']);
+
+            // Body progress tracking routes
+            Route::get('/body-progress', [BodyProgressController::class, 'index']);
+            Route::get('/body-progress/latest', [BodyProgressController::class, 'latest']);
+            Route::post('/body-progress', [BodyProgressController::class, 'store']);
+            Route::put('/body-progress/{id}', [BodyProgressController::class, 'update']);
+            Route::delete('/body-progress/{id}', [BodyProgressController::class, 'destroy']);
         });
     });
 });
