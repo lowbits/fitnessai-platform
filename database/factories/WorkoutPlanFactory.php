@@ -21,7 +21,7 @@ class WorkoutPlanFactory extends Factory
             'plan_id' => Plan::factory(),
             'date' => fake()->dateTimeBetween('now', '+30 days'),
             'day_number' => fake()->numberBetween(1, 28),
-            'status' => fake()->randomElement(['pending', 'generated', 'failed']),
+            'status' => 'generated',
             'workout_name' => fake()->randomElement(['Upper Body Strength', 'Lower Body Power', 'Full Body Workout', 'Cardio Session', 'Core Training']),
             'workout_type' => fake()->randomElement(['strength', 'cardio', 'hiit', 'rest', 'mobility']),
             'estimated_duration_minutes' => fake()->numberBetween(30, 90),

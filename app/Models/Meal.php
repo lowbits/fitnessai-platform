@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Meal extends Model
 {
+    use HasFactory;
 
     protected $fillable = [
         'meal_plan_id',
@@ -29,6 +30,7 @@ class Meal extends Model
         'servings',
         'tags',
         'allergens',
+        'completed_at',
     ];
 
     protected function casts(): array
@@ -38,11 +40,36 @@ class Meal extends Model
             'instructions' => 'array',
             'tags' => 'array',
             'allergens' => 'array',
+            'completed_at' => 'datetime',
         ];
     }
 
     public function mealPlan(): BelongsTo
     {
         return $this->belongsTo(MealPlan::class);
+    }
+
+    /**
+     * Mark this meal as completed
+     */
+    public function markAsCompleted(): void
+    {
+        $this->update(['completed_at' => now()]);
+    }
+
+    /**
+     * Mark this meal as incomplete
+     */
+    public function markAsIncomplete(): void
+    {
+        $this->update(['completed_at' => null]);
+    }
+
+    /**
+     * Check if meal is completed
+     */
+    public function isCompleted(): bool
+    {
+        return $this->completed_at !== null;
     }
 }

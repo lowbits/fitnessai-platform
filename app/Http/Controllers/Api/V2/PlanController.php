@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
+use App\Models\CalorieTracking;
 use App\Models\MealPlan;
 use App\Models\WorkoutPlan;
 use Illuminate\Http\JsonResponse;
@@ -87,11 +88,15 @@ class PlanController extends Controller
             ->first();
 
         // Handle different meal plan statuses
-        $mealsData = $this->formatMealPlanResponse($mealPlan);
+        $mealsData = $this->formatMealPlanResponse($mealPlan, $user, $requestDate);
         $workoutData = $this->formatWorkoutPlanResponse($workoutPlan);
 
         // Determine overall status
         $overallStatus = $this->determineOverallStatus($mealPlan, $workoutPlan);
+
+        // Get tracked calories for this day
+        $trackedCalories = $this->getTrackedCaloriesForDay($user, $requestDate);
+
 
         return response()->json([
             'plan_id' => $plan->id,
@@ -104,6 +109,7 @@ class PlanController extends Controller
             'meals' => $mealsData['meals'],
             'workout' => $workoutData,
             'daily_totals' => $mealsData['totals'],
+            'tracked_calories' => $trackedCalories,
             'message' => $this->getStatusMessage($overallStatus),
         ]);
     }
@@ -111,7 +117,7 @@ class PlanController extends Controller
     /**
      * Format meal plan response
      */
-    private function formatMealPlanResponse(?MealPlan $mealPlan): array
+    private function formatMealPlanResponse(?MealPlan $mealPlan, $user, Carbon $date): array
     {
         if (!$mealPlan) {
             return [
@@ -148,6 +154,8 @@ class PlanController extends Controller
                 'protein_g' => $meal->protein_g,
                 'carbs_g' => $meal->carbs_g,
                 'fat_g' => $meal->fat_g,
+                'is_completed' => $meal->completed_at !== null,
+                'completed_at' => $meal->completed_at?->toISOString(),
             ];
         })->values()->all();
 
@@ -244,6 +252,53 @@ class PlanController extends Controller
             'not_generated' => 'Plan for this day has not been generated yet.',
             default => null,
         };
+    }
+
+    /**
+     * Get tracked calories for a specific day
+     */
+    private function getTrackedCaloriesForDay($user, Carbon $date): array
+    {
+        $trackings = $user->calorieTrackings()
+            ->with('meal:id,name,type')
+            ->whereDate('tracked_date', $date)
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+
+        $entries = $trackings->map(function ($tracking) {
+            return [
+                'id' => $tracking->id,
+                'meal_id' => $tracking->meal_id,
+                'meal_name' => $tracking->meal_name ?? $tracking->meal?->name,
+                'meal_type' => $tracking->meal?->type,
+                'calories' => (float) $tracking->calories,
+                'protein_g' => $tracking->protein_g ? (float) $tracking->protein_g : null,
+                'carbs_g' => $tracking->carbs_g ? (float) $tracking->carbs_g : null,
+                'fat_g' => $tracking->fat_g ? (float) $tracking->fat_g : null,
+                'notes' => $tracking->notes,
+                'tracked_at' => $tracking->created_at->toISOString(),
+            ];
+        })->values()->all();
+
+        // Calculate totals
+        $totals = [
+            'calories' => $trackings->sum('calories'),
+            'protein_g' => $trackings->sum('protein_g'),
+            'carbs_g' => $trackings->sum('carbs_g'),
+            'fat_g' => $trackings->sum('fat_g'),
+        ];
+
+        return [
+            'entries' => $entries,
+            'totals' => [
+                'calories' => (float) $totals['calories'],
+                'protein_g' => $totals['protein_g'] ? (float) $totals['protein_g'] : 0,
+                'carbs_g' => $totals['carbs_g'] ? (float) $totals['carbs_g'] : 0,
+                'fat_g' => $totals['fat_g'] ? (float) $totals['fat_g'] : 0,
+            ],
+            'count' => $trackings->count(),
+        ];
     }
 }
 

@@ -82,6 +82,11 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         return $this->hasMany(WorkoutTracking::class);
     }
 
+    public function calorieTrackings(): HasMany
+    {
+        return $this->hasMany(CalorieTracking::class);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);

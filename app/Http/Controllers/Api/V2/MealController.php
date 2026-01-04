@@ -62,6 +62,7 @@ class MealController extends Controller
 
             'tags' => $meal->tags ?? [],
             'allergens' => $meal->allergens ?? [],
+            'completed_at' => $meal->completed_at,
         ]);
     }
 }
