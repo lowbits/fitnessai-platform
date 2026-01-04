@@ -99,7 +99,7 @@ class AuthController extends Controller
 
         // Determine subscription status
         $hasActiveSubscription = $subscription && $subscription->isActive();
-        $subscriptionTier = $hasActiveSubscription ? $subscription->type : 'free';
+        $subscriptionTier = $hasActiveSubscription ? __($subscription->type) : 'free';
         $subscriptionStatus = $hasActiveSubscription ? 'active' : 'free';
 
         return response()->json([

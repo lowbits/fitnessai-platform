@@ -35,6 +35,7 @@ test('user can track body progress with only weight', function () {
                 'recorded_at',
                 'created_at',
                 'updated_at',
+                'trend',
             ],
         ])
         ->assertJson([
@@ -314,5 +315,105 @@ test('body progress is ordered by recorded_at descending', function () {
     $data = $response->json('data');
     expect($data[0]['id'])->toBe($newest->id);
     expect($data[1]['id'])->toBe($oldest->id);
+});
+
+test('body progress shows trend as null for first entry', function () {
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/body-progress', [
+            'weight' => 75.0,
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'weight' => '75.00',
+                'trend' => null,
+            ],
+        ]);
+});
+
+test('body progress shows trend as up when weight increases', function () {
+    BodyProgress::factory()->create([
+        'user_id' => $this->user->id,
+        'weight_kg' => 75.0,
+        'recorded_at' => now()->subDay(),
+    ]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/body-progress', [
+            'weight' => 76.5,
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'weight' => '76.50',
+                'trend' => 'up',
+            ],
+        ]);
+});
+
+test('body progress shows trend as down when weight decreases', function () {
+    BodyProgress::factory()->create([
+        'user_id' => $this->user->id,
+        'weight_kg' => 75.0,
+        'recorded_at' => now()->subDay(),
+    ]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/body-progress', [
+            'weight' => 73.5,
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'weight' => '73.50',
+                'trend' => 'down',
+            ],
+        ]);
+});
+
+test('body progress shows trend as stable when weight change is minimal', function () {
+    BodyProgress::factory()->create([
+        'user_id' => $this->user->id,
+        'weight_kg' => 75.0,
+        'recorded_at' => now()->subDay(),
+    ]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/body-progress', [
+            'weight' => 75.05, // Less than 0.1kg difference
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'weight' => '75.05',
+                'trend' => 'stable',
+            ],
+        ]);
+});
+
+test('trend only compares to previous entry, not other users', function () {
+    $otherUser = User::factory()->create();
+    BodyProgress::factory()->create([
+        'user_id' => $otherUser->id,
+        'weight_kg' => 90.0,
+        'recorded_at' => now()->subDay(),
+    ]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/body-progress', [
+            'weight' => 75.0,
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJson([
+            'data' => [
+                'weight' => '75.00',
+                'trend' => null, // No previous entry for this user
+            ],
+        ]);
 });
 

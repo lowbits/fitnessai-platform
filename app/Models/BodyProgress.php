@@ -57,6 +57,7 @@ class BodyProgress extends Model
         'hip_circumference',
         'arm_circumference',
         'thigh_circumference',
+        'trend',
     ];
 
     public function user(): BelongsTo
@@ -98,6 +99,36 @@ class BodyProgress extends Model
     public function getThighCircumferenceAttribute(): ?float
     {
         return $this->thigh_circumference_cm;
+    }
+
+    /**
+     * Get the weight trend compared to the previous entry.
+     * Returns 'up', 'down', 'stable', or null if no previous entry
+     */
+    public function getTrendAttribute(): ?string
+    {
+        if (!$this->weight_kg) {
+            return null;
+        }
+
+        $previousEntry = static::where('user_id', $this->user_id)
+            ->where('recorded_at', '<', $this->recorded_at)
+            ->whereNotNull('weight_kg')
+            ->orderBy('recorded_at', 'desc')
+            ->first();
+
+        if (!$previousEntry || !$previousEntry->weight_kg) {
+            return null;
+        }
+
+        $difference = $this->weight_kg - $previousEntry->weight_kg;
+
+        // Consider differences less than 0.1kg as stable
+        if (abs($difference) < 0.1) {
+            return 'stable';
+        }
+
+        return $difference > 0 ? 'up' : 'down';
     }
 }
 
