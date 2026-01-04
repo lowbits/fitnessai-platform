@@ -9,7 +9,7 @@ use App\Models\WorkoutPlan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use OpenAI\Laravel\Facades\OpenAI;
+use OpenAI;
 
 
 class GenerateUserWorkoutPlan implements ShouldQueue
