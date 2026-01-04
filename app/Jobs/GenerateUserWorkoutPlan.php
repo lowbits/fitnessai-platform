@@ -9,7 +9,8 @@ use App\Models\WorkoutPlan;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use OpenAI;
+use OpenAI\Laravel\Facades\OpenAI;
+
 
 class GenerateUserWorkoutPlan implements ShouldQueue
 {
@@ -43,9 +44,20 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             ->where('status', 'generated')
             ->max('day_number') ?? 0;
 
+        // Check if plan is already complete
+        if ($lastGeneratedDayNumber >= $this->plan->duration_days) {
+            Log::info('Workout plan already complete, skipping generation', [
+                'user_id' => $this->user->id,
+                'plan_id' => $this->plan->id,
+                'last_generated_day' => $lastGeneratedDayNumber,
+                'plan_duration_days' => $this->plan->duration_days,
+            ]);
+            return;
+        }
+
         $startDayNumber = $lastGeneratedDayNumber + 1;
         $daysToGenerate = 7; // Always generate 7 days at a time
-        $endDayNumber = $startDayNumber + $daysToGenerate - 1;
+        $endDayNumber = min($startDayNumber + $daysToGenerate - 1, $this->plan->duration_days);
 
         Log::info('Starting workout plan generation', [
             'user_id' => $this->user->id,
@@ -84,6 +96,15 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     'day' => $day,
                     'date' => $date->format('Y-m-d'),
                     'plan_end_date' => $this->plan->end_date->format('Y-m-d'),
+                ]);
+                break;
+            }
+
+            // Safety check: don't exceed plan duration
+            if ($day > $this->plan->duration_days) {
+                Log::warning("Day number exceeds plan duration, stopping generation", [
+                    'day' => $day,
+                    'plan_duration_days' => $this->plan->duration_days,
                 ]);
                 break;
             }
