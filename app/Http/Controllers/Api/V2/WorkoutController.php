@@ -28,42 +28,44 @@ class WorkoutController extends Controller
             ], 403);
         }
 
-        // Get the latest workout tracking for this workout and user
-        $latestWorkoutTracking = $workout->trackings()
-            ->where('user_id', $user->id)
-            ->latest('completed_at')
-            ->first();
+        // Get exercises with their original names
+        $exercises = $workout->exercises()->orderBy('order')->get();
+        $originalNames = $exercises->pluck('original_name')->unique()->filter()->all();
 
-        // Get tracking exercise IDs if we have a latest tracking
-        $trackingExerciseIds = $latestWorkoutTracking
-            ? $latestWorkoutTracking->exercises()->pluck('exercise_id', 'id')->toArray()
-            : [];
+        // Get latest tracking exercises for all original names in one query
+        // This is more performant than querying per exercise
+        $latestTrackings = collect();
+
+        if (!empty($originalNames)) {
+            $latestTrackings = WorkoutTrackingExercise::query()
+                ->select('workout_tracking_exercises.*')
+                ->join('workout_trackings', 'workout_tracking_exercises.workout_tracking_id', '=', 'workout_trackings.id')
+                ->join('exercises', 'workout_tracking_exercises.exercise_id', '=', 'exercises.id')
+                ->where('workout_trackings.user_id', $user->id)
+                ->whereIn('exercises.original_name', $originalNames)
+                ->whereNotNull('workout_trackings.completed_at')
+                ->with(['sets' => fn($query) => $query->orderBy('set_number'), 'exercise:id,original_name', 'workoutTracking:id,completed_at'])
+                ->get()
+                ->groupBy(fn($item) => $item->exercise->original_name)
+                ->map(fn($group) => $group->sortByDesc(fn($item) => $item->workoutTracking->completed_at)->first());
+        }
 
         // Format exercises
-        $exercises = $workout->exercises()
-            ->orderBy('order')
-            ->get()
-            ->map(function ($exercise) use ($trackingExerciseIds) {
-                // Find the tracking exercise for this exercise
-                $trackingExerciseId = array_search($exercise->id, $trackingExerciseIds);
+        $formattedExercises = $exercises->map(function ($exercise) use ($latestTrackings) {
                 $latestTracking = null;
 
-                if ($trackingExerciseId !== false) {
-                    $trackingExercise = WorkoutTrackingExercise::with(['sets' => function ($query) {
-                        $query->orderBy('set_number');
-                    }])->find($trackingExerciseId);
+                if ($exercise->original_name && isset($latestTrackings[$exercise->original_name])) {
+                    $trackingExercise = $latestTrackings[$exercise->original_name];
 
-                    if ($trackingExercise) {
-                        $latestTracking = [
-                            'notes' => $trackingExercise->notes,
-                            'sets' => $trackingExercise->sets->map(fn($set) => [
-                                'set_number' => $set->set_number,
-                                'reps' => $set->reps,
-                                'duration' => $set->duration,
-                                'weight' => $set->weight,
-                            ])->all(),
-                        ];
-                    }
+                    $latestTracking = [
+                        'notes' => $trackingExercise->notes,
+                        'sets' => $trackingExercise->sets->map(fn($set) => [
+                            'set_number' => $set->set_number,
+                            'reps' => $set->reps,
+                            'duration' => $set->duration,
+                            'weight' => $set->weight,
+                        ])->all(),
+                    ];
                 }
 
                 return [
@@ -100,8 +102,8 @@ class WorkoutController extends Controller
             'estimated_calories_burned' => $workout->estimated_calories_burned,
             'difficulty' => $workout->difficulty,
             'muscle_groups' => $workout->muscle_groups ?? [],
-            'exercises' => $exercises,
-            'exercises_count' => count($exercises),
+            'exercises' => $formattedExercises,
+            'exercises_count' => count($formattedExercises),
         ]);
     }
 }
