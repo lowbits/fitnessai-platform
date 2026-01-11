@@ -11,21 +11,25 @@ import FlagIcon from '@/components/icons/FlagIcon.vue';
 import GhostIcon from '@/components/icons/GhostIcon.vue';
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
+import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 
+const page = usePage();
 defineProps<{
     durationDays: number;
 }>();
 
 const { t } = useI18n();
+const {language} = useSelectedLanguage()
 
-const structuredData = {
+const structuredData = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: 'fytrr',
     description: t('welcome.meta.structured_data.description'),
-    url: 'https://fytrr.com',
+    url: `https://fytrr.com${page.url}`,
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web Browser',
     offers: {
@@ -33,7 +37,8 @@ const structuredData = {
         price: '3.99',
         priceCurrency: 'EUR',
     },
-};
+    inLanguage: language.value === 'de' ? 'de-DE' : 'en-GB',
+}));
 </script>
 
 <template>

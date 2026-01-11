@@ -2,6 +2,7 @@
 import SelectInput from '@/components/form/SelectInput.vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
+import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 
 const page = usePage();
 
@@ -26,7 +27,7 @@ interface FooterLinks {
 }
 
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
-const selectedLanguage = ref(page.props.currentLocale as string);
+const {language: selectedLanguage} = useSelectedLanguage()
 
 const getPathFromUrl = (url: string) => {
     return url.replace(/^https?:\/\/[^\/]+/, '');
@@ -126,12 +127,12 @@ watch(selectedLanguage, (newLocale) => {
                     <ul class="space-y-2 text-sm">
                         <li>
                             <Link
-                                href="/"
+                                :href="`/${selectedLanguage}`"
                                 :class="{
                                     'font-semibold text-secondary-200':
-                                        $page.url === '/',
+                                        $page.url === `/${selectedLanguage}`,
                                     'hover:text-se-300 text-gray-300 transition':
-                                        $page.url !== '/',
+                                        $page.url !== `/${selectedLanguage}`,
                                 }"
                             >
                                 {{ footerLinks.labels.home }}
