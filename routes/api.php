@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\V2\AuthController;
 use App\Http\Controllers\Api\V2\BodyProgressController;
 use App\Http\Controllers\Api\V2\CalorieTrackingController;
 use App\Http\Controllers\Api\V2\MealController;
+use App\Http\Controllers\Api\V2\MoveWorkoutController;
 use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\PushNotificationController;
@@ -40,6 +41,7 @@ Route::prefix('v2')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
+        Route::post('/workouts/{workout}/move', MoveWorkoutController::class);
 
         // Push notification routes
         Route::prefix('notifications')->group(function () {

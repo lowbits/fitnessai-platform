@@ -106,5 +106,5 @@ class WorkoutController extends Controller
             'exercises_count' => count($formattedExercises),
         ]);
     }
-}
 
+}

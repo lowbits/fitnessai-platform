@@ -11,13 +11,21 @@ use Illuminate\Console\Command;
 
 class GenerateWeeklyPlans extends Command
 {
-    protected $signature = 'plans:generate-weekly {--force : Generate for all users regardless of schedule}';
+    protected $signature = 'plans:generate-weekly
+                            {--force : Generate for all users regardless of schedule}
+                            {--email= : Generate for a specific user by email}';
     protected $description = 'Generate next 7 days of plans for users based on their individual schedule';
 
     public function handle(): int
     {
         $this->info('Starting weekly plan generation...');
         $force = $this->option('force');
+        $email = $this->option('email');
+
+        // If email is provided, generate only for that specific user
+        if ($email) {
+            return $this->generateForSpecificUser($email, $force);
+        }
 
         // Get users with active subscriptions and active plans
         $users = User::whereHas('subscription', function ($query) {
@@ -141,6 +149,134 @@ class GenerateWeeklyPlans extends Command
         );
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Generate plans for a specific user by email
+     */
+    private function generateForSpecificUser(string $email, bool $force): int
+    {
+        $this->info("Generating plans for user: {$email}");
+
+        $user = User::where('email', $email)
+            ->with(['plans' => function ($query) {
+                $query->where('status', 'active')
+                    ->latest()
+                    ->limit(1);
+            }])
+            ->first();
+
+        if (!$user) {
+            $this->error("❌ User not found: {$email}");
+            return Command::FAILURE;
+        }
+
+        $plan = $user->plans->first();
+
+        if (!$plan) {
+            $this->error("❌ User {$email} has no active plan");
+            return Command::FAILURE;
+        }
+
+        // Check if user has active subscription (optional - can generate even without)
+        $hasActiveSubscription = $user->subscription &&
+            $user->subscription->status === 'active' &&
+            ($user->subscription->ends_at === null || $user->subscription->ends_at->gt(now()));
+
+        if (!$hasActiveSubscription && !$force) {
+            $this->warn("⚠️  User {$email} has no active subscription. Use --force to generate anyway.");
+
+            if (!$this->confirm('Generate anyway?', false)) {
+                return Command::FAILURE;
+            }
+        }
+
+        // Check if today is generation day (can be bypassed with --force)
+        if (!$force && !$this->isUserGenerationDay($plan)) {
+            $generationDay = $this->getUserGenerationDayName($plan);
+            $this->warn("⚠️  Today is not {$email}'s generation day (scheduled for {$generationDay})");
+
+            if (!$this->confirm('Generate anyway?', false)) {
+                return Command::FAILURE;
+            }
+        }
+
+        // Check if already has enough plans
+        if (!$force && !$this->shouldGenerateForUser($plan)) {
+            $this->warn("⚠️  User {$email} already has plans for next week");
+
+            if (!$this->confirm('Generate anyway?', false)) {
+                return Command::FAILURE;
+            }
+        }
+
+        try {
+            // Find the last generated date
+            $lastWorkoutDate = $plan->workoutPlans()
+                ->where('status', 'generated')
+                ->max('date');
+
+            // Start from the day after the last generated date
+            $startDate = $lastWorkoutDate
+                ? Carbon::parse($lastWorkoutDate)->addDay()
+                : now()->startOfDay();
+
+            // Ensure we don't generate beyond plan end date
+            $endDate = $startDate->copy()->addDays(6); // 7 days total
+            if ($endDate->gt($plan->end_date)) {
+                $endDate = $plan->end_date;
+            }
+
+            $daysToGenerate = $startDate->diffInDays($endDate) + 1;
+
+            $this->info("\n📋 Generation Details:");
+            $this->table(
+                ['Property', 'Value'],
+                [
+                    ['User', "{$user->name} ({$user->email})"],
+                    ['Plan ID', $plan->id],
+                    ['Plan Start', $plan->start_date->format('Y-m-d')],
+                    ['Plan End', $plan->end_date->format('Y-m-d')],
+                    ['Generation Day', $this->getUserGenerationDayName($plan)],
+                    ['Start Date', $startDate->format('Y-m-d')],
+                    ['End Date', $endDate->format('Y-m-d')],
+                    ['Days to Generate', $daysToGenerate],
+                    ['Has Subscription', $hasActiveSubscription ? 'Yes' : 'No'],
+                ]
+            );
+
+            // Dispatch jobs to generate next 7 days
+            GenerateUserWorkoutPlan::dispatch($user, $plan);
+            GenerateUserMealPlan::dispatch($user, $plan);
+
+            $this->info("\n✅ Generation jobs dispatched successfully!");
+            $this->line("   🏋️  Workout plans queued");
+            $this->line("   🍽️  Meal plans queued");
+
+            // Send notification
+            $notificationTime = now()->setHour(8)->setMinute(0)->setSecond(0);
+            if (now()->hour >= 8) {
+                $notificationTime = $notificationTime->addDay();
+            }
+            $delay = now()->diffInSeconds($notificationTime);
+
+            $user->notify(
+                (new WeeklyPlansGeneratedNotification(
+                    $startDate->format('Y-m-d'),
+                    $endDate->format('Y-m-d')
+                ))->delay($delay)
+            );
+
+            $this->line("\n📬 Notifications:");
+            $this->line("   📧 Email sent immediately");
+            $this->line("   📱 Push notification scheduled for: {$notificationTime->format('Y-m-d H:i')}");
+
+            return Command::SUCCESS;
+        } catch (\Exception $e) {
+            $this->error("\n❌ Failed to generate plans: {$e->getMessage()}");
+            $this->error($e->getTraceAsString());
+            return Command::FAILURE;
+        }
     }
 
     /**
