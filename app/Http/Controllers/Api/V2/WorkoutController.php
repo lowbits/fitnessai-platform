@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Http\Controllers\Api\V2\Concerns\MapsExercises;
 use App\Http\Controllers\Controller;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutTrackingExercise;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 
 class WorkoutController extends Controller
 {
+    use MapsExercises;
     /**
      * Get detailed workout information
      */
@@ -68,34 +70,13 @@ class WorkoutController extends Controller
                     ];
                 }
 
-                return [
-                    'id' => $exercise->id,
-                    'order' => $exercise->order,
-                    'name' => $exercise->name,
-                    'original_name' => $exercise->original_name,
-                    'type' => $exercise->type,
-                    'description' => $exercise->description,
-                    'instructions' => $exercise->instructions,
-                    'sets' => $exercise->sets,
-                    'reps' => $exercise->reps,
-                    'duration_seconds' => $exercise->duration_seconds,
-                    'rest_seconds' => $exercise->rest_seconds,
-                    'tempo' => $exercise->tempo,
-                    'weight_recommendation' => $exercise->weight_recommendation,
-                    'muscle_groups' => $exercise->muscle_groups ?? [],
-                    'equipment' => $exercise->equipment ?? [],
-                    'form_cues' => $exercise->form_cues,
-                    'alternatives' => $exercise->alternatives ?? [],
-                    'difficulty' => $exercise->difficulty,
-                    'video_url' => $exercise->video_url,
-                    'image' => $exercise->image,
-                    'latest_tracking' => $latestTracking,
-                ];
+                return $this->mapExerciseToResponse($exercise, $latestTracking);
             })->values()->all();
 
         return response()->json([
             'id' => $workout->id,
             'name' => $workout->workout_name,
+            'date' => $workout->date->format('Y-m-d'),
             'type' => $workout->workout_type,
             'description' => $workout->description,
             'estimated_duration_minutes' => $workout->estimated_duration_minutes,

@@ -4,11 +4,12 @@ use App\Http\Controllers\Api\V2\AuthController;
 use App\Http\Controllers\Api\V2\BodyProgressController;
 use App\Http\Controllers\Api\V2\CalorieTrackingController;
 use App\Http\Controllers\Api\V2\MealController;
-use App\Http\Controllers\Api\V2\MoveWorkoutController;
 use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\PushNotificationController;
+use App\Http\Controllers\Api\V2\RescheduleWorkoutController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
+use App\Http\Controllers\Api\V2\SkipWorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
 use Illuminate\Support\Facades\Route;
@@ -41,7 +42,8 @@ Route::prefix('v2')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
-        Route::post('/workouts/{workout}/move', MoveWorkoutController::class);
+        Route::post('/workouts/{workout}/reschedule', RescheduleWorkoutController::class);
+        Route::post('/workouts/{workoutPlan}/skip', SkipWorkoutController::class)->name('workouts.skip');
 
         // Push notification routes
         Route::prefix('notifications')->group(function () {
