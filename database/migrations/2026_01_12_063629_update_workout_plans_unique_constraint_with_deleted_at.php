@@ -20,11 +20,20 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('workout_plans', function (Blueprint $table) {
-            // Drop old unique constraint
+            // 1. Drop FK
+            $table->dropForeign(['plan_id']);
+
+            // 2. Drop UNIQUE (nicht dropIndex!)
             $table->dropUnique(['plan_id', 'day_number']);
 
-            // Add a regular (non-unique) index for query performance
+            // 3. Add normalen INDEX
             $table->index(['plan_id', 'day_number']);
+
+            // 4. Re-add FK
+            $table->foreign('plan_id')
+                ->references('id')
+                ->on('plans')
+                ->onDelete('cascade');
         });
     }
 
@@ -34,11 +43,20 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('workout_plans', function (Blueprint $table) {
-            // Drop the regular index
+            // 1. Drop FK
+            $table->dropForeign(['plan_id']);
+
+            // 2. Drop den normalen INDEX (den wir in up() hinzugefügt haben)
             $table->dropIndex(['plan_id', 'day_number']);
 
-            // Restore original unique constraint
+            // 3. Add UNIQUE wieder zurück (wie es vorher war)
             $table->unique(['plan_id', 'day_number']);
+
+            // 4. Re-add FK
+            $table->foreign('plan_id')
+                ->references('id')
+                ->on('plans')
+                ->onDelete('cascade');
         });
     }
 };
