@@ -19,8 +19,10 @@
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
         "mcamara/laravel-localization": "^2.3",
+        "noopstudios/laravel-revenue-cat": "^1.0",
         "openai-php/client": "^0.18.0",
-        "openai-php/laravel": "^0.18.0"
+        "openai-php/laravel": "^0.18.0",
+        "spatie/laravel-sitemap": "^7.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",

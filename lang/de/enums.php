@@ -9,10 +9,15 @@ return [
     ],
     'bodyGoal' => [
         'muscle_gain' => 'Muskelaufbau',
+        'muscle_gain_description' => 'Baue magere Muskelmasse auf und steigere deine Größe',
         'weight_loss' => 'Gewichtsverlust',
+        'weight_loss_description' => 'Verliere Körperfett bei gleichzeitigem Muskelerhalt',
         'maintenance' => 'Erhaltung',
+        'maintenance_description' => 'Halte dein aktuelles Gewicht und deine Körperzusammensetzung',
         'endurance' => 'Ausdauer',
+        'endurance_description' => 'Baue kardiovaskuläre Ausdauer und Durchhaltevermögen auf',
         'strength' => 'Kraft',
+        'strength_description' => 'Steigere deine Maximalkraft und Power',
     ],
     'skillLevel' => [
         'beginner' => 'Anfänger',

@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Plan;
-use App\Models\Subscription;
+use App\Models\SubscriptionLegacy;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Carbon\Carbon;
@@ -18,7 +18,7 @@ test('command runs daily and checks individual user generation days', function (
     $user = User::factory()->create();
 
     // Create subscription
-    Subscription::create([
+    SubscriptionLegacy::create([
         'user_id' => $user->id,
         'type' => 'beta',
         'status' => 'active',
@@ -69,12 +69,68 @@ test('generates plans for user on their generation day', function () {
     $user = User::factory()->create();
 
     // Create subscription
-    Subscription::create([
+    SubscriptionLegacy::create([
         'user_id' => $user->id,
         'type' => 'beta',
         'status' => 'active',
         'starts_at' => now(),
         'ends_at' => now()->addMonth(),
+    ]);
+
+    // Create plan that started Monday (generation day = Thursday)
+    $plan = Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => Carbon::parse('2026-01-06'), // Monday
+        'end_date' => now()->addDays(27),
+        'duration_days' => 30,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    // Create existing workout
+    WorkoutPlan::create([
+        'plan_id' => $plan->id,
+        'date' => now()->subDays(2),
+        'day_number' => 1,
+        'status' => 'generated',
+        'workout_name' => 'Day 1',
+        'workout_type' => 'strength',
+    ]);
+
+    $this->artisan('plans:generate-weekly')
+        ->assertSuccessful();
+
+    // Should have queued jobs
+    Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
+
+    Carbon::setTestNow();
+});
+
+test('generates plans for user with RevenueCat subscription', function () {
+    Queue::fake();
+    Notification::fake();
+
+    Carbon::setTestNow(Carbon::parse('2026-01-09')); // Thursday
+
+    $user = User::factory()->create();
+
+    // Create RevenueCat subscription
+    $user->subscriptions()->forceCreate([
+        'billable_id' => $user->id,
+        'billable_type' => $user->getMorphClass(),
+        'name' => 'main',
+        'product_id' => 'pro_monthly',
+        'status' => 'active',
+        'price' => '9.99',
+        'currency' => 'USD',
+        'store' => 'app_store',
+        'current_period_ended_at' => now()->addMonth(),
     ]);
 
     // Create plan that started Monday (generation day = Thursday)
@@ -120,7 +176,7 @@ test('skips user when not their generation day', function () {
 
     $user = User::factory()->create();
 
-    Subscription::create([
+    SubscriptionLegacy::create([
         'user_id' => $user->id,
         'type' => 'beta',
         'status' => 'active',
@@ -210,7 +266,7 @@ test('calculates correct generation day based on plan start date', function () {
 
         $user = User::factory()->create();
 
-        Subscription::create([
+        SubscriptionLegacy::create([
             'user_id' => $user->id,
             'type' => 'beta',
             'status' => 'active',
@@ -259,7 +315,7 @@ test('skips user who already has 7+ days of future plans', function () {
 
     $user = User::factory()->create();
 
-    Subscription::create([
+    SubscriptionLegacy::create([
         'user_id' => $user->id,
         'type' => 'beta',
         'status' => 'active',
@@ -310,7 +366,7 @@ test('sends delayed notification when plans are generated', function () {
 
     $user = User::factory()->create();
 
-    Subscription::create([
+    SubscriptionLegacy::create([
         'user_id' => $user->id,
         'type' => 'beta',
         'status' => 'active',

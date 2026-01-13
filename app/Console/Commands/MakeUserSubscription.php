@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Actions\RevenueCat\AdjustActivePlanAction;
 use App\Models\Plan;
-use App\Models\Subscription;
+use App\Models\SubscriptionLegacy;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -12,7 +13,7 @@ class MakeUserSubscription extends Command
     protected $signature = 'subscription:create {email} {--type=beta} {--months=1}';
     protected $description = 'Create a subscription for a user and update their plan duration';
 
-    public function handle(): int
+    public function handle(AdjustActivePlanAction $adjustActivePlanAction): int
     {
         $email = $this->argument('email');
         $type = $this->option('type');
@@ -34,12 +35,12 @@ class MakeUserSubscription extends Command
             }
         }
 
-        $subscription = Subscription::create([
+        $subscription = SubscriptionLegacy::create([
             'user_id' => $user->id,
             'type' => $type,
             'status' => 'active',
             'starts_at' => now(),
-            'ends_at' => now()->addMonths($months),
+            'ends_at' => now()->addMonthsNoOverflow($months),
         ]);
 
         $this->info("✅ Subscription created successfully!");
@@ -53,14 +54,11 @@ class MakeUserSubscription extends Command
             $oldDuration = $activePlan->duration_days;
             $oldEndDate = $activePlan->end_date;
 
-            // Calculate new duration (30 days per month)
-            $newDuration = 30 * $months;
-            $newEndDate = $activePlan->start_date->copy()->addDays($newDuration);
+            $adjustActivePlanAction->execute($user, 'beta', $months);
 
-            $activePlan->update([
-                'duration_days' => $newDuration,
-                'end_date' => $newEndDate,
-            ]);
+            $activePlan->refresh();
+            $newDuration = $activePlan->duration_days;
+            $newEndDate = $activePlan->end_date;
 
             $this->table(
                 ['Field', 'Old Value', 'New Value'],

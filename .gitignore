@@ -26,3 +26,6 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+# Ignore sitemap file
+/public/sitemap.xml

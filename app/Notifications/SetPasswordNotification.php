@@ -51,12 +51,22 @@ class SetPasswordNotification extends Notification implements ShouldQueue
 
         // Log in development
         if (app()->environment('local')) {
+            $deepLink = $this->generateDeepLink($notifiable->email, $this->token);
+            $simulatorCommand = 'xcrun simctl openurl booted "' . $deepLink . '"';
+
             Log::info('🔗 Set Password Link (Signed):', [
                 'url' => $setPasswordUrl,
+                'command' => $simulatorCommand,
                 'email' => $notifiable->email,
                 'token' => $this->token,
                 'expires' => now()->addHours(24)->toDateTimeString(),
             ]);
+
+            // Also output to console/stdout
+            echo "\n========================================\n";
+            echo "📱 iOS Simulator Command (click to open):\n";
+            echo $simulatorCommand . "\n";
+            echo "========================================\n\n";
         }
 
         return (new MailMessage)
@@ -78,6 +88,21 @@ class SetPasswordNotification extends Notification implements ShouldQueue
             ->line(__('emails.beta_invite.salutation'))
             ->salutation(__('emails.beta_invite.signature'));
 
+    }
+
+    /**
+     * Generate a deep link for the mobile app only development.
+     */
+    private function generateDeepLink(string $email, string $token): string
+    {
+        // This creates a deep link that your React Native app can handle
+        // Format: fitnessai://set-password?email=...&token=...
+        $params = http_build_query([
+            'email' => $email,
+            'token' => $token,
+        ]);
+
+        return 'fytrr://set-password?' . $params;
     }
 
 

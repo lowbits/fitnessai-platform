@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Plan;
-use App\Models\Subscription;
+use App\Models\SubscriptionLegacy;
 use App\Models\User;
 
 test('can create beta subscription for user', function () {
@@ -10,7 +10,7 @@ test('can create beta subscription for user', function () {
     $this->artisan('subscription:create', ['email' => $user->email])
         ->assertSuccessful();
 
-    expect($user->fresh()->hasActiveSubscription())->toBeTrue();
+    expect($user->fresh()->hasActiveLegacySubscription())->toBeTrue();
 });
 
 test('subscription extends existing plan from 7 to 30 days', function () {
@@ -38,10 +38,11 @@ test('subscription extends existing plan from 7 to 30 days', function () {
     $this->artisan('subscription:create', ['email' => $user->email])
         ->assertSuccessful();
 
-    // Check plan is updated to 30 days
+    // Check plan is updated accordingly
     $updatedPlan = $plan->fresh();
-    expect($updatedPlan->duration_days)->toBe(30);
-    expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe(30);
+    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonth());
+    expect($updatedPlan->duration_days)->toBe($expectedDuration);
+    expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe($expectedDuration);
 });
 
 test('subscription with multiple months extends plan accordingly', function () {
@@ -67,10 +68,11 @@ test('subscription with multiple months extends plan accordingly', function () {
         '--months' => 3,
     ])->assertSuccessful();
 
-    // Check plan is updated to 90 days (3 months * 30 days)
+    // Check plan is updated accordingly
     $updatedPlan = $plan->fresh();
-    expect($updatedPlan->duration_days)->toBe(90);
-    expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe(90);
+    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonths(3));
+    expect($updatedPlan->duration_days)->toBe($expectedDuration);
+    expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe($expectedDuration);
 });
 
 test('handles user without active plan gracefully', function () {
@@ -83,7 +85,7 @@ test('handles user without active plan gracefully', function () {
     $this->artisan('subscription:create', ['email' => $user->email])
         ->assertSuccessful();
 
-    expect($user->fresh()->hasActiveSubscription())->toBeTrue();
+    expect($user->fresh()->hasActiveLegacySubscription())->toBeTrue();
 });
 
 test('subscription updates only active plan not inactive ones', function () {
@@ -123,7 +125,8 @@ test('subscription updates only active plan not inactive ones', function () {
         ->assertSuccessful();
 
     // Active plan should be updated
-    expect($activePlan->fresh()->duration_days)->toBe(30);
+    $expectedDuration = (int) $activePlan->start_date->diffInDays($activePlan->start_date->copy()->addMonth());
+    expect($activePlan->fresh()->duration_days)->toBe($expectedDuration);
 
     // Inactive plan should remain unchanged
     expect($inactivePlan->fresh()->duration_days)->toBe(7);

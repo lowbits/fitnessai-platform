@@ -1,0 +1,136 @@
+<?php
+
+namespace App\Listeners;
+
+
+use App\Actions\RevenueCat\HandleInitialPurchaseAction;
+use Illuminate\Support\Facades\Log;
+use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
+
+class HandleRevenueCatWebhook
+{
+    /**
+     * Create the event listener.
+     */
+    public function __construct(private readonly HandleInitialPurchaseAction $initialPurchaseAction)
+    {
+        //
+    }
+
+    /**
+     * Handle the event.
+     */
+    public function handle(WebhookReceived $event): void
+    {
+        $payload = $event->payload;
+        $type = $payload['event']['type'];
+
+        Log::info('RevenueCat webhook received', [
+            'type' => $type,
+            'payload' => $payload,
+        ]);
+
+        switch ($type) {
+            case 'INITIAL_PURCHASE':
+                $this->initialPurchaseAction->execute($payload);
+                break;
+            case 'RENEWAL':
+                $this->handleRenewal($payload);
+                break;
+            case 'CANCELLATION':
+                $this->handleCancellation($payload);
+                break;
+            case 'NON_RENEWING_PURCHASE':
+                $this->handleNonRenewingPurchase($payload);
+                break;
+            case 'SUBSCRIPTION_PAUSED':
+                $this->handleSubscriptionPaused($payload);
+                break;
+            case 'SUBSCRIPTION_RESUMED':
+                $this->handleSubscriptionResumed($payload);
+                break;
+            case 'PRODUCT_CHANGE':
+                $this->handleProductChange($payload);
+                break;
+            case 'BILLING_ISSUE':
+                $this->handleBillingIssue($payload);
+                break;
+            case 'REFUND':
+                $this->handleRefund($payload);
+                break;
+            case 'SUBSCRIPTION_PERIOD_CHANGED':
+                $this->handleSubscriptionPeriodChanged($payload);
+                break;
+        }
+    }
+
+
+
+    protected function handleRenewal(array $payload): void
+    {
+        Log::info('Handling renewal', ['payload' => $payload]);
+        // Add logic for renewal if needed, for now just follow the requirement for initial purchase
+    }
+
+    protected function handleCancellation(array $payload): void
+    {
+        Log::info('Handling cancellation', ['payload' => $payload]);
+
+        $event = $payload['event'];
+        $user = \App\Models\User::find($event['app_user_id']);
+
+        if (!$user) {
+            Log::error('User not found for cancellation', [
+                'app_user_id' => $event['app_user_id'],
+            ]);
+            return;
+        }
+
+        $subscription = $user->subscriptions()
+            ->where('product_id', $event['product_id'])
+            ->first();
+
+        if ($subscription) {
+            $subscription->cancel();
+            Log::info('Subscription cancelled successfully', [
+                'user_id' => $user->id,
+                'product_id' => $event['product_id'],
+            ]);
+        }
+    }
+
+    protected function handleNonRenewingPurchase(array $payload): void
+    {
+        Log::info('Handling non-renewing purchase', ['payload' => $payload]);
+    }
+
+    protected function handleSubscriptionPaused(array $payload): void
+    {
+        Log::info('Handling subscription paused', ['payload' => $payload]);
+    }
+
+    protected function handleSubscriptionResumed(array $payload): void
+    {
+        Log::info('Handling subscription resumed', ['payload' => $payload]);
+    }
+
+    protected function handleProductChange(array $payload): void
+    {
+        Log::info('Handling product change', ['payload' => $payload]);
+    }
+
+    protected function handleBillingIssue(array $payload): void
+    {
+        Log::info('Handling billing issue', ['payload' => $payload]);
+    }
+
+    protected function handleRefund(array $payload): void
+    {
+        Log::info('Handling refund', ['payload' => $payload]);
+    }
+
+    protected function handleSubscriptionPeriodChanged(array $payload): void
+    {
+        Log::info('Handling subscription period changed', ['payload' => $payload]);
+    }
+}

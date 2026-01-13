@@ -20,23 +20,17 @@ enum BodyGoal: string
     /**
      * Get human-readable label for frontend display.
      */
-    public function label(): string
+    public function label(?string $locale = null): string
     {
-        return __('enums.bodyGoal.' . $this->value);
+        return __('enums.bodyGoal.' . $this->value, [], $locale);
     }
 
     /**
      * Get detailed description of this goal.
      */
-    public function description(): string
+    public function description(?string $locale = null): string
     {
-        return match($this) {
-            self::MUSCLE_GAIN => 'Build lean muscle mass and increase size',
-            self::WEIGHT_LOSS => 'Lose body fat while maintaining muscle',
-            self::MAINTENANCE => 'Maintain current weight and body composition',
-            self::ENDURANCE => 'Build cardiovascular endurance and stamina',
-            self::STRENGTH => 'Increase maximum strength and power',
-        };
+        return __('enums.bodyGoal.' . $this->value . '_description', [], $locale);
     }
 
     /**

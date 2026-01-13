@@ -39,4 +39,3 @@ Schedule::command('notifications:meal-reminders')
     ->dailyAt('12:00')
     ->withoutOverlapping()
     ->runInBackground();
-

@@ -3,10 +3,14 @@
 namespace App\Providers;
 
 use App\Events\EmailVerified;
+use App\Events\RevenueCat\InitialPurchaseProcessed;
+use App\Listeners\AdjustPlanAfterPurchase;
 use App\Listeners\GenerateMealPlan;
 use App\Listeners\GenerateWorkoutPlan;
+use App\Listeners\HandleRevenueCatWebhook;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
+use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,5 +31,8 @@ class AppServiceProvider extends ServiceProvider
             EmailVerified::class,
             [GenerateMealPlan::class, GenerateWorkoutPlan::class],
         );
+
+        Event::listen(WebhookReceived::class, HandleRevenueCatWebhook::class);
+        Event::listen(InitialPurchaseProcessed::class, AdjustPlanAfterPurchase::class);
     }
 }

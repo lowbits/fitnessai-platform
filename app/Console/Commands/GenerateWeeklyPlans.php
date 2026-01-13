@@ -28,13 +28,17 @@ class GenerateWeeklyPlans extends Command
         }
 
         // Get users with active subscriptions and active plans
-        $users = User::whereHas('subscription', function ($query) {
-                $query->where('status', 'active')
-                    ->where(function ($q) {
-                        $q->whereNull('ends_at')
-                            ->orWhere('ends_at', '>', now());
+        $users = User::where(function ($query) {
+            $query->whereHas('subscriptions', function ($q) {
+                $q->where('status', 'active')
+                    ->where(function ($sq) {
+                        $sq->whereNull('current_period_ended_at')
+                            ->orWhere('current_period_ended_at', '>', now());
                     });
-            })
+            })->orWhereHas('legacySubscription', function ($q) {
+                $q->active();
+            });
+        })
             ->whereHas('plans', function ($query) {
                 $query->where('status', 'active');
             })
@@ -179,9 +183,7 @@ class GenerateWeeklyPlans extends Command
         }
 
         // Check if user has active subscription (optional - can generate even without)
-        $hasActiveSubscription = $user->subscription &&
-            $user->subscription->status === 'active' &&
-            ($user->subscription->ends_at === null || $user->subscription->ends_at->gt(now()));
+        $hasActiveSubscription = ($user->hasActiveLegacySubscription() || $user->hasActiveSubscription());
 
         if (!$hasActiveSubscription && !$force) {
             $this->warn("⚠️  User {$email} has no active subscription. Use --force to generate anyway.");

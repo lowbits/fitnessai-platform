@@ -9,10 +9,15 @@ return [
     ],
     'bodyGoal' => [
         'muscle_gain' => 'Muscle Gain',
+        'muscle_gain_description' => 'Build lean muscle mass and increase size',
         'weight_loss' => 'Weight Loss',
+        'weight_loss_description' => 'Lose body fat while maintaining muscle',
         'maintenance' => 'Maintenance',
+        'maintenance_description' => 'Maintain current weight and body composition',
         'endurance' => 'Endurance',
+        'endurance_description' => 'Build cardiovascular endurance and stamina',
         'strength' => 'Strength',
+        'strength_description' => 'Increase maximum strength and power',
     ],
     'skillLevel' => [
         'beginner' => 'Beginner',

@@ -11,11 +11,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
+use NoopStudios\LaravelRevenueCat\Concerns\Billable;
 
 class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens;
+    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens, Billable;
 
     /**
      * The attributes that are mass assignable.
@@ -97,19 +98,19 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         return $this->hasMany(UserDevice::class);
     }
 
-    public function subscription(): HasOne
+    public function legacySubscription(): HasOne
     {
-        return $this->hasOne(Subscription::class)->latestOfMany();
+        return $this->hasOne(SubscriptionLegacy::class)->latestOfMany();
     }
 
-    public function subscriptions(): HasMany
+    public function legacySubscriptions(): HasMany
     {
-        return $this->hasMany(Subscription::class);
+        return $this->hasMany(SubscriptionLegacy::class,);
     }
 
-    public function hasActiveSubscription(): bool
+    public function hasActiveLegacySubscription(): bool
     {
-        return $this->subscription && $this->subscription->isActive();
+        return $this->legacySubscription && $this->legacySubscription->isActive();
     }
 
     public function preferredLocale()
@@ -127,5 +128,39 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
             ->first();
 
         return $latestProgress?->weight_kg ?? $this->profile?->weight_kg;
+    }
+
+    public function getSubscriptionDetails(): array
+    {
+        if ($rc = $this->subscriptions()->where('status', 'active')->first()) {
+            return [
+                'has_active_subscription' => true,
+                'tier' => $rc->product_id,
+                'status' => $rc->status,
+                'started_at' => $rc->created_at,
+                'expires_at' => $rc->current_period_ended_at,
+                'source' => 'revenuecat',
+            ];
+        }
+
+        if ($this->legacySubscription?->isActive()) {
+            return [
+                'has_active_subscription' => true,
+                'tier' => __($this->legacySubscription->type),
+                'status' => 'active',
+                'started_at' => $this->legacySubscription->starts_at,
+                'expires_at' => $this->legacySubscription->ends_at,
+                'source' => 'legacy',
+            ];
+        }
+
+        return [
+            'has_active_subscription' => false,
+            'tier' => 'free',
+            'status' => 'free',
+            'started_at' => $this->created_at,
+            'expires_at' => $this->plans()->where('status', 'active')->first()?->end_date,
+            'source' => 'free',
+        ];
     }
 }

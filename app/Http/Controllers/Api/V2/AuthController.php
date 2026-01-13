@@ -92,15 +92,13 @@ class AuthController extends Controller
      */
     public function me(Request $request): JsonResponse
     {
-        $user = $request->user()->load(['profile', 'plans', 'subscription']);
-        $profile = $user->profile;
-        $currentPlan = $user->plans()->where('status', 'active')->first();
-        $subscription = $user->subscription;
+        $user = $request->user()->load(
+            'profile'
+        );
 
-        // Determine subscription status
-        $hasActiveSubscription = $subscription && $subscription->isActive();
-        $subscriptionTier = $hasActiveSubscription ? __($subscription->type) : 'free';
-        $subscriptionStatus = $hasActiveSubscription ? 'active' : 'free';
+        $subscription = $user->getSubscriptionDetails();
+        $currentPlan = $user->plans()->where('status', 'active')->first();
+
 
         return response()->json([
             'user' => [
@@ -136,21 +134,7 @@ class AuthController extends Controller
                     'fat_g' => $currentPlan->daily_fat_g,
                 ],
             ] : null,
-            'subscription' => [
-                'status' => $subscriptionStatus,
-                'tier' => $subscriptionTier,
-                'started_at' => $subscription?->starts_at?->toIso8601String() ?? $user->created_at->toIso8601String(),
-                'expires_at' => $subscription?->ends_at?->toIso8601String() ?? ($currentPlan ? $currentPlan->end_date->toIso8601String() : null),
-                'will_renew' => false,
-                'features' => [
-                    'full_plan_access' => $hasActiveSubscription,
-                    'max_days_accessible' => $hasActiveSubscription ? $currentPlan?->duration_days ?? 30 : 7,
-                    'unlimited_regeneration' => $hasActiveSubscription,
-                    'meal_alternatives' => $hasActiveSubscription,
-                    'exercise_alternatives' => $hasActiveSubscription,
-                    'ai_coach' => $hasActiveSubscription,
-                ],
-            ],
+            'subscription' => $subscription,
             'settings' => [
                 'notifications_enabled' => true,
                 'workout_reminders' => true,

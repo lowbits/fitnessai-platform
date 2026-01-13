@@ -5,8 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Subscription extends Model
+class SubscriptionLegacy extends Model
 {
+
+    protected $table = 'subscriptions_legacy';
+
     protected $fillable = [
         'user_id',
         'type',

@@ -144,10 +144,11 @@ if ($subscription && $subscription->isActive()) {
 ```
 
 ### Create subscription programmatically
-```php
-use App\Models\Subscription;
 
-$subscription = Subscription::create([
+```php
+use App\Models\SubscriptionLegacy;
+
+$subscription = SubscriptionLegacy::create([
     'user_id' => $user->id,
     'type' => 'beta',
     'status' => 'active',
