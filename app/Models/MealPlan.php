@@ -16,6 +16,7 @@ class MealPlan extends Model
         'date',
         'day_number',
         'status',
+        'openai_response_id',
         'total_calories',
         'total_protein_g',
         'total_carbs_g',

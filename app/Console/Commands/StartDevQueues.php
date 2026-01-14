@@ -26,9 +26,9 @@ class StartDevQueues extends Command
     {
         $commands = [
             ['php', 'artisan', 'schedule:work'],
-            ['php', 'artisan', 'queue:listen', '--queue=workouts', '--timeout=3000'],
-            ['php', 'artisan', 'queue:listen', '--queue=nutrition', '--timeout=3000'],
-            ['php', 'artisan', 'queue:listen', '--queue=default'],
+            ['php', 'artisan', 'queue:work', '--queue=workouts', '--timeout=3000'],
+            ['php', 'artisan', 'queue:work', '--queue=nutrition', '--timeout=3000'],
+            ['php', 'artisan', 'queue:work', '--queue=default'],
         ];
 
         foreach ($commands as $command) {
