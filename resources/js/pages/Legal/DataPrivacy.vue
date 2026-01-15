@@ -24,321 +24,212 @@ const { t } = useI18n();
             <div class="mb-10 max-w-prose space-y-8">
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        1. Datenschutz auf einen Blick
+                        {{ t('legal.data_privacy.sections.overview.title') }}
                     </h2>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Allgemeine Hinweise
+                        {{ t('legal.data_privacy.sections.overview.general.title') }}
                     </h3>
                     <p class="mb-4">
-                        Die folgenden Hinweise geben einen einfachen Überblick
-                        darüber, was mit Ihren personenbezogenen Daten passiert,
-                        wenn Sie diese Website besuchen. Personenbezogene Daten
-                        sind alle Daten, mit denen Sie persönlich identifiziert
-                        werden können.
+                        {{ t('legal.data_privacy.sections.overview.general.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Datenerfassung auf dieser Website
+                        {{ t('legal.data_privacy.sections.overview.data_collection.title') }}
                     </h3>
                     <p class="mb-2">
-                        <strong
-                            >Wer ist verantwortlich für die Datenerfassung auf
-                            dieser Website?</strong
-                        >
+                        <strong>{{ t('legal.data_privacy.sections.overview.data_collection.who_responsible') }}</strong>
                     </p>
                     <p class="mb-4">
-                        Die Datenverarbeitung auf dieser Website erfolgt durch
-                        den Websitebetreiber. Dessen Kontaktdaten können Sie dem
-                        Impressum dieser Website entnehmen.
+                        {{ t('legal.data_privacy.sections.overview.data_collection.who_answer') }}
                     </p>
 
                     <p class="mb-2">
-                        <strong>Wie erfassen wir Ihre Daten?</strong>
+                        <strong>{{ t('legal.data_privacy.sections.overview.data_collection.how_collect') }}</strong>
                     </p>
                     <p class="mb-4">
-                        Ihre Daten werden zum einen dadurch erhoben, dass Sie
-                        uns diese mitteilen (z.B. bei der Erstellung Ihres
-                        Trainingsplans). Andere Daten werden automatisch beim
-                        Besuch der Website durch unsere IT-Systeme erfasst (z.B.
-                        IP-Adresse).
+                        {{ t('legal.data_privacy.sections.overview.data_collection.how_answer') }}
                     </p>
 
                     <p class="mb-2">
-                        <strong>Wofür nutzen wir Ihre Daten?</strong>
+                        <strong>{{ t('legal.data_privacy.sections.overview.data_collection.why_use') }}</strong>
                     </p>
                     <p class="mb-4">
-                        Ihre Daten werden verwendet, um personalisierte
-                        Trainings- und Ernährungspläne mittels KI-Technologie zu
-                        erstellen und Ihnen diese per E-Mail zuzustellen.
+                        {{ t('legal.data_privacy.sections.overview.data_collection.why_answer') }}
                     </p>
                 </section>
 
                 <section>
-                    <h2 class="mb-4 text-2xl font-semibold">2. Hosting</h2>
-                    <p class="mb-2"><strong>Hetzner Online GmbH</strong></p>
+                    <h2 class="mb-4 text-2xl font-semibold">{{ t('legal.data_privacy.sections.hosting.title') }}</h2>
+                    <p class="mb-2"><strong>{{ t('legal.data_privacy.sections.hosting.provider') }}</strong></p>
                     <p class="mb-4">
-                        Wir hosten unsere Website bei Hetzner Online GmbH,
-                        Industriestr. 25, 91710 Gunzenhausen, Deutschland.
+                        {{ t('legal.data_privacy.sections.hosting.description') }}
                     </p>
-                    <p class="mb-4">
-                        Wenn Sie unsere Website besuchen, erfasst Hetzner
-                        verschiedene Logfiles inklusive Ihrer IP-Adressen.
-                        Details entnehmen Sie der Datenschutzerklärung von
-                        Hetzner:
-                        <a
-                            href="https://www.hetzner.com/de/rechtliches/datenschutz"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-primary-500 hover:underline"
-                            >https://www.hetzner.com/de/rechtliches/datenschutz</a
-                        >
-                    </p>
+                    <p class="mb-4" v-html="t('legal.data_privacy.sections.hosting.details')"></p>
                     <p class="mb-2">
-                        Die Verwendung von Hetzner erfolgt auf Grundlage von
-                        Art. 6 Abs. 1 lit. f DSGVO. Wir haben ein berechtigtes
-                        Interesse an einer möglichst zuverlässigen Darstellung
-                        unserer Website.
+                        {{ t('legal.data_privacy.sections.hosting.legal_basis') }}
                     </p>
                 </section>
 
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        3. Allgemeine Hinweise und Pflichtinformationen
+                        {{ t('legal.data_privacy.sections.general_info.title') }}
                     </h2>
 
-                    <h3 class="mb-2 text-lg font-semibold">Datenschutz</h3>
+                    <h3 class="mb-2 text-lg font-semibold">{{ t('legal.data_privacy.sections.general_info.data_protection.title') }}</h3>
                     <p class="mb-4">
-                        Die Betreiber dieser Seiten nehmen den Schutz Ihrer
-                        persönlichen Daten sehr ernst. Wir behandeln Ihre
-                        personenbezogenen Daten vertraulich und entsprechend der
-                        gesetzlichen Datenschutzvorschriften sowie dieser
-                        Datenschutzerklärung.
+                        {{ t('legal.data_privacy.sections.general_info.data_protection.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Hinweis zur verantwortlichen Stelle
+                        {{ t('legal.data_privacy.sections.general_info.responsible_party.title') }}
                     </h3>
                     <p class="mb-4">
-                        Die verantwortliche Stelle für die Datenverarbeitung auf
-                        dieser Website ist:
+                        {{ t('legal.data_privacy.sections.general_info.responsible_party.description') }}
                     </p>
                     <div class="mb-4 rounded bg-dark-surfaces-500 p-4">
                         <p>Tobias Lobitz</p>
                         <p>Annastraße 7</p>
                         <p>40477 Düsseldorf</p>
-                        <p>E-Mail: hello@fytrr.com</p>
+                        <p>{{ t('legal.data_privacy.sections.general_info.responsible_party.email') }}: hello@fytrr.com</p>
                     </div>
 
-                    <h3 class="mb-2 text-lg font-semibold">Speicherdauer</h3>
+                    <h3 class="mb-2 text-lg font-semibold">{{ t('legal.data_privacy.sections.general_info.storage_duration.title') }}</h3>
                     <p class="mb-4">
-                        Soweit innerhalb dieser Datenschutzerklärung keine
-                        speziellere Speicherdauer genannt wurde, verbleiben Ihre
-                        personenbezogenen Daten bei uns, bis der Zweck für die
-                        Datenverarbeitung entfällt. Wenn Sie ein berechtigtes
-                        Löschersuchen geltend machen oder eine Einwilligung zur
-                        Datenverarbeitung widerrufen, werden Ihre Daten
-                        gelöscht.
+                        {{ t('legal.data_privacy.sections.general_info.storage_duration.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Widerruf Ihrer Einwilligung zur Datenverarbeitung
+                        {{ t('legal.data_privacy.sections.general_info.consent_withdrawal.title') }}
                     </h3>
                     <p class="mb-4">
-                        Viele Datenverarbeitungsvorgänge sind nur mit Ihrer
-                        ausdrücklichen Einwilligung möglich. Sie können eine
-                        bereits erteilte Einwilligung jederzeit widerrufen. Die
-                        Rechtmäßigkeit der bis zum Widerruf erfolgten
-                        Datenverarbeitung bleibt vom Widerruf unberührt.
+                        {{ t('legal.data_privacy.sections.general_info.consent_withdrawal.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Beschwerderecht bei der zuständigen Aufsichtsbehörde
+                        {{ t('legal.data_privacy.sections.general_info.complaint_right.title') }}
                     </h3>
                     <p class="mb-4">
-                        Im Falle von Verstößen gegen die DSGVO steht den
-                        Betroffenen ein Beschwerderecht bei einer
-                        Aufsichtsbehörde zu. Das Beschwerderecht besteht
-                        unbeschadet anderweitiger verwaltungsrechtlicher oder
-                        gerichtlicher Rechtsbehelfe.
+                        {{ t('legal.data_privacy.sections.general_info.complaint_right.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Recht auf Datenübertragbarkeit
+                        {{ t('legal.data_privacy.sections.general_info.data_portability.title') }}
                     </h3>
                     <p class="mb-4">
-                        Sie haben das Recht, Daten, die wir auf Grundlage Ihrer
-                        Einwilligung oder in Erfüllung eines Vertrags
-                        automatisiert verarbeiten, an sich oder an einen Dritten
-                        in einem gängigen, maschinenlesbaren Format aushändigen
-                        zu lassen.
+                        {{ t('legal.data_privacy.sections.general_info.data_portability.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Auskunft, Löschung und Berichtigung
+                        {{ t('legal.data_privacy.sections.general_info.access_rights.title') }}
                     </h3>
                     <p class="mb-4">
-                        Sie haben im Rahmen der geltenden gesetzlichen
-                        Bestimmungen jederzeit das Recht auf unentgeltliche
-                        Auskunft über Ihre gespeicherten personenbezogenen
-                        Daten, deren Herkunft und Empfänger und den Zweck der
-                        Datenverarbeitung und ggf. ein Recht auf Berichtigung
-                        oder Löschung dieser Daten.
+                        {{ t('legal.data_privacy.sections.general_info.access_rights.description') }}
                     </p>
                 </section>
 
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        4. Datenerfassung auf dieser Website
+                        {{ t('legal.data_privacy.sections.data_collection.title') }}
                     </h2>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Server-Log-Dateien
+                        {{ t('legal.data_privacy.sections.data_collection.server_logs.title') }}
                     </h3>
                     <p class="mb-2">
-                        Der Provider der Seiten erhebt und speichert automatisch
-                        Informationen in sogenannten Server-Log-Dateien:
+                        {{ t('legal.data_privacy.sections.data_collection.server_logs.description') }}
                     </p>
                     <ul class="mb-4 list-inside list-disc space-y-1">
-                        <li>Browsertyp und Browserversion</li>
-                        <li>Verwendetes Betriebssystem</li>
-                        <li>Referrer URL</li>
-                        <li>Hostname des zugreifenden Rechners</li>
-                        <li>Uhrzeit der Serveranfrage</li>
-                        <li>IP-Adresse</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.browser') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.os') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.referrer') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.hostname') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.time') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.server_logs.items.ip') }}</li>
                     </ul>
                     <p class="mb-4">
-                        Eine Zusammenführung dieser Daten mit anderen
-                        Datenquellen wird nicht vorgenommen. Die Erfassung
-                        dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1
-                        lit. f DSGVO.
+                        {{ t('legal.data_privacy.sections.data_collection.server_logs.legal_note') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Anfrage per E-Mail
+                        {{ t('legal.data_privacy.sections.data_collection.email_inquiry.title') }}
                     </h3>
                     <p class="mb-4">
-                        Wenn Sie uns per E-Mail kontaktieren, wird Ihre Anfrage
-                        inklusive aller daraus hervorgehenden personenbezogenen
-                        Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres
-                        Anliegens bei uns gespeichert und verarbeitet. Diese
-                        Daten geben wir nicht ohne Ihre Einwilligung weiter.
+                        {{ t('legal.data_privacy.sections.data_collection.email_inquiry.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Registrierung und Nutzung des Services
+                        {{ t('legal.data_privacy.sections.data_collection.registration.title') }}
                     </h3>
                     <p class="mb-4">
-                        Bei der Nutzung unseres Services zur Erstellung von
-                        Trainings- und Ernährungsplänen erfassen wir folgende
-                        Daten:
+                        {{ t('legal.data_privacy.sections.data_collection.registration.description') }}
                     </p>
                     <ul class="mb-4 list-inside list-disc space-y-1">
-                        <li>E-Mail-Adresse (zur Zusendung der Pläne)</li>
-                        <li>Körperdaten (Gewicht, Größe, Alter, Geschlecht)</li>
-                        <li>Fitnessziele und Präferenzen</li>
-                        <li>
-                            Gesundheitsinformationen (soweit von Ihnen
-                            angegeben)
-                        </li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.registration.items.email') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.registration.items.body_data') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.registration.items.goals') }}</li>
+                        <li>{{ t('legal.data_privacy.sections.data_collection.registration.items.health') }}</li>
                     </ul>
                     <p class="mb-4">
-                        Diese Daten werden ausschließlich zur Erstellung Ihrer
-                        personalisierten Pläne verwendet und auf Grundlage Ihrer
-                        Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) verarbeitet.
+                        {{ t('legal.data_privacy.sections.data_collection.registration.legal_note') }}
                     </p>
                 </section>
 
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        5. Externe Dienste
+                        {{ t('legal.data_privacy.sections.external_services.title') }}
                     </h2>
 
-                    <h3 class="mb-2 text-lg font-semibold">KI-Dienste</h3>
+                    <h3 class="mb-2 text-lg font-semibold">{{ t('legal.data_privacy.sections.external_services.ai.title') }}</h3>
                     <p class="mb-4">
-                        Zur Erstellung personalisierter Trainings- und
-                        Ernährungspläne nutzen wir KI-basierte Dienste von
-                        Drittanbietern (USA/EU). Ihre eingegebenen Daten werden
-                        an diese Dienste übermittelt, um die Pläne zu
-                        generieren. Die Verarbeitung erfolgt auf Grundlage von
-                        Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung) und Art.
-                        6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+                        {{ t('legal.data_privacy.sections.external_services.ai.description') }}
                     </p>
                     <p class="mb-4">
-                        Wir haben mit den Anbietern
-                        Auftragsverarbeitungsverträge (AVV) geschlossen. Bei
-                        Übermittlung in Drittländer außerhalb der EU erfolgt
-                        dies auf Basis von Standardvertragsklauseln.
+                        {{ t('legal.data_privacy.sections.external_services.ai.contracts') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Resend (E-Mail-Versand)
+                        {{ t('legal.data_privacy.sections.external_services.resend.title') }}
+                    </h3>
+                    <p class="mb-4" v-html="t('legal.data_privacy.sections.external_services.resend.description')"></p>
+
+                    <h3 class="mb-2 text-lg font-semibold">
+                        {{ t('legal.data_privacy.sections.external_services.plausible.title') }}
                     </h3>
                     <p class="mb-4">
-                        Wir nutzen Resend zum Versand Ihrer personalisierten
-                        Pläne per E-Mail. Dabei wird Ihre E-Mail-Adresse an
-                        Resend übermittelt. Weitere Informationen:
-                        <a
-                            href="https://resend.com/legal/privacy-policy"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="text-primary-500 hover:underline"
-                            >https://resend.com/legal/privacy-policy</a
-                        >
+                        {{ t('legal.data_privacy.sections.external_services.plausible.description') }}
                     </p>
 
                     <h3 class="mb-2 text-lg font-semibold">
-                        Plausible Analytics
+                        {{ t('legal.data_privacy.sections.external_services.polar.title') }}
                     </h3>
                     <p class="mb-4">
-                        Wir nutzen Plausible Analytics, ein
-                        datenschutzfreundlichen Analyse-Tool. Plausible
-                        verwendet keine Cookies und erfasst keine
-                        personenbezogenen Daten. Die Erfassung erfolgt
-                        anonymisiert.
-                    </p>
-
-                    <h3 class="mb-2 text-lg font-semibold">
-                        Polar.sh (Zahlungsabwicklung)
-                    </h3>
-                    <p class="mb-4">
-                        Für die Zahlungsabwicklung nutzen wir Polar.sh. Bei
-                        Zahlungsvorgängen werden Ihre Zahlungsdaten direkt an
-                        Polar.sh übermittelt und dort verarbeitet. Wir speichern
-                        keine vollständigen Zahlungsdaten. Rechtsgrundlage ist
-                        Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).
+                        {{ t('legal.data_privacy.sections.external_services.polar.description') }}
                     </p>
                 </section>
 
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        6. Datenlöschung
+                        {{ t('legal.data_privacy.sections.data_deletion.title') }}
                     </h2>
                     <p class="mb-4">
-                        Ihre Daten werden gelöscht, sobald sie für die
-                        Erreichung des Zweckes ihrer Erhebung nicht mehr
-                        erforderlich sind. Sie können jederzeit die Löschung
-                        Ihrer Daten per E-Mail an hello@fytrr.com beantragen.
+                        {{ t('legal.data_privacy.sections.data_deletion.description') }}
                     </p>
                 </section>
 
                 <section>
                     <h2 class="mb-4 text-2xl font-semibold">
-                        7. SSL- bzw. TLS-Verschlüsselung
+                        {{ t('legal.data_privacy.sections.ssl.title') }}
                     </h2>
                     <p class="mb-4">
-                        Diese Seite nutzt aus Sicherheitsgründen und zum Schutz
-                        der Übertragung vertraulicher Inhalte eine SSL- bzw.
-                        TLS-Verschlüsselung. Eine verschlüsselte Verbindung
-                        erkennen Sie daran, dass die Adresszeile des Browsers
-                        von "http://" auf "https://" wechselt.
+                        {{ t('legal.data_privacy.sections.ssl.description') }}
                     </p>
                 </section>
 
                 <div
                     class="mt-8 border-t border-gray-200 pt-6 text-sm text-gray-500"
                 >
-                    <p>Stand: Dezember 2025</p>
+                    <p>{{ t('legal.data_privacy.last_updated') }}</p>
                 </div>
             </div>
         </div>

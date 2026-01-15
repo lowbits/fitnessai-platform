@@ -627,6 +627,49 @@ export const locales = {
                         'Legal information and contact details for fytrr.',
                 },
                 title: 'Imprint',
+                sections: {
+                    company: {
+                        title: 'Business Information',
+                        country: 'Germany',
+                    },
+                    contact: {
+                        title: 'Contact',
+                        email: 'Email',
+                    },
+                    tax: {
+                        title: 'Tax Identification Number',
+                        description: 'VAT Identification Number (Germany)',
+                    },
+                    dispute: {
+                        title: 'EU Online Dispute Resolution',
+                        description:
+                            'The European Commission provides a platform for online dispute resolution (ODR): <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://ec.europa.eu/consumers/odr/</a>',
+                        email_note: 'Our email address can be found above.',
+                    },
+                    consumer_dispute: {
+                        title: 'Consumer Dispute Resolution',
+                        description:
+                            'We are neither willing nor obligated to participate in dispute resolution proceedings before a consumer arbitration board.',
+                    },
+                    disclaimer: {
+                        title: 'Liability Disclaimer',
+                        content: {
+                            title: 'Liability for Content',
+                            description:
+                                'The content of our pages has been created with the utmost care. However, we cannot guarantee the accuracy, completeness, or timeliness of the content. As a service provider, we are responsible for our own content on these pages in accordance with general laws. However, as a service provider, we are not obligated to monitor transmitted or stored third-party information or to investigate circumstances that indicate illegal activity. This disclaimer applies to the extent permitted by applicable law, including US federal and state consumer protection laws.',
+                        },
+                        links: {
+                            title: 'Liability for Links',
+                            description:
+                                'Our website contains links to external third-party websites over whose content we have no control. Therefore, we cannot accept any liability for this third-party content. The respective provider or operator of the linked pages is always responsible for the content of the linked pages. To the extent permitted under applicable US law, we disclaim all liability for damages arising from the use of third-party content.',
+                        },
+                        copyright: {
+                            title: 'Copyright',
+                            description:
+                                'The content and works created by the site operators on these pages are subject to German and international copyright law. The reproduction, editing, distribution, and any kind of use beyond the limits of copyright require the written consent of the respective author or creator. This applies to all jurisdictions where fytrr operates, including the United States.',
+                        },
+                    },
+                },
             },
             data_privacy: {
                 meta: {
@@ -635,6 +678,149 @@ export const locales = {
                         'Information about how we collect, use, and protect your personal data.',
                 },
                 title: 'Privacy Policy',
+                sections: {
+                    overview: {
+                        title: '1. Privacy at a Glance',
+                        general: {
+                            title: 'General Information',
+                            description:
+                                'The following information provides a simple overview of what happens to your personal data when you visit this website. Personal data is any data that can be used to personally identify you.',
+                        },
+                        data_collection: {
+                            title: 'Data Collection on This Website',
+                            who_responsible: 'Who is responsible for data collection on this website?',
+                            who_answer:
+                                'Data processing on this website is carried out by the website operator. Contact details can be found in the imprint of this website.',
+                            how_collect: 'How do we collect your data?',
+                            how_answer:
+                                'Your data is collected either by you providing it to us (e.g., when creating your workout plan) or automatically by our IT systems when you visit the website (e.g., IP address).',
+                            why_use: 'What do we use your data for?',
+                            why_answer:
+                                'Your data is used to create personalized workout and nutrition plans using AI technology and to deliver them to you via email.',
+                        },
+                    },
+                    hosting: {
+                        title: '2. Hosting',
+                        provider: 'Hetzner Online GmbH',
+                        description:
+                            'We host our website with Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Germany.',
+                        details:
+                            'When you visit our website, Hetzner collects various log files including your IP addresses. For details, please refer to Hetzner\'s privacy policy: <a href="https://www.hetzner.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://www.hetzner.com/legal/privacy-policy</a>',
+                        legal_basis:
+                            'The use of Hetzner is based on Art. 6 (1) lit. f GDPR. We have a legitimate interest in ensuring the most reliable presentation of our website possible. For users in the United States, this processing is conducted in accordance with applicable US data protection laws and represents our legitimate business interest.',
+                    },
+                    general_info: {
+                        title: '3. General Information and Mandatory Disclosures',
+                        data_protection: {
+                            title: 'Data Protection',
+                            description:
+                                'The operators of this website take the protection of your personal data very seriously. We treat your personal data confidentially and in accordance with statutory data protection regulations and this privacy policy.',
+                        },
+                        responsible_party: {
+                            title: 'Information About the Responsible Party',
+                            description:
+                                'The party responsible for data processing on this website is:',
+                            email: 'Email',
+                        },
+                        storage_duration: {
+                            title: 'Storage Duration',
+                            description:
+                                'Unless a more specific storage period has been specified in this privacy policy, your personal data will remain with us until the purpose for data processing no longer applies. If you submit a legitimate deletion request or revoke consent for data processing, your data will be deleted unless we have other legally permissible reasons for storing your personal data. This applies to users in all jurisdictions, including the United States.',
+                        },
+                        consent_withdrawal: {
+                            title: 'Withdrawal of Your Consent to Data Processing',
+                            description:
+                                'Many data processing operations are only possible with your express consent. You can withdraw consent you have already given at any time. The lawfulness of data processing carried out prior to the withdrawal remains unaffected by the withdrawal.',
+                        },
+                        complaint_right: {
+                            title: 'Right to Lodge a Complaint with the Supervisory Authority',
+                            description:
+                                'In the event of violations of data protection law, the affected party has the right to lodge a complaint with the competent supervisory authority. For users in the European Union and Germany, this right exists regardless of other administrative or judicial remedies. For users in the United States, you may have additional rights under federal and state privacy laws, including the California Consumer Privacy Act (CCPA) and similar state laws.',
+                        },
+                        data_portability: {
+                            title: 'Right to Data Portability',
+                            description:
+                                'You have the right to have data that we process automatically based on your consent or in fulfillment of a contract handed over to you or to a third party in a common, machine-readable format. This right applies to users worldwide, including those in the United States.',
+                        },
+                        access_rights: {
+                            title: 'Information, Deletion, and Correction',
+                            description:
+                                'Within the scope of applicable legal provisions, you have the right to free information about your stored personal data, its origin and recipients, and the purpose of data processing at any time, as well as a right to correction or deletion of this data. Users in California and other US states may have additional rights under applicable state privacy laws.',
+                        },
+                    },
+                    data_collection: {
+                        title: '4. Data Collection on This Website',
+                        server_logs: {
+                            title: 'Server Log Files',
+                            description:
+                                'The website provider automatically collects and stores information in server log files:',
+                            items: {
+                                browser: 'Browser type and browser version',
+                                os: 'Operating system used',
+                                referrer: 'Referrer URL',
+                                hostname: 'Hostname of the accessing computer',
+                                time: 'Time of the server request',
+                                ip: 'IP address',
+                            },
+                            legal_note:
+                                'This data is not merged with other data sources. Data collection is based on Art. 6 (1) lit. f GDPR. For US users, this represents our legitimate business interest in maintaining website security and functionality.',
+                        },
+                        email_inquiry: {
+                            title: 'Inquiry by Email',
+                            description:
+                                'If you contact us by email, your inquiry including all resulting personal data (name, inquiry) will be stored and processed by us for the purpose of handling your request. We do not share this data without your consent.',
+                        },
+                        registration: {
+                            title: 'Registration and Use of the Service',
+                            description:
+                                'When using our service to create workout and nutrition plans, we collect the following data:',
+                            items: {
+                                email: 'Email address (for delivering the plans)',
+                                body_data: 'Body data (weight, height, age, gender)',
+                                goals: 'Fitness goals and preferences',
+                                health: 'Health information (as provided by you)',
+                            },
+                            legal_note:
+                                'This data is used exclusively to create your personalized plans and is processed based on your consent (Art. 6 (1) lit. a GDPR) and for contract performance (Art. 6 (1) lit. b GDPR). For US users, this processing is also in accordance with applicable federal and state privacy laws.',
+                        },
+                    },
+                    external_services: {
+                        title: '5. External Services',
+                        ai: {
+                            title: 'AI Services',
+                            description:
+                                'To create personalized workout and nutrition plans, we use AI-based services from third-party providers (USA/EU). Your entered data is transmitted to these services to generate the plans. Processing is based on Art. 6 (1) lit. a GDPR (your consent) and Art. 6 (1) lit. b GDPR (contract performance). For US users, this processing complies with applicable US privacy laws.',
+                            contracts:
+                                'We have concluded data processing agreements (DPA) with the providers. When data is transferred to third countries outside the EU, this is done on the basis of standard contractual clauses.',
+                        },
+                        resend: {
+                            title: 'Resend (Email Delivery)',
+                            description:
+                                'We use Resend to send your personalized plans via email. Your email address is transmitted to Resend for this purpose. For more information: <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://resend.com/legal/privacy-policy</a>',
+                        },
+                        plausible: {
+                            title: 'Plausible Analytics',
+                            description:
+                                'We use Plausible Analytics, a privacy-friendly analytics tool. Plausible does not use cookies and does not collect personal data. Data collection is anonymized and complies with GDPR and US privacy regulations.',
+                        },
+                        polar: {
+                            title: 'Polar.sh (Payment Processing)',
+                            description:
+                                'We use Polar.sh for payment processing. During payment transactions, your payment data is transmitted directly to Polar.sh and processed there. We do not store complete payment data. The legal basis is Art. 6 (1) lit. b GDPR (contract performance) and compliance with applicable payment processing regulations in all operating jurisdictions.',
+                        },
+                    },
+                    data_deletion: {
+                        title: '6. Data Deletion',
+                        description:
+                            'Your data will be deleted as soon as it is no longer required for the purpose for which it was collected. You can request deletion of your data at any time by email to hello@fytrr.com. This right applies to users in all jurisdictions, including specific deletion rights under California CCPA and similar state laws.',
+                    },
+                    ssl: {
+                        title: '7. SSL/TLS Encryption',
+                        description:
+                            'This website uses SSL/TLS encryption for security reasons and to protect the transmission of confidential content. You can recognize an encrypted connection by the browser address line changing from "http://" to "https://".',
+                    },
+                },
+                last_updated: 'Last updated: January 2026',
             },
             terms: {
                 meta: {
@@ -643,6 +829,151 @@ export const locales = {
                         'Terms and conditions for using fytrr services.',
                 },
                 title: 'Terms & Conditions',
+                sections: {
+                    scope: {
+                        title: '§ 1 Scope of Application',
+                        paragraph_1:
+                            '(1) These General Terms and Conditions (hereinafter "Terms") apply to all contracts for the use of the fytrr platform (hereinafter "Platform") concluded between Tobias Lobitz (hereinafter "Provider") and the user (hereinafter "Customer").',
+                        paragraph_2:
+                            '(2) The Platform offers a service for the automated creation of personalized workout and nutrition plans using artificial intelligence.',
+                        paragraph_3:
+                            '(3) Deviating conditions of the Customer are not recognized unless the Provider expressly agrees to their validity in writing.',
+                    },
+                    contract: {
+                        title: '§ 2 Conclusion of Contract',
+                        paragraph_1:
+                            '(1) The contract is concluded through the use of the Platform and the request for a workout or nutrition plan.',
+                        paragraph_2:
+                            '(2) By using the Platform, the Customer accepts these Terms as well as the Privacy Policy.',
+                        paragraph_3:
+                            '(3) Contract execution and communication are conducted in German or English.',
+                    },
+                    services: {
+                        title: '§ 3 Scope of Services',
+                        paragraph_1:
+                            '(1) The Provider makes available a web platform through which customers can have personalized workout and nutrition plans created.',
+                        paragraph_2:
+                            '(2) The plans are created based on data provided by the Customer (weight, height, age, fitness goals, etc.) using AI technology and delivered via email in PDF format.',
+                        paragraph_3:
+                            '(3) The Provider does not guarantee specific availability of the Platform. The Provider is entitled to temporarily take the Platform out of operation for technical or maintenance reasons.',
+                        paragraph_4:
+                            '(4) The Provider reserves the right to expand, modify, or discontinue services at any time.',
+                    },
+                    prices: {
+                        title: '§ 4 Prices and Payment',
+                        paragraph_1:
+                            '(1) The currently valid prices are visible on the website and include applicable sales tax.',
+                        paragraph_2:
+                            '(2) Payment is made through the payment service provider offered on the Platform (Polar.sh).',
+                        paragraph_3:
+                            '(3) The Provider reserves the right to adjust prices at any time. Payments already made are not affected by price changes.',
+                    },
+                    subscriptions: {
+                        title: '§ 4a Subscriptions',
+                        paragraph_1:
+                            '(1) The Provider offers use of the Platform via mobile applications (iOS and Android) through paid subscriptions. The following subscription models are available:',
+                        types: {
+                            monthly: 'Monthly Subscription: Monthly billing with a duration of one month',
+                            yearly: 'Annual Subscription: Annual billing with a duration of twelve months',
+                        },
+                        paragraph_2:
+                            '(2) <strong>Automatic Renewal:</strong> All subscriptions automatically renew for the respectively booked period (monthly or annually) unless the subscription is cancelled before the end of the respective period. Renewal occurs at the then-current price, unless a different arrangement applies according to paragraph 6.',
+                        paragraph_3:
+                            '(3) <strong>Billing Through App Stores:</strong> Subscription fees are billed exclusively through the respective app store provider (Apple App Store for iOS devices or Google Play Store for Android devices). The Customer enters into a separate payment contract with the respective app store provider. The terms and conditions and privacy policies of Apple Inc. (Apple Media Services Terms and Conditions) or Google LLC (Google Play Terms of Service) apply to payment processing.',
+                        paragraph_4:
+                            '(4) <strong>Cancellation and Cancellation Process:</strong> The subscription must be cancelled by the Customer through the subscription management of the respective app store:',
+                        cancellation: {
+                            ios: '<strong>Apple App Store (iOS):</strong> Settings → Apple ID → Subscriptions → Select fytrr → Cancel Subscription',
+                            android: '<strong>Google Play Store (Android):</strong> Open Google Play Store → Menu → Subscriptions → Select fytrr → Cancel Subscription',
+                            note: 'Cancellation directly through the Provider (fytrr) is not possible. Cancellations must be made at least 24 hours before the end of the current billing period to prevent automatic renewal.',
+                        },
+                        paragraph_5:
+                            '(5) <strong>Effective Date of Cancellation:</strong> Cancellation becomes effective at the end of the current, already paid billing period. Upon cancellation during an ongoing period, the Customer retains full access to all Premium features of the Platform until the end of that period. No prorated refund is provided for unused days within the paid period.',
+                        paragraph_6:
+                            '(6) <strong>Price Adjustments:</strong> The Provider reserves the right to adjust subscription prices. Existing customers will be informed of price increases at least 30 days in advance. The price increase becomes effective only from the next renewal period after expiration of the notice period. The Customer has the right to cancel the subscription before the price increase takes effect according to paragraph 4. Price reductions apply immediately upon announcement.',
+                        paragraph_7:
+                            '(7) <strong>Premium Subscription Features:</strong> The subscription includes access to Premium features including personalized AI-generated workout and nutrition plans, progress tracking, and advanced analytics features. The specific scope of services is determined by the description in the mobile application and may change as part of updates and further development.',
+                        paragraph_8:
+                            '(8) <strong>Applicable Terms and Conditions of App Store Providers:</strong> In addition to these Terms, the terms and conditions of the respective app store provider apply to in-app purchases and subscriptions. In case of conflicts between these Terms and the conditions of the app store providers, the conditions of the app store providers prevail to the extent legally permissible.',
+                        paragraph_9:
+                            '(9) <strong>International Legal Compliance:</strong> These subscription terms have been designed taking into account the legal requirements of various jurisdictions:',
+                        compliance: {
+                            germany:
+                                '<strong>Germany and EU:</strong> These terms comply with the requirements of the General Data Protection Regulation (GDPR), the German Civil Code (BGB), and the Act Against Unfair Competition (UWG).',
+                            uk: '<strong>United Kingdom:</strong> These terms take into account the Consumer Rights Act 2015 and ensure appropriate consumer rights for customers residing in the United Kingdom.',
+                            us: '<strong>United States:</strong> These terms have been drafted in compliance with consumer protection laws of relevant US states, particularly California (California Consumer Privacy Act), New York, and other jurisdictions.',
+                        },
+                        paragraph_10:
+                            '(10) <strong>No Prorated Refunds:</strong> In case of early cancellation, non-use of services, or account suspension due to violation of these Terms, no prorated refund of already paid subscription fees will be provided. Statutory claims, particularly for reversal in case of validly exercised right of withdrawal or in case of service defects, remain unaffected.',
+                        paragraph_11:
+                            '(11) <strong>Right of Withdrawal for Subscriptions:</strong> The right of withdrawal under § 6 of these Terms also applies to subscriptions. Consumers can withdraw from the subscription contract within 14 days without stating reasons. The right of withdrawal expires prematurely if the Customer has expressly agreed that the Provider begins execution of the contract before expiration of the withdrawal period, and the Customer has confirmed knowledge that consent results in loss of the right of withdrawal upon commencement of contract execution. Exercise of the right of withdrawal is made to the Provider according to § 6 of these Terms; refund of payments already made must be requested through the respective app store provider.',
+                    },
+                    obligations: {
+                        title: '§ 5 Customer Obligations',
+                        paragraph_1:
+                            '(1) The Customer is obligated to provide truthful information. False or misleading information may result in incorrect or unsuitable plans.',
+                        paragraph_2:
+                            '(2) The Customer is solely responsible for implementing the created plans and must consider their physical condition and any health restrictions.',
+                        paragraph_3:
+                            '(3) The Customer may not use the Platform abusively or in violation of applicable law.',
+                    },
+                    withdrawal: {
+                        title: '§ 6 Right of Withdrawal',
+                        paragraph_1:
+                            '(1) Consumers have a statutory right of withdrawal.',
+                        notice: {
+                            title: 'Withdrawal Instructions',
+                            right_title: 'Right of Withdrawal',
+                            right_text:
+                                'You have the right to withdraw from this contract within fourteen days without giving any reason.',
+                            period:
+                                'The withdrawal period is fourteen days from the date of contract conclusion.',
+                            how_to:
+                                'To exercise your right of withdrawal, you must inform us (Tobias Lobitz, Annastraße 7, Email: hello@fytrr.com) by means of a clear statement (e.g., by email) of your decision to withdraw from this contract.',
+                            consequences_title: 'Consequences of Withdrawal',
+                            consequences_text:
+                                'If you withdraw from this contract, we shall reimburse you all payments we have received from you without undue delay and no later than fourteen days from the day on which we received notice of your withdrawal from this contract.',
+                            expiry_title: 'Premature Expiration of Right of Withdrawal',
+                            expiry_text:
+                                'The right of withdrawal expires for a contract for the provision of services if the entrepreneur has fully performed the service and only began execution after the consumer gave express consent and simultaneously confirmed knowledge that the right of withdrawal is lost upon complete contract performance.',
+                        },
+                    },
+                    liability: {
+                        title: '§ 7 Liability and Warranty',
+                        paragraph_1:
+                            '(1) The Provider is liable according to statutory provisions for intent and gross negligence as well as for injury to life, body, or health.',
+                        paragraph_2:
+                            '(2) Otherwise, the Provider is only liable for breach of essential contractual obligations (cardinal obligations). In this case, liability is limited to foreseeable, contract-typical damage. To the extent permitted under US law, including state-specific liability limitations, these limitations apply to users in the United States.',
+                        paragraph_3:
+                            '(3) Liability under the Product Liability Act remains unaffected.',
+                        paragraph_4:
+                            '(4) Further liability is excluded to the extent permitted by applicable law.',
+                    },
+                    copyright: {
+                        title: '§ 8 Copyright and Usage Rights',
+                        paragraph_1:
+                            '(1) All content and works created by the Provider on this Platform are subject to German and international copyright law.',
+                        paragraph_2:
+                            '(2) The created workout and nutrition plans are exclusively for the personal, non-commercial use of the Customer.',
+                        paragraph_3:
+                            '(3) Distribution, reproduction, or commercial use of the plans is not permitted without express consent of the Provider. This applies to all jurisdictions where fytrr operates, including the United States.',
+                    },
+                    data_protection: {
+                        title: '§ 9 Data Protection',
+                        paragraph_1:
+                            'The Provider processes personal data of the Customer in accordance with applicable data protection regulations. Details can be found in the Privacy Policy, which is available on the website. For users in the United States, processing complies with applicable federal and state privacy laws.',
+                    },
+                    final: {
+                        title: '§ 10 Final Provisions',
+                        paragraph_1:
+                            '(1) The law of the Federal Republic of Germany applies, excluding the UN Convention on Contracts for the International Sale of Goods. For users outside Germany, this choice of law applies to the extent permitted by mandatory consumer protection laws of their jurisdiction.',
+                        paragraph_2:
+                            '(2) If the Customer is a merchant, legal entity under public law, or special fund under public law, the exclusive place of jurisdiction for all disputes arising from contractual relationships between the Customer and the Provider is the Provider\'s place of business.',
+                        paragraph_3:
+                            '(3) Should individual provisions of these Terms be or become invalid, the validity of the remaining provisions remains unaffected.',
+                    },
+                },
+                last_updated: 'Last updated: January 2026',
             },
         },
         footer: {
@@ -1314,6 +1645,51 @@ export const locales = {
                         'Rechtliche Informationen und Kontaktdaten von fytrr.',
                 },
                 title: 'Impressum',
+                sections: {
+                    company: {
+                        title: 'Angaben gemäß § 5 TMG',
+                        country: 'Deutschland',
+                    },
+                    contact: {
+                        title: 'Kontakt',
+                        email: 'E-Mail',
+                    },
+                    tax: {
+                        title: 'Umsatzsteuer-ID',
+                        description:
+                            'Umsatzsteuer-Identifikationsnummer gemäß § 27 a Umsatzsteuergesetz',
+                    },
+                    dispute: {
+                        title: 'EU-Streitschlichtung',
+                        description:
+                            'Die Europäische Kommission stellt eine Plattform zur Online-Streitbeilegung (OS) bereit: <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://ec.europa.eu/consumers/odr/</a>',
+                        email_note:
+                            'Unsere E-Mail-Adresse finden Sie oben im Impressum.',
+                    },
+                    consumer_dispute: {
+                        title: 'Verbraucherstreitbeilegung',
+                        description:
+                            'Wir sind nicht bereit oder verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.',
+                    },
+                    disclaimer: {
+                        title: 'Haftungsausschluss',
+                        content: {
+                            title: 'Haftung für Inhalte',
+                            description:
+                                'Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.',
+                        },
+                        links: {
+                            title: 'Haftung für Links',
+                            description:
+                                'Unser Angebot enthält Links zu externen Websites Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich.',
+                        },
+                        copyright: {
+                            title: 'Urheberrecht',
+                            description:
+                                'Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.',
+                        },
+                    },
+                },
             },
             data_privacy: {
                 meta: {
@@ -1322,6 +1698,150 @@ export const locales = {
                         'Informationen darüber, wie wir Ihre personenbezogenen Daten erheben, verwenden und schützen.',
                 },
                 title: 'Datenschutzerklärung',
+                sections: {
+                    overview: {
+                        title: '1. Datenschutz auf einen Blick',
+                        general: {
+                            title: 'Allgemeine Hinweise',
+                            description:
+                                'Die folgenden Hinweise geben einen einfachen Überblick darüber, was mit Ihren personenbezogenen Daten passiert, wenn Sie diese Website besuchen. Personenbezogene Daten sind alle Daten, mit denen Sie persönlich identifiziert werden können.',
+                        },
+                        data_collection: {
+                            title: 'Datenerfassung auf dieser Website',
+                            who_responsible:
+                                'Wer ist verantwortlich für die Datenerfassung auf dieser Website?',
+                            who_answer:
+                                'Die Datenverarbeitung auf dieser Website erfolgt durch den Websitebetreiber. Dessen Kontaktdaten können Sie dem Impressum dieser Website entnehmen.',
+                            how_collect: 'Wie erfassen wir Ihre Daten?',
+                            how_answer:
+                                'Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen (z.B. bei der Erstellung Ihres Trainingsplans). Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst (z.B. IP-Adresse).',
+                            why_use: 'Wofür nutzen wir Ihre Daten?',
+                            why_answer:
+                                'Ihre Daten werden verwendet, um personalisierte Trainings- und Ernährungspläne mittels KI-Technologie zu erstellen und Ihnen diese per E-Mail zuzustellen.',
+                        },
+                    },
+                    hosting: {
+                        title: '2. Hosting',
+                        provider: 'Hetzner Online GmbH',
+                        description:
+                            'Wir hosten unsere Website bei Hetzner Online GmbH, Industriestr. 25, 91710 Gunzenhausen, Deutschland.',
+                        details:
+                            'Wenn Sie unsere Website besuchen, erfasst Hetzner verschiedene Logfiles inklusive Ihrer IP-Adressen. Details entnehmen Sie der Datenschutzerklärung von Hetzner: <a href="https://www.hetzner.com/de/rechtliches/datenschutz" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://www.hetzner.com/de/rechtliches/datenschutz</a>',
+                        legal_basis:
+                            'Die Verwendung von Hetzner erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Wir haben ein berechtigtes Interesse an einer möglichst zuverlässigen Darstellung unserer Website.',
+                    },
+                    general_info: {
+                        title: '3. Allgemeine Hinweise und Pflichtinformationen',
+                        data_protection: {
+                            title: 'Datenschutz',
+                            description:
+                                'Die Betreiber dieser Seiten nehmen den Schutz Ihrer persönlichen Daten sehr ernst. Wir behandeln Ihre personenbezogenen Daten vertraulich und entsprechend der gesetzlichen Datenschutzvorschriften sowie dieser Datenschutzerklärung.',
+                        },
+                        responsible_party: {
+                            title: 'Hinweis zur verantwortlichen Stelle',
+                            description:
+                                'Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:',
+                            email: 'E-Mail',
+                        },
+                        storage_duration: {
+                            title: 'Speicherdauer',
+                            description:
+                                'Soweit innerhalb dieser Datenschutzerklärung keine speziellere Speicherdauer genannt wurde, verbleiben Ihre personenbezogenen Daten bei uns, bis der Zweck für die Datenverarbeitung entfällt. Wenn Sie ein berechtigtes Löschersuchen geltend machen oder eine Einwilligung zur Datenverarbeitung widerrufen, werden Ihre Daten gelöscht.',
+                        },
+                        consent_withdrawal: {
+                            title: 'Widerruf Ihrer Einwilligung zur Datenverarbeitung',
+                            description:
+                                'Viele Datenverarbeitungsvorgänge sind nur mit Ihrer ausdrücklichen Einwilligung möglich. Sie können eine bereits erteilte Einwilligung jederzeit widerrufen. Die Rechtmäßigkeit der bis zum Widerruf erfolgten Datenverarbeitung bleibt vom Widerruf unberührt.',
+                        },
+                        complaint_right: {
+                            title: 'Beschwerderecht bei der zuständigen Aufsichtsbehörde',
+                            description:
+                                'Im Falle von Verstößen gegen die DSGVO steht den Betroffenen ein Beschwerderecht bei einer Aufsichtsbehörde zu. Das Beschwerderecht besteht unbeschadet anderweitiger verwaltungsrechtlicher oder gerichtlicher Rechtsbehelfe.',
+                        },
+                        data_portability: {
+                            title: 'Recht auf Datenübertragbarkeit',
+                            description:
+                                'Sie haben das Recht, Daten, die wir auf Grundlage Ihrer Einwilligung oder in Erfüllung eines Vertrags automatisiert verarbeiten, an sich oder an einen Dritten in einem gängigen, maschinenlesbaren Format aushändigen zu lassen.',
+                        },
+                        access_rights: {
+                            title: 'Auskunft, Löschung und Berichtigung',
+                            description:
+                                'Sie haben im Rahmen der geltenden gesetzlichen Bestimmungen jederzeit das Recht auf unentgeltliche Auskunft über Ihre gespeicherten personenbezogenen Daten, deren Herkunft und Empfänger und den Zweck der Datenverarbeitung und ggf. ein Recht auf Berichtigung oder Löschung dieser Daten.',
+                        },
+                    },
+                    data_collection: {
+                        title: '4. Datenerfassung auf dieser Website',
+                        server_logs: {
+                            title: 'Server-Log-Dateien',
+                            description:
+                                'Der Provider der Seiten erhebt und speichert automatisch Informationen in sogenannten Server-Log-Dateien:',
+                            items: {
+                                browser: 'Browsertyp und Browserversion',
+                                os: 'Verwendetes Betriebssystem',
+                                referrer: 'Referrer URL',
+                                hostname: 'Hostname des zugreifenden Rechners',
+                                time: 'Uhrzeit der Serveranfrage',
+                                ip: 'IP-Adresse',
+                            },
+                            legal_note:
+                                'Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO.',
+                        },
+                        email_inquiry: {
+                            title: 'Anfrage per E-Mail',
+                            description:
+                                'Wenn Sie uns per E-Mail kontaktieren, wird Ihre Anfrage inklusive aller daraus hervorgehenden personenbezogenen Daten (Name, Anfrage) zum Zwecke der Bearbeitung Ihres Anliegens bei uns gespeichert und verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.',
+                        },
+                        registration: {
+                            title: 'Registrierung und Nutzung des Services',
+                            description:
+                                'Bei der Nutzung unseres Services zur Erstellung von Trainings- und Ernährungsplänen erfassen wir folgende Daten:',
+                            items: {
+                                email: 'E-Mail-Adresse (zur Zusendung der Pläne)',
+                                body_data: 'Körperdaten (Gewicht, Größe, Alter, Geschlecht)',
+                                goals: 'Fitnessziele und Präferenzen',
+                                health: 'Gesundheitsinformationen (soweit von Ihnen angegeben)',
+                            },
+                            legal_note:
+                                'Diese Daten werden ausschließlich zur Erstellung Ihrer personalisierten Pläne verwendet und auf Grundlage Ihrer Einwilligung (Art. 6 Abs. 1 lit. a DSGVO) verarbeitet.',
+                        },
+                    },
+                    external_services: {
+                        title: '5. Externe Dienste',
+                        ai: {
+                            title: 'KI-Dienste',
+                            description:
+                                'Zur Erstellung personalisierter Trainings- und Ernährungspläne nutzen wir KI-basierte Dienste von Drittanbietern (USA/EU). Ihre eingegebenen Daten werden an diese Dienste übermittelt, um die Pläne zu generieren. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung) und Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).',
+                            contracts:
+                                'Wir haben mit den Anbietern Auftragsverarbeitungsverträge (AVV) geschlossen. Bei Übermittlung in Drittländer außerhalb der EU erfolgt dies auf Basis von Standardvertragsklauseln.',
+                        },
+                        resend: {
+                            title: 'Resend (E-Mail-Versand)',
+                            description:
+                                'Wir nutzen Resend zum Versand Ihrer personalisierten Pläne per E-Mail. Dabei wird Ihre E-Mail-Adresse an Resend übermittelt. Weitere Informationen: <a href="https://resend.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://resend.com/legal/privacy-policy</a>',
+                        },
+                        plausible: {
+                            title: 'Plausible Analytics',
+                            description:
+                                'Wir nutzen Plausible Analytics, ein datenschutzfreundliches Analyse-Tool. Plausible verwendet keine Cookies und erfasst keine personenbezogenen Daten. Die Erfassung erfolgt anonymisiert.',
+                        },
+                        polar: {
+                            title: 'Polar.sh (Zahlungsabwicklung)',
+                            description:
+                                'Für die Zahlungsabwicklung nutzen wir Polar.sh. Bei Zahlungsvorgängen werden Ihre Zahlungsdaten direkt an Polar.sh übermittelt und dort verarbeitet. Wir speichern keine vollständigen Zahlungsdaten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).',
+                        },
+                    },
+                    data_deletion: {
+                        title: '6. Datenlöschung',
+                        description:
+                            'Ihre Daten werden gelöscht, sobald sie für die Erreichung des Zweckes ihrer Erhebung nicht mehr erforderlich sind. Sie können jederzeit die Löschung Ihrer Daten per E-Mail an hello@fytrr.com beantragen.',
+                    },
+                    ssl: {
+                        title: '7. SSL- bzw. TLS-Verschlüsselung',
+                        description:
+                            'Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von "http://" auf "https://" wechselt.',
+                    },
+                },
+                last_updated: 'Stand: Januar 2026',
             },
             terms: {
                 meta: {
@@ -1330,6 +1850,151 @@ export const locales = {
                         'Allgemeine Geschäftsbedingungen für die Nutzung von fytrr-Diensten.',
                 },
                 title: 'Allgemeine Geschäftsbedingungen',
+                sections: {
+                    scope: {
+                        title: '§ 1 Geltungsbereich',
+                        paragraph_1:
+                            '(1) Diese Allgemeinen Geschäftsbedingungen (nachfolgend "AGB") gelten für alle Verträge über die Nutzung der Plattform fytrr (nachfolgend "Plattform"), die zwischen Tobias Lobitz (nachfolgend "Anbieter") und dem Nutzer (nachfolgend "Kunde") geschlossen werden.',
+                        paragraph_2:
+                            '(2) Die Plattform bietet einen Service zur automatisierten Erstellung personalisierter Trainings- und Ernährungspläne mittels künstlicher Intelligenz.',
+                        paragraph_3:
+                            '(3) Abweichende Bedingungen des Kunden werden nicht anerkannt, es sei denn, der Anbieter stimmt ihrer Geltung ausdrücklich schriftlich zu.',
+                    },
+                    contract: {
+                        title: '§ 2 Vertragsschluss',
+                        paragraph_1:
+                            '(1) Der Vertrag kommt durch die Nutzung der Plattform und die Anforderung eines Trainings- oder Ernährungsplans zustande.',
+                        paragraph_2:
+                            '(2) Mit der Nutzung der Plattform akzeptiert der Kunde diese AGB sowie die Datenschutzerklärung.',
+                        paragraph_3:
+                            '(3) Die Vertragsdurchführung und Kontaktaufnahme erfolgen in deutscher oder englischer Sprache.',
+                    },
+                    services: {
+                        title: '§ 3 Leistungsumfang',
+                        paragraph_1:
+                            '(1) Der Anbieter stellt eine Web-Plattform zur Verfügung, über die Kunden personalisierte Trainings- und Ernährungspläne erstellen lassen können.',
+                        paragraph_2:
+                            '(2) Die Pläne werden auf Basis der vom Kunden angegebenen Daten (Gewicht, Größe, Alter, Fitnessziele etc.) mittels KI-Technologie erstellt und per E-Mail im PDF-Format zugestellt.',
+                        paragraph_3:
+                            '(3) Der Anbieter schuldet keine bestimmte Verfügbarkeit der Plattform. Der Anbieter ist berechtigt, die Plattform aus technischen oder wartungsbedingten Gründen vorübergehend außer Betrieb zu nehmen.',
+                        paragraph_4:
+                            '(4) Der Anbieter behält sich vor, die Leistungen jederzeit zu erweitern, zu verändern oder einzustellen.',
+                    },
+                    prices: {
+                        title: '§ 4 Preise und Zahlung',
+                        paragraph_1:
+                            '(1) Die jeweils gültigen Preise sind auf der Website ersichtlich und verstehen sich inklusive der gesetzlichen Umsatzsteuer.',
+                        paragraph_2:
+                            '(2) Die Zahlung erfolgt über den auf der Plattform angebotenen Zahlungsdienstleister (Polar.sh).',
+                        paragraph_3:
+                            '(3) Der Anbieter behält sich vor, die Preise jederzeit anzupassen. Bereits getätigte Zahlungen sind von Preisänderungen nicht betroffen.',
+                    },
+                    subscriptions: {
+                        title: '§ 4a Abonnements',
+                        paragraph_1:
+                            '(1) Der Anbieter bietet die Nutzung der Plattform über die mobilen Applikationen (iOS und Android) im Rahmen von kostenpflichtigen Abonnements an. Folgende Abonnement-Modelle stehen zur Verfügung:',
+                        types: {
+                            monthly: 'Monatsabonnement: Monatliche Abrechnung mit Laufzeit von einem Monat',
+                            yearly: 'Jahresabonnement: Jährliche Abrechnung mit Laufzeit von zwölf Monaten',
+                        },
+                        paragraph_2:
+                            '(2) <strong>Automatische Verlängerung:</strong> Alle Abonnements verlängern sich automatisch um die jeweils gebuchte Laufzeit (monatlich bzw. jährlich), sofern das Abonnement nicht vor Ablauf der jeweiligen Periode gekündigt wird. Die Verlängerung erfolgt zum dann gültigen Preis, sofern keine abweichende Regelung nach Absatz 6 greift.',
+                        paragraph_3:
+                            '(3) <strong>Abrechnung über App Stores:</strong> Die Abrechnung der Abonnementgebühren erfolgt ausschließlich über den jeweiligen App Store-Anbieter (Apple App Store für iOS-Geräte bzw. Google Play Store für Android-Geräte). Der Kunde schließt einen separaten Zahlungsvertrag mit dem jeweiligen App Store-Anbieter ab. Für die Zahlungsabwicklung gelten die Geschäftsbedingungen und Datenschutzbestimmungen von Apple Inc. (Apple Media Services – Geschäftsbedingungen) bzw. Google LLC (Google Play – Nutzungsbedingungen).',
+                        paragraph_4:
+                            '(4) <strong>Kündigung und Kündigungsprozess:</strong> Die Kündigung des Abonnements muss vom Kunden selbst über die Abonnementverwaltung des jeweiligen App Stores vorgenommen werden:',
+                        cancellation: {
+                            ios: '<strong>Apple App Store (iOS):</strong> Einstellungen → Apple-ID → Abonnements → fytrr auswählen → Abonnement kündigen',
+                            android: '<strong>Google Play Store (Android):</strong> Google Play Store öffnen → Menü → Abos → fytrr auswählen → Abo kündigen',
+                            note: 'Eine Kündigung über den Anbieter (fytrr) direkt ist nicht möglich. Kündigungen müssen mindestens 24 Stunden vor Ablauf der aktuellen Abrechnungsperiode erfolgen, um eine automatische Verlängerung zu verhindern.',
+                        },
+                        paragraph_5:
+                            '(5) <strong>Wirksamwerden der Kündigung:</strong> Die Kündigung wird zum Ende der laufenden, bereits bezahlten Abrechnungsperiode wirksam. Bei Kündigung während einer laufenden Periode behält der Kunde bis zum Ende dieser Periode vollen Zugriff auf alle Premium-Funktionen der Plattform. Es erfolgt keine anteilige Rückerstattung für nicht genutzte Tage innerhalb der bezahlten Periode.',
+                        paragraph_6:
+                            '(6) <strong>Preisanpassungen:</strong> Der Anbieter behält sich vor, die Abonnementpreise anzupassen. Bestehende Kunden werden über Preiserhöhungen mindestens 30 Tage im Voraus informiert. Die Preiserhöhung wird erst ab der nächsten Verlängerungsperiode nach Ablauf der Informationsfrist wirksam. Der Kunde hat das Recht, das Abonnement vor Inkrafttreten der Preiserhöhung gemäß Absatz 4 zu kündigen. Preissenkungen gelten unmittelbar ab ihrer Bekanntgabe.',
+                        paragraph_7:
+                            '(7) <strong>Leistungsumfang Premium-Abonnement:</strong> Das Abonnement umfasst den Zugriff auf Premium-Funktionen einschließlich personalisierter KI-generierter Trainings- und Ernährungspläne, Fortschrittsverfolgung und erweiterte Analysefunktionen. Der konkrete Leistungsumfang ergibt sich aus der Beschreibung in der mobilen Applikation und kann sich im Rahmen von Updates und Weiterentwicklungen ändern.',
+                        paragraph_8:
+                            '(8) <strong>Anwendbare Geschäftsbedingungen der App Store-Anbieter:</strong> Zusätzlich zu diesen AGB gelten für In-App-Käufe und Abonnements die Geschäftsbedingungen des jeweiligen App Store-Anbieters. Im Falle von Widersprüchen zwischen diesen AGB und den Bedingungen der App Store-Anbieter gehen die Bedingungen der App Store-Anbieter vor, soweit dies gesetzlich zulässig ist.',
+                        paragraph_9:
+                            '(9) <strong>Internationale Rechtskonformität:</strong> Diese Abonnementbedingungen wurden unter Berücksichtigung der rechtlichen Anforderungen verschiedener Rechtsordnungen gestaltet:',
+                        compliance: {
+                            germany:
+                                '<strong>Deutschland und EU:</strong> Diese Bedingungen entsprechen den Anforderungen der Datenschutz-Grundverordnung (DSGVO), des Bürgerlichen Gesetzbuchs (BGB) und des Gesetzes gegen den unlauteren Wettbewerb (UWG).',
+                            uk: '<strong>Vereinigtes Königreich:</strong> Diese Bedingungen berücksichtigen den Consumer Rights Act 2015 und gewährleisten angemessene Verbraucherrechte für Kunden mit Wohnsitz im Vereinigten Königreich.',
+                            us: '<strong>Vereinigte Staaten:</strong> Diese Bedingungen wurden unter Beachtung der Verbraucherschutzgesetze relevanter US-Bundesstaaten, insbesondere Kalifornien (California Consumer Privacy Act), New York und anderer Rechtsordnungen, erstellt.',
+                        },
+                        paragraph_10:
+                            '(10) <strong>Keine anteilige Rückerstattung:</strong> Bei vorzeitiger Kündigung, Nichtinanspruchnahme der Leistungen oder Sperrung des Zugangs aufgrund eines Verstoßes gegen diese AGB erfolgt keine anteilige Rückerstattung bereits gezahlter Abonnementgebühren. Gesetzliche Ansprüche, insbesondere auf Rückabwicklung bei wirksam ausgeübtem Widerrufsrecht oder bei Mängeln der Leistung, bleiben hiervon unberührt.',
+                        paragraph_11:
+                            '(11) <strong>Widerrufsrecht bei Abonnements:</strong> Das Widerrufsrecht nach § 6 dieser AGB gilt auch für Abonnements. Verbraucher können den Abonnementvertrag innerhalb von 14 Tagen ohne Angabe von Gründen widerrufen. Das Widerrufsrecht erlischt vorzeitig, wenn der Kunde ausdrücklich zugestimmt hat, dass der Anbieter mit der Ausführung des Vertrages vor Ablauf der Widerrufsfrist beginnt, und der Kunde seine Kenntnis davon bestätigt hat, dass er durch seine Zustimmung mit Beginn der Ausführung des Vertrags sein Widerrufsrecht verliert. Die Ausübung des Widerrufsrechts erfolgt gegenüber dem Anbieter gemäß § 6 dieser AGB; eine Rückerstattung bereits geleisteter Zahlungen ist über den jeweiligen App Store-Anbieter zu beantragen.',
+                    },
+                    obligations: {
+                        title: '§ 5 Pflichten des Kunden',
+                        paragraph_1:
+                            '(1) Der Kunde verpflichtet sich, wahrheitsgemäße Angaben zu machen. Falsche oder irreführende Angaben können zu fehlerhaften oder ungeeigneten Plänen führen.',
+                        paragraph_2:
+                            '(2) Der Kunde ist selbst verantwortlich für die Umsetzung der erstellten Pläne und muss seine körperliche Verfassung sowie eventuelle gesundheitliche Einschränkungen berücksichtigen.',
+                        paragraph_3:
+                            '(3) Der Kunde darf die Plattform nicht missbräuchlich nutzen oder gegen geltendes Recht verstoßen.',
+                    },
+                    withdrawal: {
+                        title: '§ 6 Widerrufsrecht',
+                        paragraph_1:
+                            '(1) Verbrauchern steht ein gesetzliches Widerrufsrecht zu.',
+                        notice: {
+                            title: 'Widerrufsbelehrung',
+                            right_title: 'Widerrufsrecht',
+                            right_text:
+                                'Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.',
+                            period:
+                                'Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.',
+                            how_to:
+                                'Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com) mittels einer eindeutigen Erklärung (z.B. per E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.',
+                            consequences_title: 'Folgen des Widerrufs',
+                            consequences_text:
+                                'Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.',
+                            expiry_title: 'Vorzeitiges Erlöschen des Widerrufsrechts',
+                            expiry_text:
+                                'Das Widerrufsrecht erlischt bei einem Vertrag zur Erbringung von Dienstleistungen, wenn der Unternehmer die Dienstleistung vollständig erbracht hat und mit der Ausführung erst begonnen hat, nachdem der Verbraucher dazu seine ausdrückliche Zustimmung gegeben hat und gleichzeitig seine Kenntnis davon bestätigt hat, dass er sein Widerrufsrecht bei vollständiger Vertragserfüllung verliert.',
+                        },
+                    },
+                    liability: {
+                        title: '§ 7 Haftung und Gewährleistung',
+                        paragraph_1:
+                            '(1) Der Anbieter haftet nach den gesetzlichen Bestimmungen für Vorsatz und grobe Fahrlässigkeit sowie für die Verletzung von Leben, Körper oder Gesundheit.',
+                        paragraph_2:
+                            '(2) Im Übrigen haftet der Anbieter nur bei der Verletzung wesentlicher Vertragspflichten (Kardinalpflichten). In diesem Fall ist die Haftung auf den vertragstypischen, vorhersehbaren Schaden begrenzt.',
+                        paragraph_3:
+                            '(3) Die Haftung nach dem Produkthaftungsgesetz bleibt unberührt.',
+                        paragraph_4:
+                            '(4) Eine weitergehende Haftung ist ausgeschlossen.',
+                    },
+                    copyright: {
+                        title: '§ 8 Urheberrecht und Nutzungsrechte',
+                        paragraph_1:
+                            '(1) Alle durch den Anbieter erstellten Inhalte und Werke auf dieser Plattform unterliegen dem deutschen Urheberrecht.',
+                        paragraph_2:
+                            '(2) Die erstellten Trainings- und Ernährungspläne sind ausschließlich für den persönlichen, nicht-kommerziellen Gebrauch des Kunden bestimmt.',
+                        paragraph_3:
+                            '(3) Eine Weitergabe, Vervielfältigung oder kommerzielle Nutzung der Pläne ist ohne ausdrückliche Zustimmung des Anbieters nicht gestattet.',
+                    },
+                    data_protection: {
+                        title: '§ 9 Datenschutz',
+                        paragraph_1:
+                            'Der Anbieter verarbeitet personenbezogene Daten des Kunden gemäß den geltenden Datenschutzbestimmungen. Einzelheiten ergeben sich aus der Datenschutzerklärung, die auf der Website einsehbar ist.',
+                    },
+                    final: {
+                        title: '§ 10 Schlussbestimmungen',
+                        paragraph_1:
+                            '(1) Es gilt das Recht der Bundesrepublik Deutschland unter Ausschluss des UN-Kaufrechts.',
+                        paragraph_2:
+                            '(2) Ist der Kunde Kaufmann, juristische Person des öffentlichen Rechts oder öffentlich-rechtliches Sondervermögen, ist ausschließlicher Gerichtsstand für alle Streitigkeiten aus Vertragsverhältnissen zwischen dem Kunden und dem Anbieter der Sitz des Anbieters.',
+                        paragraph_3:
+                            '(3) Sollten einzelne Bestimmungen dieser AGB unwirksam sein oder werden, bleibt die Wirksamkeit der übrigen Bestimmungen hiervon unberührt.',
+                    },
+                },
+                last_updated: 'Stand: Januar 2026',
             },
         },
         footer: {

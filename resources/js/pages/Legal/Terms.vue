@@ -23,271 +23,230 @@ const { t } = useI18n();
                 <div class="space-y-8">
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 1 Geltungsbereich
+                            {{ t('legal.terms.sections.scope.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Diese Allgemeinen Geschäftsbedingungen
-                            (nachfolgend "AGB") gelten für alle Verträge über
-                            die Nutzung der Plattform fytrr (nachfolgend
-                            "Plattform"), die zwischen Tobias Lobitz (nachfolgend
-                            "Anbieter") und dem Nutzer (nachfolgend "Kunde")
-                            geschlossen werden.
+                            {{ t('legal.terms.sections.scope.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Die Plattform bietet einen Service zur
-                            automatisierten Erstellung personalisierter
-                            Trainings- und Ernährungspläne mittels künstlicher
-                            Intelligenz.
+                            {{ t('legal.terms.sections.scope.paragraph_2') }}
                         </p>
                         <p>
-                            (3) Abweichende Bedingungen des Kunden werden nicht
-                            anerkannt, es sei denn, der Anbieter stimmt ihrer
-                            Geltung ausdrücklich schriftlich zu.
+                            {{ t('legal.terms.sections.scope.paragraph_3') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 2 Vertragsschluss
+                            {{ t('legal.terms.sections.contract.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Der Vertrag kommt durch die Nutzung der
-                            Plattform und die Anforderung eines Trainings- oder
-                            Ernährungsplans zustande.
+                            {{ t('legal.terms.sections.contract.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Mit der Nutzung der Plattform akzeptiert der
-                            Kunde diese AGB sowie die Datenschutzerklärung.
+                            {{ t('legal.terms.sections.contract.paragraph_2') }}
                         </p>
                         <p>
-                            (3) Die Vertragsdurchführung und Kontaktaufnahme
-                            erfolgen in deutscher oder englischer Sprache.
+                            {{ t('legal.terms.sections.contract.paragraph_3') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 3 Leistungsumfang
+                            {{ t('legal.terms.sections.services.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Der Anbieter stellt eine Web-Plattform zur
-                            Verfügung, über die Kunden personalisierte
-                            Trainings- und Ernährungspläne erstellen lassen
-                            können.
+                            {{ t('legal.terms.sections.services.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Die Pläne werden auf Basis der vom Kunden
-                            angegebenen Daten (Gewicht, Größe, Alter,
-                            Fitnessziele etc.) mittels KI-Technologie erstellt
-                            und per E-Mail im PDF-Format zugestellt.
+                            {{ t('legal.terms.sections.services.paragraph_2') }}
                         </p>
                         <p class="mb-2">
-                            (3) Der Anbieter schuldet keine bestimmte
-                            Verfügbarkeit der Plattform. Der Anbieter ist
-                            berechtigt, die Plattform aus technischen oder
-                            wartungsbedingten Gründen vorübergehend außer
-                            Betrieb zu nehmen.
+                            {{ t('legal.terms.sections.services.paragraph_3') }}
                         </p>
                         <p>
-                            (4) Der Anbieter behält sich vor, die Leistungen
-                            jederzeit zu erweitern, zu verändern oder
-                            einzustellen.
+                            {{ t('legal.terms.sections.services.paragraph_4') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 4 Preise und Zahlung
+                            {{ t('legal.terms.sections.prices.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Die jeweils gültigen Preise sind auf der Website
-                            ersichtlich und verstehen sich inklusive der
-                            gesetzlichen Umsatzsteuer.
+                            {{ t('legal.terms.sections.prices.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Die Zahlung erfolgt über den auf der Plattform
-                            angebotenen Zahlungsdienstleister (Polar.sh).
+                            {{ t('legal.terms.sections.prices.paragraph_2') }}
                         </p>
                         <p>
-                            (3) Der Anbieter behält sich vor, die Preise
-                            jederzeit anzupassen. Bereits getätigte Zahlungen
-                            sind von Preisänderungen nicht betroffen.
+                            {{ t('legal.terms.sections.prices.paragraph_3') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 5 Pflichten des Kunden
+                            {{ t('legal.terms.sections.subscriptions.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Der Kunde verpflichtet sich, wahrheitsgemäße
-                            Angaben zu machen. Falsche oder irreführende Angaben
-                            können zu fehlerhaften oder ungeeigneten Plänen
-                            führen.
+                            {{ t('legal.terms.sections.subscriptions.paragraph_1') }}
+                        </p>
+                        <ul class="mb-4 ml-6 list-disc space-y-1">
+                            <li>{{ t('legal.terms.sections.subscriptions.types.monthly') }}</li>
+                            <li>{{ t('legal.terms.sections.subscriptions.types.yearly') }}</li>
+                        </ul>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_2')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_3')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_4')"></p>
+                        <ul class="mb-4 ml-6 list-disc space-y-1">
+                            <li v-html="t('legal.terms.sections.subscriptions.cancellation.ios')"></li>
+                            <li v-html="t('legal.terms.sections.subscriptions.cancellation.android')"></li>
+                        </ul>
+                        <p class="mb-2">
+                            {{ t('legal.terms.sections.subscriptions.cancellation.note') }}
+                        </p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_5')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_6')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_7')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_8')"></p>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_9')"></p>
+                        <ul class="mb-4 ml-6 list-disc space-y-1">
+                            <li v-html="t('legal.terms.sections.subscriptions.compliance.germany')"></li>
+                            <li v-html="t('legal.terms.sections.subscriptions.compliance.uk')"></li>
+                            <li v-html="t('legal.terms.sections.subscriptions.compliance.us')"></li>
+                        </ul>
+
+                        <p class="mb-2" v-html="t('legal.terms.sections.subscriptions.paragraph_10')"></p>
+
+                        <p v-html="t('legal.terms.sections.subscriptions.paragraph_11')"></p>
+                    </section>
+
+                    <section>
+                        <h2 class="mb-4 text-2xl font-semibold">
+                            {{ t('legal.terms.sections.obligations.title') }}
+                        </h2>
+                        <p class="mb-2">
+                            {{ t('legal.terms.sections.obligations.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Der Kunde ist selbst verantwortlich für die
-                            Umsetzung der erstellten Pläne und muss seine
-                            körperliche Verfassung sowie eventuelle
-                            gesundheitliche Einschränkungen berücksichtigen.
+                            {{ t('legal.terms.sections.obligations.paragraph_2') }}
                         </p>
                         <p>
-                            (3) Der Kunde darf die Plattform nicht
-                            missbräuchlich nutzen oder gegen geltendes Recht
-                            verstoßen.
+                            {{ t('legal.terms.sections.obligations.paragraph_3') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 6 Widerrufsrecht
+                            {{ t('legal.terms.sections.withdrawal.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Verbrauchern steht ein gesetzliches
-                            Widerrufsrecht zu.
+                            {{ t('legal.terms.sections.withdrawal.paragraph_1') }}
                         </p>
 
                         <div class="my-4 rounded bg-dark-surfaces-500 p-6">
                             <h3 class="mb-3 font-semibold">
-                                Widerrufsbelehrung
+                                {{ t('legal.terms.sections.withdrawal.notice.title') }}
                             </h3>
 
-                            <p class="mb-2 font-semibold">Widerrufsrecht</p>
+                            <p class="mb-2 font-semibold">{{ t('legal.terms.sections.withdrawal.notice.right_title') }}</p>
                             <p class="mb-4">
-                                Sie haben das Recht, binnen vierzehn Tagen ohne
-                                Angabe von Gründen diesen Vertrag zu widerrufen.
+                                {{ t('legal.terms.sections.withdrawal.notice.right_text') }}
                             </p>
 
                             <p class="mb-4">
-                                Die Widerrufsfrist beträgt vierzehn Tage ab dem
-                                Tag des Vertragsabschlusses.
+                                {{ t('legal.terms.sections.withdrawal.notice.period') }}
                             </p>
 
                             <p class="mb-4">
-                                Um Ihr Widerrufsrecht auszuüben, müssen Sie uns
-                                (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com)
-                                mittels einer eindeutigen Erklärung (z.B. per
-                                E-Mail) über Ihren Entschluss, diesen Vertrag zu
-                                widerrufen, informieren.
+                                {{ t('legal.terms.sections.withdrawal.notice.how_to') }}
                             </p>
 
                             <p class="mb-2 font-semibold">
-                                Folgen des Widerrufs
+                                {{ t('legal.terms.sections.withdrawal.notice.consequences_title') }}
                             </p>
                             <p class="mb-4">
-                                Wenn Sie diesen Vertrag widerrufen, haben wir
-                                Ihnen alle Zahlungen, die wir von Ihnen erhalten
-                                haben, unverzüglich und spätestens binnen
-                                vierzehn Tagen ab dem Tag zurückzuzahlen, an dem
-                                die Mitteilung über Ihren Widerruf dieses
-                                Vertrags bei uns eingegangen ist.
+                                {{ t('legal.terms.sections.withdrawal.notice.consequences_text') }}
                             </p>
 
                             <p class="mb-2 font-semibold">
-                                Vorzeitiges Erlöschen des Widerrufsrechts
+                                {{ t('legal.terms.sections.withdrawal.notice.expiry_title') }}
                             </p>
                             <p>
-                                Das Widerrufsrecht erlischt bei einem Vertrag
-                                zur Erbringung von Dienstleistungen, wenn der
-                                Unternehmer die Dienstleistung vollständig
-                                erbracht hat und mit der Ausführung erst
-                                begonnen hat, nachdem der Verbraucher dazu seine
-                                ausdrückliche Zustimmung gegeben hat und
-                                gleichzeitig seine Kenntnis davon bestätigt hat,
-                                dass er sein Widerrufsrecht bei vollständiger
-                                Vertragserfüllung verliert.
+                                {{ t('legal.terms.sections.withdrawal.notice.expiry_text') }}
                             </p>
                         </div>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 7 Haftung und Gewährleistung
+                            {{ t('legal.terms.sections.liability.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Der Anbieter haftet nach den gesetzlichen
-                            Bestimmungen für Vorsatz und grobe Fahrlässigkeit
-                            sowie für die Verletzung von Leben, Körper oder
-                            Gesundheit.
+                            {{ t('legal.terms.sections.liability.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Im Übrigen haftet der Anbieter nur bei der
-                            Verletzung wesentlicher Vertragspflichten
-                            (Kardinalpflichten). In diesem Fall ist die Haftung
-                            auf den vertragstypischen, vorhersehbaren Schaden
-                            begrenzt.
+                            {{ t('legal.terms.sections.liability.paragraph_2') }}
                         </p>
                         <p class="mb-2">
-                            (3) Die Haftung nach dem Produkthaftungsgesetz
-                            bleibt unberührt.
+                            {{ t('legal.terms.sections.liability.paragraph_3') }}
                         </p>
                         <p>
-                            (4) Eine weitergehende Haftung ist ausgeschlossen.
+                            {{ t('legal.terms.sections.liability.paragraph_4') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 8 Urheberrecht und Nutzungsrechte
+                            {{ t('legal.terms.sections.copyright.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Alle durch den Anbieter erstellten Inhalte und
-                            Werke auf dieser Plattform unterliegen dem deutschen
-                            Urheberrecht.
+                            {{ t('legal.terms.sections.copyright.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Die erstellten Trainings- und Ernährungspläne
-                            sind ausschließlich für den persönlichen,
-                            nicht-kommerziellen Gebrauch des Kunden bestimmt.
+                            {{ t('legal.terms.sections.copyright.paragraph_2') }}
                         </p>
                         <p>
-                            (3) Eine Weitergabe, Vervielfältigung oder
-                            kommerzielle Nutzung der Pläne ist ohne
-                            ausdrückliche Zustimmung des Anbieters nicht
-                            gestattet.
+                            {{ t('legal.terms.sections.copyright.paragraph_3') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 9 Datenschutz
+                            {{ t('legal.terms.sections.data_protection.title') }}
                         </h2>
                         <p>
-                            Der Anbieter verarbeitet personenbezogene Daten des
-                            Kunden gemäß den geltenden Datenschutzbestimmungen.
-                            Einzelheiten ergeben sich aus der
-                            Datenschutzerklärung, die auf der Website einsehbar
-                            ist.
+                            {{ t('legal.terms.sections.data_protection.paragraph_1') }}
                         </p>
                     </section>
 
                     <section>
                         <h2 class="mb-4 text-2xl font-semibold">
-                            § 10 Schlussbestimmungen
+                            {{ t('legal.terms.sections.final.title') }}
                         </h2>
                         <p class="mb-2">
-                            (1) Es gilt das Recht der Bundesrepublik Deutschland
-                            unter Ausschluss des UN-Kaufrechts.
+                            {{ t('legal.terms.sections.final.paragraph_1') }}
                         </p>
                         <p class="mb-2">
-                            (2) Ist der Kunde Kaufmann, juristische Person des
-                            öffentlichen Rechts oder öffentlich-rechtliches
-                            Sondervermögen, ist ausschließlicher Gerichtsstand
-                            für alle Streitigkeiten aus Vertragsverhältnissen
-                            zwischen dem Kunden und dem Anbieter der Sitz des
-                            Anbieters.
+                            {{ t('legal.terms.sections.final.paragraph_2') }}
                         </p>
                         <p class="mb-2">
-                            (3) Sollten einzelne Bestimmungen dieser AGB
-                            unwirksam sein oder werden, bleibt die Wirksamkeit
-                            der übrigen Bestimmungen hiervon unberührt.
+                            {{ t('legal.terms.sections.final.paragraph_3') }}
                         </p>
                     </section>
 
                     <div
                         class="mt-8 border-t border-gray-200 pt-6 text-sm text-gray-500"
                     >
-                        <p>Stand: Dezember 2024</p>
+                        <p>{{ t('legal.terms.last_updated') }}</p>
                     </div>
                 </div>
             </div>
