@@ -1,5 +1,9 @@
 export const locales = {
     en: {
+        common: {
+            yes: 'Yes',
+            no: 'No',
+        },
         welcome: {
             meta: {
                 locale: 'en',
@@ -102,9 +106,13 @@ export const locales = {
                 weightRequired: 'Enter your weight',
                 activityLevelRequired: 'Select your activity level',
                 skillLevelRequired: 'Select your experience level',
+                dietaryPreferenceRequired: 'Select your dietary preference',
+                dietStyleRequired: 'Select your diet style',
                 bodyGoalRequired: 'Select your goal',
                 trainingPlaceRequired: 'Select your training location',
                 trainingSessionsRequired: 'Choose how often you want to train',
+                trainingDaysCountMismatch:
+                    'Please select exactly {count} training days',
             },
             success: {
                 title: 'Almost there',
@@ -146,8 +154,11 @@ export const locales = {
                 diet: {
                     headline: "What's your diet preference?",
                     subline: "We'll create meals that match your lifestyle",
-                    label: 'Dietary Preferences',
-                    placeholder: 'Select Diet Type',
+                    preferenceLabel: 'Dietary Preference',
+                    hasStyleQuestion: 'Do you follow a specific diet style or nutritional approach?',
+                    styleLabel: 'Diet Style / Nutritional Approach',
+                    styleHint: 'Optional: Choose a specific approach to eating',
+                    stylePlaceholder: 'Select Diet Style',
                 },
                 activity: {
                     headline: 'How active are you?',
@@ -181,6 +192,9 @@ export const locales = {
                     sessionsError: 'Please set how often you want to train',
                     sessionsSuffix: 'times',
                     recommended: '(✨ recommended)',
+                    daysHeadline: 'Which days do you want to train?',
+                    daysSubline: 'Please select {count} days of the week',
+                    daysLabel: 'Training Days',
                 },
                 final: {
                     headline: 'Almost there!',
@@ -998,6 +1012,10 @@ export const locales = {
         },
     },
     de: {
+        common: {
+            yes: 'Ja',
+            no: 'Nein',
+        },
         welcome: {
             meta: {
                 locale: 'de',
@@ -1152,7 +1170,9 @@ export const locales = {
                     subline:
                         'Wir erstellen Mahlzeiten, die zu deinem Alltag passen',
                     label: 'Ernährungspräferenzen',
-                    placeholder: 'Diät-Typ auswählen',
+                    hasStyleQuestion: 'Folgst du einem bestimmten Ernährungsstil?',
+                    styleLabel: 'Ernährungsstil / Ansatz',
+                    stylePlaceholder: 'Ernährungsstil auswählen',
                 },
                 activity: {
                     headline: 'Aktivität',

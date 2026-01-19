@@ -419,6 +419,26 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
     private function isRestDay(int $day, int $workoutsPerWeek): bool
     {
+        $profile = $this->user->profile;
+
+        if ($profile && !empty($profile->training_days)) {
+            // Mapping days to numeric values (0 = Monday, 6 = Sunday)
+            $dayMap = [
+                'monday' => 0,
+                'tuesday' => 1,
+                'wednesday' => 2,
+                'thursday' => 3,
+                'friday' => 4,
+                'saturday' => 5,
+                'sunday' => 6,
+            ];
+
+            $workoutDays = array_map(fn($d) => $dayMap[strtolower($d)], $profile->training_days);
+            $dayOfWeek = ($day - 1) % 7;
+
+            return !in_array($dayOfWeek, $workoutDays);
+        }
+
         // Calculate which day of the week this is (0-6)
         $dayOfWeek = ($day - 1) % 7;
 

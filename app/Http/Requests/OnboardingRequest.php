@@ -4,8 +4,11 @@ namespace App\Http\Requests;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\DietaryPreference;
+use App\Enums\DietStyle;
 use App\Enums\DietType;
 use App\Enums\Gender;
+use App\Enums\UserSource;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use Illuminate\Foundation\Http\FormRequest;
@@ -56,8 +59,11 @@ class OnboardingRequest extends FormRequest
             'skill_level' => ['required', new Enum(SkillLevel::class)],
             'activity_level' => ['required', new Enum(ActivityLevel::class)],
             'training_place' => ['required', new Enum(TrainingPlace::class)],
-            'diet_type' => ['required', new Enum(DietType::class)],
+            'diet_type' => ['nullable', new Enum(DietType::class)],
+            'dietary_preference' => ['required', new Enum(DietaryPreference::class)],
+            'diet_style' => ['nullable', new Enum(DietStyle::class)],
             'training_sessions' => ['required', 'integer', 'min:1', 'max:7'],
+            'training_days' => ['nullable', 'array', 'size:' . ($this->training_sessions ?? 0)],
             'language' => ['nullable', 'string', 'in:en,de']
         ];
     }

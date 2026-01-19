@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserSource;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         'email',
         'password',
         'locale',
+        'source',
     ];
 
 
@@ -54,6 +56,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
+            'source' => UserSource::class,
         ];
     }
 

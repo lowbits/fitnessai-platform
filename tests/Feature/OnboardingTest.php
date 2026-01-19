@@ -26,7 +26,7 @@ test('allows user to complete onboarding without password', function () {
         'skill_level' => 'intermediate',
         'activity_level' => ActivityLevel::MAINLY_SITTING->value,
         'training_place' => 'gym',
-        'diet_type' => 'omnivore',
+        'dietary_preference' => 'omnivore',
         'training_sessions' => 4,
     ])->assertCreated();
 

@@ -5,6 +5,8 @@ namespace App\Helpers;
 use App\Enums\Gender;
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\DietaryPreference;
+use App\Enums\DietStyle;
 use App\Enums\DietType;
 
 class Metabolism
@@ -68,12 +70,12 @@ class Metabolism
      * Calculate macro split in grams.
      *
      * @param int $dailyCalories Total daily calories
-     * @param DietType $dietType
+     * @param DietaryPreference|DietStyle|DietType $dietStyle
      * @return array{protein_g: int, carbs_g: int, fat_g: int}
      */
-    public static function calculateMacros(int $dailyCalories, DietType $dietType): array
+    public static function calculateMacros(int $dailyCalories, DietaryPreference|DietStyle|DietType $dietStyle): array
     {
-        $split = $dietType->macroSplit();
+        $split = $dietStyle->macroSplit();
 
         // Protein: 4 kcal/g
         // Carbs: 4 kcal/g

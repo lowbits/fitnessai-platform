@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\DietaryPreference;
+use App\Enums\DietStyle;
 use App\Enums\DietType;
 use App\Enums\Gender;
 use App\Enums\SkillLevel;
@@ -28,7 +30,10 @@ class UserProfile extends Model
         'activity_level',
         'training_place',
         'diet_type',
+        'dietary_preference',
+        'diet_style',
         'training_sessions_per_week',
+        'training_days',
     ];
 
     protected function casts(): array
@@ -40,6 +45,9 @@ class UserProfile extends Model
             'activity_level' => ActivityLevel::class,
             'training_place' => TrainingPlace::class,
             'diet_type' => DietType::class,
+            'dietary_preference' => DietaryPreference::class,
+            'diet_style' => DietStyle::class,
+            'training_days' => 'array',
         ];
     }
 
@@ -82,7 +90,21 @@ class UserProfile extends Model
     public function calculateMacros(): array
     {
         $dailyCalories = $this->calculateDailyCalories();
-        return Metabolism::calculateMacros($dailyCalories, $this->diet_type);
+
+        // If diet_style is set, it takes precedence for macro calculations
+        if ($this->diet_style instanceof DietStyle) {
+            return Metabolism::calculateMacros($dailyCalories, $this->diet_style);
+        }
+
+        // Fallback to dietary_preference or existing diet_type
+        $dietSource = $this->dietary_preference ?: $this->diet_type;
+
+        if ($dietSource instanceof DietaryPreference || $dietSource instanceof DietType) {
+            return Metabolism::calculateMacros($dailyCalories, $dietSource);
+        }
+
+        // Default to omnivore if nothing is set
+        return Metabolism::calculateMacros($dailyCalories, DietType::OMNIVORE);
     }
 
     /**

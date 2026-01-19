@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Enums\UserSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OnboardingRequest;
 use App\Models\User;
@@ -26,6 +27,7 @@ class OnboardingController extends Controller
                     ? Hash::make($validated['password'])
                     : null,
                 'locale' => $validated['language'] ?? $request->header('Accept-Language', 'en'),
+                'source' => $validated['source'] ?? UserSource::WEB,
             ]);
 
 
@@ -38,8 +40,11 @@ class OnboardingController extends Controller
                 'skill_level' => $validated['skill_level'],
                 'activity_level' => $validated['activity_level'],
                 'training_place' => $validated['training_place'],
-                'diet_type' => $validated['diet_type'],
+                'diet_type' => $validated['diet_type'] ?? null,
+                'dietary_preference' => $validated['dietary_preference'] ?? null,
+                'diet_style' => $validated['diet_style'] ?? null,
                 'training_sessions_per_week' => $validated['training_sessions'],
+                'training_days' => $validated['training_days'] ?? null,
             ]);
 
             // Calculate nutrition using profile helper methods

@@ -32,7 +32,9 @@ const {
     SKILL_LEVELS,
     ACTIVITY_LEVELS,
     TRAINING_PLACES,
-    DIET_TYPES,
+    DIETARY_PREFERENCES,
+    DIET_STYLES,
+    DAYS_OF_WEEK,
 } = useTranslatedEnums();
 
 // State
@@ -50,8 +52,12 @@ const form = reactive({
     body_goal: '',
     skill_level: '',
     diet_type: '',
+    dietary_preference: '',
+    has_diet_style: false,
+    diet_style: '',
     training_place: '',
     training_sessions: '',
+    training_days: [] as string[],
     activity_level: '',
     signup_newsletter: false,
     agree_terms: false,
@@ -111,9 +117,13 @@ const setDefaultValues = () => {
     form.body_goal = randomItem(BODY_GOALS.value).value;
     form.activity_level = randomItem(ACTIVITY_LEVELS.value).value;
     form.skill_level = randomItem(SKILL_LEVELS.value).value;
-    form.diet_type = randomItem(DIET_TYPES.value).value;
+    form.dietary_preference = randomItem(DIETARY_PREFERENCES.value).value;
+    form.diet_style = randomItem(DIET_STYLES.value).value;
     form.training_place = randomItem(TRAINING_PLACES.value).value;
     form.training_sessions = getRecommendedTrainingSessions(form.skill_level);
+    form.training_days = DAYS_OF_WEEK.value
+        .slice(0, parseInt(form.training_sessions))
+        .map((d) => d.value);
 };
 
 // Validation
@@ -142,7 +152,18 @@ const validateStep = (step: number): boolean => {
             }
             break;
 
-        case 2: // Diet Type (optional)
+        case 2: // Dietary Preference & Diet Style
+            if (!form.dietary_preference) {
+                setError(
+                    'dietary_preference',
+                    t('form.validation.dietaryPreferenceRequired'),
+                );
+                return false;
+            }
+            if (form.has_diet_style && !form.diet_style) {
+                setError('diet_style', t('form.validation.dietStyleRequired'));
+                return false;
+            }
             break;
 
         case 3: // Activity Level & Skill Level
@@ -195,6 +216,18 @@ const validateStep = (step: number): boolean => {
                 return false;
             }
             break;
+
+        case 7: // Training Days
+            if (form.training_days.length !== parseInt(form.training_sessions)) {
+                setError(
+                    'training_days',
+                    t('form.validation.trainingDaysCountMismatch', {
+                        count: form.training_sessions,
+                    }),
+                );
+                return false;
+            }
+            break;
     }
 
     return true;
@@ -228,7 +261,8 @@ const submit = async () => {
     try {
         trackEvent('Onboarding Completed', {
             body_goal: form.body_goal,
-            diet_type: form.diet_type,
+            dietary_preference: form.dietary_preference,
+            diet_style: form.diet_style,
         });
         const response = await fetch('/api/v2/onboarding', {
             method: 'POST',
@@ -249,9 +283,11 @@ const submit = async () => {
                 height: parseFloat(form.height),
                 body_goal: form.body_goal,
                 skill_level: form.skill_level,
-                diet_type: form.diet_type,
+                dietary_preference: form.dietary_preference,
+                diet_style: form.diet_style,
                 training_place: form.training_place,
                 training_sessions: parseInt(form.training_sessions),
+                training_days: form.training_days,
                 activity_level: form.activity_level,
                 language: locale.value
             }),
@@ -494,7 +530,7 @@ const submit = async () => {
                     </FormGroup>
                 </FormPanel>
 
-                <!-- Step 3: Diet Type -->
+                <!-- Step 3: Diet Preference & Style -->
                 <FormPanel
                     :headline="$t('form.steps.diet.headline')"
                     :subline="$t('form.steps.diet.subline')"
@@ -503,24 +539,87 @@ const submit = async () => {
                     <FormGroup class="mt-4">
                         <LabeledInput
                             full-width
-                            :label="$t('form.steps.diet.label')"
-                            name="diet_type"
-                            :errors="form.errors.diet_type"
+                            :label="$t('form.steps.diet.preferenceLabel')"
+                            name="dietary_preference"
+                            :errors="form.errors.dietary_preference"
+                        >
+                            <div class="grid grid-cols-2 gap-4">
+                                <button
+                                    v-for="pref in DIETARY_PREFERENCES"
+                                    :key="pref.value"
+                                    type="button"
+                                    class="flex flex-col items-center justify-center rounded-xl border-2 p-4 transition"
+                                    :class="
+                                        form.dietary_preference === pref.value
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 bg-dark-surfaces-500 text-secondary-300 hover:border-dark-surfaces-400'
+                                    "
+                                    @click="form.dietary_preference = pref.value"
+                                >
+                                    <span class="mb-2 text-2xl">{{ pref.icon }}</span>
+                                    <span class="text-sm font-semibold">{{ pref.label }}</span>
+                                </button>
+                            </div>
+                        </LabeledInput>
+
+                        <div v-if="form.dietary_preference" class="mt-8">
+                            <label class="mb-4 block text-sm font-semibold text-white">
+                                {{ $t('form.steps.diet.hasStyleQuestion') }}
+                            </label>
+                            <div class="flex gap-4">
+                                <button
+                                    type="button"
+                                    class="flex-1 rounded-xl border-2 py-3 transition"
+                                    :class="
+                                        form.has_diet_style
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 bg-dark-surfaces-500 text-secondary-300 hover:border-dark-surfaces-400'
+                                    "
+                                    @click="form.has_diet_style = true"
+                                >
+                                    {{ $t('common.yes') }}
+                                </button>
+                                <button
+                                    type="button"
+                                    class="flex-1 rounded-xl border-2 py-3 transition"
+                                    :class="
+                                        !form.has_diet_style
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 bg-dark-surfaces-500 text-secondary-300 hover:border-dark-surfaces-400'
+                                    "
+                                    @click="
+                                        form.has_diet_style = false;
+                                        form.diet_style = '';
+                                    "
+                                >
+                                    {{ $t('common.no') }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <LabeledInput
+                            v-if="form.has_diet_style"
+                            full-width
+                            :label="$t('form.steps.diet.styleLabel')"
+                            name="diet_style"
+                            :hint="$t('form.steps.diet.styleHint')"
+                            :errors="form.errors.diet_style"
+                            class="mt-6"
                         >
                             <SelectInput
-                                id="diet_type"
-                                name="diet_type"
-                                v-model="form.diet_type"
+                                id="diet_style"
+                                name="diet_style"
+                                v-model="form.diet_style"
                                 :default-label="
-                                    $t('form.steps.diet.placeholder')
+                                    $t('form.steps.diet.stylePlaceholder')
                                 "
                             >
                                 <option
-                                    v-for="diet in DIET_TYPES"
-                                    :key="diet.value"
-                                    :value="diet.value"
+                                    v-for="style in DIET_STYLES"
+                                    :key="style.value"
+                                    :value="style.value"
                                 >
-                                    {{ diet.label }}
+                                    {{ style.label }}
                                 </option>
                             </SelectInput>
                         </LabeledInput>
@@ -689,7 +788,56 @@ const submit = async () => {
                     </FormGroup>
                 </FormPanel>
 
-                <!-- Step 8: Email & Submit -->
+                <!-- Step 8: Training Days -->
+                <FormPanel
+                    :headline="$t('form.steps.training.daysHeadline')"
+                    :subline="
+                        $t('form.steps.training.daysSubline', {
+                            count: form.training_sessions,
+                        })
+                    "
+                    @click:next="nextStep"
+                >
+                    <FormGroup class="mt-8">
+                        <LabeledInput
+                            full-width
+                            name="training_days"
+                            :label="$t('form.steps.training.daysLabel')"
+                            :errors="form.errors.training_days"
+                        >
+                            <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+                                <button
+                                    v-for="day in DAYS_OF_WEEK"
+                                    :key="day.value"
+                                    type="button"
+                                    class="flex items-center justify-center rounded-lg border-2 py-3 transition"
+                                    :class="
+                                        form.training_days.includes(day.value)
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 bg-dark-surfaces-500 text-secondary-300 hover:border-dark-surfaces-400'
+                                    "
+                                    @click="
+                                        form.training_days.includes(day.value)
+                                            ? (form.training_days =
+                                                  form.training_days.filter(
+                                                      (d) => d !== day.value,
+                                                  ))
+                                            : form.training_days.length <
+                                              parseInt(form.training_sessions)
+                                            ? form.training_days.push(day.value)
+                                            : null
+                                    "
+                                >
+                                    <span class="text-sm font-semibold">{{
+                                        day.label
+                                    }}</span>
+                                </button>
+                            </div>
+                        </LabeledInput>
+                    </FormGroup>
+                </FormPanel>
+
+                <!-- Step 9: Email & Submit -->
                 <TabPanel class="flex min-h-[550px] flex-col">
                     <div class="shrink-0">
                         <h4
@@ -841,7 +989,7 @@ const submit = async () => {
 
                 <!-- Progress Indicator -->
                 <TabList class="mt-20 flex space-x-1 p-1">
-                    <FormTab v-for="i in 8" :key="i" />
+                    <FormTab v-for="i in 9" :key="i" />
                 </TabList>
             </TabPanels>
         </TabGroup>

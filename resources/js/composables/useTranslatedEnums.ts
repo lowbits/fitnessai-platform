@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 export interface EnumOption {
     value: string;
     label: string;
+    icon?: string;
 }
 
 export function useTranslatedEnums() {
@@ -66,6 +67,31 @@ export function useTranslatedEnums() {
         /*{ value: 'intermittent_fasting', label: t('enums.dietType.intermittent_fasting') },*/
     ]);
 
+    const DIETARY_PREFERENCES = computed<EnumOption[]>(() => [
+        { value: 'omnivore', label: t('enums.dietaryPreference.omnivore'), icon: '🍽️' },
+        { value: 'vegetarian', label: t('enums.dietaryPreference.vegetarian'), icon: '🥗' },
+        { value: 'pescatarian', label: t('enums.dietaryPreference.pescatarian'), icon: '🐟' },
+        { value: 'vegan', label: t('enums.dietaryPreference.vegan'), icon: '🌱' },
+    ]);
+
+    const DIET_STYLES = computed<EnumOption[]>(() => [
+        { value: 'high_protein', label: t('enums.dietStyle.high_protein') },
+        { value: 'low_carb', label: t('enums.dietStyle.low_carb') },
+        { value: 'ketogenic', label: t('enums.dietStyle.ketogenic') },
+        { value: 'paleo', label: t('enums.dietStyle.paleo') },
+        { value: 'mediterranean', label: t('enums.dietStyle.mediterranean') },
+    ]);
+
+    const DAYS_OF_WEEK = computed<EnumOption[]>(() => [
+        { value: 'monday', label: t('enums.dayOfWeek.monday') },
+        { value: 'tuesday', label: t('enums.dayOfWeek.tuesday') },
+        { value: 'wednesday', label: t('enums.dayOfWeek.wednesday') },
+        { value: 'thursday', label: t('enums.dayOfWeek.thursday') },
+        { value: 'friday', label: t('enums.dayOfWeek.friday') },
+        { value: 'saturday', label: t('enums.dayOfWeek.saturday') },
+        { value: 'sunday', label: t('enums.dayOfWeek.sunday') },
+    ]);
+
     return {
         GENDERS,
         BODY_GOALS,
@@ -73,5 +99,8 @@ export function useTranslatedEnums() {
         ACTIVITY_LEVELS,
         TRAINING_PLACES,
         DIET_TYPES,
+        DIETARY_PREFERENCES,
+        DIET_STYLES,
+        DAYS_OF_WEEK,
     };
 }
