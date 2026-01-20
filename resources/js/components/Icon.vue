@@ -5,7 +5,7 @@ import { computed } from 'vue';
 
 interface Props {
     name: string;
-    class?: string;
+    class?: string | object;
     size?: number | string;
     color?: string;
     strokeWidth?: number | string;

@@ -4,16 +4,17 @@ import { useI18n } from 'vue-i18n';
 export interface EnumOption {
     value: string;
     label: string;
-    icon?: string;
+    description?: string;
+    icon?: string
 }
 
 export function useTranslatedEnums() {
     const { t } = useI18n();
 
     const GENDERS = computed<EnumOption[]>(() => [
-        { value: 'male', label: t('enums.gender.male') },
-        { value: 'female', label: t('enums.gender.female') },
-        { value: 'other', label: t('enums.gender.other') },
+        { value: 'male', label: t('enums.gender.male'), icon: 'mars' },
+        { value: 'female', label: t('enums.gender.female'), icon: 'venus' },
+        { value: 'other', label: t('enums.gender.other'), icon: 'nonBinary' },
     ]);
 
     const BODY_GOALS = computed<EnumOption[]>(() => [
@@ -48,17 +49,18 @@ export function useTranslatedEnums() {
     ]);
 
     const TRAINING_PLACES = computed<EnumOption[]>(() => [
-        { value: 'gym', label: t('enums.trainingPlace.gym') },
-        { value: 'home', label: t('enums.trainingPlace.home') },
-        { value: 'outdoor', label: t('enums.trainingPlace.outdoor') },
+        { value: 'gym', label: t('enums.trainingPlace.gym'), icon: 'dumbbell' },
+        { value: 'home', label: t('enums.trainingPlace.home'), icon: 'houseHeart' },
+        {
+            value: 'outdoor',
+            label: t('enums.trainingPlace.outdoor'),
+            icon: 'leaf',
+        },
         /*{ value: 'no_preference', label: t('enums.trainingPlace.no_preference') },*/
     ]);
 
     const DIET_TYPES = computed<EnumOption[]>(() => [
-        { value: 'omnivore', label: t('enums.dietType.omnivore') },
-        { value: 'vegetarian', label: t('enums.dietType.vegetarian') },
-        { value: 'pescatarian', label: t('enums.dietType.pescatarian') },
-        { value: 'vegan', label: t('enums.dietType.vegan') },
+        { value: 'vegan', label: t('enums.dietType.vegan'), icon: 'sprout' },
         { value: 'high_protein', label: t('enums.dietType.high_protein') },
         { value: 'low_carb', label: t('enums.dietType.low_carb') },
         { value: 'ketogenic', label: t('enums.dietType.ketogenic') },
@@ -68,10 +70,30 @@ export function useTranslatedEnums() {
     ]);
 
     const DIETARY_PREFERENCES = computed<EnumOption[]>(() => [
-        { value: 'omnivore', label: t('enums.dietaryPreference.omnivore'), icon: '🍽️' },
-        { value: 'vegetarian', label: t('enums.dietaryPreference.vegetarian'), icon: '🥗' },
-        { value: 'pescatarian', label: t('enums.dietaryPreference.pescatarian'), icon: '🐟' },
-        { value: 'vegan', label: t('enums.dietaryPreference.vegan'), icon: '🌱' },
+        {
+            value: 'omnivore',
+            label: t('enums.dietaryPreference.omnivore'),
+            description: t('enums.dietaryPreference.omnivoreDescription'),
+            icon: 'utensilsCrossed',
+        },
+        {
+            value: 'vegetarian',
+            label: t('enums.dietaryPreference.vegetarian'),
+            description: t('enums.dietaryPreference.vegetarianDescription'),
+            icon: 'salad',
+        },
+        {
+            value: 'pescatarian',
+            label: t('enums.dietaryPreference.pescatarian'),
+            description: t('enums.dietaryPreference.pescatarianDescription'),
+            icon: 'fish',
+        },
+        {
+            value: 'vegan',
+            label: t('enums.dietaryPreference.vegan'),
+            description: t('enums.dietaryPreference.veganDescription'),
+            icon: 'sprout',
+        },
     ]);
 
     const DIET_STYLES = computed<EnumOption[]>(() => [

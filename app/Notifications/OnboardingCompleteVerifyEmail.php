@@ -41,6 +41,17 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
         $verificationUrl = $this->verificationUrl($notifiable);
         $days = config('plans.duration_days');
 
+        // Log deep link URL in local environment
+        if (app()->environment('local')) {
+            \Log::info('Verify Email Deep Link', [
+                'user_id' => $notifiable->id,
+                'email' => $notifiable->email,
+                'url' => $verificationUrl,
+                'deep_link' => str_replace(config('app.url'), 'fytrr://', $verificationUrl),
+                'command' => 'xcrun simctl openurl booted ' . str_replace(config('app.url'), 'fytrr://', $verificationUrl)
+            ]);
+        }
+
         return (new MailMessage)
             ->subject(__('emails.verify_email.subject'))
             ->greeting(__('emails.verify_email.greeting', ['name' => $notifiable->name]))

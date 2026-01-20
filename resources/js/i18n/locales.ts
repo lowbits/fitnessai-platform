@@ -154,9 +154,13 @@ export const locales = {
                 diet: {
                     headline: "What's your diet preference?",
                     subline: "We'll create meals that match your lifestyle",
+                    hasDietaryPreferencesQuestion:
+                        'Do you have any dietary preferences?',
                     preferenceLabel: 'Dietary Preference',
-                    hasStyleQuestion: 'Do you follow a specific diet style or nutritional approach?',
-                    styleLabel: 'Diet Style / Nutritional Approach',
+                    hasStyleQuestion: 'Specific Style?',
+                    hasStyleQuestionHint:
+                        'Do you follow a specific nutritional approach (e.g. Low Carb, Keto)?',
+                    styleLabel: 'Diet Style',
                     styleHint: 'Optional: Choose a specific approach to eating',
                     stylePlaceholder: 'Select Diet Style',
                 },
@@ -302,6 +306,23 @@ export const locales = {
                 paleo: 'Paleo',
                 mediterranean: 'Mediterranean',
                 intermittent_fasting: 'Intermittent Fasting',
+            },
+            dietaryPreference: {
+                omnivore: 'Classic',
+                vegetarian: 'Vegetarian',
+                pescatarian: 'Pescatarian',
+                vegan: 'Vegan',
+                omnivoreDescription: 'All food groups',
+                vegetarianDescription: 'No meat, includes dairy & eggs',
+                pescatarianDescription: 'Fish, no other meat',
+                veganDescription: 'Plant-based foods only',
+            },
+            dietStyle: {
+                high_protein: 'High Protein',
+                low_carb: 'Low Carb',
+                ketogenic: 'Ketogenic',
+                paleo: 'Paleo',
+                mediterranean: 'Mediterranean',
             },
         },
         workout_plan: {
@@ -702,7 +723,8 @@ export const locales = {
                         },
                         data_collection: {
                             title: 'Data Collection on This Website',
-                            who_responsible: 'Who is responsible for data collection on this website?',
+                            who_responsible:
+                                'Who is responsible for data collection on this website?',
                             who_answer:
                                 'Data processing on this website is carried out by the website operator. Contact details can be found in the imprint of this website.',
                             how_collect: 'How do we collect your data?',
@@ -790,7 +812,8 @@ export const locales = {
                                 'When using our service to create workout and nutrition plans, we collect the following data:',
                             items: {
                                 email: 'Email address (for delivering the plans)',
-                                body_data: 'Body data (weight, height, age, gender)',
+                                body_data:
+                                    'Body data (weight, height, age, gender)',
                                 goals: 'Fitness goals and preferences',
                                 health: 'Health information (as provided by you)',
                             },
@@ -887,7 +910,8 @@ export const locales = {
                         paragraph_1:
                             '(1) The Provider offers use of the Platform via mobile applications (iOS and Android) through paid subscriptions. The following subscription models are available:',
                         types: {
-                            monthly: 'Monthly Subscription: Monthly billing with a duration of one month',
+                            monthly:
+                                'Monthly Subscription: Monthly billing with a duration of one month',
                             yearly: 'Annual Subscription: Annual billing with a duration of twelve months',
                         },
                         paragraph_2:
@@ -898,7 +922,8 @@ export const locales = {
                             '(4) <strong>Cancellation and Cancellation Process:</strong> The subscription must be cancelled by the Customer through the subscription management of the respective app store:',
                         cancellation: {
                             ios: '<strong>Apple App Store (iOS):</strong> Settings → Apple ID → Subscriptions → Select fytrr → Cancel Subscription',
-                            android: '<strong>Google Play Store (Android):</strong> Open Google Play Store → Menu → Subscriptions → Select fytrr → Cancel Subscription',
+                            android:
+                                '<strong>Google Play Store (Android):</strong> Open Google Play Store → Menu → Subscriptions → Select fytrr → Cancel Subscription',
                             note: 'Cancellation directly through the Provider (fytrr) is not possible. Cancellations must be made at least 24 hours before the end of the current billing period to prevent automatic renewal.',
                         },
                         paragraph_5:
@@ -940,14 +965,13 @@ export const locales = {
                             right_title: 'Right of Withdrawal',
                             right_text:
                                 'You have the right to withdraw from this contract within fourteen days without giving any reason.',
-                            period:
-                                'The withdrawal period is fourteen days from the date of contract conclusion.',
-                            how_to:
-                                'To exercise your right of withdrawal, you must inform us (Tobias Lobitz, Annastraße 7, Email: hello@fytrr.com) by means of a clear statement (e.g., by email) of your decision to withdraw from this contract.',
+                            period: 'The withdrawal period is fourteen days from the date of contract conclusion.',
+                            how_to: 'To exercise your right of withdrawal, you must inform us (Tobias Lobitz, Annastraße 7, Email: hello@fytrr.com) by means of a clear statement (e.g., by email) of your decision to withdraw from this contract.',
                             consequences_title: 'Consequences of Withdrawal',
                             consequences_text:
                                 'If you withdraw from this contract, we shall reimburse you all payments we have received from you without undue delay and no later than fourteen days from the day on which we received notice of your withdrawal from this contract.',
-                            expiry_title: 'Premature Expiration of Right of Withdrawal',
+                            expiry_title:
+                                'Premature Expiration of Right of Withdrawal',
                             expiry_text:
                                 'The right of withdrawal expires for a contract for the provision of services if the entrepreneur has fully performed the service and only began execution after the consumer gave express consent and simultaneously confirmed knowledge that the right of withdrawal is lost upon complete contract performance.',
                         },
@@ -982,7 +1006,7 @@ export const locales = {
                         paragraph_1:
                             '(1) The law of the Federal Republic of Germany applies, excluding the UN Convention on Contracts for the International Sale of Goods. For users outside Germany, this choice of law applies to the extent permitted by mandatory consumer protection laws of their jurisdiction.',
                         paragraph_2:
-                            '(2) If the Customer is a merchant, legal entity under public law, or special fund under public law, the exclusive place of jurisdiction for all disputes arising from contractual relationships between the Customer and the Provider is the Provider\'s place of business.',
+                            "(2) If the Customer is a merchant, legal entity under public law, or special fund under public law, the exclusive place of jurisdiction for all disputes arising from contractual relationships between the Customer and the Provider is the Provider's place of business.",
                         paragraph_3:
                             '(3) Should individual provisions of these Terms be or become invalid, the validity of the remaining provisions remains unaffected.',
                     },
@@ -1002,12 +1026,12 @@ export const locales = {
             title: 'Set Your Password',
             subtitle: 'Your link will automatically open the Fytrr app',
             description:
-                'Your link will automatically open the Fytrr app. If you don\'t have the app installed yet, download it below.',
+                "Your link will automatically open the Fytrr app. If you don't have the app installed yet, download it below.",
             tip: {
                 label: '👆 Tip:',
                 text: 'If the app didn\'t open automatically, click the \"Open\" button in your browser.',
             },
-            no_app: 'Don\'t have the app?',
+            no_app: "Don't have the app?",
             download_prompt: 'Download Fytrr to get started',
         },
     },
@@ -1169,9 +1193,15 @@ export const locales = {
                     headline: 'Ernährung',
                     subline:
                         'Wir erstellen Mahlzeiten, die zu deinem Alltag passen',
-                    label: 'Ernährungspräferenzen',
-                    hasStyleQuestion: 'Folgst du einem bestimmten Ernährungsstil?',
-                    styleLabel: 'Ernährungsstil / Ansatz',
+                    hasDietaryPreferencesQuestion:
+                        'Hast du Ernährungspräferenzen?',
+                    preferenceLabel: 'Ernährungspräferenzen',
+                    hasStyleQuestion: 'Spezieller Stil?',
+                    hasStyleQuestionHint:
+                        'Folgst du einem speziellen Ernährungsansatz (z.B. Low Carb, Keto)?',
+                    styleLabel: 'Ernährungsstil',
+                    styleHint:
+                        'Optional: Wähle einen spezifischen Ernährungsansatz',
                     stylePlaceholder: 'Ernährungsstil auswählen',
                 },
                 activity: {
@@ -1318,6 +1348,27 @@ export const locales = {
                 paleo: 'Paleo',
                 mediterranean: 'Mediterran',
                 intermittent_fasting: 'Intervallfasten',
+            },
+            dietaryPreference: {
+                omnivore: 'Klassisch',
+                omnivoreDescription: 'Alle Lebensmittelgruppen',
+                vegetarian: 'Vegetarisch',
+                vegetarianDescription:
+                    'Kein Fleisch, mit Milchprodukten & Eiern',
+                pescatarian: 'Pescetarisch',
+                pescatarianDescription: 'Fisch, keine anderen Fleischsorten',
+                vegan: 'Vegan',
+                veganDescription: 'Nur pflanzliche Lebensmittel',
+            },
+            dietStyle: {
+                high_protein: 'Proteinreich',
+                high_protein_description:
+                    'Hoher Proteinanteil für Muskelaufbau',
+                low_carb: 'Kohlenhydratarm',
+                low_carb_description: 'Reduzierte Kohlenhydrate',
+                ketogenic: 'Ketogen',
+                paleo: 'Paleo',
+                mediterranean: 'Mediterran',
             },
         },
         workout_plan: {
@@ -1817,7 +1868,8 @@ export const locales = {
                                 'Bei der Nutzung unseres Services zur Erstellung von Trainings- und Ernährungsplänen erfassen wir folgende Daten:',
                             items: {
                                 email: 'E-Mail-Adresse (zur Zusendung der Pläne)',
-                                body_data: 'Körperdaten (Gewicht, Größe, Alter, Geschlecht)',
+                                body_data:
+                                    'Körperdaten (Gewicht, Größe, Alter, Geschlecht)',
                                 goals: 'Fitnessziele und Präferenzen',
                                 health: 'Gesundheitsinformationen (soweit von Ihnen angegeben)',
                             },
@@ -1914,7 +1966,8 @@ export const locales = {
                         paragraph_1:
                             '(1) Der Anbieter bietet die Nutzung der Plattform über die mobilen Applikationen (iOS und Android) im Rahmen von kostenpflichtigen Abonnements an. Folgende Abonnement-Modelle stehen zur Verfügung:',
                         types: {
-                            monthly: 'Monatsabonnement: Monatliche Abrechnung mit Laufzeit von einem Monat',
+                            monthly:
+                                'Monatsabonnement: Monatliche Abrechnung mit Laufzeit von einem Monat',
                             yearly: 'Jahresabonnement: Jährliche Abrechnung mit Laufzeit von zwölf Monaten',
                         },
                         paragraph_2:
@@ -1925,7 +1978,8 @@ export const locales = {
                             '(4) <strong>Kündigung und Kündigungsprozess:</strong> Die Kündigung des Abonnements muss vom Kunden selbst über die Abonnementverwaltung des jeweiligen App Stores vorgenommen werden:',
                         cancellation: {
                             ios: '<strong>Apple App Store (iOS):</strong> Einstellungen → Apple-ID → Abonnements → fytrr auswählen → Abonnement kündigen',
-                            android: '<strong>Google Play Store (Android):</strong> Google Play Store öffnen → Menü → Abos → fytrr auswählen → Abo kündigen',
+                            android:
+                                '<strong>Google Play Store (Android):</strong> Google Play Store öffnen → Menü → Abos → fytrr auswählen → Abo kündigen',
                             note: 'Eine Kündigung über den Anbieter (fytrr) direkt ist nicht möglich. Kündigungen müssen mindestens 24 Stunden vor Ablauf der aktuellen Abrechnungsperiode erfolgen, um eine automatische Verlängerung zu verhindern.',
                         },
                         paragraph_5:
@@ -1967,14 +2021,13 @@ export const locales = {
                             right_title: 'Widerrufsrecht',
                             right_text:
                                 'Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.',
-                            period:
-                                'Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.',
-                            how_to:
-                                'Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com) mittels einer eindeutigen Erklärung (z.B. per E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.',
+                            period: 'Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.',
+                            how_to: 'Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com) mittels einer eindeutigen Erklärung (z.B. per E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.',
                             consequences_title: 'Folgen des Widerrufs',
                             consequences_text:
                                 'Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.',
-                            expiry_title: 'Vorzeitiges Erlöschen des Widerrufsrechts',
+                            expiry_title:
+                                'Vorzeitiges Erlöschen des Widerrufsrechts',
                             expiry_text:
                                 'Das Widerrufsrecht erlischt bei einem Vertrag zur Erbringung von Dienstleistungen, wenn der Unternehmer die Dienstleistung vollständig erbracht hat und mit der Ausführung erst begonnen hat, nachdem der Verbraucher dazu seine ausdrückliche Zustimmung gegeben hat und gleichzeitig seine Kenntnis davon bestätigt hat, dass er sein Widerrufsrecht bei vollständiger Vertragserfüllung verliert.',
                         },

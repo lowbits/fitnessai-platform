@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SelectInput from '@/components/form/SelectInput.vue';
 import { Link, usePage } from '@inertiajs/vue3';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 
 const page = usePage();
@@ -27,7 +27,7 @@ interface FooterLinks {
 }
 
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
-const {language: selectedLanguage} = useSelectedLanguage()
+const { language: selectedLanguage } = useSelectedLanguage();
 
 const getPathFromUrl = (url: string) => {
     return url.replace(/^https?:\/\/[^\/]+/, '');
@@ -66,9 +66,11 @@ watch(selectedLanguage, (newLocale) => {
             >
                 <!-- Brand -->
                 <div>
-                    <Link href="/">
+                    <Link :href="`/${selectedLanguage}`">
                         <img
                             class="h-auto w-[180px]"
+                            width="892"
+                            height="323"
                             src="/fytrr-logo.png"
                             alt="Logo fytrr.com footer"
                         />
@@ -195,12 +197,16 @@ watch(selectedLanguage, (newLocale) => {
 
                 <!-- Language Switcher -->
                 <div>
-                    <h3
+                    <label
+                        for="language_select"
                         class="mb-4 text-sm font-semibold tracking-wider text-white uppercase"
                     >
                         {{ footerLinks.labels.language }}
-                    </h3>
-                    <SelectInput v-model="selectedLanguage">
+                    </label>
+                    <SelectInput
+                        id="language_select"
+                        v-model="selectedLanguage"
+                    >
                         <option
                             v-for="(lang, code) in footerLinks.languages"
                             :key="code"

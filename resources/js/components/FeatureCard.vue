@@ -14,6 +14,8 @@ defineProps<{
     >
         <header class="border-b border-dark-surfaces-25">
             <img
+                height="180"
+                width="125"
                 class="mx-auto"
                 :src="illustrationPath"
                 :alt="`${headline} illustration`"

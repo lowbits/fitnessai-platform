@@ -33,14 +33,6 @@ class AuthController extends Controller
             ]);
         }
 
-        if (!$user->hasVerifiedEmail()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Please verify your email address before logging in.',
-                'email_verified' => false,
-            ], 403);
-        }
-
         $user->tokens()->where('name', $validated['device_name'])->delete();
 
         // Create a new API token
@@ -53,7 +45,7 @@ class AuthController extends Controller
                 'id' => $user->id,
                 'email' => $user->email,
                 'name' => $user->name,
-                'email_verified' => true,
+                'email_verified' => $user->email_verified_at,
             ],
             'api_token' => $token,
         ]);
@@ -113,7 +105,7 @@ class AuthController extends Controller
                     'diet_type' => $user->profile?->diet_type?->label(),
                     'skill_level' => $user->profile?->skill_level?->label(),
                 ],
-                'email_verified_at' => $user->hasVerifiedEmail(),
+                'email_verified_at' => $user->email_verified_at,
                 'created_at' => $user->created_at->toIso8601String(),
             ],
             'current_plan' => $currentPlan ? [

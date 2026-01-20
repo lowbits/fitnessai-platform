@@ -10,7 +10,9 @@ const { language: selectedLanguage } = useSelectedLanguage();
         <nav class="container mx-auto px-6 py-4 md:px-0">
             <Link :href="`/${selectedLanguage}`">
                 <img
-                    class="h-auto w-40"
+                    width="112"
+                    height="38"
+                    class="h-auto w-28"
                     src="/fytrr-logo.svg"
                     alt="fytrr.com logo"
                 />

@@ -28,7 +28,7 @@ onMounted(() => {
             <div class="mb-8 text-center">
                 <div class="mb-4">
                     <img
-                        src="/logomark.png"
+                        src="/favicon.svg"
                         alt="Fytrr"
                         class="mx-auto h-20 w-20"
                     />

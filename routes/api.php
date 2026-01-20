@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\PushNotificationController;
 use App\Http\Controllers\Api\V2\RescheduleWorkoutController;
+use App\Http\Controllers\Api\V2\ResendVerificationEmailController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
 use App\Http\Controllers\Api\V2\SkipWorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutController;
@@ -34,6 +35,9 @@ Route::prefix('v2')->group(function () {
             Route::post('/logout', [AuthController::class, 'logout']);
             Route::post('/logout-all', [AuthController::class, 'logoutAll']);
             Route::post('/refresh-token', [AuthController::class, 'refreshToken']);
+            Route::post('/resend-verification-email', ResendVerificationEmailController::class)
+                ->middleware('throttle:3,1')
+                ->name('api.verification.send');
         });
     });
 

@@ -41,6 +41,7 @@ Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::c
     ->middleware(['signed'])
     ->name('verification.verify-onboarding');
 
+
 // Set password landing page (for email links + universal links)
 Route::get('/{locale}/set-password/{token}', function ($locale, $token) {
     $email = request()->query('email', '');

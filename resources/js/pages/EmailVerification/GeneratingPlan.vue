@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { usePoll } from '@inertiajs/vue3';
+import { onMounted } from 'vue';
 
 interface Props {
     user: {
@@ -47,6 +48,10 @@ const { stop: stopPolling } = usePoll(3000, {
             return false; // Cancel this poll request
         }
     },
+});
+
+onMounted(() => {
+    window.location.href = 'fytrr://verify-email';
 });
 </script>
 

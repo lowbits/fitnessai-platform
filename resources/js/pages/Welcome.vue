@@ -117,7 +117,9 @@ const structuredData = computed(() => ({
                         class="absolute inset-0 z-0 -mt-20 -mr-32 flex items-center justify-center xl:-mt-10 xl:-mr-64"
                     >
                         <img
-                            src="/assets/gradient_form.png"
+                            src="/assets/gradient_form_optimized.png"
+                            height="796"
+                            width="605"
                             alt="Decorative gradient background"
                             class="h-auto w-full max-w-4xl object-contain opacity-50"
                             loading="lazy"
@@ -165,7 +167,9 @@ const structuredData = computed(() => ({
                     class="absolute inset-0 z-0 flex items-center justify-center"
                 >
                     <img
-                        src="/assets/gradient.png"
+                        src="/assets/gradient-optimized.png"
+                        width="1230"
+                        height="785"
                         alt="Abstract gradient background"
                         class="h-auto w-full max-w-7xl object-contain opacity-50"
                         loading="lazy"

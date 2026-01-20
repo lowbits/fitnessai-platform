@@ -89,7 +89,7 @@ class PlanController extends Controller
 
         // Handle different meal plan statuses
         $mealsData = $this->formatMealPlanResponse($mealPlan, $user, $requestDate);
-        $workoutData = $this->formatWorkoutPlanResponse($workoutPlan);
+        $workoutData = $this->formatWorkoutPlanResponse($workoutPlan, $user);
 
         // Determine overall status
         $overallStatus = $this->determineOverallStatus($mealPlan, $workoutPlan);
@@ -120,10 +120,14 @@ class PlanController extends Controller
     private function formatMealPlanResponse(?MealPlan $mealPlan, $user, Carbon $date): array
     {
         if (!$mealPlan) {
+            // If user was verified today and plan is empty, it's likely being generated
+            $verifiedToday = $user->email_verified_at &&
+                            Carbon::parse($user->email_verified_at)->isToday();
+
             return [
                 'meals' => [],
                 'totals' => null,
-                'status' => 'not_generated',
+                'status' => $verifiedToday ? 'generating' : 'not_generated',
             ];
         }
 
@@ -174,9 +178,17 @@ class PlanController extends Controller
     /**
      * Format workout plan response
      */
-    private function formatWorkoutPlanResponse(?WorkoutPlan $workoutPlan): ?array
+    private function formatWorkoutPlanResponse(?WorkoutPlan $workoutPlan, $user = null): ?array
     {
         if (!$workoutPlan) {
+            // If user was verified today and plan is empty, it's likely being generated
+            if ($user && $user->email_verified_at && Carbon::parse($user->email_verified_at)->isToday()) {
+                return [
+                    'status' => 'generating',
+                    'message' => 'Workout is being generated...',
+                    'workouts' => []
+                ];
+            }
             return null;
         }
 
