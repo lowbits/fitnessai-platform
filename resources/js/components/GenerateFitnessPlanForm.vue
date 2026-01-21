@@ -10,13 +10,11 @@ import LabeledInput from '@/components/form/LabeledInput.vue';
 import NumberInput from '@/components/form/NumberInput.vue';
 import RadioGroup from '@/components/form/RadioGroup.vue';
 import SelectInput from '@/components/form/SelectInput.vue';
-import Icon from '@/components/Icon.vue';
 import Email from '@/components/icons/email.vue';
 import { Input } from '@/components/ui/input';
 import { useTracking } from '@/composables/useTracking';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
 import { Link } from '@inertiajs/vue3';
-import RoundedIcon from '@/components/ui/icons/RoundedIcon.vue';
 
 defineProps<{
     totalDays: number;
@@ -426,7 +424,6 @@ const submit = async () => {
                 <FormPanel
                     :headline="$t('form.steps.gender.headline')"
                     :subline="$t('form.steps.gender.subline')"
-
                     @click:next="nextStep"
                 >
                     <RadioGroup

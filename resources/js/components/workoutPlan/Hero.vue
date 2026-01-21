@@ -27,7 +27,7 @@ defineEmits<{
             class="absolute inset-0 flex items-center justify-center opacity-30"
         >
             <img
-                src="/assets/gradient.png"
+                src="/assets/gradient-optimized.png"
                 alt="Abstract gradient background"
                 class="h-full w-full object-cover"
                 loading="lazy"

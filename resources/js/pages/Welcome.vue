@@ -22,7 +22,7 @@ defineProps<{
 }>();
 
 const { t } = useI18n();
-const {language} = useSelectedLanguage()
+const { language } = useSelectedLanguage();
 
 const structuredData = computed(() => ({
     '@context': 'https://schema.org',
@@ -164,10 +164,10 @@ const structuredData = computed(() => ({
             <div class="relative mx-auto mt-48">
                 <!-- Background Gradient Image -->
                 <div
-                    class="absolute inset-0 z-0 flex items-center justify-center"
+                    class="pointer-events-none absolute inset-0 z-0 flex items-center justify-center"
                 >
                     <img
-                        src="/assets/gradient-optimized.png"
+                        src="/assets/gradient-optimized.webp"
                         width="1230"
                         height="785"
                         alt="Abstract gradient background"
@@ -177,9 +177,9 @@ const structuredData = computed(() => ({
                     />
                 </div>
 
-                <div class="mx-auto max-w-xl">
+                <div class="z-10 mx-auto max-w-xl">
                     <h2
-                        class="z-10 text-center text-5xl font-bold tracking-tight text-white"
+                        class="text-center text-5xl font-bold tracking-tight text-white"
                     >
                         {{ $t('welcome.cta.title') }}
                     </h2>
