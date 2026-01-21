@@ -118,6 +118,7 @@ const structuredData = computed(() => ({
                     >
                         <img
                             src="/assets/gradient_form_optimized.png"
+                            fetchpriority="low"
                             height="796"
                             width="605"
                             alt="Decorative gradient background"
