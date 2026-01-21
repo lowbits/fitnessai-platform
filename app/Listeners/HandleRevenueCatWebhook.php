@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 
 use App\Actions\RevenueCat\HandleInitialPurchaseAction;
+use App\Actions\RevenueCat\HandleRenewalAction;
 use Illuminate\Support\Facades\Log;
 use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
@@ -12,8 +13,10 @@ class HandleRevenueCatWebhook
     /**
      * Create the event listener.
      */
-    public function __construct(private readonly HandleInitialPurchaseAction $initialPurchaseAction)
-    {
+    public function __construct(
+        private readonly HandleInitialPurchaseAction $initialPurchaseAction,
+        private readonly HandleRenewalAction $renewalAction
+    ) {
         //
     }
 
@@ -68,8 +71,7 @@ class HandleRevenueCatWebhook
 
     protected function handleRenewal(array $payload): void
     {
-        Log::info('Handling renewal', ['payload' => $payload]);
-        // Add logic for renewal if needed, for now just follow the requirement for initial purchase
+        $this->renewalAction->execute($payload);
     }
 
     protected function handleCancellation(array $payload): void

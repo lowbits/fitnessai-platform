@@ -4,7 +4,9 @@ namespace App\Providers;
 
 use App\Events\EmailVerified;
 use App\Events\RevenueCat\InitialPurchaseProcessed;
+use App\Events\RevenueCat\SubscriptionRenewed;
 use App\Listeners\AdjustPlanAfterPurchase;
+use App\Listeners\AdjustPlanAfterRenewal;
 use App\Listeners\GenerateMealPlan;
 use App\Listeners\GenerateWorkoutPlan;
 use App\Listeners\HandleRevenueCatWebhook;
@@ -34,5 +36,6 @@ class AppServiceProvider extends ServiceProvider
 
         Event::listen(WebhookReceived::class, HandleRevenueCatWebhook::class);
         Event::listen(InitialPurchaseProcessed::class, AdjustPlanAfterPurchase::class);
+        Event::listen(SubscriptionRenewed::class, AdjustPlanAfterRenewal::class);
     }
 }

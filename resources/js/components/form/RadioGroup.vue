@@ -54,10 +54,10 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
                         checked
                             ? 'z-10 border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5'
                             : 'border-dark-surfaces-25',
-                        'relative flex w-full cursor-pointer justify-between rounded-2xl border p-4 whitespace-nowrap transition-colors focus:outline-none',
+                        'relative flex w-full cursor-pointer justify-between rounded-2xl border p-2 md:p-4 whitespace-nowrap transition-colors focus:outline-none',
                     ]"
                 >
-                    <span class="ml-3 flex flex-col">
+                    <span class="flex flex-col">
                         <RadioGroupLabel
                             as="span"
                             class="block font-medium text-white capitalize"
@@ -77,7 +77,7 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
                                         </p>
                                         <p
                                             v-if="isRadioOption(item) && item.description"
-                                            class="text-secondary-100 text-sm"
+                                            class="text-secondary-100 text-sm  text-wrap"
                                         >
                                             {{ item.description }}
                                         </p>
