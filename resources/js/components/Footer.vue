@@ -71,7 +71,7 @@ watch(selectedLanguage, (newLocale) => {
                             class="h-auto w-[180px]"
                             width="892"
                             height="323"
-                            src="/fytrr-logo.png"
+                            src="/fytrr-logo.png?v2"
                             alt="Logo fytrr.com footer"
                         />
                     </Link>
