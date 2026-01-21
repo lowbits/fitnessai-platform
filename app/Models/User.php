@@ -121,6 +121,14 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         return $this->locale ?? 'en';
     }
 
+    private function getTimezone(): string
+    {
+        return match($this->preferred_language) {
+            'de' => 'Europe/Berlin',
+            default => 'UTC',
+        };
+    }
+
     /**
      * Get the current weight from the latest body progress entry or user profile.
      */

@@ -43,7 +43,7 @@ class SendWorkoutReminders extends Command
             }
 
             // Determine when to send reminder for this user
-            $shouldSendNow = $this->shouldSendReminderNow($user, $currentHour);
+            $shouldSendNow = $this->shouldSendReminderNow($user);
 
             if (!$shouldSendNow) {
                 $skippedCount++;
@@ -86,11 +86,14 @@ class SendWorkoutReminders extends Command
     /**
      * Determine if reminder should be sent now for this user
      * MVP Logic:
-     * - First 2 weeks OR no trackings: Send at 18:00
-     * - Has trackings: Send 1 hour before average latest tracking time
+     * - First 2 weeks OR no trackings: Send at 9:00 AM (user timezone)
+     * - Has trackings: Send 2 hours before average workout start time
      */
-    private function shouldSendReminderNow(User $user, int $currentHour): bool
+    private function shouldSendReminderNow(User $user): bool
     {
+        // Get current hour in user's timezone
+        $userHour = now()->timezone($user->getTimezone())->hour;
+
         // Check if user is in first 2 weeks
         $firstPlan = $user->plans()->oldest()->first();
         $isNewUser = !$firstPlan || $firstPlan->created_at->diffInDays(now()) <= 14;
@@ -101,21 +104,23 @@ class SendWorkoutReminders extends Command
             ->latest('started_at')
             ->first();
 
-        // No tracking or new user: Default 18:00 (6 PM)
+        // No tracking or new user: Default 9:00 AM
         if (!$latestTracking || $isNewUser) {
-            $reminderHour = 18;
-            $this->line("User {$user->id}: Using default time 18:00 (new user or no tracking)");
+            $reminderHour = 9;
+            $this->line("User {$user->id}: Using default time 09:00 (new user or no tracking) - User time: {$userHour}:00");
         } else {
-            // Calculate 1 hour before their latest workout START time
-            $lastWorkoutHour = Carbon::parse($latestTracking->started_at)->hour;
-            $reminderHour = $lastWorkoutHour - 1;
+            // Calculate 2 hours before their latest workout START time
+            $lastWorkoutHour = Carbon::parse($latestTracking->started_at)
+                ->timezone($user->getTimezone())
+                ->hour;
+            $reminderHour = $lastWorkoutHour - 2;
 
             // Ensure it's between 6 AM and 11 PM
             $reminderHour = max(6, min(23, $reminderHour));
 
-            $this->line("User {$user->id}: Learned time " . sprintf('%02d:00', $reminderHour) . " (1h before last workout START at {$lastWorkoutHour}:00)");
+            $this->line("User {$user->id}: Learned time " . sprintf('%02d:00', $reminderHour) . " (2h before last workout START at {$lastWorkoutHour}:00) - User time: {$userHour}:00");
         }
 
-        return $currentHour === $reminderHour;
+        return $userHour === $reminderHour;
     }
 }
