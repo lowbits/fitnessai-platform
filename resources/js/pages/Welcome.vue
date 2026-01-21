@@ -170,6 +170,7 @@ const structuredData = computed(() => ({
                         src="/assets/gradient-optimized.webp"
                         width="1230"
                         height="785"
+                        fetchpriority="low"
                         alt="Abstract gradient background"
                         class="h-auto w-full max-w-7xl object-contain opacity-50"
                         loading="lazy"
