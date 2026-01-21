@@ -39,5 +39,9 @@ return [
             'closing' => 'Viel Erfolg bei Ihrem Training!',
         ],
     ],
+    'plan_completed' => [
+        'title' => 'Dein Plan ist fertig 💪',
+        'body' => 'Dein personalisierter Trainings- & Ernährungsplan wartet auf dich.',
+    ],
 ];
 

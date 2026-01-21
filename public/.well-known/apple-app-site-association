@@ -9,7 +9,8 @@
                         "/set-password/*",
                         "/*/auth/*",
                         "/*/workouts/*",
-                        "/*/meals/*"
+                        "/*/meals/*",
+                        "/*/dashboard"
                     ]
             }
         ]

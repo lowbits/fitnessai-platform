@@ -3,30 +3,22 @@
 return [
     'plan_ready' => [
         'subject' => 'Dein persönlicher Fitnessplan ist fertig 💪',
-
         'greeting' => 'Hi :name,',
-
-        'thank_you' => 'dein personalisierter **:days-Tage Trainings- & Ernährungsplan** ist fertig und dieser E-Mail als **PDF** beigefügt.',
-
+        'intro_pdf' => 'dein personalisierter **:days-Tage Trainings- & Ernährungsplan** ist fertig und dieser E-Mail als **PDF** beigefügt.',
+        'intro_app' => 'dein personalisierter **:days-Tage Trainings- & Ernährungsplan** ist fertig und wartet in der App auf dich.',
+        'cta_app' => 'Plan ansehen',
         'tailored' => 'Der Plan wurde speziell für dich erstellt – basierend auf deinem Ziel, deinem Fitnesslevel und den Angaben, die du gemacht hast:',
-
         'features' => [
             'meals' => '🥗 **:days Tage Ernährungspläne** mit Rezepten',
             'workouts' => '🏋️ **Individuelle Trainingsroutinen**, angepasst an dein Fitnesslevel',
             'ingredients' => '🛒 **Zutatenlisten & einfache Kochanleitungen**',
             'exercises' => '📋 **Übungsanleitungen** mit Hinweisen zur korrekten Ausführung',
         ],
-
         'review' => 'Nimm dir kurz Zeit, den Plan anzuschauen. Wenn du Fragen hast oder etwas angepasst werden soll, **antworte einfach auf diese E-Mail** – wir helfen dir gerne weiter.',
-
         'disclaimer_title' => '**Wichtiger Hinweis:**',
-
         'disclaimer_text' => 'Dieser Plan wurde mithilfe eines KI-Systems erstellt und ersetzt keine medizinische oder ernährungswissenschaftliche Beratung. Bitte konsultiere bei gesundheitlichen Fragen einen Arzt oder qualifizierten Ernährungsberater.',
-
         'confidence' => 'Viel Erfolg beim Training – und vor allem: hab Spaß dabei 💪',
-
         'signature' => 'Beste Grüße',
-
         'team' => 'Das fytrr Team',
     ],
 
@@ -45,7 +37,8 @@ return [
 
         'steps' => [
             'create' => 'Wir erstellen deinen individuellen Trainings- & Ernährungsplan',
-            'receive' => 'Du erhältst alles als **PDF per E-Mail**',
+            'receive_pdf' => 'Du erhältst alles als **PDF per E-Mail**',
+            'receive_app' => 'Dein Plan wartet dann **in der App** auf dich',
             'ready' => 'Fertig in etwa **3–5 Minuten**',
         ],
 

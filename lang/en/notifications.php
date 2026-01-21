@@ -39,4 +39,8 @@ return [
             'closing' => 'Best of luck with your training!',
         ],
     ],
+    'plan_completed' => [
+        'title' => 'Your Plan is Ready 💪',
+        'body' => 'Your personalized workout & nutrition plan is waiting for you.'
+    ],
 ];

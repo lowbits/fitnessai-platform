@@ -12,6 +12,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         ]);
     })->name('home');
 
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('mobile.open-dashboard');
+
     Route::get(LaravelLocalization::transRoute('routes.data_privacy'), function () {
         return Inertia::render('Legal/DataPrivacy');
     })->name('data-privacy');

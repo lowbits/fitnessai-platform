@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\UserSource;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,6 +40,7 @@ class NewOnboardingStarted extends Notification implements ShouldQueue
             ->greeting('New Onboarding Started')
             ->line('A new user has completed the onboarding form.')
             ->line('**User Details:**')
+            ->line('Source: ' . $this->user->source == UserSource::WEB ? '💻' : '📱' )
             ->line('Name: ' . $this->user->name)
             ->line('Email: ' . $this->user->email)
             ->line('Age: ' . ($this->profileData['age'] ?? 'N/A'))

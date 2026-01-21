@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Enums\UserSource;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -40,6 +41,7 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
 
         $verificationUrl = $this->verificationUrl($notifiable);
         $days = config('plans.duration_days');
+        $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
 
         // Log deep link URL in local environment
         if (app()->environment('local')) {
@@ -52,6 +54,8 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
             ]);
         }
 
+        $receiveKey = $isMobileAppOnboarding ? 'receive_app' : 'receive_pdf';
+
         return (new MailMessage)
             ->subject(__('emails.verify_email.subject'))
             ->greeting(__('emails.verify_email.greeting', ['name' => $notifiable->name]))
@@ -60,7 +64,7 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
             ->action(__('emails.verify_email.verify_button'), $verificationUrl)
             ->line(__('emails.verify_email.what_next'))
             ->line('• ' . __('emails.verify_email.steps.create'))
-            ->line('• ' . __('emails.verify_email.steps.receive'))
+            ->line('• ' . __("emails.verify_email.steps.$receiveKey"))
             ->line('• ' . __('emails.verify_email.steps.ready'))
             ->line(__('emails.verify_email.valid'))
             ->line('')

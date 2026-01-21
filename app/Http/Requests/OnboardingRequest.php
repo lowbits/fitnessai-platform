@@ -64,7 +64,8 @@ class OnboardingRequest extends FormRequest
             'diet_style' => ['nullable', new Enum(DietStyle::class)],
             'training_sessions' => ['required', 'integer', 'min:1', 'max:7'],
             'training_days' => ['nullable', 'array'],
-            'language' => ['nullable', 'string', 'in:en,de']
+            'language' => ['nullable', 'string', 'in:en,de'],
+            'source' => ['nullable', new Enum(UserSource::class)],
         ];
     }
 

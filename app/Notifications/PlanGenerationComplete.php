@@ -2,12 +2,15 @@
 
 namespace App\Notifications;
 
+use App\Enums\UserSource;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use NotificationChannels\Expo\ExpoChannel;
+use NotificationChannels\Expo\ExpoMessage;
 
 class PlanGenerationComplete extends Notification implements ShouldQueue
 {
@@ -18,14 +21,22 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
      */
     public function __construct(
         public Plan $plan
-    ) {}
+    )
+    {
+    }
 
     /**
      * Get the notification's delivery channels.
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        $channels = ['mail'];
+
+        if ($notifiable->routeNotificationForExpo()->isNotEmpty()) {
+            $channels[] = ExpoChannel::class;
+        }
+
+        return $channels;
     }
 
     /**
@@ -33,8 +44,10 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+
+        $locale = $notifiable->locale ?? 'en';
         // Set locale for email based on user's preference
-        app()->setLocale($notifiable->locale ?? 'en');
+        app()->setLocale($locale);
 
         // Load plan with all relations for PDF generation
         $this->plan->load(['mealPlans.meals', 'workoutPlans.exercises']);
@@ -54,29 +67,59 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         ]);
 
         $days = config('plans.duration_days');
+        $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
 
-        return (new MailMessage)
+        $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_web';
+
+        $mail = (new MailMessage)
             ->subject(__('emails.plan_ready.subject'))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
-            ->line(__('emails.plan_ready.thank_you', ['days' => $days]))
+            ->line(__("emails.plan_ready.$introKey", ['days' => $days]))
             ->line(__('emails.plan_ready.tailored'))
             ->line('• ' . __('emails.plan_ready.features.meals', ['days' => $days]))
             ->line('• ' . __('emails.plan_ready.features.workouts'))
             ->line('• ' . __('emails.plan_ready.features.ingredients'))
             ->line('• ' . __('emails.plan_ready.features.exercises'))
-            ->line(__('emails.plan_ready.review'))
-            ->attachData($mealPlanPdf->output(), 'Meal_Plan_' . $this->plan->id . '.pdf', [
-                'mime' => 'application/pdf',
-            ])
-            ->attachData($workoutPlanPdf->output(), 'Workout_Plan_' . $this->plan->id . '.pdf', [
-                'mime' => 'application/pdf',
-            ])
+            ->line(__('emails.plan_ready.review'));
+
+
+        if ($isMobileAppOnboarding) {
+            $mail->action(__('emails.plan_ready.cta_app'), route('mobile.open-dashboard', ['locale' => $locale]));
+        } else {
+            $mail
+                ->attachData($mealPlanPdf->output(), 'Meal_Plan_' . $this->plan->id . '.pdf', [
+                    'mime' => 'application/pdf',
+                ])
+                ->attachData($workoutPlanPdf->output(), 'Workout_Plan_' . $this->plan->id . '.pdf', [
+                    'mime' => 'application/pdf',
+                ]);
+        }
+
+
+        $mail
             ->line(__('emails.plan_ready.disclaimer_title'))
             ->line(__('emails.plan_ready.disclaimer_text'))
             ->line(__('emails.plan_ready.confidence'))
             ->line('')
             ->line(__('emails.plan_ready.signature'))
             ->salutation(__('emails.plan_ready.team'));
+
+        return $mail;
+    }
+
+
+    public function toExpo(object $notifiable): ExpoMessage
+    {
+        return ExpoMessage::create()
+            ->title(__('notifications.plan_completed.title'))
+            ->body(__('notifications.plan_completed.body'))
+            ->data([
+                'type' => 'plan_ready',
+                'screen' => 'Home',
+            ])
+            ->channelId('plans')
+            ->badge(1)
+            ->priority('high');
     }
 
     /**
