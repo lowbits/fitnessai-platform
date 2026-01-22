@@ -229,22 +229,35 @@ class GenerateMealPlanBatch implements ShouldQueue
         $metabolismData = $profile->getMetabolismData();
         $language = $this->getLanguageInstruction();
         $dietStyle = $profile->diet_style?->value ?? '-';
+        $gender = $profile->gender?->value;
+        $bodyGoal = $profile->body_goal?->value;
+        $activityLevel = $profile->activity_level->value;
         $dietaryInfo = filled($profile->dietary_preference?->value)
             ? $profile->dietary_preference->value
             : ($profile->diet_type?->value ?? '-');
+
+        Log::info('Building prompt:', [
+            'gender' => $gender,
+            'body_goal' => $bodyGoal,
+            'activity_level' => $activityLevel,
+            'dietary_preference' => $dietaryInfo,
+            'diet_style' => $dietStyle,
+            'metabolism' => $metabolismData,
+            'language' => $language,
+        ]);
 
         return <<<PROMPT
 You are a world-class nutritionist and meal planner specializing in personalized nutrition for fitness and body composition goals.
 
 **User Profile:**
 - Age: {$profile->age} years
-- Gender: {$profile->gender->value}
+- Gender: {$gender}
 - Current Weight: {$profile->weight} kg
 - Height: {$profile->height} cm
-- Body Goal: {$profile->body_goal->value}
+- Body Goal: {$bodyGoal}
 - Dietary Preference: $dietaryInfo
 - Diet Style: $dietStyle
-- Activity Level: {$profile->activity_level->value}
+- Activity Level: {$activityLevel}
 - Training Sessions per Week: {$profile->training_sessions_per_week}
 
 **Daily Nutritional Targets:**

@@ -44,7 +44,7 @@ class OnboardingRequest extends FormRequest
         return [
             'email' => [
                 'required',
-                config('app.env') === 'testing'
+                config('app.env') !== 'production'
                     ? 'email:rfc,filter'
                     : 'email:rfc,dns,strict,filter',
                 'unique:users',
