@@ -69,7 +69,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         $days = config('plans.duration_days');
         $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
 
-        $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_web';
+        $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_pdf';
 
         $mail = (new MailMessage)
             ->subject(__('emails.plan_ready.subject'))

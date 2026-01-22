@@ -13,6 +13,7 @@ return [
         'daily_targets' => 'Daily Nutrition Targets',
         'goal' => 'Goal',
         'diet_type' => 'Diet Type',
+        'diet_style' => 'Diet Style',
         'not_specified' => 'Not specified',
         'calories' => 'Calories',
         'protein' => 'Protein',

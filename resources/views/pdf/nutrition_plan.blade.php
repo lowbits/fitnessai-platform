@@ -246,7 +246,8 @@
             <h3 style="margin-top: 0;">{{ __('pdf.nutrition_plan.daily_targets') }}</h3>
             <ul style="list-style: none; padding-left: 0;">
                 <li><strong>{{ __('pdf.nutrition_plan.goal') }}:</strong> {{ $user->profile->body_goal?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
-                <li><strong>{{ __('pdf.nutrition_plan.diet_type') }}:</strong> {{ $user->profile->diet_type?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
+                <li><strong>{{ __('pdf.nutrition_plan.diet_type') }}:</strong> {{ $user->profile->dietary_preference?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
+                <li><strong>{{ __('pdf.nutrition_plan.diet_style') }}:</strong> {{ $user->profile->diet_style?->label() ?? __('pdf.nutrition_plan.not_specified') }}</li>
                 <li><strong>{{ __('pdf.nutrition_plan.calories') }}:</strong> {{ $plan->daily_calories }} kcal</li>
                 <li><strong>{{ __('pdf.nutrition_plan.protein') }}:</strong> {{ $plan->daily_protein_g }}g</li>
                 <li><strong>{{ __('pdf.nutrition_plan.carbohydrates') }}:</strong> {{ $plan->daily_carbs_g }}g</li>
