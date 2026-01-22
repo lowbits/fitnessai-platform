@@ -121,9 +121,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         return $this->locale ?? 'en';
     }
 
-    private function getTimezone(): string
+    public function getTimezone(): string
     {
-        return match($this->preferred_language) {
+        return match($this->locale) {
             'de' => 'Europe/Berlin',
             default => 'UTC',
         };

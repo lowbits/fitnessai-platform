@@ -50,7 +50,7 @@ class WeeklyPlansGeneratedNotification extends Notification implements ShouldQue
             ->greeting(__('notifications.weekly_plans_generated.email.greeting', ['name' => $notifiable->name], $locale))
             ->line(__('notifications.weekly_plans_generated.email.intro', [], $locale))
             ->line(__('notifications.weekly_plans_generated.email.details', [], $locale))
-            ->action(__('notifications.weekly_plans_generated.email.action', [], $locale), 'fytrr://(tabs)')
+            ->action(__('notifications.weekly_plans_generated.email.action', [], $locale), route('mobile.open-dashboard', ['locale' => $locale]))
             ->line(__('notifications.weekly_plans_generated.email.closing', [], $locale));
     }
 }

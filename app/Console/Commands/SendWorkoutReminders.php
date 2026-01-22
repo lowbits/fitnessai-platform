@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use App\Notifications\DailyWorkoutReminderNotification;
 use App\Notifications\RestDayReminderNotification;
-use Carbon\Carbon;
+use App\Services\WorkoutReminderService;
 use Illuminate\Console\Command;
 
 class SendWorkoutReminders extends Command
@@ -13,22 +13,19 @@ class SendWorkoutReminders extends Command
     protected $signature = 'notifications:workout-reminders';
     protected $description = 'Send daily workout reminders to users with active plans';
 
+    public function __construct(
+        private readonly WorkoutReminderService $reminderService
+    ) {
+        parent::__construct();
+    }
+
     public function handle(): int
     {
-        $currentHour = now()->hour;
-        $this->info("Starting workout reminder notifications for hour {$currentHour}:00...");
+        $currentTime = now();
+        $this->info("Starting workout reminder notifications for {$currentTime}...");
 
-        // Get users with active plans and devices
         $users = User::whereHas('devices')
-            ->whereHas('plans', function ($query) {
-                $query->where('status', 'active')
-                    ->whereNotNull('generation_completed_at');
-            })
-            ->with(['plans' => function ($query) {
-                $query->where('status', 'active')
-                    ->latest()
-                    ->limit(1);
-            }])
+            ->whereHas('plans', fn($q) => $q->where('status', 'active')->whereNotNull('generation_completed_at'))
             ->get();
 
         $sentCount = 0;
@@ -36,23 +33,25 @@ class SendWorkoutReminders extends Command
         $skippedCount = 0;
 
         foreach ($users as $user) {
-            $plan = $user->plans->first();
+            $plan = $user->plans()
+                ->where('status', 'active')
+                ->whereNotNull('generation_completed_at')
+                ->latest()
+                ->first();
 
             if (!$plan) {
                 continue;
             }
 
-            // Determine when to send reminder for this user
-            $shouldSendNow = $this->shouldSendReminderNow($user);
-
-            if (!$shouldSendNow) {
+            if (!$this->reminderService->shouldSendReminderNow($user, $currentTime)) {
                 $skippedCount++;
                 continue;
             }
 
-            // Get today's workout
+            $userToday = $this->reminderService->getTodayDateForUser($user, $currentTime);
+
             $todayWorkout = $plan->workoutPlans()
-                ->whereDate('date', today())
+                ->whereDate('date', $userToday)
                 ->where('status', 'generated')
                 ->first();
 
@@ -60,67 +59,16 @@ class SendWorkoutReminders extends Command
                 continue;
             }
 
-            // Check if it's a rest day
             if ($todayWorkout->workout_type === 'rest') {
                 $user->notify(new RestDayReminderNotification());
                 $restDayCount++;
-                $this->line("✅ Rest day reminder sent to user {$user->id} ({$user->email})");
             } else {
-                $user->notify(new DailyWorkoutReminderNotification(
-                    $todayWorkout->workout_name,
-                    $todayWorkout->id
-                ));
+                $user->notify(new DailyWorkoutReminderNotification($todayWorkout->workout_name, $todayWorkout->id));
                 $sentCount++;
-                $this->line("✅ Workout reminder sent to user {$user->id} ({$user->email}) - {$todayWorkout->workout_name}");
             }
         }
 
-        $this->info("✅ Workout reminders sent: {$sentCount}");
-        $this->info("✅ Rest day reminders sent: {$restDayCount}");
-        $this->info("⏭️  Skipped (wrong time): {$skippedCount}");
-        $this->info('Done!');
-
+        $this->info("✅ Sent: {$sentCount}, Rest days: {$restDayCount}, Skipped: {$skippedCount}");
         return Command::SUCCESS;
-    }
-
-    /**
-     * Determine if reminder should be sent now for this user
-     * MVP Logic:
-     * - First 2 weeks OR no trackings: Send at 9:00 AM (user timezone)
-     * - Has trackings: Send 2 hours before average workout start time
-     */
-    private function shouldSendReminderNow(User $user): bool
-    {
-        // Get current hour in user's timezone
-        $userHour = now()->timezone($user->getTimezone())->hour;
-
-        // Check if user is in first 2 weeks
-        $firstPlan = $user->plans()->oldest()->first();
-        $isNewUser = !$firstPlan || $firstPlan->created_at->diffInDays(now()) <= 14;
-
-        // Get user's latest workout tracking (use started_at, not completed_at)
-        $latestTracking = $user->workoutTrackings()
-            ->whereNotNull('started_at')
-            ->latest('started_at')
-            ->first();
-
-        // No tracking or new user: Default 9:00 AM
-        if (!$latestTracking || $isNewUser) {
-            $reminderHour = 9;
-            $this->line("User {$user->id}: Using default time 09:00 (new user or no tracking) - User time: {$userHour}:00");
-        } else {
-            // Calculate 2 hours before their latest workout START time
-            $lastWorkoutHour = Carbon::parse($latestTracking->started_at)
-                ->timezone($user->getTimezone())
-                ->hour;
-            $reminderHour = $lastWorkoutHour - 2;
-
-            // Ensure it's between 6 AM and 11 PM
-            $reminderHour = max(6, min(23, $reminderHour));
-
-            $this->line("User {$user->id}: Learned time " . sprintf('%02d:00', $reminderHour) . " (2h before last workout START at {$lastWorkoutHour}:00) - User time: {$userHour}:00");
-        }
-
-        return $userHour === $reminderHour;
     }
 }

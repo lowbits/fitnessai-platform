@@ -33,10 +33,10 @@ return [
         'email' => [
             'subject' => 'Ihre nächste Trainingswoche ist bereit',
             'greeting' => 'Hallo :name,',
-            'intro' => 'Wir haben Ihre nächste Trainingswoche für Sie vorbereitet.',
-            'details' => 'Ihre neuen Workouts und Mahlzeitenpläne sind jetzt verfügbar.',
+            'intro' => 'Wir haben deine nächste Trainingswoche vorbereitet.',
+            'details' => 'Deine neuen Workouts und Mahlzeitenpläne sind jetzt verfügbar.',
             'action' => 'Pläne ansehen',
-            'closing' => 'Viel Erfolg bei Ihrem Training!',
+            'closing' => 'Viel Erfolg bei trainieren!',
         ],
     ],
     'plan_completed' => [

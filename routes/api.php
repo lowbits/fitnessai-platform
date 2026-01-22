@@ -3,10 +3,12 @@
 use App\Http\Controllers\Api\V2\AuthController;
 use App\Http\Controllers\Api\V2\BodyProgressController;
 use App\Http\Controllers\Api\V2\CalorieTrackingController;
+use App\Http\Controllers\Api\V2\GetMealAlternativesController;
 use App\Http\Controllers\Api\V2\MealController;
 use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\PushNotificationController;
+use App\Http\Controllers\Api\V2\ReplaceMealController;
 use App\Http\Controllers\Api\V2\RescheduleWorkoutController;
 use App\Http\Controllers\Api\V2\ResendVerificationEmailController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
@@ -45,6 +47,8 @@ Route::prefix('v2')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
+        Route::post('/meals/{mealId}/alternatives', [GetMealAlternativesController::class, '__invoke']);
+        Route::post('/meals/{mealId}/replace', [ReplaceMealController::class, '__invoke']);
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
         Route::post('/workouts/{workout}/reschedule', RescheduleWorkoutController::class);
         Route::post('/workouts/{workoutPlan}/skip', SkipWorkoutController::class)->name('workouts.skip');
