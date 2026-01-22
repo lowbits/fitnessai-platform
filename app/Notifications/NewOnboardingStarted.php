@@ -45,7 +45,7 @@ class NewOnboardingStarted extends Notification implements ShouldQueue
             ->line('Email: ' . $this->user->email)
             ->line('Age: ' . ($this->profileData['age'] ?? 'N/A'))
             ->line('Goal: ' . ($this->profileData['body_goal'] ?? 'N/A'))
-            ->line('Diet Type: ' . ($this->profileData['diet_type'] ?? 'N/A'))
+            ->line('Diet Type: ' . ($this->profileData['dietary_preference'] ?? 'N/A'))
             ->line('The user will receive a verification email to activate their account.');
     }
 
