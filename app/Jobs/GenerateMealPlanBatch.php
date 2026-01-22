@@ -228,6 +228,10 @@ class GenerateMealPlanBatch implements ShouldQueue
     {
         $metabolismData = $profile->getMetabolismData();
         $language = $this->getLanguageInstruction();
+        $dietStyle = $profile->diet_style?->value ?? '-';
+        $dietaryInfo = filled($profile->dietary_preference?->value)
+            ? $profile->dietary_preference->value
+            : ($profile->diet_type?->value ?? '-');
 
         return <<<PROMPT
 You are a world-class nutritionist and meal planner specializing in personalized nutrition for fitness and body composition goals.
@@ -238,7 +242,8 @@ You are a world-class nutritionist and meal planner specializing in personalized
 - Current Weight: {$profile->weight} kg
 - Height: {$profile->height} cm
 - Body Goal: {$profile->body_goal->value}
-- Diet Type: {$profile->diet_type->value}
+- Dietary Preference: $dietaryInfo
+- Diet Style: $dietStyle
 - Activity Level: {$profile->activity_level->value}
 - Training Sessions per Week: {$profile->training_sessions_per_week}
 
@@ -259,7 +264,7 @@ Create a complete, delicious, and practical meal plan for ONE day with 4 meals (
    - Consider meal timing: breakfast (25-30%), lunch (30-35%), snack (10-15%), dinner (25-30%)
 
 2. **Diet Compliance:**
-   - STRICTLY follow {$profile->diet_type->value} diet principles
+   - STRICTLY follow $dietaryInfo diet principles
    - No ingredients that violate the diet type
    - Ensure adequate variety of nutrient sources
 
