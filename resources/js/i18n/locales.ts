@@ -849,7 +849,7 @@ export const locales = {
                     data_deletion: {
                         title: '6. Data Deletion',
                         description:
-                            'Your data will be deleted as soon as it is no longer required for the purpose for which it was collected. You can request deletion of your data at any time by email to hello@fytrr.com. This right applies to users in all jurisdictions, including specific deletion rights under California CCPA and similar state laws.',
+                            "Your data will be deleted as soon as it is no longer required for the purpose for which it was collected. You can request deletion of your data at any time by email to hello{'@'}fytrr.com. This right applies to users in all jurisdictions, including specific deletion rights under California CCPA and similar state laws.",
                     },
                     ssl: {
                         title: '7. SSL/TLS Encryption',
@@ -966,7 +966,7 @@ export const locales = {
                             right_text:
                                 'You have the right to withdraw from this contract within fourteen days without giving any reason.',
                             period: 'The withdrawal period is fourteen days from the date of contract conclusion.',
-                            how_to: 'To exercise your right of withdrawal, you must inform us (Tobias Lobitz, Annastraße 7, Email: hello@fytrr.com) by means of a clear statement (e.g., by email) of your decision to withdraw from this contract.',
+                            how_to: "To exercise your right of withdrawal, you must inform us (Tobias Lobitz, Annastraße 7, Email: hello{'@'}fytrr.com) by means of a clear statement (e.g., by email) of your decision to withdraw from this contract.",
                             consequences_title: 'Consequences of Withdrawal',
                             consequences_text:
                                 'If you withdraw from this contract, we shall reimburse you all payments we have received from you without undue delay and no later than fourteen days from the day on which we received notice of your withdrawal from this contract.',
@@ -1905,7 +1905,7 @@ export const locales = {
                     data_deletion: {
                         title: '6. Datenlöschung',
                         description:
-                            'Ihre Daten werden gelöscht, sobald sie für die Erreichung des Zweckes ihrer Erhebung nicht mehr erforderlich sind. Sie können jederzeit die Löschung Ihrer Daten per E-Mail an hello@fytrr.com beantragen.',
+                            "Ihre Daten werden gelöscht, sobald sie für die Erreichung des Zweckes ihrer Erhebung nicht mehr erforderlich sind. Sie können jederzeit die Löschung Ihrer Daten per E-Mail an hello{'@'}fytrr.com beantragen.",
                     },
                     ssl: {
                         title: '7. SSL- bzw. TLS-Verschlüsselung',
@@ -2022,7 +2022,7 @@ export const locales = {
                             right_text:
                                 'Sie haben das Recht, binnen vierzehn Tagen ohne Angabe von Gründen diesen Vertrag zu widerrufen.',
                             period: 'Die Widerrufsfrist beträgt vierzehn Tage ab dem Tag des Vertragsabschlusses.',
-                            how_to: 'Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Tobias Lobitz, Annastraße 7, E-Mail: hello@fytrr.com) mittels einer eindeutigen Erklärung (z.B. per E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.',
+                            how_to: "Um Ihr Widerrufsrecht auszuüben, müssen Sie uns (Tobias Lobitz, Annastraße 7, E-Mail: hello{'@'}fytrr.com) mittels einer eindeutigen Erklärung (z.B. per E-Mail) über Ihren Entschluss, diesen Vertrag zu widerrufen, informieren.",
                             consequences_title: 'Folgen des Widerrufs',
                             consequences_text:
                                 'Wenn Sie diesen Vertrag widerrufen, haben wir Ihnen alle Zahlungen, die wir von Ihnen erhalten haben, unverzüglich und spätestens binnen vierzehn Tagen ab dem Tag zurückzuzahlen, an dem die Mitteilung über Ihren Widerruf dieses Vertrags bei uns eingegangen ist.',
