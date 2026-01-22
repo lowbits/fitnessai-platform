@@ -11,4 +11,12 @@ enum UserSource: string
     {
         return __('enums.userSource.' . $this->value);
     }
+
+    public function icon(): string
+    {
+        return match($this) {
+            self::WEB => '💻',
+            self::MOBILE_APPLE => '📱',
+        };
+    }
 }

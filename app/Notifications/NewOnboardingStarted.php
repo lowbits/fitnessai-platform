@@ -40,7 +40,7 @@ class NewOnboardingStarted extends Notification implements ShouldQueue
             ->greeting('New Onboarding Started')
             ->line('A new user has completed the onboarding form.')
             ->line('**User Details:**')
-            ->line('Source: ' . $this->user->source == UserSource::WEB ? '💻' : '📱' )
+            ->line('Source: ' . $this->user->source->icon())
             ->line('Name: ' . $this->user->name)
             ->line('Email: ' . $this->user->email)
             ->line('Age: ' . ($this->profileData['age'] ?? 'N/A'))

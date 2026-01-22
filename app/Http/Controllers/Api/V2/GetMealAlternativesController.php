@@ -172,8 +172,6 @@ PROMPT;
             'tool_choice' => ['type' => 'function', 'function' => ['name' => 'provide_meal_titles']],
         ]);
 
-        dd($response);
-
 
         // Parse the function call response
         $toolCall = $response->choices[0]->message->toolCalls[0] ?? null;
