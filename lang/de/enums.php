@@ -37,6 +37,18 @@ return [
         'outdoor' => 'Draußen',
         'no_preference' => 'Keine Präferenz',
     ],
+    'dietaryPreference' => [
+        'omnivore' => 'Omnivor',
+        'vegetarian' => 'Vegetarisch',
+        'pescatarian' => 'Pescetarisch',
+        'vegan' => 'Vegan',
+        'high_protein' => 'Proteinreich',
+        'low_carb' => 'Kohlenhydratarm',
+        'ketogenic' => 'Ketogen',
+        'paleo' => 'Paleo',
+        'mediterranean' => 'Mediterran',
+        'intermittent_fasting' => 'Intervallfasten',
+    ],
     'dietType' => [
         'omnivore' => 'Omnivor',
         'vegetarian' => 'Vegetarisch',
