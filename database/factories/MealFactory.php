@@ -37,6 +37,7 @@ class MealFactory extends Factory
             'servings' => fake()->numberBetween(1, 4),
             'tags' => fake()->words(3),
             'allergens' => fake()->randomElement([['gluten', 'dairy'], ['nuts'], []]),
+            'status' => 'generated',
         ];
     }
 }

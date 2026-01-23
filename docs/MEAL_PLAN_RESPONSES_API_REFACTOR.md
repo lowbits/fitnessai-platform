@@ -426,7 +426,7 @@ Nach dem Deployment sollte getestet werden:
 // oder
 'tool_choice' => 'auto'      // Model entscheidet
 // oder
-'tool_choice' => 'none'      // Keine Tools
+'tool_choice' => 'none'      // Keine OpenAITools
 ```
 
 **Workaround:** Wenn du nur ein Tool definierst und `'required'` verwendest, wird automatisch dieses Tool genutzt.

@@ -47,8 +47,8 @@ Route::prefix('v2')->group(function () {
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
-        Route::post('/meals/{mealId}/alternatives', [GetMealAlternativesController::class, '__invoke']);
-        Route::post('/meals/{mealId}/replace', [ReplaceMealController::class, '__invoke']);
+        Route::post('/meals/{meal}/alternatives', GetMealAlternativesController::class)->name('meals.alternatives');
+        Route::post('/meals/{meal}/replace', ReplaceMealController::class)->name('meals.replace');
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
         Route::post('/workouts/{workout}/reschedule', RescheduleWorkoutController::class);
         Route::post('/workouts/{workoutPlan}/skip', SkipWorkoutController::class)->name('workouts.skip');

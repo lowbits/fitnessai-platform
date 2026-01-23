@@ -4,96 +4,73 @@ use App\Jobs\ReplaceMealJob;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
-use App\Models\UserProfile;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
-test('user can replace a meal without hint', function () {
+test('user can replace a meal with a recipe title instruction', function () {
     Queue::fake();
 
-    // Create user with profile and plan
-    $user = User::factory()->create();
-    $profile = UserProfile::factory()->create(['user_id' => $user->id]);
+    $user = User::factory()->withProfile()->create();
     $plan = Plan::factory()->create([
         'user_id' => $user->id,
         'status' => 'active',
-        'generation_completed_at' => now(),
     ]);
 
     $mealPlan = MealPlan::factory()->create([
         'plan_id' => $plan->id,
         'status' => 'generated',
-        'date' => today(),
     ]);
 
     $meal = Meal::factory()->create([
         'meal_plan_id' => $mealPlan->id,
         'type' => 'lunch',
-        'name' => 'Old Lunch',
+        'name' => 'Old Chicken Salad',
+        'calories' => 500,
+        'protein_g' => 40,
+        'carbs_g' => 35,
+        'fat_g' => 20,
     ]);
 
-    // Make authenticated request to replace meal
     $response = $this->actingAs($user)
-        ->postJson("/api/v2/meals/{$meal->id}/replace");
-
-    $response->assertStatus(202);
-    $response->assertJson([
-        'message' => 'Meal replacement is being generated',
-    ]);
-
-    // Assert job was dispatched
-    Queue::assertPushed(ReplaceMealJob::class, function ($job) use ($meal) {
-        return $job->meal->id === $meal->id
-            && $job->hint === null;
-    });
-});
-
-test('user can replace a meal with hint', function () {
-    Queue::fake();
-
-    // Create user with profile and plan
-    $user = User::factory()->create();
-    $profile = UserProfile::factory()->create(['user_id' => $user->id]);
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
-        'generation_completed_at' => now(),
-    ]);
-
-    $mealPlan = MealPlan::factory()->create([
-        'plan_id' => $plan->id,
-        'status' => 'generated',
-        'date' => today(),
-    ]);
-
-    $meal = Meal::factory()->create([
-        'meal_plan_id' => $mealPlan->id,
-        'type' => 'dinner',
-        'name' => 'Old Dinner',
-    ]);
-
-    // Make authenticated request with hint
-    $response = $this->actingAs($user)
-        ->postJson("/api/v2/meals/{$meal->id}/replace", [
-            'hint' => 'I want something with salmon',
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Grilled Salmon with Lemon Herb Quinoa',
         ]);
 
     $response->assertStatus(202);
+    $response->assertJsonStructure([
+        'message',
+        'meal_id',
+        'instruction',
+    ]);
     $response->assertJson([
-        'message' => 'Meal replacement is being generated',
+        'meal_id' => $meal->id,
+        'instruction' => 'Grilled Salmon with Lemon Herb Quinoa',
     ]);
 
-    // Assert job was dispatched with hint
+    // Verify job was dispatched
     Queue::assertPushed(ReplaceMealJob::class, function ($job) use ($meal) {
         return $job->meal->id === $meal->id
-            && $job->hint === 'I want something with salmon';
+            && $job->hint === 'Grilled Salmon with Lemon Herb Quinoa';
     });
 });
 
-test('user cannot replace meal they do not own', function () {
+test('user cannot replace a meal without instruction', function () {
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), []);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['instruction']);
+});
+
+test('user cannot replace a meal they do not own', function () {
     $user = User::factory()->create();
     $otherUser = User::factory()->create();
 
@@ -102,52 +79,162 @@ test('user cannot replace meal they do not own', function () {
     $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
 
     $response = $this->actingAs($user)
-        ->postJson("/api/v2/meals/{$meal->id}/replace");
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Pan-Seared Salmon with Garlic Asparagus',
+        ]);
 
     $response->assertStatus(403);
-    $response->assertJson([
-        'error' => 'Unauthorized',
-    ]);
 });
 
-test('replacing non-existent meal returns 404', function () {
-    $user = User::factory()->create();
-
-    $response = $this->actingAs($user)
-        ->postJson('/api/v2/meals/99999/replace');
-
-    $response->assertStatus(404);
-    // The response format may vary (custom vs Laravel's ModelNotFoundException)
-    // but 404 status is what matters
-});
-
-test('hint validation limits length', function () {
-    $user = User::factory()->create();
-    $profile = UserProfile::factory()->create(['user_id' => $user->id]);
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
-    ]);
-
+test('replacement validation limits instruction length', function () {
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
     $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
     $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
 
-    // Try with excessively long hint
-    $longHint = str_repeat('a', 501);
+    $longInstruction = str_repeat('a', 501);
     $response = $this->actingAs($user)
-        ->postJson("/api/v2/meals/{$meal->id}/replace", [
-            'hint' => $longHint,
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => $longInstruction,
         ]);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors(['hint']);
+    $response->assertJsonValidationErrors(['instruction']);
 });
 
-test('user must be authenticated to replace meal', function () {
-    $meal = Meal::factory()->create();
+test('user can replace breakfast meal with specific recipe', function () {
+    Queue::fake();
 
-    $response = $this->postJson("/api/v2/meals/{$meal->id}/replace");
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+
+    $meal = Meal::factory()->create([
+        'meal_plan_id' => $mealPlan->id,
+        'type' => 'breakfast',
+        'name' => 'Oatmeal with Berries',
+        'calories' => 350,
+        'protein_g' => 15,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Greek Yogurt Parfait with Granola and Fresh Fruit',
+        ]);
+
+    $response->assertStatus(202);
+    Queue::assertPushed(ReplaceMealJob::class);
+});
+
+test('user can replace dinner meal with specific recipe', function () {
+    Queue::fake();
+
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+
+    $meal = Meal::factory()->create([
+        'meal_plan_id' => $mealPlan->id,
+        'type' => 'dinner',
+        'name' => 'Beef Stir Fry',
+        'calories' => 650,
+        'protein_g' => 45,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Thai Green Curry with Tofu and Vegetables',
+        ]);
+
+    $response->assertStatus(202);
+    $response->assertJson([
+        'instruction' => 'Thai Green Curry with Tofu and Vegetables',
+    ]);
+});
+
+test('user can replace snack with specific recipe', function () {
+    Queue::fake();
+
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+
+    $meal = Meal::factory()->create([
+        'meal_plan_id' => $mealPlan->id,
+        'type' => 'snack',
+        'name' => 'Apple with Peanut Butter',
+        'calories' => 200,
+        'protein_g' => 8,
+    ]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Protein Smoothie Bowl with Mixed Berries',
+        ]);
+
+    $response->assertStatus(202);
+    Queue::assertPushed(ReplaceMealJob::class);
+});
+
+test('replacement works for meals with special characters in instruction', function () {
+    Queue::fake();
+
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 'Hähnchen-Gemüse-Pfanne mit Reis & Kräutern',
+        ]);
+
+    $response->assertStatus(202);
+    $response->assertJson([
+        'instruction' => 'Hähnchen-Gemüse-Pfanne mit Reis & Kräutern',
+    ]);
+});
+
+test('unauthenticated user cannot replace meal', function () {
+    $user = User::factory()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $response = $this->postJson(route('meals.replace', $meal), [
+        'instruction' => 'Some Recipe',
+    ]);
 
     $response->assertStatus(401);
+});
+
+test('instruction must be a string', function () {
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => 12345,
+        ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['instruction']);
+});
+
+test('empty string instruction is rejected', function () {
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $meal = Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $response = $this->actingAs($user)
+        ->postJson(route('meals.replace', $meal), [
+            'instruction' => '',
+        ]);
+
+    $response->assertStatus(422);
+    $response->assertJsonValidationErrors(['instruction']);
 });
 

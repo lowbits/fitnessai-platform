@@ -26,10 +26,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('meal replacement job updates meal with new data', function () {
+test('meal replacement job creates new meal and soft deletes old one', function () {
     // Create test data
-    $user = User::factory()->create(['locale' => 'en']);
-    $profile = UserProfile::factory()->create(['user_id' => $user->id]);
+    $user = User::factory()->en()->withProfile()->create();
     $plan = Plan::factory()->create([
         'user_id' => $user->id,
         'status' => 'active',
@@ -44,7 +43,7 @@ test('meal replacement job updates meal with new data', function () {
         'total_fat_g' => 20,
     ]);
 
-    $meal = Meal::factory()->create([
+    $originalMeal = Meal::factory()->create([
         'meal_plan_id' => $mealPlan->id,
         'type' => 'lunch',
         'name' => 'Old Lunch',
@@ -54,56 +53,87 @@ test('meal replacement job updates meal with new data', function () {
         'fat_g' => 20,
     ]);
 
-    $originalMealId = $meal->id;
+    $originalMealId = $originalMeal->id;
 
     // Execute the job (makes real API call!)
-    $job = new ReplaceMealJob($meal, 'I want something with salmon');
+    $job = new ReplaceMealJob($originalMeal, 'I want something with salmon');
     $job->handle();
 
-    // Refresh meal from database
-    $meal->refresh();
+    // Refresh old meal from database
+    $originalMeal->refresh();
 
-    // Assert meal was updated (not replaced)
-    expect($meal->id)->toBe($originalMealId);
-    expect($meal->name)->not->toBe('Old Lunch');
-    expect($meal->name)->not->toBeEmpty();
-    expect($meal->description)->not->toBeNull();
-    expect($meal->calories)->toBeGreaterThan(0);
-    expect($meal->protein_g)->toBeGreaterThan(0);
-    expect($meal->carbs_g)->toBeGreaterThan(0);
-    expect($meal->fat_g)->toBeGreaterThan(0);
-    expect($meal->ingredients)->toBeArray();
-    expect($meal->instructions)->toBeArray();
-    expect($meal->ingredients)->not->toBeEmpty();
-    expect($meal->instructions)->not->toBeEmpty();
+    // Assert old meal was soft deleted
+    expect($originalMeal->deleted_at)->not->toBeNull();
+    expect($originalMeal->trashed())->toBeTrue();
 
-    // Assert meal plan totals were updated
+    // Assert new meal was created
+    $newMeal = Meal::where('meal_plan_id', $mealPlan->id)
+        ->where('type', 'lunch')
+        ->whereNull('deleted_at')
+        ->first();
+
+    expect($newMeal)->not->toBeNull();
+    expect($newMeal->id)->not->toBe($originalMealId);
+    expect($newMeal->name)->not->toBe('Old Lunch');
+    expect($newMeal->name)->not->toBe('Generating...');
+    expect($newMeal->name)->not->toBeEmpty();
+    expect($newMeal->description)->not->toBeNull();
+    expect($newMeal->status)->toBe('generated');  // Check meal status
+    expect($newMeal->calories)->toBeGreaterThan(0);
+    expect($newMeal->protein_g)->toBeGreaterThan(0);
+    expect($newMeal->carbs_g)->toBeGreaterThan(0);
+    expect($newMeal->fat_g)->toBeGreaterThan(0);
+    expect($newMeal->ingredients)->toBeArray();
+    expect($newMeal->instructions)->toBeArray();
+    expect($newMeal->ingredients)->not->toBeEmpty();
+    expect($newMeal->instructions)->not->toBeEmpty();
+
+    // Assert meal plan totals were updated and status is "generated"
     $mealPlan->refresh();
+    expect($mealPlan->status)->toBe('generated');
     expect($mealPlan->total_calories)->toBeGreaterThan(0);
     expect($mealPlan->total_protein_g)->toBeGreaterThan(0);
-})->group('integration')->skip('Requires OpenAI API key and makes real API calls');
+});
 
 test('meal replacement job without hint generates alternative', function () {
     $user = User::factory()->create(['locale' => 'de']);
     $profile = UserProfile::factory()->create(['user_id' => $user->id]);
     $plan = Plan::factory()->create(['user_id' => $user->id]);
-    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id]);
+    $mealPlan = MealPlan::factory()->create([
+        'plan_id' => $plan->id,
+        'status' => 'generated',
+    ]);
 
-    $meal = Meal::factory()->create([
+    $originalMeal = Meal::factory()->create([
         'meal_plan_id' => $mealPlan->id,
         'type' => 'breakfast',
         'name' => 'Old Breakfast',
     ]);
 
     // Execute job without hint (makes real API call!)
-    $job = new ReplaceMealJob($meal, null);
+    $job = new ReplaceMealJob($originalMeal, null);
     $job->handle();
 
-    $meal->refresh();
+    $originalMeal->refresh();
 
-    expect($meal->name)->not->toBe('Old Breakfast');
-    expect($meal->name)->not->toBeEmpty();
-    expect($meal->calories)->toBeGreaterThan(0);
+    // Assert old meal was deleted
+    expect($originalMeal->trashed())->toBeTrue();
+
+    // Assert new meal was created
+    $newMeal = Meal::where('meal_plan_id', $mealPlan->id)
+        ->where('type', 'breakfast')
+        ->whereNull('deleted_at')
+        ->first();
+
+    expect($newMeal)->not->toBeNull();
+    expect($newMeal->name)->not->toBe('Old Breakfast');
+    expect($newMeal->name)->not->toBeEmpty();
+    expect($newMeal->status)->toBe('generated');  // Check meal status
+    expect($newMeal->calories)->toBeGreaterThan(0);
+
+    // Assert meal plan status is "generated"
+    $mealPlan->refresh();
+    expect($mealPlan->status)->toBe('generated');
 })->group('integration')->skip('Requires OpenAI API key and makes real API calls');
 
 test('meal replacement job with multiple meals updates only target meal', function () {
@@ -113,6 +143,7 @@ test('meal replacement job with multiple meals updates only target meal', functi
     $mealPlan = MealPlan::factory()->create([
         'plan_id' => $plan->id,
         'total_calories' => 1500,
+        'status' => 'generated',
     ]);
 
     // Create multiple meals
@@ -155,14 +186,27 @@ test('meal replacement job with multiple meals updates only target meal', functi
     $lunch->refresh();
     $dinner->refresh();
 
-    // Assert only dinner was changed
+    // Assert only dinner was changed (soft deleted)
     expect($breakfast->name)->toBe('Breakfast');
+    expect($breakfast->trashed())->toBeFalse();
     expect($lunch->name)->toBe('Lunch');
-    expect($dinner->name)->not->toBe('Old Dinner');
-    expect($dinner->name)->not->toBeEmpty();
+    expect($lunch->trashed())->toBeFalse();
+    expect($dinner->trashed())->toBeTrue();
 
-    // Assert meal plan totals were recalculated
+    // Assert new dinner meal was created
+    $newDinner = Meal::where('meal_plan_id', $mealPlan->id)
+        ->where('type', 'dinner')
+        ->whereNull('deleted_at')
+        ->first();
+
+    expect($newDinner)->not->toBeNull();
+    expect($newDinner->name)->not->toBe('Old Dinner');
+    expect($newDinner->name)->not->toBeEmpty();
+    expect($newDinner->status)->toBe('generated');  // Check meal status
+
+    // Assert meal plan totals were recalculated and status is "generated"
     $mealPlan->refresh();
+    expect($mealPlan->status)->toBe('generated');
     expect($mealPlan->total_calories)->toBeGreaterThan(0);
 })->group('integration')->skip('Requires OpenAI API key and makes real API calls');
 

@@ -7,55 +7,33 @@ use App\Jobs\ReplaceMealJob;
 use App\Models\Meal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 
 class ReplaceMealController extends Controller
 {
     /**
-     * Replace a meal with an alternative (Queue-based, original version)
+     * Replace a meal with an alternative based on a recipe title instruction
      */
-    public function __invoke(Request $request, int $mealId): JsonResponse
+    public function __invoke(Request $request, Meal $meal): JsonResponse
     {
-        $user = $request->user();
+        // Authorize using policy
+        Gate::authorize('update', $meal);
 
-        // Validate input
-        $validator = Validator::make($request->all(), [
-            'hint' => 'nullable|string|max:500',
+        // Validate input - instruction is the recipe title
+        $validated = Validator::validate($request->all(), [
+            'instruction' => 'required|string|max:500',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+        $meal->update(['status' => 'replacing']);
 
-        // Get meal from database with relations
-        $meal = Meal::with('mealPlan.plan')->find($mealId);
-
-        if (!$meal) {
-            return response()->json([
-                'error' => 'Meal not found',
-                'message' => 'The requested meal does not exist',
-            ], 404);
-        }
-
-        // Verify the meal belongs to user's plan
-        $mealPlan = $meal->mealPlan;
-        if (!$mealPlan || $mealPlan->plan->user_id !== $user->id) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'You do not have access to this meal',
-            ], 403);
-        }
-
-        // Dispatch the job to replace the meal
-        $hint = $request->input('hint');
-        ReplaceMealJob::dispatch($meal, $hint);
+        // Dispatch the job to replace the meal with the given instruction (recipe title)
+        ReplaceMealJob::dispatch($meal, $validated['instruction']);
 
         return response()->json([
             'message' => 'Meal replacement is being generated',
             'meal_id' => $meal->id,
+            'instruction' => $validated['instruction'],
         ], 202);
     }
 }

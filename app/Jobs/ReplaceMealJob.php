@@ -2,16 +2,21 @@
 
 namespace App\Jobs;
 
+use App\Helpers\ToolCallHelper;
 use App\Models\Meal;
 use App\Models\User;
+use App\OpenAITools\MealToolDefinition;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use OpenAI;
+use OpenAI\Laravel\Facades\OpenAI;
+use RuntimeException;
+use Throwable;
+
 
 /**
  * Job that replaces a meal with an alternative
- * Can work with or without a user hint
+ * The hint parameter is the recipe title instruction (e.g., "Grilled Salmon with Lemon Herb Quinoa")
  */
 class ReplaceMealJob implements ShouldQueue
 {
@@ -47,98 +52,53 @@ class ReplaceMealJob implements ShouldQueue
             'with_hint' => !empty($this->hint),
         ]);
 
+
+        // Create new meal with placeholder data and status "generating"
+        $newMeal = Meal::create([
+            'meal_plan_id' => $mealPlan->id,
+            'type' => $this->meal->type,
+            'name' => 'Generating...',
+            'description' => 'Generating meal replacement...',
+            'calories' => $this->meal->calories,
+            'protein_g' => $this->meal->protein_g,
+            'carbs_g' => $this->meal->carbs_g,
+            'fat_g' => $this->meal->fat_g,
+            'status' => 'generating',
+        ]);
+
+        $this->meal->delete();
+
+
         try {
-            $client = OpenAI::client(config('services.openai.api_key'));
             $instructions = $this->buildSystemPrompt($profile, $user);
             $contextMessage = $this->buildContextMessage();
 
             $startTime = microtime(true);
 
-            $response = $client->responses()->create([
-                'model' => 'gpt-5-mini',
+            $response = OpenAI::responses()->create([
+                'model' => 'gpt-4o-mini',
                 'instructions' => $instructions,
                 'input' => $contextMessage,
                 'tools' => [
-                    [
-                        'type' => 'function',
-                        'name' => 'replace_meal',
-                        'description' => 'Creates a replacement meal',
-                        'parameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'type' => ['type' => 'string', 'enum' => ['breakfast', 'lunch', 'snack', 'dinner']],
-                                'name' => ['type' => 'string'],
-                                'description' => ['type' => 'string'],
-                                'calories' => ['type' => 'integer'],
-                                'protein_g' => ['type' => 'integer'],
-                                'carbs_g' => ['type' => 'integer'],
-                                'fat_g' => ['type' => 'integer'],
-                                'fiber_g' => ['type' => 'integer'],
-                                'sugar_g' => ['type' => 'integer'],
-                                'ingredients' => [
-                                    'type' => 'array',
-                                    'items' => [
-                                        'type' => 'object',
-                                        'properties' => [
-                                            'name' => ['type' => 'string'],
-                                            'amount' => ['type' => 'string'],
-                                            'unit' => ['type' => 'string'],
-                                        ],
-                                        'required' => ['name', 'amount', 'unit'],
-                                    ],
-                                ],
-                                'instructions' => [
-                                    'type' => 'array',
-                                    'items' => ['type' => 'string'],
-                                ],
-                                'prep_time_minutes' => ['type' => 'integer'],
-                                'cook_time_minutes' => ['type' => 'integer'],
-                                'difficulty' => ['type' => 'string', 'enum' => ['Easy', 'Medium', 'Hard']],
-                                'tags' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                'allergens' => ['type' => 'array', 'items' => ['type' => 'string']],
-                            ],
-                            'required' => [
-                                'type',
-                                'name',
-                                'calories',
-                                'protein_g',
-                                'carbs_g',
-                                'fat_g',
-                            ],
-                        ],
-                    ],
+                    MealToolDefinition::getReplaceMealTool(),
                 ],
                 'tool_choice' => 'required',
                 'store' => true,
                 'metadata' => [
                     'user_id' => (string) $user->id,
-                    'meal_id' => (string) $this->meal->id,
+                    'old_meal_id' => (string) $this->meal->id,
+                    'new_meal_id' => (string) $newMeal->id,
                     'replacement' => 'true',
                 ],
             ]);
 
             $duration = microtime(true) - $startTime;
 
-            // Parse Responses API output
-            $toolCall = null;
-            foreach ($response->output ?? [] as $item) {
-                if ($item->type === 'function_call' && $item->name === 'replace_meal') {
-                    $toolCall = $item;
-                    break;
-                }
-            }
+            // Parse tool call using ToolCallHelper
+            $arguments = ToolCallHelper::extractToolCall($response, 'replace_meal');
 
-            if (!$toolCall) {
-                Log::warning('No tool call received for meal replacement', [
-                    'meal_id' => $this->meal->id,
-                ]);
-                throw new \RuntimeException('Function call missing in Responses output');
-            }
-
-            $arguments = json_decode($toolCall->arguments, true);
-
-            // Update the existing meal with new data
-            $this->meal->update([
+            // Update the new meal with generated data
+            $newMeal->update([
                 'name' => $arguments['name'],
                 'description' => $arguments['description'] ?? null,
                 'calories' => $arguments['calories'],
@@ -154,23 +114,35 @@ class ReplaceMealJob implements ShouldQueue
                 'difficulty' => $arguments['difficulty'] ?? 'Medium',
                 'tags' => $arguments['tags'] ?? [],
                 'allergens' => $arguments['allergens'] ?? [],
+                'status' => 'generated',
             ]);
 
-            // Update meal plan totals
+            // Update meal plan totals and set status back to "generated"
             $this->updateMealPlanTotals($mealPlan);
+            $mealPlan->update(['status' => 'generated']);
+            $this->meal->update(['status' => 'replaced']);
 
             Log::info('Meal replaced successfully', [
-                'meal_id' => $this->meal->id,
-                'new_name' => $this->meal->name,
+                'old_meal_id' => $this->meal->id,
+                'new_meal_id' => $newMeal->id,
+                'new_name' => $newMeal->name,
                 'duration_seconds' => round($duration, 2),
                 'openai_response_id' => $response->id,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error('Failed to replace meal', [
-                'meal_id' => $this->meal->id,
+                'old_meal_id' => $this->meal->id,
+                'new_meal_id' => $newMeal->id,
                 'error' => $e->getMessage(),
                 'error_class' => get_class($e),
             ]);
+
+            // Mark the new meal as failed instead of deleting it
+            $newMeal->update(['status' => 'failed']);
+            $mealPlan->update(['status' => 'generated']);
+            // restore old meal
+            $this->meal->update(['status' => 'generated']);
+            $this->meal->restore();
 
             throw $e;
         }
@@ -180,6 +152,7 @@ class ReplaceMealJob implements ShouldQueue
     {
         $metabolismData = $profile->getMetabolismData();
         $language = $this->getLanguageInstruction($user);
+        $dietStyle = $profile->diet_style?->value ?? '';
 
         return <<<PROMPT
 You are a world-class nutritionist specializing in personalized meal replacements.
@@ -190,7 +163,8 @@ You are a world-class nutritionist specializing in personalized meal replacement
 - Current Weight: {$profile->weight} kg
 - Height: {$profile->height} cm
 - Body Goal: {$profile->body_goal->value}
-- Diet Type: {$profile->diet_type->value}
+- Diet Type: {$profile->dietary_preference->value}
+- Diet Style: $dietStyle
 - Activity Level: {$profile->activity_level->value}
 
 **Daily Nutritional Targets:**
@@ -209,7 +183,7 @@ Replace a meal with an alternative that matches the nutritional profile.
    - Maintain the meal's contribution to daily nutritional goals
 
 2. **Diet Compliance:**
-   - STRICTLY follow {$profile->diet_type->value} diet principles
+   - STRICTLY follow {$profile->dietary_preference->value} diet principles
    - No ingredients that violate the diet type
 
 3. **Recipe Quality:**
@@ -251,8 +225,8 @@ PROMPT;
         $message .= "**Fat:** {$originalMeal->fat_g}g\n\n";
 
         if ($this->hint) {
-            $message .= "**User's Request:** {$this->hint}\n\n";
-            $message .= "Create a replacement that considers the user's preference while maintaining similar nutritional values.\n";
+            $message .= "**Recipe Title to Create:** {$this->hint}\n\n";
+            $message .= "Create a complete recipe for this exact meal title while maintaining similar nutritional values to the original meal.\n";
         } else {
             $message .= "Create a delicious alternative with similar nutritional values but different ingredients and flavors.\n";
         }

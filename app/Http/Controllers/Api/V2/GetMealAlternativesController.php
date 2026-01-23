@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Helpers\ToolCallHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Meal;
+use App\OpenAITools\MealToolDefinition;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -17,52 +20,22 @@ class GetMealAlternativesController extends Controller
      * Get meal alternatives for a specific meal
      * Returns 5 alternative meal suggestions based on user preferences
      */
-    public function __invoke(Request $request, int $mealId): JsonResponse
+    public function __invoke(Request $request, Meal $meal): JsonResponse
     {
+
+        Gate::authorize('update', $meal);
+
+
         $user = $request->user();
 
         // Validate input
-        $validator = Validator::make($request->all(), [
+        $validated = Validator::validate($request->all(), [
             'hint' => 'nullable|string|max:500',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => 'Validation failed',
-                'errors' => $validator->errors(),
-            ], 422);
-        }
-
-        // Get meal from database with relations
-        $meal = Meal::with('mealPlan.plan')->find($mealId);
-
-        if (!$meal) {
-            return response()->json([
-                'error' => 'Meal not found',
-                'message' => 'The requested meal does not exist',
-            ], 404);
-        }
-
-        // Verify the meal belongs to user's plan
-        $mealPlan = $meal->mealPlan;
-        if (!$mealPlan || $mealPlan->plan->user_id !== $user->id) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'You do not have access to this meal',
-            ], 403);
-        }
-
-        $profile = $user->profile;
-        if (!$profile) {
-            return response()->json([
-                'error' => 'Profile not found',
-                'message' => 'User profile is required to generate alternatives',
-            ], 400);
-        }
 
         try {
-            $hint = $request->input('hint');
-            $titles = $this->generateAlternativeTitles($meal, $profile, $user, $hint);
+            $titles = $this->generateAlternativeTitles($meal, $user->profile, $user, $validated['hint'] ?? null);
 
             return response()->json([
                 'titles' => $titles,
@@ -99,7 +72,7 @@ You are a world-class nutritionist specializing in personalized meal alternative
 
 **User Profile:**
 - Body Goal: {$profile->body_goal->value}
-- Diet Type: {$profile->diet_type->value}
+- Diet Type: {$profile->dietary_preference->value}
 
 **Original Meal Context:**
 - Meal Type: {$meal->type}
@@ -114,7 +87,7 @@ Generate 5 appealing meal TITLES ONLY (not full recipes) as alternatives for thi
 
 **Critical Requirements:**
 1. Each title should suggest a meal with similar macros (±15%)
-2. STRICTLY follow {$profile->diet_type->value} diet principles
+2. STRICTLY follow {$profile->dietary_preference->value} diet principles
 3. Match the meal type ({$meal->type})
 4. Create exciting, varied options (different proteins, cooking methods, cuisines)
 5. Use {$language} for ALL titles
@@ -137,61 +110,35 @@ PROMPT;
             'meal_id' => $meal->id,
             'meal_type' => $meal->type,
             'meal_calories' => $meal->calories,
-            'diet_type' => $profile->diet_type->value,
+            'dietary_preference' => $profile->dietary_preference->value,
             'with_hint' => !empty($hint),
         ]);
 
-        $response = OpenAI::chat()->create([
+
+        $response = OpenAI::responses()->create([
             'model' => 'gpt-4o-mini',
-            'messages' => [
-                ['role' => 'system', 'content' => $systemPrompt],
-                ['role' => 'user', 'content' => $userMessage],
-            ],
+            'input' => $userMessage,
+            'instructions' => $systemPrompt,
             'tools' => [
-                [
-                    'type' => 'function',
-                    'function' => [
-                        'name' => 'provide_meal_titles',
-                        'description' => 'Provides 5 alternative meal title suggestions',
-                        'parameters' => [
-                            'type' => 'object',
-                            'properties' => [
-                                'titles' => [
-                                    'type' => 'array',
-                                    'items' => ['type' => 'string'],
-                                    'minItems' => 5,
-                                    'maxItems' => 5,
-                                    'description' => 'Array of 5 appetizing meal titles',
-                                ],
-                            ],
-                            'required' => ['titles'],
-                        ],
-                    ],
-                ],
+                MealToolDefinition::getProvideMealTitlesTool()
             ],
-            'tool_choice' => ['type' => 'function', 'function' => ['name' => 'provide_meal_titles']],
+            'tool_choice' => 'required',
         ]);
 
 
-        // Parse the function call response
-        $toolCall = $response->choices[0]->message->toolCalls[0] ?? null;
+        $arguments = ToolCallHelper::extractToolCall(
+            $response,
+            'provide_meal_titles',
+            fn($args) => isset($args['titles'])
+                && is_array($args['titles'])
+        );
 
-        if (!$toolCall || $toolCall->function->name !== 'provide_meal_titles') {
-            throw new \RuntimeException('No valid meal titles returned from AI');
-        }
-
-        $arguments = json_decode($toolCall->function->arguments, true);
-
-        if (!isset($arguments['titles']) || count($arguments['titles']) !== 5) {
-            throw new \RuntimeException('Expected exactly 5 meal titles');
-        }
-
-        Log::info('Generated meal title alternatives successfully', [
+        Log::info('Generated meal title alternatives', [
             'meal_id' => $meal->id,
             'titles_count' => count($arguments['titles']),
         ]);
 
-        // Return simple title array
+
         return $arguments['titles'];
     }
 

@@ -2,14 +2,18 @@
 
 namespace App\Jobs;
 
+use App\Helpers\ToolCallHelper;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
+use App\OpenAITools\MealToolDefinition;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
-use OpenAI;
+use OpenAI\Laravel\Facades\OpenAI;
+
+
 
 /**
  * Job that generates meal plans for a specific range of days (2-3 days)
@@ -18,6 +22,8 @@ use OpenAI;
 class GenerateMealPlanBatch implements ShouldQueue
 {
     use Queueable;
+
+    private $GPT_MODEL = 'gpt-5.2';
 
     public function __construct(
         public User $user,
@@ -46,7 +52,6 @@ class GenerateMealPlanBatch implements ShouldQueue
             'days' => "{$this->startDay}-{$this->endDay}",
         ]);
 
-        $client = OpenAI::client(config('services.openai.api_key'));
         $instructions = $this->buildSystemPrompt($profile);
 
         for ($day = $this->startDay; $day <= $this->endDay; $day++) {
@@ -77,73 +82,17 @@ class GenerateMealPlanBatch implements ShouldQueue
 
 
                 Log::debug("Calling OpenAI for day {$day}", [
-                    'model' => 'gpt-5-mini'
+                    'model' => $this->GPT_MODEL,
                 ]);
 
                 $startTime = microtime(true);
 
-                $response = $client->responses()->create([
-                    'model' => 'gpt-5-mini',
+                $response = OpenAI::responses()->create([
+                    'model' => $this->GPT_MODEL,
                     'instructions' => $instructions,
                     'input' => $contextMessage,
                     'tools' => [
-                        [
-                            'type' => 'function',
-                            'name' => 'create_meal_plan',
-                            'description' => 'Creates a complete daily meal plan with all meals',
-                            'parameters' => [
-                                'type' => 'object',
-                                'properties' => [
-                                    'meals' => [
-                                        'type' => 'array',
-                                        'items' => [
-                                            'type' => 'object',
-                                            'properties' => [
-                                                'type' => ['type' => 'string', 'enum' => ['breakfast', 'lunch', 'snack', 'dinner']],
-                                                'name' => ['type' => 'string'],
-                                                'description' => ['type' => 'string'],
-                                                'calories' => ['type' => 'integer'],
-                                                'protein_g' => ['type' => 'integer'],
-                                                'carbs_g' => ['type' => 'integer'],
-                                                'fat_g' => ['type' => 'integer'],
-                                                'fiber_g' => ['type' => 'integer'],
-                                                'sugar_g' => ['type' => 'integer'],
-                                                'ingredients' => [
-                                                    'type' => 'array',
-                                                    'items' => [
-                                                        'type' => 'object',
-                                                        'properties' => [
-                                                            'name' => ['type' => 'string'],
-                                                            'amount' => ['type' => 'string'],
-                                                            'unit' => ['type' => 'string'],
-                                                        ],
-                                                        'required' => ['name', 'amount', 'unit'],
-                                                    ],
-                                                ],
-                                                'instructions' => [
-                                                    'type' => 'array',
-                                                    'items' => ['type' => 'string'],
-                                                ],
-                                                'prep_time_minutes' => ['type' => 'integer'],
-                                                'cook_time_minutes' => ['type' => 'integer'],
-                                                'difficulty' => ['type' => 'string', 'enum' => ['Easy', 'Medium', 'Hard']],
-                                                'tags' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                                'allergens' => ['type' => 'array', 'items' => ['type' => 'string']],
-                                            ],
-                                            'required' => [
-                                                'type',
-                                                'name',
-                                                'calories',
-                                                'protein_g',
-                                                'carbs_g',
-                                                'fat_g',
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'required' => ['meals'],
-                            ],
-                        ],
+                        MealToolDefinition::getCreateMealPlanTool(),
                     ],
                     'tool_choice' => 'required',
                     'store' => true,
@@ -162,24 +111,8 @@ class GenerateMealPlanBatch implements ShouldQueue
                     'output_count' => count($response->output ?? []),
                 ]);
 
-                // Parse Responses API output - it contains reasoning + function_call items
-                $toolCall = null;
-                foreach ($response->output ?? [] as $item) {
-                    // Check if this is a function_call type
-                    if ($item->type === 'function_call' && $item->name === 'create_meal_plan') {
-                        $toolCall = $item;
-                        break;
-                    }
-                }
-
-                if (!$toolCall) {
-                    Log::warning("No tool call received for day {$day}", [
-                        'response_structure' => json_encode($response),
-                    ]);
-                    throw new \RuntimeException('Function call missing in Responses output');
-                }
-
-                $arguments = json_decode($toolCall->arguments, true);
+                // Parse tool call using ToolCallHelper
+                $arguments = ToolCallHelper::extractToolCall($response, 'create_meal_plan');
 
                 Log::debug("Tool call received for day {$day}", [
                     'meals_count' => count($arguments['meals'] ?? []),
@@ -207,6 +140,8 @@ class GenerateMealPlanBatch implements ShouldQueue
                     'openai_response_id' => $response->id,
                 ]);
             } catch (\Throwable $e) {
+
+                Log::debug($e);
                 Log::error("Failed to generate meal plan for day {$day}", [
                     'error' => $e->getMessage(),
                     'error_class' => get_class($e),
@@ -368,6 +303,7 @@ PROMPT;
                 'servings' => 1,
                 'tags' => $meal['tags'] ?? [],
                 'allergens' => $meal['allergens'] ?? [],
+                'status' => 'generated',
             ]);
         }
     }

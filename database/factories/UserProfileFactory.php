@@ -4,6 +4,8 @@ namespace Database\Factories;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\DietaryPreference;
+use App\Enums\DietStyle;
 use App\Enums\DietType;
 use App\Enums\Gender;
 use App\Enums\SkillLevel;
@@ -33,7 +35,7 @@ class UserProfileFactory extends Factory
             'skill_level' => fake()->randomElement(SkillLevel::cases()),
             'activity_level' => fake()->randomElement(ActivityLevel::cases()),
             'training_place' => fake()->randomElement(TrainingPlace::cases()),
-            'diet_type' => fake()->randomElement(DietType::cases()),
+            'dietary_preference' => fake()->randomElement(DietaryPreference::cases()),
             'training_sessions_per_week' => fake()->numberBetween(1, 7),
         ];
     }
@@ -96,6 +98,15 @@ class UserProfileFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'training_place' => TrainingPlace::GYM,
         ]);
+    }
+
+    public function withDietStyle(?DietStyle $dietStyle): static
+    {
+        return $this->state(function (array $attributes) use ($dietStyle) {
+            return [
+                'diet_style' => $dietStyle ?? fake()->randomElement(DietStyle::cases()),
+            ];
+        });
     }
 }
 

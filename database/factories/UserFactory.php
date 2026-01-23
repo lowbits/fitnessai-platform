@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\UserProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -52,6 +53,22 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'password' => null,
+        ]);
+    }
+
+    public function withProfile(array $attributes = []): static
+    {
+        return $this->afterCreating(function ($user) use ($attributes) {
+            UserProfile::factory()->create(array_merge([
+                'user_id' => $user->id,
+            ], $attributes));
+        });
+    }
+
+    public function en()
+    {
+        return $this->state(fn (array $attributes) => [
+            'locale' => 'en',
         ]);
     }
 

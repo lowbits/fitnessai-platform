@@ -131,26 +131,20 @@ class PlanController extends Controller
             ];
         }
 
-        if ($mealPlan->status === 'pending') {
-            return [
-                'meals' => [],
-                'totals' => null,
-                'status' => 'generating',
-            ];
-        }
+        // Determine meal status based on meal_plan status
+        $mealStatus = match($mealPlan->status) {
+            'pending', 'generating' => 'generating',
+            'failed' => 'failed',
+            'generated' => 'generated',
+            default => 'not_generated',
+        };
 
-        if ($mealPlan->status === 'failed') {
-            return [
-                'meals' => [],
-                'totals' => null,
-                'status' => 'failed',
-            ];
-        }
-
-        // Format meals from database
+        // Format meals from database with individual status from each meal
+        // Each meal now has its own status (e.g., during replacement, one meal might be "generating" while others are "generated")
         $meals = $mealPlan->meals->map(function ($meal) {
             return [
                 'id' => $meal->id,
+                'status' => $meal->status ?? 'generated',  // Use individual meal status
                 'name' => $meal->name,
                 'type' => ucfirst($meal->type),
                 'image' => $meal->image ?? "{$meal->type}_placeholder",
@@ -171,7 +165,7 @@ class PlanController extends Controller
                 'carbs_g' => $mealPlan->total_carbs_g,
                 'fat_g' => $mealPlan->total_fat_g,
             ],
-            'status' => 'generated',
+            'status' => $mealStatus,
         ];
     }
 
