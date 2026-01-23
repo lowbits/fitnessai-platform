@@ -92,6 +92,7 @@ class ReplaceMealJob implements ShouldQueue
                 ],
             ]);
 
+
             $duration = microtime(true) - $startTime;
 
             // Parse tool call using ToolCallHelper

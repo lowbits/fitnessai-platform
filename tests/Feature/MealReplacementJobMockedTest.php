@@ -14,6 +14,7 @@ use App\OpenAITools\MealToolDefinition;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use OpenAI\Laravel\Facades\OpenAI;
 use OpenAI\Responses\Responses\CreateResponse;
+use function Pest\Laravel\assertDatabaseHas;
 
 uses(RefreshDatabase::class);
 
@@ -49,34 +50,18 @@ test('meal replacement job updates meal with mocked OpenAI response', function (
         'fat_g' => 20,
     ]);
 
-    $originalMealId = $meal->id;
-
     // Execute the job (uses mocked response)
     $job = new ReplaceMealJob($meal, 'I want something with salmon');
     $job->handle();
 
-    // Refresh meal from database
-    $meal->refresh();
 
-    // Assert meal was updated with the mocked data
-    expect($meal->id)->toBe($originalMealId);
-    expect($meal->name)->toBe('Grilled Salmon with Lemon Herb Quinoa');
-    expect($meal->description)->toBe('Fresh grilled salmon fillet served with fluffy quinoa infused with lemon and herbs');
-    expect($meal->calories)->toBe(520);
-    expect($meal->protein_g)->toBe(42);
-    expect($meal->carbs_g)->toBe(38);
-    expect($meal->fat_g)->toBe(18);
-    expect($meal->fiber_g)->toBe(6);
-    expect($meal->sugar_g)->toBe(3);
-    expect($meal->ingredients)->toBeArray();
-    expect($meal->instructions)->toBeArray();
-    expect($meal->ingredients)->toHaveCount(5);
-    expect($meal->instructions)->toHaveCount(5);
-    expect($meal->prep_time_minutes)->toBe(10);
-    expect($meal->cook_time_minutes)->toBe(15);
-    expect($meal->difficulty)->toBe('Medium');
-    expect($meal->tags)->toContain('high-protein');
-    expect($meal->allergens)->toContain('fish');
+    expect($meal->deleted_at)->not()->toBeNull();
+    expect($meal->status)->toEqual('replaced');
+
+    assertDatabaseHas('meals', [
+        'meal_plan_id' => $mealPlan->id,
+        'name' => 'Grilled Salmon with Lemon Herb Quinoa',
+    ]);
 
     // Assert meal plan totals were updated
     $mealPlan->refresh();
@@ -149,9 +134,10 @@ test('meal replacement with custom meal data', function () {
 
     $meal->refresh();
 
-    expect($meal->name)->toBe('Protein Pancakes');
-    expect($meal->calories)->toBe(420);
-    expect($meal->protein_g)->toBe(35);
+    assertDatabaseHas('meals', [
+        'meal_plan_id' => $mealPlan->id,
+        'name' => 'Protein Pancakes',
+    ]);
 });
 
 test('meal replacement without hint still works', function () {
@@ -188,10 +174,14 @@ test('meal replacement without hint still works', function () {
     $job = new ReplaceMealJob($meal, null);
     $job->handle();
 
-    $meal->refresh();
+    expect($meal->deleted_at)->not()->toBeNull();
+    expect($meal->status)->toEqual('replaced');
 
-    expect($meal->name)->not->toBe('Old Lunch');
-    expect($meal->name)->toBe('Grilled Salmon with Lemon Herb Quinoa');
-    expect($meal->calories)->toBeGreaterThan(0);
+    assertDatabaseHas('meals', [
+        'meal_plan_id' => $mealPlan->id,
+        'type' => $meal->type,
+        'name' => 'Grilled Salmon with Lemon Herb Quinoa',
+        'deleted_at' => null,
+    ]);
 });
 

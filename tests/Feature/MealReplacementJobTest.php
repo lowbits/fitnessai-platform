@@ -93,7 +93,7 @@ test('meal replacement job creates new meal and soft deletes old one', function 
     expect($mealPlan->status)->toBe('generated');
     expect($mealPlan->total_calories)->toBeGreaterThan(0);
     expect($mealPlan->total_protein_g)->toBeGreaterThan(0);
-});
+})->group('integration')->skip('Requires OpenAI API key and makes real API calls');;
 
 test('meal replacement job without hint generates alternative', function () {
     $user = User::factory()->create(['locale' => 'de']);
