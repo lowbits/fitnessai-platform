@@ -21,8 +21,6 @@ const toggle = (index: number) => {
 <template>
     <section
         class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8"
-        itemscope
-        itemtype="https://schema.org/FAQPage"
     >
         <div class="mx-auto max-w-3xl">
             <h2 class="font-display text-3xl font-bold text-white">
@@ -34,9 +32,6 @@ const toggle = (index: number) => {
                     v-for="(faq, index) in faqs"
                     :key="index"
                     class="overflow-hidden rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-900"
-                    itemscope
-                    itemprop="mainEntity"
-                    itemtype="https://schema.org/Question"
                 >
                     <button
                         @click="toggle(index)"
@@ -48,7 +43,7 @@ const toggle = (index: number) => {
                             faq.question
                         }}</span>
                         <svg
-                            class="mt-1 h-6 w-6 flex-shrink-0 text-primary-300 transition-transform"
+                            class="mt-1 h-6 w-6 shrink-0 text-primary-300 transition-transform"
                             :class="{ 'rotate-180': expandedIndex === index }"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -66,9 +61,6 @@ const toggle = (index: number) => {
                     <div
                         v-show="expandedIndex === index"
                         class="border-t border-dark-surfaces-500 p-6"
-                        itemscope
-                        itemprop="acceptedAnswer"
-                        itemtype="https://schema.org/Answer"
                     >
                         <p class="leading-relaxed text-gray-300">
                             {{ faq.answer }}

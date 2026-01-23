@@ -291,7 +291,7 @@ test('tracked calories reference is kept when meal is deleted', function () {
         ->getJson("/api/v2/plan/day/{$date}");
 
     $response->assertStatus(200);
-    
+
 
     // Verify tracking is still there, but meal_id is null
     expect($response->json('tracked_calories.count'))->toBe(1);
