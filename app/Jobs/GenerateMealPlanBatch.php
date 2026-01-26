@@ -36,6 +36,7 @@ class GenerateMealPlanBatch implements ShouldQueue
 
     public function handle(): void
     {
+        $this->user->load('profile');
         $profile = $this->user->profile;
 
         if (!$profile) {

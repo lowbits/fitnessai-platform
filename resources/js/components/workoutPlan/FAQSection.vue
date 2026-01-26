@@ -19,9 +19,7 @@ const toggle = (index: number) => {
 </script>
 
 <template>
-    <section
-        class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8"
-    >
+    <section class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
             <h2 class="font-display text-3xl font-bold text-white">
                 {{ $t('workout_plan.faq.heading') }}
@@ -71,3 +69,32 @@ const toggle = (index: number) => {
         </div>
     </section>
 </template>
+
+/ https://fytrr.com/de 2026-01-23T17:34:14+00:00 weekly 1.0
+https://fytrr.com/de/kostenloser-trainingsplan 2025-12-24T00:00:00+00:00 weekly
+0.9 https://fytrr.com/de/kostenloser-trainingsplan/abnehmen
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/de/kostenloser-trainingsplan/muskelaufbau
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/de/kostenloser-trainingsplan/anfaenger
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/de/kostenloser-trainingsplan/zuhause 2025-12-24T00:00:00+00:00
+monthly 0.8 https://fytrr.com/de/kostenloser-trainingsplan/frauen
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/de/kostenloser-trainingsplan/neujahrs-trainingsplan
+2025-12-24T00:00:00+00:00 monthly 0.8 https://fytrr.com/de/agb
+2025-12-23T17:34:14+00:00 yearly 0.3 https://fytrr.com/de/datenschutz
+2025-12-23T17:34:14+00:00 yearly 0.3 https://fytrr.com/en
+2026-01-23T17:34:14+00:00 weekly 1.0 https://fytrr.com/en/free-workout-plan
+2025-12-24T00:00:00+00:00 weekly 0.9
+https://fytrr.com/en/free-workout-plan/weight-loss 2025-12-24T00:00:00+00:00
+monthly 0.8 https://fytrr.com/en/free-workout-plan/muscle-gain
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/en/free-workout-plan/beginner 2025-12-24T00:00:00+00:00
+monthly 0.8 https://fytrr.com/en/free-workout-plan/home
+2025-12-24T00:00:00+00:00 monthly 0.8
+https://fytrr.com/en/free-workout-plan/women 2025-12-24T00:00:00+00:00 monthly
+0.8 https://fytrr.com/en/free-workout-plan/new-year-reset
+2025-12-24T00:00:00+00:00 monthly 0.8 https://fytrr.com/en/terms-and-conditions
+2025-12-23T17:34:14+00:00 yearly 0.3 https://fytrr.com/en/privacy-policy
+2025-12-23T17:34:14+00:00 yearly 0.3

@@ -3,7 +3,7 @@ import GuestLayout from '@/layouts/GuestLayout.vue';
 import { onMounted } from 'vue';
 
 onMounted(() => {
-    window.location.href = 'fytrr://dashboard';
+    window.location.href = 'fytrr://';
 });
 </script>
 

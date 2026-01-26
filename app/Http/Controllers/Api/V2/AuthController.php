@@ -98,11 +98,13 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'name' => $user->name,
                 'profile' => [
+                    'birthdate' => $user->profile?->birthdate?->format('Y-m-d'),
                     'age' => $user->profile?->age,
                     'height' => $user->profile?->height_cm,
                     'weight' => $user->getCurrentWeight(),
                     'body_goal' => $user->profile?->body_goal?->label(),
                     'diet_type' => $user->profile?->diet_type?->label(),
+                    'training_place' => $user->profile?->training_place?->label(),
                     'skill_level' => $user->profile?->skill_level?->label(),
                 ],
                 'email_verified_at' => $user->email_verified_at,
