@@ -276,8 +276,10 @@ class PlanController extends Controller
             return [
                 'id' => $tracking->id,
                 'meal_id' => $tracking->meal_id,
+                'external_id' => $tracking->external_id,
+                'source' => $tracking->source,
                 'meal_name' => $tracking->meal_name ?? $tracking->meal?->name,
-                'meal_type' => $tracking->meal?->type,
+                'meal_type' => $tracking->meal?->type ?? $tracking->meal_type,
                 'calories' => (float) $tracking->calories,
                 'protein_g' => $tracking->protein_g ? (float) $tracking->protein_g : null,
                 'carbs_g' => $tracking->carbs_g ? (float) $tracking->carbs_g : null,

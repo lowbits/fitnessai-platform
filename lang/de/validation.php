@@ -108,7 +108,7 @@ return [
     'prohibited' => ':attribute ist nicht erlaubt.',
     'prohibited_if' => ':attribute ist nicht erlaubt, wenn :other :value ist.',
     'prohibited_unless' => ':attribute ist nicht erlaubt, es sei denn :other ist in :values.',
-    'prohibits' => ':attribute verbietet die Angabe von :other.',
+    'prohibits' => ':attribute darf nicht zusammen mit :other angegeben werden.',
     'same' => ':attribute und :other müssen übereinstimmen.',
     'size' => [
         'numeric' => ':attribute muss :size sein.',

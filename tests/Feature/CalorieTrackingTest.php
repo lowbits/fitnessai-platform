@@ -356,3 +356,52 @@ test('multiple calorie entries can be tracked on same day', function () {
     $this->assertDatabaseCount('calorie_trackings', 3);
 });
 
+test('user can filter calorie trackings by date, meal_type and source', function () {
+    $date = '2026-01-27';
+    // breakfast, manual
+    CalorieTracking::factory()->create([
+        'user_id' => $this->user->id,
+        'tracked_date' => $date,
+        'meal_type' => 'breakfast',
+        'meal_id' => null,
+        'external_id' => null,
+    ]);
+    // breakfast, search
+    CalorieTracking::factory()->create([
+        'user_id' => $this->user->id,
+        'tracked_date' => $date,
+        'meal_type' => 'breakfast',
+        'meal_id' => null,
+        'external_id' => 'ext-123',
+    ]);
+    // lunch, manual
+    CalorieTracking::factory()->create([
+        'user_id' => $this->user->id,
+        'tracked_date' => $date,
+        'meal_type' => 'lunch',
+        'meal_id' => null,
+        'external_id' => null,
+    ]);
+    // breakfast, plan (should not match for source=custom)
+    $meal = \App\Models\Meal::factory()->create();
+    CalorieTracking::factory()->create([
+        'user_id' => $this->user->id,
+        'tracked_date' => $date,
+        'meal_type' => 'breakfast',
+        'meal_id' => $meal->id,
+        'external_id' => null,
+    ]);
+
+    // Filter: breakfast + source=custom (manual/search)
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->getJson("/api/v2/track/calories?start_date={$date}&end_date={$date}&meal_type=breakfast&source=custom");
+
+    $response->assertStatus(200)
+        ->assertJsonCount(2, 'data');
+
+    $data = $response->json('data');
+    foreach ($data as $item) {
+        expect($item['meal_type'])->toBe('breakfast');
+        expect(in_array($item['source'], ['manual', 'search']))->toBeTrue();
+    }
+});

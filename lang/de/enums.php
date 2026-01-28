@@ -61,5 +61,11 @@ return [
         'mediterranean' => 'Mediterran',
         'intermittent_fasting' => 'Intervallfasten',
     ],
+    'mealType' => [
+        'breakfast' => 'Frühstück',
+        'lunch' => 'Mittagessen',
+        'dinner' => 'Abendessen',
+        'snack' => 'Snack',
+    ]
 ];
 

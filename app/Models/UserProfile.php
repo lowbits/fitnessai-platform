@@ -126,7 +126,7 @@ class UserProfile extends Model
             'fat_g' => $macros['fat_g'],
             'goal_adjustment' => $this->body_goal->calorieAdjustment(),
             'activity_multiplier' => $this->activity_level->tdeeMultiplier(),
-            'macro_split' => $this->dietary_preference->macroSplit() ?? $this->diet_type->macroSplit(),
+            'macro_split' => $this->dietary_preference?->macroSplit() ?? $this->diet_type->macroSplit(),
         ];
     }
 
