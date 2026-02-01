@@ -24,7 +24,15 @@ export const locales = {
                 },
                 structured_data: {
                     description:
-                        'Personalized AI workout and meal plans tailored to your fitness goals, level, and available equipment.',
+                        'Create your free 7-day workout & meal plan as PDF. AI-powered, personalized & no signup required.',
+                    web_app_name: 'fytrr',
+                    mobile_app_name: 'fytrr - AI Personal Trainer',
+                    free_plan: 'Free Plan',
+                    free_plan_description:
+                        'Free AI-generated workout or nutrition plan as PDF - no signup required',
+                    monthly_plan: 'Monthly Subscription',
+                    annual_plan: 'Annual Subscription',
+                    free_trial: '7-day free trial',
                 },
             },
             hero: {
@@ -92,6 +100,19 @@ export const locales = {
                     question:
                         'Can the AI accommodate special diets or restrictions?',
                     answer: 'Yes! Our AI can accommodate special dietary needs including allergies, food preferences, vegetarian/vegan diets, religious restrictions, and more. Simply provide accurate information during the setup process. However, for complex medical conditions or severe allergies, please consult with a healthcare professional to ensure the plan is safe and appropriate for you.',
+                },
+                free: {
+                    question: 'Is the workout and meal plan really free?',
+                    answer: 'Yes, you can create a personalized 7-day workout and meal plan as PDF completely free - no signup required.',
+                },
+                cost: {
+                    question: 'How much does fytrr cost?',
+                    answer: 'Creating a workout or meal plan as PDF is completely free. For unlimited plans, tracking, and AI coaching, fytrr offers a monthly subscription for 3.99 EUR or an annual subscription for 39.99 EUR.',
+                },
+                app: {
+                    question: 'Is there a fytrr app?',
+                    answer: 'Yes, fytrr is available as an iOS app with AI-powered workout tracking, meal logging, and unlimited personalized plans. Try it free for 7 days.',
+                    download_link: 'Download on the App Store →',
                 },
             },
             footer: {
@@ -1062,6 +1083,14 @@ export const locales = {
                 structured_data: {
                     description:
                         'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung.',
+                    web_app_name: 'fytrr',
+                    mobile_app_name: 'fytrr - KI Personal Trainer',
+                    free_plan: 'Kostenloser Plan',
+                    free_plan_description:
+                        'Kostenloser KI-generierter Trainings- oder Ernährungsplan als PDF – ohne Anmeldung',
+                    monthly_plan: 'Monatliches Abo',
+                    annual_plan: 'Jährliches Abo',
+                    free_trial: '7 Tage kostenlos testen',
                 },
             },
             hero: {
@@ -1131,6 +1160,20 @@ export const locales = {
                     question:
                         'Kann die KI spezielle Diäten oder Einschränkungen berücksichtigen?',
                     answer: 'Ja! Unsere KI kann spezielle Ernährungsbedürfnisse berücksichtigen, einschließlich Allergien, Lebensmittelpräferenzen, vegetarischer/veganer Ernährung, religiöser Einschränkungen und mehr. Gib einfach genaue Informationen während des Einrichtungsprozesses an. Bei komplexen medizinischen Zuständen oder schweren Allergien konsultiere bitte einen medizinischen Fachmann, um sicherzustellen, dass der Plan sicher und angemessen für dich ist.',
+                },
+                free: {
+                    question:
+                        'Ist der Trainings- und Ernährungsplan wirklich kostenlos?',
+                    answer: 'Ja, du kannst einen individuellen 7-Tage Trainings- und Ernährungsplan als PDF komplett kostenlos erstellen – ohne Anmeldung.',
+                },
+                cost: {
+                    question: 'Was kostet fytrr?',
+                    answer: 'Einen Trainings- oder Ernährungsplan als PDF zu erstellen ist komplett kostenlos. Für unbegrenzte Pläne, Tracking und KI-Coaching bietet fytrr ein Monatsabo für 3,99 € oder ein Jahresabo für 39,99 €.',
+                },
+                app: {
+                    question: 'Gibt es eine fytrr App?',
+                    answer: 'Ja, fytrr gibt es als iOS App mit KI-gestütztem Workout-Tracking, Ernährungs-Logging und unbegrenzten personalisierten Plänen. 7 Tage kostenlos testen.',
+                    download_link: 'Im App Store laden →',
                 },
             },
             footer: {

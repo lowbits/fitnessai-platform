@@ -39,4 +39,12 @@ return [
         'api_key' => env('OPENAI_API_KEY'),
     ],
 
+    'meilisearch' => [
+        'host' => env('MEILISEARCH_HOST', 'http://0.0.0.0:7700'),
+        'key' => env('MEILISEARCH_API_KEY'),
+    ],
+    'openfoodfacts' => [
+        'db_dump_url' => env('OPENFOODFACTS_URL', 'https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.json.gz'),
+    ]
+
 ];

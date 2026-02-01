@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import SelectInput from '@/components/form/SelectInput.vue';
+import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 import { Link, usePage } from '@inertiajs/vue3';
 import { computed, watch } from 'vue';
-import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 
 const page = usePage();
 
@@ -24,6 +24,7 @@ interface FooterLinks {
         description: string;
         copyright: string;
     };
+    appStoreUrl: string;
 }
 
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
@@ -197,24 +198,38 @@ watch(selectedLanguage, (newLocale) => {
 
                 <!-- Language Switcher -->
                 <div>
-                    <label
-                        for="language_select"
-                        class="mb-4 text-sm font-semibold tracking-wider text-white uppercase"
-                    >
-                        {{ footerLinks.labels.language }}
-                    </label>
-                    <SelectInput
-                        id="language_select"
-                        v-model="selectedLanguage"
-                    >
-                        <option
-                            v-for="(lang, code) in footerLinks.languages"
-                            :key="code"
-                            :value="code"
+                    <div class="mb-4">
+                        <label
+                            for="language_select"
+                            class="mb-4 text-sm font-semibold tracking-wider text-white uppercase"
                         >
-                            {{ lang.name }}
-                        </option>
-                    </SelectInput>
+                            {{ footerLinks.labels.language }}
+                        </label>
+                        <SelectInput
+                            id="language_select"
+                            v-model="selectedLanguage"
+                        >
+                            <option
+                                v-for="(lang, code) in footerLinks.languages"
+                                :key="code"
+                                :value="code"
+                            >
+                                {{ lang.name }}
+                            </option>
+                        </SelectInput>
+                    </div>
+                    <a
+                        :href="footerLinks.appStoreUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="mt-20 transition-opacity hover:opacity-80"
+                    >
+                        <img
+                            src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+                            alt="Download on App Store"
+                            class="h-10"
+                        />
+                    </a>
                 </div>
             </div>
 

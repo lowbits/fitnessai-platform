@@ -10,6 +10,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-zlib": "*",
         "barryvdh/laravel-dompdf": "^3.1",
         "inertiajs/inertia-laravel": "^2.0",
         "laravel-notification-channels/expo": "^2.1",
@@ -19,6 +20,7 @@
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.9",
         "mcamara/laravel-localization": "^2.3",
+        "meilisearch/meilisearch-php": "^1.16",
         "noopstudios/laravel-revenue-cat": "^1.0",
         "openai-php/client": "^0.18.0",
         "openai-php/laravel": "^0.18.0",

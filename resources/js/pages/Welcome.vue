@@ -24,20 +24,139 @@ defineProps<{
 const { t } = useI18n();
 const { language } = useSelectedLanguage();
 
+const APP_STORE_URL =
+    'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695';
+
 const structuredData = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
-    name: 'fytrr',
+    name: t('welcome.meta.structured_data.web_app_name'),
     description: t('welcome.meta.structured_data.description'),
     url: `https://fytrr.com${page.url}`,
     applicationCategory: 'HealthApplication',
     operatingSystem: 'Web Browser',
     offers: {
-        '@type': 'Offer',
-        price: '3.99',
+        '@type': 'AggregateOffer',
+        lowPrice: '0',
+        highPrice: '39.99',
         priceCurrency: 'EUR',
+        offerCount: '3',
+        offers: [
+            {
+                '@type': 'Offer',
+                name: t('welcome.meta.structured_data.free_plan'),
+                price: '0',
+                priceCurrency: 'EUR',
+                description: t(
+                    'welcome.meta.structured_data.free_plan_description',
+                ),
+            },
+            {
+                '@type': 'Offer',
+                name: t('welcome.meta.structured_data.monthly_plan'),
+                price: '3.99',
+                priceCurrency: 'EUR',
+            },
+            {
+                '@type': 'Offer',
+                name: t('welcome.meta.structured_data.annual_plan'),
+                price: '39.99',
+                priceCurrency: 'EUR',
+            },
+        ],
     },
     inLanguage: language.value === 'de' ? 'de-DE' : 'en-GB',
+    author: {
+        '@type': 'Organization',
+        name: 'fytrr',
+        url: 'https://fytrr.com',
+    },
+}));
+
+const mobileAppData = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'MobileApplication',
+    name: t('welcome.meta.structured_data.mobile_app_name'),
+    description: t('welcome.meta.structured_data.description'),
+    url: APP_STORE_URL,
+    downloadUrl: APP_STORE_URL,
+    applicationCategory: 'HealthApplication',
+    operatingSystem: 'iOS',
+    offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'EUR',
+        description: t('welcome.meta.structured_data.free_trial'),
+    },
+    inLanguage: language.value === 'de' ? 'de-DE' : 'en-GB',
+    author: {
+        '@type': 'Organization',
+        name: 'fytrr',
+        url: 'https://fytrr.com',
+    },
+}));
+
+const faqData = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: [
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.accuracy.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.accuracy.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.dietitian.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.dietitian.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.safety.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.safety.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.restrictions.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.restrictions.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.free.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.free.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.cost.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.cost.answer'),
+            },
+        },
+        {
+            '@type': 'Question',
+            name: t('welcome.faq.app.question'),
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: t('welcome.faq.app.answer'),
+            },
+        },
+    ],
 }));
 </script>
 
@@ -84,6 +203,12 @@ const structuredData = computed(() => ({
         <!-- Structured Data -->
         <component :is="'script'" type="application/ld+json">
             {{ JSON.stringify(structuredData) }}
+        </component>
+        <component :is="'script'" type="application/ld+json">
+            {{ JSON.stringify(mobileAppData) }}
+        </component>
+        <component :is="'script'" type="application/ld+json">
+            {{ JSON.stringify(faqData) }}
         </component>
     </Head>
 
@@ -303,6 +428,45 @@ const structuredData = computed(() => ({
                                 class="text-md mt-2 leading-5 text-secondary-100"
                             >
                                 {{ $t('welcome.faq.restrictions.answer') }}
+                            </p>
+                        </div>
+                        <div class="py-3">
+                            <h3 class="text-xl font-medium text-primary-25">
+                                {{ $t('welcome.faq.free.question') }}
+                            </h3>
+                            <p
+                                class="text-md mt-2 leading-5 text-secondary-100"
+                            >
+                                {{ $t('welcome.faq.free.answer') }}
+                            </p>
+                        </div>
+                        <div class="py-3">
+                            <h3 class="text-xl font-medium text-primary-25">
+                                {{ $t('welcome.faq.cost.question') }}
+                            </h3>
+                            <p
+                                class="text-md mt-2 leading-5 text-secondary-100"
+                            >
+                                {{ $t('welcome.faq.cost.answer') }}
+                            </p>
+                        </div>
+                        <div class="py-3">
+                            <h3 class="text-xl font-medium text-primary-25">
+                                {{ $t('welcome.faq.app.question') }}
+                            </h3>
+                            <p
+                                class="text-md mt-2 leading-5 text-secondary-100"
+                            >
+                                {{ $t('welcome.faq.app.answer') }}
+
+                                <a
+                                    :href="APP_STORE_URL"
+                                    target="_blank"
+                                    rel="noopener"
+                                    class="font-medium text-primary-25 underline transition-colors hover:text-primary-300"
+                                >
+                                    {{ $t('welcome.faq.app.download_link') }}
+                                </a>
                             </p>
                         </div>
                     </div>

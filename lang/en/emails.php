@@ -21,6 +21,26 @@ return [
         'team' => 'The fytrr Team',
     ],
 
+    'app_promo' => [
+        'subject' => 'Your plan is live – ready for the next step? 📱',
+        'greeting' => 'Hey :name,',
+        'intro' => 'you created your workout & meal plan a day ago – how\'s it going?',
+        'pitch' => 'With the **fytrr app** you get the full experience:',
+        'features' => [
+            'track' => 'Track your workouts',
+            'meals' => 'Log your meals',
+            'unlimited' => 'Create unlimited new plans',
+            'adaptive' => 'Adapts to your progress',
+        ],
+        'trial' => '**Try it free for 7 days** – no commitment.',
+        'step1_label' => '**Step 1**',
+        'step1_text' => '[Download the free fytrr app](:link)',
+        'step2_label' => '**Step 2⃣**',
+        'cta' => 'Unlock your free 7-day trial →',
+        'signature' => 'Best regards',
+        'team' => 'Your fytrr Team',
+    ],
+
     'verify_email' => [
         'subject' => 'One Step Away from Your Personal Fitness Plan',
         'greeting' => 'Hi :name,',

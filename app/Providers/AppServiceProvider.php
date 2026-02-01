@@ -13,6 +13,7 @@ use App\Listeners\HandleRevenueCatWebhook;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
+use Meilisearch\Client as MeilisearchClient;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->singleton(MeilisearchClient::class, fn () => new MeilisearchClient(
+            config('services.meilisearch.host'),
+            config('services.meilisearch.key')
+        ));
     }
 
     /**

@@ -22,6 +22,26 @@ return [
         'team' => 'Das fytrr Team',
     ],
 
+    'app_promo' => [
+        'subject' => 'Dein Plan läuft – bereit für den nächsten Schritt? 📱',
+        'greeting' => 'Hey :name,',
+        'intro' => 'du hast deinen Trainings- & Ernährungsplan seit einem Tag – wie läuft\'s?',
+        'pitch' => 'Mit der **fytrr App** holst du alles raus:',
+        'features' => [
+            'track' => 'Workouts tracken',
+            'meals' => 'Mahlzeiten loggen',
+            'unlimited' => 'Unbegrenzt neue Pläne erstellen',
+            'adaptive' => 'Passt sich an deinen Fortschritt an',
+        ],
+        'trial' => '**7 Tage kostenlos testen** – unverbindlich.',
+        'step1_label' => '**Schritt 1**',
+        'step1_text' => '[Lade die kostenlose fytrr App](:link)',
+        'step2_label' => '**Schritt 2⃣**',
+        'cta' => '7 Tage gratis freischalten →',
+        'signature' => 'Beste Grüße',
+        'team' => 'Dein fytrr Team',
+    ],
+
     'verify_email' => [
         'subject' => 'Fast geschafft – bestätige deine E-Mail-Adresse',
 

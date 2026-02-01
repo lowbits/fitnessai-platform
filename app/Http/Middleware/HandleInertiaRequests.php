@@ -73,6 +73,7 @@ class HandleInertiaRequests extends Middleware
         $links = [
             'workoutPlans' => [],
             'indexUrl' => LaravelLocalization::localizeURL("/{$basePath}", $locale),
+            'appStoreUrl' => config('app.app_store.ios.url'),
         ];
 
         foreach ($workoutPlanTypes as $internalType) {

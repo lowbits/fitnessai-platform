@@ -139,7 +139,8 @@ return [
 
     'app_store'=> [
         'ios' => [
-            'url' => env('IOS_APP_STORE_URL', 'https://testflight.apple.com/join/q62vmKeD'),
+            'url' => env('IOS_APP_STORE_URL', 'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695'),
+            'testflight_url' => env('IOS_APP_STORE_TESTFLIGHT_URL', 'https://testflight.apple.com/join/q62vmKeD'),
         ]
     ]
 

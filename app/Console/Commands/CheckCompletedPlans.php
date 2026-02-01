@@ -3,13 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Models\Plan;
-use App\Models\User;
-use App\Notifications\NewOnboardingStarted;
+use App\Notifications\AppPromoNotification;
 use App\Notifications\PlanGenerationComplete;
 use App\Notifications\PlanReadyForDelivery;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Password;
 
 class CheckCompletedPlans extends Command
 {
@@ -41,12 +40,11 @@ class CheckCompletedPlans extends Command
             ->get();
 
 
-
         $notifiedCount = 0;
 
         foreach ($plans as $plan) {
             // Check if plan is 100% complete
-            $totalDays = (int) config('plans.duration_days');
+            $totalDays = (int)config('plans.duration_days');
             $mealPlansGenerated = $plan->mealPlans()->where('status', 'generated')->count();
             $workoutPlansGenerated = $plan->workoutPlans()->where('status', 'generated')->count();
 
@@ -72,6 +70,29 @@ class CheckCompletedPlans extends Command
             try {
                 $this->notifyAdmins($plan);
                 $plan->user->notify(new PlanGenerationComplete($plan));
+
+                if (!filled($plan->user->password)) {
+                    Password::broker(config('fortify.passwords'))->sendResetLink(
+                        [
+                            'email' => $plan->user->email,
+                        ],
+                        function ($user, $token) use ($plan) {
+                            if (filled($user->password)) {
+                                return Password::INVALID_USER;
+                            }
+
+                            $notification = new AppPromoNotification($plan, $token);
+
+                            $user->notify(
+                                app()->environment('production')
+                                    ? $notification->delay(now()->addHours(24))
+                                    : $notification
+                            );
+
+                            return Password::RESET_LINK_SENT;
+                        }
+                    );
+                }
 
                 // Mark as notified (add this column via migration)
                 $plan->update([
@@ -100,7 +121,7 @@ class CheckCompletedPlans extends Command
         try {
             Notification::route('mail', $adminEmails)
                 ->notify(new PlanReadyForDelivery($plan));
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             $this->error("✗ Failed to notify admins $adminEmails: {$e->getMessage()}");
         }
 
