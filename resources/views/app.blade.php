@@ -43,6 +43,8 @@
         @endif
     @endforeach
 
+    <meta name="apple-itunes-app" content="app-id=6757151695">
+
     {{-- Hreflang tags --}}
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
         <link rel="alternate"
