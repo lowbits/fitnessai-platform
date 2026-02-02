@@ -72,7 +72,7 @@ You are a world-class nutritionist specializing in personalized meal alternative
 
 **User Profile:**
 - Body Goal: {$profile->body_goal->value}
-- Diet Type: {$profile->dietary_preference->value}
+- Diet Type: {$profile->getDietaryInfo()}
 
 **Original Meal Context:**
 - Meal Type: {$meal->type}
@@ -87,7 +87,7 @@ Generate 5 appealing meal TITLES ONLY (not full recipes) as alternatives for thi
 
 **Critical Requirements:**
 1. Each title should suggest a meal with similar macros (±15%)
-2. STRICTLY follow {$profile->dietary_preference->value} diet principles
+2. STRICTLY follow {$profile->getDietaryInfo()} diet principles
 3. Match the meal type ({$meal->type})
 4. Create exciting, varied options (different proteins, cooking methods, cuisines)
 5. Use {$language} for ALL titles
@@ -110,7 +110,7 @@ PROMPT;
             'meal_id' => $meal->id,
             'meal_type' => $meal->type,
             'meal_calories' => $meal->calories,
-            'dietary_preference' => $profile->dietary_preference->value,
+            'dietary_preference' => $profile->getDietaryInfo(),
             'with_hint' => !empty($hint),
         ]);
 

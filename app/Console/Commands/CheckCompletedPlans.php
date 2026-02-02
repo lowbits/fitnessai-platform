@@ -3,12 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Plan;
-use App\Notifications\AppPromoNotification;
 use App\Notifications\PlanGenerationComplete;
 use App\Notifications\PlanReadyForDelivery;
+use App\Services\AppPromoNotificationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
-use Password;
 
 class CheckCompletedPlans extends Command
 {
@@ -71,28 +70,8 @@ class CheckCompletedPlans extends Command
                 $this->notifyAdmins($plan);
                 $plan->user->notify(new PlanGenerationComplete($plan));
 
-                if (!filled($plan->user->password)) {
-                    Password::broker(config('fortify.passwords'))->sendResetLink(
-                        [
-                            'email' => $plan->user->email,
-                        ],
-                        function ($user, $token) use ($plan) {
-                            if (filled($user->password)) {
-                                return Password::INVALID_USER;
-                            }
-
-                            $notification = new AppPromoNotification($plan, $token);
-
-                            $user->notify(
-                                app()->environment('production')
-                                    ? $notification->delay(now()->addHours(24))
-                                    : $notification
-                            );
-
-                            return Password::RESET_LINK_SENT;
-                        }
-                    );
-                }
+                // Send app promo notification
+                app(AppPromoNotificationService::class)->sendToUser($plan->user, $plan);
 
                 // Mark as notified (add this column via migration)
                 $plan->update([

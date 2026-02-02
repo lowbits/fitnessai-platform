@@ -130,6 +130,13 @@ class UserProfile extends Model
         ];
     }
 
+    public function getDietaryInfo(): string
+    {
+        return filled($this->dietary_preference?->value)
+            ? $this->dietary_preference->value
+            : ($this->diet_type?->value ?? '-');
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
