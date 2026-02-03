@@ -2,20 +2,34 @@
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 
 const props = defineProps<{
     token: string;
     email: string;
     iosAppStoreUrl: string;
+    utmSource?: string;
+    utmMedium?: string;
+    utmCampaign?: string;
 }>();
 
 const { t } = useI18n();
 
-const deepLink = `fytrr://set-password?token=${encodeURIComponent(props.token)}&email=${encodeURIComponent(props.email)}`;
+const deepLink = computed(() => {
+    const params = new URLSearchParams({
+        token: props.token,
+        email: props.email,
+    });
+
+    if (props.utmSource) params.append('utm_source', props.utmSource);
+    if (props.utmMedium) params.append('utm_medium', props.utmMedium);
+    if (props.utmCampaign) params.append('utm_campaign', props.utmCampaign);
+
+    return `fytrr://set-password?${params.toString()}`;
+});
 
 onMounted(() => {
-    window.location.href = deepLink;
+    window.location.href = deepLink.value;
 });
 </script>
 

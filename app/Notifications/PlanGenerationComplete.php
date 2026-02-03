@@ -11,18 +11,24 @@ use Illuminate\Notifications\Notification;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use NotificationChannels\Expo\ExpoChannel;
 use NotificationChannels\Expo\ExpoMessage;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Facades\URL;
 
 class PlanGenerationComplete extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    protected ?string $passwordResetToken;
+
     /**
      * Create a new notification instance.
      */
     public function __construct(
-        public Plan $plan
+        public Plan $plan,
+        ?string     $passwordResetToken = null
     )
     {
+        $this->passwordResetToken = $passwordResetToken;
     }
 
     /**
@@ -44,22 +50,17 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-
         $locale = $notifiable->locale ?? 'en';
-        // Set locale for email based on user's preference
         app()->setLocale($locale);
 
-        // Load plan with all relations for PDF generation
         $this->plan->load(['mealPlans.meals', 'workoutPlans.exercises']);
 
-        // Generate Meal Plan PDF
         $mealPlanPdf = PDF::loadView('pdf.nutrition_plan', [
             'user' => $notifiable,
             'plan' => $this->plan,
             'mealPlans' => $this->plan->mealPlans()->with('meals')->orderBy('day_number')->get(),
         ]);
 
-        // Generate Workout Plan PDF
         $workoutPlanPdf = PDF::loadView('pdf.workout_plan', [
             'user' => $notifiable,
             'plan' => $this->plan,
@@ -68,23 +69,17 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
 
         $days = config('plans.duration_days');
         $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
-
         $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_pdf';
+
+        $badgeLocale = $locale === 'de' ? 'de-de' : 'en-us';
 
         $mail = (new MailMessage)
             ->subject(__('emails.plan_ready.subject'))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
-            ->line(__("emails.plan_ready.$introKey", ['days' => $days]))
-            ->line(__('emails.plan_ready.tailored'))
-            ->line('• ' . __('emails.plan_ready.features.meals', ['days' => $days]))
-            ->line('• ' . __('emails.plan_ready.features.workouts'))
-            ->line('• ' . __('emails.plan_ready.features.ingredients'))
-            ->line('• ' . __('emails.plan_ready.features.exercises'))
-            ->line(__('emails.plan_ready.review'));
-
+            ->line(__("emails.plan_ready.$introKey", ['days' => $days]));
 
         if ($isMobileAppOnboarding) {
-            $mail->action(__('emails.plan_ready.cta_app'), route('mobile.open-dashboard', ['locale' => $locale]));
+            $mail->action(__('emails.plan_ready.cta_app'), route('home', ['locale' => $locale]));
         } else {
             $mail
                 ->attachData($mealPlanPdf->output(), 'Meal_Plan_' . $this->plan->id . '.pdf', [
@@ -95,14 +90,55 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
                 ]);
         }
 
+        // App Promo only for web users
+        if ($this->passwordResetToken && !filled($notifiable->password)) {
+
+            // App Promo
+            $mail
+                ->line('')
+                ->line(__('emails.plan_ready.app_pitch'))
+                ->line(new HtmlString(
+                    '<img src="' . asset("assets/app-promo_{$locale}.png") . '" width="600" style="display:block;width:100%;max-width:600px;height:auto;border-radius:8px;margin:16px 0;" alt="fytrr App">'
+                ))
+                ->line(new HtmlString('<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;">
+            <tr>
+                <td align="center">
+                    <a href="' . config('app.app_store.ios.url') . '">
+                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/' . $badgeLocale . '?size=250x83"
+                             alt="Download on App Store"
+                             style="height:40px;">
+                    </a>
+                </td>
+            </tr>
+        </table>'));
+
+            // Step 2: Password reset if needed
+
+            $setPasswordUrl = URL::temporarySignedRoute(
+                'set-password',
+                now()->addHours(24),
+                [
+                    'locale' => $locale,
+                    'token' => $this->passwordResetToken,
+                    'email' => $notifiable->email,
+                    'utm_source' => 'email',
+                    'utm_medium' => 'plan_ready',
+                    'utm_campaign' => 'app_promo',
+                ]
+            );
+
+            $mail->action(__('emails.plan_ready.cta'), $setPasswordUrl);
+        }
 
         $mail
-            ->line(__('emails.plan_ready.disclaimer_title'))
-            ->line(__('emails.plan_ready.disclaimer_text'))
-            ->line(__('emails.plan_ready.confidence'))
+            ->line(__('emails.plan_ready.trial'))
             ->line('')
-            ->line(__('emails.plan_ready.signature'))
-            ->salutation(__('emails.plan_ready.team'));
+            ->line(__('emails.plan_ready.support'))
+            ->line('')
+            ->line(__('emails.plan_ready.closing'))
+            ->salutation(__('emails.plan_ready.team'))
+            ->line('')
+            ->line(new HtmlString('<p style="font-size:12px;color:#666;margin-top:24px;">' . __('emails.plan_ready.disclaimer') . '</p>'));
 
         return $mail;
     }

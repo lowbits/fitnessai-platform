@@ -6,6 +6,7 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Bus;
 use App\Jobs\GenerateUserMealPlan;
 use App\Jobs\GenerateUserWorkoutPlan;
@@ -16,14 +17,14 @@ use Illuminate\Support\Facades\Event;
 uses(RefreshDatabase::class);
 
 test('initial purchase adjusts plan duration and triggers generation if behind', function () {
+    Carbon::setTestNow('2026-03-15 12:00:00');
+
     Bus::fake();
     Event::fake([InitialPurchaseProcessed::class]);
 
     $user = User::factory()->create(['id' => 123]);
 
-    // Create an active 7-day plan that started 5 days ago
-    // Generation day is usually 3 days after start (so it was 2 days ago)
-    $startDate = now()->subDays(5)->startOfDay();
+    $startDate = now()->subDays(5)->startOfDay(); // 2026-03-10
     $plan = Plan::create([
         'user_id' => $user->id,
         'plan_name' => 'Test Plan',
@@ -38,7 +39,6 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
         'workouts_per_week' => 3,
     ]);
 
-    // Generate workout plans for the first 7 days
     for ($i = 0; $i < 7; $i++) {
         WorkoutPlan::create([
             'plan_id' => $plan->id,
@@ -73,23 +73,16 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
 
     $response->assertStatus(200);
 
-    // 1. Verify Event was dispatched
-    Event::assertDispatched(InitialPurchaseProcessed::class, function ($event) use ($user) {
-        return $event->user->id === $user->id;
-    });
+    Event::assertDispatched(InitialPurchaseProcessed::class, fn ($event) => $event->user->id === $user->id);
 
-    // 2. Manually trigger the listener logic since it's queued
     app(AdjustPlanAfterPurchase::class)->handle(new InitialPurchaseProcessed($user, $payload['event']));
 
-    // 3. Check plan duration is adjusted accordingly
     $plan->refresh();
-    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonth());
-    expect($plan->duration_days)->toBe($expectedDuration);
-    expect((int)$plan->start_date->diffInDays($plan->end_date))->toBe($expectedDuration);
 
-    // 4. Check if generation jobs were dispatched
-    // Since it's day 5 and generation should happen around day 3 or 4,
-    // and we only have plans until day 7, it should trigger generation.
+    // March 10 + 1 month = April 10 = 31 days
+    expect($plan->duration_days)->toBe(31);
+    expect($plan->end_date)->toEqual(Carbon::parse('2026-04-10'));
+
     Bus::assertDispatched(GenerateUserWorkoutPlan::class);
     Bus::assertDispatched(GenerateUserMealPlan::class);
 });

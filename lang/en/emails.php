@@ -2,23 +2,20 @@
 
 return [
     'plan_ready' => [
-        'subject' => 'Your Personal Fitness Plan is Ready 💪',
+        'subject' => 'Your plan is ready! 🎉',
         'greeting' => 'Hi :name,',
-        'intro_pdf' => 'your personalized **:days-day workout & nutrition plan** is ready and attached to this email as a **PDF**.',
-        'intro_app' => 'your personalized **:days-day workout & nutrition plan** is ready and waiting for you in the app.',
-        'tailored' => 'The plan was created specifically for you – based on your goal, fitness level, and the details you provided:',
-        'features' => [
-            'meals' => '🥗 **:days days of meal plans** with recipes',
-            'workouts' => '🏋️ **Individual workout routines** tailored to your fitness level',
-            'ingredients' => '🛒 **Ingredient lists & simple cooking instructions**',
-            'exercises' => '📋 **Exercise guides** with tips for proper form',
-        ],
-        'review' => 'Take a moment to check out the plan. If you have questions or want something adjusted, **just reply to this email** – we\'re happy to help.',
-        'disclaimer_title' => '**Important Note:**',
-        'disclaimer_text' => 'This plan was created using an AI system and does not replace medical or nutritional advice. Please consult a doctor or qualified nutritionist if you have any health concerns.',
-        'confidence' => 'Good luck with your training – and most importantly: have fun with it 💪',
-        'signature' => 'Best regards,',
+        'intro_pdf' => 'your personalized **:days-day plan** is ready! Training + nutrition, tailored to your goal. PDF attached.',
+        'intro_app' => 'your personalized **:days-day plan** is ready! Training + nutrition, tailored to your goal.',
+        'cta_app' => 'View plan →',
+        'app_pitch' => '**Even better with the app:** Track your workouts, log your meals — and your plan adapts to your progress.',
+        'trial' => 'No risk. Cancel anytime.',
+        'step1_label' => '**Step 1:** Download app',
+        'step2_label' => '**Step 2:** Unlock 7 days free',
+        'cta' => 'Try 7 days free →',
+        'support' => 'Questions? Just reply to this email.',
+        'closing' => 'Good luck! 💪',
         'team' => 'The fytrr Team',
+        'disclaimer' => '*AI-generated plan. Not a substitute for medical advice.*',
     ],
 
     'app_promo' => [

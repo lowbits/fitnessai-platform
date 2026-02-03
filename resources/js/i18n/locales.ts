@@ -229,6 +229,7 @@ export const locales = {
                     terms: 'I have taken note of the {termsLink}, {disclaimerLink} and {privacyLink} and accept them.',
                     termsLinkText: 'Terms & Conditions',
                     disclaimerLinkText: 'Disclaimer',
+                    privacyLinkText: 'Privacy Policy',
                     newsletter:
                         'I would like to subscribe to the free newsletter and regularly receive fitness tips, workout ideas, and exclusive content.',
                     submit: 'Generate plan',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Meal;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class MealController extends Controller
 {
@@ -64,6 +65,24 @@ class MealController extends Controller
             'allergens' => $meal->allergens ?? [],
             'completed_at' => $meal->completed_at,
         ]);
+    }
+
+    /**
+     * Delete a meal
+     */
+    public function destroy(Meal $meal): JsonResponse
+    {
+
+        // Authorize using policy
+        Gate::authorize('delete', $meal);
+
+        // Soft delete the meal
+        $meal->delete();
+
+        return response()->json([
+            'message' => 'Meal deleted successfully',
+            'deleted_at' => $meal->deleted_at->toISOString(),
+        ], 200);
     }
 }
 

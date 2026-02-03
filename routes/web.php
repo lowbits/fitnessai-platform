@@ -51,7 +51,32 @@ Route::get('/{locale}/set-password/{token}', function ($locale, $token) {
         'iosAppStoreUrl' => config('app.app_store.ios.url'),
         'token' => $token,
         'email' => $email,
+        'utmSource' => request()->query('utm_source'),
+        'utmMedium' => request()->query('utm_medium'),
+        'utmCampaign' => request()->query('utm_campaign'),
     ]);
 })->middleware(['signed'])
     ->name('set-password');
+
+
+// Dev routes (only available in local environment)
+if (app()->environment('local')) {
+    Route::get('/dev/test-email/plan-ready', function () {
+        $user = \App\Models\User::first();
+
+        if (!$user) {
+            return 'No user found in database. Please create a user first.';
+        }
+
+        $plan = \App\Models\Plan::where('user_id', $user->id)->first();
+
+        if (!$plan) {
+            return 'No plan found for user. Please create a plan first.';
+        }
+
+        $notification = new \App\Notifications\PlanGenerationComplete($plan, 'too');
+
+        return $notification->toMail($user)->render();
+    })->name('dev.test-email.plan-ready');
+}
 

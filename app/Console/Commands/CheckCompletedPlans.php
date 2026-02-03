@@ -8,6 +8,7 @@ use App\Notifications\PlanReadyForDelivery;
 use App\Services\AppPromoNotificationService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 
 class CheckCompletedPlans extends Command
 {
@@ -68,9 +69,19 @@ class CheckCompletedPlans extends Command
             // Send notification
             try {
                 $this->notifyAdmins($plan);
-                $plan->user->notify(new PlanGenerationComplete($plan));
 
-                // Send app promo notification
+                // Generate password reset token if user has no password
+                $passwordResetToken = null;
+                if (!filled($plan->user->password)) {
+                    // Create token for password reset
+                    $passwordResetToken = Password::broker(config('fortify.passwords'))
+                        ->createToken($plan->user);
+                }
+
+                // Send plan ready notification with optional password reset token
+                $plan->user->notify(new PlanGenerationComplete($plan, $passwordResetToken));
+
+                // Send app promo notification (delayed by 24h) as fallback/reminder
                 app(AppPromoNotificationService::class)->sendToUser($plan->user, $plan);
 
                 // Mark as notified (add this column via migration)

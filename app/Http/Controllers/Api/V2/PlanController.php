@@ -139,23 +139,37 @@ class PlanController extends Controller
             default => 'not_generated',
         };
 
+        // Define meal type order
+        $typeOrder = [
+            'breakfast' => 1,
+            'lunch' => 2,
+            'snack' => 3,
+            'dinner' => 4,
+        ];
+
         // Format meals from database with individual status from each meal
         // Each meal now has its own status (e.g., during replacement, one meal might be "generating" while others are "generated")
-        $meals = $mealPlan->meals->map(function ($meal) {
-            return [
-                'id' => $meal->id,
-                'status' => $meal->status ?? 'generated',  // Use individual meal status
-                'name' => $meal->name,
-                'type' => ucfirst($meal->type),
-                'image' => $meal->image ?? "{$meal->type}_placeholder",
-                'calories' => $meal->calories,
-                'protein_g' => $meal->protein_g,
-                'carbs_g' => $meal->carbs_g,
-                'fat_g' => $meal->fat_g,
-                'is_completed' => $meal->completed_at !== null,
-                'completed_at' => $meal->completed_at?->toISOString(),
-            ];
-        })->values()->all();
+        $meals = $mealPlan->meals
+            ->sortBy(function ($meal) use ($typeOrder) {
+                return $typeOrder[strtolower($meal->type)] ?? 99;
+            })
+            ->map(function ($meal) {
+                return [
+                    'id' => $meal->id,
+                    'status' => $meal->status ?? 'generated',  // Use individual meal status
+                    'name' => $meal->name,
+                    'type' => ucfirst($meal->type),
+                    'image' => $meal->image ?? "{$meal->type}_placeholder",
+                    'calories' => $meal->calories,
+                    'protein_g' => $meal->protein_g,
+                    'carbs_g' => $meal->carbs_g,
+                    'fat_g' => $meal->fat_g,
+                    'is_completed' => $meal->completed_at !== null,
+                    'completed_at' => $meal->completed_at?->toISOString(),
+                ];
+            })
+            ->values()
+            ->all();
 
         return [
             'meals' => $meals,

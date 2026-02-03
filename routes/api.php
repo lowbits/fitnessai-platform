@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V2\BodyProgressController;
 use App\Http\Controllers\Api\V2\CalorieTrackingController;
 use App\Http\Controllers\Api\V2\GetMealAlternativesController;
 use App\Http\Controllers\Api\V2\MealController;
+use App\Http\Controllers\Api\V2\NewPasswordController;
 use App\Http\Controllers\Api\V2\OnboardingController;
 use App\Http\Controllers\Api\V2\PlanController;
 use App\Http\Controllers\Api\V2\PushNotificationController;
@@ -16,7 +17,7 @@ use App\Http\Controllers\Api\V2\SkipWorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Http\Controllers\NewPasswordController;
+
 
 
 Route::prefix('v2')->group(function () {
@@ -49,6 +50,7 @@ Route::prefix('v2')->group(function () {
         Route::get('/meals/{mealId}', [MealController::class, 'show']);
         Route::post('/meals/{meal}/alternatives', GetMealAlternativesController::class)->name('meals.alternatives');
         Route::post('/meals/{meal}/replace', ReplaceMealController::class)->name('meals.replace');
+        Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
         Route::post('/workouts/{workout}/reschedule', RescheduleWorkoutController::class);
         Route::post('/workouts/{workoutPlan}/skip', SkipWorkoutController::class)->name('workouts.skip');

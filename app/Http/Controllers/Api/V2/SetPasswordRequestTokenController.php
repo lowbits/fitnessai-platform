@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Notifications\SetPasswordNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

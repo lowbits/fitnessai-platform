@@ -48,6 +48,12 @@ class AppPromoNotification extends Notification implements ShouldQueue
         );
 
         $promoImageUrl = asset("assets/app-promo_{$locale}.png");
+        $badgeLocale = match($locale) {
+            'de' => 'de-de',
+            'en' => 'en-us',
+            default => 'en-us',
+        };
+
 
         return (new MailMessage)
             ->subject(__('emails.app_promo.subject'))
@@ -65,7 +71,17 @@ class AppPromoNotification extends Notification implements ShouldQueue
             ->line(__('emails.app_promo.trial'))
             ->line('')
             ->line(__('emails.app_promo.step1_label'))
-            ->line(__('emails.app_promo.step1_text', ['link' => config('app.app_store.ios.url')]))
+            ->line(new HtmlString('<table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center">
+                        <a href="' . config('app.app_store.ios.url') . '">
+                            <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/' . $badgeLocale . '?size=250x83"
+                                 alt="Download on App Store"
+                                 style="height:40px;">
+                        </a>
+                    </td>
+                </tr>
+            </table>'))
             ->line('')
             ->line(__('emails.app_promo.step2_label'))
             ->action(__('emails.app_promo.cta'), $setPasswordUrl)
