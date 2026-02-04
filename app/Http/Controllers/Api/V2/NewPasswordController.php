@@ -81,7 +81,7 @@ class NewPasswordController extends Controller
             }
         );
 
-        if ($request->query('utm_campaign') === 'app_promo') {
+        if ($request->hasAny('utm_medium', 'utm_source', 'utm_campaign')) {
             $this->notifyAdminsPromoUsed(
                 $request->email,
                 $request->query('utm_source'),

@@ -122,8 +122,8 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
                     'token' => $this->passwordResetToken,
                     'email' => $notifiable->email,
                     'utm_source' => 'email',
-                    'utm_medium' => 'plan_ready',
-                    'utm_campaign' => 'app_promo',
+                    'utm_medium' => 'app_promo',
+                    'utm_campaign' => 'plan_ready',
                 ]
             );
 
