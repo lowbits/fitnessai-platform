@@ -239,19 +239,9 @@ const faqData = computed(() => ({
 
                 <div class="relative flex flex-1">
                     <div
-                        class="absolute inset-0 z-0 -mt-20 -mr-32 flex items-center justify-center xl:-mt-10 xl:-mr-64"
-                    >
-                        <img
-                            src="/assets/gradient_form_optimized.png"
-                            fetchpriority="low"
-                            height="796"
-                            width="605"
-                            alt="Decorative gradient background"
-                            class="h-auto w-full max-w-4xl object-contain opacity-50"
-                            loading="lazy"
-                            decoding="async"
-                        />
-                    </div>
+                        class="absolute inset-0 z-0 -mt-20 -mr-32 bg-[url('/assets/gradient_form_optimized.png')] bg-contain bg-center bg-no-repeat opacity-50 xl:-mt-10 xl:-mr-64 2xl:-mr-[400px]"
+                        aria-hidden="true"
+                    />
                     <FormCard class="flex flex-1 justify-end">
                         <GenerateFitnessPlanForm :total-days="durationDays" />
                     </FormCard>

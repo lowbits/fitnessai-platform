@@ -227,7 +227,9 @@ watch(selectedLanguage, (newLocale) => {
                         <img
                             src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
                             alt="Download on App Store"
-                            class="h-10"
+                            width="120"
+                            height="40"
+                            class="h-10 w-auto"
                         />
                     </a>
                 </div>
