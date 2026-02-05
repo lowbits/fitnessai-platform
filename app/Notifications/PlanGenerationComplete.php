@@ -104,7 +104,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
             <tr>
                 <td align="center">
                     <a href="' . config('app.app_store.ios.url') . '">
-                        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/' . $badgeLocale . '?size=250x83"
+                        <img src="'. asset("/assets/badges/App_Store_Badge_{$locale}.svg") .'"
                              alt="Download on App Store"
                              style="height:40px;">
                     </a>

@@ -18,9 +18,8 @@
                             <td align="center">
                                 <a href="{{ config('app.app_store.ios.url') }}"
                                    style="text-decoration: none; display: inline-block;">
-                                    <img
-                                        src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-en?size=250x83"
-                                        alt="Download on the App Store" width="120" style="display: block;">
+                                    <img src="{{asset("/assets/badges/App_Store_Badge_EN.svg")}}"
+                                         alt="Download on the App Store" width="120" style="display: block;">
                                 </a>
                             </td>
                         </tr>

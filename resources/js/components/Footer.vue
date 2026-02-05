@@ -225,7 +225,7 @@ watch(selectedLanguage, (newLocale) => {
                         class="mt-20 transition-opacity hover:opacity-80"
                     >
                         <img
-                            src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+                            :src="`/assets/badges/App_Store_Badge_${selectedLanguage.toUpperCase()}.svg`"
                             alt="Download on App Store"
                             width="120"
                             height="40"

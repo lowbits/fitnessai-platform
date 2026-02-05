@@ -13,7 +13,7 @@ const props = defineProps<{
     utmCampaign?: string;
 }>();
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const deepLink = computed(() => {
     const params = new URLSearchParams({
@@ -93,7 +93,7 @@ onMounted(() => {
                             class="transition-opacity hover:opacity-80"
                         >
                             <img
-                                src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/en-us?size=250x83"
+                                :src="`/assets/badges/App_Store_Badge_${locale.toUpperCase()}.svg`"
                                 alt="Download on App Store"
                                 class="h-10"
                             />
