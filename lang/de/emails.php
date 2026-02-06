@@ -82,5 +82,20 @@ return [
         'salutation' => 'Viel Spaß beim Trainieren,',
         'signature' => 'Dein fytrr Team',
     ],
+
+    'calorie_update' => [
+        'subject' => 'Update zu deiner Kalorienberechnung',
+        'greeting' => 'Hi :name,',
+        'intro' => 'Wir haben eine Verbesserung an der Berechnung deiner täglichen Kalorienzufuhr vorgenommen.',
+        'what_changed_title' => '**Was hat sich geändert?**',
+        'what_changed_text' => 'Wir haben unsere Berechnung aktualisiert, um besser zu deinen individuellen Bedürfnissen zu passen. Für die meisten Nutzer bedeutet das ein etwas höheres tägliches Kalorienziel.',
+        'current_plan_title' => '**Was ist mit meinem aktuellen Ernährungsplan?**',
+        'current_plan_text' => 'Deine bestehenden Ernährungspläne bleiben wie sie sind. Die aktualisierte Berechnung greift automatisch, wenn Mona das nächste Mal einen neuen Plan für dich erstellt.',
+        'why_title' => '**Warum sagen wir dir das?**',
+        'why_text' => 'Immer wenn wir Änderungen vornehmen, die deine Ernährungsziele betreffen, möchten wir dich darüber informieren. Keine Überraschungen.',
+        'support' => 'Bei Fragen melde dich bei uns unter hello@fytrr.com.',
+        'closing' => 'Guten Appetit,',
+        'team' => 'Tobi - fytrr Team',
+    ],
 ];
 

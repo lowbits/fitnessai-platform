@@ -73,5 +73,20 @@ return [
         'salutation' => 'Happy training,',
         'signature' => 'The fytrr Team',
     ],
+
+    'calorie_update' => [
+        'subject' => 'Update to your calorie calculation',
+        'greeting' => 'Hi :name,',
+        'intro' => 'We\'ve made an improvement to how your daily calorie intake is calculated.',
+        'what_changed_title' => '**What changed?**',
+        'what_changed_text' => 'We updated our calculation to better match your individual needs. For most users, this means a slightly higher daily calorie target.',
+        'current_plan_title' => '**What about my current meal plan?**',
+        'current_plan_text' => 'Your existing meal plans stay as they are. The updated calculation kicks in automatically the next time Mona generates a new plan for you.',
+        'why_title' => '**Why are we telling you this?**',
+        'why_text' => 'Whenever we make changes that affect your nutrition targets, we want you to know about it. No surprises.',
+        'support' => 'If you have any questions, reach out to us at hello@fytrr.com.',
+        'closing' => 'Happy eating,',
+        'team' => 'Tobi - fytrr Team',
+    ],
 ];
 

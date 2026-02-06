@@ -80,7 +80,7 @@ test('set password view can be accessed with valid signed url', function () {
 });
 
 test('set password view cannot be accessed with invalid signature', function () {
-    $response = $this->get('/en/set-password/test-token-123?email=test@example.com');
+    $response = $this->get('/set-password?token=test-token-123&email=test@example.com');
 
     $response->assertStatus(403); // Forbidden - invalid signature
 });
@@ -94,7 +94,6 @@ test('set password view cannot be accessed with expired signature', function () 
         'set-password',
         now()->subHour(),
         [
-            'locale' => 'en',
             'token' => $token,
             'email' => $email,
         ]
@@ -125,25 +124,4 @@ test('set password view cannot be accessed with tampered token', function () {
     $response = $this->get($tamperedUrl);
 
     $response->assertStatus(403); // Forbidden - signature invalid due to tampering
-});
-
-test('set password view uses correct locale in url', function () {
-    $token = 'test-token-123';
-    $email = 'test@example.com';
-
-    // Test German locale
-    $signedUrlDe = URL::temporarySignedRoute(
-        'set-password',
-        now()->addHours(24),
-        [
-            'locale' => 'de',
-            'token' => $token,
-            'email' => $email,
-        ]
-    );
-
-    $response = $this->get($signedUrlDe);
-
-    $response->assertStatus(200);
-    expect($signedUrlDe)->toContain('/de/set-password/');
 });
