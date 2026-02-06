@@ -61,6 +61,13 @@ return [
         'mediterranean' => 'Mediterranean',
         'intermittent_fasting' => 'Intermittent Fasting',
     ],
+    'dietStyle' => [
+        'high_protein' => 'High Protein',
+        'low_carb' => 'Low Carb',
+        'ketogenic' => 'Ketogenic',
+        'paleo' => 'Paleo',
+        'mediterranean' => 'Mediterranean',
+    ],
     'mealType' => [
         'breakfast' => 'Breakfast',
         'lunch' => 'Lunch',

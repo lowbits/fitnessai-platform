@@ -61,6 +61,13 @@ return [
         'mediterranean' => 'Mediterran',
         'intermittent_fasting' => 'Intervallfasten',
     ],
+    'dietStyle' => [
+        'high_protein' => 'Proteinreich',
+        'low_carb' => 'Kohlenhydratarm',
+        'ketogenic' => 'Ketogen',
+        'paleo' => 'Paleo',
+        'mediterranean' => 'Mediterran',
+    ],
     'mealType' => [
         'breakfast' => 'Frühstück',
         'lunch' => 'Mittagessen',

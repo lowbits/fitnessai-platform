@@ -93,6 +93,8 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         // App Promo only for web users
         if ($this->passwordResetToken && !filled($notifiable->password)) {
 
+            $badgeLocale = strtoupper($locale);
+
             // App Promo
             $mail
                 ->line('')
@@ -104,7 +106,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
             <tr>
                 <td align="center">
                     <a href="' . config('app.app_store.ios.url') . '">
-                        <img src="'. asset("/assets/badges/App_Store_Badge_{$locale}.png") .'"
+                        <img src="'. asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png") .'"
                              alt="Download on App Store"
                              style="height:40px;">
                     </a>

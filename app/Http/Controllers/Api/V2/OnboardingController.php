@@ -61,9 +61,9 @@ class OnboardingController extends Controller
                 'duration_days' => $totalDays,
                 'end_date' => now()->addDays($totalDays),
                 'daily_calories' => $dailyCalories,
-                'daily_protein_g' => $macros['protein_g'],
-                'daily_carbs_g' => $macros['carbs_g'],
-                'daily_fat_g' => $macros['fat_g'],
+                'daily_protein_g' => $macros->proteinGrams,
+                'daily_carbs_g' => $macros->carbsGrams,
+                'daily_fat_g' => $macros->fatGrams,
                 'workouts_per_week' => $validated['training_sessions'],
             ]);
 

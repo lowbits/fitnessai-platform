@@ -65,6 +65,29 @@ enum DietStyle: string
         };
     }
 
+
+    /**
+     * Carb/fat ratio for distributing calories after protein is set.
+     *
+     * Since protein is now anchored to body weight (not a percentage),
+     * this ratio only governs how remaining calories are split.
+     *
+     * Replaces macroSplit() for the new calculation approach.
+     *
+     * @return array{carbs: int, fat: int}
+     */
+    public function carbFatRatio(): array
+    {
+        return match ($this) {
+            self::HIGH_PROTEIN => ['carbs' => 55, 'fat' => 45],
+            self::LOW_CARB => ['carbs' => 35, 'fat' => 65],
+            self::KETOGENIC => ['carbs' => 7, 'fat' => 93],
+
+            self::PALEO,
+            self::MEDITERRANEAN => ['carbs' => 55, 'fat' => 45],
+        };
+    }
+
     /**
      * Get list of excluded food groups.
      *

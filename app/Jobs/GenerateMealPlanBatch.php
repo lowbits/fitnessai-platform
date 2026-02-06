@@ -2,11 +2,14 @@
 
 namespace App\Jobs;
 
+use App\Enums\DietaryPreference;
+use App\Enums\DietType;
 use App\Helpers\ToolCallHelper;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\OpenAITools\MealToolDefinition;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
@@ -160,26 +163,26 @@ class GenerateMealPlanBatch implements ShouldQueue
         ]);
     }
 
-    private function buildSystemPrompt($profile): string
+    private function buildSystemPrompt(UserProfile $profile): string
     {
         $metabolismData = $profile->getMetabolismData();
         $language = $this->getLanguageInstruction();
-        $dietStyle = $profile->diet_style?->value ?? '-';
+        $preference = $profile->resolveDietaryPreference();
+        $dietStyle = $profile->diet_style?->value ?? 'balanced';
         $gender = $profile->gender?->value;
-        $bodyGoal = $profile->body_goal?->value;
         $activityLevel = $profile->activity_level->value;
-        $dietaryInfo = filled($profile->dietary_preference?->value)
-            ? $profile->dietary_preference->value
-            : ($profile->diet_type?->value ?? '-');
+        $weight = $profile->user->getCurrentWeight();
+        $coachingNotes = $this->buildCoachingNotes($metabolismData, $profile);
+        $goalAdjustment = sprintf('%+d', $metabolismData['goal_adjustment']);
 
-        Log::info('Building prompt:', [
-            'gender' => $gender,
-            'body_goal' => $bodyGoal,
-            'activity_level' => $activityLevel,
-            'dietary_preference' => $dietaryInfo,
+
+        Log::info('Building meal plan prompt', [
+            'user_id' => $profile->user_id,
+            'gender' => $profile->gender?->value,
+            'weight' => $weight,
+            'preference' => $preference->value,
             'diet_style' => $dietStyle,
             'metabolism' => $metabolismData,
-            'language' => $language,
         ]);
 
         return <<<PROMPT
@@ -188,19 +191,23 @@ You are a world-class nutritionist and meal planner specializing in personalized
 **User Profile:**
 - Age: {$profile->age} years
 - Gender: {$gender}
-- Current Weight: {$profile->weight} kg
 - Height: {$profile->height} cm
-- Body Goal: {$bodyGoal}
-- Dietary Preference: $dietaryInfo
-- Diet Style: $dietStyle
+- Current Weight: {$weight} kg
+- Body Goal: {$metabolismData['goal']} ({$goalAdjustment} kcal)
+- Activity Level: {$metabolismData['activity_multiplier']}x (daily) + {$metabolismData['training_sessions_per_week']}x training/week
+- Dietary Preference: {$preference->value} — {$preference->description()}
+- Diet Style: {$dietStyle}
 - Activity Level: {$activityLevel}
-- Training Sessions per Week: {$profile->training_sessions_per_week}
+- Training Sessions per Week: {$metabolismData['training_sessions_per_week']}
 
-**Daily Nutritional Targets:**
-- Calories: {$metabolismData['daily_calories']} kcal
-- Protein: {$metabolismData['protein_g']}g (essential for muscle recovery and growth)
-- Carbohydrates: {$metabolismData['carbs_g']}g (energy for workouts)
+**Daily Nutritional Targets (calculated via Mifflin-St Jeor + ISSN):**
+- BMR: {$metabolismData['bmr']} kcal
+- TDEE: {$metabolismData['tdee']} kcal
+- Daily Target: {$metabolismData['daily_calories']} kcal
+- Protein: {$metabolismData['protein_g']}g (anchored to body weight, essential for {$metabolismData['goal']})
+- Carbohydrates: {$metabolismData['carbs_g']}g (energy for workouts and recovery)
 - Fat: {$metabolismData['fat_g']}g (hormonal health and satiety)
+{$coachingNotes}
 
 **Your Mission:**
 Create a complete, delicious, and practical meal plan for ONE day with 4 meals (breakfast, lunch, snack, dinner).
@@ -213,7 +220,7 @@ Create a complete, delicious, and practical meal plan for ONE day with 4 meals (
    - Consider meal timing: breakfast (25-30%), lunch (30-35%), snack (10-15%), dinner (25-30%)
 
 2. **Diet Compliance:**
-   - STRICTLY follow $dietaryInfo diet principles
+   - STRICTLY follow {$preference->value} diet principles
    - No ingredients that violate the diet type
    - Ensure adequate variety of nutrient sources
 
@@ -260,6 +267,32 @@ Use the create_meal_plan function with complete, accurate data for all 4 meals.
 
 Make every meal something the user will genuinely look forward to eating!
 PROMPT;
+    }
+
+
+    private function buildCoachingNotes(array $metabolism, UserProfile $profile): string
+    {
+        $notes = [];
+
+        if ($metabolism['protein_challenging']) {
+            $diet = $profile->resolveDietaryPreference();
+            $notes[] = match (true) {
+                $diet === DietaryPreference::VEGAN,
+                    $diet === DietType::VEGAN
+                => 'Protein target is ambitious for a vegan diet. Prioritize seitan, tempeh, edamame, lentils, and consider including a plant-based protein shake in the snack meal.',
+                $diet === DietaryPreference::VEGETARIAN,
+                    $diet === DietType::VEGETARIAN
+                => 'Protein target is high for a vegetarian diet. Leverage eggs, Greek yogurt, cottage cheese, and legumes generously.',
+                default
+                => 'Protein target is high relative to total calories. Prioritize lean protein sources across all meals.',
+            };
+        }
+
+        if ($metabolism['minimum_fat_enforced']) {
+            $notes[] = 'Minimum fat intake has been enforced for hormonal health. Do NOT reduce fat below the target, even to hit other macros.';
+        }
+
+        return $notes ? implode("\n- ", ['', ...$notes]) : 'None.';
     }
 
     private function getLanguageInstruction(): string

@@ -53,66 +53,6 @@ enum DietType: string
         };
     }
 
-    /**
-     * Get macro split percentages (protein/carbs/fat).
-     *
-     * @return array{protein: int, carbs: int, fat: int}
-     */
-    public function macroSplit(): array
-    {
-        return match ($this) {
-            self::OMNIVORE => [
-                'protein' => 30,
-                'carbs' => 45,
-                'fat' => 25,
-            ],
-            self::VEGETARIAN => [
-                'protein' => 25,
-                'carbs' => 50,
-                'fat' => 25,
-            ],
-            self::PESCATARIAN => [
-                'protein' => 30,
-                'carbs' => 45,
-                'fat' => 25,
-            ],
-            self::VEGAN => [
-                'protein' => 25,
-                'carbs' => 50,
-                'fat' => 25,
-            ],
-            self::HIGH_PROTEIN => [
-                'protein' => 40,
-                'carbs' => 35,
-                'fat' => 25,
-            ],
-            self::LOW_CARB => [
-                'protein' => 35,
-                'carbs' => 25,
-                'fat' => 40,
-            ],
-            self::KETOGENIC => [
-                'protein' => 25,
-                'carbs' => 5,
-                'fat' => 70,
-            ],
-            self::PALEO => [
-                'protein' => 35,
-                'carbs' => 35,
-                'fat' => 30,
-            ],
-            self::MEDITERRANEAN => [
-                'protein' => 25,
-                'carbs' => 40,
-                'fat' => 35,
-            ],
-            self::INTERMITTENT_FASTING => [
-                'protein' => 30,
-                'carbs' => 45,
-                'fat' => 25,
-            ],
-        };
-    }
 
     /**
      * Get list of excluded food groups.
@@ -135,27 +75,14 @@ enum DietType: string
         };
     }
 
-    /**
-     * Determine if this diet has eating time restrictions.
-     */
-    public function hasTimeRestrictions(): bool
-    {
-        return $this === self::INTERMITTENT_FASTING;
-    }
-
-    /**
-     * Get recommended eating window for time-restricted diets.
-     *
-     * @return array{start: string, end: string}|null
-     */
-    public function eatingWindow(): ?array
+    public function carbFatRatio(): array
     {
         return match ($this) {
-            self::INTERMITTENT_FASTING => [
-                'start' => '12:00',
-                'end' => '20:00',
-            ],
-            default => null,
+            self::OMNIVORE,
+            self::PESCATARIAN => ['carbs' => 60, 'fat' => 40],
+
+            self::VEGETARIAN,
+            self::VEGAN => ['carbs' => 65, 'fat' => 35],
         };
     }
 }

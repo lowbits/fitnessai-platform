@@ -41,10 +41,10 @@ test('allows user to complete onboarding without password', function () {
     ]);
 
     assertDatabaseHas('plans', [
-        'daily_calories' => 2148,
-        'daily_protein_g' => 161,
-        'daily_carbs_g' => 242,
-        'daily_fat_g' => 60
+        'daily_calories' => 2377,
+        'daily_protein_g' => 144,
+        'daily_carbs_g' => 270,
+        'daily_fat_g' => 80
     ]);
 
     // Verify notification was sent

@@ -11,6 +11,7 @@ use App\Enums\Gender;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Helpers\Metabolism;
+use App\ValueObjects\MacroDistribution;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -60,7 +61,7 @@ class UserProfile extends Model
             $this->gender,
             $this->age,
             $this->height_cm,
-            $this->weight_kg
+            $this->user->getCurrentWeight()
         );
     }
 
@@ -70,7 +71,12 @@ class UserProfile extends Model
     public function calculateTDEE(): int
     {
         $bmr = $this->calculateBMR();
-        return Metabolism::calculateTDEE($bmr, $this->activity_level);
+        return Metabolism::calculateTDEE(
+            $bmr,
+            $this->activity_level,
+            $this->training_sessions_per_week,
+            $this->user->getCurrentWeight()
+        );
     }
 
     /**
@@ -85,50 +91,85 @@ class UserProfile extends Model
     /**
      * Calculate macro split in grams.
      *
-     * @return array{protein_g: int, carbs_g: int, fat_g: int}
+     * @return MacroDistribution
      */
-    public function calculateMacros(): array
+    public function calculateMacros(): MacroDistribution
     {
-        $dailyCalories = $this->calculateDailyCalories();
-
-        // If diet_style is set, it takes precedence for macro calculations
-        if ($this->diet_style instanceof DietStyle) {
-            return Metabolism::calculateMacros($dailyCalories, $this->diet_style);
-        }
-
-        // Fallback to dietary_preference or existing diet_type
-        $dietSource = $this->dietary_preference ?: $this->diet_type;
-
-        if ($dietSource instanceof DietaryPreference || $dietSource instanceof DietType) {
-            return Metabolism::calculateMacros($dailyCalories, $dietSource);
-        }
-
-        // Default to omnivore if nothing is set
-        return Metabolism::calculateMacros($dailyCalories, DietType::OMNIVORE);
+        return Metabolism::calculateMacros(
+            dailyCalories: $this->calculateDailyCalories(),
+            bodyWeight: $this->user->getCurrentWeight(),
+            goal: $this->body_goal,
+            carbFatRatio: $this->resolveCarbFatRatio(),
+        );
     }
 
     /**
      * Get complete metabolism data.
+     *
+     * @return array{
+     *     bmr: int,
+     *     tdee: int,
+     *     daily_calories: int,
+     *     activity_multiplier: float,
+     *     training_sessions_per_week: int,
+     *     goal: string,
+     *     goal_adjustment: int,
+     *     diet: string,
+     *     carb_fat_ratio: array{carbs: int, fat: int},
+     *     protein_g: int,
+     *     carbs_g: int,
+     *     fat_g: int,
+     *     protein_challenging: bool,
+     *     minimum_fat_enforced: bool,
+     * }
      */
     public function getMetabolismData(): array
     {
-        $bmr = $this->calculateBMR();
-        $tdee = $this->calculateTDEE();
-        $dailyCalories = $this->calculateDailyCalories();
         $macros = $this->calculateMacros();
+        $preference = $this->resolveDietaryPreference();
 
         return [
-            'bmr' => $bmr,
-            'tdee' => $tdee,
-            'daily_calories' => $dailyCalories,
-            'protein_g' => $macros['protein_g'],
-            'carbs_g' => $macros['carbs_g'],
-            'fat_g' => $macros['fat_g'],
-            'goal_adjustment' => $this->body_goal->calorieAdjustment(),
+            'bmr' => $this->calculateBMR(),
+            'tdee' => $this->calculateTDEE(),
+            'daily_calories' => $this->calculateDailyCalories(),
             'activity_multiplier' => $this->activity_level->tdeeMultiplier(),
-            'macro_split' => $this->dietary_preference?->macroSplit() ?? $this->diet_type->macroSplit(),
+            'training_sessions_per_week' => $this->training_sessions_per_week,
+            'goal' => $this->body_goal->value,
+            'goal_adjustment' => $this->body_goal->calorieAdjustment(),
+            'dietary_preference' => $preference->value,
+            'diet_style' => $this->diet_style?->value,
+            'carb_fat_ratio' => $this->resolveCarbFatRatio(),
+            ...$macros->toArray(),
         ];
     }
+
+    /**
+     * Resolve what the user eats.
+     * Used for meal plan food selection and excluded ingredients.
+     *
+     * Priority: dietary_preference > diet_type (legacy) > omnivore fallback.
+     */
+    public function resolveDietaryPreference(): DietaryPreference|DietType
+    {
+        return $this->dietary_preference
+            ?? $this->diet_type
+            ?? DietaryPreference::OMNIVORE;
+    }
+
+    /**
+     * Resolve how macros are distributed (carb/fat ratio).
+     * Used for macro calculations.
+     *
+     * Priority: diet_style (new) > dietary_preference > diet_type (legacy).
+     *
+     * @return array{carbs: int, fat: int}
+     */
+    public function resolveCarbFatRatio(): array
+    {
+        return $this->diet_style?->carbFatRatio()
+            ?? $this->resolveDietaryPreference()->carbFatRatio();
+    }
+
 
     public function getDietaryInfo(): string
     {

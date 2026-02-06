@@ -27,6 +27,17 @@ enum DietaryPreference: string
         };
     }
 
+    public function carbFatRatio(): array
+    {
+        return match ($this) {
+            self::OMNIVORE,
+            self::PESCATARIAN => ['carbs' => 60, 'fat' => 40],
+
+            self::VEGETARIAN,
+            self::VEGAN => ['carbs' => 65, 'fat' => 35],
+        };
+    }
+
     /**
      * Get macro split percentages (protein/carbs/fat).
      *

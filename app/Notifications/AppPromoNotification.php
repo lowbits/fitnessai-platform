@@ -48,12 +48,7 @@ class AppPromoNotification extends Notification implements ShouldQueue
         );
 
         $promoImageUrl = asset("assets/app-promo_{$locale}.png");
-        $badgeLocale = match($locale) {
-            'de' => 'de-de',
-            'en' => 'en-us',
-            default => 'en-us',
-        };
-
+        $badgeLocale = strtoupper($locale);
 
         return (new MailMessage)
             ->subject(__('emails.app_promo.subject'))
@@ -75,7 +70,7 @@ class AppPromoNotification extends Notification implements ShouldQueue
                 <tr>
                     <td align="center">
                         <a href="' . config('app.app_store.ios.url') . '">
-                            <img src="'. asset("/assets/badges/App_Store_Badge_{$locale}.png") .'"
+                            <img src="'. asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png") .'"
                                  alt="Download on App Store"
                                  style="height:40px;">
                         </a>

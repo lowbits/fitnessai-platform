@@ -134,11 +134,12 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
      */
     public function getCurrentWeight(): ?float
     {
-        $latestProgress = $this->bodyProgress()
-            ->orderBy('recorded_at', 'desc')
-            ->first();
-
-        return $latestProgress?->weight_kg ?? $this->profile?->weight_kg;
+        return once(fn () =>
+            $this->bodyProgress()
+                ->latest('recorded_at')
+                ->value('weight_kg')
+            ?? $this->profile?->weight_kg
+        );
     }
 
     public function getSubscriptionDetails(): array

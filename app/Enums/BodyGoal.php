@@ -41,12 +41,36 @@ enum BodyGoal: string
      */
     public function calorieAdjustment(): int
     {
-        return match($this) {
+        return match ($this) {
             self::MUSCLE_GAIN => 300,   // Caloric surplus for muscle growth
             self::WEIGHT_LOSS => -500,  // Caloric deficit for fat loss
             self::MAINTENANCE => 0,     // Maintain current weight
             self::ENDURANCE => 200,     // Slight surplus for energy demands
             self::STRENGTH => 250,      // Moderate surplus for strength gains
+        };
+    }
+
+
+    /**
+     * Protein intake per kg body weight for this goal.
+     *
+     * Based on ISSN Position Stand (2017) + 2024/2025 research:
+     * - Muscle gain: 1.6–2.2 g/kg → 2.0 as practical target
+     * - Weight loss: 2.3–3.1 g/kg → 2.5 to preserve lean mass in deficit
+     * - Strength: similar to muscle gain, slightly higher
+     * - Endurance: 1.4–1.8 g/kg
+     * - Maintenance: 1.4–2.0 g/kg → 1.8 as middle ground
+     *
+     * @see https://pubmed.ncbi.nlm.nih.gov/28642676/
+     */
+    public function proteinPerKg(): float
+    {
+        return match ($this) {
+            self::MUSCLE_GAIN => 2.0,
+            self::STRENGTH => 2.2,
+            self::WEIGHT_LOSS => 2.5,
+            self::ENDURANCE => 1.6,
+            self::MAINTENANCE => 1.8,
         };
     }
 }
