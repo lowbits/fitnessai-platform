@@ -120,7 +120,6 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
                 'set-password',
                 now()->addHours(24),
                 [
-                    'locale' => $locale,
                     'token' => $this->passwordResetToken,
                     'email' => $notifiable->email,
                     'utm_source' => 'email',
@@ -171,4 +170,3 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         ];
     }
 }
-

@@ -34,11 +34,12 @@ class AppPromoNotification extends Notification implements ShouldQueue
 
     public function toMail($notifiable): MailMessage
     {
+        $locale = $notifiable->preferredLocale();
+
         $setPasswordUrl = URL::temporarySignedRoute(
             'set-password',
             now()->addHours(24),
             [
-                'locale' => $locale = $notifiable->preferredLocale(),
                 'token' => $this->token,
                 'email' => $notifiable->email,
                 'utm_source' => 'email',
