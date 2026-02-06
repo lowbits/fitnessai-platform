@@ -12,6 +12,11 @@ class CalorieCalculationUpdate extends Notification implements ShouldQueue
     use Queueable;
 
     /**
+     * Unique identifier for this notification campaign
+     */
+    public const CAMPAIGN_ID = 'calorie_update_2026_02';
+
+    /**
      * Create a new notification instance.
      */
     public function __construct()
@@ -32,6 +37,8 @@ class CalorieCalculationUpdate extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $locale = $notifiable->preferredLocale();
+        app()->setLocale($locale);
 
         return (new MailMessage)
             ->subject(__('emails.calorie_update.subject'))
@@ -59,7 +66,15 @@ class CalorieCalculationUpdate extends Notification implements ShouldQueue
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'campaign_id' => self::CAMPAIGN_ID,
         ];
+    }
+
+    /**
+     * Get the cache key for tracking if user has received this notification
+     */
+    public static function getCacheKey(int $userId): string
+    {
+        return 'notification:sent:' . self::CAMPAIGN_ID . ':user:' . $userId;
     }
 }

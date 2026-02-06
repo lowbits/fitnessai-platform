@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\User;
 use App\Notifications\CalorieCalculationUpdate;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class SendCalorieUpdateNotification extends Command
 {
@@ -15,6 +16,8 @@ class SendCalorieUpdateNotification extends Command
                             {--email= : Send to specific email address}
                             {--user-id= : Send to specific user ID}
                             {--all-with-password : Send to all users with password}
+                            {--limit= : Limit the number of users to process}
+                            {--force : Force resend even if already sent}
                             {--dry-run : Show what would be sent without actually sending}';
 
     /**
@@ -34,22 +37,59 @@ class SendCalorieUpdateNotification extends Command
             return Command::FAILURE;
         }
 
+        // Apply limit if specified
+        $limit = $this->option('limit');
+        if ($limit && $limit > 0) {
+            $totalUsers = $users->count();
+            $users = $users->take((int) $limit);
+            $this->info("Limiting to {$limit} users (out of {$totalUsers} total)");
+        }
+
         $this->info("Found {$users->count()} user(s) to notify.");
+
+        if (!$this->option('dry-run')) {
+            $this->info("⏱️  Rate limit protection: 0.5s delay between each notification");
+        }
 
         $sentCount = 0;
         $errorCount = 0;
+        $skippedCount = 0;
+        $delaySeconds = 0;
+        $force = $this->option('force');
 
-        foreach ($users as $user) {
+        foreach ($users as $index => $user) {
+            // Check if already sent (unless force flag is used)
+            $cacheKey = CalorieCalculationUpdate::getCacheKey($user->id);
+            $alreadySent = Cache::has($cacheKey);
+
+            if ($alreadySent && !$force && !$this->option('dry-run')) {
+                $this->line("⊘ Skipping {$user->email} - already received this notification");
+                $skippedCount++;
+                continue;
+            }
+
             if ($this->option('dry-run')) {
-                $this->line("Would send to: {$user->email} (Name: {$user->name}, Locale: {$user->locale})");
+                $status = $alreadySent ? '(already sent)' : '(new)';
+                $this->line("Would send to: {$user->email} (Name: {$user->name}, Locale: {$user->locale}) {$status}");
                 $sentCount++;
                 continue;
             }
 
             try {
-                $user->notify(new CalorieCalculationUpdate());
-                $this->info("✓ Sent to: {$user->email}");
+                // Add delay to each queued notification to prevent rate limiting
+                // 0.5 seconds between each email (2 per second max)
+                $notification = (new CalorieCalculationUpdate())->delay(now()->addSeconds($delaySeconds));
+                $user->notify($notification);
+
+                // Mark as sent in cache (store for 1 year)
+                Cache::put($cacheKey, true, now()->addYear());
+
+                $resendLabel = ($alreadySent && $force) ? ' (RESEND)' : '';
+                $this->info("✓ Queued for {$user->email} (delay: {$delaySeconds}s){$resendLabel}");
                 $sentCount++;
+
+                // Increment delay for next notification
+                $delaySeconds += 0.5;
             } catch (\Exception $e) {
                 $this->error("✗ Failed to send to {$user->email}: {$e->getMessage()}");
                 $errorCount++;
@@ -57,7 +97,7 @@ class SendCalorieUpdateNotification extends Command
         }
 
         $this->newLine();
-        $this->info("Completed! Sent: {$sentCount}, Errors: {$errorCount}");
+        $this->info("Completed! Sent: {$sentCount}, Skipped: {$skippedCount}, Errors: {$errorCount}");
 
         return Command::SUCCESS;
     }
