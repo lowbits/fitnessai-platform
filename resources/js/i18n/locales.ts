@@ -1056,6 +1056,98 @@ export const locales = {
             no_app: "Don't have the app?",
             download_prompt: 'Download Fytrr to get started',
         },
+        generatingPlan: {
+            badge: {
+                generating: 'Mona is creating your plan',
+                completed: 'Your plan is ready!',
+            },
+            header: {
+                title: 'Your PDF is coming soon.',
+                titleHighlight: 'But you deserve more.',
+                description:
+                    "A static PDF can't adapt to you. Your AI Coach Mona can.",
+            },
+            progress: {
+                meals: 'Planning meals...',
+                workouts: 'Planning workouts...',
+                completed: 'Plan completed!',
+            },
+            eta: {
+                minutes: '~{count} min',
+                lessThanMinute: '<1 min',
+                almostDone: 'Almost done!',
+            },
+            comparison: {
+                title: 'Your plan. Two ways.',
+                pdf: {
+                    title: 'PDF Plan',
+                    sevenDayTraining: '7-day training',
+                    sevenDayNutrition: '7-day nutrition',
+                    noAdaptation: 'No adaptation',
+                    noTracking: 'No tracking',
+                    noAiCoach: 'No AI Coach',
+                },
+                app: {
+                    title: 'fytrr App',
+                    freeTrial: 'FREE TRIAL',
+                    everythingFromPdf: 'Everything from PDF',
+                    newPlansWeekly: 'New plans every week',
+                    aiCoach: 'AI Coach Mona 24/7',
+                    workoutTracking: 'Workout tracking',
+                    mealTracking: 'Meal tracking',
+                },
+            },
+            monaDemo: {
+                title: "💬 This is what a PDF can't do",
+                userMessage:
+                    "I'm tired and only have 30 min. What should I train?",
+                monaResponse:
+                    "No stress! I've adapted your workout to 30 min — same muscle groups, less volume. You've got this 💪",
+                footer: 'Mona adapts to your life. A PDF does not.',
+            },
+            cta: {
+                price: {
+                    title: '7 days free',
+                    subtitle:
+                        'No credit card needed · Then €3.99/month · Cancel anytime',
+                },
+                step1: {
+                    title: 'Download the app',
+                    comingSoon: 'Coming soon',
+                    scanQr: 'Scan with phone',
+                    or: 'or',
+                },
+                step2: {
+                    title: 'Activate account',
+                    button: 'Set password & get started',
+                    hint: 'Opens the app and sets up your account',
+                },
+            },
+            fallback: {
+                title: '📄 Your PDF will still be created.',
+                description:
+                    "We'll send you an email as soon as it's ready — whether you use the app or not.",
+            },
+            closePage: 'Close page',
+            reviews: {
+                review1: {
+                    quote: 'Pure motivation. I got to test the app and I am especially excited about the workout part...',
+                    author: 'Jazz',
+                },
+                review2: {
+                    quote: 'Got a personalized training plan in just a few minutes.',
+                    author: 'Sh0owzy',
+                },
+                review3: {
+                    quote: 'The AI intelligently adapts the training plans to my fitness level and goals...',
+                    author: 'Dima H.',
+                },
+                review4: {
+                    quote: "I've been testing this app for about 30 days and I'm very satisfied. It helped me lose weight...",
+                    author: 'Benedikt K.',
+                },
+            },
+        },
     },
     de: {
         common: {
@@ -2134,6 +2226,98 @@ export const locales = {
             },
             no_app: 'Hast du die App noch nicht?',
             download_prompt: 'Lade Fytrr herunter, um loszulegen',
+        },
+        generatingPlan: {
+            badge: {
+                generating: 'Mona erstellt deinen Plan',
+                completed: 'Dein Plan ist fertig!',
+            },
+            header: {
+                title: 'Dein PDF kommt gleich.',
+                titleHighlight: 'Aber du verdienst mehr.',
+                description:
+                    'Ein statisches PDF kann sich nicht an dich anpassen. Dein AI Coach Mona schon.',
+            },
+            progress: {
+                meals: 'Mahlzeiten werden geplant...',
+                workouts: 'Workouts werden geplant...',
+                completed: 'Plan fertig!',
+            },
+            eta: {
+                minutes: '~{count} Min',
+                lessThanMinute: '<1 Min',
+                almostDone: 'Gleich fertig!',
+            },
+            comparison: {
+                title: 'Dein Plan. Zwei Wege.',
+                pdf: {
+                    title: 'PDF Plan',
+                    sevenDayTraining: '7-Tage Training',
+                    sevenDayNutrition: '7-Tage Ernährung',
+                    noAdaptation: 'Keine Anpassung',
+                    noTracking: 'Kein Tracking',
+                    noAiCoach: 'Kein AI Coach',
+                },
+                app: {
+                    title: 'fytrr App',
+                    freeTrial: 'KOSTENLOS TESTEN',
+                    everythingFromPdf: 'Alles aus dem PDF',
+                    newPlansWeekly: 'Neue Pläne jede Woche',
+                    aiCoach: 'AI Coach Mona 24/7',
+                    workoutTracking: 'Workout-Tracking',
+                    mealTracking: 'Meal-Tracking',
+                },
+            },
+            monaDemo: {
+                title: '💬 Das kann kein PDF',
+                userMessage:
+                    'Ich bin müde und hab nur 30 Min. Was soll ich trainieren?',
+                monaResponse:
+                    'Kein Stress! Ich hab dein Workout auf 30 Min angepasst — gleiche Muskelgruppen, weniger Volumen. Du schaffst das 💪',
+                footer: 'Mona reagiert auf dein Leben. Ein PDF nicht.',
+            },
+            cta: {
+                price: {
+                    title: '7 Tage kostenlos',
+                    subtitle:
+                        'Keine Kreditkarte nötig · Danach 3,99€/Monat · Jederzeit kündbar',
+                },
+                step1: {
+                    title: 'App herunterladen',
+                    comingSoon: 'Bald verfügbar',
+                    scanQr: 'Mit Handy scannen',
+                    or: 'oder',
+                },
+                step2: {
+                    title: 'Account aktivieren',
+                    button: 'Passwort setzen & loslegen',
+                    hint: 'Öffnet die App und richtet deinen Account ein',
+                },
+            },
+            fallback: {
+                title: '📄 Dein PDF wird trotzdem erstellt.',
+                description:
+                    'Wir senden dir eine E-Mail sobald er fertig ist — egal ob du die App nutzt oder nicht.',
+            },
+            closePage: 'Seite schließen',
+            reviews: {
+                review1: {
+                    quote: 'Motiviation pur. Ich durfte die App testen und ich bin vor allem von dem sportlichen Teil total begeistert...',
+                    author: 'Jazz',
+                },
+                review2: {
+                    quote: 'Habe in wenigen Minuten einen personalisierten Trainingplan erstellt bekommen.',
+                    author: 'Sh0owzy',
+                },
+                review3: {
+                    quote: 'Die KI passt die Trainingspläne intelligent an mein Fitnesslevel und meine Ziele an...',
+                    author: 'Dima H.',
+                },
+                review4: {
+                    quote: 'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren...',
+                    author: 'Benedikt K.',
+                },
+            },
         },
     },
 } as const;

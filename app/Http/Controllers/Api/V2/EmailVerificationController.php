@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 
 class EmailVerificationController extends Controller
@@ -42,6 +44,22 @@ class EmailVerificationController extends Controller
         }
 
         $status = $this->getStatus($plan);
+        if (!filled($plan->user->password)) {
+            $passwordResetToken = Password::broker(config('fortify.passwords'))
+                ->createToken($plan->user);
+        }
+
+        $setPasswordUrl = URL::temporarySignedRoute(
+            'set-password',
+            now()->addHours(24),
+            [
+                'token' => $passwordResetToken,
+                'email' => $user->email,
+                'utm_source' => 'email',
+                'utm_medium' => 'app_promo',
+                'utm_campaign' => 'plan_generating',
+            ]
+        );
 
 
         // Render plan generation page with polling
@@ -58,6 +76,8 @@ class EmailVerificationController extends Controller
                 'workouts_per_week' => $plan->workouts_per_week,
             ],
             'status' => $status,
+            'iosAppStoreUrl' => config('services.app_store.ios_url', 'https://apps.apple.com/app/fytrr/id6757151695'),
+            'setPasswordUrl' => $setPasswordUrl,
         ]);
     }
 

@@ -24,3 +24,14 @@ declare module 'vue' {
         $headManager: ReturnType<typeof createHeadManager>;
     }
 }
+
+// Plausible Analytics
+declare global {
+    interface Window {
+        plausible?: (
+            eventName: string,
+            options?: { props?: Record<string, any> }
+        ) => void;
+    }
+}
+
