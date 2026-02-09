@@ -5,8 +5,7 @@
             {
                 "appID": "HXX8GTN8W8.com.fytrr.app", "paths": [
                         "/*/verify-email/*",
-                        "/*/set-password/*",
-                        "/set-password/*",
+                        "/set-password",
                         "/*/auth/*",
                         "/*/workouts/*",
                         "/*/meals/*",
