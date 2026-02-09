@@ -73,9 +73,7 @@ class CheckCompletedPlans extends Command
                 // Generate password reset token if user has no password
                 $passwordResetToken = null;
                 if (!filled($plan->user->password)) {
-                    // Create token for password reset
-                    $passwordResetToken = Password::broker(config('fortify.passwords'))
-                        ->createToken($plan->user);
+                    $passwordResetToken = $plan->user->getPasswordResetToken();
                 }
 
                 // Send plan ready notification with optional password reset token

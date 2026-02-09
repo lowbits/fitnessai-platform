@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use NoopStudios\LaravelRevenueCat\Concerns\Billable;
@@ -140,6 +142,16 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
                 ->value('weight_kg')
             ?? $this->profile?->weight_kg
         );
+    }
+
+    public function getPasswordResetToken(): string
+    {
+        $cacheKey = "password_reset_token:{$this->id}";
+
+        return Cache::remember($cacheKey, now()->addHours(24), function () {
+            return Password::broker(config('fortify.passwords'))
+                ->createToken($this);
+        });
     }
 
     public function getSubscriptionDetails(): array

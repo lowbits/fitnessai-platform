@@ -109,10 +109,7 @@ test('plan generation complete email includes password reset link when user has 
         'status' => 'active',
     ]);
 
-    // Generate a token
-    $token = Password::broker(config('fortify.passwords'))->createToken($user);
-
-    $notification = new PlanGenerationComplete($plan, $token);
+    $notification = new PlanGenerationComplete($plan, $plan->user->getPasswordResetToken());
     $mail = $notification->toMail($user);
 
     // Convert mail to array to inspect content

@@ -51,13 +51,12 @@ class EmailVerificationController extends Controller
         $setPasswordUrl = null;
         if (!filled($plan->user->password)) {
             Log::debug("User {$id} does not have a password set. Generating password reset token...");
-            $passwordResetToken = Password::broker(config('fortify.passwords'))
-                ->createToken($plan->user);
+
             $setPasswordUrl = URL::temporarySignedRoute(
                 'set-password',
                 now()->addHours(24),
                 [
-                    'token' => $passwordResetToken,
+                    'token' => $plan->user->getPasswordResetToken(),
                     'email' => $user->email,
                     'utm_source' => 'email',
                     'utm_medium' => 'app_promo',
