@@ -136,7 +136,8 @@ const handleStoreClick = (store: 'app_store' | 'play_store') => {
 const handlePasswordClick = () => {
     trackEvent('Set Password Click', { source: 'loading-page' });
 
-    window.location.href = props.setPasswordUrl;
+    const url = new URL(props.setPasswordUrl);
+    window.location.href = `fytrr://${url.pathname.slice(1)}${url.search}`;
 };
 
 onMounted(() => {
@@ -144,7 +145,7 @@ onMounted(() => {
     detectOS();
 
     // Deep link to app
-    window.location.href = 'fytrr://verify-email';
+    window.location.href = props.setPasswordUrl;
 
     // Start review rotation
     reviewInterval = setInterval(() => {
@@ -181,7 +182,7 @@ onUnmounted(() => {
                 >
                     <span
                         v-if="!isComplete"
-                        class="live-dot h-1.5 w-1.5 rounded-full bg-primary-400 animate-pulse-dot"
+                        class="live-dot animate-pulse-dot h-1.5 w-1.5 rounded-full bg-primary-400"
                     ></span>
                     <span v-else class="text-sm">✓</span>
                     {{
@@ -274,7 +275,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-500">{{
                                     $t(
-                                        'generatingPlan.comparison.pdf.sevenDayTraining'
+                                        'generatingPlan.comparison.pdf.sevenDayTraining',
                                     )
                                 }}</span>
                             </div>
@@ -284,7 +285,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-500">{{
                                     $t(
-                                        'generatingPlan.comparison.pdf.sevenDayNutrition'
+                                        'generatingPlan.comparison.pdf.sevenDayNutrition',
                                     )
                                 }}</span>
                             </div>
@@ -294,7 +295,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-500">{{
                                     $t(
-                                        'generatingPlan.comparison.pdf.noAdaptation'
+                                        'generatingPlan.comparison.pdf.noAdaptation',
                                     )
                                 }}</span>
                             </div>
@@ -304,7 +305,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-500">{{
                                     $t(
-                                        'generatingPlan.comparison.pdf.noTracking'
+                                        'generatingPlan.comparison.pdf.noTracking',
                                     )
                                 }}</span>
                             </div>
@@ -314,7 +315,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-500">{{
                                     $t(
-                                        'generatingPlan.comparison.pdf.noAiCoach'
+                                        'generatingPlan.comparison.pdf.noAiCoach',
                                     )
                                 }}</span>
                             </div>
@@ -341,7 +342,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-300">{{
                                     $t(
-                                        'generatingPlan.comparison.app.everythingFromPdf'
+                                        'generatingPlan.comparison.app.everythingFromPdf',
                                     )
                                 }}</span>
                             </div>
@@ -351,7 +352,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-300">{{
                                     $t(
-                                        'generatingPlan.comparison.app.newPlansWeekly'
+                                        'generatingPlan.comparison.app.newPlansWeekly',
                                     )
                                 }}</span>
                             </div>
@@ -369,7 +370,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-300">{{
                                     $t(
-                                        'generatingPlan.comparison.app.workoutTracking'
+                                        'generatingPlan.comparison.app.workoutTracking',
                                     )
                                 }}</span>
                             </div>
@@ -379,7 +380,7 @@ onUnmounted(() => {
                                 >
                                 <span class="text-gray-300">{{
                                     $t(
-                                        'generatingPlan.comparison.app.mealTracking'
+                                        'generatingPlan.comparison.app.mealTracking',
                                     )
                                 }}</span>
                             </div>
@@ -514,9 +515,7 @@ onUnmounted(() => {
                         </svg>
                         <div class="text-left">
                             <div class="text-[9px] leading-none text-gray-500">
-                                {{
-                                    $t('generatingPlan.cta.step1.comingSoon')
-                                }}
+                                {{ $t('generatingPlan.cta.step1.comingSoon') }}
                             </div>
                             <div class="text-xs leading-tight font-bold">
                                 Google Play
@@ -525,10 +524,7 @@ onUnmounted(() => {
                     </div>
 
                     <!-- Desktop: QR Code + App Store badge -->
-                    <div
-                        v-else
-                        class="flex items-center justify-center gap-6"
-                    >
+                    <div v-else class="flex items-center justify-center gap-6">
                         <!-- QR Code -->
                         <div class="flex flex-col items-center">
                             <div
