@@ -144,9 +144,6 @@ onMounted(() => {
     // Detect OS
     detectOS();
 
-    // Deep link to app
-    window.location.href = props.setPasswordUrl;
-
     // Start review rotation
     reviewInterval = setInterval(() => {
         currentReviewIndex.value =
