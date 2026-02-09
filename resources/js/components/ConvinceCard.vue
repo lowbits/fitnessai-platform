@@ -8,8 +8,7 @@ defineProps<{ headline: string; body: string }>();
     <article
         class="w-full rounded-lg border border-dark-surfaces-25 bg-dark-surfaces-900 px-10 py-8 text-white"
     >
-        <RoundedIcon
-        >
+        <RoundedIcon>
             <slot name="icon" />
         </RoundedIcon>
 

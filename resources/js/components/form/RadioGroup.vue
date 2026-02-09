@@ -1,10 +1,35 @@
-<script setup lang="ts" generic="T extends string | { label: string; description?: string; value: string; icon?: string } = string | { label: string; description?: string; value: string; icon?: string }">
+<script
+    setup
+    lang="ts"
+    generic="
+        T extends
+            | string
+            | {
+                  label: string;
+                  description?: string;
+                  value: string;
+                  icon?: string;
+              } =
+            | string
+            | {
+                  label: string;
+                  description?: string;
+                  value: string;
+                  icon?: string;
+              }
+    "
+>
 import CheckIcon from '@/components/icons/CheckIcon.vue';
 import RoundedIcon from '@/components/ui/icons/RoundedIcon.vue';
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from '@headlessui/vue';
 import { computed } from 'vue';
 
-type RadioOption = { label: string; description?: string; value: string; icon?: string };
+type RadioOption = {
+    label: string;
+    description?: string;
+    value: string;
+    icon?: string;
+};
 
 interface Props {
     label?: string;
@@ -54,7 +79,7 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
                         checked
                             ? 'z-10 border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5'
                             : 'border-dark-surfaces-25',
-                        'relative flex w-full cursor-pointer justify-between rounded-2xl border p-2 md:p-4 whitespace-nowrap transition-colors focus:outline-none',
+                        'relative flex w-full cursor-pointer justify-between rounded-2xl border p-2 whitespace-nowrap transition-colors focus:outline-none md:p-4',
                     ]"
                 >
                     <span class="flex flex-col">
@@ -73,11 +98,18 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
                                     />
                                     <div>
                                         <p>
-                                            {{ isRadioOption(item) ? item.label : item }}
+                                            {{
+                                                isRadioOption(item)
+                                                    ? item.label
+                                                    : item
+                                            }}
                                         </p>
                                         <p
-                                            v-if="isRadioOption(item) && item.description"
-                                            class="text-secondary-100 text-sm  text-wrap"
+                                            v-if="
+                                                isRadioOption(item) &&
+                                                item.description
+                                            "
+                                            class="text-sm text-wrap text-secondary-100"
                                         >
                                             {{ item.description }}
                                         </p>

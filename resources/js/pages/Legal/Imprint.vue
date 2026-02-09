@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { useI18n } from 'vue-i18n';
 import { Head } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 </script>
@@ -64,7 +64,10 @@ const { t } = useI18n();
                     <h2 class="mb-3 text-xl font-semibold">
                         {{ t('legal.imprint.sections.dispute.title') }}
                     </h2>
-                    <p class="" v-html="t('legal.imprint.sections.dispute.description')"></p>
+                    <p
+                        class=""
+                        v-html="t('legal.imprint.sections.dispute.description')"
+                    ></p>
                     <p class="mt-2">
                         {{ t('legal.imprint.sections.dispute.email_note') }}
                     </p>
@@ -75,7 +78,11 @@ const { t } = useI18n();
                         {{ t('legal.imprint.sections.consumer_dispute.title') }}
                     </h2>
                     <p class="">
-                        {{ t('legal.imprint.sections.consumer_dispute.description') }}
+                        {{
+                            t(
+                                'legal.imprint.sections.consumer_dispute.description',
+                            )
+                        }}
                     </p>
                 </section>
 
@@ -85,24 +92,42 @@ const { t } = useI18n();
                     </h2>
 
                     <h3 class="mt-4 mb-2 font-semibold">
-                        {{ t('legal.imprint.sections.disclaimer.content.title') }}
+                        {{
+                            t('legal.imprint.sections.disclaimer.content.title')
+                        }}
                     </h3>
                     <p class="text-sm">
-                        {{ t('legal.imprint.sections.disclaimer.content.description') }}
+                        {{
+                            t(
+                                'legal.imprint.sections.disclaimer.content.description',
+                            )
+                        }}
                     </p>
 
                     <h3 class="mt-4 mb-2 font-semibold">
                         {{ t('legal.imprint.sections.disclaimer.links.title') }}
                     </h3>
                     <p class="text-sm">
-                        {{ t('legal.imprint.sections.disclaimer.links.description') }}
+                        {{
+                            t(
+                                'legal.imprint.sections.disclaimer.links.description',
+                            )
+                        }}
                     </p>
 
                     <h3 class="mt-4 mb-2 font-semibold">
-                        {{ t('legal.imprint.sections.disclaimer.copyright.title') }}
+                        {{
+                            t(
+                                'legal.imprint.sections.disclaimer.copyright.title',
+                            )
+                        }}
                     </h3>
                     <p class="text-sm">
-                        {{ t('legal.imprint.sections.disclaimer.copyright.description') }}
+                        {{
+                            t(
+                                'legal.imprint.sections.disclaimer.copyright.description',
+                            )
+                        }}
                     </p>
                 </section>
             </div>

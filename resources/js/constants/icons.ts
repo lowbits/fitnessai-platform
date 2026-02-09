@@ -4,11 +4,11 @@ import {
     HouseHeart,
     Leaf,
     Mars,
+    NonBinary,
     Salad,
     Sprout,
     UtensilsCrossed,
     Venus,
-    NonBinary,
 } from 'lucide-vue-next';
 
 export const iconRegistry = {

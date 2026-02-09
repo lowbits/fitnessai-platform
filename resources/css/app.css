@@ -17,7 +17,7 @@
 
 @font-face {
     font-family: 'Nunito';
-    font-weight: 500;  /* Medium */
+    font-weight: 500; /* Medium */
     src: url('/assets/fonts/Nunito-Medium.woff2') format('woff2');
 }
 
@@ -63,7 +63,7 @@
 
     /* Primary Colors */
     --color-primary-25: #f5fff8;
-    --color-primary-100: #DDFBE5;
+    --color-primary-100: #ddfbe5;
     --color-primary-200: #9af2b2;
     --color-primary-300: #9af2b2;
     --color-primary-400: #56e97f;

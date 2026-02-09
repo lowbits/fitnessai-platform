@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { useI18n } from 'vue-i18n';
 import { computed, onMounted } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     token: string;

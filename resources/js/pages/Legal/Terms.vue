@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { useI18n } from 'vue-i18n';
 import { Head } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 </script>

@@ -11,10 +11,10 @@ import FlagIcon from '@/components/icons/FlagIcon.vue';
 import GhostIcon from '@/components/icons/GhostIcon.vue';
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
-import { Head, usePage } from '@inertiajs/vue3';
-import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
+import { Head, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const page = usePage();
 defineProps<{

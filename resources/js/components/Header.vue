@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { Link } from '@inertiajs/vue3';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
+import { Link } from '@inertiajs/vue3';
 
 const { language: selectedLanguage } = useSelectedLanguage();
 </script>

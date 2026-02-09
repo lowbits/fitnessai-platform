@@ -5,7 +5,7 @@ export interface EnumOption {
     value: string;
     label: string;
     description?: string;
-    icon?: string
+    icon?: string;
 }
 
 export function useTranslatedEnums() {
@@ -50,7 +50,11 @@ export function useTranslatedEnums() {
 
     const TRAINING_PLACES = computed<EnumOption[]>(() => [
         { value: 'gym', label: t('enums.trainingPlace.gym'), icon: 'dumbbell' },
-        { value: 'home', label: t('enums.trainingPlace.home'), icon: 'houseHeart' },
+        {
+            value: 'home',
+            label: t('enums.trainingPlace.home'),
+            icon: 'houseHeart',
+        },
         {
             value: 'outdoor',
             label: t('enums.trainingPlace.outdoor'),

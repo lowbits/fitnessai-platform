@@ -9,8 +9,6 @@ onMounted(() => {
 
 <template>
     <GuestLayout>
-        <div class="mx-auto mt-10 max-w-2xl">
-
-        </div>
+        <div class="mx-auto mt-10 max-w-2xl"></div>
     </GuestLayout>
 </template>

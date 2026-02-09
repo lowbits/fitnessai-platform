@@ -30,8 +30,7 @@ declare global {
     interface Window {
         plausible?: (
             eventName: string,
-            options?: { props?: Record<string, any> }
+            options?: { props?: Record<string, any> },
         ) => void;
     }
 }
-

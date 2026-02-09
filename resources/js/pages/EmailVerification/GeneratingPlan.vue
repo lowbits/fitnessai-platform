@@ -1,9 +1,9 @@
 <script setup lang="ts">
+import { Button } from '@/components/ui/button';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { usePoll } from '@inertiajs/vue3';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Button } from '@/components/ui/button';
 
 interface Props {
     user: {
