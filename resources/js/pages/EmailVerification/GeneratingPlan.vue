@@ -127,6 +127,7 @@ const copyToClipboard = () => {
 
 // Use Inertia's usePoll for automatic polling
 const { stop: stopPolling } = usePoll(3000, {
+    only: ['status'],
     onBefore() {
         if (props.status?.is_complete) {
             stopPolling();

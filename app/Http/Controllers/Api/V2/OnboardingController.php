@@ -105,7 +105,7 @@ class OnboardingController extends Controller
         $adminEmails = config('app.admin_emails');
 
         Notification::route('mail', $adminEmails)
-            ->notify(new NewOnboardingStarted($user, $profileData));
+            ->notify((new NewOnboardingStarted($user, $profileData))->delay(now()->addSeconds(5)));
 
     }
 }

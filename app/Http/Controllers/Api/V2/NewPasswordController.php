@@ -124,7 +124,7 @@ class NewPasswordController extends Controller
 
         try {
             Notification::route('mail', $adminEmails)
-                ->notify(new PromoLinkUsed($email, $utmSource, $utmMedium, $utmCampaign));
+                ->notify((new PromoLinkUsed($email, $utmSource, $utmMedium, $utmCampaign))->delay(now()->addSeconds(5)));
         } catch (\Exception $e) {
             Log::error("Failed to notify admins about promo usage: {$e->getMessage()}");
         }
