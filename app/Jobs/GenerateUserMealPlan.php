@@ -30,30 +30,40 @@ class GenerateUserMealPlan implements ShouldQueue
             return;
         }
 
+        // Find the earliest failed day that needs retry
+        $firstFailedDay = MealPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'failed')
+            ->min('day_number');
+
         $lastGeneratedDayNumber = MealPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
             ->max('day_number') ?? 0;
 
-        if ($lastGeneratedDayNumber >= $this->plan->duration_days) {
+        if ($lastGeneratedDayNumber >= $this->plan->duration_days && !$firstFailedDay) {
             Log::info('Meal plan already complete, skipping generation', [
                 'plan_id' => $this->plan->id,
             ]);
             return;
         }
 
+        // Start from the earliest failed day, or after the last generated day
+        $startDayNumber = $firstFailedDay
+            ? min($firstFailedDay, $lastGeneratedDayNumber + 1)
+            : $lastGeneratedDayNumber + 1;
+
         // Dispatch batches of 2-3 days instead of processing all at once
-        $this->dispatchBatches($lastGeneratedDayNumber);
+        $this->dispatchBatches($startDayNumber);
     }
 
     /**
      * Dispatch job batches for meal plan generation
      * Each batch handles 2-3 days for better parallelization and error handling
      */
-    private function dispatchBatches(int $lastGeneratedDayNumber): void
+    private function dispatchBatches(int $startDayNumber): void
     {
         $batchSize = 3; // Generate 3 days per batch
-        $startDayNumber = $lastGeneratedDayNumber + 1;
-        $totalDays = $this->plan->duration_days;
+        $daysToGenerate = 7;
+        $totalDays = min($startDayNumber + $daysToGenerate - 1, $this->plan->duration_days);
 
         $batches = [];
 
@@ -71,7 +81,7 @@ class GenerateUserMealPlan implements ShouldQueue
         if (empty($batches)) {
             Log::info('No meal plan batches to generate', [
                 'plan_id' => $this->plan->id,
-                'last_generated_day' => $lastGeneratedDayNumber,
+                'start_day_number' => $startDayNumber,
             ]);
             return;
         }

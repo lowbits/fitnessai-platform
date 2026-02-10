@@ -38,14 +38,17 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return;
         }
 
-        // Find the highest successfully generated day_number to continue from there
-        // This ensures retries work correctly if a previous run partially failed
+        // Find the earliest failed day that needs retry
+        $firstFailedDay = WorkoutPlan::where('plan_id', $this->plan->id)
+            ->where('status', 'failed')
+            ->min('day_number');
+
         $lastGeneratedDayNumber = WorkoutPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
             ->max('day_number') ?? 0;
 
-        // Check if plan is already complete
-        if ($lastGeneratedDayNumber >= $this->plan->duration_days) {
+        // Check if plan is already complete (all days generated with no failures)
+        if ($lastGeneratedDayNumber >= $this->plan->duration_days && !$firstFailedDay) {
             Log::info('Workout plan already complete, skipping generation', [
                 'user_id' => $this->user->id,
                 'plan_id' => $this->plan->id,
@@ -55,7 +58,10 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return;
         }
 
-        $startDayNumber = $lastGeneratedDayNumber + 1;
+        // Start from the earliest failed day, or after the last generated day
+        $startDayNumber = $firstFailedDay
+            ? min($firstFailedDay, $lastGeneratedDayNumber + 1)
+            : $lastGeneratedDayNumber + 1;
         $daysToGenerate = 7; // Always generate 7 days at a time
         $endDayNumber = min($startDayNumber + $daysToGenerate - 1, $this->plan->duration_days);
 
