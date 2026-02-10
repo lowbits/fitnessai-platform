@@ -6,14 +6,19 @@ use App\Events\EmailVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
 use App\Models\User;
+use App\Services\QrCodeService;
+use Cache;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Log;
 
 class EmailVerificationController extends Controller
 {
+    public function __construct(
+        private readonly QrCodeService $qrCodeService
+    ) {}
+
     /**
      * Verify user email and trigger plan generation.
      */
@@ -23,15 +28,16 @@ class EmailVerificationController extends Controller
         $user = User::findOrFail($id);
 
         // Verify the hash matches
-        if (!hash_equals($hash, sha1($user->getEmailForVerification()))) {
+        if (! hash_equals($hash, sha1($user->getEmailForVerification()))) {
             return Inertia::render('EmailVerification/Invalid', [
                 'message' => 'Invalid verification link',
             ]);
         }
 
         // Check if signature is valid
-        if (!$request->hasValidSignature()) {
+        if (! $request->hasValidSignature()) {
             Log::debug("Invalid signature for user {$id} email verification link.");
+
             return Inertia::render('EmailVerification/Expired', [
                 'message' => 'Verification link expired',
             ]);
@@ -41,7 +47,7 @@ class EmailVerificationController extends Controller
         $plan = Plan::findOrFail($planId);
 
         // Mark email as verified
-        if (!$user->hasVerifiedEmail()) {
+        if (! $user->hasVerifiedEmail()) {
             Log::debug("User {$id} email verified successfully. Triggering plan generation...");
             $user->markEmailAsVerified();
             event(new EmailVerified($user, $plan));
@@ -49,7 +55,8 @@ class EmailVerificationController extends Controller
 
         $status = $this->getStatus($plan);
         $setPasswordUrl = null;
-        if (!filled($plan->user->password)) {
+        $setPasswordQrCode = null;
+        if (! filled($plan->user->password)) {
             Log::debug("User {$id} does not have a password set. Generating password reset token...");
 
             $setPasswordUrl = URL::temporarySignedRoute(
@@ -63,7 +70,17 @@ class EmailVerificationController extends Controller
                     'utm_campaign' => 'plan_generating',
                 ]
             );
+
+
+            $setPasswordQrCode = Cache::remember("set_password_qr_code:{$plan->user->id}", now()->addHours(2), function () use ($setPasswordUrl) {
+                return $this->qrCodeService->generate($setPasswordUrl);
+            });
         }
+
+        $iosAppStoreUrl = config('app.app_store.ios.url');
+        $openAppStoreQrCode  = Cache::remember("open_app_qr_code:$", now()->addMonth(), function () use ($iosAppStoreUrl) {
+            return $this->qrCodeService->generate($iosAppStoreUrl);
+        });
 
 
         // Render plan generation page with polling
@@ -80,8 +97,10 @@ class EmailVerificationController extends Controller
                 'workouts_per_week' => $plan->workouts_per_week,
             ],
             'status' => $status,
-            'iosAppStoreUrl' => config('app.app_store.ios.url'),
+            'iosAppStoreUrl' => $iosAppStoreUrl,
+            'iosAppStoreQrCode' => $openAppStoreQrCode,
             'setPasswordUrl' => $setPasswordUrl,
+            'setPasswordQrCode' => $setPasswordQrCode,
         ]);
     }
 
@@ -100,8 +119,7 @@ class EmailVerificationController extends Controller
 
         return [
             'status' => $status,
-            'is_complete' => $allGenerated
+            'is_complete' => $allGenerated,
         ];
     }
 }
-

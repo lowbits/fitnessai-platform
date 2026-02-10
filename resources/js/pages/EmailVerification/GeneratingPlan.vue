@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { usePoll } from '@inertiajs/vue3';
+import { useClipboard } from '@vueuse/core';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -38,7 +39,9 @@ interface Props {
         has_failures: boolean;
     } | null;
     iosAppStoreUrl: string;
+    iosAppStoreQrCode: string;
     setPasswordUrl: string;
+    setPasswordQrCode: string | null;
 }
 
 const props = defineProps<Props>();
@@ -104,6 +107,7 @@ const progressText = computed(() => {
 // OS Detection
 const isIOS = ref(false);
 const isAndroid = ref(false);
+const isDesktop = computed(() => !isIOS.value && !isAndroid.value);
 
 const detectOS = () => {
     const ua = navigator.userAgent;
@@ -111,13 +115,22 @@ const detectOS = () => {
     isAndroid.value = /Android/.test(ua);
 };
 
+// Clipboard
+const { copy, copied } = useClipboard({
+    legacy: true,
+    source: computed(() => props.setPasswordUrl),
+});
+const copyToClipboard = () => {
+    if (!props.setPasswordUrl) return;
+    copy(props.setPasswordUrl);
+};
+
 // Use Inertia's usePoll for automatic polling
 const { stop: stopPolling } = usePoll(3000, {
     onBefore() {
-        // Stop polling if complete
         if (props.status?.is_complete) {
             stopPolling();
-            return false; // Cancel this poll request
+            return false;
         }
     },
 });
@@ -528,10 +541,8 @@ onUnmounted(() => {
                                 class="rounded-xl border border-gray-600 bg-white p-2"
                             >
                                 <img
-                                    src="/assets/download-on-app-store-qr-code.png"
+                                    :src="iosAppStoreQrCode"
                                     alt="QR Code - App Store"
-                                    width="400"
-                                    height="400"
                                     class="h-28 w-28"
                                 />
                             </div>
@@ -581,17 +592,117 @@ onUnmounted(() => {
                         </div>
                     </div>
 
-                    <Button
-                        variant="default"
-                        class="w-full"
-                        @click.prevent="handlePasswordClick"
-                    >
-                        {{ $t('generatingPlan.cta.step2.button') }}
-                    </Button>
+                    <!-- Mobile: Button to open app -->
+                    <template v-if="!isDesktop">
+                        <Button
+                            variant="default"
+                            class="w-full"
+                            @click.prevent="handlePasswordClick"
+                        >
+                            {{ $t('generatingPlan.cta.step2.button') }}
+                        </Button>
 
-                    <div class="mt-1.5 text-center text-[11px] text-gray-500">
-                        {{ $t('generatingPlan.cta.step2.hint') }}
-                    </div>
+                        <div
+                            class="mt-1.5 text-center text-[11px] text-gray-500"
+                        >
+                            {{ $t('generatingPlan.cta.step2.hint') }}
+                        </div>
+                    </template>
+
+                    <!-- Desktop: QR Code + Copy Link -->
+                    <template v-else>
+                        <div class="flex items-center justify-center gap-6">
+                            <!-- QR Code -->
+                            <div
+                                v-if="setPasswordQrCode"
+                                class="flex flex-col items-center"
+                            >
+                                <div
+                                    class="rounded-xl border border-gray-600 bg-white p-2"
+                                >
+                                    <img
+                                        :src="setPasswordQrCode"
+                                        alt="QR Code - Set Password"
+                                        class="h-28 w-28"
+                                    />
+                                </div>
+                                <span
+                                    class="mt-1.5 text-[10px] text-gray-500"
+                                    >{{
+                                        $t('generatingPlan.cta.step2.scanQr')
+                                    }}</span
+                                >
+                            </div>
+
+                            <!-- Divider -->
+                            <div class="flex flex-col items-center gap-1">
+                                <div class="h-6 w-px bg-gray-700"></div>
+                                <span class="text-[10px] text-gray-500">{{
+                                    $t('generatingPlan.cta.step1.or')
+                                }}</span>
+                                <div class="h-6 w-px bg-gray-700"></div>
+                            </div>
+
+                            <!-- Copy Link Button -->
+                            <div class="flex flex-col items-center gap-2">
+                                <Button
+                                    class="relative"
+                                    :class="{'text-transparent!': copied}"
+                                    variant="secondary"
+                                    @click="copyToClipboard"
+                                >
+                                    <svg
+                                        :class="{ 'text-transparent!': copied }"
+                                        class="h-5 w-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+                                        />
+                                    </svg>
+                                    <span
+                                        v-if="copied"
+                                        class="absolute inset-x-0 left-3"
+                                    >
+                                        <svg
+                                            class="h-5 w-5 text-primary-400"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M5 13l4 4L19 7"
+                                            />
+                                        </svg>
+                                    </span>
+                                    <span
+                                        v-if="copied"
+                                        class="absolute ml-2 text-green-500 inset-0 flex items-center justify-center text-center"
+                                    >
+                                        {{
+                                            $t(
+                                                'generatingPlan.cta.step2.copied',
+                                            )
+                                        }}
+                                    </span>
+                                    {{
+                                        $t('generatingPlan.cta.step2.copyLink')
+                                    }}
+                                </Button>
+                                <span class="text-[10px] text-gray-500">{{
+                                    $t('generatingPlan.cta.step2.copyHint')
+                                }}</span>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
 

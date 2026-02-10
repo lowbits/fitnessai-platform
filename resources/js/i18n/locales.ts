@@ -1121,6 +1121,10 @@ export const locales = {
                     title: 'Activate account',
                     button: 'Set password & get started',
                     hint: 'Opens the app and sets up your account',
+                    scanQr: 'Scan with phone',
+                    copyLink: 'Copy link',
+                    copied: 'Copied!',
+                    copyHint: 'Open in phone browser',
                 },
             },
             fallback: {
@@ -2292,6 +2296,10 @@ export const locales = {
                     title: 'Account aktivieren',
                     button: 'Passwort setzen & loslegen',
                     hint: 'Öffnet die App und richtet deinen Account ein',
+                    scanQr: 'Mit Handy scannen',
+                    copyLink: 'Link kopieren',
+                    copied: 'Link kopiert',
+                    copyHint: 'Im Handy-Browser öffnen',
                 },
             },
             fallback: {
