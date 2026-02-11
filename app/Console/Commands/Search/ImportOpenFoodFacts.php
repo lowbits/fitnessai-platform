@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Search;
 
 use App\Services\OpenFoodFacts\ProductExtractor;
 use Illuminate\Console\Command;

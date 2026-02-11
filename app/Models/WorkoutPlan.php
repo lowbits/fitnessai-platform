@@ -41,7 +41,7 @@ class WorkoutPlan extends Model
 
     public function exercises(): HasMany
     {
-        return $this->hasMany(Exercise::class)->orderBy('order');
+        return $this->hasMany(WorkoutPlanExercise::class)->orderBy('order');
     }
 
     public function trackings(): HasMany
@@ -54,4 +54,3 @@ class WorkoutPlan extends Model
         return $this->hasOne(WorkoutTracking::class)->latestOfMany('completed_at');
     }
 }
-

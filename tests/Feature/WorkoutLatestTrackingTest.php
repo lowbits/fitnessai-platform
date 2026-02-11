@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutPlanExercise;
 use App\Models\WorkoutTracking;
 use App\Models\WorkoutTrackingExercise;
 use App\Models\WorkoutTrackingSet;
@@ -22,7 +22,7 @@ test('workout shows latest tracking by original_name across different workouts',
         'plan_id' => $this->plan->id,
         'workout_name' => 'Monday - Push Day',
     ]);
-    $mondayBenchPress = Exercise::factory()->create([
+    $mondayBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $mondayWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -36,7 +36,7 @@ test('workout shows latest tracking by original_name across different workouts',
         'plan_id' => $this->plan->id,
         'workout_name' => 'Thursday - Push Day',
     ]);
-    $thursdayBenchPress = Exercise::factory()->create([
+    $thursdayBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $thursdayWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press', // Same original_name, different ID
@@ -54,7 +54,7 @@ test('workout shows latest tracking by original_name across different workouts',
 
     $mondayTrackingExercise = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $mondayTracking->id,
-        'exercise_id' => $mondayBenchPress->id,
+        'workout_plan_exercise_id' => $mondayBenchPress->id,
         'order' => 1,
         'notes' => 'Felt strong on Monday',
     ]);
@@ -106,7 +106,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
         'plan_id' => $this->plan->id,
         'workout_name' => 'Push Day',
     ]);
-    $benchPress = Exercise::factory()->create([
+    $benchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -118,7 +118,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
         'plan_id' => $this->plan->id,
         'workout_name' => 'Another Push Day',
     ]);
-    $benchPress2 = Exercise::factory()->create([
+    $benchPress2 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout2->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -134,7 +134,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
 
     $olderTrackingExercise = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $olderTracking->id,
-        'exercise_id' => $benchPress->id,
+        'workout_plan_exercise_id' => $benchPress->id,
         'order' => 1,
         'notes' => 'Old workout',
     ]);
@@ -155,7 +155,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
 
     $newerTrackingExercise = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $newerTracking->id,
-        'exercise_id' => $benchPress2->id,
+        'workout_plan_exercise_id' => $benchPress2->id,
         'order' => 1,
         'notes' => 'Recent workout',
     ]);
@@ -183,14 +183,14 @@ test('workout with multiple exercises shows correct latest tracking for each', f
         'workout_name' => 'Full Body',
     ]);
 
-    $benchPress = Exercise::factory()->create([
+    $benchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
         'order' => 1,
     ]);
 
-    $squat = Exercise::factory()->create([
+    $squat = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Squat',
         'original_name' => 'squat',
@@ -202,13 +202,13 @@ test('workout with multiple exercises shows correct latest tracking for each', f
         'plan_id' => $this->plan->id,
     ]);
 
-    $previousBenchPress = Exercise::factory()->create([
+    $previousBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
     ]);
 
-    $previousSquat = Exercise::factory()->create([
+    $previousSquat = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'name' => 'Squat',
         'original_name' => 'squat',
@@ -223,7 +223,7 @@ test('workout with multiple exercises shows correct latest tracking for each', f
     // Bench Press tracking
     $benchPressTracking = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $tracking->id,
-        'exercise_id' => $previousBenchPress->id,
+        'workout_plan_exercise_id' => $previousBenchPress->id,
         'order' => 1,
         'notes' => 'Bench notes',
     ]);
@@ -238,7 +238,7 @@ test('workout with multiple exercises shows correct latest tracking for each', f
     // Squat tracking
     $squatTracking = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $tracking->id,
-        'exercise_id' => $previousSquat->id,
+        'workout_plan_exercise_id' => $previousSquat->id,
         'order' => 2,
         'notes' => 'Squat notes',
     ]);
@@ -267,7 +267,7 @@ test('exercise without original_name has no latest_tracking', function () {
         'plan_id' => $this->plan->id,
     ]);
 
-    $exerciseWithoutOriginalName = Exercise::factory()->create([
+    $exerciseWithoutOriginalName = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Custom Exercise',
         'original_name' => null, // No original_name
@@ -288,7 +288,7 @@ test('exercise shows no latest_tracking when no previous tracking exists', funct
         'plan_id' => $this->plan->id,
     ]);
 
-    $exercise = Exercise::factory()->create([
+    $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -311,7 +311,7 @@ test('user only sees their own tracking data, not other users', function () {
     $workout = WorkoutPlan::factory()->create([
         'plan_id' => $this->plan->id,
     ]);
-    $exercise = Exercise::factory()->create([
+    $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -322,7 +322,7 @@ test('user only sees their own tracking data, not other users', function () {
     $otherWorkout = WorkoutPlan::factory()->create([
         'plan_id' => $otherPlan->id,
     ]);
-    $otherExercise = Exercise::factory()->create([
+    $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -338,7 +338,7 @@ test('user only sees their own tracking data, not other users', function () {
 
     $otherTrackingExercise = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $otherTracking->id,
-        'exercise_id' => $otherExercise->id,
+        'workout_plan_exercise_id' => $otherExercise->id,
         'order' => 1,
         'notes' => 'Other user notes',
     ]);
@@ -362,7 +362,7 @@ test('only completed workouts are included in latest tracking', function () {
     $workout = WorkoutPlan::factory()->create([
         'plan_id' => $this->plan->id,
     ]);
-    $exercise = Exercise::factory()->create([
+    $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -373,7 +373,7 @@ test('only completed workouts are included in latest tracking', function () {
     $previousWorkout = WorkoutPlan::factory()->create([
         'plan_id' => $this->plan->id,
     ]);
-    $previousExercise = Exercise::factory()->create([
+    $previousExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -388,7 +388,7 @@ test('only completed workouts are included in latest tracking', function () {
 
     $trackingExercise = WorkoutTrackingExercise::create([
         'workout_tracking_id' => $incompleteTracking->id,
-        'exercise_id' => $previousExercise->id,
+        'workout_plan_exercise_id' => $previousExercise->id,
         'order' => 1,
         'notes' => 'Incomplete workout',
     ]);
@@ -416,7 +416,7 @@ test('latest tracking query is performant with many exercises', function () {
     // Create 10 exercises with same original_name pattern
     $exercises = [];
     for ($i = 1; $i <= 10; $i++) {
-        $exercises[] = Exercise::factory()->create([
+        $exercises[] = WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $workout->id,
             'name' => "Exercise {$i}",
             'original_name' => "exercise_{$i}",
@@ -436,7 +436,7 @@ test('latest tracking query is performant with many exercises', function () {
     ]);
 
     foreach ($exercises as $index => $exercise) {
-        $prevExercise = Exercise::factory()->create([
+        $prevExercise = WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $previousWorkout->id,
             'name' => $exercise->name,
             'original_name' => $exercise->original_name,
@@ -444,7 +444,7 @@ test('latest tracking query is performant with many exercises', function () {
 
         $trackingExercise = WorkoutTrackingExercise::create([
             'workout_tracking_id' => $tracking->id,
-            'exercise_id' => $prevExercise->id,
+            'workout_plan_exercise_id' => $prevExercise->id,
             'order' => $index + 1,
         ]);
 
@@ -475,5 +475,3 @@ test('latest tracking query is performant with many exercises', function () {
         $response->assertJsonPath("exercises.{$i}.latest_tracking.sets.0.weight", 50 + $i);
     }
 });
-
-

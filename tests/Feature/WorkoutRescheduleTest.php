@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutPlanExercise;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -35,7 +35,7 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
     ]);
 
     // Add exercises to workout
-    $exercise1 = Exercise::factory()->create([
+    $exercise1 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -44,7 +44,7 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
         'reps' => 10,
     ]);
 
-    $exercise2 = Exercise::factory()->create([
+    $exercise2 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Shoulder Press',
         'original_name' => 'shoulder_press',
@@ -83,7 +83,6 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
         ->where('day_number', 7)
         ->first();
 
-
     expect($tomorrowWorkout)->not->toBeNull();
     expect($tomorrowWorkout->workout_name)->toBe('Push Day');
     expect($tomorrowWorkout->workout_type)->toBe('strength');
@@ -118,7 +117,6 @@ test('cannot move workout if tomorrow already has a workout', function () {
         'status' => 'generated',
     ]);
 
-
     $response = $this->actingAs($this->user, 'sanctum')
         ->postJson("/api/v2/workouts/{$todayWorkout->id}/reschedule", [
             'target_date' => $todayWorkout->date->addDay()->format('Y-m-d'),
@@ -137,7 +135,6 @@ test('cannot move workout if tomorrow already has a workout', function () {
     expect($todayWorkout->workout_type)->toBe('strength');
     expect($todayWorkout->workout_name)->toBe('Push Day');
 });
-
 
 test('cannot move workout beyond plan duration', function () {
     $user = User::factory()->create();
@@ -159,8 +156,6 @@ test('cannot move workout beyond plan duration', function () {
     ]);
 
     $beyondDate = $plan->end_date->copy()->addDay();
-
-
 
     $response = $this->actingAs($user, 'sanctum')
         ->postJson("/api/v2/workouts/{$lastDayWorkout->id}/reschedule", [
@@ -219,7 +214,7 @@ test('move workout requires authentication', function () {
 
 test('move workout handles non-existent workout id', function () {
     $response = $this->actingAs($this->user, 'sanctum')
-        ->postJson("/api/v2/workouts/99999/reschedule", [
+        ->postJson('/api/v2/workouts/99999/reschedule', [
             'target_date' => now()->addDays(6)->format('Y-m-d'),
         ]);
 
@@ -250,7 +245,6 @@ test('moved workout preserves all original workout properties', function () {
 
     $response->assertStatus(200);
 
-
     $tomorrowWorkout = WorkoutPlan::where('plan_id', $this->plan->id)
         ->where('day_number', 7)
         ->first();
@@ -272,7 +266,7 @@ test('moved workout preserves exercise properties including arrays', function ()
         'status' => 'generated',
     ]);
 
-    $exercise = Exercise::factory()->create([
+    $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -340,7 +334,7 @@ test('move workout maintains exercise order', function () {
 
     // Create 5 exercises with specific order
     for ($i = 1; $i <= 5; $i++) {
-        Exercise::factory()->create([
+        WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $todayWorkout->id,
             'name' => "Exercise {$i}",
             'original_name' => "exercise_{$i}",
@@ -363,7 +357,7 @@ test('move workout maintains exercise order', function () {
 
     expect($movedExercises)->toHaveCount(5);
     for ($i = 0; $i < 5; $i++) {
-        expect($movedExercises[$i]->name)->toBe("Exercise " . ($i + 1));
+        expect($movedExercises[$i]->name)->toBe('Exercise '.($i + 1));
         expect($movedExercises[$i]->order)->toBe($i + 1);
     }
 });
@@ -382,7 +376,7 @@ test('rest day has correct properties after conversion', function () {
         'status' => 'generated',
     ]);
 
-    Exercise::factory()->create([
+    WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'order' => 1,
@@ -419,7 +413,7 @@ test('move workout is atomic - all or nothing', function () {
         'status' => 'generated',
     ]);
 
-    $exercise = Exercise::factory()->create([
+    $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'order' => 1,
@@ -464,7 +458,7 @@ test('can force replace existing tomorrow workout with force parameter', functio
         'status' => 'generated',
     ]);
 
-    $todayExercise = Exercise::factory()->create([
+    $todayExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'original_name' => 'bench_press',
@@ -481,7 +475,7 @@ test('can force replace existing tomorrow workout with force parameter', functio
         'status' => 'generated',
     ]);
 
-    $tomorrowExercise = Exercise::factory()->create([
+    $tomorrowExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $tomorrowWorkout->id,
         'name' => 'Pull Ups',
         'order' => 1,
@@ -501,7 +495,7 @@ test('can force replace existing tomorrow workout with force parameter', functio
 
     // Verify old tomorrow workout is deleted
     expect(WorkoutPlan::find($tomorrowWorkout->id))->toBeNull();
-    expect(Exercise::find($tomorrowExercise->id))->toBeNull();
+    expect(WorkoutPlanExercise::find($tomorrowExercise->id))->toBeNull();
 
     // Verify new tomorrow workout exists with correct data
     $newTomorrowWorkout = WorkoutPlan::where('plan_id', $this->plan->id)
@@ -759,7 +753,7 @@ test('can reschedule workout to specific date with target_date parameter', funct
         'status' => 'generated',
     ]);
 
-    Exercise::factory()->create([
+    WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Bench Press',
         'order' => 1,
@@ -946,7 +940,7 @@ test('reschedule preserves all workout and exercise properties', function () {
         'status' => 'generated',
     ]);
 
-    Exercise::factory()->create([
+    WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
         'name' => 'Burpees',
         'original_name' => 'burpees',
@@ -1001,7 +995,7 @@ test('user can move workout backward from tomorrow to today', function () {
         'status' => 'generated',
     ]);
 
-    Exercise::factory()->count(3)->create([
+    WorkoutPlanExercise::factory()->count(3)->create([
         'workout_plan_id' => $tomorrowWorkout->id,
     ]);
 
@@ -1052,4 +1046,3 @@ test('cannot move workout to actual past date (yesterday)', function () {
     $response->assertStatus(422)
         ->assertJsonValidationErrors(['target_date']);
 });
-

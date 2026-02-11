@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 class WorkoutController extends Controller
 {
     use MapsExercises;
+
     /**
      * Get detailed workout information
      */
@@ -38,40 +39,40 @@ class WorkoutController extends Controller
         // This is more performant than querying per exercise
         $latestTrackings = collect();
 
-        if (!empty($originalNames)) {
+        if (! empty($originalNames)) {
             $latestTrackings = WorkoutTrackingExercise::query()
                 ->select('workout_tracking_exercises.*')
                 ->join('workout_trackings', 'workout_tracking_exercises.workout_tracking_id', '=', 'workout_trackings.id')
-                ->join('exercises', 'workout_tracking_exercises.exercise_id', '=', 'exercises.id')
+                ->join('workout_plan_exercises', 'workout_tracking_exercises.workout_plan_exercise_id', '=', 'workout_plan_exercises.id')
                 ->where('workout_trackings.user_id', $user->id)
-                ->whereIn('exercises.original_name', $originalNames)
+                ->whereIn('workout_plan_exercises.original_name', $originalNames)
                 ->whereNotNull('workout_trackings.completed_at')
-                ->with(['sets' => fn($query) => $query->orderBy('set_number'), 'exercise:id,original_name', 'workoutTracking:id,completed_at'])
+                ->with(['sets' => fn ($query) => $query->orderBy('set_number'), 'exercise:id,original_name', 'workoutTracking:id,completed_at'])
                 ->get()
-                ->groupBy(fn($item) => $item->exercise->original_name)
-                ->map(fn($group) => $group->sortByDesc(fn($item) => $item->workoutTracking->completed_at)->first());
+                ->groupBy(fn ($item) => $item->exercise->original_name)
+                ->map(fn ($group) => $group->sortByDesc(fn ($item) => $item->workoutTracking->completed_at)->first());
         }
 
         // Format exercises
         $formattedExercises = $exercises->map(function ($exercise) use ($latestTrackings) {
-                $latestTracking = null;
+            $latestTracking = null;
 
-                if ($exercise->original_name && isset($latestTrackings[$exercise->original_name])) {
-                    $trackingExercise = $latestTrackings[$exercise->original_name];
+            if ($exercise->original_name && isset($latestTrackings[$exercise->original_name])) {
+                $trackingExercise = $latestTrackings[$exercise->original_name];
 
-                    $latestTracking = [
-                        'notes' => $trackingExercise->notes,
-                        'sets' => $trackingExercise->sets->map(fn($set) => [
-                            'set_number' => $set->set_number,
-                            'reps' => $set->reps,
-                            'duration' => $set->duration,
-                            'weight' => $set->weight,
-                        ])->all(),
-                    ];
-                }
+                $latestTracking = [
+                    'notes' => $trackingExercise->notes,
+                    'sets' => $trackingExercise->sets->map(fn ($set) => [
+                        'set_number' => $set->set_number,
+                        'reps' => $set->reps,
+                        'duration' => $set->duration,
+                        'weight' => $set->weight,
+                    ])->all(),
+                ];
+            }
 
-                return $this->mapExerciseToResponse($exercise, $latestTracking);
-            })->values()->all();
+            return $this->mapExerciseToResponse($exercise, $latestTracking);
+        })->values()->all();
 
         return response()->json([
             'id' => $workout->id,
@@ -87,5 +88,4 @@ class WorkoutController extends Controller
             'exercises_count' => count($formattedExercises),
         ]);
     }
-
 }

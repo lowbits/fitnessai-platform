@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
-use App\Models\Exercise;
 use App\Models\WorkoutPlan;
 use Gate;
 use Illuminate\Http\JsonResponse;
@@ -21,10 +20,8 @@ class SkipWorkoutController extends Controller
 
         Gate::authorize('skip', $workoutPlan);
 
-
         // Get workout from database with exercises
         $workoutPlan = $workoutPlan->load('exercises');
-
 
         // Don't allow skipping if already a rest day
         if ($workoutPlan->workout_type === 'rest') {
@@ -33,7 +30,6 @@ class SkipWorkoutController extends Controller
                 'message' => 'Cannot skip a rest day',
             ], 422);
         }
-
 
         // Don't allow skipping if already skipped (soft deleted)
         if ($workoutPlan->trashed()) {

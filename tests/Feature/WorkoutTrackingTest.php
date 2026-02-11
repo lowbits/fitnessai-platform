@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutPlanExercise;
 use App\Models\WorkoutTracking;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -13,8 +13,8 @@ beforeEach(function () {
     $this->user = User::factory()->create();
     $plan = Plan::factory()->create(['user_id' => $this->user->id]);
     $this->workoutPlan = WorkoutPlan::factory()->create(['plan_id' => $plan->id]);
-    $this->exercise1 = Exercise::factory()->create(['workout_plan_id' => $this->workoutPlan->id, 'order' => 1]);
-    $this->exercise2 = Exercise::factory()->create(['workout_plan_id' => $this->workoutPlan->id, 'order' => 2]);
+    $this->exercise1 = WorkoutPlanExercise::factory()->create(['workout_plan_id' => $this->workoutPlan->id, 'order' => 1]);
+    $this->exercise2 = WorkoutPlanExercise::factory()->create(['workout_plan_id' => $this->workoutPlan->id, 'order' => 2]);
 });
 
 test('user can start tracking a workout', function () {
@@ -56,7 +56,7 @@ test('user can complete a workout tracking with exercises', function () {
             'feeling_rate' => 5,
             'exercises' => [
                 [
-                    'exercise_id' => $this->exercise1->id,
+                    'workout_plan_exercise_id' => $this->exercise1->id,
                     'order' => 1,
                     'notes' => 'Felt strong',
                     'sets' => [
@@ -81,7 +81,7 @@ test('user can complete a workout tracking with exercises', function () {
                     ],
                 ],
                 [
-                    'exercise_id' => $this->exercise2->id,
+                    'workout_plan_exercise_id' => $this->exercise2->id,
                     'order' => 2,
                     'notes' => 'Good cardio',
                     'sets' => [
@@ -111,7 +111,7 @@ test('user can complete a workout tracking with exercises', function () {
     ]);
 
     $this->assertDatabaseHas('workout_tracking_exercises', [
-        'exercise_id' => $this->exercise1->id,
+        'workout_plan_exercise_id' => $this->exercise1->id,
         'notes' => 'Felt strong',
     ]);
 
@@ -261,4 +261,3 @@ test('user can delete a workout tracking', function () {
         'id' => $tracking->id,
     ]);
 });
-

@@ -2,15 +2,14 @@
 
 namespace App\Jobs;
 
-use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutPlanExercise;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use OpenAI;
-
 
 class GenerateUserWorkoutPlan implements ShouldQueue
 {
@@ -33,8 +32,9 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     {
         $profile = $this->user->profile;
 
-        if (!$profile) {
+        if (! $profile) {
             Log::error('User profile not found', ['user_id' => $this->user->id]);
+
             return;
         }
 
@@ -48,13 +48,14 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             ->max('day_number') ?? 0;
 
         // Check if plan is already complete (all days generated with no failures)
-        if ($lastGeneratedDayNumber >= $this->plan->duration_days && !$firstFailedDay) {
+        if ($lastGeneratedDayNumber >= $this->plan->duration_days && ! $firstFailedDay) {
             Log::info('Workout plan already complete, skipping generation', [
                 'user_id' => $this->user->id,
                 'plan_id' => $this->plan->id,
                 'last_generated_day' => $lastGeneratedDayNumber,
                 'plan_duration_days' => $this->plan->duration_days,
             ]);
+
             return;
         }
 
@@ -98,7 +99,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
             // Check if we exceed plan end date
             if ($date->gt($this->plan->end_date)) {
-                Log::info("Reached plan end date, stopping generation", [
+                Log::info('Reached plan end date, stopping generation', [
                     'day' => $day,
                     'date' => $date->format('Y-m-d'),
                     'plan_end_date' => $this->plan->end_date->format('Y-m-d'),
@@ -108,7 +109,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
             // Safety check: don't exceed plan duration
             if ($day > $this->plan->duration_days) {
-                Log::warning("Day number exceeds plan duration, stopping generation", [
+                Log::warning('Day number exceeds plan duration, stopping generation', [
                     'day' => $day,
                     'plan_duration_days' => $this->plan->duration_days,
                 ]);
@@ -146,7 +147,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 ]);
 
                 // Add to summary for lightweight context
-                if (!$isRestDay) {
+                if (! $isRestDay) {
                     $exercises = $workoutPlan->exercises()->get();
                     $exerciseNames = $exercises->pluck('name')->take(3)->implode(', ');
                     $generatedWorkoutsSummary[] = "Day {$day}: {$workoutPlan->workout_name} ({$exerciseNames}...)";
@@ -165,6 +166,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     'estimated_duration_minutes' => 0,
                 ]);
                 Log::info("Created rest day for day {$day}", ['workout_plan_id' => $workoutPlan->id]);
+
                 continue;
             }
 
@@ -175,7 +177,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 // Add recent workouts context (last 5 workouts)
                 if (count($generatedWorkoutsSummary) > 0) {
                     $recentWorkouts = array_slice($generatedWorkoutsSummary, -5);
-                    $contextMessage .= "\n\nRecent workouts (ensure variety):\n" . implode("\n", $recentWorkouts);
+                    $contextMessage .= "\n\nRecent workouts (ensure variety):\n".implode("\n", $recentWorkouts);
                 }
 
                 // CONSTANT size: only system + current request
@@ -211,28 +213,28 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                     'properties' => [
                                         'workout_name' => [
                                             'type' => 'string',
-                                            'description' => 'Concise workout name focusing on training focus/muscle groups (2-4 words max). NO day numbers, difficulty levels, or body goals.'
+                                            'description' => 'Concise workout name focusing on training focus/muscle groups (2-4 words max). NO day numbers, difficulty levels, or body goals.',
                                         ],
                                         'workout_type' => [
                                             'type' => 'string',
-                                            'enum' => ['strength', 'cardio', 'hiit', 'mobility']
+                                            'enum' => ['strength', 'cardio', 'hiit', 'mobility'],
                                         ],
                                         'description' => [
                                             'type' => 'string',
-                                            'description' => 'Brief overview of the workout\'s purpose and focus (1-2 sentences)'
+                                            'description' => 'Brief overview of the workout\'s purpose and focus (1-2 sentences)',
                                         ],
                                         'estimated_duration_minutes' => [
                                             'type' => 'integer',
-                                            'description' => 'Total time including warmup, main workout, and cooldown'
+                                            'description' => 'Total time including warmup, main workout, and cooldown',
                                         ],
                                         'difficulty' => [
                                             'type' => 'string',
-                                            'enum' => ['Beginner', 'Intermediate', 'Advanced']
+                                            'enum' => ['Beginner', 'Intermediate', 'Advanced'],
                                         ],
                                         'muscle_groups' => [
                                             'type' => 'array',
                                             'items' => ['type' => 'string'],
-                                            'description' => 'Primary muscle groups targeted in this workout'
+                                            'description' => 'Primary muscle groups targeted in this workout',
                                         ],
                                         'exercises' => [
                                             'type' => 'array',
@@ -242,76 +244,76 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                                 'properties' => [
                                                     'name' => [
                                                         'type' => 'string',
-                                                        'description' => 'Clean, simple exercise name in the target language. NO prefixes (like "Dehnung:", "Warmup:"), NO alternatives in parentheses, NO slashes for multiple options. Just the exercise name.'
+                                                        'description' => 'Clean, simple exercise name in the target language. NO prefixes (like "Dehnung:", "Warmup:"), NO alternatives in parentheses, NO slashes for multiple options. Just the exercise name.',
                                                     ],
                                                     'original_name' => [
                                                         'type' => 'string',
-                                                        'description' => 'Standardized English exercise name for database lookup using standard fitness industry terminology (e.g., "Bench Press", "Pull-ups", "Bicycle Crunch"). Keep consistent naming.'
+                                                        'description' => 'Standardized English exercise name for database lookup using standard fitness industry terminology (e.g., "Bench Press", "Pull-ups", "Bicycle Crunch"). Keep consistent naming.',
                                                     ],
                                                     'type' => [
                                                         'type' => 'string',
                                                         'enum' => ['strength', 'cardio', 'warmup', 'cooldown', 'stretch'],
-                                                        'description' => 'Exercise type - this field indicates the category, so DO NOT include type in the name'
+                                                        'description' => 'Exercise type - this field indicates the category, so DO NOT include type in the name',
                                                     ],
                                                     'description' => [
                                                         'type' => 'string',
-                                                        'description' => 'Brief description of the exercise and its benefits'
+                                                        'description' => 'Brief description of the exercise and its benefits',
                                                     ],
                                                     'instructions' => [
                                                         'type' => 'array',
                                                         'items' => ['type' => 'string'],
-                                                        'description' => 'Step-by-step instructions on how to perform the exercise correctly.'
+                                                        'description' => 'Step-by-step instructions on how to perform the exercise correctly.',
                                                     ],
                                                     'sets' => [
                                                         'type' => 'integer',
-                                                        'description' => 'Number of sets (for strength exercises)'
+                                                        'description' => 'Number of sets (for strength exercises)',
                                                     ],
                                                     'reps' => [
                                                         'type' => 'integer',
-                                                        'description' => 'Number of repetitions per set (for strength exercises)'
+                                                        'description' => 'Number of repetitions per set (for strength exercises)',
                                                     ],
                                                     'duration_seconds' => [
                                                         'type' => 'integer',
-                                                        'description' => 'Duration in seconds (for cardio, stretches, or time-based exercises)'
+                                                        'description' => 'Duration in seconds (for cardio, stretches, or time-based exercises)',
                                                     ],
                                                     'rest_seconds' => [
                                                         'type' => 'string',
-                                                        'description' => 'Rest period between sets (e.g., "60-90", "30")'
+                                                        'description' => 'Rest period between sets (e.g., "60-90", "30")',
                                                     ],
                                                     'tempo' => [
                                                         'type' => 'string',
-                                                        'description' => 'Tempo notation (e.g., "3-0-1-0" for eccentric-pause-concentric-pause)'
+                                                        'description' => 'Tempo notation (e.g., "3-0-1-0" for eccentric-pause-concentric-pause)',
                                                     ],
                                                     'weight_recommendation' => [
                                                         'type' => 'string',
-                                                        'description' => 'Weight guidance (e.g., "70% 1RM", "Bodyweight", "Moderate")'
+                                                        'description' => 'Weight guidance (e.g., "70% 1RM", "Bodyweight", "Moderate")',
                                                     ],
                                                     'rpe' => [
                                                         'type' => 'string',
-                                                        'description' => 'Rate of Perceived Exertion (e.g., "7-8", "6-7")'
+                                                        'description' => 'Rate of Perceived Exertion (e.g., "7-8", "6-7")',
                                                     ],
                                                     'muscle_groups' => [
                                                         'type' => 'array',
                                                         'items' => ['type' => 'string'],
-                                                        'description' => 'Muscle groups targeted by this exercise'
+                                                        'description' => 'Muscle groups targeted by this exercise',
                                                     ],
                                                     'equipment' => [
                                                         'type' => 'array',
                                                         'items' => ['type' => 'string'],
-                                                        'description' => 'Equipment needed for this exercise'
+                                                        'description' => 'Equipment needed for this exercise',
                                                     ],
                                                     'form_cues' => [
                                                         'type' => 'string',
-                                                        'description' => 'Important form and safety cues for proper execution'
+                                                        'description' => 'Important form and safety cues for proper execution',
                                                     ],
                                                     'alternatives' => [
                                                         'type' => 'array',
                                                         'items' => ['type' => 'string'],
-                                                        'description' => 'Alternative exercises if primary exercise cannot be performed. List alternatives HERE, not in the exercise name.'
+                                                        'description' => 'Alternative exercises if primary exercise cannot be performed. List alternatives HERE, not in the exercise name.',
                                                     ],
                                                     'difficulty' => [
                                                         'type' => 'string',
-                                                        'enum' => ['Beginner', 'Intermediate', 'Advanced']
+                                                        'enum' => ['Beginner', 'Intermediate', 'Advanced'],
                                                     ],
                                                 ],
                                                 'required' => ['name', 'original_name', 'type'],
@@ -321,7 +323,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                                     'required' => ['workout_name', 'workout_type', 'exercises'],
                                 ],
                             ],
-                        ]
+                        ],
                     ],
                     'tool_choice' => ['type' => 'function', 'function' => ['name' => 'create_workout_plan']],
                 ]);
@@ -366,7 +368,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
                     // Add workout to summary for next iterations (lightweight context)
                     $exerciseNames = array_slice(array_column($arguments['exercises'], 'name'), 0, 3);
-                    $generatedWorkoutsSummary[] = "Day {$day}: {$arguments['workout_name']} (" . implode(', ', $exerciseNames) . "...)";
+                    $generatedWorkoutsSummary[] = "Day {$day}: {$arguments['workout_name']} (".implode(', ', $exerciseNames).'...)';
 
                     Log::info("Generated workout plan for day {$day}", [
                         'workout_plan_id' => $workoutPlan->id,
@@ -427,7 +429,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     {
         $profile = $this->user->profile;
 
-        if ($profile && !empty($profile->training_days)) {
+        if ($profile && ! empty($profile->training_days)) {
             // Mapping days to numeric values (0 = Monday, 6 = Sunday)
             $dayMap = [
                 'monday' => 0,
@@ -439,16 +441,16 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 'sunday' => 6,
             ];
 
-            $workoutDays = array_map(fn($d) => $dayMap[strtolower($d)], $profile->training_days);
+            $workoutDays = array_map(fn ($d) => $dayMap[strtolower($d)], $profile->training_days);
             $dayOfWeek = ($day - 1) % 7;
 
-            return !in_array($dayOfWeek, $workoutDays);
+            return ! in_array($dayOfWeek, $workoutDays);
         }
 
         // Calculate which day of the week this is (0-6)
         $dayOfWeek = ($day - 1) % 7;
 
-        $workoutDays = match($workoutsPerWeek) {
+        $workoutDays = match ($workoutsPerWeek) {
             1 => [0], // Monday only
             2 => [0, 3], // Monday, Thursday
             3 => [0, 2, 4], // Monday, Wednesday, Friday
@@ -459,12 +461,12 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             default => [0, 2, 4],
         };
 
-        return !in_array($dayOfWeek, $workoutDays);
+        return ! in_array($dayOfWeek, $workoutDays);
     }
 
     private function getWorkoutSplit(int $sessionsPerWeek): string
     {
-        return match($sessionsPerWeek) {
+        return match ($sessionsPerWeek) {
             1 => 'Full Body',
             2 => 'Upper/Lower Split',
             3 => 'Push/Pull/Legs',
@@ -480,16 +482,16 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     {
         $workoutDayNumber = $this->getWorkoutDayNumber($day, $sessionsPerWeek);
 
-        return match($sessionsPerWeek) {
+        return match ($sessionsPerWeek) {
             1 => 'Full Body',
             2 => $workoutDayNumber === 1 ? 'Upper Body (Chest, Back, Shoulders, Arms)' : 'Lower Body (Quads, Hamstrings, Glutes, Calves)',
-            3 => match($workoutDayNumber) {
+            3 => match ($workoutDayNumber) {
                 1 => 'Push (Chest, Shoulders, Triceps)',
                 2 => 'Pull (Back, Biceps, Rear Delts)',
                 3 => 'Legs (Quads, Hamstrings, Glutes, Calves)',
                 default => 'Full Body',
             },
-            4 => match($workoutDayNumber) {
+            4 => match ($workoutDayNumber) {
                 1 => 'Upper Body (Chest, Back, Shoulders)',
                 2 => 'Lower Body (Quads, Hamstrings, Glutes)',
                 3 => 'Upper Body (Emphasis: Back and Arms)',
@@ -505,7 +507,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         $workoutCount = 0;
 
         for ($d = 1; $d <= $day; $d++) {
-            if (!$this->isRestDay($d, $sessionsPerWeek)) {
+            if (! $this->isRestDay($d, $sessionsPerWeek)) {
                 $workoutCount++;
             }
         }
@@ -516,8 +518,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
     private function getGoalGuidelines(string $bodyGoal): string
     {
-        return match($bodyGoal) {
-            'muscle_gain' => "
+        return match ($bodyGoal) {
+            'muscle_gain' => '
 **Muscle Gain (Hypertrophy) Protocol:**
 - Volume: 3-4 sets per exercise
 - Rep range: 8-12 reps (hypertrophy zone)
@@ -527,8 +529,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Exercise selection: 70% compound movements, 30% isolation
 - Progressive overload: Increase weight when RPE drops below 7
 - Focus on time under tension and muscle connection
-        ",
-            'weight_loss' => "
+        ',
+            'weight_loss' => '
 **Weight Loss (Fat Loss) Protocol:**
 - Volume: 3 sets per exercise
 - Rep range: 12-15 reps
@@ -539,8 +541,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Include HIIT or cardio intervals between strength exercises
 - Focus on calorie burn and maintaining muscle mass
 - Total workout intensity should feel challenging but sustainable
-        ",
-            'strength' => "
+        ',
+            'strength' => '
 **Strength & Power Protocol:**
 - Volume: 4-6 sets per exercise (lower volume, higher intensity)
 - Rep range: 3-6 reps (strength/power zone)
@@ -550,8 +552,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Exercise selection: 90%+ compound movements (squat, deadlift, bench, press)
 - Progressive overload: Focus on increasing load
 - Prioritize form and complete recovery between sets
-        ",
-            'endurance' => "
+        ',
+            'endurance' => '
 **Muscular Endurance Protocol:**
 - Volume: 2-3 sets per exercise
 - Rep range: 15-25 reps (or 45-60 seconds time under tension)
@@ -561,8 +563,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Mix resistance training with cardio elements
 - Focus on work capacity and cardiovascular conditioning
 - Higher frequency, lower intensity approach
-        ",
-            'general_fitness' => "
+        ',
+            'general_fitness' => '
 **General Fitness Protocol:**
 - Volume: 3 sets per exercise
 - Rep range: 10-12 reps
@@ -572,8 +574,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Balanced mix of compound and isolation exercises
 - Include mobility and flexibility work
 - Focus on movement quality and consistency
-        ",
-            default => "
+        ',
+            default => '
 **Balanced Training Protocol:**
 - Volume: 3 sets per exercise
 - Rep range: 10-12 reps
@@ -581,7 +583,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 - Tempo: 2-0-1-0 (controlled pace)
 - RPE: 6-8
 - Mix of compound and isolation movements
-        ",
+        ',
         };
     }
 
@@ -683,7 +685,7 @@ PROMPT;
     {
         $language = $this->user->locale;
 
-        return match($language) {
+        return match ($language) {
             'de' => 'German language',
             default => 'English language',
         };
@@ -692,7 +694,7 @@ PROMPT;
     private function saveExercises(WorkoutPlan $workoutPlan, array $exercises): void
     {
         foreach ($exercises as $index => $exerciseData) {
-            Exercise::create([
+            WorkoutPlanExercise::create([
                 'workout_plan_id' => $workoutPlan->id,
                 'order' => $index + 1,
                 'name' => $exerciseData['name'],
@@ -755,4 +757,3 @@ PROMPT;
             ->update(['status' => 'failed']);
     }
 }
-

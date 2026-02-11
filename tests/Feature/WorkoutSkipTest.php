@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutPlanExercise;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -38,10 +38,9 @@ test('user can skip a workout', function () {
     ]);
 
     // Add some exercises
-    Exercise::factory()->count(3)->create([
+    WorkoutPlanExercise::factory()->count(3)->create([
         'workout_plan_id' => $workout->id,
     ]);
-
 
     $response = $this->actingAs($this->user)
         ->postJson(route('workouts.skip', $workout));
@@ -162,7 +161,7 @@ test('skipped workout exercises remain in database', function () {
         'workout_type' => 'strength',
     ]);
 
-    Exercise::factory()->count(3)->create([
+    WorkoutPlanExercise::factory()->count(3)->create([
         'workout_plan_id' => $workout->id,
     ]);
 
@@ -231,4 +230,3 @@ test('rest day remains when skipped', function () {
     // Rest day should still be active
     expect($restDay->fresh()->trashed())->toBeFalse();
 });
-

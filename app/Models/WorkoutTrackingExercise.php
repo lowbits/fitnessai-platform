@@ -13,7 +13,7 @@ class WorkoutTrackingExercise extends Model
 
     protected $fillable = [
         'workout_tracking_id',
-        'exercise_id',
+        'workout_plan_exercise_id',
         'order',
         'notes',
     ];
@@ -32,7 +32,7 @@ class WorkoutTrackingExercise extends Model
 
     public function exercise(): BelongsTo
     {
-        return $this->belongsTo(Exercise::class);
+        return $this->belongsTo(WorkoutPlanExercise::class, 'workout_plan_exercise_id');
     }
 
     public function sets(): HasMany
@@ -40,4 +40,3 @@ class WorkoutTrackingExercise extends Model
         return $this->hasMany(WorkoutTrackingSet::class)->orderBy('set_number');
     }
 }
-

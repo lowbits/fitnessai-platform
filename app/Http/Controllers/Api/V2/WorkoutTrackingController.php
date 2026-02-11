@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkoutTracking;
-use App\Models\WorkoutTrackingExercise;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class WorkoutTrackingController extends Controller
 {
@@ -24,7 +22,7 @@ class WorkoutTrackingController extends Controller
             ->get();
 
         return response()->json([
-            'data' => $trackings->map(fn($tracking) => $this->formatTracking($tracking)),
+            'data' => $trackings->map(fn ($tracking) => $this->formatTracking($tracking)),
         ]);
     }
 
@@ -40,7 +38,7 @@ class WorkoutTrackingController extends Controller
             'notes' => ['nullable', 'string', 'max:1000'],
             'feeling_rate' => ['nullable', 'integer', 'min:1', 'max:5'],
             'exercises' => ['nullable', 'array'],
-            'exercises.*.exercise_id' => ['required', 'exists:exercises,id'],
+            'exercises.*.workout_plan_exercise_id' => ['required', 'exists:workout_plan_exercises,id'],
             'exercises.*.order' => ['nullable', 'integer', 'min:0'],
             'exercises.*.notes' => ['nullable', 'string', 'max:500'],
             'exercises.*.sets' => ['nullable', 'array'],
@@ -61,15 +59,15 @@ class WorkoutTrackingController extends Controller
                 'feeling_rate' => $validated['feeling_rate'] ?? null,
             ]);
 
-            if (!empty($validated['exercises'])) {
+            if (! empty($validated['exercises'])) {
                 foreach ($validated['exercises'] as $exerciseData) {
                     $trackingExercise = $tracking->exercises()->create([
-                        'exercise_id' => $exerciseData['exercise_id'],
+                        'workout_plan_exercise_id' => $exerciseData['workout_plan_exercise_id'],
                         'order' => $exerciseData['order'] ?? 0,
                         'notes' => $exerciseData['notes'] ?? null,
                     ]);
 
-                    if (!empty($exerciseData['sets'])) {
+                    if (! empty($exerciseData['sets'])) {
                         foreach ($exerciseData['sets'] as $setData) {
                             $trackingExercise->sets()->create($setData);
                         }
@@ -117,7 +115,7 @@ class WorkoutTrackingController extends Controller
             'notes' => ['nullable', 'string', 'max:1000'],
             'feeling_rate' => ['nullable', 'integer', 'min:1', 'max:5'],
             'exercises' => ['nullable', 'array'],
-            'exercises.*.exercise_id' => ['required', 'exists:exercises,id'],
+            'exercises.*.workout_plan_exercise_id' => ['required', 'exists:workout_plan_exercises,id'],
             'exercises.*.order' => ['nullable', 'integer', 'min:0'],
             'exercises.*.notes' => ['nullable', 'string', 'max:500'],
             'exercises.*.sets' => ['nullable', 'array'],
@@ -142,12 +140,12 @@ class WorkoutTrackingController extends Controller
 
                 foreach ($validated['exercises'] as $exerciseData) {
                     $trackingExercise = $workoutTracking->exercises()->create([
-                        'exercise_id' => $exerciseData['exercise_id'],
+                        'workout_plan_exercise_id' => $exerciseData['workout_plan_exercise_id'],
                         'order' => $exerciseData['order'] ?? 0,
                         'notes' => $exerciseData['notes'] ?? null,
                     ]);
 
-                    if (!empty($exerciseData['sets'])) {
+                    if (! empty($exerciseData['sets'])) {
                         foreach ($exerciseData['sets'] as $setData) {
                             $trackingExercise->sets()->create($setData);
                         }
@@ -190,13 +188,13 @@ class WorkoutTrackingController extends Controller
             'completed_at' => $tracking->completed_at?->toISOString(),
             'notes' => $tracking->notes,
             'feeling_rate' => $tracking->feeling_rate,
-            'exercises' => $tracking->exercises->map(fn($exercise) => [
+            'exercises' => $tracking->exercises->map(fn ($exercise) => [
                 'id' => $exercise->id,
-                'exercise_id' => $exercise->exercise_id,
+                'workout_plan_exercise_id' => $exercise->workout_plan_exercise_id,
                 'exercise_name' => $exercise->exercise?->name,
                 'order' => $exercise->order,
                 'notes' => $exercise->notes,
-                'sets' => $exercise->sets->map(fn($set) => [
+                'sets' => $exercise->sets->map(fn ($set) => [
                     'id' => $set->id,
                     'set_number' => $set->set_number,
                     'reps' => $set->reps,
@@ -217,4 +215,3 @@ class WorkoutTrackingController extends Controller
         ];
     }
 }
-

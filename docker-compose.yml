@@ -1,10 +1,11 @@
 version: '3.8'
 services:
   meilisearch:
-    image: getmeili/meilisearch:v1.6
+    image: getmeili/meilisearch:latest
     container_name: meilisearch
     environment:
       - MEILI_MASTER_KEY=masterKey
+      - MEILI_EXPERIMENTAL_ENABLE_METRICS=true
     ports:
       - "7700:7700"
     volumes:
