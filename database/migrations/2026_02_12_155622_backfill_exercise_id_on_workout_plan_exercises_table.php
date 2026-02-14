@@ -20,9 +20,14 @@ return new class extends Migration
               AND exercise_id IS NULL
         ');
 
-        Schema::table('workout_plan_exercises', function (Blueprint $table) {
-            $table->foreign('exercise_id')->references('id')->on('exercises');
-        });
+        $foreignKeyExists = collect(DB::select("SHOW CREATE TABLE workout_plan_exercises"))
+            ->contains(fn ($row) => str_contains($row->{'Create Table'}, 'workout_plan_exercises_exercise_id_foreign'));
+
+        if (! $foreignKeyExists) {
+            Schema::table('workout_plan_exercises', function (Blueprint $table) {
+                $table->foreign('exercise_id')->references('id')->on('exercises');
+            });
+        }
     }
 
     public function down(): void
