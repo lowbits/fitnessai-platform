@@ -3,8 +3,10 @@
 namespace App\Console\Commands;
 
 use App\Jobs\GenerateUserMealPlan;
+use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\MealPlan;
 use App\Models\Plan;
+use App\Models\WorkoutPlan;
 use Illuminate\Console\Command;
 
 class RetryFailedNutritionPlans extends Command
