@@ -4,15 +4,15 @@ namespace App\Notifications;
 
 use App\Enums\UserSource;
 use App\Models\Plan;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\HtmlString;
 use NotificationChannels\Expo\ExpoChannel;
 use NotificationChannels\Expo\ExpoMessage;
-use Illuminate\Support\HtmlString;
-use Illuminate\Support\Facades\URL;
 
 class PlanGenerationComplete extends Notification implements ShouldQueue
 {
@@ -25,9 +25,8 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
      */
     public function __construct(
         public Plan $plan,
-        ?string     $passwordResetToken = null
-    )
-    {
+        ?string $passwordResetToken = null
+    ) {
         $this->passwordResetToken = $passwordResetToken;
     }
 
@@ -64,7 +63,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         $workoutPlanPdf = PDF::loadView('pdf.workout_plan', [
             'user' => $notifiable,
             'plan' => $this->plan,
-            'workoutPlans' => $this->plan->workoutPlans()->with('exercises')->orderBy('day_number')->get(),
+            'workoutPlans' => $this->plan->workoutPlans()->with('exercises.exercise.translations')->orderBy('day_number')->get(),
         ]);
 
         $days = config('plans.duration_days');
@@ -82,16 +81,16 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
             $mail->action(__('emails.plan_ready.cta_app'), route('home', ['locale' => $locale]));
         } else {
             $mail
-                ->attachData($mealPlanPdf->output(), 'Meal_Plan_' . $this->plan->id . '.pdf', [
+                ->attachData($mealPlanPdf->output(), 'Meal_Plan_'.$this->plan->id.'.pdf', [
                     'mime' => 'application/pdf',
                 ])
-                ->attachData($workoutPlanPdf->output(), 'Workout_Plan_' . $this->plan->id . '.pdf', [
+                ->attachData($workoutPlanPdf->output(), 'Workout_Plan_'.$this->plan->id.'.pdf', [
                     'mime' => 'application/pdf',
                 ]);
         }
 
         // App Promo only for web users
-        if ($this->passwordResetToken && !filled($notifiable->password)) {
+        if ($this->passwordResetToken && ! filled($notifiable->password)) {
 
             $badgeLocale = strtoupper($locale);
 
@@ -100,13 +99,13 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
                 ->line('')
                 ->line(__('emails.plan_ready.app_pitch'))
                 ->line(new HtmlString(
-                    '<img src="' . asset("assets/app-promo_{$locale}.png") . '" width="600" style="display:block;width:100%;max-width:600px;height:auto;border-radius:8px;margin:16px 0;" alt="fytrr App">'
+                    '<img src="'.asset("assets/app-promo_{$locale}.png").'" width="600" style="display:block;width:100%;max-width:600px;height:auto;border-radius:8px;margin:16px 0;" alt="fytrr App">'
                 ))
                 ->line(new HtmlString('<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;">
             <tr>
                 <td align="center">
-                    <a href="' . config('app.app_store.ios.url') . '">
-                        <img src="'. asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png") .'"
+                    <a href="'.config('app.app_store.ios.url').'">
+                        <img src="'.asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png").'"
                              alt="Download on App Store"
                              style="height:40px;">
                     </a>
@@ -139,11 +138,10 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
             ->line(__('emails.plan_ready.closing'))
             ->salutation(__('emails.plan_ready.team'))
             ->line('')
-            ->line(new HtmlString('<p style="font-size:12px;color:#666;margin-top:24px;">' . __('emails.plan_ready.disclaimer') . '</p>'));
+            ->line(new HtmlString('<p style="font-size:12px;color:#666;margin-top:24px;">'.__('emails.plan_ready.disclaimer').'</p>'));
 
         return $mail;
     }
-
 
     public function toExpo(object $notifiable): ExpoMessage
     {

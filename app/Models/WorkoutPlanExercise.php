@@ -15,6 +15,7 @@ class WorkoutPlanExercise extends Model
 
     protected $fillable = [
         'workout_plan_id',
+        'exercise_id',
         'order',
         'name',
         'original_name',
@@ -27,7 +28,9 @@ class WorkoutPlanExercise extends Model
         'reps',
         'duration_seconds',
         'rest_seconds',
+        'execution_style',
         'tempo',
+        'rpe',
         'weight_recommendation',
         'muscle_groups',
         'equipment',
@@ -49,6 +52,11 @@ class WorkoutPlanExercise extends Model
     public function workoutPlan(): BelongsTo
     {
         return $this->belongsTo(WorkoutPlan::class);
+    }
+
+    public function exercise(): BelongsTo
+    {
+        return $this->belongsTo(Exercise::class);
     }
 
     public function trackingExercises(): HasMany

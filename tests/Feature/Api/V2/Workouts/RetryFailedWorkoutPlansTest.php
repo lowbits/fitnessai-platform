@@ -128,4 +128,3 @@ test('command can be cancelled by user', function () {
     expect(WorkoutPlan::where('status', 'failed')->count())->toBe(1);
     Queue::assertNotPushed(GenerateUserWorkoutPlan::class);
 });
-

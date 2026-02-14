@@ -12,9 +12,9 @@ trait MapsExercises
     {
         return [
             'id' => $exercise->id,
+            'exercise_id' => $exercise->exercise_id,
             'order' => $exercise->order,
-            'name' => $exercise->name,
-            'original_name' => $exercise->original_name,
+            'name' => $exercise->exercise?->localizedName() ?? $exercise->name,
             'type' => $exercise->type,
             'description' => $exercise->description,
             'instructions' => $exercise->instructions,
@@ -27,7 +27,7 @@ trait MapsExercises
             'muscle_groups' => $exercise->muscle_groups,
             'equipment' => $exercise->equipment,
             'form_cues' => $exercise->form_cues,
-            'alternatives' => $exercise->alternatives,
+            'alternatives' => $this->mapAlternatives($exercise->alternatives),
             'difficulty' => $exercise->difficulty,
         ];
     }
@@ -40,9 +40,9 @@ trait MapsExercises
     {
         return [
             'id' => $exercise->id,
+            'exercise_id' => $exercise->exercise_id,
             'order' => $exercise->order,
-            'name' => $exercise->name,
-            'original_name' => $exercise->original_name,
+            'name' => $exercise->exercise?->localizedName() ?? $exercise->name,
             'type' => $exercise->type,
             'description' => $exercise->description,
             'instructions' => $exercise->instructions,
@@ -51,16 +51,35 @@ trait MapsExercises
             'duration_seconds' => $exercise->duration_seconds,
             'rest_seconds' => $exercise->rest_seconds,
             'tempo' => $exercise->tempo,
+            'execution_style' => $exercise->execution_style,
+            'rpe' => $exercise->rpe,
             'weight_recommendation' => $exercise->weight_recommendation,
             'muscle_groups' => $exercise->muscle_groups ?? [],
             'equipment' => $exercise->equipment ?? [],
             'form_cues' => $exercise->form_cues,
-            'alternatives' => $exercise->alternatives ?? [],
+            'alternatives' => $this->mapAlternatives($exercise->alternatives),
             'difficulty' => $exercise->difficulty,
-            'video_url' => $exercise->video_url,
-            'image' => $exercise->image,
+            'video_url' => $exercise->exercise?->video_url ?? $exercise->video_url,
+            'image' => $exercise->exercise?->image ?? $exercise->image,
             'latest_tracking' => $latestTracking,
         ];
     }
-}
 
+    /**
+     * Map alternatives from [{exercise_id, name}] to clean name array
+     */
+    protected function mapAlternatives(?array $alternatives): array
+    {
+        if (empty($alternatives)) {
+            return [];
+        }
+
+        return collect($alternatives)->map(function ($item) {
+            if (is_string($item)) {
+                return $item;
+            }
+
+            return $item['name'] ?? null;
+        })->filter()->values()->all();
+    }
+}

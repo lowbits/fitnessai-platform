@@ -314,7 +314,7 @@
                                 <thead>
                                     <tr>
                                         <th colspan="2" style="text-align: left; padding: 16px 18px; background-color: #08233e; color: white; font-size: 13px; font-weight: bold; border-bottom: 3px solid #48D670;">
-                                            {{ $loop->iteration }}. {{ $exercise->name }}
+                                            {{ $loop->iteration }}. {{ $exercise->exercise?->localizedName() ?? $exercise->name }}
                                         </th>
                                     </tr>
                                 </thead>
@@ -387,7 +387,7 @@
                                         <tr>
                                             <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9;">
                                                 <strong style="color: #333;">{{ __('pdf.workout_plan.alternatives') }}:</strong>
-                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->alternatives)) }}</span>
+                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : ($item['name'] ?? json_encode($item)); }, $exercise->alternatives)) }}</span>
                                             </td>
                                         </tr>
                                     @endif

@@ -15,10 +15,13 @@ use App\Http\Controllers\Api\V2\ResendVerificationEmailController;
 use App\Http\Controllers\Api\V2\SetPasswordRequestTokenController;
 use App\Http\Controllers\Api\V2\SkipWorkoutController;
 use App\Http\Controllers\Api\V2\WorkoutController;
+use App\Http\Controllers\Api\V2\Workouts\AddWorkoutExerciseController;
+use App\Http\Controllers\Api\V2\Workouts\RemoveWorkoutExerciseController;
+use App\Http\Controllers\Api\V2\Workouts\ReorderWorkoutExercisesController;
+use App\Http\Controllers\Api\V2\Workouts\ReplaceWorkoutExerciseController;
+use App\Http\Controllers\Api\V2\Workouts\UpdateWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
 use Illuminate\Support\Facades\Route;
-
-
 
 Route::prefix('v2')->group(function () {
     Route::post('/onboarding', [OnboardingController::class, 'store'])
@@ -54,6 +57,11 @@ Route::prefix('v2')->group(function () {
         Route::get('/workouts/{workoutId}', [WorkoutController::class, 'show']);
         Route::post('/workouts/{workout}/reschedule', RescheduleWorkoutController::class);
         Route::post('/workouts/{workoutPlan}/skip', SkipWorkoutController::class)->name('workouts.skip');
+        Route::post('/workouts/{workout}/exercises', AddWorkoutExerciseController::class)->name('workouts.exercises.add');
+        Route::put('/workouts/{workout}/exercises/reorder', ReorderWorkoutExercisesController::class)->name('workouts.exercises.reorder');
+        Route::put('/workouts/{workout}/exercises/{exerciseId}', UpdateWorkoutExerciseController::class)->name('workouts.exercises.update');
+        Route::put('/workouts/{workout}/exercises/{exerciseId}/replace', ReplaceWorkoutExerciseController::class)->name('workouts.exercises.replace');
+        Route::delete('/workouts/{workout}/exercises/{exerciseId}', RemoveWorkoutExerciseController::class)->name('workouts.exercises.remove');
 
         // Push notification routes
         Route::prefix('notifications')->group(function () {

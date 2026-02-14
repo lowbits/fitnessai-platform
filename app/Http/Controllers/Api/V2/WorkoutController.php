@@ -20,8 +20,8 @@ class WorkoutController extends Controller
     {
         $user = $request->user();
 
-        // Get workout from database with exercises
-        $workout = WorkoutPlan::with(['exercises'])->findOrFail($workoutId);
+        // Get workout from database with exercises and their canonical exercise
+        $workout = WorkoutPlan::with(['exercises.exercise.translations'])->findOrFail($workoutId);
 
         // Verify the workout belongs to user's plan
         if ($workout->plan->user_id !== $user->id) {
@@ -31,25 +31,24 @@ class WorkoutController extends Controller
             ], 403);
         }
 
-        // Get exercises with their original names
-        $exercises = $workout->exercises()->orderBy('order')->get();
-        $originalNames = $exercises->pluck('original_name')->unique()->filter()->all();
+        // Get exercises ordered
+        $exercises = $workout->exercises()->with('exercise.translations')->orderBy('order')->get();
+        $exerciseIds = $exercises->pluck('exercise_id')->unique()->filter()->all();
 
-        // Get latest tracking exercises for all original names in one query
-        // This is more performant than querying per exercise
+        // Get latest tracking exercises for all exercise IDs in one query
         $latestTrackings = collect();
 
-        if (! empty($originalNames)) {
+        if (! empty($exerciseIds)) {
             $latestTrackings = WorkoutTrackingExercise::query()
                 ->select('workout_tracking_exercises.*')
                 ->join('workout_trackings', 'workout_tracking_exercises.workout_tracking_id', '=', 'workout_trackings.id')
                 ->join('workout_plan_exercises', 'workout_tracking_exercises.workout_plan_exercise_id', '=', 'workout_plan_exercises.id')
                 ->where('workout_trackings.user_id', $user->id)
-                ->whereIn('workout_plan_exercises.original_name', $originalNames)
+                ->whereIn('workout_plan_exercises.exercise_id', $exerciseIds)
                 ->whereNotNull('workout_trackings.completed_at')
-                ->with(['sets' => fn ($query) => $query->orderBy('set_number'), 'exercise:id,original_name', 'workoutTracking:id,completed_at'])
+                ->with(['sets' => fn ($query) => $query->orderBy('set_number'), 'exercise:id,exercise_id', 'workoutTracking:id,completed_at'])
                 ->get()
-                ->groupBy(fn ($item) => $item->exercise->original_name)
+                ->groupBy(fn ($item) => $item->exercise->exercise_id)
                 ->map(fn ($group) => $group->sortByDesc(fn ($item) => $item->workoutTracking->completed_at)->first());
         }
 
@@ -57,8 +56,8 @@ class WorkoutController extends Controller
         $formattedExercises = $exercises->map(function ($exercise) use ($latestTrackings) {
             $latestTracking = null;
 
-            if ($exercise->original_name && isset($latestTrackings[$exercise->original_name])) {
-                $trackingExercise = $latestTrackings[$exercise->original_name];
+            if ($exercise->exercise_id && isset($latestTrackings[$exercise->exercise_id])) {
+                $trackingExercise = $latestTrackings[$exercise->exercise_id];
 
                 $latestTracking = [
                     'notes' => $trackingExercise->notes,

@@ -14,7 +14,7 @@ use Spatie\Sluggable\SlugOptions;
 #[ObservedBy([ExerciseObserver::class])]
 class Exercise extends Model
 {
-    use HasFactory, SoftDeletes, HasSlug;
+    use HasFactory, HasSlug, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -27,7 +27,6 @@ class Exercise extends Model
             'training_places' => 'array',
             'instructions' => 'array',
             'event_tags' => 'array',
-            'requires_spotter' => 'boolean',
             'is_verified' => 'boolean',
         ];
     }
@@ -53,10 +52,17 @@ class Exercise extends Model
             }
         });
 
+        $translations = $this->translations
+            ->mapWithKeys(fn (ExerciseTranslation $t) => [$t->locale => $t->name])
+            ->put('en', $this->name)
+            ->sortKeys()
+            ->all();
+
         return [
             'id' => $this->id,
             'name' => $this->name,
             'slug' => $this->slug,
+            'translations' => $translations,
             'all_names' => $allNames->unique()->values()->toArray(),
             'search_text' => $searchText,
             'type' => $this->type,
@@ -69,7 +75,6 @@ class Exercise extends Model
             'equipment' => $this->equipment ?? [],
             'training_places' => $this->training_places ?? [],
             'event_tags' => $this->event_tags ?? [],
-            'requires_spotter' => $this->requires_spotter,
             'is_verified' => $this->is_verified,
         ];
     }

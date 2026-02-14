@@ -23,14 +23,14 @@ test('workout plan does not generate day 8 on retry when plan is already complet
                                     'sets' => 3,
                                     'reps' => 10,
                                     'rest_seconds' => 60,
-                                    'instructions' => 'Push weight up'
-                                ]
-                            ]
-                        ])
-                    ]
-                ]
-            ]
-        ])
+                                    'instructions' => 'Push weight up',
+                                ],
+                            ],
+                        ]),
+                    ],
+                ],
+            ],
+        ]),
     ]);
 
     $user = User::factory()->create();
@@ -92,12 +92,12 @@ test('workout plan logic calculates correct end day for partial completion', fun
                     'message' => [
                         'content' => json_encode([
                             'workout_name' => 'Test Workout',
-                            'exercises' => []
-                        ])
-                    ]
-                ]
-            ]
-        ])
+                            'exercises' => [],
+                        ]),
+                    ],
+                ],
+            ],
+        ]),
     ]);
 
     $user = User::factory()->create();
@@ -150,7 +150,7 @@ test('workout plan logic calculates correct end day for partial completion', fun
     // Verify endDayNumber calculation with min()
     $daysToGenerate = 7;
     $endDayNumber = min($nextDay + $daysToGenerate - 1, $plan->duration_days);
-    expect($endDayNumber)->toBe(7, "End day should be limited to plan duration (7), not 10");
+    expect($endDayNumber)->toBe(7, 'End day should be limited to plan duration (7), not 10');
 });
 
 test('workout plan logic prevents generation beyond duration for 30 day plan', function () {
@@ -162,12 +162,12 @@ test('workout plan logic prevents generation beyond duration for 30 day plan', f
                     'message' => [
                         'content' => json_encode([
                             'workout_name' => 'Test Workout',
-                            'exercises' => []
-                        ])
-                    ]
-                ]
-            ]
-        ])
+                            'exercises' => [],
+                        ]),
+                    ],
+                ],
+            ],
+        ]),
     ]);
 
     $user = User::factory()->create();
@@ -237,7 +237,7 @@ test('workout plan logic prevents generation beyond duration for 30 day plan', f
     // For last days (29-30), endDay should be 30, not 35
     $nextDay = $lastGeneratedDay + 1;
     $endDayNumber = min($nextDay + $daysToGenerate - 1, $plan->duration_days);
-    expect($endDayNumber)->toBe(30, "End day should be limited to 30, not 35");
+    expect($endDayNumber)->toBe(30, 'End day should be limited to 30, not 35');
 });
 
 test('workout plan completeness check identifies completed plans', function () {
@@ -249,12 +249,12 @@ test('workout plan completeness check identifies completed plans', function () {
                     'message' => [
                         'content' => json_encode([
                             'workout_name' => 'Test Workout',
-                            'exercises' => []
-                        ])
-                    ]
-                ]
-            ]
-        ])
+                            'exercises' => [],
+                        ]),
+                    ],
+                ],
+            ],
+        ]),
     ]);
 
     $plan = Plan::factory()->create([
@@ -281,5 +281,3 @@ test('workout plan completeness check identifies completed plans', function () {
     expect($lastGeneratedDay)->toBe(7);
     expect($plan->duration_days)->toBe(7);
 });
-
-

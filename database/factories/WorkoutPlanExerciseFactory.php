@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Exercise;
 use App\Models\WorkoutPlan;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -19,6 +20,7 @@ class WorkoutPlanExerciseFactory extends Factory
     {
         return [
             'workout_plan_id' => WorkoutPlan::factory(),
+            'exercise_id' => Exercise::factory(),
             'order' => fake()->numberBetween(1, 10),
             'name' => fake()->randomElement(['Bench Press', 'Squat', 'Deadlift', 'Pull-ups', 'Push-ups', 'Lunges', 'Plank']),
             'type' => fake()->randomElement(['strength', 'cardio', 'warmup', 'cooldown', 'stretch']),

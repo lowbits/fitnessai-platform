@@ -281,13 +281,7 @@ const submit = async () => {
 
         if (!response.ok) {
             if (response.status === 422 && data.errors) {
-                // Validation errors (e.g., email already in use)
                 setError(data.errors);
-
-                // If email error exists, navigate back to email step (step 6)
-                if (data.errors.email) {
-                    activeStep.value = 6;
-                }
             } else {
                 console.error('Onboarding failed:', data);
             }

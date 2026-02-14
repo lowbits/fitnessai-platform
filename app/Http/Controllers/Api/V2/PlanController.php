@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
-use App\Models\CalorieTracking;
 use App\Models\MealPlan;
 use App\Models\WorkoutPlan;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +27,7 @@ class PlanController extends Controller
         // Get user's active plan
         $plan = $user->plans()->where('status', 'active')->first();
 
-        if (!$plan) {
+        if (! $plan) {
             return response()->json([
                 'error' => 'No active plan found',
                 'message' => 'You don\'t have an active plan. Please complete onboarding first.',
@@ -82,7 +81,7 @@ class PlanController extends Controller
             ->first();
 
         // Get workout plan for this day
-        $workoutPlan = WorkoutPlan::with('exercises')
+        $workoutPlan = WorkoutPlan::with('exercises.exercise.translations')
             ->where('plan_id', $plan->id)
             ->where('day_number', $dayOfPlan)
             ->first();
@@ -96,7 +95,6 @@ class PlanController extends Controller
 
         // Get tracked calories for this day
         $trackedCalories = $this->getTrackedCaloriesForDay($user, $requestDate);
-
 
         return response()->json([
             'plan_id' => $plan->id,
@@ -119,7 +117,7 @@ class PlanController extends Controller
      */
     private function formatMealPlanResponse(?MealPlan $mealPlan, $user, Carbon $date): array
     {
-        if (!$mealPlan) {
+        if (! $mealPlan) {
             // If user was verified today and plan is empty, it's likely being generated
             $verifiedToday = $user->email_verified_at &&
                             Carbon::parse($user->email_verified_at)->isToday();
@@ -132,7 +130,7 @@ class PlanController extends Controller
         }
 
         // Determine meal status based on meal_plan status
-        $mealStatus = match($mealPlan->status) {
+        $mealStatus = match ($mealPlan->status) {
             'pending', 'generating' => 'generating',
             'failed' => 'failed',
             'generated' => 'generated',
@@ -188,15 +186,16 @@ class PlanController extends Controller
      */
     private function formatWorkoutPlanResponse(?WorkoutPlan $workoutPlan, $user = null): ?array
     {
-        if (!$workoutPlan) {
+        if (! $workoutPlan) {
             // If user was verified today and plan is empty, it's likely being generated
             if ($user && $user->email_verified_at && Carbon::parse($user->email_verified_at)->isToday()) {
                 return [
                     'status' => 'generating',
                     'message' => 'Workout is being generated...',
-                    'workouts' => []
+                    'workouts' => [],
                 ];
             }
+
             return null;
         }
 
@@ -204,7 +203,7 @@ class PlanController extends Controller
             return [
                 'status' => 'generating',
                 'message' => 'Workout is being generated...',
-                'workouts'=> []
+                'workouts' => [],
             ];
         }
 
@@ -221,7 +220,7 @@ class PlanController extends Controller
             'type' => $workoutPlan->workout_type,
             'description' => $workoutPlan->description,
             'duration_minutes' => $workoutPlan->estimated_duration_minutes,
-            'exercises' => $workoutPlan->exercises->pluck('name'),
+            'exercises' => $workoutPlan->exercises->map(fn ($e) => $e->exercise?->localizedName() ?? $e->name),
             'exercises_count' => $workoutPlan->exercises->count(),
             'difficulty' => $workoutPlan->difficulty,
             'muscle_groups' => $workoutPlan->muscle_groups ?? [],
@@ -265,7 +264,7 @@ class PlanController extends Controller
      */
     private function getStatusMessage(string $status): ?string
     {
-        return match($status) {
+        return match ($status) {
             'generating' => 'Your plan is being generated. This may take a few moments.',
             'failed' => 'Failed to generate plan. Please contact support.',
             'partial' => 'Some parts of your plan could not be generated. Please contact support.',
@@ -284,7 +283,6 @@ class PlanController extends Controller
             ->whereDate('tracked_date', $date)
             ->orderBy('created_at', 'asc')
             ->get();
-
 
         $entries = $trackings->map(function ($tracking) {
             return [
@@ -323,4 +321,3 @@ class PlanController extends Controller
         ];
     }
 }
-
