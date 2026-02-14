@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\EmailVerified;
-use App\Jobs\GenerateUserWorkoutPlan;
+use App\Jobs\LegacyGenerateUserWorkoutPlan;
 use Illuminate\Support\Facades\Cache;
 
 class GenerateWorkoutPlan
@@ -19,7 +19,7 @@ class GenerateWorkoutPlan
             return;
         }
 
-        GenerateUserWorkoutPlan::dispatch($event->user, $event->plan);
+        LegacyGenerateUserWorkoutPlan::dispatch($event->user, $event->plan);
     }
 }
 

@@ -3,7 +3,7 @@
 namespace App\Actions\RevenueCat;
 
 use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
+use App\Jobs\LegacyGenerateUserWorkoutPlan;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -54,7 +54,7 @@ class AdjustActivePlanAction
 
         // Check if user is behind generation week date
         if ($this->shouldTriggerGeneration($activePlan)) {
-            GenerateUserWorkoutPlan::dispatch($user, $activePlan);
+            LegacyGenerateUserWorkoutPlan::dispatch($user, $activePlan);
             GenerateUserMealPlan::dispatch($user, $activePlan);
 
             Log::info('Triggered next week generation after plan adjustment', [

@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
+use App\Jobs\LegacyGenerateUserWorkoutPlan;
 use App\Models\User;
 use App\Notifications\WeeklyPlansGeneratedNotification;
 use Carbon\Carbon;
@@ -100,7 +100,7 @@ class GenerateWeeklyPlans extends Command
                 }
 
                 // Dispatch jobs to generate next 7 days
-                GenerateUserWorkoutPlan::dispatch($user, $plan);
+                LegacyGenerateUserWorkoutPlan::dispatch($user, $plan);
                 GenerateUserMealPlan::dispatch($user, $plan);
 
                 $daysToGenerate = $startDate->diffInDays($endDate) + 1;
@@ -248,7 +248,7 @@ class GenerateWeeklyPlans extends Command
             );
 
             // Dispatch jobs to generate next 7 days
-            GenerateUserWorkoutPlan::dispatch($user, $plan);
+            LegacyGenerateUserWorkoutPlan::dispatch($user, $plan);
             GenerateUserMealPlan::dispatch($user, $plan);
 
             $this->info("\n✅ Generation jobs dispatched successfully!");

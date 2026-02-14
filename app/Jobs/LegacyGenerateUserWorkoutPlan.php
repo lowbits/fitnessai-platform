@@ -11,7 +11,7 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use OpenAI;
 
-class backup_GenerateUserWorkoutPlan implements ShouldQueue
+class LegacyGenerateUserWorkoutPlan implements ShouldQueue
 {
     use Queueable;
 
