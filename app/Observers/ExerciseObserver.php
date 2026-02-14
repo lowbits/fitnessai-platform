@@ -14,6 +14,7 @@ class ExerciseObserver
 
     public function saved(Exercise $exercise): void
     {
+        if (app()->environment('testing')) return;
         $exercise->loadMissing('translations');
 
         $this->client
@@ -23,6 +24,7 @@ class ExerciseObserver
 
     public function deleted(Exercise $exercise): void
     {
+        if (app()->environment('testing')) return;
         $this->client
             ->index('exercises')
             ->deleteDocument($exercise->id);
@@ -30,11 +32,13 @@ class ExerciseObserver
 
     public function restored(Exercise $exercise): void
     {
+        if (app()->environment('testing')) return;
         $this->saved($exercise);
     }
 
     public function forceDeleted(Exercise $exercise): void
     {
+        if (app()->environment('testing')) return;
         $this->deleted($exercise);
     }
 }
