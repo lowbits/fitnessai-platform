@@ -5,12 +5,14 @@ namespace App\Ai\Agents;
 use App\Ai\Tools\MeilisearchSimilaritySearch;
 use App\Ai\Tools\SaveWorkoutPlanTool;
 use App\Models\WorkoutPlan;
+use Laravel\Ai\Attributes\Timeout;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Promptable;
 use Stringable;
 
+#[Timeout(300)]
 class WorkoutProgrammerAgent implements Agent, Conversational, HasTools
 {
     use Promptable;
