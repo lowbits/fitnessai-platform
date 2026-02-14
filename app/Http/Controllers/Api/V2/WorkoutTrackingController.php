@@ -62,7 +62,7 @@ class WorkoutTrackingController extends Controller
             if (! empty($validated['exercises'])) {
                 foreach ($validated['exercises'] as $exerciseData) {
                     $trackingExercise = $tracking->exercises()->create([
-                        'workout_plan_exercise_id' => $exerciseData['workout_plan_exercise_id'],
+                        'workout_plan_exercise_id' => $exerciseData['exercise_id'],
                         'order' => $exerciseData['order'] ?? 0,
                         'notes' => $exerciseData['notes'] ?? null,
                     ]);
@@ -140,7 +140,7 @@ class WorkoutTrackingController extends Controller
 
                 foreach ($validated['exercises'] as $exerciseData) {
                     $trackingExercise = $workoutTracking->exercises()->create([
-                        'workout_plan_exercise_id' => $exerciseData['workout_plan_exercise_id'],
+                        'workout_plan_exercise_id' => $exerciseData['exercise_id'],
                         'order' => $exerciseData['order'] ?? 0,
                         'notes' => $exerciseData['notes'] ?? null,
                     ]);
