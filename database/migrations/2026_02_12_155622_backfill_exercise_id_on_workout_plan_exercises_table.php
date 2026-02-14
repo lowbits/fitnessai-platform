@@ -17,19 +17,10 @@ return new class extends Migration
                 LIMIT 1
             )
             WHERE original_name IS NOT NULL
+              AND exercise_id IS NULL
         ');
 
-        $unmatched = DB::table('workout_plan_exercises')
-            ->whereNull('exercise_id')
-            ->whereNotNull('original_name')
-            ->count();
-
-        if ($unmatched > 0) {
-            throw new RuntimeException("{$unmatched} workout_plan_exercises could not be matched to an exercise.");
-        }
-
         Schema::table('workout_plan_exercises', function (Blueprint $table) {
-            $table->unsignedBigInteger('exercise_id')->nullable(false)->change();
             $table->foreign('exercise_id')->references('id')->on('exercises');
         });
     }
