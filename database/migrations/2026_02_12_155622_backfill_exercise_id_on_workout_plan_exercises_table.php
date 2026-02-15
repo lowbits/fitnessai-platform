@@ -20,13 +20,23 @@ return new class extends Migration
               AND exercise_id IS NULL
         ');
 
-        $foreignKeyExists = collect(DB::select("SHOW CREATE TABLE workout_plan_exercises"))
-            ->contains(fn ($row) => str_contains($row->{'Create Table'}, 'workout_plan_exercises_exercise_id_foreign'));
+        $driver = Schema::getConnection()->getDriverName();
 
-        if (! $foreignKeyExists) {
-            Schema::table('workout_plan_exercises', function (Blueprint $table) {
-                $table->foreign('exercise_id')->references('id')->on('exercises');
-            });
+        if ($driver === 'sqlite') {
+            // SQLite doesn't support adding foreign keys after table creation reliably
+            // and doesn't have SHOW CREATE TABLE. Skip foreign key check in SQLite.
+            if (! collect(Schema::getColumnListing('workout_plan_exercises'))->contains('exercise_id')) {
+                return;
+            }
+        } else {
+            $foreignKeyExists = collect(DB::select('SHOW CREATE TABLE workout_plan_exercises'))
+                ->contains(fn ($row) => str_contains($row->{'Create Table'}, 'workout_plan_exercises_exercise_id_foreign'));
+
+            if (! $foreignKeyExists) {
+                Schema::table('workout_plan_exercises', function (Blueprint $table) {
+                    $table->foreign('exercise_id')->references('id')->on('exercises');
+                });
+            }
         }
     }
 

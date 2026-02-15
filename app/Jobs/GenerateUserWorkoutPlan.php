@@ -29,7 +29,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         $profile = $this->user->profile;
 
         if (! $profile) {
-            Log::error('User profile not found', ['user_id' => $this->user->id]);
+            Log::error('[WorkoutGen] No profile found, aborting', ['user_id' => $this->user->id]);
 
             return;
         }
@@ -37,7 +37,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         [$startDay, $endDay] = $this->calculateDayRange();
 
         if (! $startDay) {
-            Log::info('Workout plan already complete', [
+            Log::info('[WorkoutGen] All days already generated', [
                 'user_id' => $this->user->id,
                 'plan_id' => $this->plan->id,
             ]);
@@ -45,11 +45,12 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return;
         }
 
-        Log::info('Starting workout plan generation', [
+        Log::info('[WorkoutGen] Starting generation', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
-            'start_day' => $startDay,
-            'end_day' => $endDay,
+            'day_range' => "$startDay-$endDay",
+            'workouts_per_week' => $this->plan->workouts_per_week ?? 3,
+            'locale' => $this->user->locale,
         ]);
 
         $workoutsPerWeek = $this->plan->workouts_per_week ?? 3;
@@ -94,6 +95,10 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
             // Generate workout via AI agent
             try {
+                Log::info("[WorkoutGen] Calling AI agent for day $day", [
+                    'workout_plan_id' => $workoutPlan->id,
+                ]);
+
                 $prompt = new CreateWorkoutPrompt(
                     profile: $profile,
                     locale: $this->user->locale,
@@ -112,12 +117,14 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     $exerciseNames = $workoutPlan->exercises()->with('exercise')->get()->map(fn ($e) => $e->exercise?->name ?? $e->name)->take(3)->implode(', ');
                     $generatedWorkoutsSummary[] = "Day $day: $workoutPlan->workout_name ($exerciseNames...)";
 
-                    Log::info("Generated workout for day $day", [
+                    Log::info("[WorkoutGen] Day $day OK", [
                         'workout_plan_id' => $workoutPlan->id,
                         'workout_name' => $workoutPlan->workout_name,
+                        'workout_type' => $workoutPlan->workout_type,
+                        'exercises' => $workoutPlan->exercises()->count(),
                     ]);
                 } else {
-                    Log::warning("Agent completed but workout not generated for day $day", [
+                    Log::warning("[WorkoutGen] Agent finished but status still '{$workoutPlan->status}' for day $day — likely SaveWorkoutPlanTool failed silently", [
                         'workout_plan_id' => $workoutPlan->id,
                         'status' => $workoutPlan->status,
                     ]);
@@ -125,9 +132,9 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     $workoutPlan->update(['status' => 'failed']);
                 }
             } catch (Exception $e) {
-                Log::error("Failed to generate workout for day $day", [
-                    'error' => $e->getMessage(),
+                Log::error("[WorkoutGen] Exception on day $day: {$e->getMessage()}", [
                     'workout_plan_id' => $workoutPlan->id,
+                    'exception' => $e::class,
                 ]);
 
                 $workoutPlan->update(['status' => 'failed']);
@@ -136,11 +143,16 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             }
         }
 
-        Log::info('Workout plan generation completed', [
+        $generated = WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'generated')->count();
+        $failed = WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'failed')->count();
+        $pending = WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'pending')->count();
+
+        Log::info('[WorkoutGen] Batch done', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
-            'generated' => WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'generated')->count(),
-            'failed' => WorkoutPlan::where('plan_id', $this->plan->id)->where('status', 'failed')->count(),
+            'generated' => $generated,
+            'failed' => $failed,
+            'pending' => $pending,
         ]);
     }
 
@@ -203,10 +215,11 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
     public function failed(Throwable $exception): void
     {
-        Log::error('GenerateUserWorkoutPlan final failure', [
+        Log::error('[WorkoutGen] Job failed permanently', [
             'user_id' => $this->user->id,
             'plan_id' => $this->plan->id,
             'error' => $exception->getMessage(),
+            'exception' => $exception::class,
         ]);
 
         WorkoutPlan::where('plan_id', $this->plan->id)

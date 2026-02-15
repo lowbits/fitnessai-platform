@@ -2,20 +2,19 @@
 
 return [
     'plan_ready' => [
-        'subject' => 'Your plan is ready! 🎉',
-        'greeting' => 'Hi :name,',
-        'intro_pdf' => 'your personalized **:days-day plan** is ready! Training + nutrition, tailored to your goal. PDF attached.',
-        'intro_app' => 'your personalized **:days-day plan** is ready! Training + nutrition, tailored to your goal.',
+        'subject' => 'Your :goal plan is ready 💪',
+        'greeting' => 'Hey :name,',
+        'intro_pdf' => 'Your personalized :days-day :goal plan is ready — PDF attached.',
+        'intro_app' => 'Your personalized :days-day :goal plan is ready!',
         'cta_app' => 'View plan →',
-        'app_pitch' => '**Even better with the app:** Track your workouts, log your meals — and your plan adapts to your progress.',
-        'trial' => 'No risk. Cancel anytime.',
-        'step1_label' => '**Step 1:** Download app',
-        'step2_label' => '**Step 2:** Unlock 7 days free',
-        'cta' => 'Try 7 days free →',
-        'support' => 'Questions? Just reply to this email.',
-        'closing' => 'Good luck! 💪',
+        'first_workout' => 'Your first workout: **:workout**',
+        'first_meal' => 'Your first meal: **:meal**',
+        'start_cta' => 'Start with Day 1 tomorrow. Read through the plan once so you know what to expect.',
+        'app_pitch' => 'P.S. In the fytrr app, your plan adapts automatically — new workouts, adjusted nutrition, all based on your progress.',
+        'app_cta' => '7 days free →',
+        'closing' => 'Good luck!',
         'team' => 'The fytrr Team',
-        'disclaimer' => '*AI-generated plan. Not a substitute for medical advice.*',
+        'disclaimer' => '*AI-generated plan. Does not replace medical advice.*',
     ],
 
     'app_promo' => [
@@ -88,5 +87,78 @@ return [
         'closing' => 'Happy eating,',
         'team' => 'Tobi - fytrr Team',
     ],
-];
 
+    'onboarding' => [
+        'email_02' => [
+            'subject' => 'Quick tip for your first workout 🏋️',
+            'greeting' => 'Hey :name,',
+            'intro' => ':workout is on the schedule today. Quick tip:',
+            'tip' => 'Use the first 2-3 sets to find your weight. Don\'t go too heavy — getting the movement right matters more than the number on the bar.',
+            'mona_pitch' => 'And if an exercise doesn\'t work for you? In the app, Mona can swap it instantly — same muscle group, different movement.',
+            'closing' => 'You got this.',
+            'soft_cta' => 'Mona can help with that → [:label](:url)',
+            'team' => 'The fytrr Team',
+        ],
+
+        'email_03' => [
+            'subject' => 'Your :goal plan can\'t do this',
+            'greeting' => 'Hey :name,',
+            'intro' => 'You\'ve been training for a few days now. Probably going well — but something\'s missing.',
+            'pain_point' => 'What do you do when you\'re short on time? When an exercise doesn\'t work? When you don\'t like a meal?',
+            'pdf_limitation' => 'Your PDF can\'t answer you. Mona can:',
+            'scenarios' => [
+                'gym' => [
+                    '"I only have 30 min at the gym." → Mona shortens your workout, same muscle groups.',
+                    '"The leg press is taken." → Mona gives you an alternative.',
+                    '"I want to change my dinner." → Mona swaps it, same macros.',
+                ],
+                'home' => [
+                    '"I don\'t have dumbbells." → Mona adapts the exercise to bodyweight.',
+                    '"I can\'t stay motivated alone." → Mona coaches you through every workout.',
+                    '"I want to change my dinner." → Mona swaps it, same macros.',
+                ],
+                'outdoor' => [
+                    '"It\'s raining, I can\'t go outside." → Mona builds you an indoor workout.',
+                    '"All I have is a park bench." → Mona adapts the exercises.',
+                    '"I want to change my dinner." → Mona swaps it, same macros.',
+                ],
+            ],
+            'trial' => '7 days free. No risk.',
+            'cta' => 'Meet Mona →',
+            'team' => 'The fytrr Team',
+        ],
+
+        'email_04' => [
+            'subject' => 'He started with the same plan as you',
+            'greeting' => 'Hey :name,',
+            'intro' => '30 days ago, Benedikt started exactly where you are now — with a free :goal plan.',
+            'testimonial_intro' => 'Then he tried the app:',
+            'testimonial' => '"I\'m very satisfied. The app helped me lose weight. Mona feels like a real coach."',
+            'testimonial_author' => '— Benedikt K. ⭐⭐⭐⭐⭐',
+            'outro' => 'The difference between having a plan and seeing results? Sticking with it. That\'s exactly what the app helps with.',
+            'cta' => 'Start for free →',
+            'team' => 'The fytrr Team',
+        ],
+
+        'email_05' => [
+            'subject' => 'Week 1 is done — what now?',
+            'greeting' => 'Hey :name,',
+            'intro' => 'Your :goal plan has been running for a week. Be honest: did you complete all :sessions workouts?',
+            'if_yes' => 'If yes — impressive. Keep going.',
+            'if_no' => 'If no — that\'s normal. Most people stop after Week 1. Not because the plan is bad, but because no one holds them accountable.',
+            'mona_pitch' => 'Mona does exactly that. She tracks your workouts, adapts your plan, and shows you what you\'ve already achieved.',
+            'trial' => 'Start Week 2 with Mona. 7 days free.',
+            'cta' => 'Start now →',
+            'last_email' => 'This is our last email — we won\'t bother you again. If you have questions, just reply here.',
+            'team' => 'The fytrr Team',
+        ],
+    ],
+
+    'body_goal_labels' => [
+        'muscle_gain' => 'Build Muscle',
+        'weight_loss' => 'Lose Weight',
+        'maintenance' => 'Stay Fit',
+        'endurance' => 'Build Endurance',
+        'strength' => 'Get Stronger',
+    ],
+];

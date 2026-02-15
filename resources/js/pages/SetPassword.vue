@@ -1,19 +1,21 @@
 <script setup lang="ts">
+import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { computed, onMounted } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
     token: string;
     email: string;
     iosAppStoreUrl: string;
+    iosAppStoreQrCode: string | null;
     utmSource?: string;
     utmMedium?: string;
     utmCampaign?: string;
 }>();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const deepLink = computed(() => {
     const params = new URLSearchParams({
@@ -25,16 +27,17 @@ const deepLink = computed(() => {
     if (props.utmMedium) params.append('utm_medium', props.utmMedium);
     if (props.utmCampaign) params.append('utm_campaign', props.utmCampaign);
 
-    return `fytrr://set-password?${params.toString()}`;
-});
-
-onMounted(() => {
-    window.location.href = deepLink.value;
+    return `https://fytrr.de/set-password?${params.toString()}`;
 });
 </script>
 
 <template>
-    <Head :title="t('set_password.meta.title')" />
+    <Head :title="t('set_password.meta.title')">
+        <meta
+            name="apple-itunes-app"
+            :content="`app-id=6757151695, app-argument=${deepLink}`"
+        />
+    </Head>
 
     <GuestLayout>
         <div class="mx-auto mt-10 max-w-2xl px-6 md:px-0">
@@ -84,21 +87,10 @@ onMounted(() => {
                         {{ t('set_password.download_prompt') }}
                     </p>
 
-                    <div class="flex flex-wrap justify-center gap-3">
-                        <!-- App Store Badge (only iOS for now) -->
-                        <a
-                            :href="iosAppStoreUrl"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="transition-opacity hover:opacity-80"
-                        >
-                            <img
-                                :src="`/assets/badges/App_Store_Badge_${locale.toUpperCase()}.svg`"
-                                alt="Download on App Store"
-                                class="h-10"
-                            />
-                        </a>
-                    </div>
+                    <AppStoreDownload
+                        :app-store-url="iosAppStoreUrl"
+                        :qr-code="iosAppStoreQrCode"
+                    />
                 </div>
 
                 <!-- Debug Info (only in development) -->

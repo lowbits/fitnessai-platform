@@ -39,9 +39,8 @@ test('command can retry failed workout plans', function () {
         ->expectsConfirmation('Do you want to retry generating these workout plans?', 'yes')
         ->assertSuccessful();
 
-    // Check that failed workouts were reset to pending
-    expect(WorkoutPlan::where('plan_id', $plan->id)->where('status', 'pending')->count())->toBe(2);
-    expect(WorkoutPlan::where('plan_id', $plan->id)->where('status', 'failed')->count())->toBe(0);
+    // Failed status is kept so calculateDayRange finds them
+    expect(WorkoutPlan::where('plan_id', $plan->id)->where('status', 'failed')->count())->toBe(2);
 
     // Check that job was dispatched
     Queue::assertPushed(GenerateUserWorkoutPlan::class);
@@ -63,8 +62,8 @@ test('command can filter by plan id', function () {
         ->expectsConfirmation('Do you want to retry generating these workout plans?', 'yes')
         ->assertSuccessful();
 
-    // Only plan1's workout should be reset
-    expect(WorkoutPlan::where('plan_id', $plan1->id)->where('status', 'pending')->count())->toBe(1);
+    // Only plan1's job should be dispatched, plan2 stays failed
+    expect(WorkoutPlan::where('plan_id', $plan1->id)->where('status', 'failed')->count())->toBe(1);
     expect(WorkoutPlan::where('plan_id', $plan2->id)->where('status', 'failed')->count())->toBe(1);
 });
 
@@ -84,8 +83,8 @@ test('command can filter by user id', function () {
         ->expectsConfirmation('Do you want to retry generating these workout plans?', 'yes')
         ->assertSuccessful();
 
-    // Only user1's workouts should be reset
-    expect(WorkoutPlan::where('plan_id', $plan1->id)->where('status', 'pending')->count())->toBe(1);
+    // Only user1's job should be dispatched, user2 stays failed
+    expect(WorkoutPlan::where('plan_id', $plan1->id)->where('status', 'failed')->count())->toBe(1);
     expect(WorkoutPlan::where('plan_id', $plan2->id)->where('status', 'failed')->count())->toBe(1);
 });
 

@@ -10,6 +10,9 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\HtmlString;
 
+/**
+ * @deprecated Replaced by onboarding drip sequence (Email02-05). See App\Jobs\SendOnboardingDripEmail.
+ */
 class AppPromoNotification extends Notification implements ShouldQueue
 {
     use Queueable;
@@ -21,9 +24,8 @@ class AppPromoNotification extends Notification implements ShouldQueue
      */
     public function __construct(
         public Plan $plan,
-        string      $token = null
-    )
-    {
+        ?string $token = null
+    ) {
         $this->token = $token;
     }
 
@@ -57,21 +59,21 @@ class AppPromoNotification extends Notification implements ShouldQueue
             ->line(__('emails.app_promo.intro'))
             ->line(__('emails.app_promo.pitch'))
             ->line(new HtmlString(
-                '<img src="' . $promoImageUrl . '" width="600" style="width:100%;max-width:600px;height:auto;border-radius:8px;" alt="fytrr App">'
+                '<img src="'.$promoImageUrl.'" width="600" style="width:100%;max-width:600px;height:auto;border-radius:8px;" alt="fytrr App">'
             ))
             ->line('')
-            ->line('✅ ' . __('emails.app_promo.features.track'))
-            ->line('✅ ' . __('emails.app_promo.features.meals'))
-            ->line('✅ ' . __('emails.app_promo.features.unlimited'))
-            ->line('✅ ' . __('emails.app_promo.features.adaptive'))
+            ->line('✅ '.__('emails.app_promo.features.track'))
+            ->line('✅ '.__('emails.app_promo.features.meals'))
+            ->line('✅ '.__('emails.app_promo.features.unlimited'))
+            ->line('✅ '.__('emails.app_promo.features.adaptive'))
             ->line(__('emails.app_promo.trial'))
             ->line('')
             ->line(__('emails.app_promo.step1_label'))
             ->line(new HtmlString('<table width="100%" cellpadding="0" cellspacing="0">
                 <tr>
                     <td align="center">
-                        <a href="' . config('app.app_store.ios.url') . '">
-                            <img src="'. asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png") .'"
+                        <a href="'.config('app.app_store.ios.url').'">
+                            <img src="'.asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png").'"
                                  alt="Download on App Store"
                                  style="height:40px;">
                         </a>

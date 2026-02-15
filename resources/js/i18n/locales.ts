@@ -1043,7 +1043,7 @@ export const locales = {
         },
         set_password: {
             meta: {
-                title: 'Set Your Password - Fytrr',
+                title: 'Set Your Password',
             },
             title: 'Set Your Password',
             subtitle: 'Your link will automatically open the Fytrr app',
@@ -1056,16 +1056,56 @@ export const locales = {
             no_app: "Don't have the app?",
             download_prompt: 'Download Fytrr to get started',
         },
+        downloadApp: {
+            meta: {
+                title: 'Download the App',
+            },
+            greeting: 'Hey {name}!',
+            mobile: {
+                body: 'Just 2 steps to your {goal} plan in the app:',
+            },
+            desktop: {
+                body: 'Scan the QR code with your phone:',
+                scanQr: 'Scan with phone',
+                or: 'or',
+                copyLink: 'Copy link',
+                copied: 'Copied!',
+                copyHint: 'Open the link on your phone',
+            },
+            step1: {
+                label: 'Step 1',
+                text: 'Download the app',
+            },
+            step2: {
+                label: 'Step 2',
+                text: 'Activate your account',
+                cta: 'Activate account',
+            },
+            trustLine: 'Free \u00b7 No credit card required.',
+        },
         generatingPlan: {
+            meta: {
+                title: 'Your plan is being created',
+            },
             badge: {
                 generating: 'Mona is creating your plan',
                 completed: 'Your plan is ready!',
             },
-            header: {
-                title: 'Your PDF is coming soon.',
-                titleHighlight: 'But you deserve more.',
-                description:
-                    "A static PDF can't adapt to you. Your AI Coach Mona can.",
+            phase1: {
+                title: 'Mona is creating your {bodyGoal} plan...',
+                subtitle: '~3-4 min',
+                canLeave:
+                    "You'll get an email when it's ready — you can close this page.",
+            },
+            phase2: {
+                title: 'Your {bodyGoal} plan is ready!',
+                subtitle: 'Check your emails.',
+                cta: 'Start in the app',
+            },
+            progressSteps: {
+                analyzingGoals: 'Analyzing goals',
+                buildingWorkouts: 'Building workouts',
+                creatingNutrition: 'Creating nutrition',
             },
             progress: {
                 meals: 'Planning meals...',
@@ -1077,26 +1117,6 @@ export const locales = {
                 lessThanMinute: '<1 min',
                 almostDone: 'Almost done!',
             },
-            comparison: {
-                title: 'Your plan. Two ways.',
-                pdf: {
-                    title: 'PDF Plan',
-                    sevenDayTraining: '7-day training',
-                    sevenDayNutrition: '7-day nutrition',
-                    noAdaptation: 'No adaptation',
-                    noTracking: 'No tracking',
-                    noAiCoach: 'No AI Coach',
-                },
-                app: {
-                    title: 'fytrr App',
-                    freeTrial: 'FREE TRIAL',
-                    everythingFromPdf: 'Everything from PDF',
-                    newPlansWeekly: 'New plans every week',
-                    aiCoach: 'AI Coach Mona 24/7',
-                    workoutTracking: 'Workout tracking',
-                    mealTracking: 'Meal tracking',
-                },
-            },
             monaDemo: {
                 title: "💬 This is what a PDF can't do",
                 userMessage:
@@ -1106,32 +1126,12 @@ export const locales = {
                 footer: 'Mona adapts to your life. A PDF does not.',
             },
             cta: {
-                price: {
-                    title: '7 days free',
-                    subtitle:
-                        'No credit card needed · Then €3.99/month · Cancel anytime',
-                },
-                step1: {
-                    title: 'Download the app',
-                    comingSoon: 'Coming soon',
-                    scanQr: 'Scan with phone',
-                    or: 'or',
-                },
-                step2: {
-                    title: 'Activate account',
-                    button: 'Set password & get started',
-                    hint: 'Opens the app and sets up your account',
-                    scanQr: 'Scan with phone',
-                    copyLink: 'Copy link',
-                    copied: 'Copied!',
-                    copyHint: 'Open in phone browser',
-                },
+                softLabel: 'Get the most out of your plan',
             },
-            fallback: {
-                title: '📄 Your PDF will still be created.',
-                description:
-                    "We'll send you an email as soon as it's ready — whether you use the app or not.",
-            },
+            trustLine:
+                '7 days free · No risk · Cancel anytime',
+            fallback:
+                "You'll also receive your plan as a PDF by email.",
             closePage: 'Close page',
             reviews: {
                 review1: {
@@ -2218,7 +2218,7 @@ export const locales = {
         },
         set_password: {
             meta: {
-                title: 'Passwort festlegen - Fytrr',
+                title: 'Passwort festlegen',
             },
             title: 'Passwort festlegen',
             subtitle: 'Dein Link öffnet automatisch die Fytrr App',
@@ -2231,16 +2231,56 @@ export const locales = {
             no_app: 'Hast du die App noch nicht?',
             download_prompt: 'Lade Fytrr herunter, um loszulegen',
         },
+        downloadApp: {
+            meta: {
+                title: 'App herunterladen',
+            },
+            greeting: 'Hey {name}!',
+            mobile: {
+                body: 'Nur 2 Schritte zu deinem {goal}-Plan in der App:',
+            },
+            desktop: {
+                body: 'Scanne den QR-Code mit deinem Handy:',
+                scanQr: 'Mit Handy scannen',
+                or: 'oder',
+                copyLink: 'Link kopieren',
+                copied: 'Kopiert!',
+                copyHint: '\u00d6ffne den Link auf deinem Handy',
+            },
+            step1: {
+                label: 'Schritt 1',
+                text: 'App herunterladen',
+            },
+            step2: {
+                label: 'Schritt 2',
+                text: 'Konto aktivieren',
+                cta: 'Konto aktivieren',
+            },
+            trustLine: 'Kostenlos \u00b7 Keine Kreditkarte n\u00f6tig.',
+        },
         generatingPlan: {
+            meta: {
+                title: 'Dein Plan wird erstellt',
+            },
             badge: {
                 generating: 'Mona erstellt deinen Plan',
                 completed: 'Dein Plan ist fertig!',
             },
-            header: {
-                title: 'Dein PDF kommt gleich.',
-                titleHighlight: 'Aber du verdienst mehr.',
-                description:
-                    'Ein statisches PDF kann sich nicht an dich anpassen. Dein AI Coach Mona schon.',
+            phase1: {
+                title: 'Mona erstellt deinen {bodyGoal}-Plan...',
+                subtitle: '~3-4 Min.',
+                canLeave:
+                    'Du bekommst eine E-Mail sobald er fertig ist — du kannst die Seite schließen.',
+            },
+            phase2: {
+                title: 'Dein {bodyGoal}-Plan ist fertig!',
+                subtitle: 'Check deine Mails.',
+                cta: 'Jetzt in der App starten',
+            },
+            progressSteps: {
+                analyzingGoals: 'Ziele analysieren',
+                buildingWorkouts: 'Workouts erstellen',
+                creatingNutrition: 'Ernährung planen',
             },
             progress: {
                 meals: 'Mahlzeiten werden geplant...',
@@ -2252,26 +2292,6 @@ export const locales = {
                 lessThanMinute: '<1 Min',
                 almostDone: 'Gleich fertig!',
             },
-            comparison: {
-                title: 'Dein Plan. Zwei Wege.',
-                pdf: {
-                    title: 'PDF Plan',
-                    sevenDayTraining: '7-Tage Training',
-                    sevenDayNutrition: '7-Tage Ernährung',
-                    noAdaptation: 'Keine Anpassung',
-                    noTracking: 'Kein Tracking',
-                    noAiCoach: 'Kein AI Coach',
-                },
-                app: {
-                    title: 'fytrr App',
-                    freeTrial: 'KOSTENLOS TESTEN',
-                    everythingFromPdf: 'Alles aus dem PDF',
-                    newPlansWeekly: 'Neue Pläne jede Woche',
-                    aiCoach: 'AI Coach Mona 24/7',
-                    workoutTracking: 'Workout-Tracking',
-                    mealTracking: 'Meal-Tracking',
-                },
-            },
             monaDemo: {
                 title: '💬 Das kann kein PDF',
                 userMessage:
@@ -2281,32 +2301,12 @@ export const locales = {
                 footer: 'Mona reagiert auf dein Leben. Ein PDF nicht.',
             },
             cta: {
-                price: {
-                    title: '7 Tage kostenlos',
-                    subtitle:
-                        'Keine Kreditkarte nötig · Danach 3,99€/Monat · Jederzeit kündbar',
-                },
-                step1: {
-                    title: 'App herunterladen',
-                    comingSoon: 'Bald verfügbar',
-                    scanQr: 'Mit Handy scannen',
-                    or: 'oder',
-                },
-                step2: {
-                    title: 'Account aktivieren',
-                    button: 'Passwort setzen & loslegen',
-                    hint: 'Öffnet die App und richtet deinen Account ein',
-                    scanQr: 'Mit Handy scannen',
-                    copyLink: 'Link kopieren',
-                    copied: 'Link kopiert',
-                    copyHint: 'Im Handy-Browser öffnen',
-                },
+                softLabel: 'Hole das Beste aus deinem Plan',
             },
-            fallback: {
-                title: '📄 Dein PDF wird trotzdem erstellt.',
-                description:
-                    'Wir senden dir eine E-Mail sobald er fertig ist — egal ob du die App nutzt oder nicht.',
-            },
+            trustLine:
+                '7 Tage kostenlos · Kein Risiko · Jederzeit kündbar',
+            fallback:
+                'Du erhältst deinen Plan auch als PDF per E-Mail.',
             closePage: 'Seite schließen',
             reviews: {
                 review1: {

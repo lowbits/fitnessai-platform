@@ -12,6 +12,9 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Password;
 
+/**
+ * @deprecated Replaced by App\Jobs\SendOnboardingDripEmail.
+ */
 class SendAppPromoNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -22,8 +25,7 @@ class SendAppPromoNotificationJob implements ShouldQueue
     public function __construct(
         public User $user,
         public Plan $plan
-    ) {
-    }
+    ) {}
 
     /**
      * Execute the job.
@@ -52,4 +54,3 @@ class SendAppPromoNotificationJob implements ShouldQueue
         );
     }
 }
-

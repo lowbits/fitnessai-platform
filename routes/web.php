@@ -8,10 +8,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
     Route::get('/', function () {
         return Inertia::render('Welcome', [
-            'durationDays' => (int)config('plans.duration_days'),
+            'durationDays' => (int) config('plans.duration_days'),
         ]);
     })->name('home');
-
 
     Route::get(LaravelLocalization::transRoute('routes.data_privacy'), function () {
         return Inertia::render('Legal/DataPrivacy');
@@ -42,14 +41,23 @@ Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::c
     ->middleware(['signed'])
     ->name('verification.verify-onboarding');
 
+// Download app landing page (signed URL from emails)
+Route::get('/{locale}/app', App\Http\Controllers\DownloadAppController::class)
+    ->middleware(['signed'])
+    ->name('download-app');
 
 // Set password landing page (for email links + universal links)
 Route::get('/set-password', function () {
     $token = request()->query('token', '');
     $email = request()->query('email', '');
 
+    $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad|iPod/i', request()->userAgent() ?? '');
+    $appStoreUrl = config('app.app_store.ios.url');
+    $appStoreQrCode = $isMobile ? null : app(\App\Services\QrCodeService::class)->generate($appStoreUrl);
+
     return Inertia::render('SetPassword', [
-        'iosAppStoreUrl' => config('app.app_store.ios.url'),
+        'iosAppStoreUrl' => $appStoreUrl,
+        'iosAppStoreQrCode' => $appStoreQrCode,
         'token' => $token,
         'email' => $email,
         'utmSource' => request()->query('utm_source'),
@@ -59,19 +67,18 @@ Route::get('/set-password', function () {
 })->middleware(['signed'])
     ->name('set-password');
 
-
 // Dev routes (only available in local environment)
 if (app()->environment('local')) {
     Route::get('/dev/test-email/plan-ready', function () {
         $user = \App\Models\User::first();
 
-        if (!$user) {
+        if (! $user) {
             return 'No user found in database. Please create a user first.';
         }
 
         $plan = \App\Models\Plan::where('user_id', $user->id)->first();
 
-        if (!$plan) {
+        if (! $plan) {
             return 'No plan found for user. Please create a plan first.';
         }
 
@@ -80,4 +87,3 @@ if (app()->environment('local')) {
         return $notification->toMail($user)->render();
     })->name('dev.test-email.plan-ready');
 }
-

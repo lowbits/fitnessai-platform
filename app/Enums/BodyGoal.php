@@ -1,4 +1,5 @@
 <?php
+
 // app/Enums/BodyGoal.php
 
 namespace App\Enums;
@@ -22,7 +23,7 @@ enum BodyGoal: string
      */
     public function label(?string $locale = null): string
     {
-        return __('enums.bodyGoal.' . $this->value, [], $locale);
+        return __('enums.bodyGoal.'.$this->value, [], $locale);
     }
 
     /**
@@ -30,7 +31,7 @@ enum BodyGoal: string
      */
     public function description(?string $locale = null): string
     {
-        return __('enums.bodyGoal.' . $this->value . '_description', [], $locale);
+        return __('enums.bodyGoal.'.$this->value.'_description', [], $locale);
     }
 
     /**
@@ -50,6 +51,10 @@ enum BodyGoal: string
         };
     }
 
+    public function actionLabel(?string $locale = null): string
+    {
+        return __('emails.body_goal_labels.'.$this->value, [], $locale);
+    }
 
     /**
      * Protein intake per kg body weight for this goal.
@@ -62,6 +67,9 @@ enum BodyGoal: string
      * - Maintenance: 1.4–2.0 g/kg → 1.8 as middle ground
      *
      * @see https://pubmed.ncbi.nlm.nih.gov/28642676/
+     */
+    /**
+     * Get action-oriented label for email copy (e.g. "Build Muscle", "Muskelaufbau").
      */
     public function proteinPerKg(): float
     {

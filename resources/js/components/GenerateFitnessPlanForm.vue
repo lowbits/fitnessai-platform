@@ -760,7 +760,7 @@ const submit = async () => {
                 <TabPanel class="flex min-h-[550px] flex-col">
                     <div class="shrink-0">
                         <h4
-                            class="text-center font-display text-3xl font-semibold"
+                            class="text-center text-white font-display text-3xl font-semibold"
                         >
                             {{ $t('form.steps.final.headline') }}
                         </h4>

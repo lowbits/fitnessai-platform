@@ -52,6 +52,7 @@ class RetryFailedWorkoutPlans extends Command
 
         if ($failedWorkouts->isEmpty()) {
             $this->info('No failed workout plans found.');
+
             return Command::SUCCESS;
         }
 
@@ -67,6 +68,7 @@ class RetryFailedWorkoutPlans extends Command
             }
 
             $this->info('Status reset complete. Run workout generation job to retry.');
+
             return Command::SUCCESS;
         }
 
@@ -75,8 +77,9 @@ class RetryFailedWorkoutPlans extends Command
 
         $this->info("Plans affected: {$planIds->count()}");
 
-        if (!$this->confirm('Do you want to retry generating these workout plans?', true)) {
+        if (! $this->confirm('Do you want to retry generating these workout plans?', true)) {
             $this->info('Operation cancelled.');
+
             return Command::SUCCESS;
         }
 
@@ -85,22 +88,19 @@ class RetryFailedWorkoutPlans extends Command
         foreach ($planIds as $planId) {
             $plan = Plan::with('user')->find($planId);
 
-            if (!$plan) {
+            if (! $plan) {
                 $this->error("Plan #{$planId} not found, skipping.");
+
                 continue;
             }
 
-            if (!$plan->user) {
+            if (! $plan->user) {
                 $this->error("User for Plan #{$planId} not found, skipping.");
+
                 continue;
             }
 
-            // Reset all failed workouts for this plan to pending
-            WorkoutPlan::where('plan_id', $planId)
-                ->where('status', 'failed')
-                ->update(['status' => 'pending']);
-
-            // Dispatch the generation job
+            // Dispatch the generation job (failed status is kept so calculateDayRange finds them)
             GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
 
             $failedCount = $failedWorkouts->where('plan_id', $planId)->count();
@@ -116,4 +116,3 @@ class RetryFailedWorkoutPlans extends Command
         return Command::SUCCESS;
     }
 }
-

@@ -33,11 +33,19 @@ class SaveWorkoutPlanTool implements Tool
         try {
             $result = WorkoutPlanResult::fromRequest($request);
 
-            $this->populateWorkoutPlanAction->execute($this->workoutPlan, $result);
-
-            Log::info('Workout plan saved via tool', [
+            Log::debug('[WorkoutGen][SaveTool] Saving workout', [
                 'workout_plan_id' => $this->workoutPlan->id,
                 'workout_name' => $request['workout_name'],
+                'workout_type' => $request['workout_type'],
+                'exercises_count' => count($request['exercises'] ?? []),
+            ]);
+
+            $this->populateWorkoutPlanAction->execute($this->workoutPlan, $result);
+
+            Log::info('[WorkoutGen][SaveTool] Saved successfully', [
+                'workout_plan_id' => $this->workoutPlan->id,
+                'workout_name' => $request['workout_name'],
+                'workout_type' => $request['workout_type'],
                 'exercises_count' => count($request['exercises'] ?? []),
             ]);
 
@@ -46,9 +54,12 @@ class SaveWorkoutPlanTool implements Tool
                 'message' => "Workout plan '{$request['workout_name']}' saved with ".count($request['exercises'] ?? []).' exercises.',
             ]);
         } catch (Exception $e) {
-            Log::error('Failed to save workout plan via tool', [
+            Log::error('[WorkoutGen][SaveTool] Failed to save', [
                 'workout_plan_id' => $this->workoutPlan->id,
+                'workout_name' => $request['workout_name'] ?? null,
+                'workout_type' => $request['workout_type'] ?? null,
                 'error' => $e->getMessage(),
+                'exception' => $e::class,
             ]);
 
             return json_encode([

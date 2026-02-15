@@ -56,7 +56,7 @@ test('user can complete a workout tracking with exercises', function () {
             'feeling_rate' => 5,
             'exercises' => [
                 [
-                    'workout_plan_exercise_id' => $this->exercise1->id,
+                    'exercise_id' => $this->exercise1->id,
                     'order' => 1,
                     'notes' => 'Felt strong',
                     'sets' => [
@@ -81,7 +81,7 @@ test('user can complete a workout tracking with exercises', function () {
                     ],
                 ],
                 [
-                    'workout_plan_exercise_id' => $this->exercise2->id,
+                    'exercise_id' => $this->exercise2->id,
                     'order' => 2,
                     'notes' => 'Good cardio',
                     'sets' => [

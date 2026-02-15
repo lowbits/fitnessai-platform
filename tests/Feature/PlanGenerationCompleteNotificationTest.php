@@ -1,151 +1,128 @@
 <?php
 
+use App\Enums\BodyGoal;
+use App\Models\Meal;
+use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\WorkoutPlan;
 use App\Notifications\PlanGenerationComplete;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Password;
 
 uses(RefreshDatabase::class);
 
-test('plan generation complete email includes app promo content', function () {
-    Notification::fake();
+function createUserWithCompletePlan(array $profileOverrides = [], string $locale = 'en', bool $withPassword = false): array
+{
+    $factory = User::factory()->withProfile($profileOverrides);
 
-    $user = User::factory()
-        ->withProfile()
-        ->withoutPassword()
-        ->create([
-            'locale' => 'en',
-        ]);
+    if (! $withPassword) {
+        $factory = $factory->withoutPassword();
+    }
 
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
+    $user = $factory->create(['locale' => $locale]);
+
+    $plan = Plan::factory()->active()->create(['user_id' => $user->id]);
+
+    WorkoutPlan::factory()->create([
+        'plan_id' => $plan->id,
+        'day_number' => 1,
+        'workout_name' => 'Upper Body Push',
     ]);
 
-    $notification = new PlanGenerationComplete($plan, "MOCKED KEY");
-    $mail = $notification->toMail($user);
-
-    // Convert mail to array to inspect content
-    $mailData = $mail->toArray();
-
-
-    // Check that app promo content is included
-    expect(implode(' ', $mailData['introLines']))->toContain('your personalized **'.config('plans.duration_days').'-day plan**');
-    expect(implode(' ', $mailData['introLines']))->toContain('**Even better with the app:**');
-    expect(implode(' ', $mailData['introLines']))->toContain('Track your workouts');
-    expect(implode(' ', $mailData['introLines']))->toContain('log your meals');
-});
-
-test('plan generation complete email includes app promo in German', function () {
-    Notification::fake();
-
-    $user = User::factory()
-        ->withProfile()
-        ->withoutPassword()
-        ->create([
-            'locale' => 'de'
-        ]);
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
+    $mealPlan = MealPlan::factory()->create([
+        'plan_id' => $plan->id,
+        'day_number' => 1,
     ]);
 
-    $notification = new PlanGenerationComplete($plan, "MOCKED KEY");
-    $mail = $notification->toMail($user);
-
-    // Convert mail to array to inspect content
-    $mailData = $mail->toArray();
-
-
-    // Check that app promo content is included in German
-    expect(implode(' ', $mailData['introLines']))->toContain('dein personalisierter **'.config('plans.duration_days').'-Tage Plan** ist fertig!');
-    expect(implode(' ', $mailData['introLines']))->toContain('**Noch besser mit der App:**');
-    expect(implode(' ', $mailData['introLines']))->toContain('Track deine Workouts');
-    expect(implode(' ', $mailData['introLines']))->toContain('log deine Mahlzeiten');
-});
-
-test('plan generation complete email includes app promo image', function () {
-    Notification::fake();
-
-    $user = User::factory()
-        ->withProfile()
-        ->withoutPassword()
-        ->create([
-            'locale' => 'en',
-        ]);
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
+    Meal::factory()->create([
+        'meal_plan_id' => $mealPlan->id,
+        'name' => 'Protein Oats with Berries',
     ]);
 
-    $notification = new PlanGenerationComplete($plan, "MOCKED KEY");
-    $mail = $notification->toMail($user);
+    return [$user, $plan];
+}
 
-    // Convert mail to array to inspect content
+test('plan generation complete email includes personalized content in English', function () {
+    Notification::fake();
+
+    [$user, $plan] = createUserWithCompletePlan(['body_goal' => BodyGoal::MUSCLE_GAIN]);
+
+    $notification = new PlanGenerationComplete($plan);
+    $mail = $notification->toMail($user);
     $mailData = $mail->toArray();
 
-    // Check that app promo image is included
     $content = implode(' ', $mailData['introLines']);
-    expect($content)->toContain('app-promo_en.png');
+
+    expect($mailData['subject'])->toContain('Build Muscle');
+    expect($content)->toContain('Upper Body Push');
+    expect($content)->toContain('Protein Oats with Berries');
 });
 
-test('plan generation complete email includes password reset link when user has no password', function () {
+test('plan generation complete email includes personalized content in German', function () {
+    Notification::fake();
+
+    [$user, $plan] = createUserWithCompletePlan(['body_goal' => BodyGoal::WEIGHT_LOSS], 'de');
+
+    $notification = new PlanGenerationComplete($plan);
+    $mail = $notification->toMail($user);
+    $mailData = $mail->toArray();
+
+    expect($mailData['subject'])->toContain('Abnehmen');
+    expect(implode(' ', $mailData['introLines']))->toContain('Upper Body Push');
+});
+
+test('plan generation complete email includes app pitch for web user', function () {
+    Notification::fake();
+
+    [$user, $plan] = createUserWithCompletePlan();
+
+    $notification = new PlanGenerationComplete($plan);
+    $mail = $notification->toMail($user);
+    $mailData = $mail->toArray();
+
+    $content = implode(' ', $mailData['introLines']);
+
+    expect($content)->toContain('fytrr app');
+    expect($content)->toContain('adapts automatically');
+});
+
+test('plan generation complete email has download-app CTA with UTM params for web user', function () {
+    Notification::fake();
+
+    [$user, $plan] = createUserWithCompletePlan();
+
+    $notification = new PlanGenerationComplete($plan);
+    $mail = $notification->toMail($user);
+    $mailData = $mail->toArray();
+
+    expect($mailData['actionText'])->toBe('7 days free →');
+    expect($mailData['actionUrl'])->toContain('/app');
+    expect($mailData['actionUrl'])->toContain('signature=');
+    expect($mailData['actionUrl'])->toContain('utm_source=email');
+    expect($mailData['actionUrl'])->toContain('utm_medium=notification');
+    expect($mailData['actionUrl'])->toContain('utm_campaign=plan_ready');
+});
+
+test('plan generation complete email does not include app CTA for mobile user', function () {
     Notification::fake();
 
     $user = User::factory()
         ->withProfile()
-        ->withoutPassword()
         ->create([
             'locale' => 'en',
-            'email_verified_at' => now(),
+            'source' => \App\Enums\UserSource::MOBILE_APPLE,
         ]);
 
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
-    ]);
+    $plan = Plan::factory()->active()->create(['user_id' => $user->id]);
 
-    $notification = new PlanGenerationComplete($plan, $plan->user->getPasswordResetToken());
+    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1]);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1]);
+    Meal::factory()->create(['meal_plan_id' => $mealPlan->id]);
+
+    $notification = new PlanGenerationComplete($plan);
     $mail = $notification->toMail($user);
-
-    // Convert mail to array to inspect content
     $mailData = $mail->toArray();
 
-    // Check that step 2 and CTA are included
-    expect($mailData['actionText'])->toBe('Try 7 days free →');
-    expect($mailData['actionUrl'])->toContain('set-password');
-    expect($mailData['actionUrl'])->toContain(urlencode($user->email));
+    expect($mailData['actionText'])->toBe('View plan →');
 });
-
-test('plan generation complete email does not include password reset link when user has password', function () {
-    Notification::fake();
-
-    $user = User::factory()
-        ->withProfile()
-        ->create([
-            'locale' => 'en',
-            'email_verified_at' => now(),
-            'password' => bcrypt('password123'),
-        ]);
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'status' => 'active',
-    ]);
-
-    // Even if we provide a token, it should not be included
-    $notification = new PlanGenerationComplete($plan, 'some-token');
-    $mail = $notification->toMail($user);
-
-    // Convert mail to array to inspect content
-    $mailData = $mail->toArray();
-
-    // Check that CTA is NOT included
-    expect($mailData['actionText'] ?? null)->toBeNull();
-    expect($mailData['actionUrl'] ?? null)->toBeNull();
-});
-

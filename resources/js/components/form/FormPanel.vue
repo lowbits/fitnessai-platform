@@ -10,7 +10,7 @@ defineProps<{
 <template>
     <TabPanel class="flex min-h-[500px] flex-col">
         <div class="shrink-0">
-            <p class="text-center font-display text-3xl font-semibold">
+            <p class="text-center text-white font-display text-3xl font-semibold">
                 {{ headline }}
             </p>
             <p

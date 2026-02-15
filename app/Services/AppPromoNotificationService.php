@@ -6,6 +6,9 @@ use App\Jobs\SendAppPromoNotificationJob;
 use App\Models\Plan;
 use App\Models\User;
 
+/**
+ * @deprecated Replaced by onboarding drip sequence dispatched in CheckCompletedPlans. See App\Jobs\SendOnboardingDripEmail.
+ */
 class AppPromoNotificationService
 {
     /**
@@ -15,10 +18,7 @@ class AppPromoNotificationService
      * by 24 hours (unless $immediate is true), ensuring the password reset token is
      * generated at the time the email is actually sent, not when it's scheduled.
      *
-     * @param User $user
-     * @param Plan $plan
-     * @param bool $immediate If true, send immediately. If false, apply 24h delay in production.
-     * @return bool
+     * @param  bool  $immediate  If true, send immediately. If false, apply 24h delay in production.
      */
     public function sendToUser(User $user, Plan $plan, bool $immediate = false): bool
     {
@@ -29,7 +29,7 @@ class AppPromoNotificationService
         // Dispatch job with delay in production (unless immediate)
         $job = new SendAppPromoNotificationJob($user, $plan);
 
-        if (!$immediate && app()->environment('production')) {
+        if (! $immediate && app()->environment('production')) {
             $job->delay(now()->addHours(24));
         }
 
@@ -38,4 +38,3 @@ class AppPromoNotificationService
         return true;
     }
 }
-

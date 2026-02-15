@@ -18,17 +18,13 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected ?string $passwordResetToken;
-
     /**
      * Create a new notification instance.
      */
     public function __construct(
         public Plan $plan,
-        ?string $passwordResetToken = null
-    ) {
-        $this->passwordResetToken = $passwordResetToken;
-    }
+        protected ?string $passwordResetToken = null
+    ) {}
 
     /**
      * Get the notification's delivery channels.
@@ -54,32 +50,40 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
 
         $this->plan->load(['mealPlans.meals', 'workoutPlans.exercises']);
 
-        $mealPlanPdf = PDF::loadView('pdf.nutrition_plan', [
-            'user' => $notifiable,
-            'plan' => $this->plan,
-            'mealPlans' => $this->plan->mealPlans()->with('meals')->orderBy('day_number')->get(),
-        ]);
-
-        $workoutPlanPdf = PDF::loadView('pdf.workout_plan', [
-            'user' => $notifiable,
-            'plan' => $this->plan,
-            'workoutPlans' => $this->plan->workoutPlans()->with('exercises.exercise.translations')->orderBy('day_number')->get(),
-        ]);
-
         $days = config('plans.duration_days');
         $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
         $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_pdf';
 
-        $badgeLocale = $locale === 'de' ? 'de-de' : 'en-us';
+        $bodyGoal = $notifiable->profile?->body_goal;
+        $goalLabel = $bodyGoal?->actionLabel($locale) ?? '';
+
+        $firstWorkout = $this->plan->workoutPlans()->orderBy('day_number')->first();
+        $firstWorkoutName = $firstWorkout?->workout_name ?? '';
+
+        $firstMealPlan = $this->plan->mealPlans()->orderBy('day_number')->first();
+        $firstMeal = $firstMealPlan?->meals()->first();
+        $firstMealName = $firstMeal?->name ?? '';
 
         $mail = (new MailMessage)
-            ->subject(__('emails.plan_ready.subject'))
+            ->subject(__('emails.plan_ready.subject', ['goal' => $goalLabel]))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
-            ->line(__("emails.plan_ready.$introKey", ['days' => $days]));
+            ->line(__("emails.plan_ready.$introKey", ['days' => $days, 'goal' => $goalLabel]));
 
         if ($isMobileAppOnboarding) {
             $mail->action(__('emails.plan_ready.cta_app'), route('home', ['locale' => $locale]));
         } else {
+            $mealPlanPdf = PDF::loadView('pdf.nutrition_plan', [
+                'user' => $notifiable,
+                'plan' => $this->plan,
+                'mealPlans' => $this->plan->mealPlans()->with('meals')->orderBy('day_number')->get(),
+            ]);
+
+            $workoutPlanPdf = PDF::loadView('pdf.workout_plan', [
+                'user' => $notifiable,
+                'plan' => $this->plan,
+                'workoutPlans' => $this->plan->workoutPlans()->with('exercises.exercise.translations')->orderBy('day_number')->get(),
+            ]);
+
             $mail
                 ->attachData($mealPlanPdf->output(), 'Meal_Plan_'.$this->plan->id.'.pdf', [
                     'mime' => 'application/pdf',
@@ -89,56 +93,35 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
                 ]);
         }
 
-        // App Promo only for web users
-        if ($this->passwordResetToken && ! filled($notifiable->password)) {
+        $mail
+            ->line('')
+            ->line(__('emails.plan_ready.first_workout', ['workout' => $firstWorkoutName]))
+            ->line(__('emails.plan_ready.first_meal', ['meal' => $firstMealName]))
+            ->line('')
+            ->line(__('emails.plan_ready.start_cta'))
+            ->line('')
+            ->line(__('emails.plan_ready.closing'))
+            ->salutation(__('emails.plan_ready.team'));
 
-            $badgeLocale = strtoupper($locale);
-
-            // App Promo
+        // Soft P.S. about the app for web users
+        if (! $isMobileAppOnboarding) {
             $mail
                 ->line('')
                 ->line(__('emails.plan_ready.app_pitch'))
-                ->line(new HtmlString(
-                    '<img src="'.asset("assets/app-promo_{$locale}.png").'" width="600" style="display:block;width:100%;max-width:600px;height:auto;border-radius:8px;margin:16px 0;" alt="fytrr App">'
-                ))
-                ->line(new HtmlString('<table width="100%" cellpadding="0" cellspacing="0" style="margin:16px 0;">
-            <tr>
-                <td align="center">
-                    <a href="'.config('app.app_store.ios.url').'">
-                        <img src="'.asset("/assets/badges/App_Store_Badge_{$badgeLocale}.png").'"
-                             alt="Download on App Store"
-                             style="height:40px;">
-                    </a>
-                </td>
-            </tr>
-        </table>'));
-
-            // Step 2: Password reset if needed
-
-            $setPasswordUrl = URL::temporarySignedRoute(
-                'set-password',
-                now()->addHours(24),
-                [
-                    'token' => $this->passwordResetToken,
-                    'email' => $notifiable->email,
-                    'utm_source' => 'email',
-                    'utm_medium' => 'app_promo',
-                    'utm_campaign' => 'plan_ready',
-                ]
-            );
-
-            $mail->action(__('emails.plan_ready.cta'), $setPasswordUrl);
+                ->action(__('emails.plan_ready.app_cta'), URL::temporarySignedRoute(
+                    'download-app',
+                    now()->addHours(72),
+                    [
+                        'locale' => $locale,
+                        'user' => $notifiable->id,
+                        'utm_source' => 'email',
+                        'utm_medium' => 'notification',
+                        'utm_campaign' => 'plan_ready',
+                    ]
+                ));
         }
 
-        $mail
-            ->line(__('emails.plan_ready.trial'))
-            ->line('')
-            ->line(__('emails.plan_ready.support'))
-            ->line('')
-            ->line(__('emails.plan_ready.closing'))
-            ->salutation(__('emails.plan_ready.team'))
-            ->line('')
-            ->line(new HtmlString('<p style="font-size:12px;color:#666;margin-top:24px;">'.__('emails.plan_ready.disclaimer').'</p>'));
+        $mail->line(new HtmlString('<p style="font-size:12px;color:#666;margin-top:24px;">'.__('emails.plan_ready.disclaimer').'</p>'));
 
         return $mail;
     }

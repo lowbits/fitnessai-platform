@@ -199,6 +199,7 @@ const faqData = computed(() => ({
             name="twitter:image"
             content="https://fytrr.com/fitness-plan.png"
         />
+        <meta name="apple-itunes-app" content="app-id=6757151695, app-argument=https://fytrr.com/" />
 
         <!-- Structured Data -->
         <component :is="'script'" type="application/ld+json">

@@ -5,14 +5,19 @@ namespace App\Ai\Agents;
 use App\Ai\Tools\MeilisearchSimilaritySearch;
 use App\Ai\Tools\SaveWorkoutPlanTool;
 use App\Models\WorkoutPlan;
+use Laravel\Ai\Attributes\Model;
+use Laravel\Ai\Attributes\Provider;
 use Laravel\Ai\Attributes\Timeout;
 use Laravel\Ai\Contracts\Agent;
 use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Contracts\HasTools;
+use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
 use Stringable;
 
 #[Timeout(300)]
+#[Provider([Lab::OpenAI, Lab::Mistral])]
+#[Model('gpt-5-mini')]
 class WorkoutProgrammerAgent implements Agent, Conversational, HasTools
 {
     use Promptable;
