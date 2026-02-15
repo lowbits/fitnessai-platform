@@ -42,13 +42,13 @@ class CheckCompletedPlans extends Command
 
         foreach ($plans as $plan) {
             // Check if plan is 100% complete
-            $totalDays = (int) config('plans.duration_days');
+            $totalDays = (int)config('plans.duration_days');
             $mealPlansGenerated = $plan->mealPlans()->where('status', 'generated')->count();
             $workoutPlansGenerated = $plan->workoutPlans()->where('status', 'generated')->count();
 
             $isComplete = ($mealPlansGenerated === $totalDays) && ($workoutPlansGenerated === $totalDays);
 
-            if (! $isComplete) {
+            if (!$isComplete) {
                 continue;
             }
 
@@ -70,7 +70,7 @@ class CheckCompletedPlans extends Command
 
                 // Generate password reset token if user has no password
                 $passwordResetToken = null;
-                if (! filled($plan->user->password)) {
+                if (!filled($plan->user->password)) {
                     $passwordResetToken = $plan->user->getPasswordResetToken();
                 }
 
@@ -78,19 +78,20 @@ class CheckCompletedPlans extends Command
                 $plan->user->notify(new PlanGenerationComplete($plan, $passwordResetToken));
 
                 // Dispatch onboarding drip emails for web users (no password set)
-                if (! filled($plan->user->password)) {
-                    /*
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 2))->delay(now()->addDay());
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 3))->delay(now()->addDays(4));
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 4))->delay(now()->addDays(6));
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 5))->delay(now()->addDays(8));
-                    */
+                if (!filled($plan->user->password)) {
+                    $isLocal = app()->isLocal();
 
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 2))->delay(now()->addMinute());
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 3))->delay(now()->addMinutes(4));
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 4))->delay(now()->addMinutes(6));
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 5))->delay(now()->addMinutes(8));
+                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 2))
+                        ->delay($isLocal ? now()->addMinute() : now()->addDay());
 
+                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 3))
+                        ->delay($isLocal ? now()->addMinutes(4) : now()->addDays(4));
+
+                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 4))
+                        ->delay($isLocal ? now()->addMinutes(6) : now()->addDays(6));
+
+                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 5))
+                        ->delay($isLocal ? now()->addMinutes(8) : now()->addDays(8));
                 }
 
                 // Mark as notified (add this column via migration)
