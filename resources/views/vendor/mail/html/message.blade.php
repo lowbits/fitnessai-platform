@@ -1,4 +1,4 @@
-<x-mail::layout>
+<x-mail::layout :previewText="$previewText ?? ''">
 {{-- Header --}}
 <x-slot:header>
 <x-mail::header :url="config('app.url')">

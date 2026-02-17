@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -17,7 +18,9 @@ class PlanReadyForDelivery extends Notification implements ShouldQueue
      */
     public function __construct(
         public Plan $plan,
-    ) {}
+    )
+    {
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -33,7 +36,8 @@ class PlanReadyForDelivery extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new AppMailMessage())
+            ->useAdminMailer()
             ->subject('Plan ready for delivery')
             ->greeting('New Plan was generated')
             ->line('A new plan is ready to be delivered.')
@@ -46,7 +50,6 @@ class PlanReadyForDelivery extends Notification implements ShouldQueue
             ->line('Proteins: ' . ($this->plan->daily_protein_g ?? 'N/A'))
             ->line('Carbs: ' . ($this->plan->daily_carbs_g ?? 'N/A'))
             ->line('Fats: ' . ($this->plan->daily_fat_g ?? 'N/A'))
-
             ->line('The user will receive a the plan now via email.');
     }
 

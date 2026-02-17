@@ -1,3 +1,4 @@
+@props(['previewText' => ''])
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -26,6 +27,12 @@ width: 100% !important;
 {!! $head ?? '' !!}
 </head>
 <body>
+
+@if($previewText ?? false)
+<span style="display:none; max-height:0; overflow:hidden; mso-hide:all;">
+    {{ $previewText }}
+</span>
+@endif
 
 <table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
 <tr>

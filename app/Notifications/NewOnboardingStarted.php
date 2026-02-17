@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Enums\UserSource;
+use App\Mail\AppMailMessage;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -35,7 +35,8 @@ class NewOnboardingStarted extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new AppMailMessage())
+            ->useAdminMailer()
             ->subject('New User Started Onboarding')
             ->greeting('New Onboarding Started')
             ->line('A new user has completed the onboarding form.')

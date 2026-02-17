@@ -3,6 +3,7 @@
 return [
     'plan_ready' => [
         'subject' => 'Your :goal plan is ready 💪',
+        'preview' => 'Your personalized plan is ready — start with Day 1 tomorrow.',
         'greeting' => 'Hey :name,',
         'intro_pdf' => 'Your personalized :days-day :goal plan is ready — PDF attached.',
         'intro_app' => 'Your personalized :days-day :goal plan is ready!',
@@ -91,6 +92,7 @@ return [
     'onboarding' => [
         'email_02' => [
             'subject' => 'Quick tip for your first workout 🏋️',
+            'preview' => 'Don\'t go too heavy on your first session — here\'s why.',
             'greeting' => 'Hey :name,',
             'intro' => ':workout is on the schedule today. Quick tip:',
             'tip' => 'Use the first 2-3 sets to find your weight. Don\'t go too heavy — getting the movement right matters more than the number on the bar.',
@@ -102,6 +104,7 @@ return [
 
         'email_03' => [
             'subject' => 'Your :goal plan can\'t do this',
+            'preview' => 'What happens when you\'re short on time or don\'t like a meal?',
             'greeting' => 'Hey :name,',
             'intro' => 'You\'ve been training for a few days now. Probably going well — but something\'s missing.',
             'pain_point' => 'What do you do when you\'re short on time? When an exercise doesn\'t work? When you don\'t like a meal?',
@@ -130,6 +133,7 @@ return [
 
         'email_04' => [
             'subject' => 'He started with the same plan as you',
+            'preview' => 'Benedikt started where you are now. Here\'s what happened next.',
             'greeting' => 'Hey :name,',
             'intro' => '30 days ago, Benedikt started exactly where you are now — with a free :goal plan.',
             'testimonial_intro' => 'Then he tried the app:',
@@ -142,6 +146,7 @@ return [
 
         'email_05' => [
             'subject' => 'Week 1 is done — what now?',
+            'preview' => 'Did you complete all your workouts? Be honest.',
             'greeting' => 'Hey :name,',
             'intro' => 'Your :goal plan has been running for a week. Be honest: did you complete all :sessions workouts?',
             'if_yes' => 'If yes — impressive. Keep going.',

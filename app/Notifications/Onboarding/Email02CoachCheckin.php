@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Onboarding;
 
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,9 +29,12 @@ class Email02CoachCheckin extends Notification implements ShouldQueue
         $firstWorkout = $this->plan->workoutPlans()->orderBy('day_number')->first();
         $workoutName = $firstWorkout?->workout_name ?? '';
 
-        return (new MailMessage)
+        $mail = (new AppMailMessage)
             ->subject(__('emails.onboarding.email_02.subject'))
             ->greeting(__('emails.onboarding.email_02.greeting', ['name' => $notifiable->name]))
+            ->previewText(__('emails.onboarding.email_02.preview'));
+
+        return $mail
             ->line(__('emails.onboarding.email_02.intro', ['workout' => $workoutName]))
             ->line('')
             ->line(__('emails.onboarding.email_02.tip'))

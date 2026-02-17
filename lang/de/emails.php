@@ -3,6 +3,7 @@
 return [
     'plan_ready' => [
         'subject' => 'Dein Plan zum :goal ist da 💪',
+        'preview' => 'Dein personalisierter Plan ist fertig — starte morgen mit Tag 1.',
         'greeting' => 'Hey :name,',
         'intro_pdf' => 'Dein personalisierter :days-Tage-Plan zum :goal ist fertig — PDF im Anhang.',
         'intro_app' => 'Dein personalisierter :days-Tage-Plan zum :goal ist fertig!',
@@ -100,6 +101,7 @@ return [
     'onboarding' => [
         'email_02' => [
             'subject' => 'Kurz zu deinem ersten Workout 🏋️',
+            'preview' => 'Nicht zu schwer starten — hier ist warum.',
             'greeting' => 'Hey :name,',
             'intro' => 'Heute steht :workout an. Ein kurzer Tipp:',
             'tip' => 'Nimm dir die ersten 2-3 Sätze, um das Gewicht zu finden. Nicht zu schwer starten — das Gefühl für die Übung ist wichtiger als die Zahl auf der Hantel.',
@@ -111,6 +113,7 @@ return [
 
         'email_03' => [
             'subject' => 'Dein Plan zum :goal kann das nicht',
+            'preview' => 'Was machst du, wenn du keine Zeit hast oder ein Gericht nicht magst?',
             'greeting' => 'Hey :name,',
             'intro' => 'Du trainierst jetzt seit ein paar Tagen. Läuft wahrscheinlich ganz gut — aber irgendwas fehlt.',
             'pain_point' => 'Was machst du, wenn du keine Zeit hast? Wenn eine Übung nicht klappt? Wenn du ein Gericht nicht magst?',
@@ -139,6 +142,7 @@ return [
 
         'email_04' => [
             'subject' => 'Er hat mit dem gleichen Plan angefangen wie du',
+            'preview' => 'Benedikt hat da angefangen, wo du jetzt bist. Das ist passiert.',
             'greeting' => 'Hey :name,',
             'intro' => 'Benedikt hat vor 30 Tagen genau da angefangen, wo du jetzt bist — mit einem kostenlosen Plan zum :goal.',
             'testimonial_intro' => 'Dann hat er die App ausprobiert:',
@@ -151,6 +155,7 @@ return [
 
         'email_05' => [
             'subject' => 'Woche 1 ist rum — und jetzt?',
+            'preview' => 'Hast du alle Workouts geschafft? Hand aufs Herz.',
             'greeting' => 'Hey :name,',
             'intro' => 'Dein Plan zum :goal läuft seit einer Woche. Hand aufs Herz: Hast du alle :sessions Workouts geschafft?',
             'if_yes' => 'Falls ja — stark. Weiter so.',

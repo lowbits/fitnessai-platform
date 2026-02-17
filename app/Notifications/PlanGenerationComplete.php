@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Enums\UserSource;
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Bus\Queueable;
@@ -64,9 +65,12 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         $firstMeal = $firstMealPlan?->meals()->first();
         $firstMealName = $firstMeal?->name ?? '';
 
-        $mail = (new MailMessage)
+        $mail = (new AppMailMessage)
             ->subject(__('emails.plan_ready.subject', ['goal' => $goalLabel]))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
+            ->previewText(__('emails.plan_ready.preview'));
+
+        $mail
             ->line(__("emails.plan_ready.$introKey", ['days' => $days, 'goal' => $goalLabel]));
 
         if ($isMobileAppOnboarding) {

@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Onboarding;
 
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -28,9 +29,12 @@ class Email04SocialProof extends Notification implements ShouldQueue
         $bodyGoal = $notifiable->profile?->body_goal;
         $goalLabel = $bodyGoal?->actionLabel($locale) ?? '';
 
-        return (new MailMessage)
+        $mail = (new AppMailMessage)
             ->subject(__('emails.onboarding.email_04.subject'))
             ->greeting(__('emails.onboarding.email_04.greeting', ['name' => $notifiable->name]))
+            ->previewText(__('emails.onboarding.email_04.preview'));
+
+        return $mail
             ->line(__('emails.onboarding.email_04.intro', ['goal' => $goalLabel]))
             ->line('')
             ->line(__('emails.onboarding.email_04.testimonial_intro'))

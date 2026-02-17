@@ -3,6 +3,7 @@
 namespace App\Notifications\Onboarding;
 
 use App\Enums\TrainingPlace;
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -37,9 +38,12 @@ class Email03LimitationAngle extends Notification implements ShouldQueue
         $scenarioKey = $trainingPlace->value;
         $scenarios = __("emails.onboarding.email_03.scenarios.$scenarioKey");
 
-        $mail = (new MailMessage)
+        $mail = (new AppMailMessage)
             ->subject(__('emails.onboarding.email_03.subject', ['goal' => $goalLabel]))
             ->greeting(__('emails.onboarding.email_03.greeting', ['name' => $notifiable->name]))
+            ->previewText(__('emails.onboarding.email_03.preview'));
+
+        $mail
             ->line(__('emails.onboarding.email_03.intro'))
             ->line('')
             ->line(__('emails.onboarding.email_03.pain_point'))

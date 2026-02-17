@@ -2,6 +2,7 @@
 
 namespace App\Notifications\Onboarding;
 
+use App\Mail\AppMailMessage;
 use App\Models\Plan;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -30,9 +31,12 @@ class Email05LastChance extends Notification implements ShouldQueue
 
         $sessionsPerWeek = $notifiable->profile?->training_sessions_per_week ?? 3;
 
-        return (new MailMessage)
+        $mail = (new AppMailMessage)
             ->subject(__('emails.onboarding.email_05.subject'))
             ->greeting(__('emails.onboarding.email_05.greeting', ['name' => $notifiable->name]))
+            ->previewText(__('emails.onboarding.email_05.preview'));
+
+        return $mail
             ->line(__('emails.onboarding.email_05.intro', ['goal' => $goalLabel, 'sessions' => $sessionsPerWeek]))
             ->line('')
             ->line(__('emails.onboarding.email_05.if_yes'))
