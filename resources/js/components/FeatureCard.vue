@@ -4,19 +4,22 @@ defineProps<{
     body: string;
     illustrationPath: string;
     isPreview?: boolean;
+    previewLabel?: string;
 }>();
 </script>
 
 <template>
     <!-- TODO: gradient 0% 1D262B -> 20% 1A2328 -> 100% 12181E-->
     <article
-        class="relative w-full rounded-lg border border-dark-surfaces-25 bg-linear-to-bl from-[#1D262B] via-[#1A2328] to-dark-surfaces-900 py-10 text-white md:w-1/3"
+        class="relative col-span-3 w-full rounded-lg border border-dark-surfaces-25 bg-linear-to-bl from-[#1D262B] via-[#1A2328] to-dark-surfaces-900 py-10 text-white md:col-span-1"
     >
-        <header class="border-b border-dark-surfaces-25">
+        <header
+            class="flex h-[140px] items-center justify-center border-b border-dark-surfaces-25"
+        >
             <img
-                height="180"
-                width="125"
-                class="mx-auto"
+                width="180"
+                height="125"
+                class="h-full w-auto object-contain"
                 :src="illustrationPath"
                 :alt="`${headline} illustration`"
             />
@@ -25,7 +28,7 @@ defineProps<{
         <span
             v-if="isPreview"
             class="absolute top-4 right-4 rounded-full bg-dark-surfaces-900 px-2 py-1 text-sm text-primary-300"
-            >Coming soon</span
+            >{{ previewLabel ?? 'Coming soon' }}</span
         >
 
         <div class="mt-10 px-10">

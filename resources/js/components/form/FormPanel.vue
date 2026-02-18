@@ -8,9 +8,11 @@ defineProps<{
 }>();
 </script>
 <template>
-    <TabPanel class="flex min-h-[500px] flex-col">
-        <div class="shrink-0">
-            <p class="text-center text-white font-display text-3xl font-semibold">
+    <TabPanel class="flex h-[600px] flex-col">
+        <div class="animate-fade-in shrink-0">
+            <p
+                class="text-center font-display text-3xl font-semibold text-white"
+            >
                 {{ headline }}
             </p>
             <p
@@ -19,14 +21,44 @@ defineProps<{
                 {{ subline }}
             </p>
         </div>
-        <div class="mt-8 grow">
+        <div class="animate-scale-in mt-4 grow">
             <slot />
         </div>
         <PrimaryButton
-            class="mt-10 w-full shrink-0"
+            class="animate-scale-in mt-auto w-full shrink-0 [animation-delay:80ms]"
             @click="$emit('click:next')"
             type="button"
             >{{ $t('form_panel.submit') }}</PrimaryButton
         >
     </TabPanel>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.25s ease-out both;
+}
+
+.animate-scale-in {
+    animation: scale-in 0.3s ease-out both;
+}
+</style>

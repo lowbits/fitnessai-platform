@@ -6,9 +6,11 @@ import { Tab } from '@headlessui/vue';
     <Tab as="template" v-slot="{ selected }">
         <div
             :class="[
-                'w-full rounded-lg py-1.5 text-sm leading-5 font-medium text-blue-700',
-                'ring-opacity-60 ring-white ring-offset-2 ring-offset-blue-400 focus:ring-2 focus:outline-none',
-                selected ? 'bg-primary-500' : 'bg-dark-surfaces-25',
+                'w-full rounded-lg py-1.5 text-sm leading-5 font-medium transition-all duration-300 ease-out',
+                'focus:ring-2 focus:ring-white/60 focus:ring-offset-2 focus:outline-none',
+                selected
+                    ? 'bg-primary-500 shadow-[0_0_8px_rgba(var(--color-primary-500),0.4)]'
+                    : 'bg-dark-surfaces-25',
             ]"
         />
     </Tab>

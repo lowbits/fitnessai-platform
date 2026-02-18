@@ -26,7 +26,7 @@ class GenerateMealPlanBatch implements ShouldQueue
 {
     use Queueable;
 
-    private $GPT_MODEL = 'gpt-5.2';
+    private $GPT_MODEL = 'gpt-5-mini';
 
     public function __construct(
         public User $user,

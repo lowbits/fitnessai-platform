@@ -124,9 +124,7 @@ onMounted(() => {
                     </div>
                     <!-- Step 2 -->
                     <div v-if="setPasswordUrl">
-                        <div
-                            class="mb-1 border-t border-gray-700 pt-6"
-                        ></div>
+                        <div class="mb-1 border-t border-gray-700 pt-6"></div>
                         <div
                             class="mb-3 flex items-center gap-2 text-sm font-semibold text-primary-400"
                         >
@@ -137,15 +135,8 @@ onMounted(() => {
                             </span>
                             {{ t('downloadApp.step2.text') }}
                         </div>
-                        <a
-                            :href="setPasswordUrl"
-                            @click="handleActivateClick"
-                        >
-                            <Button
-                                variant="outline"
-                                size="lg"
-                                class="w-full"
-                            >
+                        <a :href="setPasswordUrl" @click="handleActivateClick">
+                            <Button variant="outline" size="lg" class="w-full">
                                 {{ t('downloadApp.step2.cta') }}
                             </Button>
                         </a>
@@ -184,9 +175,7 @@ onMounted(() => {
                                     class="h-28 w-28"
                                 />
                             </div>
-                            <span
-                                class="mt-1.5 text-[10px] text-gray-500"
-                            >
+                            <span class="mt-1.5 text-[10px] text-gray-500">
                                 {{ t('downloadApp.desktop.scanQr') }}
                             </span>
                         </div>
@@ -244,9 +233,7 @@ onMounted(() => {
                                         class="h-28 w-28"
                                     />
                                 </div>
-                                <span
-                                    class="mt-1.5 text-[10px] text-gray-500"
-                                >
+                                <span class="mt-1.5 text-[10px] text-gray-500">
                                     {{ t('downloadApp.desktop.scanQr') }}
                                 </span>
                             </div>
@@ -286,24 +273,12 @@ onMounted(() => {
                                         v-if="copied"
                                         class="absolute inset-0 flex items-center justify-center text-green-500"
                                     >
-                                        {{
-                                            t(
-                                                'downloadApp.desktop.copied',
-                                            )
-                                        }}
+                                        {{ t('downloadApp.desktop.copied') }}
                                     </span>
-                                    {{
-                                        t('downloadApp.desktop.copyLink')
-                                    }}
+                                    {{ t('downloadApp.desktop.copyLink') }}
                                 </Button>
-                                <span
-                                    class="text-[10px] text-gray-500"
-                                >
-                                    {{
-                                        t(
-                                            'downloadApp.desktop.copyHint',
-                                        )
-                                    }}
+                                <span class="text-[10px] text-gray-500">
+                                    {{ t('downloadApp.desktop.copyHint') }}
                                 </span>
                             </div>
                         </template>

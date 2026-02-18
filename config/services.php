@@ -45,6 +45,13 @@ return [
     ],
     'openfoodfacts' => [
         'db_dump_url' => env('OPENFOODFACTS_URL', 'https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.json.gz'),
-    ]
+    ],
+
+    'rembg' => [
+        'url' => env('REMBG_URL', 'https://rembg.lowbits.de'),
+    ],
+    'photoroom' => [
+        'api_key' => 'sandbox_sk_pr_default_4c785cb9271319d33798336ce0e1e1c31e75399a',
+    ],
 
 ];

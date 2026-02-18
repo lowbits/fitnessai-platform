@@ -63,20 +63,32 @@ export const locales = {
             },
             features: {
                 label: 'Features',
-                title: 'Transform Your Fitness with AI-Powered Plans',
+                title: 'Everything You Need to Reach Your Goals',
                 subtitle:
-                    'Explore cutting-edge features designed to optimize your workouts, nutrition, and overall progress.',
+                    'From personalized plans to real-time coaching — powerful tools that adapt to your lifestyle and keep you on track.',
                 plans: {
-                    headline: 'Create Individual Plans',
-                    body: 'Design unique workout and nutrition plans tailored to your specific goals and needs.',
+                    headline: 'Personalized Plans',
+                    body: 'AI-generated workout and nutrition plans built around your goals, preferences, and schedule — no guesswork.',
                 },
-                shopping: {
-                    headline: 'Shop with Ease',
-                    body: 'Generate shopping lists automatically from your personalized nutrition plan.',
+                food_intolerances: {
+                    headline: 'Respects Your Diet',
+                    body: 'Allergies, vegan, keto or religious restrictions — your plan adapts to what you can and want to eat.',
+                },
+                progressive_plans: {
+                    headline: 'Stronger Every Week',
+                    body: 'Plans that evolve with you. Automatic adjustments keep your training challenging and effective.',
                 },
                 coach: {
-                    headline: 'Get Instant Advice',
-                    body: 'Receive real-time guidance from your AI Coach for on-the-spot support during workouts.',
+                    headline: 'AI Coach Mona',
+                    body: 'Ask anything about training or nutrition. Mona gives you instant, personalized guidance 24/7.',
+                },
+                tracking: {
+                    headline: 'Track Your Progress',
+                    body: 'Log workouts, meals, and body stats. See your transformation unfold over time.',
+                },
+                shopping: {
+                    headline: 'Smart Shopping Lists',
+                    body: 'Your grocery list generated straight from your meal plan — organized and ready for the store.',
                 },
             },
             faq: {
@@ -113,6 +125,47 @@ export const locales = {
                     question: 'Is there a fytrr app?',
                     answer: 'Yes, fytrr is available as an iOS app with AI-powered workout tracking, meal logging, and unlimited personalized plans. Try it free for 7 days.',
                     download_link: 'Download on the App Store →',
+                },
+            },
+            app_section: {
+                badge: 'Available on the App Store',
+                title: 'Meet Mona, your AI Coach',
+                subtitle:
+                    'Your plan is just the beginning. Mona brings it to life.',
+                feature_swap: 'Swap meals & workouts',
+                feature_swap_body:
+                    "Something doesn't fit? Swap it instantly for an alternative.",
+                feature_track: 'Track everything',
+                feature_track_body:
+                    'Meals, workouts & body stats — your progress at a glance.',
+                feature_coach: 'AI Coaching with Mona',
+                feature_coach_body:
+                    'Questions about training or nutrition? Mona helps you anytime.',
+                cta: 'Download on the App Store',
+                cta_sub: '7 days free trial',
+            },
+            testimonials: {
+                label: 'Real Stories, Inspiring Success',
+                title: 'Empowering Fitness Journeys with AI',
+                subtitle:
+                    'Hear firsthand how our innovative AI-Fitness Tool has revolutionized workouts and nutrition for people just like you.',
+                review1: {
+                    title: 'Top App',
+                    body: 'Got a personalized training plan created in just a few minutes.',
+                    author: 'Sh0owzy',
+                    date: 'Feb 4, 2026',
+                },
+                review2: {
+                    title: 'Pure Motivation',
+                    body: "I got to test the app and I'm especially thrilled by the workout part. The training is varied even though I \"only\" work out at home. I was never very motivated but I've been at it for over a month now and I'm almost addicted to the workouts!",
+                    author: 'Jazzilalala',
+                    date: 'Jan 30, 2026',
+                },
+                review3: {
+                    title: 'Amazing App',
+                    body: "I've been testing this app for about 30 days and I'm very satisfied. It helped me lose weight and improve my fitness. The meals are easy to prepare, taste great, and keep you full, so staying in a calorie deficit is effortless. I'm already looking forward to upcoming features.",
+                    author: 'Benedikt Kuhlmann',
+                    date: 'Feb 5, 2026',
                 },
             },
             footer: {
@@ -184,6 +237,11 @@ export const locales = {
                     styleLabel: 'Diet Style',
                     styleHint: 'Optional: Choose a specific approach to eating',
                     stylePlaceholder: 'Select Diet Style',
+                },
+                dietStyle: {
+                    headline: 'Do you follow a specific diet?',
+                    subline:
+                        'Optional: Tell us if you follow a particular nutritional approach',
                 },
                 activity: {
                     headline: 'How active are you?',
@@ -1128,10 +1186,8 @@ export const locales = {
             cta: {
                 softLabel: 'Get the most out of your plan',
             },
-            trustLine:
-                '7 days free · No risk · Cancel anytime',
-            fallback:
-                "You'll also receive your plan as a PDF by email.",
+            trustLine: '7 days free · No risk · Cancel anytime',
+            fallback: "You'll also receive your plan as a PDF by email.",
             closePage: 'Close page',
             reviews: {
                 review1: {
@@ -1218,20 +1274,32 @@ export const locales = {
             },
             features: {
                 label: 'Funktionen',
-                title: 'Transformiere deine Fitness mit KI-gestützten Plänen',
+                title: 'Alles, was du brauchst, um deine Ziele zu erreichen',
                 subtitle:
-                    'Entdecke modernste Funktionen, die deine Trainings, Ernährung und deinen gesamten Fortschritt optimieren.',
+                    'Von personalisierten Plänen bis zu Echtzeit-Coaching — leistungsstarke Tools, die sich deinem Lifestyle anpassen.',
                 plans: {
-                    headline: 'Erstelle individuelle Pläne',
-                    body: 'Entwickle einzigartige Trainings- und Ernährungspläne, die auf deine spezifischen Ziele und Bedürfnisse zugeschnitten sind.',
+                    headline: 'Personalisierte Pläne',
+                    body: 'KI-generierte Trainings- und Ernährungspläne, abgestimmt auf deine Ziele, Vorlieben und deinen Alltag.',
                 },
-                shopping: {
-                    headline: 'Einkaufen leicht gemacht',
-                    body: 'Generiere automatisch Einkaufslisten aus deinem personalisierten Ernährungsplan.',
+                food_intolerances: {
+                    headline: 'Respektiert deine Ernährung',
+                    body: 'Allergien, vegan, keto oder religiöse Einschränkungen — dein Plan passt sich an, was du essen kannst und willst.',
+                },
+                progressive_plans: {
+                    headline: 'Jede Woche stärker',
+                    body: 'Pläne, die mit dir wachsen. Automatische Anpassungen halten dein Training herausfordernd und effektiv.',
                 },
                 coach: {
-                    headline: 'Erhalte sofortige Beratung',
-                    body: 'Erhalte Echtzeit-Anleitungen von deinem KI-Coach für Unterstützung direkt während des Trainings.',
+                    headline: 'KI-Coach Mona',
+                    body: 'Frag alles zu Training oder Ernährung. Mona gibt dir sofort personalisierte Tipps — rund um die Uhr.',
+                },
+                tracking: {
+                    headline: 'Fortschritt tracken',
+                    body: 'Logge Workouts, Mahlzeiten und Körperdaten. Sieh deine Transformation über die Zeit.',
+                },
+                shopping: {
+                    headline: 'Smarte Einkaufslisten',
+                    body: 'Einkaufsliste direkt aus deinem Ernährungsplan — sortiert und bereit für den Einkauf.',
                 },
             },
             faq: {
@@ -1271,6 +1339,47 @@ export const locales = {
                     question: 'Gibt es eine fytrr App?',
                     answer: 'Ja, fytrr gibt es als iOS App mit KI-gestütztem Workout-Tracking, Ernährungs-Logging und unbegrenzten personalisierten Plänen. 7 Tage kostenlos testen.',
                     download_link: 'Im App Store laden →',
+                },
+            },
+            app_section: {
+                badge: 'Verfügbar im App Store',
+                title: 'Triff Mona, deinen KI-Coach',
+                subtitle:
+                    'Dein Plan ist erst der Anfang. Mona macht ihn lebendig.',
+                feature_swap: 'Mahlzeiten & Workouts tauschen',
+                feature_swap_body:
+                    'Passt dir etwas nicht? Tausche es sofort gegen eine Alternative.',
+                feature_track: 'Alles tracken',
+                feature_track_body:
+                    'Mahlzeiten, Workouts & Körperdaten – dein Fortschritt auf einen Blick.',
+                feature_coach: 'KI-Coaching mit Mona',
+                feature_coach_body:
+                    'Fragen zu Training oder Ernährung? Mona hilft dir jederzeit.',
+                cta: 'Im App Store laden',
+                cta_sub: '7 Tage kostenlos testen',
+            },
+            testimonials: {
+                label: 'Echte Geschichten, inspirierender Erfolg',
+                title: 'KI-gestützte Fitness-Transformationen',
+                subtitle:
+                    'Erfahre aus erster Hand, wie unser innovatives KI-Fitness-Tool Workouts und Ernährung für Menschen wie dich revolutioniert hat.',
+                review1: {
+                    title: 'Top App',
+                    body: 'Habe in wenigen Minuten einen personalisierten Trainingsplan erstellt bekommen.',
+                    author: 'Sh0owzy',
+                    date: '4. Feb. 2026',
+                },
+                review2: {
+                    title: 'Motivation pur',
+                    body: 'Ich durfte die App testen und ich bin vor allem von dem sportlichen Teil total begeistert. Das Training ist abwechslungsreich und das obwohl ich „nur" zu Hause trainiere. Ich war nie sehr motiviert aber ich bin jetzt schon seit über einem Monat dabei und schon fast süchtig nach dem Training!',
+                    author: 'Jazzilalala',
+                    date: '30. Jan. 2026',
+                },
+                review3: {
+                    title: 'Tolle App',
+                    body: 'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern. Die Mahlzeiten sind einfach zuzubereiten, schmecken hervorragend und machen satt, sodass man problemlos im Kaloriendefizit bleibt. Ich freue mich schon auf die kommenden Funktionen.',
+                    author: 'Benedikt Kuhlmann',
+                    date: '5. Feb. 2026',
                 },
             },
             footer: {
@@ -1343,6 +1452,11 @@ export const locales = {
                     styleHint:
                         'Optional: Wähle einen spezifischen Ernährungsansatz',
                     stylePlaceholder: 'Ernährungsstil auswählen',
+                },
+                dietStyle: {
+                    headline: 'Folgst du einem speziellen Ernährungsstil?',
+                    subline:
+                        'Optional: Sag uns, ob du einem bestimmten Ernährungsansatz folgst',
                 },
                 activity: {
                     headline: 'Aktivität',
@@ -2303,10 +2417,8 @@ export const locales = {
             cta: {
                 softLabel: 'Hole das Beste aus deinem Plan',
             },
-            trustLine:
-                '7 Tage kostenlos · Kein Risiko · Jederzeit kündbar',
-            fallback:
-                'Du erhältst deinen Plan auch als PDF per E-Mail.',
+            trustLine: '7 Tage kostenlos · Kein Risiko · Jederzeit kündbar',
+            fallback: 'Du erhältst deinen Plan auch als PDF per E-Mail.',
             closePage: 'Seite schließen',
             reviews: {
                 review1: {

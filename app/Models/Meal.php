@@ -17,6 +17,8 @@ class Meal extends Model
         'name',
         'description',
         'image',
+        'image_full',
+        'image_isolated',
         'calories',
         'protein_g',
         'carbs_g',

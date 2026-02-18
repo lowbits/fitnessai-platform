@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
+use Laravel\Ai\Enums\Lab;
 use Throwable;
 
 class GenerateUserWorkoutPlan implements ShouldQueue
@@ -108,7 +109,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 );
 
                 (new WorkoutProgrammerAgent($workoutPlan))
-                    ->prompt((string) $prompt);
+                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: 'gpt-5-mini');
 
                 // Refresh to get updated data from SaveWorkoutPlanTool tool
                 $workoutPlan->refresh();

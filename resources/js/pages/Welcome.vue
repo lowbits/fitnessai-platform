@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import ConvinceCard from '@/components/ConvinceCard.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import Footer from '@/components/Footer.vue';
@@ -9,10 +10,18 @@ import AtomIcon from '@/components/icons/AtomIcon.vue';
 import FingerprintIcon from '@/components/icons/FingerprintIcon.vue';
 import FlagIcon from '@/components/icons/FlagIcon.vue';
 import GhostIcon from '@/components/icons/GhostIcon.vue';
+import ProgressivePlanIcon from '@/components/icons/ProgressivePlanIcon.vue';
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
+import TrackingIcon from '@/components/icons/TrackingIcon.vue';
+import RoundedIcon from '@/components/ui/icons/RoundedIcon.vue';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 import { Head, usePage } from '@inertiajs/vue3';
+import {
+    ArrowLeftRight,
+    ChartNoAxesCombined,
+    MessageCircle,
+} from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -94,6 +103,62 @@ const mobileAppData = computed(() => ({
         name: 'fytrr',
         url: 'https://fytrr.com',
     },
+}));
+
+const reviewData = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'SoftwareApplication',
+    name: 'fytrr',
+    applicationCategory: 'HealthApplication',
+    operatingSystem: 'iOS',
+    aggregateRating: {
+        '@type': 'AggregateRating',
+        ratingValue: '5',
+        bestRating: '5',
+        ratingCount: '4',
+    },
+    inLanguage: 'de',
+    review: [
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Sh0owzy' },
+            datePublished: '2026-02-04',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5',
+                bestRating: '5',
+            },
+            name: 'Top App',
+            reviewBody:
+                'Habe in wenigen Minuten einen personalisierten Trainingsplan erstellt bekommen.',
+        },
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Jazzilalala' },
+            datePublished: '2026-01-30',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5',
+                bestRating: '5',
+            },
+            name: 'Motivation pur',
+            reviewBody:
+                'Ich durfte die App testen und ich bin vor allem von dem sportlichen Teil total begeistert. Das Training ist abwechslungsreich und das obwohl ich „nur" zu Hause trainiere. Ich war nie sehr motiviert aber ich bin jetzt schon seit über einem Monat dabei und schon fast süchtig nach dem Training!',
+        },
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Benedikt Kuhlmann' },
+            datePublished: '2026-02-05',
+            reviewRating: {
+                '@type': 'Rating',
+                ratingValue: '5',
+                bestRating: '5',
+            },
+            name: 'Tolle App',
+            reviewBody:
+                'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern. Die Mahlzeiten sind einfach zuzubereiten, schmecken hervorragend und machen satt, sodass man problemlos im Kaloriendefizit bleibt. Ich freue mich schon auf die kommenden Funktionen.',
+        },
+    ],
 }));
 
 const faqData = computed(() => ({
@@ -199,7 +264,10 @@ const faqData = computed(() => ({
             name="twitter:image"
             content="https://fytrr.com/fitness-plan.png"
         />
-        <meta name="apple-itunes-app" content="app-id=6757151695, app-argument=https://fytrr.com/" />
+        <meta
+            name="apple-itunes-app"
+            content="app-id=6757151695, app-argument=https://fytrr.com/"
+        />
 
         <!-- Structured Data -->
         <component :is="'script'" type="application/ld+json">
@@ -210,6 +278,9 @@ const faqData = computed(() => ({
         </component>
         <component :is="'script'" type="application/ld+json">
             {{ JSON.stringify(faqData) }}
+        </component>
+        <component :is="'script'" type="application/ld+json">
+            {{ JSON.stringify(reviewData) }}
         </component>
     </Head>
 
@@ -325,7 +396,7 @@ const faqData = computed(() => ({
                 </div>
 
                 <div
-                    class="mt-12 flex flex-col justify-between gap-8 md:flex-row"
+                    class="mt-12 grid grid-cols-3 grid-rows-2 justify-between gap-8 md:flex-row"
                 >
                     <FeatureCard
                         :headline="$t('welcome.features.plans.headline')"
@@ -336,27 +407,317 @@ const faqData = computed(() => ({
                             <FingerprintIcon />
                         </template>
                     </FeatureCard>
-
                     <FeatureCard
-                        :headline="$t('welcome.features.shopping.headline')"
-                        :body="$t('welcome.features.shopping.body')"
-                        illustration-path="/assets/illustrations/research-paper.svg"
-                        is-preview
-                    >
-                        <template #icon>
-                            <ShoppingBagIcon />
-                        </template>
-                    </FeatureCard>
-                    <FeatureCard
-                        :headline="$t('welcome.features.coach.headline')"
-                        :body="$t('welcome.features.coach.body')"
+                        :headline="
+                            $t('welcome.features.food_intolerances.headline')
+                        "
+                        :body="$t('welcome.features.food_intolerances.body')"
                         illustration-path="/assets/illustrations/food-intolerances.svg"
                         is-preview
+                        preview-label="In App"
                     >
                         <template #icon>
                             <GhostIcon />
                         </template>
                     </FeatureCard>
+                    <FeatureCard
+                        :headline="
+                            $t('welcome.features.progressive_plans.headline')
+                        "
+                        :body="$t('welcome.features.progressive_plans.body')"
+                        illustration-path="/assets/illustrations/progressive-plans.png"
+                        is-preview
+                        preview-label="In App"
+                    >
+                        <template #icon>
+                            <ProgressivePlanIcon />
+                        </template>
+                    </FeatureCard>
+                    <FeatureCard
+                        :headline="$t('welcome.features.coach.headline')"
+                        :body="$t('welcome.features.coach.body')"
+                        illustration-path="/assets/illustrations/messenger-wireframe.png"
+                        is-preview
+                        preview-label="In App"
+                    >
+                        <template #icon>
+                            <GhostIcon />
+                        </template>
+                    </FeatureCard>
+                    <FeatureCard
+                        :headline="$t('welcome.features.tracking.headline')"
+                        :body="$t('welcome.features.tracking.body')"
+                        illustration-path="/assets/illustrations/tracking.png"
+                        is-preview
+                        preview-label="In App"
+                    >
+                        <template #icon>
+                            <TrackingIcon />
+                        </template>
+                    </FeatureCard>
+                    <FeatureCard
+                        :headline="$t('welcome.features.shopping.headline')"
+                        :body="$t('welcome.features.shopping.body')"
+                        illustration-path="/assets/illustrations/shopping-cart.png"
+                        is-preview
+                        preview-label="In App"
+                    >
+                        <template #icon>
+                            <ShoppingBagIcon />
+                        </template>
+                    </FeatureCard>
+                </div>
+            </section>
+
+            <section id="app" class="container mx-auto mt-32">
+                <div
+                    class="overflow-hidden rounded-2xl border border-dark-surfaces-25 bg-gradient-to-br from-dark-surfaces-800 via-dark-surfaces-900 to-primary-500/10"
+                >
+                    <div
+                        class="flex flex-col items-center gap-10 p-8 md:flex-row md:gap-16 md:p-12 lg:p-16"
+                    >
+                        <!-- Phone Mock -->
+                        <div class="flex shrink-0 justify-center md:w-1/3">
+                            <img
+                                :src="`/assets/images/mocks/iphone/dashboard_${language}.png`"
+                                :alt="$t('welcome.app_section.title')"
+                                class="h-auto w-[260px] drop-shadow-2xl md:w-[300px]"
+                                loading="lazy"
+                                decoding="async"
+                            />
+                        </div>
+
+                        <!-- Content -->
+                        <div class="flex-1 space-y-8">
+                            <div class="space-y-3">
+                                <span
+                                    class="inline-block rounded-full bg-primary-500/15 px-4 py-1.5 text-sm font-medium text-primary-400"
+                                >
+                                    {{ $t('welcome.app_section.badge') }}
+                                </span>
+                                <h2
+                                    class="font-display text-3xl font-bold tracking-tight text-white md:text-4xl"
+                                >
+                                    {{ $t('welcome.app_section.title') }}
+                                </h2>
+                                <p class="text-lg text-secondary-300">
+                                    {{ $t('welcome.app_section.subtitle') }}
+                                </p>
+                            </div>
+
+                            <div class="space-y-5">
+                                <div class="flex items-start gap-4">
+                                    <RoundedIcon size="sm">
+                                        <ArrowLeftRight
+                                            class="size-5 text-primary-100"
+                                        />
+                                    </RoundedIcon>
+                                    <div>
+                                        <h3 class="font-semibold text-white">
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_swap',
+                                                )
+                                            }}
+                                        </h3>
+                                        <p
+                                            class="mt-0.5 text-sm text-secondary-300"
+                                        >
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_swap_body',
+                                                )
+                                            }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-4">
+                                    <RoundedIcon size="sm">
+                                        <ChartNoAxesCombined
+                                            class="size-5 text-primary-100"
+                                        />
+                                    </RoundedIcon>
+                                    <div>
+                                        <h3 class="font-semibold text-white">
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_track',
+                                                )
+                                            }}
+                                        </h3>
+                                        <p
+                                            class="mt-0.5 text-sm text-secondary-300"
+                                        >
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_track_body',
+                                                )
+                                            }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-4">
+                                    <RoundedIcon size="sm">
+                                        <MessageCircle
+                                            class="size-5 text-primary-100"
+                                        />
+                                    </RoundedIcon>
+                                    <div>
+                                        <h3 class="font-semibold text-white">
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_coach',
+                                                )
+                                            }}
+                                        </h3>
+                                        <p
+                                            class="mt-0.5 text-sm text-secondary-300"
+                                        >
+                                            {{
+                                                $t(
+                                                    'welcome.app_section.feature_coach_body',
+                                                )
+                                            }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start gap-3 pt-2">
+                                <AppStoreDownload
+                                    :app-store-url="APP_STORE_URL"
+                                    qr-code="/assets/download-on-app-store-qr-code.png"
+                                />
+                                <p class="text-sm text-secondary-300">
+                                    {{ $t('welcome.app_section.cta_sub') }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="testimonials" class="container mx-auto mt-32">
+                <div class="text-center">
+                    <p class="text-sm text-primary-500">
+                        {{ $t('welcome.testimonials.label') }}
+                    </p>
+                    <h2
+                        class="mt-3 font-display text-3xl font-bold tracking-tight text-white md:text-4xl"
+                    >
+                        {{ $t('welcome.testimonials.title') }}
+                    </h2>
+                    <p
+                        class="mx-auto mt-4 max-w-2xl text-lg text-secondary-300"
+                    >
+                        {{ $t('welcome.testimonials.subtitle') }}
+                    </p>
+                </div>
+
+                <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+                    <article
+                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+                    >
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <svg
+                                v-for="n in 5"
+                                :key="n"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-white">
+                            {{ $t('welcome.testimonials.review1.title') }}
+                        </h3>
+                        <p
+                            class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
+                        >
+                            {{ $t('welcome.testimonials.review1.body') }}
+                        </p>
+                        <div class="mt-4 text-sm text-secondary-300">
+                            <span class="font-medium text-white">
+                                {{ $t('welcome.testimonials.review1.author') }}
+                            </span>
+                            &middot;
+                            {{ $t('welcome.testimonials.review1.date') }}
+                        </div>
+                    </article>
+
+                    <article
+                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+                    >
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <svg
+                                v-for="n in 5"
+                                :key="n"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-white">
+                            {{ $t('welcome.testimonials.review2.title') }}
+                        </h3>
+                        <p
+                            class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
+                        >
+                            {{ $t('welcome.testimonials.review2.body') }}
+                        </p>
+                        <div class="mt-4 text-sm text-secondary-300">
+                            <span class="font-medium text-white">
+                                {{ $t('welcome.testimonials.review2.author') }}
+                            </span>
+                            &middot;
+                            {{ $t('welcome.testimonials.review2.date') }}
+                        </div>
+                    </article>
+
+                    <article
+                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+                    >
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <svg
+                                v-for="n in 5"
+                                :key="n"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 20 20"
+                                fill="currentColor"
+                                class="h-5 w-5"
+                            >
+                                <path
+                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
+                                />
+                            </svg>
+                        </div>
+                        <h3 class="mt-4 text-lg font-semibold text-white">
+                            {{ $t('welcome.testimonials.review3.title') }}
+                        </h3>
+                        <p
+                            class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
+                        >
+                            {{ $t('welcome.testimonials.review3.body') }}
+                        </p>
+                        <div class="mt-4 text-sm text-secondary-300">
+                            <span class="font-medium text-white">
+                                {{ $t('welcome.testimonials.review3.author') }}
+                            </span>
+                            &middot;
+                            {{ $t('welcome.testimonials.review3.date') }}
+                        </div>
+                    </article>
                 </div>
             </section>
 

@@ -36,7 +36,6 @@ class NewOnboardingStarted extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new AppMailMessage())
-            ->useAdminMailer()
             ->subject('New User Started Onboarding')
             ->greeting('New Onboarding Started')
             ->line('A new user has completed the onboarding form.')

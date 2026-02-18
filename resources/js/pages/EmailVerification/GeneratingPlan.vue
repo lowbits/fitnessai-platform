@@ -316,9 +316,7 @@ onUnmounted(() => {
                                 Mona
                             </div>
                             <div class="text-gray-400">
-                                {{
-                                    $t('generatingPlan.monaDemo.monaResponse')
-                                }}
+                                {{ $t('generatingPlan.monaDemo.monaResponse') }}
                             </div>
                         </div>
                     </div>
@@ -391,18 +389,14 @@ onUnmounted(() => {
                 </p>
 
                 <!-- 3 testimonials stacked -->
-                <div
-                    class="animate-fade-in-delay-2 mb-7 flex flex-col gap-3"
-                >
+                <div class="animate-fade-in-delay-2 mb-7 flex flex-col gap-3">
                     <div
                         v-for="(review, index) in reviews"
                         :key="index"
                         class="flex items-start gap-3.5 rounded-xl border border-gray-700 bg-gray-800 p-3.5"
                     >
                         <div class="shrink-0 text-center">
-                            <div
-                                class="text-xs tracking-wide text-yellow-400"
-                            >
+                            <div class="text-xs tracking-wide text-yellow-400">
                                 ★★★★★
                             </div>
                         </div>

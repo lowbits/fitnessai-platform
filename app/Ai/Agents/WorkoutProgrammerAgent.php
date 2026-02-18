@@ -13,7 +13,6 @@ use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Contracts\HasTools;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
-use Stringable;
 
 #[Timeout(300)]
 #[Provider([Lab::OpenAI, Lab::Mistral])]
@@ -25,9 +24,10 @@ class WorkoutProgrammerAgent implements Agent, Conversational, HasTools
     public function __construct(private readonly WorkoutPlan $workoutPlan) {}
 
     /**
-     * Get the instructions that the agent should follow.
+     * Static training knowledge — cached by the provider.
+     * Same for every user, every generation.
      */
-    public function instructions(): Stringable|string
+    public function instructions(): string
     {
         return 'You are an expert personal trainer and workout programmer specializing in evidence-based training methods. Create personalized workout plans based on the user profile below.';
     }

@@ -149,7 +149,7 @@ const validateStep = (step: number): boolean => {
             }
             break;
 
-        case 2: // Dietary Preference & Diet Style
+        case 2: // Dietary Preference
             if (!form.dietary_preference) {
                 setError(
                     'dietary_preference',
@@ -157,13 +157,16 @@ const validateStep = (step: number): boolean => {
                 );
                 return false;
             }
+            break;
+
+        case 3: // Diet Style
             if (form.has_diet_style && !form.diet_style) {
                 setError('diet_style', t('form.validation.dietStyleRequired'));
                 return false;
             }
             break;
 
-        case 3: // Activity Level & Skill Level
+        case 4: // Activity Level & Skill Level
             if (!form.activity_level) {
                 setError(
                     'activity_level',
@@ -180,14 +183,14 @@ const validateStep = (step: number): boolean => {
             }
             break;
 
-        case 4: // Body Goal
+        case 5: // Body Goal
             if (!form.body_goal) {
                 setError('body_goal', t('form.validation.bodyGoalRequired'));
                 return false;
             }
             break;
 
-        case 5: // Training Place
+        case 6: // Training Place
             if (!form.training_place) {
                 setError(
                     'training_place',
@@ -201,7 +204,7 @@ const validateStep = (step: number): boolean => {
             );
             break;
 
-        case 6: // Training Sessions
+        case 7: // Training Sessions
             if (
                 !form.training_sessions ||
                 parseInt(form.training_sessions) < 1
@@ -402,7 +405,7 @@ const submit = async () => {
     <!-- Form -->
     <form v-else @submit.prevent="submit" class="w-full flex-1 space-y-4">
         <!-- Dev Helper -->
-        <div v-if="$page.props.server.isLocal" class="absolute right-0">
+        <div v-if="$page.props.server.isLocal" class="absolute right-0 z-50">
             <button
                 type="button"
                 class="rounded border border-primary-500 bg-transparent px-4 py-2 text-primary-400"
@@ -413,7 +416,7 @@ const submit = async () => {
         </div>
 
         <TabGroup :selectedIndex="activeStep" @change="goToStep">
-            <TabPanels class="mt-2 flex min-h-[550px] flex-col">
+            <TabPanels class="mt-2 flex flex-col">
                 <!-- Step 1: Gender -->
                 <FormPanel
                     :headline="$t('form.steps.gender.headline')"
@@ -512,7 +515,7 @@ const submit = async () => {
                     </FormGroup>
                 </FormPanel>
 
-                <!-- Step 3: Diet Preference & Style -->
+                <!-- Step 3: Diet Preference -->
                 <FormPanel
                     :headline="$t('form.steps.diet.headline')"
                     :subline="$t('form.steps.diet.subline')"
@@ -533,46 +536,51 @@ const submit = async () => {
                                 />
                             </div>
                         </LabeledInput>
+                    </FormGroup>
+                </FormPanel>
 
-                        <div v-if="form.dietary_preference" class="mt-2">
-                            <LabeledInput
-                                :label="$t('form.steps.diet.hasStyleQuestion')"
-                                name=""
-                                :hint="
-                                    $t('form.steps.diet.hasStyleQuestionHint')
-                                "
-                            >
-                                <div class="flex gap-4">
-                                    <button
-                                        type="button"
-                                        class="flex-1 rounded-xl border-2 py-3 transition"
-                                        :class="
-                                            form.has_diet_style
-                                                ? 'border-primary-500 bg-primary-500/10 text-white'
-                                                : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
-                                        "
-                                        @click="form.has_diet_style = true"
-                                    >
-                                        {{ $t('common.yes') }}
-                                    </button>
-                                    <button
-                                        type="button"
-                                        class="flex-1 rounded-xl border-2 py-3 transition"
-                                        :class="
-                                            !form.has_diet_style
-                                                ? 'border-primary-500 bg-primary-500/10 text-white'
-                                                : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
-                                        "
-                                        @click="
-                                            form.has_diet_style = false;
-                                            form.diet_style = '';
-                                        "
-                                    >
-                                        {{ $t('common.no') }}
-                                    </button>
-                                </div>
-                            </LabeledInput>
-                        </div>
+                <!-- Step 4: Diet Style -->
+                <FormPanel
+                    :headline="$t('form.steps.dietStyle.headline')"
+                    :subline="$t('form.steps.dietStyle.subline')"
+                    @click:next="nextStep"
+                >
+                    <FormGroup class="mt-4 flex flex-col">
+                        <LabeledInput
+                            :label="$t('form.steps.diet.hasStyleQuestion')"
+                            name=""
+                            :hint="$t('form.steps.diet.hasStyleQuestionHint')"
+                        >
+                            <div class="flex gap-4">
+                                <button
+                                    type="button"
+                                    class="flex-1 rounded-xl border-2 py-3 transition"
+                                    :class="
+                                        form.has_diet_style
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
+                                    "
+                                    @click="form.has_diet_style = true"
+                                >
+                                    {{ $t('common.yes') }}
+                                </button>
+                                <button
+                                    type="button"
+                                    class="flex-1 rounded-xl border-2 py-3 transition"
+                                    :class="
+                                        !form.has_diet_style
+                                            ? 'border-primary-500 bg-primary-500/10 text-white'
+                                            : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
+                                    "
+                                    @click="
+                                        form.has_diet_style = false;
+                                        form.diet_style = '';
+                                    "
+                                >
+                                    {{ $t('common.no') }}
+                                </button>
+                            </div>
+                        </LabeledInput>
 
                         <LabeledInput
                             v-if="form.has_diet_style"
@@ -609,7 +617,7 @@ const submit = async () => {
                     :subline="$t('form.steps.activity.subline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup wrap class="mt-8">
+                    <FormGroup wrap class="mt-4">
                         <LabeledInput
                             full-width
                             :label="$t('form.steps.activity.activityLabel')"
@@ -670,7 +678,7 @@ const submit = async () => {
                     :subline="$t('form.steps.goal.subline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup class="mt-8">
+                    <FormGroup class="mt-4">
                         <LabeledInput
                             full-width
                             :label="$t('form.steps.goal.label')"
@@ -703,7 +711,7 @@ const submit = async () => {
                     :subline="$t('form.steps.training.subline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup class="mt-8">
+                    <FormGroup class="mt-4">
                         <LabeledInput
                             full-width
                             name="training_place"
@@ -725,7 +733,7 @@ const submit = async () => {
                     :subline="$t('form.steps.training.sessionsSubline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup class="relative mt-8">
+                    <FormGroup class="relative mt-4">
                         <LabeledInput
                             full-width
                             name="training_sessions"
@@ -756,11 +764,11 @@ const submit = async () => {
                     </FormGroup>
                 </FormPanel>
 
-                <!-- Step 8: Email & Submit -->
-                <TabPanel class="flex min-h-[550px] flex-col">
-                    <div class="shrink-0">
+                <!-- Step 9: Email & Submit -->
+                <TabPanel class="flex h-[600px] flex-col">
+                    <div class="animate-fade-in shrink-0">
                         <h4
-                            class="text-center text-white font-display text-3xl font-semibold"
+                            class="text-center font-display text-3xl font-semibold text-white"
                         >
                             {{ $t('form.steps.final.headline') }}
                         </h4>
@@ -771,7 +779,7 @@ const submit = async () => {
                         </p>
                     </div>
 
-                    <div class="mt-8 grow">
+                    <div class="animate-scale-in mt-4 grow">
                         <FormGroup wrap>
                             <LabeledInput
                                 name="name"
@@ -896,7 +904,7 @@ const submit = async () => {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="mt-10 inline-flex w-full flex-shrink-0 justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition disabled:cursor-not-allowed disabled:opacity-50"
+                        class="animate-scale-in mt-auto inline-flex w-full shrink-0 justify-center gap-0.5 overflow-hidden rounded-xl border border-primary-300 bg-primary-500 px-3 py-4 text-xl font-medium text-dark-surfaces-900 transition [animation-delay:80ms] disabled:cursor-not-allowed disabled:opacity-50"
                     >
                         {{
                             form.processing
@@ -907,10 +915,40 @@ const submit = async () => {
                 </TabPanel>
 
                 <!-- Progress Indicator -->
-                <TabList class="mt-20 flex space-x-1 p-1">
-                    <FormTab v-for="i in 8" :key="i" />
+                <TabList class="mt-6 flex space-x-1 p-1">
+                    <FormTab v-for="i in 9" :key="i" />
                 </TabList>
             </TabPanels>
         </TabGroup>
     </form>
 </template>
+
+<style scoped>
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in {
+    animation: fade-in 0.25s ease-out both;
+}
+
+.animate-scale-in {
+    animation: scale-in 0.3s ease-out both;
+}
+</style>

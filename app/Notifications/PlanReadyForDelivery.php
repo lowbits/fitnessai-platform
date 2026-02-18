@@ -37,7 +37,6 @@ class PlanReadyForDelivery extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new AppMailMessage())
-            ->useAdminMailer()
             ->subject('Plan ready for delivery')
             ->greeting('New Plan was generated')
             ->line('A new plan is ready to be delivered.')

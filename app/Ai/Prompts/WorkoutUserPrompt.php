@@ -1,0 +1,203 @@
+<?php
+
+namespace App\Ai\Prompts;
+
+use App\Models\UserProfile;
+use Stringable;
+
+/**
+ * Dynamic user-specific context for each workout generation.
+ * Goes into messages() — small token footprint, changes per call.
+ */
+class WorkoutUserPrompt implements Stringable
+{
+    private int $totalDays;
+
+    public function __construct(
+        private UserProfile $profile,
+        private string $locale,
+        private int $dayNumber,
+        private int $workoutsPerWeek,
+        private array $recentWorkouts = [],
+    ) {
+        $this->totalDays = config('plans.duration_days');
+    }
+
+    public function __toString(): string
+    {
+        $workoutNumber = $this->getWorkoutNumberInCycle();
+        $language = $this->locale === 'de' ? 'German' : 'English';
+
+        $parts = [
+            $this->buildProfile(),
+            $this->buildContext($workoutNumber),
+            $this->buildGoalProtocol(),
+            $this->buildStructure(),
+            $this->buildWeightRec(),
+            $this->buildTrainingEnvironment(),
+            $this->buildGenderNote(),
+            "Language: {$language}",
+            $this->buildRecentWorkouts(),
+            'Create this workout now. Use MeilisearchSimilaritySearch for all exercises, then call saveWorkoutPlan.',
+        ];
+
+        return implode("\n\n", array_filter($parts));
+    }
+
+    private function buildProfile(): string
+    {
+        $p = $this->profile;
+
+        return implode("\n", [
+            "Age: {$p->age} | Gender: {$p->gender->value} | Level: {$p->skill_level->value}",
+            "Goal: {$p->body_goal->value} | Place: {$p->training_place->value} | Activity: {$p->activity_level->value}",
+            "Sessions/week: {$p->training_sessions_per_week}",
+        ]);
+    }
+
+    private function buildContext(int $workoutNumber): string
+    {
+        $split = $this->getWorkoutSplit();
+        $focus = $this->getTargetMuscleGroups($workoutNumber);
+
+        return implode("\n", [
+            "Day {$this->dayNumber}/{$this->totalDays} | Workout {$workoutNumber}/{$this->workoutsPerWeek}",
+            "Split: {$split} | Today: {$focus}",
+        ]);
+    }
+
+    private function buildGenderNote(): string
+    {
+        if ($this->profile->gender->value !== 'female') {
+            return '';
+        }
+
+        return 'Note: Favor glute-focused lower body variations (hip thrust > leg extension). Include posterior chain emphasis.';
+    }
+
+    private function buildRecentWorkouts(): string
+    {
+        if (empty($this->recentWorkouts)) {
+            return '';
+        }
+
+        $list = implode("\n", array_map(fn ($w) => "- {$w}", $this->recentWorkouts));
+
+        return "Recent workouts (vary accessories, compounds may repeat):\n{$list}";
+    }
+
+    // =========================================================================
+    // Split & Target Logic (unchanged, just compact)
+    // =========================================================================
+
+    private function getWorkoutSplit(): string
+    {
+        return match ($this->profile->training_sessions_per_week) {
+            2 => 'Upper/Lower',
+            3 => 'Push/Pull/Legs',
+            4 => 'Upper/Lower/Upper/Lower',
+            5 => 'Push/Pull/Legs/Upper/Lower',
+            6 => 'PPL/PPL',
+            7 => 'Daily Specialization',
+            default => 'Full Body',
+        };
+    }
+
+    private function buildGoalProtocol(): string
+    {
+        return match ($this->profile->body_goal->value) {
+            'muscle_gain' => 'Protocol: 3-4 sets, 8-12 reps, 60-90s rest, tempo 3-0-1-0/2-0-1-0, RPE 7-9. 70% compound, 30% isolation. Slow eccentrics. Last set RPE 9.',
+            'weight_loss' => 'Protocol: 3 sets, 12-15 reps, 30-45s rest, tempo 2-0-1-0, RPE 6-8. Circuit-style, maintain heart rate. Include HIIT intervals.',
+            'strength' => 'Protocol: 4-6 sets main/3 accessory, 3-6 reps main/6-8 accessory, 2-5min rest main/90-120s accessory, tempo 1-0-X-0/2-0-1-0, RPE 8-9.5/7-8. 90%+ compound. Explosive concentric.',
+            'endurance' => 'Protocol: 2-3 sets, 15-25 reps, ≤30s rest, tempo 1-0-1-0, RPE 5-7. Circuit format, sustained output, never to failure.',
+            'maintenance' => 'Protocol: 3 sets, 8-12 reps, 60-90s rest, tempo 2-0-1-0, RPE 6-7. Balanced compound/isolation. Preserve, don\'t overreach.',
+            'general_fitness' => 'Protocol: 3 sets, 10-12 reps, 60s rest, tempo 2-0-1-0, RPE 6-8. Balanced. Include mobility.',
+            default => 'Protocol: 3 sets, 10-12 reps, 60s rest, tempo 2-0-1-0, RPE 6-8.',
+        };
+    }
+
+    private function buildStructure(): string
+    {
+        $level = $this->profile->skill_level->value;
+        $goal = $this->profile->body_goal->value;
+
+        if ($level === 'beginner') {
+            return 'Structure: Straight sets only. No supersets/circuits. Focus on form and confidence.';
+        }
+
+        return match ($goal) {
+            'muscle_gain' => 'Structure: Straight sets for compounds → superset antagonist isolation → burnout set.',
+            'weight_loss' => 'Structure: Circuit/paired exercises, upper/lower alternating, HIIT between blocks.',
+            'strength' => 'Structure: Straight sets only for main lifts. Full recovery. Accessories support the main lift.',
+            'endurance' => 'Structure: Circuit with minimal rest, group by movement pattern.',
+            'maintenance' => 'Structure: Straight sets for compounds, optional supersets for isolation.',
+            default => 'Structure: Straight sets for compounds, supersets optional for isolation.',
+        };
+    }
+
+    private function buildWeightRec(): string
+    {
+        return match ($this->profile->skill_level->value) {
+            'beginner' => 'Weight: Qualitative only — "Light"/"Moderate"/"Challenging". Never reference 1RM.',
+            'intermediate' => 'Weight: Qualitative with context — "Moderate — 2-3 reps in reserve".',
+            'advanced' => 'Weight: Main lifts use %1RM (3-6 reps → 80-90%, 8-12 → 65-80%). Isolation uses qualitative.',
+            default => 'Weight: Qualitative — "Light"/"Moderate"/"Challenging".',
+        };
+    }
+
+    private function buildTrainingEnvironment(): string
+    {
+        return match ($this->profile->training_place->value) {
+            'gym' => 'Environment: Gym. Full equipment. Prioritize free weights for main lifts, cables for isolation, machines for burnout.',
+            'home' => 'Environment: Home. Bodyweight, bands, light dumbbells only. Use tempo manipulation for difficulty. Never prescribe barbells.',
+            'outdoor' => 'Environment: Outdoor. Calisthenics, park infrastructure, plyometrics. Never prescribe gym machines.',
+            default => 'Environment: General. Adapt to available equipment, prioritize bodyweight.',
+        };
+    }
+    private function getWorkoutNumberInCycle(): int
+    {
+        return (($this->dayNumber - 1) % $this->workoutsPerWeek) + 1;
+    }
+
+    private function getTargetMuscleGroups(int $workoutNumber): string
+    {
+        return match ($this->workoutsPerWeek) {
+            2 => match ($workoutNumber) {
+                1 => 'Upper Body (Chest, Back, Shoulders, Arms)',
+                2 => 'Lower Body (Quads, Hamstrings, Glutes, Calves)',
+                default => 'Full Body',
+            },
+            3 => match ($workoutNumber) {
+                1 => 'Push (Chest, Shoulders, Triceps)',
+                2 => 'Pull (Back, Biceps, Rear Delts)',
+                3 => 'Legs & Core',
+                default => 'Full Body',
+            },
+            4 => match ($workoutNumber) {
+                1 => 'Upper A (Chest, Back, Shoulders)',
+                2 => 'Lower A (Quads, Hamstrings, Glutes)',
+                3 => 'Upper B (Back, Arms, Rear Delts)',
+                4 => 'Lower B (Glutes, Hamstrings, Calves)',
+                default => 'Full Body',
+            },
+            5 => match ($workoutNumber) {
+                1 => 'Push (Chest, Shoulders, Triceps)',
+                2 => 'Pull (Back, Biceps, Rear Delts)',
+                3 => 'Legs (Quads, Hamstrings, Glutes, Calves)',
+                4 => 'Upper Body (Chest, Back, Shoulders)',
+                5 => 'Lower Body (Glutes, Hamstrings, Calves)',
+                default => 'Full Body',
+            },
+            6 => match ($workoutNumber) {
+                1 => 'Push A (Chest, Shoulders, Triceps)',
+                2 => 'Pull A (Back, Biceps, Rear Delts)',
+                3 => 'Legs A (Quads, Hamstrings, Glutes)',
+                4 => 'Push B (Shoulders, Chest, Triceps)',
+                5 => 'Pull B (Back, Biceps, Rear Delts)',
+                6 => 'Legs B (Hamstrings, Glutes, Calves)',
+                default => 'Full Body',
+            },
+            default => 'Full Body',
+        };
+    }
+}
