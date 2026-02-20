@@ -2,7 +2,7 @@
 import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps<{
@@ -17,7 +17,12 @@ const props = defineProps<{
 
 const { t } = useI18n();
 
-const deepLink = computed(() => {
+const isSafari = computed(() => {
+    if (typeof navigator === 'undefined') return false;
+    return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+});
+
+const linkParams = computed(() => {
     const params = new URLSearchParams({
         token: props.token,
         email: props.email,
@@ -27,7 +32,20 @@ const deepLink = computed(() => {
     if (props.utmMedium) params.append('utm_medium', props.utmMedium);
     if (props.utmCampaign) params.append('utm_campaign', props.utmCampaign);
 
-    return `https://fytrr.de/set-password?${params.toString()}`;
+    return params.toString();
+});
+
+const deepLink = computed(
+    () => `https://fytrr.de/set-password?${linkParams.value}`,
+);
+const customSchemeLink = computed(
+    () => `fytrr://set-password?${linkParams.value}`,
+);
+
+onMounted(() => {
+    if (!isSafari.value) {
+        window.location.href = customSchemeLink.value;
+    }
 });
 </script>
 
@@ -73,9 +91,22 @@ const deepLink = computed(() => {
                     >
                         <p class="text-sm text-primary-200">
                             <strong>{{ t('set_password.tip.label') }}</strong>
-                            {{ t('set_password.tip.text') }}
+                            {{
+                                isSafari
+                                    ? t('set_password.tip.safari')
+                                    : t('set_password.tip.other')
+                            }}
                         </p>
                     </div>
+
+                    <!-- Activate Account Button -->
+
+                    <a
+                        :href="customSchemeLink"
+                        class="hover:bg-primary-600 inline-flex w-full items-center justify-center rounded-xl bg-primary-500 px-6 py-4 text-lg font-semibold text-white transition"
+                    >
+                        {{ t('set_password.activate_account') }}
+                    </a>
 
                     <!-- Divider -->
                     <div class="my-6 text-sm text-gray-500">

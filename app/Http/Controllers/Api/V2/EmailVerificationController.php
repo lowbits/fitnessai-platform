@@ -44,6 +44,12 @@ class EmailVerificationController extends Controller
             event(new EmailVerified($user, $plan));
         }
 
+        $token = $user->getPasswordResetToken();
+        $setPasswordUrl = URL::signedRoute('set-password', [
+            'token' => $token,
+            'email' => $user->email,
+        ]);
+
         $user->load('profile');
 
         // Render plan generation page with polling
@@ -72,6 +78,7 @@ class EmailVerificationController extends Controller
                     'utm_campaign' => 'plan_generation',
                 ]
             )),
+            'setPasswordUrl' => Inertia::once(fn () => $setPasswordUrl),
             'iosAppStoreUrl' => Inertia::once(fn () => config('app.app_store.ios.url')),
         ]);
     }

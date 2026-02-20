@@ -23,6 +23,7 @@ interface Props {
     } | null;
     bodyGoal: string | null;
     smartLink: string;
+    setPasswordUrl: string;
     iosAppStoreUrl: string;
 }
 
@@ -130,7 +131,12 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <Head :title="$t('generatingPlan.meta.title')" />
+    <Head :title="$t('generatingPlan.meta.title')">
+        <meta
+            name="apple-itunes-app"
+            :content="`app-id=6757151695, app-argument=${setPasswordUrl}`"
+        />
+    </Head>
 
     <GuestLayout>
         <div class="container mx-auto max-w-lg px-5 pt-7 pb-12">
