@@ -61,13 +61,6 @@ onMounted(() => {
         <div class="mx-auto mt-10 max-w-2xl px-6 md:px-0">
             <!-- Header -->
             <div class="mb-8 text-center">
-                <div class="mb-4">
-                    <img
-                        src="/favicon.svg"
-                        alt="Fytrr"
-                        class="mx-auto h-20 w-20"
-                    />
-                </div>
                 <h1 class="mb-2 text-4xl font-bold text-white">
                     {{ t('set_password.title') }}
                 </h1>

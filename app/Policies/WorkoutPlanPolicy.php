@@ -2,25 +2,29 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
 use App\Models\User;
 use App\Models\WorkoutPlan;
-use Illuminate\Auth\Access\Response;
 
 class WorkoutPlanPolicy
 {
     /**
      * Determine whether the user can view any models.
      */
-    public function viewAny(User $user): bool
+    public function viewAny(User|Admin $user): bool
     {
-        return false;
+        return $user instanceof Admin || false;
     }
 
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, WorkoutPlan $workoutPlan): bool
+    public function view(User|Admin $user, WorkoutPlan $workoutPlan): bool
     {
+        if ($user instanceof Admin) {
+            return true;
+        }
+
         return false;
     }
 

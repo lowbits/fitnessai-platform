@@ -16,10 +16,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use NoopStudios\LaravelRevenueCat\Concerns\Billable;
 
-class User extends Authenticatable implements MustVerifyEmail, HasLocalePreference
+class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable, HasApiTokens, Billable;
+    use Billable, HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
      * The attributes that are mass assignable.
@@ -33,7 +33,6 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
         'locale',
         'source',
     ];
-
 
     /**
      * The attributes that should be hidden for serialization.
@@ -110,7 +109,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function legacySubscriptions(): HasMany
     {
-        return $this->hasMany(SubscriptionLegacy::class,);
+        return $this->hasMany(SubscriptionLegacy::class);
     }
 
     public function hasActiveLegacySubscription(): bool
@@ -125,7 +124,7 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
 
     public function getTimezone(): string
     {
-        return match($this->locale) {
+        return match ($this->locale) {
             'de' => 'Europe/Berlin',
             default => 'UTC',
         };
@@ -136,10 +135,9 @@ class User extends Authenticatable implements MustVerifyEmail, HasLocalePreferen
      */
     public function getCurrentWeight(): ?float
     {
-        return once(fn () =>
-            $this->bodyProgress()
-                ->latest('recorded_at')
-                ->value('weight_kg')
+        return once(fn () => $this->bodyProgress()
+            ->latest('recorded_at')
+            ->value('weight_kg')
             ?? $this->profile?->weight_kg
         );
     }
