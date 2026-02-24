@@ -33,6 +33,8 @@ class Meal extends Model
         'servings',
         'tags',
         'allergens',
+        'primary_protein',
+        'cuisine',
         'status',
         'completed_at',
     ];
