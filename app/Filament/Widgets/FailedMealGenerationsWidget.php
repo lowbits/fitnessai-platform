@@ -2,27 +2,27 @@
 
 namespace App\Filament\Widgets;
 
-use App\Jobs\GenerateUserWorkoutPlan;
-use App\Models\WorkoutPlan;
+use App\Jobs\GenerateUserMealPlan;
+use App\Models\MealPlan;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 
-class FailedGenerationsWidget extends BaseWidget
+class FailedMealGenerationsWidget extends BaseWidget
 {
     protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 1;
 
-    protected static ?string $heading = 'Failed Workouts';
+    protected static ?string $heading = 'Failed Meals';
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                WorkoutPlan::query()
+                MealPlan::query()
                     ->where('status', 'failed')
                     ->with('plan.user')
                     ->latest()
@@ -30,7 +30,7 @@ class FailedGenerationsWidget extends BaseWidget
             ->columns([
                 TextColumn::make('plan.user.email')
                     ->label('User'),
-                TextColumn::make('workout_name')
+                TextColumn::make('plan.plan_name')
                     ->label('Name'),
                 TextColumn::make('day_number')
                     ->label('Day'),
@@ -43,13 +43,13 @@ class FailedGenerationsWidget extends BaseWidget
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->action(function (WorkoutPlan $record): void {
+                    ->action(function (MealPlan $record): void {
                         $plan = $record->plan;
-                        $plan->workoutPlans()->where('status', 'failed')->update(['status' => 'pending']);
-                        GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
+                        $plan->mealPlans()->where('status', 'failed')->update(['status' => 'pending']);
+                        GenerateUserMealPlan::dispatch($plan->user, $plan);
 
                         Notification::make()
-                            ->title('Workout generation retry dispatched')
+                            ->title('Meal generation retry dispatched')
                             ->success()
                             ->send();
                     }),

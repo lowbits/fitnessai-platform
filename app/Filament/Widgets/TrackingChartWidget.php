@@ -12,7 +12,7 @@ class TrackingChartWidget extends ChartWidget
 {
     protected ?string $heading = 'Daily Tracking Activity';
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 2;
 
     protected int|string|array $columnSpan = 'full';
 

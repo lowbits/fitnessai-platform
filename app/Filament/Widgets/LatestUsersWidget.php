@@ -12,18 +12,18 @@ class LatestUsersWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 1;
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                User::query()->latest()->limit(10)
+                User::query()->latest()
             )
             ->columns([
-                TextColumn::make('name')
-                    ->searchable(),
                 TextColumn::make('email')
+                    ->searchable(),
+                TextColumn::make('name')
                     ->searchable(),
                 TextColumn::make('source')
                     ->badge(),
@@ -32,6 +32,6 @@ class LatestUsersWidget extends BaseWidget
                     ->sortable(),
             ])
             ->recordUrl(fn (User $record): string => UserResource::getUrl('view', ['record' => $record]))
-            ->paginated(false);
+            ->defaultPaginationPageOption(5);
     }
 }

@@ -5,8 +5,8 @@ use App\Models\SubscriptionLegacy;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Queue;
 
 test('command runs daily and checks individual user generation days', function () {
     Queue::fake();
@@ -257,8 +257,8 @@ test('calculates correct generation day based on plan start date', function () {
     ];
 
     foreach ($testCases as $case) {
-        $startDate = Carbon::parse("2026-01-06")->next($case['start']);
-        $expectedDay = Carbon::parse("2026-01-06")->next($case['expected']);
+        $startDate = Carbon::parse('2026-01-06')->next($case['start']);
+        $expectedDay = Carbon::parse('2026-01-06')->next($case['expected']);
 
         Queue::fake();
         Notification::fake();
@@ -356,6 +356,107 @@ test('skips user who already has 7+ days of future plans', function () {
     Queue::assertNothingPushed();
 
     Carbon::setTestNow();
+});
+
+test('only generates workouts when --only=workouts is passed', function () {
+    Queue::fake();
+    Notification::fake();
+
+    Carbon::setTestNow(Carbon::parse('2026-01-09')); // Thursday
+
+    $user = User::factory()->create();
+
+    SubscriptionLegacy::create([
+        'user_id' => $user->id,
+        'type' => 'beta',
+        'status' => 'active',
+        'starts_at' => now(),
+        'ends_at' => now()->addMonth(),
+    ]);
+
+    $plan = Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => Carbon::parse('2026-01-06'),
+        'end_date' => now()->addDays(27),
+        'duration_days' => 30,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    WorkoutPlan::create([
+        'plan_id' => $plan->id,
+        'date' => now()->subDays(2),
+        'day_number' => 1,
+        'status' => 'generated',
+        'workout_name' => 'Day 1',
+        'workout_type' => 'strength',
+    ]);
+
+    $this->artisan('plans:generate-weekly --only=workouts')
+        ->assertSuccessful();
+
+    Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertNotPushed(\App\Jobs\GenerateUserMealPlan::class);
+
+    Carbon::setTestNow();
+});
+
+test('only generates meals when --only=meals is passed', function () {
+    Queue::fake();
+    Notification::fake();
+
+    Carbon::setTestNow(Carbon::parse('2026-01-09')); // Thursday
+
+    $user = User::factory()->create();
+
+    SubscriptionLegacy::create([
+        'user_id' => $user->id,
+        'type' => 'beta',
+        'status' => 'active',
+        'starts_at' => now(),
+        'ends_at' => now()->addMonth(),
+    ]);
+
+    $plan = Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => Carbon::parse('2026-01-06'),
+        'end_date' => now()->addDays(27),
+        'duration_days' => 30,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    WorkoutPlan::create([
+        'plan_id' => $plan->id,
+        'date' => now()->subDays(2),
+        'day_number' => 1,
+        'status' => 'generated',
+        'workout_name' => 'Day 1',
+        'workout_type' => 'strength',
+    ]);
+
+    $this->artisan('plans:generate-weekly --only=meals')
+        ->assertSuccessful();
+
+    Queue::assertNotPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
+
+    Carbon::setTestNow();
+});
+
+test('rejects invalid --only value', function () {
+    $this->artisan('plans:generate-weekly --only=invalid')
+        ->assertFailed();
 });
 
 test('sends delayed notification when plans are generated', function () {

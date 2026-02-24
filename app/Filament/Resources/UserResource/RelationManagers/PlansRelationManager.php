@@ -3,10 +3,14 @@
 namespace App\Filament\Resources\UserResource\RelationManagers;
 
 use App\Filament\Resources\PlanResource;
+use App\Models\Plan;
 use Filament\Actions\Action;
+use Filament\Actions\ActionGroup;
+use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Support\Facades\Artisan;
 
 class PlansRelationManager extends RelationManager
 {
@@ -55,6 +59,59 @@ class PlansRelationManager extends RelationManager
                     ->sortable(),
             ])
             ->recordActions([
+                ActionGroup::make([
+                    Action::make('generateWeek')
+                        ->label('Generate Week')
+                        ->icon('heroicon-o-calendar')
+                        ->requiresConfirmation()
+                        ->action(function (Plan $record): void {
+                            Artisan::call('plans:generate-weekly', [
+                                '--email' => $record->user->email,
+                                '--force' => true,
+                            ]);
+
+                            Notification::make()
+                                ->title('Weekly generation dispatched')
+                                ->success()
+                                ->send();
+                        }),
+                    Action::make('generateWorkouts')
+                        ->label('Generate Workouts')
+                        ->icon('heroicon-o-bolt')
+                        ->requiresConfirmation()
+                        ->action(function (Plan $record): void {
+                            Artisan::call('plans:generate-weekly', [
+                                '--email' => $record->user->email,
+                                '--force' => true,
+                                '--only' => 'workouts',
+                            ]);
+
+                            Notification::make()
+                                ->title('Workout generation dispatched')
+                                ->success()
+                                ->send();
+                        }),
+                    Action::make('generateMeals')
+                        ->label('Generate Meals')
+                        ->icon('heroicon-o-fire')
+                        ->requiresConfirmation()
+                        ->action(function (Plan $record): void {
+                            Artisan::call('plans:generate-weekly', [
+                                '--email' => $record->user->email,
+                                '--force' => true,
+                                '--only' => 'meals',
+                            ]);
+
+                            Notification::make()
+                                ->title('Meal generation dispatched')
+                                ->success()
+                                ->send();
+                        }),
+                ])
+                    ->label('Generate')
+                    ->icon('heroicon-o-arrow-path')
+                    ->color('warning')
+                    ->visible(fn (Plan $record): bool => $record->status === 'active'),
                 Action::make('view')
                     ->label('View')
                     ->icon('heroicon-o-eye')

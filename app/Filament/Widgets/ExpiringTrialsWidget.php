@@ -13,7 +13,7 @@ class ExpiringTrialsWidget extends BaseWidget
 {
     protected static ?int $sort = 1;
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 1;
 
     protected static ?string $heading = 'Expiring Trials';
 
@@ -47,8 +47,6 @@ class ExpiringTrialsWidget extends BaseWidget
                     ->searchable(),
                 TextColumn::make('user.name')
                     ->label('Name'),
-                TextColumn::make('plan_name')
-                    ->label('Plan'),
                 TextColumn::make('end_date')
                     ->label('Expires')
                     ->date(),
@@ -64,6 +62,6 @@ class ExpiringTrialsWidget extends BaseWidget
                     ->sortable(query: fn ($query, string $direction) => $query->orderBy('end_date', $direction)),
             ])
             ->recordUrl(fn (Plan $record): string => UserResource::getUrl('view', ['record' => $record->user]))
-            ->paginated(false);
+            ->defaultPaginationPageOption(5);
     }
 }
