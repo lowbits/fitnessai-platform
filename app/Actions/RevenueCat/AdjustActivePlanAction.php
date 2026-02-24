@@ -17,28 +17,32 @@ class AdjustActivePlanAction
     {
         $activePlan = $user->plans()->where('status', 'active')->latest()->first();
 
-        if (!$activePlan) {
+        if (! $activePlan) {
             Log::warning('No active plan found for user to adjust', [
                 'user_id' => $user->id,
             ]);
+
             return;
         }
 
-        // Adjust duration based on product or manual months
-        $startDate = $activePlan->start_date->copy();
-        $endDate = $startDate->copy();
+        // Add subscription period on top of remaining days
+        // Use current end_date as base, or today if the plan already expired
+        $baseDate = $activePlan->end_date && $activePlan->end_date->isFuture()
+            ? $activePlan->end_date->copy()
+            : now()->startOfDay();
 
         if ($months !== null) {
-            $endDate->addMonthsNoOverflow($months);
+            $baseDate->addMonthsNoOverflow($months);
         } elseif (str_contains($productId, 'annual') || str_contains($productId, 'yearly')) {
-            $endDate->addYearNoOverflow();
+            $baseDate->addYearNoOverflow();
         } elseif (str_contains($productId, 'lifetime')) {
-            $endDate->addYearsNoOverflow(100);
+            $baseDate->addYearsNoOverflow(100);
         } else {
-            $endDate->addMonthNoOverflow();
+            $baseDate->addMonthNoOverflow();
         }
 
-        $durationDays = (int) $startDate->diffInDays($endDate);
+        $endDate = $baseDate;
+        $durationDays = (int) $activePlan->start_date->diffInDays($endDate);
 
         $activePlan->update([
             'duration_days' => $durationDays,
@@ -71,7 +75,7 @@ class AdjustActivePlanAction
             ->where('status', 'generated')
             ->max('date');
 
-        if (!$lastWorkoutDate) {
+        if (! $lastWorkoutDate) {
             return true;
         }
 

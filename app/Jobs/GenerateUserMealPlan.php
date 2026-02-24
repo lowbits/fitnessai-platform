@@ -25,31 +25,34 @@ class GenerateUserMealPlan implements ShouldQueue
         $this->user->load('profile');
         $profile = $this->user->profile;
 
-        if (!$profile) {
+        if (! $profile) {
             Log::error('User profile not found', ['user_id' => $this->user->id]);
+
             return;
         }
 
-        // Find the earliest failed day that needs retry
-        $firstFailedDay = MealPlan::where('plan_id', $this->plan->id)
-            ->where('status', 'failed')
-            ->min('day_number');
-
-        $lastGeneratedDayNumber = MealPlan::where('plan_id', $this->plan->id)
+        $generatedDays = MealPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
-            ->max('day_number') ?? 0;
+            ->pluck('day_number')
+            ->toArray();
 
-        if ($lastGeneratedDayNumber >= $this->plan->duration_days && !$firstFailedDay) {
+        // Find the first day that is not yet generated
+        $startDayNumber = null;
+        for ($day = 1; $day <= $this->plan->duration_days; $day++) {
+            if (! in_array($day, $generatedDays)) {
+                $startDayNumber = $day;
+                break;
+            }
+        }
+
+        // All days successfully generated
+        if (! $startDayNumber) {
             Log::info('Meal plan already complete, skipping generation', [
                 'plan_id' => $this->plan->id,
             ]);
+
             return;
         }
-
-        // Start from the earliest failed day, or after the last generated day
-        $startDayNumber = $firstFailedDay
-            ? min($firstFailedDay, $lastGeneratedDayNumber + 1)
-            : $lastGeneratedDayNumber + 1;
 
         // Dispatch batches of 2-3 days instead of processing all at once
         $this->dispatchBatches($startDayNumber);
@@ -83,6 +86,7 @@ class GenerateUserMealPlan implements ShouldQueue
                 'plan_id' => $this->plan->id,
                 'start_day_number' => $startDayNumber,
             ]);
+
             return;
         }
 
@@ -98,4 +102,3 @@ class GenerateUserMealPlan implements ShouldQueue
         }
     }
 }
-

@@ -33,6 +33,7 @@ class UserFactory extends Factory
             'two_factor_secret' => Str::random(10),
             'two_factor_recovery_codes' => Str::random(10),
             'two_factor_confirmed_at' => now(),
+            'locale' => 'en',
         ];
     }
 
@@ -65,10 +66,17 @@ class UserFactory extends Factory
         });
     }
 
-    public function en()
+    public function withLocale(string $locale): static
     {
         return $this->state(fn (array $attributes) => [
-            'locale' => 'en',
+            'locale' => $locale,
+        ]);
+    }
+
+    public function de()
+    {
+        return $this->state(fn (array $attributes) => [
+            'locale' => 'de',
         ]);
     }
 

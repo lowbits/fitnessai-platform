@@ -16,8 +16,6 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
 
-
-
 /**
  * Job that generates meal plans for a specific range of days (2-3 days)
  * Part of the batched meal plan generation system
@@ -42,11 +40,12 @@ class GenerateMealPlanBatch implements ShouldQueue
         $this->user->load('profile');
         $profile = $this->user->profile;
 
-        if (!$profile) {
+        if (! $profile) {
             Log::error('User profile not found in batch', [
                 'user_id' => $this->user->id,
                 'batch_days' => "{$this->startDay}-{$this->endDay}",
             ]);
+
             return;
         }
 
@@ -76,6 +75,11 @@ class GenerateMealPlanBatch implements ShouldQueue
                 continue;
             }
 
+            // Clean up any partial meals from a previous failed attempt
+            if ($mealPlan->meals()->exists()) {
+                $mealPlan->meals()->delete();
+            }
+
             try {
 
                 // Build rich context message
@@ -83,7 +87,6 @@ class GenerateMealPlanBatch implements ShouldQueue
                 $contextMessage = "Generate a delicious and nutritionally balanced meal plan for Day {$day} ({$dayOfWeek}, {$date->format('Y-m-d')}).\n\n";
                 $contextMessage .= "Create 4 complete meals: breakfast, lunch, snack, and dinner.\n";
                 $contextMessage .= "Make each meal appetizing, practical, and aligned with the user's {$profile->body_goal->value} goal.\n";
-
 
                 Log::debug("Calling OpenAI for day {$day}", [
                     'model' => $this->GPT_MODEL,
@@ -174,7 +177,6 @@ class GenerateMealPlanBatch implements ShouldQueue
         $weight = $profile->user->getCurrentWeight();
         $coachingNotes = $this->buildCoachingNotes($metabolismData, $profile);
         $goalAdjustment = sprintf('%+d', $metabolismData['goal_adjustment']);
-
 
         Log::info('Building meal plan prompt', [
             'user_id' => $profile->user_id,
@@ -269,7 +271,6 @@ Make every meal something the user will genuinely look forward to eating!
 PROMPT;
     }
 
-
     private function buildCoachingNotes(array $metabolism, UserProfile $profile): string
     {
         $notes = [];
@@ -278,13 +279,10 @@ PROMPT;
             $diet = $profile->resolveDietaryPreference();
             $notes[] = match (true) {
                 $diet === DietaryPreference::VEGAN,
-                    $diet === DietType::VEGAN
-                => 'Protein target is ambitious for a vegan diet. Prioritize seitan, tempeh, edamame, lentils, and consider including a plant-based protein shake in the snack meal.',
+                $diet === DietType::VEGAN => 'Protein target is ambitious for a vegan diet. Prioritize seitan, tempeh, edamame, lentils, and consider including a plant-based protein shake in the snack meal.',
                 $diet === DietaryPreference::VEGETARIAN,
-                    $diet === DietType::VEGETARIAN
-                => 'Protein target is high for a vegetarian diet. Leverage eggs, Greek yogurt, cottage cheese, and legumes generously.',
-                default
-                => 'Protein target is high relative to total calories. Prioritize lean protein sources across all meals.',
+                $diet === DietType::VEGETARIAN => 'Protein target is high for a vegetarian diet. Leverage eggs, Greek yogurt, cottage cheese, and legumes generously.',
+                default => 'Protein target is high relative to total calories. Prioritize lean protein sources across all meals.',
             };
         }
 
@@ -352,4 +350,3 @@ PROMPT;
         ];
     }
 }
-

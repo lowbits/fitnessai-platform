@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Plan;
-use App\Models\SubscriptionLegacy;
 use App\Models\User;
 
 test('can create beta subscription for user', function () {
@@ -13,16 +12,19 @@ test('can create beta subscription for user', function () {
     expect($user->fresh()->hasActiveLegacySubscription())->toBeTrue();
 });
 
-test('subscription extends existing plan from 7 to 30 days', function () {
+test('subscription extends existing plan by adding month on top of remaining days', function () {
     // Create user with 7-day plan
     $user = User::factory()->create();
+
+    $startDate = now()->startOfDay();
+    $endDate = $startDate->copy()->addDays(7);
 
     $plan = Plan::create([
         'user_id' => $user->id,
         'plan_name' => 'Test Plan',
         'status' => 'active',
-        'start_date' => now(),
-        'end_date' => now()->addDays(7),
+        'start_date' => $startDate,
+        'end_date' => $endDate,
         'duration_days' => 7,
         'daily_calories' => 2000,
         'daily_protein_g' => 150,
@@ -32,15 +34,15 @@ test('subscription extends existing plan from 7 to 30 days', function () {
     ]);
 
     expect($plan->duration_days)->toBe(7);
-    expect((int) $plan->start_date->diffInDays($plan->end_date))->toBe(7);
 
     // Create subscription
     $this->artisan('subscription:create', ['email' => $user->email])
         ->assertSuccessful();
 
-    // Check plan is updated accordingly
+    // Subscription adds 1 month on top of remaining end_date
     $updatedPlan = $plan->fresh();
-    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonth());
+    $expectedEndDate = $endDate->copy()->addMonthNoOverflow();
+    $expectedDuration = (int) $startDate->diffInDays($expectedEndDate);
     expect($updatedPlan->duration_days)->toBe($expectedDuration);
     expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe($expectedDuration);
 });
@@ -48,12 +50,15 @@ test('subscription extends existing plan from 7 to 30 days', function () {
 test('subscription with multiple months extends plan accordingly', function () {
     $user = User::factory()->create();
 
+    $startDate = now()->startOfDay();
+    $endDate = $startDate->copy()->addDays(7);
+
     $plan = Plan::create([
         'user_id' => $user->id,
         'plan_name' => 'Test Plan',
         'status' => 'active',
-        'start_date' => now(),
-        'end_date' => now()->addDays(7),
+        'start_date' => $startDate,
+        'end_date' => $endDate,
         'duration_days' => 7,
         'daily_calories' => 2000,
         'daily_protein_g' => 150,
@@ -68,9 +73,10 @@ test('subscription with multiple months extends plan accordingly', function () {
         '--months' => 3,
     ])->assertSuccessful();
 
-    // Check plan is updated accordingly
+    // 3 months added on top of end_date (today + 7 days)
     $updatedPlan = $plan->fresh();
-    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonths(3));
+    $expectedEndDate = $endDate->copy()->addMonthsNoOverflow(3);
+    $expectedDuration = (int) $startDate->diffInDays($expectedEndDate);
     expect($updatedPlan->duration_days)->toBe($expectedDuration);
     expect((int) $updatedPlan->start_date->diffInDays($updatedPlan->end_date))->toBe($expectedDuration);
 });
@@ -124,8 +130,9 @@ test('subscription updates only active plan not inactive ones', function () {
     $this->artisan('subscription:create', ['email' => $user->email])
         ->assertSuccessful();
 
-    // Active plan should be updated
-    $expectedDuration = (int) $activePlan->start_date->diffInDays($activePlan->start_date->copy()->addMonth());
+    // Active plan should be updated — month added on top of end_date
+    $expectedEndDate = $activePlan->end_date->copy()->addMonthNoOverflow();
+    $expectedDuration = (int) $activePlan->start_date->diffInDays($expectedEndDate);
     expect($activePlan->fresh()->duration_days)->toBe($expectedDuration);
 
     // Inactive plan should remain unchanged

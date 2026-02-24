@@ -164,22 +164,24 @@ class GenerateUserWorkoutPlan implements ShouldQueue
      */
     private function calculateDayRange(): array
     {
-        $firstFailedDay = WorkoutPlan::where('plan_id', $this->plan->id)
-            ->where('status', 'failed')
-            ->min('day_number');
-
-        $lastGeneratedDay = WorkoutPlan::where('plan_id', $this->plan->id)
+        $generatedDays = WorkoutPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
-            ->max('day_number') ?? 0;
+            ->pluck('day_number')
+            ->toArray();
 
-        // Already complete
-        if ($lastGeneratedDay >= $this->plan->duration_days && ! $firstFailedDay) {
-            return [null, null];
+        // Find the first day that is not yet generated
+        $startDay = null;
+        for ($day = 1; $day <= $this->plan->duration_days; $day++) {
+            if (! in_array($day, $generatedDays)) {
+                $startDay = $day;
+                break;
+            }
         }
 
-        $startDay = $firstFailedDay
-            ? min($firstFailedDay, $lastGeneratedDay + 1)
-            : $lastGeneratedDay + 1;
+        // All days successfully generated
+        if (! $startDay) {
+            return [null, null];
+        }
 
         $endDay = min($startDay + 6, $this->plan->duration_days); // 7 days at a time
 

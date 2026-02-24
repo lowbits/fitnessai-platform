@@ -2,16 +2,16 @@
 
 namespace Tests\Feature;
 
+use App\Events\RevenueCat\InitialPurchaseProcessed;
+use App\Jobs\GenerateUserMealPlan;
+use App\Jobs\GenerateUserWorkoutPlan;
+use App\Listeners\AdjustPlanAfterPurchase;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Bus;
-use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
-use App\Events\RevenueCat\InitialPurchaseProcessed;
-use App\Listeners\AdjustPlanAfterPurchase;
 use Illuminate\Support\Facades\Event;
 
 uses(RefreshDatabase::class);
@@ -45,7 +45,7 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
             'date' => $startDate->copy()->addDays($i),
             'day_number' => $i + 1,
             'status' => 'generated',
-            'workout_name' => 'Workout ' . ($i + 1),
+            'workout_name' => 'Workout '.($i + 1),
         ]);
     }
 
@@ -68,7 +68,7 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
     ];
 
     $response = $this->postJson(route('revenue-cat.webhook'), $payload, [
-        'Authorization' => 'Bearer ' . $secret,
+        'Authorization' => 'Bearer '.$secret,
     ]);
 
     $response->assertStatus(200);
@@ -79,9 +79,9 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
 
     $plan->refresh();
 
-    // March 10 + 1 month = April 10 = 31 days
-    expect($plan->duration_days)->toBe(31);
-    expect($plan->end_date)->toEqual(Carbon::parse('2026-04-10'));
+    // end_date (March 17) + 1 month = April 17, duration = March 10 to April 17 = 38 days
+    expect($plan->duration_days)->toBe(38);
+    expect($plan->end_date)->toEqual(Carbon::parse('2026-04-17'));
 
     Bus::assertDispatched(GenerateUserWorkoutPlan::class);
     Bus::assertDispatched(GenerateUserMealPlan::class);
@@ -116,7 +116,7 @@ test('initial purchase does not trigger generation if not behind', function () {
             'date' => $startDate->copy()->addDays($i),
             'day_number' => $i + 1,
             'status' => 'generated',
-            'workout_name' => 'Workout ' . ($i + 1),
+            'workout_name' => 'Workout '.($i + 1),
         ]);
     }
 
@@ -133,7 +133,7 @@ test('initial purchase does not trigger generation if not behind', function () {
     ];
 
     $this->postJson(route('revenue-cat.webhook'), $payload, [
-        'Authorization' => 'Bearer ' . $secret,
+        'Authorization' => 'Bearer '.$secret,
     ])->assertStatus(200);
 
     // 1. Verify Event was dispatched
@@ -143,7 +143,9 @@ test('initial purchase does not trigger generation if not behind', function () {
     app(AdjustPlanAfterPurchase::class)->handle(new InitialPurchaseProcessed($user, $payload['event']));
 
     $plan->refresh();
-    $expectedDuration = (int) $plan->start_date->diffInDays($plan->start_date->copy()->addMonth());
+    // end_date (today + 7 days) + 1 month, measured from start_date
+    $expectedEndDate = $startDate->copy()->addDays(7)->addMonthNoOverflow();
+    $expectedDuration = (int) $plan->start_date->diffInDays($expectedEndDate);
     expect($plan->duration_days)->toBe($expectedDuration);
 
     // Should NOT dispatch because it's only Day 0 and we have 7 days of plans (6 days in future)
