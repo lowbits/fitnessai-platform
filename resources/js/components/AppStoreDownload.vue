@@ -21,6 +21,8 @@ const { t, locale } = useI18n();
                 <img
                     :src="qrCode"
                     alt="QR Code - App Store"
+                    width="400"
+                    height="400"
                     class="h-28 w-28"
                 />
             </div>
@@ -47,6 +49,8 @@ const { t, locale } = useI18n();
             <img
                 :src="`/assets/badges/App_Store_Badge_${locale.toUpperCase()}.svg`"
                 alt="Download on App Store"
+                width="120"
+                height="40"
                 class="h-10 w-auto"
             />
         </a>

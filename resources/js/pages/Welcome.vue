@@ -297,7 +297,7 @@ const faqData = computed(() => ({
                         >
                             {{ $t('welcome.hero.title') }}
                             <span
-                                class="bg-gradient-to-r from-primary-400 via-primary-500 to-white bg-clip-text font-display font-bold tracking-tight text-primary-400 text-transparent"
+                                class="bg-linear-to-r from-primary-400 via-primary-500 to-white bg-clip-text font-display font-bold tracking-tight text-primary-400 text-transparent"
                                 >{{ $t('welcome.hero.titleHighlight') }}</span
                             >
                             {{ $t('welcome.hero.titleEnd') }}
@@ -481,6 +481,8 @@ const faqData = computed(() => ({
                             <img
                                 :src="`/assets/images/mocks/iphone/dashboard_${language}.png`"
                                 :alt="$t('welcome.app_section.title')"
+                                width="1177"
+                                height="2408"
                                 class="h-auto w-[260px] drop-shadow-2xl md:w-[300px]"
                                 loading="lazy"
                                 decoding="async"
