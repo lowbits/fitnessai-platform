@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\PlanResource\RelationManagers;
 
-use App\Jobs\GenerateUserMealPlan;
+use App\Actions\RetryPlanGeneration;
 use App\Models\MealPlan;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
@@ -58,11 +58,9 @@ class MealPlansRelationManager extends RelationManager
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->visible(fn (MealPlan $record): bool => $record->status === 'failed')
+                    ->visible(fn (MealPlan $record): bool => in_array($record->status, ['failed', 'pending']))
                     ->action(function (MealPlan $record): void {
-                        $plan = $record->plan;
-                        $plan->mealPlans()->where('status', 'failed')->update(['status' => 'pending']);
-                        GenerateUserMealPlan::dispatch($plan->user, $plan);
+                        RetryPlanGeneration::meals($record->plan);
 
                         Notification::make()
                             ->title('Meal generation retry dispatched')
@@ -77,13 +75,12 @@ class MealPlansRelationManager extends RelationManager
                     ->color('warning')
                     ->requiresConfirmation()
                     ->action(function (Collection $records): void {
-                        $plans = $records->where('status', 'failed')->pluck('plan_id')->unique();
+                        $plans = $records->whereIn('status', ['failed', 'pending'])->pluck('plan_id')->unique();
 
                         foreach ($plans as $planId) {
                             $plan = \App\Models\Plan::with('user')->find($planId);
                             if ($plan) {
-                                $plan->mealPlans()->where('status', 'failed')->update(['status' => 'pending']);
-                                GenerateUserMealPlan::dispatch($plan->user, $plan);
+                                RetryPlanGeneration::meals($plan);
                             }
                         }
 

@@ -10,8 +10,10 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class UserResource extends Resource
@@ -27,6 +29,7 @@ class UserResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn ($query) => $query->withCount('tokens'))
             ->columns([
                 TextColumn::make('id')
                     ->sortable(),
@@ -39,6 +42,14 @@ class UserResource extends Resource
                 TextColumn::make('source')
                     ->badge()
                     ->sortable(),
+                IconColumn::make('mobile_converted')
+                    ->label('Mobile')
+                    ->state(fn (User $record): bool => $record->source === UserSource::WEB && $record->tokens_count > 0)
+                    ->boolean()
+                    ->trueIcon('heroicon-o-device-phone-mobile')
+                    ->falseIcon('heroicon-o-minus')
+                    ->trueColor('success')
+                    ->falseColor('gray'),
                 TextColumn::make('plans_count')
                     ->counts('plans')
                     ->label('Plans')
@@ -51,6 +62,12 @@ class UserResource extends Resource
             ->filters([
                 SelectFilter::make('source')
                     ->options(UserSource::class),
+                TernaryFilter::make('mobile_converted')
+                    ->label('Web → Mobile')
+                    ->queries(
+                        true: fn ($query) => $query->where('source', UserSource::WEB)->whereHas('tokens'),
+                        false: fn ($query) => $query->where('source', UserSource::WEB)->whereDoesntHave('tokens'),
+                    ),
             ])
             ->defaultSort('created_at', 'desc');
     }
@@ -65,6 +82,17 @@ class UserResource extends Resource
                         TextEntry::make('email'),
                         TextEntry::make('source')
                             ->badge(),
+                        TextEntry::make('tokens_count')
+                            ->label('Mobile Converted')
+                            ->state(fn (User $record): string => $record->source === UserSource::WEB
+                                ? ($record->loadCount('tokens')->tokens_count > 0 ? 'Yes' : 'No')
+                                : 'N/A (native)')
+                            ->badge()
+                            ->color(fn (string $state): string => match ($state) {
+                                'Yes' => 'success',
+                                'No' => 'danger',
+                                default => 'gray',
+                            }),
                         TextEntry::make('locale'),
                         TextEntry::make('email_verified_at')
                             ->dateTime(),

@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
+use App\Actions\RetryPlanGeneration;
 use App\Filament\Resources\WorkoutPlanResource\Pages;
-use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\WorkoutPlan;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
@@ -71,11 +71,9 @@ class WorkoutPlanResource extends Resource
                     ->icon('heroicon-o-arrow-path')
                     ->color('warning')
                     ->requiresConfirmation()
-                    ->visible(fn (WorkoutPlan $record): bool => $record->status === 'failed')
+                    ->visible(fn (WorkoutPlan $record): bool => in_array($record->status, ['failed', 'pending']))
                     ->action(function (WorkoutPlan $record): void {
-                        $plan = $record->plan;
-                        $plan->workoutPlans()->where('status', 'failed')->update(['status' => 'pending']);
-                        GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
+                        RetryPlanGeneration::workouts($record->plan);
 
                         Notification::make()
                             ->title('Workout generation retry dispatched')
@@ -90,13 +88,12 @@ class WorkoutPlanResource extends Resource
                     ->color('warning')
                     ->requiresConfirmation()
                     ->action(function (Collection $records): void {
-                        $plans = $records->where('status', 'failed')->pluck('plan_id')->unique();
+                        $plans = $records->whereIn('status', ['failed', 'pending'])->pluck('plan_id')->unique();
 
                         foreach ($plans as $planId) {
                             $plan = \App\Models\Plan::with('user')->find($planId);
                             if ($plan) {
-                                $plan->workoutPlans()->where('status', 'failed')->update(['status' => 'pending']);
-                                GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
+                                RetryPlanGeneration::workouts($plan);
                             }
                         }
 

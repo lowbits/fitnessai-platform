@@ -2,6 +2,7 @@
 
 namespace App\Filament\Widgets;
 
+use App\Enums\UserSource;
 use App\Models\MealPlan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
@@ -40,12 +41,25 @@ class StatsOverviewWidget extends BaseWidget
 
         $pendingJobs = DB::table('jobs')->count();
 
+        $convertedWebUsersCount = User::where('source', UserSource::WEB)->whereHas('tokens')->count();
+
+        $mobileUsersCount = User::where('source', UserSource::MOBILE_APPLE)->count()
+            + $convertedWebUsersCount;
+
+        $mobileChart = $this->getMobileUsersChartData();
+
         return [
             Stat::make('Total Users', number_format($totalUsers))
                 ->description("+{$newUsersThisWeek} this week")
                 ->descriptionIcon('heroicon-m-arrow-trending-up')
                 ->chart($userChart)
                 ->color('success'),
+
+            Stat::make('Mobile Users', number_format($mobileUsersCount))
+                ->description("{$convertedWebUsersCount} converted from web")
+                ->descriptionIcon('heroicon-m-device-phone-mobile')
+                ->chart($mobileChart)
+                ->color('info'),
 
             Stat::make('Active Subscriptions', number_format($activeSubscriptions + $activeLegacySubscriptions))
                 ->description("RC: {$activeSubscriptions} / Legacy: {$activeLegacySubscriptions}")
@@ -81,6 +95,39 @@ class StatsOverviewWidget extends BaseWidget
 
         return collect(range(0, $days - 1))
             ->map(fn (int $i) => $counts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0)
+            ->all();
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getMobileUsersChartData(): array
+    {
+        $start = now()->subDays(30)->startOfDay();
+
+        // Native mobile sign-ups per day
+        $nativeCounts = User::where('source', UserSource::MOBILE_APPLE)
+            ->where('created_at', '>=', $start)
+            ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
+            ->groupByRaw('DATE(created_at)')
+            ->pluck('count', 'date');
+
+        // Web users who first logged in via mobile (first token created) per day
+        $convertedCounts = DB::table('personal_access_tokens')
+            ->join('users', function ($join) {
+                $join->on('personal_access_tokens.tokenable_id', '=', 'users.id')
+                    ->where('personal_access_tokens.tokenable_type', '=', (new User)->getMorphClass())
+                    ->where('users.source', '=', UserSource::WEB->value);
+            })
+            ->where('personal_access_tokens.created_at', '>=', $start)
+            ->whereRaw('personal_access_tokens.id = (SELECT MIN(pat2.id) FROM personal_access_tokens pat2 WHERE pat2.tokenable_id = personal_access_tokens.tokenable_id AND pat2.tokenable_type = personal_access_tokens.tokenable_type)')
+            ->selectRaw('DATE(personal_access_tokens.created_at) as date, COUNT(*) as count')
+            ->groupByRaw('DATE(personal_access_tokens.created_at)')
+            ->pluck('count', 'date');
+
+        return collect(range(0, 29))
+            ->map(fn (int $i) => ($nativeCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0)
+                + ($convertedCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0))
             ->all();
     }
 

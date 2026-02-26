@@ -1110,6 +1110,7 @@ export const locales = {
             tip: {
                 label: '👆 Tip:',
                 text: 'If the app didn\'t open automatically, click the \"Open\" button in your browser.',
+                other: 'If the app didn\'t open automatically, click the "Activate Account" button below.',
             },
             activate_account: 'Activate Account',
             no_app: "Don't have the app?",

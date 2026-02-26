@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
+use App\Actions\RetryPlanGeneration;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\WorkoutPlan;
@@ -15,6 +14,7 @@ class RetryAllFailedPlans extends Command
                             {--plan= : Specific plan ID to retry}
                             {--user= : Specific user ID to retry}
                             {--type= : Only retry "workouts" or "nutrition"}
+                            {--status=failed : Comma-separated statuses to retry (e.g. "failed,pending")}
                             {--reset : Reset status to pending without re-dispatching jobs}';
 
     protected $description = 'Retry all failed workout and nutrition plans';
@@ -29,15 +29,23 @@ class RetryAllFailedPlans extends Command
             return Command::FAILURE;
         }
 
+        $statuses = $this->getTargetStatuses();
+
+        if (empty($statuses)) {
+            return Command::FAILURE;
+        }
+
+        $this->info('Targeting statuses: '.implode(', ', $statuses));
+
         $workoutResults = ['found' => 0, 'plans' => 0, 'dispatched' => 0];
         $nutritionResults = ['found' => 0, 'plans' => 0, 'dispatched' => 0];
 
         if (! $type || $type === 'workouts') {
-            $workoutResults = $this->retryWorkouts();
+            $workoutResults = $this->retryWorkouts($statuses);
         }
 
         if (! $type || $type === 'nutrition') {
-            $nutritionResults = $this->retryNutrition();
+            $nutritionResults = $this->retryNutrition($statuses);
         }
 
         $this->newLine();
@@ -56,22 +64,26 @@ class RetryAllFailedPlans extends Command
     /**
      * @return array{found: int, plans: int, dispatched: int}
      */
-    private function retryWorkouts(): array
+    /**
+     * @param  string[]  $statuses
+     * @return array{found: int, plans: int, dispatched: int}
+     */
+    private function retryWorkouts(array $statuses): array
     {
-        $this->info('Looking for failed workout plans...');
+        $this->info('Looking for retryable workout plans...');
 
-        $query = WorkoutPlan::where('status', 'failed')->with('plan.user');
+        $query = WorkoutPlan::whereIn('status', $statuses)->with('plan.user');
         $this->applyFilters($query);
 
         $failed = $query->get();
 
         if ($failed->isEmpty()) {
-            $this->info('No failed workout plans found.');
+            $this->info('No retryable workout plans found.');
 
             return ['found' => 0, 'plans' => 0, 'dispatched' => 0];
         }
 
-        $this->info("Found {$failed->count()} failed workout day(s).");
+        $this->info("Found {$failed->count()} retryable workout day(s).");
         $planIds = $failed->pluck('plan_id')->unique();
 
         if ($this->option('reset')) {
@@ -94,14 +106,10 @@ class RetryAllFailedPlans extends Command
                 continue;
             }
 
-            WorkoutPlan::where('plan_id', $planId)
-                ->where('status', 'failed')
-                ->update(['status' => 'pending']);
-
-            GenerateUserWorkoutPlan::dispatch($plan->user, $plan);
+            RetryPlanGeneration::workouts($plan);
 
             $failedCount = $failed->where('plan_id', $planId)->count();
-            $this->line("  Dispatched workout job for Plan #{$planId} (User #{$plan->user->id}) - {$failedCount} failed day(s)");
+            $this->line("  Dispatched workout job for Plan #{$planId} (User #{$plan->user->id}) - {$failedCount} day(s)");
 
             $dispatched++;
         }
@@ -112,22 +120,26 @@ class RetryAllFailedPlans extends Command
     /**
      * @return array{found: int, plans: int, dispatched: int}
      */
-    private function retryNutrition(): array
+    /**
+     * @param  string[]  $statuses
+     * @return array{found: int, plans: int, dispatched: int}
+     */
+    private function retryNutrition(array $statuses): array
     {
-        $this->info('Looking for failed nutrition plans...');
+        $this->info('Looking for retryable nutrition plans...');
 
-        $query = MealPlan::where('status', 'failed')->with('plan.user');
+        $query = MealPlan::whereIn('status', $statuses)->with('plan.user');
         $this->applyFilters($query);
 
         $failed = $query->get();
 
         if ($failed->isEmpty()) {
-            $this->info('No failed nutrition plans found.');
+            $this->info('No retryable nutrition plans found.');
 
             return ['found' => 0, 'plans' => 0, 'dispatched' => 0];
         }
 
-        $this->info("Found {$failed->count()} failed meal plan day(s).");
+        $this->info("Found {$failed->count()} retryable meal plan day(s).");
         $planIds = $failed->pluck('plan_id')->unique();
 
         if ($this->option('reset')) {
@@ -150,19 +162,34 @@ class RetryAllFailedPlans extends Command
                 continue;
             }
 
-            MealPlan::where('plan_id', $planId)
-                ->where('status', 'failed')
-                ->update(['status' => 'pending']);
-
-            GenerateUserMealPlan::dispatch($plan->user, $plan);
+            RetryPlanGeneration::meals($plan);
 
             $failedCount = $failed->where('plan_id', $planId)->count();
-            $this->line("  Dispatched nutrition job for Plan #{$planId} (User #{$plan->user->id}) - {$failedCount} failed day(s)");
+            $this->line("  Dispatched nutrition job for Plan #{$planId} (User #{$plan->user->id}) - {$failedCount} day(s)");
 
             $dispatched++;
         }
 
         return ['found' => $failed->count(), 'plans' => $planIds->count(), 'dispatched' => $dispatched];
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getTargetStatuses(): array
+    {
+        $valid = ['failed', 'pending'];
+        $statuses = array_map('trim', explode(',', $this->option('status')));
+
+        $invalid = array_diff($statuses, $valid);
+
+        if (! empty($invalid)) {
+            $this->error('Invalid status: '.implode(', ', $invalid).'. Valid statuses: '.implode(', ', $valid));
+
+            return [];
+        }
+
+        return $statuses;
     }
 
     private function applyFilters($query): void
