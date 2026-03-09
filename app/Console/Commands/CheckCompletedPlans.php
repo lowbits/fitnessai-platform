@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\SendOnboardingDripEmail;
 use App\Models\Plan;
 use App\Notifications\PlanGenerationComplete;
 use App\Notifications\PlanReadyForDelivery;
@@ -77,22 +76,6 @@ class CheckCompletedPlans extends Command
                 // Send plan ready notification with optional password reset token
                 $plan->user->notify(new PlanGenerationComplete($plan, $passwordResetToken));
 
-                // Dispatch onboarding drip emails for web users (no password set)
-                if (!filled($plan->user->password)) {
-                    $isLocal = app()->isLocal();
-
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 2))
-                        ->delay($isLocal ? now()->addMinute() : now()->addDay());
-
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 3))
-                        ->delay($isLocal ? now()->addMinutes(4) : now()->addDays(4));
-
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 4))
-                        ->delay($isLocal ? now()->addMinutes(6) : now()->addDays(6));
-
-                    dispatch(new SendOnboardingDripEmail($plan->user, $plan, step: 5))
-                        ->delay($isLocal ? now()->addMinutes(8) : now()->addDays(8));
-                }
 
                 // Mark as notified (add this column via migration)
                 $plan->update([
