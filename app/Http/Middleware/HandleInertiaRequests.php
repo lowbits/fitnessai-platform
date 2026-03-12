@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
             'currentLocale' => $locale,
             'locales' => LaravelLocalization::getSupportedLocales(),
             'server' => [
-                'isLocal' => config('app.env') === 'local'
+                'isLocal' => config('app.env') === 'local',
             ],
             'footerLinks' => $this->getFooterLinks($locale),
         ];
@@ -64,7 +64,10 @@ class HandleInertiaRequests extends Middleware
             'beginner',
             'home',
             'women',
-            'new_year_reset',
+            'strength',
+            'fat_loss',
+            'abs',
+            'over_40',
         ];
 
         // Get base path from routes translation
@@ -79,12 +82,9 @@ class HandleInertiaRequests extends Middleware
         foreach ($workoutPlanTypes as $internalType) {
             $translatedSlug = trans("routes.type.{$internalType}", [], $locale);
 
-
-
             if ($translatedSlug === "routes.type.{$internalType}") {
                 continue; // Translation not found
             }
-
 
             $links['workoutPlans'][$internalType] = [
                 'url' => LaravelLocalization::localizeURL("/{$basePath}/{$translatedSlug}", $locale),
@@ -133,7 +133,6 @@ class HandleInertiaRequests extends Middleware
                 'active' => $localeCode === $locale,
             ];
         }
-
 
         return $links;
     }

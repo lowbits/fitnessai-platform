@@ -11,6 +11,10 @@ return [
         'home' => 'Home Workout',
         'women' => 'Workout for Women',
         'new_year_reset' => 'New Year Reset',
+        'strength' => 'Strength Training',
+        'fat_loss' => 'Fat Loss Workout',
+        'abs' => 'Abs Workout',
+        'over_40' => 'Over-40 Workout',
         'all' => 'All Workout Plans →',
     ],
     'product' => [
@@ -28,4 +32,3 @@ return [
         'heading' => 'Language',
     ],
 ];
-

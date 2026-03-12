@@ -10,6 +10,7 @@ interface Props {
         durationMinutes: number;
         level: string;
     };
+    utmCampaign?: string;
 }
 
 defineProps<Props>();
@@ -105,7 +106,11 @@ defineEmits<{
                     </div>
                 </div>
             </div>
-            <GenerateFitnessPlanModal #default="{ open }">
+            <GenerateFitnessPlanModal
+                utm-content="show_hero"
+                :utm-campaign="utmCampaign"
+                #default="{ open }"
+            >
                 <!-- CTA Button -->
                 <button
                     @click="open"

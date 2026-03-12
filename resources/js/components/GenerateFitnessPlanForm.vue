@@ -16,8 +16,10 @@ import { useTracking } from '@/composables/useTracking';
 import { TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue';
 import { Link } from '@inertiajs/vue3';
 
-defineProps<{
+const props = defineProps<{
     totalDays: number;
+    utmContent?: string;
+    utmCampaign?: string;
 }>();
 
 // i18n
@@ -224,10 +226,17 @@ const validateStep = (step: number): boolean => {
 // Navigation
 const nextStep = () => {
     if (activeStep.value === 0) {
-        trackEvent('Onboarding Started');
+        trackEvent('Onboarding Started', {
+            utm_content: props.utmContent,
+            utm_campaign: props.utmCampaign,
+        });
     }
     if (validateStep(activeStep.value)) {
-        trackEvent('Onboarding Step Completed', { step: activeStep.value });
+        trackEvent('Onboarding Step Completed', {
+            step: activeStep.value,
+            utm_content: props.utmContent,
+            utm_campaign: props.utmCampaign,
+        });
         activeStep.value++;
     }
 };
@@ -251,6 +260,8 @@ const submit = async () => {
             body_goal: form.body_goal,
             dietary_preference: form.dietary_preference,
             diet_style: form.diet_style,
+            utm_content: props.utmContent,
+            utm_campaign: props.utmCampaign,
         });
         const response = await fetch('/api/v2/onboarding', {
             method: 'POST',

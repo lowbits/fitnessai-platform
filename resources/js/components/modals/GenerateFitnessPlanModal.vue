@@ -3,6 +3,16 @@ import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
 import CTASection from '@/components/workoutPlan/CTASection.vue';
 import { ref } from 'vue';
 
+interface Props {
+    utmContent?: string;
+    utmCampaign?: string;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+    utmContent: 'unknown',
+    utmCampaign: undefined,
+});
+
 const showForm = ref(false);
 
 const openForm = () => {
@@ -46,6 +56,8 @@ const closeForm = () => {
                 </button>
                 <GenerateFitnessPlanForm
                     :total-days="28"
+                    :utm-content="props.utmContent"
+                    :utm-campaign="props.utmCampaign"
                     @success="closeForm"
                 />
             </div>

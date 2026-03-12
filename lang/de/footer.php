@@ -11,6 +11,10 @@ return [
         'home' => 'Trainingsplan Zuhause',
         'women' => 'Trainingsplan Frauen',
         'new_year_reset' => 'Trainingsplan Neujahrs-reset',
+        'strength' => 'Trainingsplan Krafttraining',
+        'fat_loss' => 'Trainingsplan Fettabbau',
+        'abs' => 'Trainingsplan Bauchmuskeln',
+        'over_40' => 'Trainingsplan ab 40',
         'all' => 'Alle Trainingspläne →',
     ],
     'product' => [
@@ -28,4 +32,3 @@ return [
         'heading' => 'Sprache',
     ],
 ];
-

@@ -315,7 +315,10 @@ const faqData = computed(() => ({
                         aria-hidden="true"
                     />
                     <FormCard class="flex flex-1 justify-end">
-                        <GenerateFitnessPlanForm :total-days="durationDays" />
+                        <GenerateFitnessPlanForm
+                            :total-days="durationDays"
+                            utm-content="homepage_hero"
+                        />
                     </FormCard>
                 </div>
             </div>

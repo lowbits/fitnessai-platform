@@ -128,7 +128,11 @@ const props = defineProps<Props>();
                     {{ props.labels.ctaText }}
                 </p>
 
-                <GenerateFitnessPlanModal #default="{ open }">
+                <GenerateFitnessPlanModal
+                    utm-content="index_cta"
+                    utm-campaign="free_workout_index"
+                    #default="{ open }"
+                >
                     <Button @click="open">{{ props.labels.ctaButton }}</Button>
                 </GenerateFitnessPlanModal>
             </section>

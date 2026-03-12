@@ -127,6 +127,7 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
                 durationMinutes: workout.duration_minutes,
                 level: workout.level,
             }"
+            :utm-campaign="`free_workout_${type}`"
         />
 
         <!-- Author Box Section -->
@@ -167,7 +168,10 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <FAQSection :faqs="faqs" />
         <RelatedPlans :plans="relatedPlans" />
 
-        <GenerateFitnessPlanModal />
+        <GenerateFitnessPlanModal
+            utm-content="show_bottom_cta"
+            :utm-campaign="`free_workout_${type}`"
+        />
     </main>
     <Footer />
 </template>

@@ -1,9 +1,10 @@
 <?php
+
 return [
-    "imprint" => "imprint",
-    "data_privacy" => "privacy-policy",
-    "terms" => "terms-and-conditions",
-    "disclaimer" => "disclaimer",
+    'imprint' => 'imprint',
+    'data_privacy' => 'privacy-policy',
+    'terms' => 'terms-and-conditions',
+    'disclaimer' => 'disclaimer',
     'workout_plans_index' => 'free-workout-plan',
     'workout_plans_type' => 'free-workout-plan/{type}',
 
@@ -14,5 +15,9 @@ return [
         'home' => 'home',
         'women' => 'women',
         'new_year_reset' => 'new-year-reset',
+        'strength' => 'strength',
+        'fat_loss' => 'fat-loss',
+        'abs' => 'abs',
+        'over_40' => 'over-40',
     ],
 ];

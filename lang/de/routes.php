@@ -1,9 +1,10 @@
 <?php
+
 return [
     'imprint' => 'impressum',
     'data_privacy' => 'datenschutz',
     'terms' => 'agb',
-    "disclaimer" => "haftungsausschluss",
+    'disclaimer' => 'haftungsausschluss',
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 
@@ -14,5 +15,9 @@ return [
         'home' => 'zuhause',
         'women' => 'frauen',
         'new_year_reset' => 'neujahrs-trainingsplan',
+        'strength' => 'krafttraining',
+        'fat_loss' => 'fettabbau',
+        'abs' => 'bauchmuskeltraining',
+        'over_40' => 'ueber-40-training',
     ],
 ];
