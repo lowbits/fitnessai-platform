@@ -8,7 +8,7 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Services\Rembg\RembgClient;
+use App\Services\Rembg\PhotoroomClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Storage;
@@ -31,9 +31,9 @@ function createTestPngImage(): string
 
 function mockRembg(string $returnData): void
 {
-    $mock = Mockery::mock(RembgClient::class);
+    $mock = Mockery::mock(PhotoroomClient::class);
     $mock->shouldReceive('remove')->andReturn($returnData);
-    app()->instance(RembgClient::class, $mock);
+    app()->instance(PhotoroomClient::class, $mock);
 }
 
 // -- GenerateMealImage job tests --
@@ -102,9 +102,9 @@ test('RemoveMealImageBackground job throws on rembg failure', function () {
     $pngData = createTestPngImage();
     Storage::disk('r2')->put('meals/full/failed-meal.webp', $pngData);
 
-    $mock = Mockery::mock(RembgClient::class);
+    $mock = Mockery::mock(PhotoroomClient::class);
     $mock->shouldReceive('remove')->andThrow(new RuntimeException('rembg API returned HTTP 500'));
-    app()->instance(RembgClient::class, $mock);
+    app()->instance(PhotoroomClient::class, $mock);
 
     $meal = Meal::factory()->create([
         'name' => 'Failed Meal',
