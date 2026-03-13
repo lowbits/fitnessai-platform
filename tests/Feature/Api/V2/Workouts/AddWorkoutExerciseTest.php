@@ -200,3 +200,38 @@ test('add validates training parameters types', function ($field, $value) {
     'tempo must be string' => ['tempo', 123],
     'rpe must be string' => ['rpe', true],
 ]);
+
+test('added exercise falls back to canonical exercise data in workout response', function () {
+    $exercise = Exercise::factory()->create([
+        'name' => 'Bench Press',
+        'description' => 'A compound chest exercise',
+        'instructions' => ['Lie on bench', 'Grip bar', 'Lower to chest', 'Press up'],
+        'form_cues' => 'Keep feet flat, retract scapula',
+        'difficulty' => 'intermediate',
+        'primary_muscles' => ['chest', 'triceps'],
+        'equipment' => ['barbell', 'bench'],
+    ]);
+
+    $this->actingAs($this->user)
+        ->postJson("/api/v2/workouts/{$this->workout->id}/exercises", [
+            'exercise_id' => $exercise->id,
+            'sets' => 3,
+            'reps' => 10,
+        ])
+        ->assertCreated();
+
+    $response = $this->actingAs($this->user)
+        ->getJson("/api/v2/workouts/{$this->workout->id}");
+
+    $response->assertSuccessful();
+
+    $exerciseData = $response->json('exercises.0');
+
+    expect($exerciseData)
+        ->description->toBe('A compound chest exercise')
+        ->instructions->toBe(['Lie on bench', 'Grip bar', 'Lower to chest', 'Press up'])
+        ->form_cues->toBe('Keep feet flat, retract scapula')
+        ->difficulty->toBe('intermediate')
+        ->muscle_groups->toBe(['chest', 'triceps'])
+        ->equipment->toBe(['barbell', 'bench']);
+});

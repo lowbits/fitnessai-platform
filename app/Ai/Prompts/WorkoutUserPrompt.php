@@ -154,6 +154,7 @@ class WorkoutUserPrompt implements Stringable
             default => 'Environment: General. Adapt to available equipment, prioritize bodyweight.',
         };
     }
+
     private function getWorkoutNumberInCycle(): int
     {
         return (($this->dayNumber - 1) % $this->workoutsPerWeek) + 1;
@@ -163,41 +164,41 @@ class WorkoutUserPrompt implements Stringable
     {
         return match ($this->workoutsPerWeek) {
             2 => match ($workoutNumber) {
-                1 => 'Upper Body (Chest, Back, Shoulders, Arms)',
-                2 => 'Lower Body (Quads, Hamstrings, Glutes, Calves)',
-                default => 'Full Body',
+                1 => 'Upper Body (chest, back, shoulders, biceps, triceps)',
+                2 => 'Lower Body (quadriceps, hamstrings, glutes, calves)',
+                default => 'Full Body (full_body)',
             },
             3 => match ($workoutNumber) {
-                1 => 'Push (Chest, Shoulders, Triceps)',
-                2 => 'Pull (Back, Biceps, Rear Delts)',
-                3 => 'Legs & Core',
-                default => 'Full Body',
+                1 => 'Push (chest, shoulders, triceps)',
+                2 => 'Pull (back, biceps, rear_delts)',
+                3 => 'Legs & Core (quadriceps, hamstrings, glutes, calves, core)',
+                default => 'Full Body (full_body)',
             },
             4 => match ($workoutNumber) {
-                1 => 'Upper A (Chest, Back, Shoulders)',
-                2 => 'Lower A (Quads, Hamstrings, Glutes)',
-                3 => 'Upper B (Back, Arms, Rear Delts)',
-                4 => 'Lower B (Glutes, Hamstrings, Calves)',
-                default => 'Full Body',
+                1 => 'Upper A (chest, back, shoulders)',
+                2 => 'Lower A (quadriceps, hamstrings, glutes)',
+                3 => 'Upper B (back, biceps, triceps, rear_delts)',
+                4 => 'Lower B (glutes, hamstrings, calves)',
+                default => 'Full Body (full_body)',
             },
             5 => match ($workoutNumber) {
-                1 => 'Push (Chest, Shoulders, Triceps)',
-                2 => 'Pull (Back, Biceps, Rear Delts)',
-                3 => 'Legs (Quads, Hamstrings, Glutes, Calves)',
-                4 => 'Upper Body (Chest, Back, Shoulders)',
-                5 => 'Lower Body (Glutes, Hamstrings, Calves)',
-                default => 'Full Body',
+                1 => 'Push (chest, shoulders, triceps)',
+                2 => 'Pull (back, biceps, rear_delts)',
+                3 => 'Legs (quadriceps, hamstrings, glutes, calves)',
+                4 => 'Upper Body (chest, back, shoulders)',
+                5 => 'Lower Body (glutes, hamstrings, calves)',
+                default => 'Full Body (full_body)',
             },
             6 => match ($workoutNumber) {
-                1 => 'Push A (Chest, Shoulders, Triceps)',
-                2 => 'Pull A (Back, Biceps, Rear Delts)',
-                3 => 'Legs A (Quads, Hamstrings, Glutes)',
-                4 => 'Push B (Shoulders, Chest, Triceps)',
-                5 => 'Pull B (Back, Biceps, Rear Delts)',
-                6 => 'Legs B (Hamstrings, Glutes, Calves)',
-                default => 'Full Body',
+                1 => 'Push A (chest, shoulders, triceps)',
+                2 => 'Pull A (back, biceps, rear_delts)',
+                3 => 'Legs A (quadriceps, hamstrings, glutes)',
+                4 => 'Push B (shoulders, chest, triceps)',
+                5 => 'Pull B (back, biceps, rear_delts)',
+                6 => 'Legs B (hamstrings, glutes, calves)',
+                default => 'Full Body (full_body)',
             },
-            default => 'Full Body',
+            default => 'Full Body (full_body)',
         };
     }
 }

@@ -10,25 +10,27 @@ trait MapsExercises
      */
     protected function mapExerciseToArray($exercise): array
     {
+        $canonical = $exercise->exercise;
+
         return [
             'id' => $exercise->id,
             'exercise_id' => $exercise->exercise_id,
             'order' => $exercise->order,
-            'name' => $exercise->exercise?->localizedName() ?? $exercise->name,
+            'name' => $canonical?->localizedName() ?? $exercise->name,
             'type' => $exercise->type,
-            'description' => $exercise->description,
-            'instructions' => $exercise->instructions,
+            'description' => $exercise->description ?? $canonical?->localizedDescription(),
+            'instructions' => $exercise->instructions ?? $canonical?->localizedInstructions(),
             'sets' => $exercise->sets,
             'reps' => $exercise->reps,
             'duration_seconds' => $exercise->duration_seconds,
             'rest_seconds' => $exercise->rest_seconds,
             'tempo' => $exercise->tempo,
             'weight_recommendation' => $exercise->weight_recommendation,
-            'muscle_groups' => $exercise->muscle_groups,
-            'equipment' => $exercise->equipment,
-            'form_cues' => $exercise->form_cues,
+            'muscle_groups' => $exercise->muscle_groups ?? $canonical?->primary_muscles ?? [],
+            'equipment' => $exercise->equipment ?? $canonical?->equipment ?? [],
+            'form_cues' => $exercise->form_cues ?? $canonical?->localizedFormCues(),
             'alternatives' => $this->mapAlternatives($exercise->alternatives),
-            'difficulty' => $exercise->difficulty,
+            'difficulty' => $exercise->difficulty ?? $canonical?->difficulty,
         ];
     }
 
@@ -38,14 +40,16 @@ trait MapsExercises
      */
     protected function mapExerciseToResponse($exercise, $latestTracking = null): array
     {
+        $canonical = $exercise->exercise;
+
         return [
             'id' => $exercise->id,
             'exercise_id' => $exercise->exercise_id,
             'order' => $exercise->order,
-            'name' => $exercise->exercise?->localizedName() ?? $exercise->name,
+            'name' => $canonical?->localizedName() ?? $exercise->name,
             'type' => $exercise->type,
-            'description' => $exercise->description,
-            'instructions' => $exercise->instructions,
+            'description' => $exercise->description ?? $canonical?->localizedDescription(),
+            'instructions' => $exercise->instructions ?? $canonical?->localizedInstructions(),
             'sets' => $exercise->sets,
             'reps' => $exercise->reps,
             'duration_seconds' => $exercise->duration_seconds,
@@ -54,13 +58,13 @@ trait MapsExercises
             'execution_style' => $exercise->execution_style,
             'rpe' => $exercise->rpe,
             'weight_recommendation' => $exercise->weight_recommendation,
-            'muscle_groups' => $exercise->muscle_groups ?? [],
-            'equipment' => $exercise->equipment ?? [],
-            'form_cues' => $exercise->form_cues,
+            'muscle_groups' => $exercise->muscle_groups ?? $canonical?->primary_muscles ?? [],
+            'equipment' => $exercise->equipment ?? $canonical?->equipment ?? [],
+            'form_cues' => $exercise->form_cues ?? $canonical?->localizedFormCues(),
             'alternatives' => $this->mapAlternatives($exercise->alternatives),
-            'difficulty' => $exercise->difficulty,
-            'video_url' => $exercise->exercise?->video_url ?? $exercise->video_url,
-            'image' => $exercise->exercise?->image ?? $exercise->image,
+            'difficulty' => $exercise->difficulty ?? $canonical?->difficulty,
+            'video_url' => $canonical?->video_url ?? $exercise->video_url,
+            'image' => $canonical?->image ?? $exercise->image,
             'latest_tracking' => $latestTracking,
         ];
     }

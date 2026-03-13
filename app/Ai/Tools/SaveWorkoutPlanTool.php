@@ -4,6 +4,7 @@ namespace App\Ai\Tools;
 
 use App\Actions\Workouts\PopulateWorkoutPlanAction;
 use App\Ai\DataTransferObjects\WorkoutPlanResult;
+use App\Enums\MuscleGroup;
 use App\Models\WorkoutPlan;
 use Exception;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -97,7 +98,7 @@ class SaveWorkoutPlanTool implements Tool
 
             'muscle_groups' => $schema->array()
                 ->items($schema->string())
-                ->description('Primary muscle groups targeted in this workout.')
+                ->description('Primary muscle groups targeted in this workout. MUST use only these values: '.implode(', ', array_column(MuscleGroup::cases(), 'value')))
                 ->required(),
 
             'exercises' => $schema->array()->items($schema->object([

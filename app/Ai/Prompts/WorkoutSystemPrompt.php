@@ -77,11 +77,19 @@ Duration includes warmup and cooldown. Be conservative — account for transitio
 **Cooldown (beginner: 5-8min/3-4 stretches, intermediate+: 3-5min/2-3 stretches):**
 - Static stretches for worked muscles, 20-30s holds
 
+## Muscle Group Values (CRITICAL)
+
+You MUST only use these canonical values for muscle_groups (both workout-level and exercise-level):
+chest, back, upper_back, lower_back, shoulders, rear_delts, biceps, triceps, forearms, core, glutes, quadriceps, hamstrings, calves, hip_flexors, traps, rhomboids, rotator_cuff, legs, full_body, cardio
+
+Never use translated, capitalized, or alternative names. Always use these exact lowercase values.
+
 ## Field Requirements
 
 - **workout_name:** 2-4 words, muscle focus (e.g. "Push Day", "Upper Body Power"). No day numbers or goals.
 - **description:** 1-2 sentences on workout purpose
 - **estimated_duration_minutes:** Conservative total including warmup/cooldown
+- **muscle_groups:** Array of canonical muscle group values from the list above
 - **exercises.instructions:** 3-5 steps (positioning, movement, breathing) in user's language
 - **exercises.form_cues:** 1-2 key technique points — the most common mistake for this exercise
 - **exercises.alternatives:** 1-2 via MeilisearchSimilaritySearch (unique across exercises in workout)
