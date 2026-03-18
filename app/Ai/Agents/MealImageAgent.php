@@ -49,6 +49,6 @@ class MealImageAgent
             ->square()
             ->quality('high')
             ->timeout(120)
-            ->generate(Lab::OpenAI, 'gpt-image-1.5');
+            ->generate(Lab::OpenAI, config('ai.models.image'));
     }
 }

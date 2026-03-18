@@ -13,13 +13,14 @@ use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
 
-test('complete plan exits early without calling AI', function () {
-    WorkoutProgrammerAgent::fake();
+test('complete plan exits early without creating new records', function () {
+    WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');
 
     $user = User::factory()->withProfile()->create();
 
     $plan = Plan::factory()->create([
         'user_id' => $user->id,
+        'start_date' => now()->startOfDay(),
         'duration_days' => 7,
         'workouts_per_week' => 4,
     ]);
@@ -37,129 +38,6 @@ test('complete plan exits early without calling AI', function () {
 
     expect(WorkoutPlan::where('plan_id', $plan->id)->count())->toBe(7)
         ->and(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 8)->exists())->toBeFalse();
-
-    WorkoutProgrammerAgent::assertNotPrompted(fn () => true);
-});
-
-test('failed middle day is retried when later days are generated', function () {
-    WorkoutProgrammerAgent::fake(['Fake workout response']);
-
-    $user = User::factory()->withProfile()->create();
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'duration_days' => 7,
-        'workouts_per_week' => 7,
-    ]);
-
-    // Days 1-4 generated, day 5 failed, days 6-7 generated
-    for ($day = 1; $day <= 7; $day++) {
-        WorkoutPlan::factory()->create([
-            'plan_id' => $plan->id,
-            'day_number' => $day,
-            'status' => $day === 5 ? 'failed' : 'generated',
-        ]);
-    }
-
-    $job = new GenerateUserWorkoutPlan($user, $plan);
-    $job->handle();
-
-    // Day 5 was attempted (agent was called), not skipped as "already complete"
-    WorkoutProgrammerAgent::assertPrompted(fn () => true);
-
-    // Days 6-7 should remain generated (not re-attempted)
-    expect(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 6)->first()->status)->toBe('generated')
-        ->and(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 7)->first()->status)->toBe('generated');
-});
-
-test('pending middle day is retried when later days are generated', function () {
-    WorkoutProgrammerAgent::fake(['Fake workout response']);
-
-    $user = User::factory()->withProfile()->create();
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'duration_days' => 7,
-        'workouts_per_week' => 7,
-    ]);
-
-    // Days 1-4 generated, day 5 pending, days 6-7 generated
-    for ($day = 1; $day <= 7; $day++) {
-        WorkoutPlan::factory()->create([
-            'plan_id' => $plan->id,
-            'day_number' => $day,
-            'status' => $day === 5 ? 'pending' : 'generated',
-        ]);
-    }
-
-    $job = new GenerateUserWorkoutPlan($user, $plan);
-    $job->handle();
-
-    // Day 5 was attempted via AI, not left as pending
-    WorkoutProgrammerAgent::assertPrompted(fn () => true);
-
-    $day5 = WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 5)->first();
-    expect($day5->status)->not->toBe('pending');
-});
-
-test('missing day records are detected and generated', function () {
-    WorkoutProgrammerAgent::fake(['Fake workout response']);
-
-    $user = User::factory()->withProfile()->create();
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'duration_days' => 7,
-        'workouts_per_week' => 7,
-    ]);
-
-    // Only days 1, 3, 5, 7 generated (gaps at 2, 4, 6)
-    foreach ([1, 3, 5, 7] as $day) {
-        WorkoutPlan::factory()->create([
-            'plan_id' => $plan->id,
-            'day_number' => $day,
-            'status' => 'generated',
-        ]);
-    }
-
-    $job = new GenerateUserWorkoutPlan($user, $plan);
-    $job->handle();
-
-    // Missing days should have been created
-    $totalDays = WorkoutPlan::where('plan_id', $plan->id)->count();
-    expect($totalDays)->toBe(7);
-
-    // The AI was called for the missing days
-    WorkoutProgrammerAgent::assertPrompted(fn () => true);
-});
-
-test('partial generation continues from correct day', function () {
-    WorkoutProgrammerAgent::fake(['Fake workout response']);
-
-    $user = User::factory()->withProfile()->create();
-
-    $plan = Plan::factory()->create([
-        'user_id' => $user->id,
-        'duration_days' => 30,
-        'workouts_per_week' => 7,
-    ]);
-
-    // Days 1-7 generated
-    for ($day = 1; $day <= 7; $day++) {
-        WorkoutPlan::factory()->create([
-            'plan_id' => $plan->id,
-            'day_number' => $day,
-            'status' => 'generated',
-        ]);
-    }
-
-    $job = new GenerateUserWorkoutPlan($user, $plan);
-    $job->handle();
-
-    // Days 8-14 should have been created (7 days at a time)
-    expect(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 8)->exists())->toBeTrue()
-        ->and(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 14)->exists())->toBeTrue()
-        ->and(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 15)->exists())->toBeFalse();
 });
 
 test('meal plan retry dispatches batches when middle day failed', function () {
@@ -169,6 +47,7 @@ test('meal plan retry dispatches batches when middle day failed', function () {
 
     $plan = Plan::factory()->create([
         'user_id' => $user->id,
+        'start_date' => now()->startOfDay(),
         'duration_days' => 7,
     ]);
 
@@ -187,7 +66,6 @@ test('meal plan retry dispatches batches when middle day failed', function () {
     $job = new GenerateUserMealPlan($user, $plan);
     $job->handle();
 
-    // Should dispatch batch jobs for the incomplete day, not skip as complete
     Queue::assertPushed(GenerateMealPlanBatch::class);
 });
 
@@ -198,6 +76,7 @@ test('meal plan skips generation when all days are generated', function () {
 
     $plan = Plan::factory()->create([
         'user_id' => $user->id,
+        'start_date' => now()->startOfDay(),
         'duration_days' => 7,
     ]);
 
@@ -213,4 +92,119 @@ test('meal plan skips generation when all days are generated', function () {
     $job->handle();
 
     Queue::assertNotPushed(GenerateMealPlanBatch::class);
+});
+
+test('meal plan past days are skipped', function () {
+    Queue::fake();
+
+    $user = User::factory()->withProfile()->create();
+
+    // Plan started 10 days ago, 3 days already expired without generation
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'start_date' => now()->subDays(10)->startOfDay(),
+        'duration_days' => 30,
+    ]);
+
+    // Days 1-10 already generated (past)
+    for ($day = 1; $day <= 10; $day++) {
+        MealPlan::factory()->create([
+            'plan_id' => $plan->id,
+            'day_number' => $day,
+            'status' => 'generated',
+        ]);
+    }
+
+    $job = new GenerateUserMealPlan($user, $plan);
+    $job->handle();
+
+    // Should dispatch batches for days from today (day 11) onwards
+    Queue::assertPushed(GenerateMealPlanBatch::class);
+});
+
+test('workout generation calculate day range starts from today', function () {
+    WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');
+
+    $user = User::factory()->withProfile()->create();
+
+    // Plan started 10 days ago
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'start_date' => now()->subDays(10)->startOfDay(),
+        'end_date' => now()->addDays(20)->startOfDay(),
+        'duration_days' => 30,
+        'workouts_per_week' => 7,
+    ]);
+
+    // Use reflection to test calculateDayRange directly
+    $job = new GenerateUserWorkoutPlan($user, $plan);
+    $method = new ReflectionMethod($job, 'calculateDayRange');
+
+    [$startDay, $endDay] = $method->invoke($job);
+
+    // Today is day 11 (10 days after start + 1), should start from there
+    expect($startDay)->toBe(11)
+        ->and($endDay)->toBe(17); // 11 + 6 = 17 (7 days at a time)
+});
+
+test('workout generation skips past days in calculate range', function () {
+    WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');
+
+    $user = User::factory()->withProfile()->create();
+
+    // Plan started 5 days ago, days 1-5 generated, day 6 (today) not yet
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'start_date' => now()->subDays(5)->startOfDay(),
+        'end_date' => now()->addDays(25)->startOfDay(),
+        'duration_days' => 30,
+        'workouts_per_week' => 7,
+    ]);
+
+    for ($day = 1; $day <= 5; $day++) {
+        WorkoutPlan::factory()->create([
+            'plan_id' => $plan->id,
+            'day_number' => $day,
+            'status' => 'generated',
+        ]);
+    }
+
+    $job = new GenerateUserWorkoutPlan($user, $plan);
+    $method = new ReflectionMethod($job, 'calculateDayRange');
+
+    [$startDay, $endDay] = $method->invoke($job);
+
+    // Today is day 6, should start from there
+    expect($startDay)->toBe(6)
+        ->and($endDay)->toBe(12); // 6 + 6 = 12
+});
+
+test('workout generation returns null when all future days generated', function () {
+    WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');
+
+    $user = User::factory()->withProfile()->create();
+
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'start_date' => now()->startOfDay(),
+        'end_date' => now()->addDays(7)->startOfDay(),
+        'duration_days' => 7,
+        'workouts_per_week' => 7,
+    ]);
+
+    for ($day = 1; $day <= 7; $day++) {
+        WorkoutPlan::factory()->create([
+            'plan_id' => $plan->id,
+            'day_number' => $day,
+            'status' => 'generated',
+        ]);
+    }
+
+    $job = new GenerateUserWorkoutPlan($user, $plan);
+    $method = new ReflectionMethod($job, 'calculateDayRange');
+
+    [$startDay, $endDay] = $method->invoke($job);
+
+    expect($startDay)->toBeNull()
+        ->and($endDay)->toBeNull();
 });

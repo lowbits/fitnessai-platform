@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Exercises;
 
 use App\Models\Exercise;
 use App\Models\ExerciseTranslation;

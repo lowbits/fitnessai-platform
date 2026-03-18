@@ -44,7 +44,11 @@ return [
         'key' => env('MEILISEARCH_API_KEY'),
     ],
     'openfoodfacts' => [
-        'db_dump_url' => env('OPENFOODFACTS_URL', 'https://static.openfoodfacts.org/data/en.openfoodfacts.org.products.json.gz'),
+        'db_dump_url' => env('OPENFOODFACTS_URL', 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz'),
+    ],
+
+    'r2' => [
+        'public_url' => env('R2_PUBLIC_URL', 'https://pub-3f5447ea608c4617b61c972ef190b448.r2.dev'),
     ],
 
     'rembg' => [

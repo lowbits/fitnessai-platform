@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use OpenAI\Laravel\Facades\OpenAI;
 
-
 class GetMealAlternativesController extends Controller
 {
     /**
@@ -25,14 +24,12 @@ class GetMealAlternativesController extends Controller
 
         Gate::authorize('update', $meal);
 
-
         $user = $request->user();
 
         // Validate input
         $validated = Validator::validate($request->all(), [
             'hint' => 'nullable|string|max:500',
         ]);
-
 
         try {
             $titles = $this->generateAlternativeTitles($meal, $user->profile, $user, $validated['hint'] ?? null);
@@ -111,25 +108,23 @@ PROMPT;
             'meal_type' => $meal->type,
             'meal_calories' => $meal->calories,
             'dietary_preference' => $profile->getDietaryInfo(),
-            'with_hint' => !empty($hint),
+            'with_hint' => ! empty($hint),
         ]);
 
-
         $response = OpenAI::responses()->create([
-            'model' => 'gpt-4o-mini',
+            'model' => config('ai.models.simple'),
             'input' => $userMessage,
             'instructions' => $systemPrompt,
             'tools' => [
-                MealToolDefinition::getProvideMealTitlesTool()
+                MealToolDefinition::getProvideMealTitlesTool(),
             ],
             'tool_choice' => 'required',
         ]);
 
-
         $arguments = ToolCallHelper::extractToolCall(
             $response,
             'provide_meal_titles',
-            fn($args) => isset($args['titles'])
+            fn ($args) => isset($args['titles'])
                 && is_array($args['titles'])
         );
 
@@ -137,7 +132,6 @@ PROMPT;
             'meal_id' => $meal->id,
             'titles_count' => count($arguments['titles']),
         ]);
-
 
         return $arguments['titles'];
     }
@@ -150,4 +144,3 @@ PROMPT;
         };
     }
 }
-

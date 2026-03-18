@@ -51,6 +51,23 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | AI Models
+    |--------------------------------------------------------------------------
+    |
+    | Here you may configure which models to use for various AI tasks. These
+    | can be overridden via environment variables to allow quick switching
+    | without code changes, e.g. when testing new model releases.
+    |
+    */
+
+    'models' => [
+        'agent' => env('AI_MODEL_AGENT', 'gpt-5.4-mini'),
+        'simple' => env('AI_MODEL_SIMPLE', 'gpt-5.4-nano'),
+        'image' => env('AI_MODEL_IMAGE', 'gpt-image-1.5'),
+    ],
+
     'providers' => [
         'anthropic' => [
             'driver' => 'anthropic',

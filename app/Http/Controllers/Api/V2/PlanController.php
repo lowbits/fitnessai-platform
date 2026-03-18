@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\V2;
 use App\Http\Controllers\Controller;
 use App\Models\MealPlan;
 use App\Models\WorkoutPlan;
+use App\Models\WorkoutTracking;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -12,6 +13,8 @@ use Illuminate\Support\Facades\Log;
 
 class PlanController extends Controller
 {
+    use Concerns\MapsThumbnails;
+
     /**
      * Get meal and workout plan for a specific date
      */
@@ -93,8 +96,9 @@ class PlanController extends Controller
         // Determine overall status
         $overallStatus = $this->determineOverallStatus($mealPlan, $workoutPlan);
 
-        // Get tracked calories for this day
+        // Get tracked calories and workouts for this day
         $trackedCalories = $this->getTrackedCaloriesForDay($user, $requestDate);
+        $trackedWorkouts = $this->getTrackedWorkoutsForDay($user, $workoutPlan);
 
         return response()->json([
             'plan_id' => $plan->id,
@@ -108,6 +112,7 @@ class PlanController extends Controller
             'workout' => $workoutData,
             'daily_totals' => $mealsData['totals'],
             'tracked_calories' => $trackedCalories,
+            'tracked_workouts' => $trackedWorkouts,
             'message' => $this->getStatusMessage($overallStatus),
         ]);
     }
@@ -158,6 +163,7 @@ class PlanController extends Controller
                     'name' => $meal->name,
                     'type' => ucfirst($meal->type),
                     'image' => $meal->image ?? "{$meal->type}_placeholder",
+                    'thumbnail_url' => $this->mealThumbnail($meal),
                     'calories' => $meal->calories,
                     'protein_g' => $meal->protein_g,
                     'carbs_g' => $meal->carbs_g,
@@ -214,16 +220,24 @@ class PlanController extends Controller
             ];
         }
 
+        $isCompleted = WorkoutTracking::where('user_id', $user->id)
+            ->where('workout_plan_id', $workoutPlan->id)
+            ->whereNotNull('completed_at')
+            ->exists();
+
         return [
             'id' => $workoutPlan->id,
             'name' => $workoutPlan->workout_name,
             'type' => $workoutPlan->workout_type,
             'description' => $workoutPlan->description,
             'duration_minutes' => $workoutPlan->estimated_duration_minutes,
+            'thumbnail_url' => $workoutPlan->thumbnailUrl(),
             'exercises' => $workoutPlan->exercises->map(fn ($e) => $e->exercise?->localizedName() ?? $e->name),
             'exercises_count' => $workoutPlan->exercises->count(),
             'difficulty' => $workoutPlan->difficulty,
             'muscle_groups' => $workoutPlan->muscle_groups ?? [],
+            'equipment_details' => $workoutPlan->equipmentDetails(),
+            'is_completed' => $isCompleted,
             'status' => 'generated',
         ];
     }
@@ -271,6 +285,61 @@ class PlanController extends Controller
             'not_generated' => 'Plan for this day has not been generated yet.',
             default => null,
         };
+    }
+
+    /**
+     * Get tracked workouts for a specific day's workout plan
+     */
+    private function getTrackedWorkoutsForDay($user, ?WorkoutPlan $workoutPlan): array
+    {
+        if (! $workoutPlan) {
+            return [
+                'entries' => [],
+                'count' => 0,
+            ];
+        }
+
+        $trackings = WorkoutTracking::with('exercises.sets')
+            ->where('user_id', $user->id)
+            ->where('workout_plan_id', $workoutPlan->id)
+            ->orderBy('started_at', 'asc')
+            ->get();
+
+        $entries = $trackings->map(function (WorkoutTracking $tracking) {
+            return [
+                'id' => $tracking->id,
+                'workout_plan_id' => $tracking->workout_plan_id,
+                'started_at' => $tracking->started_at->toISOString(),
+                'completed_at' => $tracking->completed_at?->toISOString(),
+                'is_completed' => $tracking->completed_at !== null,
+                'feeling_rate' => $tracking->feeling_rate,
+                'notes' => $tracking->notes,
+                'exercises' => $tracking->exercises->map(function ($exercise) {
+                    return [
+                        'id' => $exercise->id,
+                        'workout_plan_exercise_id' => $exercise->workout_plan_exercise_id,
+                        'order' => $exercise->order,
+                        'notes' => $exercise->notes,
+                        'sets' => $exercise->sets->map(function ($set) {
+                            return [
+                                'id' => $set->id,
+                                'set_number' => $set->set_number,
+                                'reps' => $set->reps,
+                                'weight' => $set->weight,
+                                'duration' => $set->duration,
+                                'rpe' => $set->rpe,
+                                'notes' => $set->notes,
+                            ];
+                        })->values()->all(),
+                    ];
+                })->values()->all(),
+            ];
+        })->values()->all();
+
+        return [
+            'entries' => $entries,
+            'count' => $trackings->count(),
+        ];
     }
 
     /**

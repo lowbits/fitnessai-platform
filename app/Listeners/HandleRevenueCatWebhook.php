@@ -2,7 +2,6 @@
 
 namespace App\Listeners;
 
-
 use App\Actions\RevenueCat\HandleInitialPurchaseAction;
 use App\Actions\RevenueCat\HandleRenewalAction;
 use Illuminate\Support\Facades\Log;
@@ -61,13 +60,14 @@ class HandleRevenueCatWebhook
             case 'REFUND':
                 $this->handleRefund($payload);
                 break;
+            case 'EXPIRATION':
+                $this->handleExpiration($payload);
+                break;
             case 'SUBSCRIPTION_PERIOD_CHANGED':
                 $this->handleSubscriptionPeriodChanged($payload);
                 break;
         }
     }
-
-
 
     protected function handleRenewal(array $payload): void
     {
@@ -81,10 +81,11 @@ class HandleRevenueCatWebhook
         $event = $payload['event'];
         $user = \App\Models\User::find($event['app_user_id']);
 
-        if (!$user) {
+        if (! $user) {
             Log::error('User not found for cancellation', [
                 'app_user_id' => $event['app_user_id'],
             ]);
+
             return;
         }
 
@@ -124,6 +125,32 @@ class HandleRevenueCatWebhook
     protected function handleBillingIssue(array $payload): void
     {
         Log::info('Handling billing issue', ['payload' => $payload]);
+    }
+
+    protected function handleExpiration(array $payload): void
+    {
+        $event = $payload['event'];
+        $user = \App\Models\User::find($event['app_user_id']);
+
+        if (! $user) {
+            Log::error('User not found for expiration', [
+                'app_user_id' => $event['app_user_id'],
+            ]);
+
+            return;
+        }
+
+        $subscription = $user->subscriptions()
+            ->where('product_id', $event['product_id'])
+            ->first();
+
+        if ($subscription) {
+            $subscription->markAsExpired();
+            Log::info('Subscription expired', [
+                'user_id' => $user->id,
+                'product_id' => $event['product_id'],
+            ]);
+        }
     }
 
     protected function handleRefund(array $payload): void

@@ -6,7 +6,6 @@ use App\Ai\Tools\MeilisearchSimilaritySearch;
 use App\Ai\Tools\SaveWorkoutPlanTool;
 use App\Models\WorkoutPlan;
 use Laravel\Ai\Attributes\MaxSteps;
-use Laravel\Ai\Attributes\Model;
 use Laravel\Ai\Attributes\Provider;
 use Laravel\Ai\Attributes\Timeout;
 use Laravel\Ai\Contracts\Agent;
@@ -18,12 +17,16 @@ use Laravel\Ai\Promptable;
 #[MaxSteps(25)]
 #[Timeout(300)]
 #[Provider([Lab::OpenAI, Lab::Mistral])]
-#[Model('gpt-5-mini')]
 class WorkoutProgrammerAgent implements Agent, Conversational, HasTools
 {
     use Promptable;
 
     public function __construct(private readonly WorkoutPlan $workoutPlan) {}
+
+    public function model(): string
+    {
+        return config('ai.models.agent');
+    }
 
     /**
      * Static training knowledge — cached by the provider.

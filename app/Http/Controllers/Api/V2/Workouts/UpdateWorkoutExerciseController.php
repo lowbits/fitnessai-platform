@@ -24,7 +24,6 @@ class UpdateWorkoutExerciseController extends Controller
             'exercise' => [
                 'id' => $workoutExercise->id,
                 'exercise_id' => $workoutExercise->exercise_id,
-                'name' => $workoutExercise->name,
                 'order' => $workoutExercise->order,
                 'sets' => $workoutExercise->sets,
                 'reps' => $workoutExercise->reps,

@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Gate;
 
 class MealController extends Controller
 {
+    use Concerns\MapsThumbnails;
+
     /**
      * Get detailed meal information
      */
@@ -20,7 +22,7 @@ class MealController extends Controller
         // Get meal from database
         $meal = Meal::find($mealId);
 
-        if (!$meal) {
+        if (! $meal) {
             return response()->json([
                 'error' => 'Meal not found',
                 'message' => 'The requested meal does not exist',
@@ -29,7 +31,7 @@ class MealController extends Controller
 
         // Verify the meal belongs to user's plan
         $mealPlan = $meal->mealPlan;
-        if (!$mealPlan || $mealPlan->plan->user_id !== $user->id) {
+        if (! $mealPlan || $mealPlan->plan->user_id !== $user->id) {
             return response()->json([
                 'error' => 'Unauthorized',
                 'message' => 'You do not have access to this meal',
@@ -41,6 +43,7 @@ class MealController extends Controller
             'name' => $meal->name,
             'type' => ucfirst($meal->type),
             'image' => $meal->image ?? $meal->type,
+            'thumbnail_url' => $this->mealThumbnail($meal),
             'description' => $meal->description,
 
             'nutrition' => [
@@ -85,4 +88,3 @@ class MealController extends Controller
         ], 200);
     }
 }
-

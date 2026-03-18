@@ -10,9 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use OpenAI\Laravel\Facades\OpenAI;
-use RuntimeException;
 use Throwable;
-
 
 /**
  * Job that replaces a meal with an alternative
@@ -36,11 +34,12 @@ class ReplaceMealJob implements ShouldQueue
         $user = $plan->user;
         $profile = $user->profile;
 
-        if (!$profile) {
+        if (! $profile) {
             Log::error('User profile not found for meal replacement', [
                 'user_id' => $user->id,
                 'meal_id' => $this->meal->id,
             ]);
+
             return;
         }
 
@@ -49,9 +48,8 @@ class ReplaceMealJob implements ShouldQueue
             'meal_id' => $this->meal->id,
             'meal_type' => $this->meal->type,
             'meal_name' => $this->meal->name,
-            'with_hint' => !empty($this->hint),
+            'with_hint' => ! empty($this->hint),
         ]);
-
 
         // Create new meal with placeholder data and status "generating"
         $newMeal = Meal::create([
@@ -68,7 +66,6 @@ class ReplaceMealJob implements ShouldQueue
 
         $this->meal->delete();
 
-
         try {
             $instructions = $this->buildSystemPrompt($profile, $user);
             $contextMessage = $this->buildContextMessage();
@@ -76,7 +73,7 @@ class ReplaceMealJob implements ShouldQueue
             $startTime = microtime(true);
 
             $response = OpenAI::responses()->create([
-                'model' => 'gpt-4o-mini',
+                'model' => config('ai.models.simple'),
                 'instructions' => $instructions,
                 'input' => $contextMessage,
                 'tools' => [
@@ -91,7 +88,6 @@ class ReplaceMealJob implements ShouldQueue
                     'replacement' => 'true',
                 ],
             ]);
-
 
             $duration = microtime(true) - $startTime;
 
@@ -257,4 +253,3 @@ PROMPT;
         $mealPlan->update($totals);
     }
 }
-

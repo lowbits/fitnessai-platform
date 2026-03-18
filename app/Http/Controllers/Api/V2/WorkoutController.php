@@ -81,8 +81,10 @@ class WorkoutController extends Controller
             'description' => $workout->description,
             'estimated_duration_minutes' => $workout->estimated_duration_minutes,
             'estimated_calories_burned' => $workout->estimated_calories_burned,
+            'thumbnail_url' => $workout->thumbnailUrl(),
             'difficulty' => $workout->difficulty,
             'muscle_groups' => $workout->muscle_groups ?? [],
+            'equipment_details' => $workout->equipmentDetails(),
             'exercises' => $formattedExercises,
             'exercises_count' => count($formattedExercises),
         ]);

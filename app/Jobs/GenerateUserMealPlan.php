@@ -31,21 +31,26 @@ class GenerateUserMealPlan implements ShouldQueue
             return;
         }
 
+        // Calculate today's day number within the plan
+        $todayDayNumber = max(1, (int) $this->plan->start_date->diffInDays(now()->startOfDay()) + 1);
+        $todayDayNumber = min($todayDayNumber, $this->plan->duration_days);
+
         $generatedDays = MealPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
+            ->where('day_number', '>=', $todayDayNumber)
             ->pluck('day_number')
             ->toArray();
 
-        // Find the first day that is not yet generated
+        // Find the first day from today onwards that is not yet generated
         $startDayNumber = null;
-        for ($day = 1; $day <= $this->plan->duration_days; $day++) {
+        for ($day = $todayDayNumber; $day <= $this->plan->duration_days; $day++) {
             if (! in_array($day, $generatedDays)) {
                 $startDayNumber = $day;
                 break;
             }
         }
 
-        // All days successfully generated
+        // All days from today onwards are generated
         if (! $startDayNumber) {
             Log::info('Meal plan already complete, skipping generation', [
                 'plan_id' => $this->plan->id,

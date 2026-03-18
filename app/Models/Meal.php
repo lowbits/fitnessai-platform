@@ -13,6 +13,7 @@ class Meal extends Model
 
     protected $fillable = [
         'meal_plan_id',
+        'recipe_id',
         'type',
         'name',
         'description',
@@ -53,6 +54,11 @@ class Meal extends Model
     public function mealPlan(): BelongsTo
     {
         return $this->belongsTo(MealPlan::class);
+    }
+
+    public function recipe(): BelongsTo
+    {
+        return $this->belongsTo(Recipe::class);
     }
 
     /**

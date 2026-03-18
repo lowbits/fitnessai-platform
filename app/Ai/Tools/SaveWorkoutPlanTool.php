@@ -106,25 +106,8 @@ class SaveWorkoutPlanTool implements Tool
                     ->description('The exercise ID from MeilisearchSimilaritySearch results. Never invent IDs.')
                     ->required(),
 
-                'name' => $schema->string()
-                    ->description('Exercise name exactly as returned from search results. Do not translate.')
-                    ->required(),
-
                 'type' => $schema->string()
                     ->description('Exercise category. One of: warmup, strength, cardio, cooldown, stretch.')
-                    ->required(),
-
-                'description' => $schema->string()
-                    ->description('What the exercise does and its benefits (1-2 sentences in user language).')
-                    ->required(),
-
-                'instructions' => $schema->array()
-                    ->items($schema->string())
-                    ->description('Step-by-step execution guide in user language. 3-5 clear steps covering positioning, movement, and breathing.')
-                    ->required(),
-
-                'form_cues' => $schema->string()
-                    ->description('1-2 key safety/technique points in user language. Focus on the most common mistake for this exercise.')
                     ->required(),
 
                 'sets' => $schema->number()

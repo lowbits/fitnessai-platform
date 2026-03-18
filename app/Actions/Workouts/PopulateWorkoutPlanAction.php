@@ -25,13 +25,9 @@ class PopulateWorkoutPlanAction
         foreach ($workoutPlanResult->exercises as $index => $exercise) {
             WorkoutPlanExercise::create([
                 'workout_plan_id' => $workoutPlan->id,
-                'exercise_id' => $exercise['exercise_id'] ?? null,
+                'exercise_id' => $exercise['exercise_id'],
                 'order' => $exercise['order'] ?? $index + 1,
-                'name' => $exercise['name'],
                 'type' => $exercise['type'],
-                'description' => $exercise['description'] ?? null,
-                'instructions' => $exercise['instructions'] ?? [],
-                'form_cues' => $exercise['form_cues'] ?? null,
                 'sets' => $exercise['sets'] ?? null,
                 'reps' => $exercise['reps'] ?? null,
                 'duration_seconds' => $exercise['duration_seconds'] ?? null,
