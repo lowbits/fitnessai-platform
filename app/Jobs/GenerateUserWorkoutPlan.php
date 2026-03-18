@@ -109,7 +109,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 );
 
                 (new WorkoutProgrammerAgent($workoutPlan))
-                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: 'gpt-5-mini');
+                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
 
                 // Refresh to get updated data from SaveWorkoutPlanTool tool
                 $workoutPlan->refresh();
@@ -164,21 +164,26 @@ class GenerateUserWorkoutPlan implements ShouldQueue
      */
     private function calculateDayRange(): array
     {
+        // Calculate today's day number within the plan
+        $todayDayNumber = max(1, (int) $this->plan->start_date->diffInDays(now()->startOfDay()) + 1);
+        $todayDayNumber = min($todayDayNumber, $this->plan->duration_days);
+
         $generatedDays = WorkoutPlan::where('plan_id', $this->plan->id)
             ->where('status', 'generated')
+            ->where('day_number', '>=', $todayDayNumber)
             ->pluck('day_number')
             ->toArray();
 
-        // Find the first day that is not yet generated
+        // Find the first day from today onwards that is not yet generated
         $startDay = null;
-        for ($day = 1; $day <= $this->plan->duration_days; $day++) {
+        for ($day = $todayDayNumber; $day <= $this->plan->duration_days; $day++) {
             if (! in_array($day, $generatedDays)) {
                 $startDay = $day;
                 break;
             }
         }
 
-        // All days successfully generated
+        // All days from today onwards are generated
         if (! $startDay) {
             return [null, null];
         }

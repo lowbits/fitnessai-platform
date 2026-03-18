@@ -86,7 +86,7 @@ class GenerateMealPlanBatch implements ShouldQueue
                 $startTime = microtime(true);
 
                 (new NutritionPlannerAgent($mealPlan))
-                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: 'gpt-5-mini');
+                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
 
                 $duration = microtime(true) - $startTime;
 

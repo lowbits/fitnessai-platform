@@ -5,7 +5,6 @@ namespace App\Ai\Agents;
 use App\Models\Exercise;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Attributes\MaxTokens;
-use Laravel\Ai\Attributes\Model;
 use Laravel\Ai\Attributes\Provider;
 use Laravel\Ai\Attributes\Temperature;
 use Laravel\Ai\Attributes\Timeout;
@@ -15,13 +14,17 @@ use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Promptable;
 
 #[Provider(Lab::OpenAI)]
-#[Model('gpt-4.1-mini')]
 #[MaxTokens(2048)]
 #[Temperature(0.3)]
 #[Timeout(60)]
 class ExerciseTranslationAgent implements Agent, HasStructuredOutput
 {
     use Promptable;
+
+    public function model(): string
+    {
+        return config('ai.models.simple');
+    }
 
     public function __construct(
         private readonly Exercise $exercise,

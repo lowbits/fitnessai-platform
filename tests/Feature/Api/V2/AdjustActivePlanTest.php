@@ -151,3 +151,32 @@ test('triggers generation when user is behind on workout plans', function () {
     Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
     Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
 });
+
+test('free trial user who returns after gap gets 1 month from today', function () {
+    $user = User::factory()->create();
+
+    // Free 7-day plan started 10 days ago, expired 3 days ago
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'active',
+        'start_date' => now()->subDays(10),
+        'end_date' => now()->subDays(3),
+        'duration_days' => 7,
+    ]);
+
+    $action = new AdjustActivePlanAction;
+    $action->execute($user, 'fytrr_premium_monthly_v2');
+
+    $plan->refresh();
+
+    // End date should be today + 1 month (expired plan starts fresh from today)
+    $expectedEndDate = now()->startOfDay()->addMonthNoOverflow();
+    expect($plan->end_date->toDateString())->toBe($expectedEndDate->toDateString());
+
+    // Duration is from original start_date to new end_date (~40 days)
+    // but generation only runs from today onwards (30 days of content)
+    expect($plan->duration_days)->toBe((int) now()->subDays(10)->startOfDay()->diffInDays($expectedEndDate));
+
+    Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
+});
