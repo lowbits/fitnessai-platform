@@ -2,7 +2,6 @@
 
 namespace App\Actions\RevenueCat;
 
-
 use App\Events\RevenueCat\InitialPurchaseProcessed;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,7 +17,7 @@ class HandleInitialPurchaseAction
 
         $user = $this->findUser($event);
 
-        if (!$user) {
+        if (! $user) {
             return;
         }
 
@@ -33,12 +32,11 @@ class HandleInitialPurchaseAction
         ]);
     }
 
-
     private function findUser(array $event): ?User
     {
         $user = User::find($event['app_user_id']);
 
-        if (!$user) {
+        if (! $user) {
             Log::error('User not found for initial purchase', [
                 'app_user_id' => $event['app_user_id'],
                 'event_type' => $event['type'],
@@ -51,7 +49,6 @@ class HandleInitialPurchaseAction
     private function syncCustomer(User $user, array $event): void
     {
         $attributes = $event['subscriber_attributes'] ?? [];
-
 
         $user->customer()->updateOrCreate(
             ['revenuecat_id' => $event['app_user_id']],
@@ -80,15 +77,24 @@ class HandleInitialPurchaseAction
 
     private function extractSubscriptionData(array $event): array
     {
-        return [
+        $isTrial = ! empty($event['is_trial_period']);
+
+        $data = [
             'name' => $event['product_id'],
             'currency' => $event['currency'] ?? 'EUR',
             'price' => (string) ($event['price_in_purchased_currency'] ?? $event['price'] ?? '0'),
-            'status' => SubscriptionStatus::ACTIVE,
+            'status' => $isTrial ? SubscriptionStatus::TRIAL : SubscriptionStatus::ACTIVE,
             'store' => $event['store'] ?? 'APP_STORE',
             'current_period_started_at' => $this->parseMilliseconds($event['purchased_at_ms'] ?? null),
             'current_period_ended_at' => $this->parseMilliseconds($event['expiration_at_ms'] ?? null),
         ];
+
+        if ($isTrial) {
+            $data['trial_started_at'] = $this->parseMilliseconds($event['purchased_at_ms'] ?? null);
+            $data['trial_ended_at'] = $this->parseMilliseconds($event['expiration_at_ms'] ?? null);
+        }
+
+        return $data;
     }
 
     private function buildCustomerMetadata(array $event): array
@@ -108,7 +114,7 @@ class HandleInitialPurchaseAction
 
     private function parseMilliseconds(?int $milliseconds): ?Carbon
     {
-        if (!$milliseconds) {
+        if (! $milliseconds) {
             return null;
         }
 
@@ -119,6 +125,7 @@ class HandleInitialPurchaseAction
                 'milliseconds' => $milliseconds,
                 'error' => $e->getMessage(),
             ]);
+
             return null;
         }
     }

@@ -8,12 +8,13 @@ use App\Events\RevenueCat\SubscriptionRenewed;
 use App\Listeners\AdjustPlanAfterPurchase;
 use App\Listeners\AdjustPlanAfterRenewal;
 use App\Listeners\GenerateMealPlan;
+use App\Listeners\GeneratePlansAfterPurchase;
 use App\Listeners\GenerateWorkoutPlan;
 use App\Listeners\HandleRevenueCatWebhook;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
-use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 use Meilisearch\Client as MeilisearchClient;
+use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         );
 
         Event::listen(WebhookReceived::class, HandleRevenueCatWebhook::class);
+        Event::listen(InitialPurchaseProcessed::class, GeneratePlansAfterPurchase::class);
         Event::listen(InitialPurchaseProcessed::class, AdjustPlanAfterPurchase::class);
         Event::listen(SubscriptionRenewed::class, AdjustPlanAfterRenewal::class);
     }
