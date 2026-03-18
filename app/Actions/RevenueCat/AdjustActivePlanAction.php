@@ -13,7 +13,7 @@ class AdjustActivePlanAction
     /**
      * Adjust the user's active plan duration and trigger generation if needed.
      */
-    public function execute(User $user, string $productId, ?int $months = null): void
+    public function execute(User $user, string $productId, ?int $months = null, ?int $expirationAtMs = null): void
     {
         $activePlan = $user->plans()->where('status', 'active')->latest()->first();
 
@@ -25,23 +25,28 @@ class AdjustActivePlanAction
             return;
         }
 
-        // Add subscription period on top of remaining days
-        // Use current end_date as base, or today if the plan already expired
-        $baseDate = $activePlan->end_date && $activePlan->end_date->isFuture()
-            ? $activePlan->end_date->copy()
-            : now()->startOfDay();
-
-        if ($months !== null) {
-            $baseDate->addMonthsNoOverflow($months);
-        } elseif (str_contains($productId, 'annual') || str_contains($productId, 'yearly')) {
-            $baseDate->addYearNoOverflow();
-        } elseif (str_contains($productId, 'lifetime')) {
-            $baseDate->addYearsNoOverflow(100);
+        // Use exact expiration from the store when available (e.g. trial periods)
+        if ($expirationAtMs) {
+            $endDate = $this->parseMilliseconds($expirationAtMs) ?? now()->startOfDay()->addWeek();
         } else {
-            $baseDate->addMonthNoOverflow();
-        }
+            // Add subscription period on top of remaining days
+            // Use current end_date as base, or today if the plan already expired
+            $baseDate = $activePlan->end_date && $activePlan->end_date->isFuture()
+                ? $activePlan->end_date->copy()
+                : now()->startOfDay();
 
-        $endDate = $baseDate;
+            if ($months !== null) {
+                $baseDate->addMonthsNoOverflow($months);
+            } elseif (str_contains($productId, 'annual') || str_contains($productId, 'yearly')) {
+                $baseDate->addYearNoOverflow();
+            } elseif (str_contains($productId, 'lifetime')) {
+                $baseDate->addYearsNoOverflow(100);
+            } else {
+                $baseDate->addMonthNoOverflow();
+            }
+
+            $endDate = $baseDate;
+        }
         $durationDays = (int) $activePlan->start_date->diffInDays($endDate);
 
         $activePlan->update([
@@ -66,6 +71,15 @@ class AdjustActivePlanAction
                 'plan_id' => $activePlan->id,
             ]);
         }
+    }
+
+    private function parseMilliseconds(?int $milliseconds): ?Carbon
+    {
+        if (! $milliseconds) {
+            return null;
+        }
+
+        return Carbon::createFromTimestampMs($milliseconds);
     }
 
     private function shouldTriggerGeneration($plan): bool
