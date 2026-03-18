@@ -152,6 +152,105 @@ test('triggers generation when user is behind on workout plans', function () {
     Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
 });
 
+test('trial same day uses Apple expiration date', function () {
+    $user = User::factory()->create();
+
+    // User signed up today, plan created during onboarding
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'active',
+        'start_date' => now()->startOfDay(),
+        'end_date' => now()->addDays(7)->startOfDay(),
+        'duration_days' => 7,
+    ]);
+
+    // Apple trial expires in 7 days from now
+    $trialExpirationMs = now()->addDays(7)->startOfDay()->getTimestampMs();
+
+    $action = new AdjustActivePlanAction;
+    $action->execute($user, 'fytrr_premium_monthly_v2', expirationAtMs: $trialExpirationMs);
+
+    $plan->refresh();
+
+    // End date matches Apple's trial expiration
+    $expectedEndDate = now()->addDays(7)->startOfDay();
+    expect($plan->end_date->toDateString())->toBe($expectedEndDate->toDateString())
+        ->and($plan->duration_days)->toBe(7);
+});
+
+test('trial 3 days after signup extends plan to Apple expiration', function () {
+    $user = User::factory()->create();
+
+    // User signed up 3 days ago, plan was 7 days from signup
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'active',
+        'start_date' => now()->subDays(3)->startOfDay(),
+        'end_date' => now()->addDays(4)->startOfDay(),
+        'duration_days' => 7,
+    ]);
+
+    // Apple trial expires 7 days from today (day 10 from signup)
+    $trialExpirationMs = now()->addDays(7)->startOfDay()->getTimestampMs();
+
+    $action = new AdjustActivePlanAction;
+    $action->execute($user, 'fytrr_premium_monthly_v2', expirationAtMs: $trialExpirationMs);
+
+    $plan->refresh();
+
+    // End date extended to Apple's trial expiration
+    $expectedEndDate = now()->addDays(7)->startOfDay();
+    expect($plan->end_date->toDateString())->toBe($expectedEndDate->toDateString())
+        // Duration is from original start (3 days ago) to trial end (7 days from now) = 10
+        ->and($plan->duration_days)->toBe(10);
+});
+
+test('trial without verify email triggers generation', function () {
+    $user = User::factory()->create();
+
+    // Plan exists from onboarding but no generation happened (no email verify)
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'active',
+        'start_date' => now()->subDays(3)->startOfDay(),
+        'end_date' => now()->addDays(4)->startOfDay(),
+        'duration_days' => 7,
+    ]);
+
+    // No workout plans exist — generation never started
+    $trialExpirationMs = now()->addDays(7)->startOfDay()->getTimestampMs();
+
+    $action = new AdjustActivePlanAction;
+    $action->execute($user, 'fytrr_premium_monthly_v2', expirationAtMs: $trialExpirationMs);
+
+    // Should trigger generation since no workouts exist
+    Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
+});
+
+test('trial converts to monthly via renewal adds 1 month', function () {
+    $user = User::factory()->create();
+
+    // Trial period: plan has 10 days (3 past + 7 trial)
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'status' => 'active',
+        'start_date' => now()->subDays(10)->startOfDay(),
+        'end_date' => now()->startOfDay(), // trial just ended
+        'duration_days' => 10,
+    ]);
+
+    // RENEWAL webhook fires (no expirationAtMs — this is a paid renewal)
+    $action = new AdjustActivePlanAction;
+    $action->execute($user, 'fytrr_premium_monthly_v2');
+
+    $plan->refresh();
+
+    // End date should be today + 1 month (expired, so starts from today)
+    $expectedEndDate = now()->startOfDay()->addMonthNoOverflow();
+    expect($plan->end_date->toDateString())->toBe($expectedEndDate->toDateString());
+});
+
 test('free trial user who returns after gap gets 1 month from today', function () {
     $user = User::factory()->create();
 
