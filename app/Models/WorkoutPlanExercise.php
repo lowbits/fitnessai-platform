@@ -17,13 +17,7 @@ class WorkoutPlanExercise extends Model
         'workout_plan_id',
         'exercise_id',
         'order',
-        'name',
-        'original_name',
         'type',
-        'description',
-        'instructions',
-        'video_url',
-        'image',
         'sets',
         'reps',
         'duration_seconds',
@@ -32,9 +26,6 @@ class WorkoutPlanExercise extends Model
         'tempo',
         'rpe',
         'weight_recommendation',
-        'muscle_groups',
-        'equipment',
-        'form_cues',
         'alternatives',
         'difficulty',
     ];
@@ -42,10 +33,7 @@ class WorkoutPlanExercise extends Model
     protected function casts(): array
     {
         return [
-            'muscle_groups' => 'array',
-            'equipment' => 'array',
             'alternatives' => 'array',
-            'instructions' => 'array',
         ];
     }
 

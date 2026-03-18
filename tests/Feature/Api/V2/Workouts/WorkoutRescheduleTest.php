@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Exercise;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
@@ -35,10 +36,12 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
     ]);
 
     // Add exercises to workout
+    $benchExercise = Exercise::factory()->create(['name' => 'Bench Press']);
+    $shoulderExercise = Exercise::factory()->create(['name' => 'Shoulder Press']);
+
     $exercise1 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
-        'original_name' => 'bench_press',
+        'exercise_id' => $benchExercise->id,
         'order' => 1,
         'sets' => 3,
         'reps' => 10,
@@ -46,8 +49,7 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
 
     $exercise2 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Shoulder Press',
-        'original_name' => 'shoulder_press',
+        'exercise_id' => $shoulderExercise->id,
         'order' => 2,
         'sets' => 3,
         'reps' => 12,
@@ -90,10 +92,8 @@ test('user can move workout to tomorrow and current day becomes rest day', funct
 
     // Verify exercises are correctly moved
     $movedExercises = $tomorrowWorkout->exercises()->orderBy('order')->get();
-    expect($movedExercises[0]->name)->toBe('Bench Press');
-    expect($movedExercises[0]->original_name)->toBe('bench_press');
-    expect($movedExercises[1]->name)->toBe('Shoulder Press');
-    expect($movedExercises[1]->original_name)->toBe('shoulder_press');
+    expect($movedExercises[0]->exercise_id)->toBe($benchExercise->id);
+    expect($movedExercises[1]->exercise_id)->toBe($shoulderExercise->id);
 });
 
 test('cannot move workout if tomorrow already has a workout', function () {
@@ -266,24 +266,18 @@ test('moved workout preserves exercise properties including arrays', function ()
         'status' => 'generated',
     ]);
 
+    $canonicalExercise = Exercise::factory()->create(['name' => 'Bench Press']);
+
     $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
-        'original_name' => 'bench_press',
+        'exercise_id' => $canonicalExercise->id,
         'type' => 'strength',
-        'description' => 'Chest exercise',
-        'instructions' => ['Step 1', 'Step 2', 'Step 3'],
-        'video_url' => 'https://example.com/video',
-        'image' => 'bench_press.jpg',
         'sets' => 4,
         'reps' => 8,
         'duration_seconds' => null,
         'rest_seconds' => '90',
         'tempo' => '3-0-1-0',
         'weight_recommendation' => '70% 1RM',
-        'muscle_groups' => ['chest', 'triceps'],
-        'equipment' => ['barbell', 'bench'],
-        'form_cues' => 'Keep shoulders back',
         'alternatives' => ['dumbbell_press', 'push_ups'],
         'difficulty' => 'intermediate',
         'order' => 1,
@@ -304,21 +298,13 @@ test('moved workout preserves exercise properties including arrays', function ()
 
     $movedExercise = $tomorrowWorkout->exercises()->first();
 
-    expect($movedExercise->name)->toBe('Bench Press');
-    expect($movedExercise->original_name)->toBe('bench_press');
+    expect($movedExercise->exercise_id)->toBe($canonicalExercise->id);
     expect($movedExercise->type)->toBe('strength');
-    expect($movedExercise->description)->toBe('Chest exercise');
-    expect($movedExercise->instructions)->toBe(['Step 1', 'Step 2', 'Step 3']);
-    expect($movedExercise->video_url)->toBe('https://example.com/video');
-    expect($movedExercise->image)->toBe('bench_press.jpg');
     expect($movedExercise->sets)->toBe(4);
     expect($movedExercise->reps)->toBe(8);
     expect($movedExercise->rest_seconds)->toBe('90');
     expect($movedExercise->tempo)->toBe('3-0-1-0');
     expect($movedExercise->weight_recommendation)->toBe('70% 1RM');
-    expect($movedExercise->muscle_groups)->toBe(['chest', 'triceps']);
-    expect($movedExercise->equipment)->toBe(['barbell', 'bench']);
-    expect($movedExercise->form_cues)->toBe('Keep shoulders back');
     expect($movedExercise->alternatives)->toBe(['dumbbell_press', 'push_ups']);
     expect($movedExercise->difficulty)->toBe('intermediate');
     expect($movedExercise->order)->toBe(1);
@@ -336,8 +322,6 @@ test('move workout maintains exercise order', function () {
     for ($i = 1; $i <= 5; $i++) {
         WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $todayWorkout->id,
-            'name' => "Exercise {$i}",
-            'original_name' => "exercise_{$i}",
             'order' => $i,
         ]);
     }
@@ -357,7 +341,6 @@ test('move workout maintains exercise order', function () {
 
     expect($movedExercises)->toHaveCount(5);
     for ($i = 0; $i < 5; $i++) {
-        expect($movedExercises[$i]->name)->toBe('Exercise '.($i + 1));
         expect($movedExercises[$i]->order)->toBe($i + 1);
     }
 });
@@ -378,7 +361,6 @@ test('rest day has correct properties after conversion', function () {
 
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
         'order' => 1,
     ]);
 
@@ -415,7 +397,6 @@ test('move workout is atomic - all or nothing', function () {
 
     $exercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
         'order' => 1,
     ]);
 
@@ -460,8 +441,6 @@ test('can force replace existing tomorrow workout with force parameter', functio
 
     $todayExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
-        'original_name' => 'bench_press',
         'order' => 1,
     ]);
 
@@ -477,7 +456,6 @@ test('can force replace existing tomorrow workout with force parameter', functio
 
     $tomorrowExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $tomorrowWorkout->id,
-        'name' => 'Pull Ups',
         'order' => 1,
     ]);
 
@@ -508,7 +486,7 @@ test('can force replace existing tomorrow workout with force parameter', functio
 
     // Verify exercises were moved correctly
     expect($newTomorrowWorkout->exercises()->count())->toBe(1);
-    expect($newTomorrowWorkout->exercises()->first()->name)->toBe('Bench Press');
+    expect($newTomorrowWorkout->exercises()->first()->exercise_id)->toBe($todayExercise->exercise_id);
 });
 
 test('force parameter accepts only boolean', function () {
@@ -755,7 +733,6 @@ test('can reschedule workout to specific date with target_date parameter', funct
 
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Bench Press',
         'order' => 1,
     ]);
 
@@ -942,8 +919,6 @@ test('reschedule preserves all workout and exercise properties', function () {
 
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $todayWorkout->id,
-        'name' => 'Burpees',
-        'original_name' => 'burpees',
         'type' => 'cardio',
         'sets' => 4,
         'reps' => 20,
@@ -970,7 +945,6 @@ test('reschedule preserves all workout and exercise properties', function () {
     expect($rescheduledWorkout->estimated_duration_minutes)->toBe(45);
     expect($rescheduledWorkout->difficulty)->toBe('hard');
     expect($rescheduledWorkout->exercises()->count())->toBe(1);
-    expect($rescheduledWorkout->exercises()->first()->name)->toBe('Burpees');
 });
 
 test('user can move workout backward from tomorrow to today', function () {

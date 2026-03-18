@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2\Workouts;
 
+use App\Http\Controllers\Api\V2\Concerns\MapsExercises;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\AddWorkoutExerciseRequest;
 use App\Models\Exercise;
@@ -10,6 +11,8 @@ use Illuminate\Http\JsonResponse;
 
 class AddWorkoutExerciseController extends Controller
 {
+    use MapsExercises;
+
     public function __invoke(AddWorkoutExerciseRequest $request, WorkoutPlan $workout): JsonResponse
     {
         $exercise = Exercise::findOrFail($request->input('exercise_id'));
@@ -18,10 +21,7 @@ class AddWorkoutExerciseController extends Controller
 
         $workoutExercise = $workout->exercises()->create([
             'exercise_id' => $exercise->id,
-            'name' => $exercise->name,
             'type' => $exercise->type,
-            'video_url' => $exercise->video_url,
-            'image' => $exercise->image,
             'order' => $nextOrder,
             'sets' => $request->input('sets'),
             'reps' => $request->input('reps'),
@@ -31,14 +31,11 @@ class AddWorkoutExerciseController extends Controller
             'rest_seconds' => $request->input('rest_seconds'),
         ]);
 
+        $workoutExercise->load('exercise');
+
         return response()->json([
             'message' => 'Exercise added successfully',
-            'exercise' => [
-                'id' => $workoutExercise->id,
-                'exercise_id' => $workoutExercise->exercise_id,
-                'name' => $workoutExercise->name,
-                'order' => $workoutExercise->order,
-            ],
+            'exercise' => $this->mapExerciseToResponse($workoutExercise),
         ], 201);
     }
 }

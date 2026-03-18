@@ -40,14 +40,14 @@ test('user can add an exercise to a workout', function () {
         ]);
 
     $response->assertCreated()
-        ->assertJsonPath('message', 'Exercise added successfully');
+        ->assertJsonPath('message', 'Exercise added successfully')
+        ->assertJsonPath('exercise.exercise_id', $exercise->id)
+        ->assertJsonPath('exercise.name', 'Bench Press')
+        ->assertJsonPath('exercise.order', 1);
 
     $workoutExercise = WorkoutPlanExercise::where('workout_plan_id', $this->workout->id)->first();
 
     expect($workoutExercise->exercise_id)->toBe($exercise->id)
-        ->and($workoutExercise->name)->toBe('Bench Press')
-        ->and($workoutExercise->video_url)->toBe('https://example.com/bench.mp4')
-        ->and($workoutExercise->image)->toBe('https://example.com/bench.jpg')
         ->and($workoutExercise->order)->toBe(1);
 });
 

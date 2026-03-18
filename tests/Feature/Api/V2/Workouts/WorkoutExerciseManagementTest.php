@@ -186,9 +186,6 @@ test('user can replace a workout exercise', function () {
     $workoutExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $this->workout->id,
         'exercise_id' => $oldExercise->id,
-        'name' => 'Bench Press',
-        'video_url' => 'https://example.com/bench.mp4',
-        'image' => 'https://example.com/bench.jpg',
         'order' => 1,
         'sets' => 4,
         'reps' => 10,
@@ -203,13 +200,19 @@ test('user can replace a workout exercise', function () {
         ]);
 
     $response->assertSuccessful()
-        ->assertJsonPath('message', 'Exercise replaced successfully');
+        ->assertJsonPath('message', 'Exercise replaced successfully')
+        ->assertJsonPath('exercise.exercise_id', $newExercise->id)
+        ->assertJsonPath('exercise.name', 'Dumbbell Press')
+        ->assertJsonPath('exercise.sets', 4)
+        ->assertJsonPath('exercise.reps', 10)
+        ->assertJsonStructure([
+            'exercise' => ['id', 'exercise_id', 'name', 'type', 'sets', 'reps', 'muscle_groups', 'equipment'],
+        ]);
 
     $workoutExercise->refresh();
 
-    // These should be updated
+    // exercise_id should be updated
     expect($workoutExercise->exercise_id)->toBe($newExercise->id);
-    expect($workoutExercise->name)->toBe('Dumbbell Press');
 
     // Training params should be preserved
     expect($workoutExercise->order)->toBe(1);
@@ -271,7 +274,7 @@ test('replace requires exercise_id to exist in exercises table', function () {
         ->assertJsonValidationErrors('exercise_id');
 });
 
-test('replace inherits name video_url and image from new exercise', function () {
+test('replace uses canonical exercise data in response', function () {
     $newExercise = Exercise::factory()->create([
         'name' => 'Cable Fly',
         'video_url' => 'https://example.com/cable-fly.mp4',
@@ -280,22 +283,21 @@ test('replace inherits name video_url and image from new exercise', function () 
 
     $workoutExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $this->workout->id,
-        'name' => 'Old Exercise',
-        'video_url' => 'https://example.com/old.mp4',
-        'image' => 'https://example.com/old.jpg',
         'order' => 1,
     ]);
 
-    $this->actingAs($this->user)
+    $response = $this->actingAs($this->user)
         ->putJson("/api/v2/workouts/{$this->workout->id}/exercises/{$workoutExercise->id}/replace", [
             'exercise_id' => $newExercise->id,
         ]);
 
-    $workoutExercise->refresh();
+    $response->assertSuccessful()
+        ->assertJsonPath('exercise.name', 'Cable Fly')
+        ->assertJsonPath('exercise.video_url', 'https://example.com/cable-fly.mp4')
+        ->assertJsonPath('exercise.image', 'https://example.com/cable-fly.jpg');
 
-    expect($workoutExercise->name)->toBe('Cable Fly');
-    expect($workoutExercise->video_url)->toBe('https://example.com/cable-fly.mp4');
-    expect($workoutExercise->image)->toBe('https://example.com/cable-fly.jpg');
+    $workoutExercise->refresh();
+    expect($workoutExercise->exercise_id)->toBe($newExercise->id);
 });
 
 test('replace returns 404 for exercise not belonging to workout', function () {
@@ -339,9 +341,9 @@ test('replace returns 404 for non-existent exercise id in url', function () {
 
 test('user can remove a workout exercise', function () {
     $exercises = WorkoutPlanExercise::factory()->count(3)->sequence(
-        ['order' => 1, 'name' => 'Exercise A'],
-        ['order' => 2, 'name' => 'Exercise B'],
-        ['order' => 3, 'name' => 'Exercise C'],
+        ['order' => 1],
+        ['order' => 2],
+        ['order' => 3],
     )->create(['workout_plan_id' => $this->workout->id]);
 
     $response = $this->actingAs($this->user)

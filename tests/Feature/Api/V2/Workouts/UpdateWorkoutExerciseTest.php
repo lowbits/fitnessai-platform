@@ -93,7 +93,6 @@ test('update does not change order or exercise identity', function () {
     $workoutExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $this->workout->id,
         'exercise_id' => $exercise->id,
-        'name' => 'Bench Press',
         'order' => 2,
         'sets' => 3,
     ]);
@@ -106,7 +105,6 @@ test('update does not change order or exercise identity', function () {
     $workoutExercise->refresh();
 
     expect($workoutExercise->exercise_id)->toBe($exercise->id);
-    expect($workoutExercise->name)->toBe('Bench Press');
     expect($workoutExercise->order)->toBe(2);
 });
 
@@ -224,7 +222,6 @@ test('update returns 404 for non-existent exercise id', function () {
 test('update returns the updated exercise in response', function () {
     $workoutExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $this->workout->id,
-        'name' => 'Bench Press',
         'order' => 1,
         'sets' => 3,
         'reps' => 10,
@@ -241,7 +238,6 @@ test('update returns the updated exercise in response', function () {
 
     $response->assertSuccessful()
         ->assertJsonPath('exercise.id', $workoutExercise->id)
-        ->assertJsonPath('exercise.name', 'Bench Press')
         ->assertJsonPath('exercise.sets', 5)
         ->assertJsonPath('exercise.reps', 8)
         ->assertJsonPath('exercise.tempo', '3-1-2-0')

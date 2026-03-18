@@ -28,7 +28,7 @@ test('workout shows latest tracking by exercise_id across different workouts', f
     $mondayBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $mondayWorkout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
         'sets' => 3,
         'reps' => 10,
@@ -42,7 +42,7 @@ test('workout shows latest tracking by exercise_id across different workouts', f
     $thursdayBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $thursdayWorkout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
         'sets' => 3,
         'reps' => 8,
@@ -113,7 +113,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
     $benchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -125,7 +125,7 @@ test('workout shows most recent tracking when multiple trackings exist for same 
     $benchPress2 = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout2->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -193,14 +193,14 @@ test('workout with multiple exercises shows correct latest tracking for each', f
     $benchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
     $squat = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $squatExercise->id,
-        'name' => 'Squat',
+
         'order' => 2,
     ]);
 
@@ -212,13 +212,13 @@ test('workout with multiple exercises shows correct latest tracking for each', f
     $previousBenchPress = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
     ]);
 
     $previousSquat = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'exercise_id' => $squatExercise->id,
-        'name' => 'Squat',
+
     ]);
 
     $tracking = WorkoutTracking::factory()->create([
@@ -279,7 +279,7 @@ test('exercise shows no latest_tracking when no previous tracking exists', funct
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -303,7 +303,7 @@ test('user only sees their own tracking data, not other users', function () {
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -314,7 +314,7 @@ test('user only sees their own tracking data, not other users', function () {
     $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -356,7 +356,7 @@ test('only completed workouts are included in latest tracking', function () {
     WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $workout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
         'order' => 1,
     ]);
 
@@ -367,7 +367,7 @@ test('only completed workouts are included in latest tracking', function () {
     $previousExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $previousWorkout->id,
         'exercise_id' => $benchPressExercise->id,
-        'name' => 'Bench Press',
+
     ]);
 
     // Incomplete tracking (completed_at is null)
@@ -411,7 +411,7 @@ test('latest tracking query is performant with many exercises', function () {
         $exercises[] = WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $workout->id,
             'exercise_id' => $exerciseModel->id,
-            'name' => "Exercise {$i}",
+
             'order' => $i,
         ]);
     }
@@ -431,7 +431,7 @@ test('latest tracking query is performant with many exercises', function () {
         $prevExercise = WorkoutPlanExercise::factory()->create([
             'workout_plan_id' => $previousWorkout->id,
             'exercise_id' => $exercise->exercise_id,
-            'name' => $exercise->name,
+            'exercise_id' => $exercise->exercise_id,
         ]);
 
         $trackingExercise = WorkoutTrackingExercise::create([

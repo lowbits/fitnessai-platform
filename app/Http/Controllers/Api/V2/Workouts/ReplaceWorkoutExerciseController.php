@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2\Workouts;
 
+use App\Http\Controllers\Api\V2\Concerns\MapsExercises;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ReplaceWorkoutExerciseRequest;
 use App\Models\Exercise;
@@ -11,6 +12,8 @@ use Illuminate\Http\JsonResponse;
 
 class ReplaceWorkoutExerciseController extends Controller
 {
+    use MapsExercises;
+
     public function __invoke(ReplaceWorkoutExerciseRequest $request, WorkoutPlan $workout, int $exerciseId): JsonResponse
     {
         $workoutExercise = WorkoutPlanExercise::where('id', $exerciseId)
@@ -27,13 +30,13 @@ class ReplaceWorkoutExerciseController extends Controller
 
         $workoutExercise->update([
             'exercise_id' => $newExercise->id,
-            'name' => $newExercise->name,
-            'video_url' => $newExercise->video_url,
-            'image' => $newExercise->image,
         ]);
+
+        $workoutExercise->refresh()->load('exercise');
 
         return response()->json([
             'message' => 'Exercise replaced successfully',
+            'exercise' => $this->mapExerciseToResponse($workoutExercise),
         ]);
     }
 }

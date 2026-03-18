@@ -76,6 +76,7 @@ class Exercise extends Model
             'training_places' => $this->training_places ?? [],
             'event_tags' => $this->event_tags ?? [],
             'is_verified' => $this->is_verified,
+            'image' => $this->image,
         ];
     }
 
