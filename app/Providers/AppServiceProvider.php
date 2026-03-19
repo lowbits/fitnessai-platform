@@ -2,19 +2,8 @@
 
 namespace App\Providers;
 
-use App\Events\EmailVerified;
-use App\Events\RevenueCat\InitialPurchaseProcessed;
-use App\Events\RevenueCat\SubscriptionRenewed;
-use App\Listeners\AdjustPlanAfterPurchase;
-use App\Listeners\AdjustPlanAfterRenewal;
-use App\Listeners\GenerateMealPlan;
-use App\Listeners\GeneratePlansAfterPurchase;
-use App\Listeners\GenerateWorkoutPlan;
-use App\Listeners\HandleRevenueCatWebhook;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Meilisearch\Client as MeilisearchClient;
-use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -34,15 +23,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Trigger plan generation after email verification
-        Event::listen(
-            EmailVerified::class,
-            [GenerateMealPlan::class, GenerateWorkoutPlan::class],
-        );
-
-        Event::listen(WebhookReceived::class, HandleRevenueCatWebhook::class);
-        Event::listen(InitialPurchaseProcessed::class, GeneratePlansAfterPurchase::class);
-        Event::listen(InitialPurchaseProcessed::class, AdjustPlanAfterPurchase::class);
-        Event::listen(SubscriptionRenewed::class, AdjustPlanAfterRenewal::class);
+        // Event listeners are auto-discovered from app/Listeners via type-hinted handle() methods.
     }
 }

@@ -87,6 +87,74 @@ test('initial purchase adjusts plan duration and triggers generation if behind',
     Bus::assertDispatched(GenerateUserMealPlan::class);
 });
 
+test('trial purchase uses expiration_at_ms instead of adding month', function () {
+    Carbon::setTestNow('2026-03-19 12:00:00');
+
+    Bus::fake();
+    Event::fake([InitialPurchaseProcessed::class]);
+
+    $user = User::factory()->create(['id' => 789]);
+
+    $startDate = Carbon::parse('2026-02-06')->startOfDay();
+    $plan = Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => $startDate,
+        'end_date' => $startDate->copy()->addDays(7),
+        'duration_days' => 7,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    $secret = 'test_secret';
+    config(['revenue-cat.webhook.secret' => $secret]);
+
+    $trialExpiration = now()->addDays(3);
+
+    $payload = [
+        'event' => [
+            'type' => 'INITIAL_PURCHASE',
+            'id' => fake()->uuid(),
+            'event_timestamp_ms' => now()->getTimestampMs(),
+            'app_user_id' => (string) $user->id,
+            'product_id' => 'fytrr_premium_monthly_v2',
+            'period_type' => 'TRIAL',
+            'purchased_at_ms' => now()->getTimestampMs(),
+            'expiration_at_ms' => (int) $trialExpiration->getTimestampMs(),
+            'environment' => 'SANDBOX',
+            'store' => 'APP_STORE',
+            'currency' => 'EUR',
+            'price' => 0,
+            'price_in_purchased_currency' => 0,
+        ],
+        'api_version' => '1.0',
+    ];
+
+    $this->postJson(route('revenue-cat.webhook'), $payload, [
+        'Authorization' => 'Bearer '.$secret,
+    ])->assertStatus(200);
+
+    Event::assertDispatched(InitialPurchaseProcessed::class);
+
+    app(AdjustPlanAfterPurchase::class)->handle(new InitialPurchaseProcessed($user, $payload['event']));
+
+    $plan->refresh();
+
+    // Should use trial expiration, NOT add a month
+    expect($plan->end_date->startOfDay()->toDateString())
+        ->toBe($trialExpiration->startOfDay()->toDateString());
+
+    // Subscription should be marked as TRIAL
+    $this->assertDatabaseHas('subscriptions', [
+        'billable_id' => $user->id,
+        'status' => 'trial',
+    ]);
+});
+
 test('initial purchase does not trigger generation if not behind', function () {
     Bus::fake();
     Event::fake([InitialPurchaseProcessed::class]);

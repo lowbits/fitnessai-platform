@@ -39,7 +39,7 @@ class HandleProductChangeAction
         }
 
         $this->updateSubscription($user, $oldProductId, $newProductId);
-        $this->adjustPlan($user, $newProductId, $event);
+        $this->adjustPlan($user, $newProductId);
 
         Log::info('Product change processed successfully', [
             'user_id' => $user->id,
@@ -79,12 +79,13 @@ class HandleProductChangeAction
         ]);
     }
 
-    private function adjustPlan(User $user, string $newProductId, array $event): void
+    private function adjustPlan(User $user, string $newProductId): void
     {
+        // Don't pass expiration_at_ms — it refers to the OLD product's expiration.
+        // Let AdjustActivePlanAction calculate based on the new product ID.
         $this->adjustActivePlanAction->execute(
             $user,
             $newProductId,
-            expirationAtMs: $event['expiration_at_ms'] ?? null,
         );
     }
 }

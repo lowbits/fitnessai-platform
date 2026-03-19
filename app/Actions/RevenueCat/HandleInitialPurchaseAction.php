@@ -77,7 +77,7 @@ class HandleInitialPurchaseAction
 
     private function extractSubscriptionData(array $event): array
     {
-        $isTrial = ! empty($event['is_trial_period']);
+        $isTrial = ($event['period_type'] ?? null) === 'TRIAL';
 
         $data = [
             'name' => $event['product_id'],

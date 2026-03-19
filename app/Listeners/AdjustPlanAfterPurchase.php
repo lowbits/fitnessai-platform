@@ -14,7 +14,7 @@ class AdjustPlanAfterPurchase implements ShouldQueue
 
     public function handle(InitialPurchaseProcessed $event): void
     {
-        $expirationAtMs = ! empty($event->event['is_trial_period'])
+        $expirationAtMs = ($event->event['period_type'] ?? null) === 'TRIAL'
             ? ($event->event['expiration_at_ms'] ?? null)
             : null;
 

@@ -98,14 +98,13 @@ test('product change adjusts active plan duration', function () {
     ]);
     Subscription::reguard();
 
+    $planEndDate = now()->addMonth();
     $plan = Plan::factory()->active()->create([
         'user_id' => $user->id,
         'start_date' => now()->subWeek(),
-        'end_date' => now()->addMonth(),
+        'end_date' => $planEndDate,
         'duration_days' => 37,
     ]);
-
-    $expiresAt = now()->addYear();
 
     $response = $this->postJson(
         route('revenue-cat.webhook'),
@@ -113,7 +112,6 @@ test('product change adjusts active plan duration', function () {
             (string) $user->id,
             'fytrr_premium_monthly_v2',
             'fytrr_premium_yearly_v2',
-            (int) $expiresAt->getTimestampMs()
         ),
         ['Authorization' => 'Bearer '.$secret]
     );
@@ -121,8 +119,10 @@ test('product change adjusts active plan duration', function () {
     $response->assertStatus(200);
 
     $plan->refresh();
+    // Should add 1 year on top of current end_date (based on yearly product)
+    $expectedEndDate = $planEndDate->copy()->addYearNoOverflow();
     expect($plan->end_date->startOfDay()->toDateString())
-        ->toBe($expiresAt->startOfDay()->toDateString());
+        ->toBe($expectedEndDate->startOfDay()->toDateString());
 });
 
 test('product change handles missing user gracefully', function () {
