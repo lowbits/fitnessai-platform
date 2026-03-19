@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
+import { useDeepLink } from '@/composables/useDeepLink';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head, usePoll } from '@inertiajs/vue3';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
@@ -30,6 +31,8 @@ interface Props {
 const props = defineProps<Props>();
 
 const { t } = useI18n();
+
+const { openApp } = useDeepLink(props.iosAppStoreUrl);
 
 // Reviews (static, stacked)
 const reviews = computed(() => [
@@ -99,10 +102,16 @@ const trackEvent = (eventName: string, eventProps?: Record<string, any>) => {
     }
 };
 
-const handleSmartLinkClick = () => {
+const handleSmartLinkClick = (e: Event) => {
+    e.preventDefault();
     trackEvent('Smart Link Click', {
         source: 'loading-page',
         phase: isComplete.value ? 'complete' : 'generating',
+    });
+    openApp('', {
+        utm_source: 'web',
+        utm_medium: 'generating_plan',
+        utm_campaign: 'plan_generation',
     });
 };
 
@@ -291,6 +300,20 @@ onUnmounted(() => {
                     </div>
                 </div>
 
+                <!-- CTA: open app while generating -->
+                <div class="animate-fade-in-delay-1 mb-4">
+                    <a
+                        :href="smartLink"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        @click="handleSmartLinkClick"
+                    >
+                        <Button variant="outline" class="w-full" size="lg">
+                            {{ $t('generatingPlan.cta.setupAccount') }}
+                        </Button>
+                    </a>
+                </div>
+
                 <!-- Permission to leave -->
                 <p
                     class="animate-fade-in-delay-1 mb-7 text-center text-xs text-gray-500"
@@ -331,19 +354,6 @@ onUnmounted(() => {
                     >
                         {{ $t('generatingPlan.monaDemo.footer') }}
                     </div>
-                </div>
-
-                <!-- Soft CTA -->
-                <div class="animate-fade-in-delay-3 mb-5 text-center">
-                    <a
-                        :href="smartLink"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="text-xs text-primary-400 underline underline-offset-2 transition-opacity hover:opacity-80"
-                        @click="handleSmartLinkClick"
-                    >
-                        {{ $t('generatingPlan.cta.softLabel') }}
-                    </a>
                 </div>
             </template>
 

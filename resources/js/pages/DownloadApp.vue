@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import { Button } from '@/components/ui/button';
+import { useDeepLink } from '@/composables/useDeepLink';
 import { useTracking } from '@/composables/useTracking';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
@@ -25,6 +26,7 @@ const props = defineProps<Props>();
 
 const { t, locale } = useI18n();
 const { trackEvent } = useTracking();
+const { openApp } = useDeepLink(props.appStoreUrl);
 
 const { copy, copied } = useClipboard({
     legacy: true,
@@ -45,8 +47,16 @@ const utmProps = computed(() => ({
     device: props.isMobile ? 'mobile' : 'desktop',
 }));
 
-const handleAppStoreClick = () => {
+const handleAppStoreClick = (e: Event) => {
     trackEvent('Download App - App Store Click', utmProps.value);
+    if (props.isMobile) {
+        e.preventDefault();
+        openApp('', {
+            utm_source: props.utmSource ?? 'web',
+            utm_medium: props.utmMedium ?? 'download_app',
+            utm_campaign: props.utmCampaign ?? 'download',
+        });
+    }
 };
 
 const handleActivateClick = () => {
@@ -63,6 +73,15 @@ const handleCopyLink = () => {
 
 onMounted(() => {
     trackEvent('Download App - Page View', utmProps.value);
+
+    // On mobile, try to open the app immediately
+    if (props.isMobile) {
+        openApp('', {
+            utm_source: props.utmSource ?? 'web',
+            utm_medium: props.utmMedium ?? 'download_app',
+            utm_campaign: props.utmCampaign ?? 'download',
+        });
+    }
 });
 </script>
 

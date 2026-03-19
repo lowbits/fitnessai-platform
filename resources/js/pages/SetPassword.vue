@@ -36,7 +36,7 @@ const linkParams = computed(() => {
 });
 
 const deepLink = computed(
-    () => `https://fytrr.de/set-password?${linkParams.value}`,
+    () => `${window.location.origin}/set-password?${linkParams.value}`,
 );
 const customSchemeLink = computed(
     () => `fytrr://set-password?${linkParams.value}`,

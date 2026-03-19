@@ -1187,6 +1187,7 @@ export const locales = {
             },
             cta: {
                 softLabel: 'Get the most out of your plan',
+                setupAccount: 'Open fytrr & set up your account',
             },
             trustLine: '7 days free · No risk · Cancel anytime',
             fallback: "You'll also receive your plan as a PDF by email.",
@@ -2420,6 +2421,7 @@ export const locales = {
             },
             cta: {
                 softLabel: 'Hole das Beste aus deinem Plan',
+                setupAccount: 'fytrr öffnen & Konto einrichten',
             },
             trustLine: '7 Tage kostenlos · Kein Risiko · Jederzeit kündbar',
             fallback: 'Du erhältst deinen Plan auch als PDF per E-Mail.',
