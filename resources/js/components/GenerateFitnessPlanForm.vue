@@ -460,7 +460,7 @@ const submit = async () => {
             </div>
             <div class="mt-8">
                 <AppStoreDownload
-                    :app-store-url="$page.props.appStoreUrl"
+                    :app-store-url="$page.props.footerLinks.appStoreUrl"
                 />
             </div>
             <button
