@@ -37,7 +37,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 });
 
 // Email verification routes
-Route::get('/{locale}/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+Route::get('/verify-email', [EmailVerificationController::class, 'verify'])
     ->middleware(['signed'])
     ->name('verification.verify-onboarding');
 

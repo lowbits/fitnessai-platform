@@ -16,11 +16,16 @@ class EmailVerificationController extends Controller
     /**
      * Verify user email and trigger plan generation.
      */
-    public function verify(Request $request, string $_locale, $id, $hash)
+    public function verify(Request $request)
     {
+        $id = $request->query('id');
+        $hash = $request->query('hash');
+
         $user = User::findOrFail($id);
 
-        if (! hash_equals($hash, sha1($user->getEmailForVerification()))) {
+        app()->setLocale($request->query('locale', $user->locale ?? 'en'));
+
+        if (! $hash || ! hash_equals($hash, sha1($user->getEmailForVerification()))) {
             return Inertia::render('EmailVerification/Invalid', [
                 'message' => 'Invalid verification link',
             ]);
