@@ -41,9 +41,8 @@ Route::get('/verify-email', [EmailVerificationController::class, 'verify'])
     ->middleware(['signed'])
     ->name('verification.verify-onboarding');
 
-// Download app landing page (signed URL from emails)
+// Download app landing page (signed URL when user-specific, plain when generic)
 Route::get('/{locale}/app', App\Http\Controllers\DownloadAppController::class)
-    ->middleware(['signed'])
     ->name('download-app');
 
 // Set password landing page (for email links + universal links)

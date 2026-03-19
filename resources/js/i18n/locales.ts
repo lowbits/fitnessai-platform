@@ -188,6 +188,12 @@ export const locales = {
                 trainingDaysCountMismatch:
                     'Please select exactly {count} training days',
             },
+            appUpsell: {
+                title: 'Want to test the app?',
+                subtitle: 'Get your plan directly in the Fytrr app — with AI coaching, meal swaps, and more.',
+                cta: 'Download from App Store',
+                skip: 'Continue without the app',
+            },
             success: {
                 title: 'Almost there',
                 thankYou: 'Your details have been saved.',
@@ -1141,6 +1147,8 @@ export const locales = {
                 text: 'Activate your account',
                 cta: 'Activate account',
             },
+            openApp: 'Open Fytrr',
+            alreadyInstalled: 'Already installed?',
             trustLine: 'Free \u00b7 No credit card required.',
         },
         generatingPlan: {
@@ -1188,6 +1196,8 @@ export const locales = {
             cta: {
                 softLabel: 'Get the most out of your plan',
                 setupAccount: 'Open fytrr & set up your account',
+                tryApp: 'Want to test the app?',
+                downloadApp: 'Download from App Store',
             },
             trustLine: '7 days free · No risk · Cancel anytime',
             fallback: "You'll also receive your plan as a PDF by email.",
@@ -1400,6 +1410,12 @@ export const locales = {
                 bodyGoalRequired: 'Ziel auswählen',
                 trainingPlaceRequired: 'Trainingsort auswählen',
                 trainingSessionsRequired: 'Trainingshäufigkeit auswählen',
+            },
+            appUpsell: {
+                title: 'Willst du die App testen?',
+                subtitle: 'Erhalte deinen Plan direkt in der Fytrr App \u2014 mit KI-Coaching, Mahlzeiten-Tausch und mehr.',
+                cta: 'Aus dem App Store laden',
+                skip: 'Ohne App fortfahren',
             },
             success: {
                 title: 'Fast geschafft',
@@ -2375,6 +2391,8 @@ export const locales = {
                 text: 'Konto aktivieren',
                 cta: 'Konto aktivieren',
             },
+            openApp: 'Fytrr \u00f6ffnen',
+            alreadyInstalled: 'Bereits installiert?',
             trustLine: 'Kostenlos \u00b7 Keine Kreditkarte n\u00f6tig.',
         },
         generatingPlan: {
@@ -2422,6 +2440,8 @@ export const locales = {
             cta: {
                 softLabel: 'Hole das Beste aus deinem Plan',
                 setupAccount: 'fytrr öffnen & Konto einrichten',
+                tryApp: 'Willst du die App testen?',
+                downloadApp: 'Aus dem App Store laden',
             },
             trustLine: '7 Tage kostenlos · Kein Risiko · Jederzeit kündbar',
             fallback: 'Du erhältst deinen Plan auch als PDF per E-Mail.',

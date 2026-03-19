@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppStoreDownload from '@/components/AppStoreDownload.vue';
+import { Button } from '@/components/ui/button';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
@@ -94,11 +95,10 @@ onMounted(() => {
 
                     <!-- Activate Account Button -->
 
-                    <a
-                        :href="customSchemeLink"
-                        class="hover:bg-primary-600 inline-flex w-full items-center justify-center rounded-xl bg-primary-500 px-6 py-4 text-lg font-semibold text-white transition"
-                    >
-                        {{ t('set_password.activate_account') }}
+                    <a :href="customSchemeLink">
+                        <Button class="w-full" size="lg">
+                            {{ t('set_password.activate_account') }}
+                        </Button>
                     </a>
 
                     <!-- Divider -->

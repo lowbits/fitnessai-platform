@@ -13,14 +13,18 @@ class DownloadAppController extends Controller
 {
     public function __invoke(Request $request, string $_locale): Response
     {
-        $user = User::with('profile')->findOrFail($request->query('user'));
+        $user = null;
+        if ($request->query('user')) {
+            abort_unless($request->hasValidSignature(), 403);
+            $user = User::with('profile')->findOrFail($request->query('user'));
+        }
 
         $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $request->userAgent() ?? '');
 
         $appStoreUrl = config('app.app_store.ios.url');
 
         $setPasswordUrl = null;
-        if (! $user->password) {
+        if ($user && ! $user->password) {
             $token = $user->getPasswordResetToken();
             $setPasswordUrl = URL::signedRoute('set-password', [
                 'token' => $token,
@@ -28,8 +32,11 @@ class DownloadAppController extends Controller
             ]);
         }
 
+        $isAccountReady = $user && $user->password && $user->hasVerifiedEmail();
+
         $appStoreQrCode = null;
         $setPasswordQrCode = null;
+        $openAppQrCode = null;
 
         if (! $isMobile) {
             $qrCodeService = app(QrCodeService::class);
@@ -38,19 +45,25 @@ class DownloadAppController extends Controller
             if ($setPasswordUrl) {
                 $setPasswordQrCode = $qrCodeService->generate($setPasswordUrl);
             }
+
+            if ($isAccountReady) {
+                $openAppQrCode = $qrCodeService->generate('fytrr://');
+            }
         }
 
         return Inertia::render('DownloadApp', [
-            'userName' => $user->name,
-            'bodyGoal' => $user->profile?->body_goal?->value,
+            'userName' => $user?->name,
+            'bodyGoal' => $user?->profile?->body_goal?->value,
             'setPasswordUrl' => $setPasswordUrl,
             'appStoreUrl' => $appStoreUrl,
             'isMobile' => $isMobile,
             'appStoreQrCode' => $appStoreQrCode,
             'setPasswordQrCode' => $setPasswordQrCode,
+            'openAppQrCode' => $openAppQrCode,
             'utmSource' => $request->query('utm_source'),
             'utmMedium' => $request->query('utm_medium'),
             'utmCampaign' => $request->query('utm_campaign'),
+            'isAccountReady' => $isAccountReady,
         ]);
     }
 }

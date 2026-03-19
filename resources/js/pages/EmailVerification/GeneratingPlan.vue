@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button';
-import { useDeepLink } from '@/composables/useDeepLink';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head, usePoll } from '@inertiajs/vue3';
 import { computed, onMounted, onUnmounted, ref } from 'vue';
@@ -23,6 +22,7 @@ interface Props {
         is_complete: boolean;
     } | null;
     bodyGoal: string | null;
+    isMobileSource: boolean;
     smartLink: string;
     setPasswordUrl: string;
     iosAppStoreUrl: string;
@@ -31,8 +31,6 @@ interface Props {
 const props = defineProps<Props>();
 
 const { t } = useI18n();
-
-const { openApp } = useDeepLink(props.iosAppStoreUrl);
 
 // Reviews (static, stacked)
 const reviews = computed(() => [
@@ -103,16 +101,19 @@ const trackEvent = (eventName: string, eventProps?: Record<string, any>) => {
 };
 
 const handleSmartLinkClick = (e: Event) => {
-    e.preventDefault();
     trackEvent('Smart Link Click', {
-        source: 'loading-page',
+        source: props.isMobileSource ? 'mobile' : 'web',
         phase: isComplete.value ? 'complete' : 'generating',
     });
-    openApp('', {
-        utm_source: 'web',
-        utm_medium: 'generating_plan',
-        utm_campaign: 'plan_generation',
-    });
+
+    if (props.isMobileSource) {
+        // Deep link — let the browser follow the fytrr:// href directly
+        return;
+    }
+
+    // Web source — navigate to the /app download page
+    e.preventDefault();
+    window.location.href = props.smartLink;
 };
 
 onMounted(() => {
@@ -314,6 +315,25 @@ onUnmounted(() => {
                     </a>
                 </div>
 
+                <!-- Try the app (mobile source only) -->
+                <div
+                    v-if="isMobileSource"
+                    class="animate-fade-in-delay-1 mb-4 text-center"
+                >
+                    <p class="mb-2 text-sm text-gray-400">
+                        {{ $t('generatingPlan.cta.tryApp') }}
+                    </p>
+                    <a
+                        :href="iosAppStoreUrl"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <Button variant="outline" class="w-full" size="lg">
+                            {{ $t('generatingPlan.cta.downloadApp') }}
+                        </Button>
+                    </a>
+                </div>
+
                 <!-- Mona chat demo -->
                 <div
                     class="animate-fade-in-delay-2 mb-5 rounded-2xl border border-gray-700 bg-gray-800 p-4"
@@ -325,7 +345,7 @@ onUnmounted(() => {
                     </div>
                     <div class="chat flex flex-col gap-2">
                         <div
-                            class="msg-user max-w-[86%] self-end rounded-2xl rounded-br-sm border border-primary-500/12 bg-primary-500/10 px-3.5 py-2.5 text-xs"
+                            class="msg-user max-w-[86%] self-end rounded-2xl rounded-br-sm border border-primary-500/12 bg-primary-500/10 px-3.5 py-2.5 text-xs text-gray-200"
                         >
                             {{ $t('generatingPlan.monaDemo.userMessage') }}
                         </div>

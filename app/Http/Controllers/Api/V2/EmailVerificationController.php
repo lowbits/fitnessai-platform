@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Enums\UserSource;
 use App\Events\EmailVerified;
 use App\Http\Controllers\Controller;
 use App\Models\Plan;
@@ -72,17 +73,25 @@ class EmailVerificationController extends Controller
             ]),
             'status' => fn () => $this->getStatus($plan),
             'bodyGoal' => Inertia::once(fn () => $user->profile?->body_goal?->value),
-            'smartLink' => Inertia::once(fn () => URL::temporarySignedRoute(
-                'download-app',
-                now()->addHours(24),
-                [
-                    'locale' => app()->getLocale(),
-                    'user' => $user->id,
-                    'utm_source' => 'web',
+            'isMobileSource' => Inertia::once(fn () => $user->source === UserSource::MOBILE_APPLE),
+            'smartLink' => Inertia::once(fn () => $user->source === UserSource::MOBILE_APPLE
+                ? 'fytrr://?'.http_build_query([
+                    'utm_source' => 'email',
                     'utm_medium' => 'generating_plan',
                     'utm_campaign' => 'plan_generation',
-                ]
-            )),
+                ])
+                : URL::temporarySignedRoute(
+                    'download-app',
+                    now()->addHours(24),
+                    [
+                        'locale' => app()->getLocale(),
+                        'user' => $user->id,
+                        'utm_source' => 'web',
+                        'utm_medium' => 'generating_plan',
+                        'utm_campaign' => 'plan_generation',
+                    ]
+                )
+            ),
             'setPasswordUrl' => Inertia::once(fn () => $setPasswordUrl),
             'iosAppStoreUrl' => Inertia::once(fn () => config('app.app_store.ios.url')),
         ]);

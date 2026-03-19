@@ -3,6 +3,7 @@ import { useTranslatedEnums } from '@/composables/useTranslatedEnums';
 import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import FormGroup from '@/components/form/FormGroup.vue';
 import FormPanel from '@/components/form/FormPanel.vue';
 import FormTab from '@/components/form/FormTab.vue';
@@ -41,7 +42,11 @@ const {
 // State
 const activeStep = ref(0);
 const showSuccessMessage = ref(false);
+const showAppUpsell = ref(false);
 const userEmail = ref('');
+
+const isMobileIos = typeof navigator !== 'undefined'
+    && /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 const form = reactive({
     email: '',
@@ -237,8 +242,20 @@ const nextStep = () => {
             utm_content: props.utmContent,
             utm_campaign: props.utmCampaign,
         });
+
+        // Show app upsell after gender step on mobile iOS
+        if (activeStep.value === 0 && isMobileIos) {
+            showAppUpsell.value = true;
+            return;
+        }
+
         activeStep.value++;
     }
+};
+
+const dismissAppUpsell = () => {
+    showAppUpsell.value = false;
+    activeStep.value++;
 };
 
 const goToStep = (index: number) => {
@@ -426,7 +443,36 @@ const submit = async () => {
             </button>
         </div>
 
-        <TabGroup :selectedIndex="activeStep" @change="goToStep">
+        <!-- App upsell interstitial (mobile iOS, after gender) -->
+        <div
+            v-if="showAppUpsell"
+            class="flex h-[600px] flex-col items-center justify-center text-center"
+        >
+            <div class="space-y-4">
+                <p
+                    class="font-display text-3xl font-semibold text-white"
+                >
+                    {{ $t('form.appUpsell.title') }}
+                </p>
+                <p class="text-base text-secondary-300">
+                    {{ $t('form.appUpsell.subtitle') }}
+                </p>
+            </div>
+            <div class="mt-8">
+                <AppStoreDownload
+                    :app-store-url="$page.props.appStoreUrl"
+                />
+            </div>
+            <button
+                type="button"
+                class="mt-6 text-sm text-gray-400 underline underline-offset-4 transition hover:text-white"
+                @click="dismissAppUpsell"
+            >
+                {{ $t('form.appUpsell.skip') }}
+            </button>
+        </div>
+
+        <TabGroup v-else :selectedIndex="activeStep" @change="goToStep">
             <TabPanels class="mt-2 flex flex-col">
                 <!-- Step 1: Gender -->
                 <FormPanel

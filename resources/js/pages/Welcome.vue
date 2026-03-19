@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import AppStoreDownload from '@/components/AppStoreDownload.vue';
+import AppSection from '@/components/AppSection.vue';
 import ConvinceCard from '@/components/ConvinceCard.vue';
 import FeatureCard from '@/components/FeatureCard.vue';
 import Footer from '@/components/Footer.vue';
@@ -14,14 +14,8 @@ import ProgressivePlanIcon from '@/components/icons/ProgressivePlanIcon.vue';
 import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
 import TrackingIcon from '@/components/icons/TrackingIcon.vue';
-import RoundedIcon from '@/components/ui/icons/RoundedIcon.vue';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
 import { Head, usePage } from '@inertiajs/vue3';
-import {
-    ArrowLeftRight,
-    ChartNoAxesCombined,
-    MessageCircle,
-} from 'lucide-vue-next';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -473,135 +467,10 @@ const faqData = computed(() => ({
             </section>
 
             <section id="app" class="container mx-auto mt-32">
-                <div
-                    class="overflow-hidden rounded-2xl border border-dark-surfaces-25 bg-gradient-to-br from-dark-surfaces-800 via-dark-surfaces-900 to-primary-500/10"
-                >
-                    <div
-                        class="flex flex-col items-center gap-10 p-8 md:flex-row md:gap-16 md:p-12 lg:p-16"
-                    >
-                        <!-- Phone Mock -->
-                        <div class="flex shrink-0 justify-center md:w-1/3">
-                            <img
-                                :src="`/assets/images/mocks/iphone/dashboard_${language}.png`"
-                                :alt="$t('welcome.app_section.title')"
-                                width="1177"
-                                height="2408"
-                                class="h-auto w-[260px] drop-shadow-2xl md:w-[300px]"
-                                loading="lazy"
-                                decoding="async"
-                            />
-                        </div>
-
-                        <!-- Content -->
-                        <div class="flex-1 space-y-8">
-                            <div class="space-y-3">
-                                <span
-                                    class="inline-block rounded-full bg-primary-500/15 px-4 py-1.5 text-sm font-medium text-primary-400"
-                                >
-                                    {{ $t('welcome.app_section.badge') }}
-                                </span>
-                                <h2
-                                    class="font-display text-3xl font-bold tracking-tight text-white md:text-4xl"
-                                >
-                                    {{ $t('welcome.app_section.title') }}
-                                </h2>
-                                <p class="text-lg text-secondary-300">
-                                    {{ $t('welcome.app_section.subtitle') }}
-                                </p>
-                            </div>
-
-                            <div class="space-y-5">
-                                <div class="flex items-start gap-4">
-                                    <RoundedIcon size="sm">
-                                        <ArrowLeftRight
-                                            class="size-5 text-primary-100"
-                                        />
-                                    </RoundedIcon>
-                                    <div>
-                                        <h3 class="font-semibold text-white">
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_swap',
-                                                )
-                                            }}
-                                        </h3>
-                                        <p
-                                            class="mt-0.5 text-sm text-secondary-300"
-                                        >
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_swap_body',
-                                                )
-                                            }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start gap-4">
-                                    <RoundedIcon size="sm">
-                                        <ChartNoAxesCombined
-                                            class="size-5 text-primary-100"
-                                        />
-                                    </RoundedIcon>
-                                    <div>
-                                        <h3 class="font-semibold text-white">
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_track',
-                                                )
-                                            }}
-                                        </h3>
-                                        <p
-                                            class="mt-0.5 text-sm text-secondary-300"
-                                        >
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_track_body',
-                                                )
-                                            }}
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div class="flex items-start gap-4">
-                                    <RoundedIcon size="sm">
-                                        <MessageCircle
-                                            class="size-5 text-primary-100"
-                                        />
-                                    </RoundedIcon>
-                                    <div>
-                                        <h3 class="font-semibold text-white">
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_coach',
-                                                )
-                                            }}
-                                        </h3>
-                                        <p
-                                            class="mt-0.5 text-sm text-secondary-300"
-                                        >
-                                            {{
-                                                $t(
-                                                    'welcome.app_section.feature_coach_body',
-                                                )
-                                            }}
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col items-start gap-3 pt-2">
-                                <AppStoreDownload
-                                    :app-store-url="APP_STORE_URL"
-                                    qr-code="/assets/download-on-app-store-qr-code.png"
-                                />
-                                <p class="text-sm text-secondary-300">
-                                    {{ $t('welcome.app_section.cta_sub') }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <AppSection
+                    :app-store-url="APP_STORE_URL"
+                    qr-code="/assets/download-on-app-store-qr-code.png"
+                />
             </section>
 
             <section id="testimonials" class="container mx-auto mt-32">
