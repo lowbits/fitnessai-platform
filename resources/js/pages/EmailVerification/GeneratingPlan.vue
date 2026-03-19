@@ -314,13 +314,6 @@ onUnmounted(() => {
                     </a>
                 </div>
 
-                <!-- Permission to leave -->
-                <p
-                    class="animate-fade-in-delay-1 mb-7 text-center text-xs text-gray-500"
-                >
-                    {{ $t('generatingPlan.phase1.canLeave') }}
-                </p>
-
                 <!-- Mona chat demo -->
                 <div
                     class="animate-fade-in-delay-2 mb-5 rounded-2xl border border-gray-700 bg-gray-800 p-4"

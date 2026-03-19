@@ -123,14 +123,10 @@ class PlanController extends Controller
     private function formatMealPlanResponse(?MealPlan $mealPlan, $user, Carbon $date): array
     {
         if (! $mealPlan) {
-            // If user was verified today and plan is empty, it's likely being generated
-            $verifiedToday = $user->email_verified_at &&
-                            Carbon::parse($user->email_verified_at)->isToday();
-
             return [
                 'meals' => [],
                 'totals' => null,
-                'status' => $verifiedToday ? 'generating' : 'not_generated',
+                'status' => 'not_generated',
             ];
         }
 
@@ -193,15 +189,6 @@ class PlanController extends Controller
     private function formatWorkoutPlanResponse(?WorkoutPlan $workoutPlan, $user = null): ?array
     {
         if (! $workoutPlan) {
-            // If user was verified today and plan is empty, it's likely being generated
-            if ($user && $user->email_verified_at && Carbon::parse($user->email_verified_at)->isToday()) {
-                return [
-                    'status' => 'generating',
-                    'message' => 'Workout is being generated...',
-                    'workouts' => [],
-                ];
-            }
-
             return null;
         }
 
@@ -269,8 +256,13 @@ class PlanController extends Controller
             return 'generated';
         }
 
-        // Otherwise, still generating
-        return 'generating';
+        // One is generated, other is pending/not yet
+        if ($mealStatus === 'generated' || $workoutStatus === 'generated') {
+            return 'generating';
+        }
+
+        // Nothing generated, nothing pending
+        return 'not_generated';
     }
 
     /**
