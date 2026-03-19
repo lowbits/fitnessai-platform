@@ -3,7 +3,9 @@
 namespace App\Listeners;
 
 use App\Actions\RevenueCat\HandleInitialPurchaseAction;
+use App\Actions\RevenueCat\HandleProductChangeAction;
 use App\Actions\RevenueCat\HandleRenewalAction;
+use App\Actions\RevenueCat\HandleTransferAction;
 use Illuminate\Support\Facades\Log;
 use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
@@ -14,7 +16,9 @@ class HandleRevenueCatWebhook
      */
     public function __construct(
         private readonly HandleInitialPurchaseAction $initialPurchaseAction,
-        private readonly HandleRenewalAction $renewalAction
+        private readonly HandleRenewalAction $renewalAction,
+        private readonly HandleTransferAction $transferAction,
+        private readonly HandleProductChangeAction $productChangeAction,
     ) {
         //
     }
@@ -52,7 +56,10 @@ class HandleRevenueCatWebhook
                 $this->handleSubscriptionResumed($payload);
                 break;
             case 'PRODUCT_CHANGE':
-                $this->handleProductChange($payload);
+                $this->productChangeAction->execute($payload);
+                break;
+            case 'TRANSFER':
+                $this->transferAction->execute($payload);
                 break;
             case 'BILLING_ISSUE':
                 $this->handleBillingIssue($payload);
@@ -115,11 +122,6 @@ class HandleRevenueCatWebhook
     protected function handleSubscriptionResumed(array $payload): void
     {
         Log::info('Handling subscription resumed', ['payload' => $payload]);
-    }
-
-    protected function handleProductChange(array $payload): void
-    {
-        Log::info('Handling product change', ['payload' => $payload]);
     }
 
     protected function handleBillingIssue(array $payload): void
