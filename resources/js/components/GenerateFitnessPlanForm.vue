@@ -57,7 +57,6 @@ const form = reactive({
     height: '',
     body_goal: '',
     skill_level: '',
-    diet_type: '',
     dietary_preference: '',
     has_diet_style: false,
     diet_style: '',

@@ -1,12 +1,14 @@
 <?php
+
 // app/Enums/DietType.php
+
 namespace App\Enums;
 
 /**
- * Diet Type Enum
+ * @deprecated Use DietaryPreference and DietStyle instead.
  *
- * Represents user's dietary preference or restriction.
- * Used to generate appropriate meal plans with correct macro splits.
+ * Legacy enum that combined dietary preferences and diet styles.
+ * Kept for backward compatibility with existing user profiles.
  */
 enum DietType: string
 {
@@ -31,7 +33,7 @@ enum DietType: string
      */
     public function label(): string
     {
-        return __('enums.dietType.' . $this->value);
+        return __('enums.dietType.'.$this->value);
     }
 
     /**
@@ -52,7 +54,6 @@ enum DietType: string
             self::INTERMITTENT_FASTING => 'Time-restricted eating windows (e.g., 16:8)',
         };
     }
-
 
     /**
      * Get list of excluded food groups.

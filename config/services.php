@@ -55,7 +55,7 @@ return [
         'url' => env('REMBG_URL', 'https://rembg.lowbits.de'),
     ],
     'photoroom' => [
-        'api_key' => 'sandbox_sk_pr_default_4c785cb9271319d33798336ce0e1e1c31e75399a',
+        'api_key' => env('PHOTOROOOM_API_KEY', 'sandbox_sk_pr_default_4c785cb9271319d33798336ce0e1e1c31e75399a'),
     ],
 
 ];

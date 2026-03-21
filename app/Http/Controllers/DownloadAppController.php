@@ -24,9 +24,14 @@ class DownloadAppController extends Controller
         $appStoreUrl = config('app.app_store.ios.url');
 
         $setPasswordUrl = null;
+        $setPasswordDeepLink = null;
         if ($user && ! $user->password) {
             $token = $user->getPasswordResetToken();
             $setPasswordUrl = URL::signedRoute('set-password', [
+                'token' => $token,
+                'email' => $user->email,
+            ]);
+            $setPasswordDeepLink = 'fytrr://set-password?'.http_build_query([
                 'token' => $token,
                 'email' => $user->email,
             ]);
@@ -55,6 +60,7 @@ class DownloadAppController extends Controller
             'userName' => $user?->name,
             'bodyGoal' => $user?->profile?->body_goal?->value,
             'setPasswordUrl' => $setPasswordUrl,
+            'setPasswordDeepLink' => $setPasswordDeepLink,
             'appStoreUrl' => $appStoreUrl,
             'isMobile' => $isMobile,
             'appStoreQrCode' => $appStoreQrCode,

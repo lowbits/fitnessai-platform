@@ -8,9 +8,10 @@ interface FAQ {
 
 interface Props {
     faqs: FAQ[];
+    heading?: string;
 }
 
-defineProps<Props>();
+const props = defineProps<Props>();
 const expandedIndex = ref<number | null>(null);
 
 const toggle = (index: number) => {
@@ -22,7 +23,7 @@ const toggle = (index: number) => {
     <section class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8">
         <div class="mx-auto max-w-3xl">
             <h2 class="font-display text-3xl font-bold text-white">
-                {{ $t('workout_plan.faq.heading') }}
+                {{ props.heading ?? $t('workout_plan.faq.heading') }}
             </h2>
 
             <div class="mt-10 space-y-4">

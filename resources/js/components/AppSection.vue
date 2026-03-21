@@ -29,7 +29,7 @@ const { language } = useSelectedLanguage();
         <!-- Mobile: upper half of phone, bottom half clipped -->
         <div class="relative mx-auto h-[200px] w-[180px] overflow-hidden pt-6 md:hidden">
             <img
-                :src="`/assets/images/mocks/iphone/dashboard_${language}.png`"
+                :src="`/assets/images/mocks/iphone/dashboard_${language}.avif`"
                 :alt="t('welcome.app_section.title')"
                 width="1177"
                 height="2408"
@@ -46,7 +46,7 @@ const { language } = useSelectedLanguage();
             <!-- Desktop: phone mock side by side -->
             <div class="hidden shrink-0 justify-center md:flex md:w-1/3">
                 <img
-                    :src="`/assets/images/mocks/iphone/dashboard_${language}.png`"
+                    :src="`/assets/images/mocks/iphone/dashboard_${language}.avif`"
                     :alt="t('welcome.app_section.title')"
                     width="1177"
                     height="2408"

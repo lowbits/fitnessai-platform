@@ -19,12 +19,14 @@ interface FooterLinks {
         all: string;
         product: string;
         home: string;
+        app: string;
         legal: string;
         language: string;
         description: string;
         copyright: string;
     };
     appStoreUrl: string;
+    appUrl: string;
 }
 
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
@@ -160,6 +162,23 @@ watch(selectedLanguage, (newLocale) => {
                                 }"
                             >
                                 {{ footerLinks.labels.heading }}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                :href="footerLinks.appUrl"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            footerLinks.appUrl,
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            footerLinks.appUrl,
+                                        ),
+                                }"
+                            >
+                                {{ footerLinks.labels.app }}
                             </Link>
                         </li>
                     </ul>

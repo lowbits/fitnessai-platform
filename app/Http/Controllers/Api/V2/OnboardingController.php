@@ -30,7 +30,6 @@ class OnboardingController extends Controller
                 'source' => $validated['source'] ?? UserSource::WEB,
             ]);
 
-
             $profile = $user->profile()->create([
                 'age' => $validated['age'],
                 'gender' => $validated['gender'],
@@ -40,7 +39,6 @@ class OnboardingController extends Controller
                 'skill_level' => $validated['skill_level'],
                 'activity_level' => $validated['activity_level'],
                 'training_place' => $validated['training_place'],
-                'diet_type' => $validated['diet_type'] ?? null,
                 'dietary_preference' => $validated['dietary_preference'] ?? null,
                 'diet_style' => $validated['diet_style'] ?? null,
                 'training_sessions_per_week' => $validated['training_sessions'],
@@ -53,10 +51,9 @@ class OnboardingController extends Controller
 
             $totalDays = (int) config('plans.duration_days');
 
-
             // Create plan
             $plan = $user->plans()->create([
-                'plan_name' => ucfirst($validated['body_goal']) . ' Plan',
+                'plan_name' => ucfirst($validated['body_goal']).' Plan',
                 'start_date' => now(),
                 'duration_days' => $totalDays,
                 'end_date' => now()->addDays($totalDays),
@@ -66,7 +63,6 @@ class OnboardingController extends Controller
                 'daily_fat_g' => $macros->fatGrams,
                 'workouts_per_week' => $validated['training_sessions'],
             ]);
-
 
             return [
                 'user' => $user,

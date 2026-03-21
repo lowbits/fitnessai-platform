@@ -20,6 +20,7 @@ return [
     'product' => [
         'heading' => 'Produkt',
         'home' => 'Home',
+        'app' => 'App',
     ],
     'legal' => [
         'heading' => 'Legal',

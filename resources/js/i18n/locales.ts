@@ -1145,11 +1145,36 @@ export const locales = {
             step2: {
                 label: 'Step 2',
                 text: 'Activate your account',
-                cta: 'Activate account',
+                cta: 'Start for free now',
             },
             openApp: 'Open Fytrr',
             alreadyInstalled: 'Already installed?',
             trustLine: 'Free \u00b7 No credit card required.',
+            faq: {
+                heading: 'Frequently Asked Questions',
+                items: [
+                    {
+                        question: 'Is fytrr really free?',
+                        answer: 'Yes! You get a complete, personalized workout and nutrition plan for free. The app offers optional premium features, but the core plan is completely free.',
+                    },
+                    {
+                        question: 'What makes fytrr different from other fitness apps?',
+                        answer: 'Fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can\'t do.',
+                    },
+                    {
+                        question: 'Can I swap exercises or meals?',
+                        answer: 'Absolutely! You can swap any exercise or meal with smart alternatives that match your macros and training goals. Mona suggests the best replacements for you.',
+                    },
+                    {
+                        question: 'Do I need gym equipment?',
+                        answer: 'Not necessarily. During onboarding you choose your training location — gym, home, or outdoor. Your plan is tailored to the equipment you have available.',
+                    },
+                    {
+                        question: 'How does the AI coach Mona work?',
+                        answer: 'Mona is your personal AI fitness coach inside the app. She adapts your plan when life gets in the way — short on time, feeling tired, or want to change things up. Just ask her.',
+                    },
+                ],
+            },
         },
         generatingPlan: {
             meta: {
@@ -2389,11 +2414,36 @@ export const locales = {
             step2: {
                 label: 'Schritt 2',
                 text: 'Konto aktivieren',
-                cta: 'Konto aktivieren',
+                cta: 'Jetzt kostenlos starten',
             },
             openApp: 'Fytrr \u00f6ffnen',
             alreadyInstalled: 'Bereits installiert?',
             trustLine: 'Kostenlos \u00b7 Keine Kreditkarte n\u00f6tig.',
+            faq: {
+                heading: 'H\u00e4ufig gestellte Fragen',
+                items: [
+                    {
+                        question: 'Ist fytrr wirklich kostenlos?',
+                        answer: 'Ja! Du bekommst einen kompletten, personalisierten Trainings- und Ern\u00e4hrungsplan kostenlos. Die App bietet optionale Premium-Features, aber der Kernplan ist komplett gratis.',
+                    },
+                    {
+                        question: 'Was unterscheidet fytrr von anderen Fitness-Apps?',
+                        answer: 'Fytrr nutzt KI, um einen wirklich personalisierten Plan basierend auf deinen Zielen, deinem Fitnesslevel und deinen Vorlieben zu erstellen. Dein KI-Coach Mona passt deine Workouts in Echtzeit an \u2014 das kann kein statisches PDF oder eine generische App.',
+                    },
+                    {
+                        question: 'Kann ich \u00dcbungen oder Mahlzeiten tauschen?',
+                        answer: 'Auf jeden Fall! Du kannst jede \u00dcbung oder Mahlzeit gegen smarte Alternativen tauschen, die zu deinen Makros und Trainingszielen passen. Mona schl\u00e4gt dir die besten Ersatz\u00fcbungen vor.',
+                    },
+                    {
+                        question: 'Brauche ich Fitnessger\u00e4te?',
+                        answer: 'Nicht unbedingt. Beim Onboarding w\u00e4hlst du deinen Trainingsort \u2014 Fitnessstudio, Zuhause oder Outdoor. Dein Plan wird an die Ger\u00e4te angepasst, die dir zur Verf\u00fcgung stehen.',
+                    },
+                    {
+                        question: 'Wie funktioniert der KI-Coach Mona?',
+                        answer: 'Mona ist dein pers\u00f6nlicher KI-Fitness-Coach in der App. Sie passt deinen Plan an, wenn das Leben dazwischenkommt \u2014 wenig Zeit, m\u00fcde oder Lust auf Abwechslung. Frag sie einfach.',
+                    },
+                ],
+            },
         },
         generatingPlan: {
             meta: {

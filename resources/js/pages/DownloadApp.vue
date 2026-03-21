@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import AppSection from '@/components/AppSection.vue';
+import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import { Button } from '@/components/ui/button';
 import { useDeepLink } from '@/composables/useDeepLink';
 import { useTracking } from '@/composables/useTracking';
@@ -13,6 +14,7 @@ interface Props {
     userName: string | null;
     bodyGoal: string | null;
     setPasswordUrl: string | null;
+    setPasswordDeepLink: string | null;
     appStoreUrl: string;
     isMobile: boolean;
     appStoreQrCode: string | null;
@@ -28,7 +30,7 @@ const props = defineProps<Props>();
 
 const DEEP_LINK_URL = 'fytrr://';
 
-const { t } = useI18n();
+const { t, tm, rt } = useI18n();
 const { trackEvent } = useTracking();
 const { openApp } = useDeepLink(props.appStoreUrl);
 
@@ -66,17 +68,17 @@ const handleActivateClick = () => {
     trackEvent('Download App - Activate Click', utmProps.value);
 };
 
+const faqs = computed(() => {
+    const items = tm('downloadApp.faq.items');
+    return (items as { question: string; answer: string }[]).map((item) => ({
+        question: rt(item.question),
+        answer: rt(item.answer),
+    }));
+});
+
 onMounted(() => {
     trackEvent('Download App - Page View', utmProps.value);
 
-    // On mobile, try to open the app immediately
-    if (props.isMobile) {
-        openApp('', {
-            utm_source: props.utmSource ?? 'web',
-            utm_medium: props.utmMedium ?? 'download_app',
-            utm_campaign: props.utmCampaign ?? 'download',
-        });
-    }
 });
 </script>
 
@@ -90,8 +92,16 @@ onMounted(() => {
                 :qr-code="appStoreQrCode"
                 @app-store-click="handleAppStoreClick"
             >
+                <!-- Step 1 label when user needs to activate account -->
+                <template v-if="setPasswordUrl" #before-download>
+                    <p class="text-sm font-semibold text-primary-400">
+                        {{ t('downloadApp.step1.label') }}:
+                        {{ t('downloadApp.step1.text') }}
+                    </p>
+                </template>
+
                 <!-- "Already installed?" above download when account ready -->
-                <template v-if="isAccountReady" #before-download>
+                <template v-else-if="isAccountReady" #before-download>
                     <div class="border-t border-white/10 pt-6">
                         <p
                             class="mb-3 text-sm font-semibold text-primary-400"
@@ -214,13 +224,14 @@ onMounted(() => {
                     <p
                         class="mb-3 text-sm font-semibold text-primary-400"
                     >
+                        {{ t('downloadApp.step2.label') }}:
                         {{ t('downloadApp.step2.text') }}
                     </p>
 
-                    <!-- Mobile: button -->
+                    <!-- Mobile: deep link directly into the app -->
                     <a
                         v-if="isMobile"
-                        :href="setPasswordUrl"
+                        :href="setPasswordDeepLink ?? setPasswordUrl"
                         @click="handleActivateClick"
                     >
                         <Button
@@ -256,6 +267,8 @@ onMounted(() => {
                     </div>
                 </div>
             </AppSection>
+
+            <FAQSection :faqs="faqs" :heading="t('downloadApp.faq.heading')" class="mt-12 rounded-2xl" />
         </div>
     </GuestLayout>
 </template>
