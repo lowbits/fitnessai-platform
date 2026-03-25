@@ -7,6 +7,7 @@ import { useTracking } from '@/composables/useTracking';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
+import { usePage } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -30,7 +31,11 @@ const props = defineProps<Props>();
 
 const DEEP_LINK_URL = 'fytrr://';
 
-const { t, tm, rt } = useI18n();
+const { t, tm, rt, locale } = useI18n();
+const page = usePage();
+const canonicalUrl = computed(
+    () => `https://fytrr.com/${locale.value}/app`,
+);
 const { trackEvent } = useTracking();
 const { openApp } = useDeepLink(props.appStoreUrl);
 
@@ -83,7 +88,10 @@ onMounted(() => {
 </script>
 
 <template>
-    <Head :title="t('downloadApp.meta.title')" />
+    <Head :title="t('downloadApp.meta.title')">
+        <meta name="description" :content="t('downloadApp.meta.description')" />
+        <link rel="canonical" :href="canonicalUrl" />
+    </Head>
 
     <GuestLayout>
         <div class="container mx-auto max-w-5xl px-5 pt-7 pb-12">

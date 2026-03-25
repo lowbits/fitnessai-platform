@@ -2,14 +2,15 @@
 
 namespace App\Console\Commands;
 
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
-use Carbon\Carbon;
 
 class GenerateSitemapCommand extends Command
 {
     protected $signature = 'generate:sitemap';
+
     protected $description = 'Generate the sitemap with all pages including workout plans';
 
     public function handle()
@@ -40,10 +41,26 @@ class GenerateSitemapCommand extends Command
 
             $sitemap->add($homepageUrl);
 
+            // App page
+            $appUrl = Url::create("/{$locale}/app")
+                ->setLastModificationDate(Carbon::now())
+                ->setPriority(0.8)
+                ->setChangeFrequency('monthly');
+
+            foreach ($locales as $altLocale) {
+                if ($altLocale !== $locale) {
+                    $appUrl->addAlternate("{$baseUrl}/{$altLocale}/app", $altLocale);
+                }
+            }
+
+            $sitemap->add($appUrl);
+
+            $this->info("Added app page: /{$locale}/app");
+
             // Workout Plans
             $planTypes = $this->getPlanTypes();
 
-            if (!empty($planTypes)) {
+            if (! empty($planTypes)) {
                 $basePath = trans('routes.workout_plans_index', [], $locale);
 
                 // Index Page - use latest update from all plans
@@ -123,8 +140,8 @@ class GenerateSitemapCommand extends Command
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
         $this->info('✅ Sitemap generated successfully!');
-        $this->info('📍 Location: ' . public_path('sitemap.xml'));
-        $this->info('🔗 URL: ' . $baseUrl . '/sitemap.xml');
+        $this->info('📍 Location: '.public_path('sitemap.xml'));
+        $this->info('🔗 URL: '.$baseUrl.'/sitemap.xml');
 
         return Command::SUCCESS;
     }
@@ -135,6 +152,7 @@ class GenerateSitemapCommand extends Command
     private function getPlanTypes(): array
     {
         $locale = app()->getLocale();
+
         return config("freeWorkouts.{$locale}", []);
     }
 

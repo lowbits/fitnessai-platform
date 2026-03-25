@@ -1124,7 +1124,9 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'Download the App',
+                title: 'Fytrr App — AI Personal Trainer for Workouts & Nutrition',
+                description:
+                    'Fytrr App: Your AI personal trainer for workout plans, meal plans & tracking. Try 7 days free. Download now on the App Store.',
             },
             greeting: 'Hey {name}!',
             mobile: {
@@ -2393,7 +2395,9 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'App herunterladen',
+                title: 'Fytrr App \u2014 KI Personal Trainer f\u00fcr Training & Ern\u00e4hrung',
+                description:
+                    'Fytrr App: Dein KI Personal Trainer f\u00fcr Ern\u00e4hrungsplan, Trainingsplan & Tracking. 7 Tage kostenlos testen. Jetzt im App Store.',
             },
             greeting: 'Hey {name}!',
             mobile: {
