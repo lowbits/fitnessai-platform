@@ -6,13 +6,13 @@ return [
             'name' => 'Tobias Lobitz',
             'title' => 'Gründer & Software-Entwickler',
             'bio' => 'Entwickelt seit 2018 Fitness-Software. Eigene Trainings-Erfahrung: 15 Jahre Krafttraining.',
-            'image' => '/assets/authors/tobias.jpeg',
+            'image' => '/assets/authors/tobias.webp',
         ],
         'en' => [
             'name' => 'Tobias Lobitz',
             'title' => 'Founder & Software Developer',
             'bio' => 'Developing fitness software since 2018. Personal training experience: 15 years of strength training.',
-            'image' => '/assets/authors/tobias.jpeg',
+            'image' => '/assets/authors/tobias.webp',
         ],
     ],
     'index_labels' => [

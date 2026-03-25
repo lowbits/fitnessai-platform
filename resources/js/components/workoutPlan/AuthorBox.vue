@@ -60,7 +60,7 @@ withDefaults(defineProps<Props>(), {
                 <p class="text-sm leading-relaxed text-gray-400">
                     {{ author.bio }}
                 </p>
-                <p class="mt-3 text-xs text-gray-500">
+                <p class="mt-3 text-xs text-gray-400">
                     {{ $t('workout_plan.author.last_updated') }}:
                     {{ lastUpdated }}
                 </p>
@@ -98,8 +98,8 @@ withDefaults(defineProps<Props>(), {
         </div>
 
         <!-- AI Disclosure -->
-        <details v-if="showDisclosure" class="mt-4 text-xs text-gray-500">
-            <summary class="cursor-pointer transition hover:text-gray-400">
+        <details v-if="showDisclosure" class="mt-4 text-xs text-gray-400">
+            <summary class="cursor-pointer transition hover:text-gray-300">
                 {{ $t('workout_plan.author.about_content') }}
             </summary>
             <p class="mt-2 leading-relaxed">

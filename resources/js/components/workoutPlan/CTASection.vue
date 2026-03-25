@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
             <button
                 @click="emit('openForm')"
-                class="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-white transition hover:bg-primary-400"
+                class="mt-8 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-dark-surfaces-900 transition hover:bg-primary-400"
             >
                 <svg
                     class="h-6 w-6"

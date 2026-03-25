@@ -28,7 +28,7 @@ defineEmits<{
             class="absolute inset-0 flex items-center justify-center opacity-30"
         >
             <img
-                src="/assets/gradient-optimized.png"
+                src="/assets/gradient-optimized.webp"
                 alt="Abstract gradient background"
                 class="h-full w-full object-cover"
                 loading="lazy"
@@ -114,7 +114,7 @@ defineEmits<{
                 <!-- CTA Button -->
                 <button
                     @click="open"
-                    class="mt-10 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-white transition hover:bg-primary-400"
+                    class="mt-10 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-dark-surfaces-900 transition hover:bg-primary-400"
                 >
                     {{ $t('workout_plan.hero.cta_button') }}
                     <svg
