@@ -19,6 +19,5 @@ return [
         'fat_loss' => 'fettabbau',
         'abs' => 'bauchmuskeltraining',
         'over_40' => 'ueber-40-training',
-        'tradesperson' => 'handwerker',
     ],
 ];

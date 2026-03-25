@@ -68,7 +68,6 @@ class HandleInertiaRequests extends Middleware
             'fat_loss',
             'abs',
             'over_40',
-            'tradesperson',
         ];
 
         // Get base path from routes translation
