@@ -124,6 +124,38 @@ class GenerateSitemapCommand extends Command
                 }
             }
 
+            // Blog Articles
+            $blogArticles = config("blog.{$locale}", []);
+
+            foreach ($blogArticles as $slug => $articleData) {
+                $lastMod = $this->getPlanLastModified($articleData);
+
+                $blogUrl = Url::create("/{$locale}/blog/{$slug}")
+                    ->setLastModificationDate($lastMod)
+                    ->setPriority(0.8)
+                    ->setChangeFrequency('monthly');
+
+                // Add hreflang alternates
+                if (isset($articleData['internal_slug'])) {
+                    foreach ($locales as $altLocale) {
+                        if ($altLocale === $locale) {
+                            continue;
+                        }
+                        $altArticles = config("blog.{$altLocale}", []);
+                        foreach ($altArticles as $altSlug => $altData) {
+                            if (($altData['internal_slug'] ?? '') === $articleData['internal_slug']) {
+                                $blogUrl->addAlternate("{$baseUrl}/{$altLocale}/blog/{$altSlug}", $altLocale);
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                $sitemap->add($blogUrl);
+
+                $this->info("Added blog article: /{$locale}/blog/{$slug}");
+            }
+
             // Legal Pages
             $legalPageMappings = [
                 'de' => [

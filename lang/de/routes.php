@@ -6,6 +6,7 @@ return [
     'terms' => 'agb',
     'disclaimer' => 'haftungsausschluss',
     'free_tools_calorie_calculator' => 'kostenlose-tools/kalorienrechner',
+    'blog_article' => 'blog/{slug}',
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 

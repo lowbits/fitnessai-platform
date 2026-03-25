@@ -1122,6 +1122,15 @@ export const locales = {
             no_app: "Don't have the app?",
             download_prompt: 'Download Fytrr to get started',
         },
+        blog: {
+            label: 'Blog',
+            calculatorCta: 'Want to calculate your calorie needs right now?',
+            calculatorCtaLink: 'Open the free calorie calculator',
+            appCtaHeadline: 'From theory to practice',
+            appCtaText: 'Fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
+            appCtaButton: '7 days free \u2014 create my plan',
+            faqHeading: 'Frequently Asked Questions',
+        },
         calorieCalculator: {
             hero: {
                 h1: 'Calorie Calculator — How Many Calories Do You Need?',
@@ -2510,6 +2519,15 @@ export const locales = {
             activate_account: 'Konto aktivieren',
             no_app: 'Hast du die App noch nicht?',
             download_prompt: 'Lade Fytrr herunter, um loszulegen',
+        },
+        blog: {
+            label: 'Blog',
+            calculatorCta: 'Du willst deinen Kalorienbedarf jetzt berechnen?',
+            calculatorCtaLink: 'Zum kostenlosen Kalorienrechner',
+            appCtaHeadline: 'Von der Theorie zur Praxis',
+            appCtaText: 'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
+            appCtaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
+            faqHeading: 'H\u00e4ufig gestellte Fragen',
         },
         calorieCalculator: {
             hero: {

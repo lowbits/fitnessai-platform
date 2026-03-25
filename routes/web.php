@@ -32,6 +32,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::get(LaravelLocalization::transRoute('routes.free_tools_calorie_calculator'), App\Http\Controllers\CalorieCalculatorController::class)
         ->name('calorie-calculator');
 
+    // Blog Articles (SEO-optimized)
+    Route::get(LaravelLocalization::transRoute('routes.blog_article'), [App\Http\Controllers\BlogController::class, 'show'])
+        ->name('blog.show');
+
     // Public Workout Plan Pages (SEO-optimized)
     Route::get(LaravelLocalization::transRoute('routes.workout_plans_index'), [App\Http\Controllers\WorkoutPlanController::class, 'index'])
         ->name('workout-plan.index');
