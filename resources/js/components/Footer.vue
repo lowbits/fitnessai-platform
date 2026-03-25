@@ -181,6 +181,23 @@ watch(selectedLanguage, (newLocale) => {
                                 {{ footerLinks.labels.app }}
                             </Link>
                         </li>
+                        <li>
+                            <Link
+                                :href="footerLinks.calorieCalculatorUrl"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(footerLinks.calorieCalculatorUrl),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(footerLinks.calorieCalculatorUrl),
+                                        ),
+                                }"
+                            >
+                                {{ footerLinks.labels.calorieCalculator }}
+                            </Link>
+                        </li>
                     </ul>
                 </div>
 

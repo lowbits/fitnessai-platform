@@ -57,6 +57,24 @@ class GenerateSitemapCommand extends Command
 
             $this->info("Added app page: /{$locale}/app");
 
+            // Calorie Calculator
+            $calcPath = trans('routes.free_tools_calorie_calculator', [], $locale);
+            $calcUrl = Url::create("/{$locale}/{$calcPath}")
+                ->setLastModificationDate(Carbon::now())
+                ->setPriority(0.9)
+                ->setChangeFrequency('monthly');
+
+            foreach ($locales as $altLocale) {
+                if ($altLocale !== $locale) {
+                    $altCalcPath = trans('routes.free_tools_calorie_calculator', [], $altLocale);
+                    $calcUrl->addAlternate("{$baseUrl}/{$altLocale}/{$altCalcPath}", $altLocale);
+                }
+            }
+
+            $sitemap->add($calcUrl);
+
+            $this->info("Added calorie calculator: /{$locale}/{$calcPath}");
+
             // Workout Plans
             $planTypes = $this->getPlanTypes();
 

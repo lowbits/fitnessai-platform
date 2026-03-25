@@ -21,6 +21,7 @@ return [
         'heading' => 'Product',
         'home' => 'Home',
         'app' => 'App',
+        'calorie_calculator' => 'Calorie Calculator',
     ],
     'legal' => [
         'heading' => 'Legal',

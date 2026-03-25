@@ -28,6 +28,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
         return Inertia::render('Legal/Imprint');
     })->name('imprint');
 
+    // Calorie Calculator (SEO tool page)
+    Route::get(LaravelLocalization::transRoute('routes.free_tools_calorie_calculator'), App\Http\Controllers\CalorieCalculatorController::class)
+        ->name('calorie-calculator');
+
     // Public Workout Plan Pages (SEO-optimized)
     Route::get(LaravelLocalization::transRoute('routes.workout_plans_index'), [App\Http\Controllers\WorkoutPlanController::class, 'index'])
         ->name('workout-plan.index');

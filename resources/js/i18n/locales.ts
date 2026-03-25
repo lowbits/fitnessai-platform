@@ -1122,6 +1122,90 @@ export const locales = {
             no_app: "Don't have the app?",
             download_prompt: 'Download Fytrr to get started',
         },
+        calorieCalculator: {
+            hero: {
+                h1: 'Calorie Calculator — Calculate Your Daily Needs',
+                subtitle:
+                    'Find out how many calories you need per day — for weight loss, muscle gain or maintenance. Free, instant, science-based.',
+            },
+            form: {
+                gender: 'Gender',
+                male: 'Male',
+                female: 'Female',
+                age: 'Age',
+                agePlaceholder: '25',
+                weight: 'Weight (kg)',
+                weightPlaceholder: '75',
+                height: 'Height (cm)',
+                heightPlaceholder: '178',
+                activity: 'Activity Level',
+                sedentary: 'Sedentary (office job, little exercise)',
+                light: 'Lightly active (1–2 workouts/week)',
+                moderate: 'Moderately active (3–5 workouts/week)',
+                active: 'Very active (6–7 workouts/week)',
+                veryActive: 'Extremely active (physical job + daily training)',
+                goal: 'Goal',
+                lose: 'Lose weight',
+                maintain: 'Maintain',
+                gain: 'Build muscle',
+                calculate: 'Calculate calories',
+            },
+            result: {
+                dailyNeeds: 'Your daily calorie needs',
+                kcalPerDay: 'kcal per day',
+                bmr: 'Basal metabolic rate',
+                tdee: 'Total expenditure',
+                goalLabel: 'Your target',
+                macros: 'Recommended macronutrient split',
+                protein: 'Protein',
+                carbs: 'Carbs',
+                fat: 'Fat',
+                ctaText: 'Want an AI-generated nutrition plan based on your calories? Fytrr creates it for you — free.',
+                ctaButton: 'Create my plan for free',
+            },
+            content: {
+                h2_1: 'How does the calorie calculator work?',
+                p1: 'Our calorie calculator uses the Mifflin-St Jeor equation — the formula recommended by most nutritional scientists as the most accurate method for calculating basal metabolic rate (BMR). From your BMR, we calculate your total daily energy expenditure (TDEE) by factoring in your activity level. Based on your goal, we then add or subtract calories to give you a practical daily target.',
+                h3_1: 'The Mifflin-St Jeor equation',
+                p2: 'This formula was developed in 1990 and has been validated by numerous studies as more accurate than the older Harris-Benedict equation. It calculates your basal metabolic rate (BMR) — the energy your body needs at complete rest:',
+                formula_male:
+                    'Men: BMR = 10 × weight (kg) + 6.25 × height (cm) − 5 × age − 5',
+                formula_female:
+                    'Women: BMR = 10 × weight (kg) + 6.25 × height (cm) − 5 × age − 161',
+                p3: 'The BMR is then multiplied by an activity factor (PAL value) to obtain your total daily energy expenditure (TDEE). This is the number of calories you actually need per day.',
+                h3_2: 'Activity levels explained',
+                p4: 'The activity factor accounts for all physical activity throughout your day — not just exercise, but also your job, daily movement and household tasks:',
+                levels: {
+                    sedentary: {
+                        label: 'Sedentary (factor 1.2)',
+                        desc: 'Office job, minimal movement, no regular exercise.',
+                    },
+                    light: {
+                        label: 'Lightly active (factor 1.375)',
+                        desc: 'Light exercise 1–2 times per week or an active commute.',
+                    },
+                    moderate: {
+                        label: 'Moderately active (factor 1.55)',
+                        desc: '3–5 workouts per week. The most common level for regular gym-goers.',
+                    },
+                    active: {
+                        label: 'Very active (factor 1.725)',
+                        desc: 'Daily intense exercise or a physically demanding job combined with regular training.',
+                    },
+                    veryActive: {
+                        label: 'Extremely active (factor 1.9)',
+                        desc: 'Physical labour combined with daily intense training. Typical for professional athletes or tradespeople who also train.',
+                    },
+                },
+                h3_3: 'Calories for weight loss vs. muscle gain',
+                p5: 'For weight loss, we recommend a moderate deficit of 400 kcal below your TDEE. This allows steady fat loss of approximately 0.4–0.5 kg per week while preserving muscle mass. A larger deficit may lead to muscle loss, metabolic slowdown and increased hunger — making it harder to sustain. For muscle gain, a moderate surplus of 300 kcal above your TDEE supports muscle growth without excessive fat gain. Combined with strength training and adequate protein (1.6–2.0 g per kg bodyweight), this enables lean mass gains of approximately 0.5–1 kg per month.',
+                h3_4: 'Beyond the calculator — personalised nutrition with Fytrr',
+                p6: 'A calorie calculator gives you a solid starting point, but real results come from consistency and a structured plan. Fytrr uses AI to build a personalised nutrition plan based on your calorie target, dietary preferences and fitness goals. Every meal is calculated, every macro is accounted for — and you can swap meals anytime. Try it free for 7 days.',
+            },
+            faq: {
+                heading: 'Frequently Asked Questions',
+            },
+        },
         downloadApp: {
             meta: {
                 title: 'Fytrr App — AI Personal Trainer for Workouts & Nutrition',
@@ -2392,6 +2476,90 @@ export const locales = {
             activate_account: 'Konto aktivieren',
             no_app: 'Hast du die App noch nicht?',
             download_prompt: 'Lade Fytrr herunter, um loszulegen',
+        },
+        calorieCalculator: {
+            hero: {
+                h1: 'Kalorienrechner \u2014 T\u00e4glichen Kalorienbedarf berechnen',
+                subtitle:
+                    'Berechne in 30 Sekunden, wie viele Kalorien du pro Tag brauchst \u2014 zum Abnehmen, Zunehmen oder Gewicht halten. Kostenlos, sofort, wissenschaftlich fundiert.',
+            },
+            form: {
+                gender: 'Geschlecht',
+                male: 'M\u00e4nnlich',
+                female: 'Weiblich',
+                age: 'Alter',
+                agePlaceholder: '25',
+                weight: 'Gewicht (kg)',
+                weightPlaceholder: '75',
+                height: 'Gr\u00f6\u00dfe (cm)',
+                heightPlaceholder: '178',
+                activity: 'Aktivit\u00e4tslevel',
+                sedentary: 'Kaum aktiv (B\u00fcrojob, wenig Bewegung)',
+                light: 'Leicht aktiv (1\u20132 Trainings/Woche)',
+                moderate: 'Moderat aktiv (3\u20135 Trainings/Woche)',
+                active: 'Sehr aktiv (6\u20137 Trainings/Woche)',
+                veryActive: 'Extrem aktiv (k\u00f6rperliche Arbeit + t\u00e4gliches Training)',
+                goal: 'Ziel',
+                lose: 'Abnehmen',
+                maintain: 'Halten',
+                gain: 'Muskelaufbau',
+                calculate: 'Kalorien berechnen',
+            },
+            result: {
+                dailyNeeds: 'Dein t\u00e4glicher Kalorienbedarf',
+                kcalPerDay: 'kcal pro Tag',
+                bmr: 'Grundumsatz',
+                tdee: 'Gesamtumsatz',
+                goalLabel: 'Dein Ziel',
+                macros: 'Empfohlene Makron\u00e4hrstoffverteilung',
+                protein: 'Protein',
+                carbs: 'Kohlenhydrate',
+                fat: 'Fett',
+                ctaText: 'M\u00f6chtest du einen KI-generierten Ern\u00e4hrungsplan basierend auf deinem Kalorienbedarf? Fytrr erstellt ihn f\u00fcr dich \u2014 kostenlos.',
+                ctaButton: 'Meinen Plan kostenlos erstellen',
+            },
+            content: {
+                h2_1: 'Wie funktioniert der Kalorienrechner?',
+                p1: 'Unser Kalorienrechner nutzt die Mifflin-St-Jeor-Formel \u2014 die von den meisten Ern\u00e4hrungswissenschaftlern empfohlene Methode zur Berechnung des Grundumsatzes (BMR). Aus deinem Grundumsatz berechnen wir deinen Gesamtumsatz (TDEE), indem wir dein Aktivit\u00e4tslevel ber\u00fccksichtigen. Je nach Ziel addieren oder subtrahieren wir Kalorien, um dir ein praktisches Tagesziel zu geben.',
+                h3_1: 'Die Mifflin-St-Jeor-Formel',
+                p2: 'Diese Formel wurde 1990 entwickelt und in zahlreichen Studien als genauer als die \u00e4ltere Harris-Benedict-Formel best\u00e4tigt. Sie berechnet deinen Grundumsatz (BMR) \u2014 die Energie, die dein K\u00f6rper in v\u00f6lliger Ruhe ben\u00f6tigt:',
+                formula_male:
+                    'M\u00e4nner: BMR = 10 \u00d7 Gewicht (kg) + 6,25 \u00d7 Gr\u00f6\u00dfe (cm) \u2212 5 \u00d7 Alter \u2212 5',
+                formula_female:
+                    'Frauen: BMR = 10 \u00d7 Gewicht (kg) + 6,25 \u00d7 Gr\u00f6\u00dfe (cm) \u2212 5 \u00d7 Alter \u2212 161',
+                p3: 'Der Grundumsatz wird dann mit einem Aktivit\u00e4tsfaktor (PAL-Wert) multipliziert, um deinen Gesamtumsatz (TDEE) zu erhalten. Das ist die Kalorienmenge, die du tats\u00e4chlich pro Tag ben\u00f6tigst.',
+                h3_2: 'Aktivit\u00e4tslevel erkl\u00e4rt',
+                p4: 'Der Aktivit\u00e4tsfaktor ber\u00fccksichtigt deine gesamte k\u00f6rperliche Aktivit\u00e4t \u2014 nicht nur Sport, sondern auch Beruf, Alltagsbewegung und Hausarbeit:',
+                levels: {
+                    sedentary: {
+                        label: 'Kaum aktiv (Faktor 1,2)',
+                        desc: 'B\u00fcrojob, wenig Bewegung, kein regelm\u00e4\u00dfiges Training.',
+                    },
+                    light: {
+                        label: 'Leicht aktiv (Faktor 1,375)',
+                        desc: 'Leichtes Training 1\u20132 Mal pro Woche oder aktiver Arbeitsweg.',
+                    },
+                    moderate: {
+                        label: 'Moderat aktiv (Faktor 1,55)',
+                        desc: '3\u20135 Trainingseinheiten pro Woche. Das h\u00e4ufigste Level f\u00fcr regelm\u00e4\u00dfige Fitnessstudiog\u00e4nger.',
+                    },
+                    active: {
+                        label: 'Sehr aktiv (Faktor 1,725)',
+                        desc: 'T\u00e4gliches intensives Training oder ein k\u00f6rperlich fordernder Beruf kombiniert mit regelm\u00e4\u00dfigem Training.',
+                    },
+                    veryActive: {
+                        label: 'Extrem aktiv (Faktor 1,9)',
+                        desc: 'K\u00f6rperliche Arbeit kombiniert mit t\u00e4glichem intensiven Training. Typisch f\u00fcr Leistungssportler oder Handwerker, die zus\u00e4tzlich trainieren.',
+                    },
+                },
+                h3_3: 'Kalorien zum Abnehmen vs. Muskelaufbau',
+                p5: 'Zum Abnehmen empfehlen wir ein moderates Defizit von 400 kcal unter deinem Gesamtumsatz. Das erm\u00f6glicht einen stetigen Fettverlust von etwa 0,4\u20130,5 kg pro Woche bei Erhalt der Muskelmasse. Ein gr\u00f6\u00dferes Defizit f\u00fchrt oft zu Muskelabbau, verlangsamtem Stoffwechsel und verst\u00e4rktem Hunger \u2014 und ist schwerer durchzuhalten. F\u00fcr Muskelaufbau empfehlen wir einen moderaten \u00dcberschuss von 300 kcal \u00fcber deinem Gesamtumsatz. Kombiniert mit Krafttraining und ausreichend Protein (1,6\u20132,0 g pro kg K\u00f6rpergewicht) erm\u00f6glicht das einen Muskelzuwachs von etwa 0,5\u20131 kg pro Monat.',
+                h3_4: '\u00dcber den Rechner hinaus \u2014 personalisierte Ern\u00e4hrung mit Fytrr',
+                p6: 'Ein Kalorienrechner gibt dir einen soliden Startwert, aber echte Ergebnisse kommen durch Konsequenz und einen strukturierten Plan. Fytrr nutzt KI, um einen personalisierten Ern\u00e4hrungsplan basierend auf deinem Kalorienziel, deinen Ern\u00e4hrungsvorlieben und Fitnesszielen zu erstellen. Jede Mahlzeit ist berechnet, jedes Makro ber\u00fccksichtigt \u2014 und du kannst Mahlzeiten jederzeit tauschen. Teste es 7 Tage kostenlos.',
+            },
+            faq: {
+                heading: 'H\u00e4ufig gestellte Fragen',
+            },
         },
         downloadApp: {
             meta: {

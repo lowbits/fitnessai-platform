@@ -7,7 +7,6 @@ import { useTracking } from '@/composables/useTracking';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import { useClipboard } from '@vueuse/core';
-import { usePage } from '@inertiajs/vue3';
 import { computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -32,7 +31,6 @@ const props = defineProps<Props>();
 const DEEP_LINK_URL = 'fytrr://';
 
 const { t, tm, rt, locale } = useI18n();
-const page = usePage();
 const canonicalUrl = computed(
     () => `https://fytrr.com/${locale.value}/app`,
 );

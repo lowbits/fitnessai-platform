@@ -5,6 +5,7 @@ return [
     'data_privacy' => 'privacy-policy',
     'terms' => 'terms-and-conditions',
     'disclaimer' => 'disclaimer',
+    'free_tools_calorie_calculator' => 'free-tools/calorie-calculator',
     'workout_plans_index' => 'free-workout-plan',
     'workout_plans_type' => 'free-workout-plan/{type}',
 
