@@ -6,9 +6,14 @@ import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanMod
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import { Button } from '@/components/ui/button';
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, usePage } from '@inertiajs/vue3';
 import { computed, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+
+type PageProps = {
+    footerLinks: { appStoreUrl: string };
+    currentLocale: string;
+};
 
 interface Props {
     meta: {
@@ -18,11 +23,14 @@ interface Props {
     };
     alternateUrls: Record<string, string>;
     schema: object[];
+    relatedArticles: { url: string; title: string; description: string }[];
 }
 
 const props = defineProps<Props>();
 
 const { t } = useI18n();
+const page = usePage<PageProps>();
+const locale = computed(() => page.props.currentLocale);
 
 const schemaJson = computed(() =>
     props.schema.map((s) => JSON.stringify(s)),
@@ -702,6 +710,73 @@ const comparisonFeatures = computed(() => [
                             {{ t('calorieCalculator.content.p7') }}
                         </p>
                     </article>
+                </div>
+            </section>
+
+            <!-- Further Reading -->
+            <section
+                v-if="relatedArticles.length"
+                class="px-4 pb-16 sm:px-6 lg:px-8"
+            >
+                <div class="mx-auto max-w-3xl">
+                    <h2
+                        class="font-display text-2xl font-bold text-white"
+                    >
+                        {{ t('calorieCalculator.furtherReading.heading') }}
+                    </h2>
+                    <div class="mt-4 space-y-3">
+                        <a
+                            v-for="article in relatedArticles"
+                            :key="article.url"
+                            :href="article.url"
+                            class="flex items-center justify-between rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-800 p-5 transition hover:border-primary-500"
+                        >
+                            <div>
+                                <p class="font-medium text-white">
+                                    {{ article.title }}
+                                </p>
+                                <p
+                                    class="mt-1 text-sm text-gray-400"
+                                >
+                                    {{ article.description }}
+                                </p>
+                            </div>
+                            <span
+                                class="ml-4 shrink-0 text-primary-400"
+                                >&rarr;</span
+                            >
+                        </a>
+                    </div>
+
+                    <!-- App Store -->
+                    <div class="mt-8 text-center">
+                        <p class="text-sm text-gray-400">
+                            {{
+                                t(
+                                    'calorieCalculator.furtherReading.appStoreText',
+                                )
+                            }}
+                        </p>
+                        <a
+                            :href="
+                                page.props.footerLinks.appStoreUrl
+                            "
+                            target="_blank"
+                            rel="noopener"
+                            class="mt-3 inline-block"
+                        >
+                            <img
+                                :src="`/assets/badges/App_Store_Badge_${locale.toUpperCase()}.svg`"
+                                :alt="
+                                    t(
+                                        'calorieCalculator.furtherReading.appStoreBadge',
+                                    )
+                                "
+                                class="h-10"
+                                loading="lazy"
+                            />
+                        </a>
+                    </div>
                 </div>
             </section>
 

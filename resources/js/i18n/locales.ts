@@ -1245,6 +1245,11 @@ export const locales = {
                 h2_7: 'Next step: from calorie number to nutrition plan',
                 p7: 'A calorie calculator gives you a solid starting point, but real results come from consistency and a structured plan. Fytrr uses AI to build a personalised nutrition plan based on your calorie target, dietary preferences and fitness goals. Every meal is calculated, every macro is accounted for \u2014 and you can swap meals anytime. Try it free for 7 days.',
             },
+            furtherReading: {
+                heading: 'Further Reading',
+                appStoreText: 'Or download the Fytrr app directly:',
+                appStoreBadge: 'Download on the App Store',
+            },
             faq: {
                 heading: 'Frequently Asked Questions',
             },
@@ -2642,6 +2647,11 @@ export const locales = {
                 },
                 h2_7: 'N\u00e4chster Schritt: Vom Kalorienwert zum Ern\u00e4hrungsplan',
                 p7: 'Ein Kalorienrechner gibt dir einen soliden Startwert, aber echte Ergebnisse kommen durch Konsequenz und einen strukturierten Plan. Fytrr nutzt KI, um einen personalisierten Ern\u00e4hrungsplan basierend auf deinem Kalorienziel, deinen Ern\u00e4hrungsvorlieben und Fitnesszielen zu erstellen. Jede Mahlzeit ist berechnet, jedes Makro ber\u00fccksichtigt \u2014 und du kannst Mahlzeiten jederzeit tauschen. Teste es 7 Tage kostenlos.',
+            },
+            furtherReading: {
+                heading: 'Weiterlesen',
+                appStoreText: 'Oder lade die Fytrr App direkt herunter:',
+                appStoreBadge: 'Im App Store laden',
             },
             faq: {
                 heading: 'H\u00e4ufig gestellte Fragen',

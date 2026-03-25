@@ -32,10 +32,22 @@ class CalorieCalculatorController extends Controller
 
         $schema = $this->buildSchema($locale, $meta);
 
+        // Build related blog article links from config
+        $relatedArticles = [];
+        $blogArticles = config("blog.{$locale}", []);
+        foreach ($blogArticles as $slug => $article) {
+            $relatedArticles[] = [
+                'url' => "/{$locale}/blog/{$slug}",
+                'title' => $article['h1'],
+                'description' => $article['description'],
+            ];
+        }
+
         return Inertia::render('CalorieCalculator', [
             'meta' => $meta,
             'alternateUrls' => $alternateUrls,
             'schema' => $schema,
+            'relatedArticles' => $relatedArticles,
         ]);
     }
 
