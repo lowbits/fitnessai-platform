@@ -187,11 +187,15 @@ watch(selectedLanguage, (newLocale) => {
                                 :class="{
                                     'font-semibold text-secondary-200':
                                         $page.url.startsWith(
-                                            getPathFromUrl(footerLinks.calorieCalculatorUrl),
+                                            getPathFromUrl(
+                                                footerLinks.calorieCalculatorUrl,
+                                            ),
                                         ),
                                     'text-gray-300 transition hover:text-secondary-100':
                                         !$page.url.startsWith(
-                                            getPathFromUrl(footerLinks.calorieCalculatorUrl),
+                                            getPathFromUrl(
+                                                footerLinks.calorieCalculatorUrl,
+                                            ),
                                         ),
                                 }"
                             >

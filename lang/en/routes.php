@@ -6,6 +6,7 @@ return [
     'terms' => 'terms-and-conditions',
     'disclaimer' => 'disclaimer',
     'free_tools_calorie_calculator' => 'free-tools/calorie-calculator',
+    'blog_index' => 'blog',
     'blog_article' => 'blog/{slug}',
     'workout_plans_index' => 'free-workout-plan',
     'workout_plans_type' => 'free-workout-plan/{type}',

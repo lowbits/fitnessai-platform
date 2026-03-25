@@ -27,7 +27,9 @@ const { language } = useSelectedLanguage();
         class="overflow-hidden rounded-2xl border border-dark-surfaces-25 bg-gradient-to-br from-dark-surfaces-800 via-dark-surfaces-900 to-primary-500/10"
     >
         <!-- Mobile: upper half of phone, bottom half clipped -->
-        <div class="relative mx-auto h-[200px] w-[180px] overflow-hidden pt-6 md:hidden">
+        <div
+            class="relative mx-auto h-[200px] w-[180px] overflow-hidden pt-6 md:hidden"
+        >
             <img
                 :src="`/assets/images/mocks/iphone/dashboard_${language}.avif`"
                 :alt="t('welcome.app_section.title')"
@@ -77,20 +79,14 @@ const { language } = useSelectedLanguage();
                 <div class="space-y-5">
                     <div class="flex items-start gap-4">
                         <RoundedIcon size="sm">
-                            <ArrowLeftRight
-                                class="size-5 text-primary-100"
-                            />
+                            <ArrowLeftRight class="size-5 text-primary-100" />
                         </RoundedIcon>
                         <div>
                             <h3 class="font-semibold text-white">
                                 {{ t('welcome.app_section.feature_swap') }}
                             </h3>
                             <p class="mt-0.5 text-sm text-secondary-300">
-                                {{
-                                    t(
-                                        'welcome.app_section.feature_swap_body',
-                                    )
-                                }}
+                                {{ t('welcome.app_section.feature_swap_body') }}
                             </p>
                         </div>
                     </div>
@@ -107,9 +103,7 @@ const { language } = useSelectedLanguage();
                             </h3>
                             <p class="mt-0.5 text-sm text-secondary-300">
                                 {{
-                                    t(
-                                        'welcome.app_section.feature_track_body',
-                                    )
+                                    t('welcome.app_section.feature_track_body')
                                 }}
                             </p>
                         </div>
@@ -117,9 +111,7 @@ const { language } = useSelectedLanguage();
 
                     <div class="flex items-start gap-4">
                         <RoundedIcon size="sm">
-                            <MessageCircle
-                                class="size-5 text-primary-100"
-                            />
+                            <MessageCircle class="size-5 text-primary-100" />
                         </RoundedIcon>
                         <div>
                             <h3 class="font-semibold text-white">
@@ -127,9 +119,7 @@ const { language } = useSelectedLanguage();
                             </h3>
                             <p class="mt-0.5 text-sm text-secondary-300">
                                 {{
-                                    t(
-                                        'welcome.app_section.feature_coach_body',
-                                    )
+                                    t('welcome.app_section.feature_coach_body')
                                 }}
                             </p>
                         </div>

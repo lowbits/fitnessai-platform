@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import AppSection from '@/components/AppSection.vue';
-import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import { Button } from '@/components/ui/button';
+import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import { useDeepLink } from '@/composables/useDeepLink';
 import { useTracking } from '@/composables/useTracking';
 import GuestLayout from '@/layouts/GuestLayout.vue';
@@ -31,9 +31,7 @@ const props = defineProps<Props>();
 const DEEP_LINK_URL = 'fytrr://';
 
 const { t, tm, rt, locale } = useI18n();
-const canonicalUrl = computed(
-    () => `https://fytrr.com/${locale.value}/app`,
-);
+const canonicalUrl = computed(() => `https://fytrr.com/${locale.value}/app`);
 const { trackEvent } = useTracking();
 const { openApp } = useDeepLink(props.appStoreUrl);
 
@@ -81,7 +79,6 @@ const faqs = computed(() => {
 
 onMounted(() => {
     trackEvent('Download App - Page View', utmProps.value);
-
 });
 </script>
 
@@ -109,9 +106,7 @@ onMounted(() => {
                 <!-- "Already installed?" above download when account ready -->
                 <template v-else-if="isAccountReady" #before-download>
                     <div class="border-t border-white/10 pt-6">
-                        <p
-                            class="mb-3 text-sm font-semibold text-primary-400"
-                        >
+                        <p class="mb-3 text-sm font-semibold text-primary-400">
                             {{ t('downloadApp.alreadyInstalled') }}
                         </p>
 
@@ -140,47 +135,31 @@ onMounted(() => {
                                         class="h-28 w-28"
                                     />
                                 </div>
-                                <span
-                                    class="mt-1.5 text-[10px] text-gray-500"
-                                >
-                                    {{
-                                        t('downloadApp.desktop.scanQr')
-                                    }}
+                                <span class="mt-1.5 text-[10px] text-gray-500">
+                                    {{ t('downloadApp.desktop.scanQr') }}
                                 </span>
                             </div>
 
-                            <div
-                                class="flex flex-col items-center gap-1"
-                            >
-                                <div
-                                    class="h-6 w-px bg-gray-700"
-                                ></div>
-                                <span
-                                    class="text-[10px] text-gray-500"
-                                >
+                            <div class="flex flex-col items-center gap-1">
+                                <div class="h-6 w-px bg-gray-700"></div>
+                                <span class="text-[10px] text-gray-500">
                                     {{ t('downloadApp.desktop.or') }}
                                 </span>
-                                <div
-                                    class="h-6 w-px bg-gray-700"
-                                ></div>
+                                <div class="h-6 w-px bg-gray-700"></div>
                             </div>
 
-                            <div
-                                class="flex flex-col items-center gap-2"
-                            >
+                            <div class="flex flex-col items-center gap-2">
                                 <Button
                                     class="relative"
                                     :class="{
-                                        'text-transparent!':
-                                            deepLinkCopied,
+                                        'text-transparent!': deepLinkCopied,
                                     }"
                                     variant="secondary"
                                     @click="handleCopyDeepLink"
                                 >
                                     <svg
                                         :class="{
-                                            'text-transparent!':
-                                                deepLinkCopied,
+                                            'text-transparent!': deepLinkCopied,
                                         }"
                                         class="h-5 w-5"
                                         fill="none"
@@ -198,24 +177,12 @@ onMounted(() => {
                                         v-if="deepLinkCopied"
                                         class="absolute inset-0 flex items-center justify-center text-green-500"
                                     >
-                                        {{
-                                            t(
-                                                'downloadApp.desktop.copied',
-                                            )
-                                        }}
+                                        {{ t('downloadApp.desktop.copied') }}
                                     </span>
-                                    {{
-                                        t('downloadApp.desktop.copyLink')
-                                    }}
+                                    {{ t('downloadApp.desktop.copyLink') }}
                                 </Button>
-                                <span
-                                    class="text-[10px] text-gray-500"
-                                >
-                                    {{
-                                        t(
-                                            'downloadApp.desktop.copyHint',
-                                        )
-                                    }}
+                                <span class="text-[10px] text-gray-500">
+                                    {{ t('downloadApp.desktop.copyHint') }}
                                 </span>
                             </div>
                         </div>
@@ -227,9 +194,7 @@ onMounted(() => {
                     v-if="setPasswordUrl"
                     class="border-t border-white/10 pt-6"
                 >
-                    <p
-                        class="mb-3 text-sm font-semibold text-primary-400"
-                    >
+                    <p class="mb-3 text-sm font-semibold text-primary-400">
                         {{ t('downloadApp.step2.label') }}:
                         {{ t('downloadApp.step2.text') }}
                     </p>
@@ -240,11 +205,7 @@ onMounted(() => {
                         :href="setPasswordDeepLink ?? setPasswordUrl"
                         @click="handleActivateClick"
                     >
-                        <Button
-                            variant="outline"
-                            size="lg"
-                            class="w-full"
-                        >
+                        <Button variant="outline" size="lg" class="w-full">
                             {{ t('downloadApp.step2.cta') }}
                         </Button>
                     </a>
@@ -264,9 +225,7 @@ onMounted(() => {
                                     class="h-28 w-28"
                                 />
                             </div>
-                            <span
-                                class="mt-1.5 text-[10px] text-gray-500"
-                            >
+                            <span class="mt-1.5 text-[10px] text-gray-500">
                                 {{ t('downloadApp.desktop.scanQr') }}
                             </span>
                         </div>
@@ -274,7 +233,11 @@ onMounted(() => {
                 </div>
             </AppSection>
 
-            <FAQSection :faqs="faqs" :heading="t('downloadApp.faq.heading')" class="mt-12 rounded-2xl" />
+            <FAQSection
+                :faqs="faqs"
+                :heading="t('downloadApp.faq.heading')"
+                class="mt-12 rounded-2xl"
+            />
         </div>
     </GuestLayout>
 </template>

@@ -24,6 +24,8 @@ return [
             'h1' => 'Kalorienbedarf berechnen — Die komplette Anleitung',
             'keywords' => ['kalorienbedarf berechnen', 'täglicher kalorienbedarf', 'kalorienbedarf formel', 'kalorienverbrauch berechnen', 'kalorienbedarf frau', 'kalorienbedarf mann'],
             'internal_slug' => 'calorie-needs',
+            'og_image' => '/assets/images/og/kalorienbedarf-berechnen.webp',
+            'og_image_alt' => 'Teller mit ausgewogener Mahlzeit, Smartphone mit Kalorienrechner und Küchenwaage auf weißer Arbeitsfläche',
             'published_at' => '2026-03-25',
             'last_updated_at' => '2026-03-25',
 
@@ -89,6 +91,70 @@ return [
 
             'calorie_calculator_slug' => 'kostenlose-tools/kalorienrechner',
         ],
+
+        'hyrox-krafttraining' => [
+            'title' => 'Krafttraining für Hyrox: Warum Ausdauer nicht reicht | Fytrr',
+            'description' => 'Du willst Hyrox machen? Dann reicht Laufen allein nicht. Erfahre, warum Krafttraining die Basis für deine Hyrox-Vorbereitung ist — und wie du startest.',
+            'h1' => 'Krafttraining für Hyrox: Warum Ausdauer allein nicht reicht',
+            'keywords' => ['hyrox krafttraining', 'krafttraining für hyrox', 'hyrox vorbereitung', 'hyrox training kraft', 'kraft aufbauen hyrox', 'hyrox anfänger kraft', 'hyrox trainingsplan krafttraining', 'wie stark muss man für hyrox sein'],
+            'internal_slug' => 'hyrox-strength-training',
+            'og_image' => '/assets/images/og/hyrox-og-image.webp',
+            'og_image_alt' => 'Mann schiebt schweren Gewichtsschlitten im Fitnessstudio als Vorbereitung auf Hyrox',
+            'published_at' => '2026-03-25',
+            'last_updated_at' => '2026-03-25',
+
+            'intro' => 'Du hast dich für einen Hyrox angemeldet. Oder du überlegst noch. So oder so — du weißt wahrscheinlich schon: Da wird gelaufen. Viel gelaufen. 8 Kilometer insgesamt, aufgeteilt in 8 Runden à 1 km. Und was machen die meisten? Sie laufen. Logisch. Aber hier ist das Ding: Die 8 km sind nicht das Problem. Was zwischen den Läufen passiert, entscheidet über dein Ergebnis. Sled Push. Sled Pull. Wall Balls. Farmer\'s Carry. Sandbag Lunges. Das alles ist Kraft. Und wenn du die nicht hast, hilft dir die beste Ausdauer nichts.',
+
+            'sections' => [
+                [
+                    'heading' => 'Was Hyrox von deinem Körper verlangt',
+                    'content' => 'Hyrox besteht aus 8 Laufrunden à 1 km, jeweils gefolgt von einer Kraftstation. SkiErg (1.000m) braucht Oberkörper-Ausdauer und Zugkraft. Sled Push (152/102 kg) verlangt Beinkraft und Core-Stabilität. Sled Pull (103/78 kg) fordert Rücken, Bizeps und Griffkraft. Burpee Broad Jumps (80m) verlangen Ganzkörper-Explosivität. Rowing (1.000m) braucht Beine, Rücken und Ausdauer. Farmer\'s Carry (200m, 2×24/2×16 kg) erfordert Griffkraft und Rumpfstabilität. Sandbag Lunges (100m, 20/10 kg) brauchen Beinkraft und Balance. Wall Balls (75/100 Wiederholungen, 6/4 kg) verlangen Beinkraft, Schulterkraft und Ausdauer. Fast überall steht Kraft. Nicht Ausdauer. Kraft.',
+                ],
+                [
+                    'heading' => 'Warum die meisten zu wenig Kraft mitbringen',
+                    'content' => 'Das typische Hyrox-Vorbereitungsmuster: Anmeldung, Panik, viel laufen, vielleicht mal ein paar Burpees üben — und am Race Day beim Sled Push sterben. Die meisten verlieren nicht beim Laufen ihre Zeit, sondern an den Stationen. Besonders Sled Push und Sled Pull sind für viele der Punkt, an dem es kippt. Der Grund: Laufen trainiert dein Herz-Kreislauf-System. Aber es baut keine Kraft in den Beinen, im Rücken oder im Griff auf. Zumindest nicht die Art von Kraft, die du brauchst, um einen 152 kg schweren Schlitten über eine Bahn zu schieben.',
+                ],
+                [
+                    'heading' => 'Welche Art von Kraft du für Hyrox brauchst',
+                    'content' => 'Du musst kein Powerlifter werden. Hyrox verlangt keine Maximalkraft für eine einzelne Wiederholung. Was du brauchst, ist Kraftausdauer — die Fähigkeit, moderate Lasten über viele Wiederholungen oder eine längere Dauer zu bewegen. Die wichtigsten Bereiche: Beinkraft (Sled Push, Sled Pull, Lunges, Wall Balls, Rowing) — das Fundament. Kniebeugen, Ausfallschritte, Beinpresse. Oberkörper-Zugkraft (Sled Pull, SkiErg, Rowing) — Rudern, Lat Pulldowns, Klimmzüge. Oberkörper-Druckkraft (Wall Balls, Sled Push) — Schulterdrücken, Push-Ups, Dips. Griffkraft (Farmer\'s Carry, Sled Pull, SkiErg) — wird unterschätzt, aber wenn dein Griff nachlässt, kannst du nichts mehr halten. Core-Stabilität (alles) — dein Rumpf verbindet Ober- und Unterkörper.',
+                ],
+                [
+                    'heading' => 'Ein realistischer Ansatz: Erst Kraft, dann Hyrox-spezifisch',
+                    'content' => 'Wenn du 12-16 Wochen bis zu deinem Hyrox hast, hier ein sinnvoller Aufbau: Wochen 1-6 — Kraft aufbauen. 3-4× pro Woche Krafttraining mit Fokus auf Kniebeugen, Kreuzheben, Rudern, Schulterdrücken, Ausfallschritte und Farmer\'s Carry. Dazu 2× pro Woche lockeres Laufen (5-8 km). Wochen 7-12 — Übergang zu Kraftausdauer. Gewichte leicht reduzieren, Wiederholungen erhöhen (15-20 statt 8-12). Supersets und Circuits einbauen, Laufumfang leicht erhöhen. Wochen 13-16 — Hyrox-spezifisch (wenn möglich). Stationen simulieren, Sled-Training wenn verfügbar, Race-Pace üben. Der Punkt ist: Die ersten 6 Wochen sind reines Krafttraining. Kein Hyrox-spezifisches Training nötig. Einfach stärker werden.',
+                ],
+                [
+                    'heading' => 'Was Fytrr für deine Hyrox-Vorbereitung tun kann',
+                    'content' => 'Ehrlich gesagt: Fytrr ist keine Hyrox-App. Wir generieren keine Hyrox-spezifischen Trainingspläne mit Sled-Stationen und SkiErg-Intervallen. Was Fytrr kann: Dir einen soliden Krafttrainingsplan erstellen, der genau die Grundlagen abdeckt, die du für Hyrox brauchst. Personalisierter Kraftplan — sag der App dein Ziel, dein Level und wie oft du trainieren willst. Verschiedene Splits — Ganzkörper, Oberkörper/Unterkörper, Push/Pull/Legs. Ernährungsplan dazu — genug Protein für den Muskelaufbau, genug Kohlenhydrate für die Ausdauer. Für 3,99€/Monat. Für das Hyrox-spezifische Training in den letzten Wochen brauchst du dann ein Hyrox Gym oder einen spezialisierten Coach. Aber die Kraft-Basis? Die kannst du jetzt aufbauen.',
+                ],
+                [
+                    'heading' => '5 Übungen, die dich am meisten auf Hyrox vorbereiten',
+                    'content' => 'Wenn du nur 5 Übungen machen könntest: 1. Kniebeugen — Basis für Sled Push, Lunges, Wall Balls. Kein Hyrox ohne starke Beine. 2. Kreuzheben — Trainiert den gesamten hinteren Körper plus Griffkraft. 3. Kurzhantel-Rudern — Zugkraft für Sled Pull, SkiErg, Rowing. Einarmig für zusätzliche Core-Arbeit. 4. Schulterdrücken — Stehend mit Kurzhanteln. Direkte Übertragung auf Wall Balls. 5. Farmer\'s Carry — Griffkraft, Core, Ganzkörperstabilität. Und es ist buchstäblich eine Hyrox-Station. Alle 5 findest du in einem typischen Fytrr-Kraftplan.',
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Wie stark muss ich für Hyrox sein?',
+                    'answer' => 'Es gibt keine Mindestanforderung. Aber als Richtwert: Wenn du dein eigenes Körpergewicht für 5 Wiederholungen kniebeugen kannst und 60 Sekunden im Dead Hang hängen kannst, hast du eine gute Basis. Für den Sled Push hilft es, wenn du die Beinpresse mit dem 1,5-fachen deines Körpergewichts für 10 Wiederholungen schaffst.',
+                ],
+                [
+                    'question' => 'Kann ich nur mit Laufen einen Hyrox schaffen?',
+                    'answer' => 'Ja, du wirst ins Ziel kommen. Aber du wirst an den Stationen viel Zeit verlieren und es wird sich deutlich härter anfühlen. Die meisten Erstläufer*innen sagen hinterher: "Ich hätte mehr Kraft trainieren sollen."',
+                ],
+                [
+                    'question' => 'Wie oft pro Woche sollte ich Kraft trainieren für Hyrox?',
+                    'answer' => '3-4× ist ideal. 2× reicht für den Anfang, wenn du zusätzlich 2-3× laufen gehst. Weniger als 2× Kraft pro Woche bringt zu wenig Fortschritt.',
+                ],
+                [
+                    'question' => 'Brauche ich ein Hyrox-Gym für die Vorbereitung?',
+                    'answer' => 'Für die Kraft-Phase: Nein. Jedes normale Fitnessstudio reicht. Kniebeugen, Kreuzheben, Rudern — das geht überall. Für die letzten 4 Wochen vor dem Rennen ist es hilfreich, mal an einem Schlitten zu trainieren, aber nicht zwingend nötig.',
+                ],
+                [
+                    'question' => 'Soll ich zuerst Kraft oder Ausdauer trainieren?',
+                    'answer' => 'Wenn du beides am selben Tag machst: Kraft zuerst. Du brauchst frische Muskeln für die Technik bei schweren Übungen. Laufen kannst du auch müde. Noch besser: Trenne die Einheiten (morgens/abends oder verschiedene Tage).',
+                ],
+            ],
+        ],
     ],
 
     'en' => [
@@ -99,6 +165,8 @@ return [
             'h1' => 'How to Calculate Your Calorie Needs — The Complete Guide',
             'keywords' => ['calculate calorie needs', 'daily calorie needs', 'calorie calculator formula', 'how many calories do I need', 'TDEE calculator'],
             'internal_slug' => 'calorie-needs',
+            'og_image' => '/assets/images/og/kalorienbedarf-berechnen.webp',
+            'og_image_alt' => 'Balanced meal plate with smartphone calorie calculator and kitchen scale on white countertop',
             'published_at' => '2026-03-25',
             'last_updated_at' => '2026-03-25',
 

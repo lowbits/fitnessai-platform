@@ -45,8 +45,9 @@ const showSuccessMessage = ref(false);
 const showAppUpsell = ref(false);
 const userEmail = ref('');
 
-const isMobileIos = typeof navigator !== 'undefined'
-    && /iPhone|iPad|iPod/i.test(navigator.userAgent);
+const isMobileIos =
+    typeof navigator !== 'undefined' &&
+    /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
 const form = reactive({
     email: '',
@@ -448,9 +449,7 @@ const submit = async () => {
             class="flex h-[600px] flex-col items-center justify-center text-center"
         >
             <div class="space-y-4">
-                <p
-                    class="font-display text-3xl font-semibold text-white"
-                >
+                <p class="font-display text-3xl font-semibold text-white">
                     {{ $t('form.appUpsell.title') }}
                 </p>
                 <p class="text-base text-secondary-300">

@@ -7,6 +7,62 @@ use Inertia\Response;
 
 class BlogController extends Controller
 {
+    public function index(): Response
+    {
+        $locale = app()->getLocale();
+        $articles = config("blog.{$locale}", []);
+        $baseUrl = config('app.url');
+        $author = config("blog.default_author.{$locale}");
+
+        $posts = [];
+        foreach ($articles as $slug => $article) {
+            $posts[] = [
+                'slug' => $slug,
+                'title' => $article['h1'],
+                'description' => $article['description'],
+                'url' => "/{$locale}/blog/{$slug}",
+                'og_image' => $article['og_image'] ?? null,
+                'og_image_alt' => $article['og_image_alt'] ?? '',
+                'published_at' => now()->parse($article['published_at'])->toFormattedDateString(),
+            ];
+        }
+
+        $canonical = "{$baseUrl}/{$locale}/blog";
+
+        $alternateUrls = [];
+        foreach (['de', 'en'] as $loc) {
+            $alternateUrls[$loc] = "{$baseUrl}/{$loc}/blog";
+        }
+
+        $meta = [
+            'title' => $locale === 'de'
+                ? 'Blog — Fitness, Ernährung & Training | Fytrr'
+                : 'Blog — Fitness, Nutrition & Training | Fytrr',
+            'description' => $locale === 'de'
+                ? 'Ratgeber rund um Training, Ernährung und Fitness. Wissenschaftlich fundiert, praxisnah und kostenlos.'
+                : 'Guides on training, nutrition and fitness. Science-based, practical and free.',
+            'canonical' => $canonical,
+        ];
+
+        $labels = [
+            'heading' => 'Blog',
+            'readMore' => $locale === 'de' ? 'Artikel lesen' : 'Read article',
+            'ctaHeading' => $locale === 'de' ? 'Von der Theorie zur Praxis' : 'From theory to practice',
+            'ctaText' => $locale === 'de'
+                ? 'Fytrr erstellt dir einen personalisierten Trainings- und Ernährungsplan — mit KI, in 60 Sekunden. 7 Tage kostenlos testen.'
+                : 'Fytrr creates a personalised workout and nutrition plan — with AI, in 60 seconds. Try it free for 7 days.',
+            'ctaButton' => $locale === 'de' ? '7 Tage kostenlos — meinen Plan erstellen' : '7 days free — create my plan',
+        ];
+
+        return Inertia::render('Blog/Index', [
+            'posts' => $posts,
+            'author' => $author,
+            'meta' => $meta,
+            'alternateUrls' => $alternateUrls,
+            'labels' => $labels,
+        ]);
+    }
+
     public function show(string $slug): Response
     {
         $locale = app()->getLocale();
@@ -23,11 +79,17 @@ class BlogController extends Controller
         $canonical = "{$baseUrl}/{$locale}/blog/{$slug}";
         $alternateUrls = $this->generateAlternateUrls($article['internal_slug']);
 
+        $ogImage = isset($article['og_image'])
+            ? "{$baseUrl}{$article['og_image']}"
+            : null;
+
         $meta = [
             'title' => $article['title'],
             'description' => $article['description'],
             'canonical' => $canonical,
             'keywords' => $article['keywords'] ?? [],
+            'ogImage' => $ogImage,
+            'ogImageAlt' => $article['og_image_alt'] ?? '',
         ];
 
         $schema = $this->buildSchema($article, $author, $canonical, $locale);

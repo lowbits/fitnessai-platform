@@ -7,7 +7,10 @@ import { ref } from 'vue';
 export function useDeepLink(appStoreUrl: string, scheme: string = 'fytrr') {
     const didOpenApp = ref(false);
 
-    function openApp(path: string = '', queryParams: Record<string, string> = {}) {
+    function openApp(
+        path: string = '',
+        queryParams: Record<string, string> = {},
+    ) {
         const params = new URLSearchParams(queryParams).toString();
         const query = params ? `?${params}` : '';
         const schemeUrl = `${scheme}://${path}${query}`;

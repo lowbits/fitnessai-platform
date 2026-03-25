@@ -190,7 +190,8 @@ export const locales = {
             },
             appUpsell: {
                 title: 'Want to test the app?',
-                subtitle: 'Get your plan directly in the Fytrr app — with AI coaching, meal swaps, and more.',
+                subtitle:
+                    'Get your plan directly in the Fytrr app — with AI coaching, meal swaps, and more.',
                 cta: 'Download from App Store',
                 skip: 'Continue without the app',
             },
@@ -1127,7 +1128,8 @@ export const locales = {
             calculatorCta: 'Want to calculate your calorie needs right now?',
             calculatorCtaLink: 'Open the free calorie calculator',
             appCtaHeadline: 'From theory to practice',
-            appCtaText: 'Fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
+            appCtaText:
+                'Fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
             appCtaButton: '7 days free \u2014 create my plan',
             faqHeading: 'Frequently Asked Questions',
         },
@@ -1171,7 +1173,8 @@ export const locales = {
                 carbs: 'Carbs',
                 fat: 'Fat',
                 ctaHeadline: 'You know how much to eat. But what exactly?',
-                ctaText: 'Fytrr creates a personalised nutrition plan for exactly {calories} kcal \u2014 with recipes, shopping list and swappable meals.',
+                ctaText:
+                    'Fytrr creates a personalised nutrition plan for exactly {calories} kcal \u2014 with recipes, shopping list and swappable meals.',
                 ctaButton: '7 days free \u2014 create my plan',
                 ctaSubline: 'Cancel anytime. No risk.',
             },
@@ -1217,7 +1220,7 @@ export const locales = {
                 h2_4: 'How many calories for muscle gain?',
                 p4: 'For muscle gain, you need a calorie surplus \u2014 consuming more energy than you burn. We recommend a moderate surplus of 200\u2013400 kcal above your TDEE. Combined with progressive strength training and adequate protein (1.6\u20132.0 g per kg bodyweight), this supports lean mass gains of approximately 0.5\u20131 kg per month. A larger surplus leads primarily to fat gain, not faster muscle growth \u2014 your body can only build muscle at a limited rate.',
                 h2_5: 'Calorie needs for women vs. men',
-                p5: 'Men typically need 2,000\u20133,000 kcal per day, women 1,600\u20132,400 kcal \u2014 but these are rough averages. The difference comes from men generally having more muscle mass (which burns more energy at rest) and larger body frames. However, individual variation is huge: an active woman who trains 5 times per week will need significantly more calories than a sedentary man. That\'s why a personalised calculation based on your data is far more useful than generic guidelines.',
+                p5: "Men typically need 2,000\u20133,000 kcal per day, women 1,600\u20132,400 kcal \u2014 but these are rough averages. The difference comes from men generally having more muscle mass (which burns more energy at rest) and larger body frames. However, individual variation is huge: an active woman who trains 5 times per week will need significantly more calories than a sedentary man. That's why a personalised calculation based on your data is far more useful than generic guidelines.",
                 h2_6: 'Activity levels explained',
                 p6: 'The activity factor accounts for all physical activity throughout your day \u2014 not just exercise, but also your job, daily movement and household tasks:',
                 levels: {
@@ -1292,8 +1295,9 @@ export const locales = {
                         answer: 'Yes! You get a complete, personalized workout and nutrition plan for free. The app offers optional premium features, but the core plan is completely free.',
                     },
                     {
-                        question: 'What makes fytrr different from other fitness apps?',
-                        answer: 'Fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can\'t do.',
+                        question:
+                            'What makes fytrr different from other fitness apps?',
+                        answer: "Fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can't do.",
                     },
                     {
                         question: 'Can I swap exercises or meals?',
@@ -1572,7 +1576,8 @@ export const locales = {
             },
             appUpsell: {
                 title: 'Willst du die App testen?',
-                subtitle: 'Erhalte deinen Plan direkt in der Fytrr App \u2014 mit KI-Coaching, Mahlzeiten-Tausch und mehr.',
+                subtitle:
+                    'Erhalte deinen Plan direkt in der Fytrr App \u2014 mit KI-Coaching, Mahlzeiten-Tausch und mehr.',
                 cta: 'Aus dem App Store laden',
                 skip: 'Ohne App fortfahren',
             },
@@ -2530,7 +2535,8 @@ export const locales = {
             calculatorCta: 'Du willst deinen Kalorienbedarf jetzt berechnen?',
             calculatorCtaLink: 'Zum kostenlosen Kalorienrechner',
             appCtaHeadline: 'Von der Theorie zur Praxis',
-            appCtaText: 'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
+            appCtaText:
+                'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
             appCtaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
             faqHeading: 'H\u00e4ufig gestellte Fragen',
         },
@@ -2555,7 +2561,8 @@ export const locales = {
                 light: 'Leicht aktiv (1\u20132 Trainings/Woche)',
                 moderate: 'Moderat aktiv (3\u20135 Trainings/Woche)',
                 active: 'Sehr aktiv (6\u20137 Trainings/Woche)',
-                veryActive: 'Extrem aktiv (k\u00f6rperliche Arbeit + t\u00e4gliches Training)',
+                veryActive:
+                    'Extrem aktiv (k\u00f6rperliche Arbeit + t\u00e4gliches Training)',
                 goal: 'Ziel',
                 lose: 'Abnehmen',
                 maintain: 'Halten',
@@ -2573,8 +2580,10 @@ export const locales = {
                 protein: 'Protein',
                 carbs: 'Kohlenhydrate',
                 fat: 'Fett',
-                ctaHeadline: 'Du wei\u00dft jetzt, wie viel du essen sollst. Aber was genau?',
-                ctaText: 'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungsplan f\u00fcr genau {calories} kcal \u2014 mit Rezepten, Einkaufsliste und Mahlzeiten, die du tauschen kannst.',
+                ctaHeadline:
+                    'Du wei\u00dft jetzt, wie viel du essen sollst. Aber was genau?',
+                ctaText:
+                    'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungsplan f\u00fcr genau {calories} kcal \u2014 mit Rezepten, Einkaufsliste und Mahlzeiten, die du tauschen kannst.',
                 ctaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
                 ctaSubline: 'Jederzeit k\u00fcndbar. Kein Risiko.',
             },
@@ -2695,11 +2704,13 @@ export const locales = {
                         answer: 'Ja! Du bekommst einen kompletten, personalisierten Trainings- und Ern\u00e4hrungsplan kostenlos. Die App bietet optionale Premium-Features, aber der Kernplan ist komplett gratis.',
                     },
                     {
-                        question: 'Was unterscheidet fytrr von anderen Fitness-Apps?',
+                        question:
+                            'Was unterscheidet fytrr von anderen Fitness-Apps?',
                         answer: 'Fytrr nutzt KI, um einen wirklich personalisierten Plan basierend auf deinen Zielen, deinem Fitnesslevel und deinen Vorlieben zu erstellen. Dein KI-Coach Mona passt deine Workouts in Echtzeit an \u2014 das kann kein statisches PDF oder eine generische App.',
                     },
                     {
-                        question: 'Kann ich \u00dcbungen oder Mahlzeiten tauschen?',
+                        question:
+                            'Kann ich \u00dcbungen oder Mahlzeiten tauschen?',
                         answer: 'Auf jeden Fall! Du kannst jede \u00dcbung oder Mahlzeit gegen smarte Alternativen tauschen, die zu deinen Makros und Trainingszielen passen. Mona schl\u00e4gt dir die besten Ersatz\u00fcbungen vor.',
                     },
                     {

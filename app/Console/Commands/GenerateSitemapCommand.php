@@ -124,6 +124,22 @@ class GenerateSitemapCommand extends Command
                 }
             }
 
+            // Blog Index
+            $blogIndexUrl = Url::create("/{$locale}/blog")
+                ->setLastModificationDate(Carbon::now())
+                ->setPriority(0.8)
+                ->setChangeFrequency('weekly');
+
+            foreach ($locales as $altLocale) {
+                if ($altLocale !== $locale) {
+                    $blogIndexUrl->addAlternate("{$baseUrl}/{$altLocale}/blog", $altLocale);
+                }
+            }
+
+            $sitemap->add($blogIndexUrl);
+
+            $this->info("Added blog index: /{$locale}/blog");
+
             // Blog Articles
             $blogArticles = config("blog.{$locale}", []);
 

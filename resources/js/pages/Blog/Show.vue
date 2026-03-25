@@ -35,7 +35,7 @@ interface Article {
     intro: string;
     sections: Section[];
     faqs: FAQ[];
-    calorie_calculator_slug: string;
+    calorie_calculator_slug?: string;
 }
 
 interface Props {
@@ -44,6 +44,7 @@ interface Props {
         description: string;
         canonical: string;
         keywords: string[];
+        ogImage?: string;
     };
     article: Article;
     author: Author;
@@ -57,9 +58,7 @@ const props = defineProps<Props>();
 
 const { t, locale } = useI18n();
 
-const schemaJson = computed(() =>
-    props.schema.map((s) => JSON.stringify(s)),
-);
+const schemaJson = computed(() => props.schema.map((s) => JSON.stringify(s)));
 
 const calculatorUrl = computed(
     () => `/${locale.value}/${props.article.calorie_calculator_slug}`,
@@ -79,9 +78,20 @@ const calculatorUrl = computed(
         <meta property="og:description" :content="meta.description" />
         <meta property="og:url" :content="meta.canonical" />
         <meta property="og:type" content="article" />
+        <meta v-if="meta.ogImage" property="og:image" :content="meta.ogImage" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" :content="meta.title" />
         <meta name="twitter:description" :content="meta.description" />
+        <meta
+            v-if="meta.ogImage"
+            name="twitter:image"
+            :content="meta.ogImage"
+        />
+        <meta
+            v-if="meta.ogImageAlt"
+            property="og:image:alt"
+            :content="meta.ogImageAlt"
+        />
         <link
             v-for="(url, loc) in alternateUrls"
             :key="loc"
@@ -130,19 +140,16 @@ const calculatorUrl = computed(
                 <div class="mx-auto max-w-3xl">
                     <article class="prose prose-invert max-w-none">
                         <!-- Intro -->
-                        <p
-                            class="text-lg leading-relaxed text-gray-300"
-                        >
+                        <p class="text-lg leading-relaxed text-gray-300">
                             {{ article.intro }}
                         </p>
 
                         <!-- Calculator CTA inline -->
                         <div
+                            v-if="article.calorie_calculator_slug"
                             class="my-8 rounded-xl border border-primary-500/20 bg-primary-500/5 p-5"
                         >
-                            <p
-                                class="text-sm font-medium text-white"
-                            >
+                            <p class="text-sm font-medium text-white">
                                 {{ t('blog.calculatorCta') }}
                             </p>
                             <a
@@ -164,9 +171,7 @@ const calculatorUrl = computed(
                             >
                                 {{ section.heading }}
                             </h2>
-                            <p
-                                class="leading-relaxed text-gray-300"
-                            >
+                            <p class="leading-relaxed text-gray-300">
                                 {{ section.content }}
                             </p>
                         </template>
@@ -176,9 +181,7 @@ const calculatorUrl = computed(
                     <div
                         class="mt-12 rounded-2xl border border-primary-500/20 bg-primary-500/5 p-8 text-center"
                     >
-                        <p
-                            class="text-lg font-semibold text-white"
-                        >
+                        <p class="text-lg font-semibold text-white">
                             {{ t('blog.appCtaHeadline') }}
                         </p>
                         <p class="mt-2 text-sm text-gray-300">
