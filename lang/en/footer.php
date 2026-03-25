@@ -15,6 +15,7 @@ return [
         'fat_loss' => 'Fat Loss Workout',
         'abs' => 'Abs Workout',
         'over_40' => 'Over-40 Workout',
+        'tradesperson' => 'Tradesperson Workout',
         'all' => 'All Workout Plans →',
     ],
     'product' => [

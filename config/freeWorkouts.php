@@ -1680,6 +1680,173 @@ return [
                 ],
             ],
         ],
+
+        /* ============================
+           Handwerker
+        ============================ */
+        'handwerker' => [
+            'title' => 'Kostenloser Trainingsplan für Handwerker – 8 Wochen',
+            'description' => 'Kostenloser 8-Wochen-Trainingsplan für Handwerker. Ausgleichstraining für Rücken, Schultern & Knie – gegen einseitige Belastung im Handwerk.',
+            'h1' => 'Trainingsplan für Handwerker – Ausgleich, Kraft & Mobilität',
+            'intro' => 'Dieser 8-Wochen-Trainingsplan wurde speziell für Handwerker entwickelt, die körperlich arbeiten und trotzdem fit bleiben wollen. Drei ausgewogene Einheiten pro Woche gleichen typische Belastungen aus dem Handwerk aus – Rücken, Schultern und Knie werden gezielt gestärkt und mobilisiert.',
+            'internal_type' => 'tradesperson',
+            'published_at' => '2026-03-21',
+            'last_updated_at' => '2026-03-21',
+
+            'why_it_works' => [
+                'title' => 'Warum dieser Trainingsplan für Handwerker funktioniert',
+                'content' => [
+                    [
+                        'heading' => 'Gezielter Ausgleich für einseitige Belastungen im Handwerk',
+                        'text' => 'Handwerker belasten täglich dieselben Muskelgruppen – Rücken, Schultern und Unterarme durch Heben, Tragen und Überkopfarbeit. Dieser Plan stärkt gezielt die vernachlässigten Gegenspieler (Rotatoren, hintere Schulter, Rumpfstabilität) und beugt so muskulären Dysbalancen vor, die laut Arbeitsmedizin die Hauptursache für berufsbedingte Beschwerden im Handwerk sind.',
+                    ],
+                    [
+                        'heading' => 'Mobilität schützt Gelenke vor Verschleiß',
+                        'text' => 'Wiederholte Bewegungen unter Last – Knien, Bücken, Tragen – verkürzen Muskulatur und belasten Gelenke einseitig. Gezielte Mobilitätsübungen für Hüfte, Brustwirbelsäule und Schultern verbessern die Beweglichkeit und reduzieren das Risiko für Arthrose und Bandscheibenvorfälle. Studien zeigen: Regelmäßiges Mobilitätstraining senkt arbeitsbedingte Rückenschmerzen um bis zu 40%.',
+                    ],
+                    [
+                        'heading' => 'Funktionelle Kraft für den Arbeitsalltag',
+                        'text' => 'Der Plan setzt auf funktionelle Übungen, die Bewegungsmuster aus dem Handwerk simulieren – Heben vom Boden, Tragen, Drücken über Kopf. So baust du Kraft auf, die direkt im Arbeitsalltag hilft: schwere Materialien sicherer bewegen, längere Arbeitstage durchhalten und Verletzungen beim Heben vermeiden.',
+                    ],
+                    [
+                        'heading' => 'Rumpfstabilität als Schutzschild für die Wirbelsäule',
+                        'text' => 'Eine starke Rumpfmuskulatur stabilisiert die Wirbelsäule bei allen Hebe- und Tragebewegungen. Dieser Plan trainiert den Core in jeder Einheit – nicht isoliert mit Sit-ups, sondern funktionell durch Anti-Rotations- und Stabilisationsübungen. Das schützt deine Bandscheiben auch bei asymmetrischen Belastungen auf der Baustelle.',
+                    ],
+                    [
+                        'heading' => 'Praxistaugliche Trainingsstruktur für den Handwerker-Alltag',
+                        'text' => '3 Einheiten à 40 Minuten pro Woche passen auch bei frühem Arbeitsbeginn und körperlich forderndem Tag in den Alltag. Das Equipment ist minimal (Kurzhanteln, Widerstandsband, Matte), sodass du zuhause oder in einer kleinen Garage trainieren kannst. Die moderate Intensität vermeidet zusätzliche Erschöpfung nach einem harten Arbeitstag.',
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'Die 7 häufigsten Trainingsfehler bei Handwerkern – und wie du sie vermeidest',
+                'mistakes' => [
+                    [
+                        'title' => 'Kein Ausgleichstraining machen',
+                        'problem' => 'Nach einem körperlich harten Arbeitstag auf Training verzichten, weil "man ja schon genug bewegt war".',
+                        'consequence' => 'Einseitige Arbeitsbelastung verstärkt muskuläre Dysbalancen über Jahre. Die Folge: chronische Rückenschmerzen, Schulterprobleme und Kniearthrose – die drei häufigsten Gründe für Berufsunfähigkeit im Handwerk.',
+                        'solution' => 'Unterscheide Arbeitsbelastung von Training. Arbeit belastet einseitig, Training gleicht aus. Auch 20 Minuten Ausgleichstraining machen einen Unterschied.',
+                        'example' => 'Ein Elektriker, der 8h über Kopf arbeitet, stärkt abends gezielt die hintere Schulter und Brustwirbelsäulen-Mobilität – 20 Minuten reichen.',
+                    ],
+                    [
+                        'title' => 'Zu schwere Gewichte nach Feierabend',
+                        'problem' => 'Nach 8–10 Stunden körperlicher Arbeit mit maximaler Intensität trainieren.',
+                        'consequence' => 'Überbelastung von Gelenken und Muskulatur, die bereits den ganzen Tag beansprucht wurden. Verletzungsrisiko steigt massiv, Regeneration reicht nicht aus.',
+                        'solution' => 'Moderate Gewichte (60–70% des Maximums), kontrollierte Bewegungen. Ziel ist Ausgleich, nicht Erschöpfung.',
+                        'example' => 'Statt schwerer Kniebeugen mit 100 kg: Goblet Squats mit 16–20 kg, saubere Technik, 3×12 Wiederholungen.',
+                    ],
+                    [
+                        'title' => 'Mobilität komplett ignorieren',
+                        'problem' => 'Nur Kraft trainieren, Dehnung und Mobilität weglassen.',
+                        'consequence' => 'Muskulatur verkürzt weiter, Bewegungsradius nimmt ab. Typische Folge: eingeschränkte Schulterbeweglichkeit, steife Hüfte, chronische Verspannungen im Nacken.',
+                        'solution' => 'Jede Trainingseinheit enthält Mobilitätsarbeit. Zusätzlich: 5–10 Minuten tägliches Stretching morgens oder abends.',
+                        'example' => 'Tägliche Routine: 90/90 Hüftdehnung (60s pro Seite) + Brustwirbelsäulen-Rotation (10 pro Seite) + Schulter-Wandgleiten (10 Wiederholungen).',
+                    ],
+                    [
+                        'title' => 'Rücken falsch trainieren',
+                        'problem' => 'Rückentraining nur mit Hyperextensions oder isolierten Übungen statt funktionellen Bewegungen.',
+                        'consequence' => 'Isolierte Übungen stärken nur einzelne Muskeln, aber nicht die Zusammenarbeit von Rumpf, Hüfte und Beinen beim Heben – genau das, was Handwerker brauchen.',
+                        'solution' => 'Setze auf funktionelle Rückenübungen: Kreuzheben-Varianten, Rows, Farmer Walks. Diese trainieren die gesamte hintere Kette als Einheit.',
+                        'example' => 'Statt 3×15 Rückenstrecker am Gerät: 3×10 Rumänisches Kreuzheben mit Kurzhanteln + 3×30s Farmer Walk.',
+                    ],
+                    [
+                        'title' => 'Knieprobleme durch fehlende Beinarbeit',
+                        'problem' => 'Beintraining auslassen, weil die Knie "eh schon belastet sind" vom Knien und Treppensteigen.',
+                        'consequence' => 'Schwache Oberschenkel- und Gesäßmuskulatur kann das Kniegelenk nicht stabilisieren. Meniskus und Bänder tragen die Last allein – Verschleiß beschleunigt sich.',
+                        'solution' => 'Gezieltes Beintraining stärkt die kniestabilisierende Muskulatur (Quadrizeps, Ischiocrurale, Gesäß). Kniefreundliche Übungen: Glute Bridges, Step-ups, Ausfallschritte.',
+                        'example' => 'Ein Fliesenleger mit Knieschmerzen: 3× pro Woche Glute Bridges (3×15) + Step-ups (3×10 pro Bein). Nach 6 Wochen: deutlich weniger Beschwerden.',
+                    ],
+                    [
+                        'title' => 'Unzureichende Ernährung trotz hohem Verbrauch',
+                        'problem' => 'Handwerker verbrennen 3.000–4.000 kcal täglich, essen aber Fast Food in der Mittagspause und zu wenig Protein.',
+                        'consequence' => 'Muskulatur regeneriert nicht ausreichend, Energielevel sinkt nachmittags ab, Verletzungsanfälligkeit steigt. Langfristig: Muskelabbau trotz körperlicher Arbeit.',
+                        'solution' => 'Meal Prep oder vorbereitete Mahlzeiten. Ziel: 1,6–2,0g Protein pro kg Körpergewicht, ausreichend Kohlenhydrate für die Arbeitsbelastung.',
+                        'example' => 'Bei 85 kg: 136–170g Protein täglich. Meal Prep Sonntag: 5× Reis + Hähnchen + Gemüse. Zwischenmahlzeit: Magerquark mit Haferflocken.',
+                    ],
+                    [
+                        'title' => 'Training am Wochenende "nachholen"',
+                        'problem' => 'Unter der Woche kein Training, dafür Samstag und Sonntag jeweils 90 Minuten Vollgas.',
+                        'consequence' => 'Zwei intensive Einheiten ohne Erholung dazwischen überlasten den bereits beanspruchten Körper. Muskelkater am Montag behindert die Arbeit. Kein nachhaltiger Trainingsfortschritt.',
+                        'solution' => 'Verteile 3 kurze Einheiten über die Woche (z.B. Mo/Mi/Fr oder Di/Do/Sa). 40 Minuten reichen – Konsistenz schlägt Intensität.',
+                        'example' => 'Statt Sa 90 Min + So 90 Min: Mo 40 Min (nach Feierabend) + Mi 40 Min + Fr 40 Min. Ergebnis: bessere Regeneration, weniger Muskelkater, mehr Fortschritt.',
+                    ],
+                ],
+                'summary' => 'Handwerker scheitern selten an fehlendem Willen – sondern an falschem Training, das zur Arbeitsbelastung nicht passt. Dieser Plan ist speziell auf die Anforderungen im Handwerk abgestimmt und schützt deinen Körper, statt ihn zusätzlich zu belasten.',
+            ],
+
+            'workout' => [
+                'weeks' => 8,
+                'workouts_per_week' => 3,
+                'duration_minutes' => 40,
+                'level' => 'Anfänger bis Fortgeschritten',
+                'equipment' => ['Kurzhanteln', 'Widerstandsband', 'Matte'],
+
+                'schedule' => [
+
+                    [
+                        'day' => 'Tag 1 – Rücken & Mobilität',
+                        'focus' => 'Hintere Kette stärken, Brustwirbelsäule & Hüfte mobilisieren',
+                        'exercises' => [
+                            ['name' => 'Rumänisches Kreuzheben (Kurzhanteln)', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'Kurzhantel Rudern einarmig', 'sets' => 3, 'reps' => '10–12 pro Seite', 'rest' => '60s'],
+                            ['name' => 'Face Pulls (Widerstandsband)', 'sets' => 3, 'reps' => '15–20', 'rest' => '45s'],
+                            ['name' => 'Brustwirbelsäulen-Rotation', 'sets' => 2, 'reps' => '10 pro Seite', 'rest' => '30s'],
+                            ['name' => '90/90 Hüftdehnung', 'sets' => 2, 'reps' => '45s pro Seite', 'rest' => '30s'],
+                        ],
+                    ],
+
+                    [
+                        'day' => 'Tag 2 – Schultern & Oberkörper-Ausgleich',
+                        'focus' => 'Rotatorenmanschette, hintere Schulter, Druckkraft',
+                        'exercises' => [
+                            ['name' => 'Kurzhantel Schulterpresse', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'Außenrotation (Widerstandsband)', 'sets' => 3, 'reps' => '15 pro Seite', 'rest' => '45s'],
+                            ['name' => 'Liegestütze', 'sets' => 3, 'reps' => '8–15', 'rest' => '60s'],
+                            ['name' => 'Farmer Walk (Kurzhanteln)', 'sets' => 3, 'reps' => '30s', 'rest' => '45s'],
+                            ['name' => 'Dead Bug', 'sets' => 3, 'reps' => '8 pro Seite', 'rest' => '45s'],
+                        ],
+                    ],
+
+                    [
+                        'day' => 'Tag 3 – Beine, Knie & Core',
+                        'focus' => 'Kniestabilität, Gesäß & Beinachse, Rumpfkraft',
+                        'exercises' => [
+                            ['name' => 'Goblet Squat (Kurzhantel)', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'Step-ups (Bank oder Stufe)', 'sets' => 3, 'reps' => '10 pro Bein', 'rest' => '60s'],
+                            ['name' => 'Glute Bridges', 'sets' => 3, 'reps' => '15–20', 'rest' => '45s'],
+                            ['name' => 'Pallof Press (Widerstandsband)', 'sets' => 3, 'reps' => '10 pro Seite', 'rest' => '45s'],
+                            ['name' => 'Wandsitzen (Wall Sit)', 'sets' => 3, 'reps' => '30–45s', 'rest' => '45s'],
+                        ],
+                    ],
+
+                ],
+
+                'progression' => 'Woche 1–2: Technik erlernen, leichte Gewichte, Beweglichkeit aufbauen | Woche 3–4: Gewicht moderat steigern, Wiederholungen erhöhen | Woche 5–6: Pausen verkürzen, Mobilitätsübungen intensivieren | Woche 7–8: höhere Gewichte, voller Bewegungsumfang, maximale Stabilität',
+                'tips' => [
+                    '1,6–2,0g Protein pro kg Körpergewicht – besonders wichtig bei körperlicher Arbeit',
+                    'Trainiere abends moderat, nicht erschöpfend – Ziel ist Ausgleich, nicht Auspowern',
+                    '7–8 Stunden Schlaf für Regeneration von Arbeitsbelastung UND Training',
+                    'An trainingsfreien Tagen: 5–10 Min. Mobility-Routine (Schultern, Hüfte, BWS)',
+                    'Ausreichend trinken: mindestens 2,5–3 Liter bei körperlicher Arbeit + Training',
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Reicht mein körperlicher Beruf nicht als Training aus?',
+                    'answer' => 'Nein. Arbeit belastet den Körper einseitig – immer dieselben Bewegungsmuster, oft in ungünstigen Positionen. Gezieltes Ausgleichstraining stärkt die vernachlässigten Muskelgruppen und schützt vor Verschleiß.',
+                ],
+                [
+                    'question' => 'Kann ich nach einem harten Arbeitstag noch trainieren?',
+                    'answer' => 'Ja. Dieser Plan ist auf moderate Intensität ausgelegt – 40 Minuten mit Fokus auf Ausgleich, nicht Erschöpfung. Die meisten Handwerker berichten nach 2–3 Wochen von weniger Verspannungen und mehr Energie.',
+                ],
+                [
+                    'question' => 'Brauche ich ein Fitnessstudio für diesen Plan?',
+                    'answer' => 'Nein. Kurzhanteln, ein Widerstandsband und eine Matte reichen aus. Alle Übungen funktionieren zuhause oder in der Garage.',
+                ],
+            ],
+        ],
     ],
 
     'en' => [
@@ -3308,6 +3475,173 @@ return [
                 [
                     'question' => 'How is this plan different from a regular training plan?',
                     'answer' => 'Controlled tempo instead of maximal loads, a dedicated mobility day, longer rest periods and a deload in week 10. These adjustments respect the changed recovery capacity and joint situation after 40.',
+                ],
+            ],
+        ],
+
+        /* ============================
+           Tradesperson
+        ============================ */
+        'tradesperson' => [
+            'title' => 'Free Workout Plan for Tradespeople – 8 Weeks',
+            'description' => 'Free 8-week workout plan for tradespeople. Corrective training for back, shoulders & knees – counteract one-sided physical strain at work.',
+            'h1' => 'Workout Plan for Tradespeople – Balance, Strength & Mobility',
+            'intro' => 'This 8-week workout plan is designed specifically for tradespeople who work physically and want to stay fit. Three balanced sessions per week counteract the typical strains of manual trades – back, shoulders and knees are strengthened and mobilised.',
+            'internal_type' => 'tradesperson',
+            'published_at' => '2026-03-21',
+            'last_updated_at' => '2026-03-21',
+
+            'why_it_works' => [
+                'title' => 'Why This Workout Plan for Tradespeople Works',
+                'content' => [
+                    [
+                        'heading' => 'Targeted Correction for One-Sided Physical Strain',
+                        'text' => 'Tradespeople load the same muscle groups daily – back, shoulders and forearms through lifting, carrying and overhead work. This plan strengthens the neglected antagonists (rotator cuff, rear deltoids, core stability) and prevents the muscular imbalances that occupational health research identifies as the primary cause of work-related injuries in the trades.',
+                    ],
+                    [
+                        'heading' => 'Mobility Protects Joints from Wear',
+                        'text' => 'Repeated movements under load – kneeling, bending, carrying – shorten muscles and stress joints unilaterally. Targeted mobility work for the hips, thoracic spine and shoulders improves range of motion and reduces the risk of osteoarthritis and disc herniation. Research shows regular mobility training reduces work-related back pain by up to 40%.',
+                    ],
+                    [
+                        'heading' => 'Functional Strength for the Working Day',
+                        'text' => 'The plan uses functional exercises that mirror trade movement patterns – lifting from the floor, carrying, pressing overhead. You build strength that directly helps on the job: moving heavy materials more safely, enduring longer workdays and preventing lifting injuries.',
+                    ],
+                    [
+                        'heading' => 'Core Stability as a Shield for Your Spine',
+                        'text' => 'A strong core stabilises the spine during every lift and carry. This plan trains the core in every session – not in isolation with sit-ups, but functionally through anti-rotation and stabilisation exercises. This protects your discs even during asymmetric loading on site.',
+                    ],
+                    [
+                        'heading' => 'A Training Structure That Fits the Tradesperson Lifestyle',
+                        'text' => '3 sessions of 40 minutes per week fit even with early starts and physically demanding days. Equipment is minimal (dumbbells, resistance band, mat), so you can train at home or in a small garage. Moderate intensity avoids additional exhaustion after a hard day at work.',
+                    ],
+                ],
+            ],
+
+            'common_mistakes' => [
+                'title' => 'The 7 Most Common Training Mistakes Tradespeople Make — and How to Avoid Them',
+                'mistakes' => [
+                    [
+                        'title' => 'Skipping Corrective Training Altogether',
+                        'problem' => 'Not training after a physically hard day because "I already moved enough at work".',
+                        'consequence' => 'One-sided work strain compounds muscular imbalances over years. The result: chronic back pain, shoulder problems and knee osteoarthritis – the three most common reasons for occupational disability in the trades.',
+                        'solution' => 'Distinguish work stress from training. Work loads you one-sidedly, training balances you out. Even 20 minutes of corrective work makes a difference.',
+                        'example' => 'An electrician who spends 8 hours working overhead strengthens the rear shoulders and thoracic spine mobility in the evening – 20 minutes is enough.',
+                    ],
+                    [
+                        'title' => 'Going Too Heavy After Work',
+                        'problem' => 'Training at maximum intensity after 8–10 hours of physical labour.',
+                        'consequence' => 'Overloading joints and muscles already stressed all day. Injury risk rises sharply and recovery cannot keep up.',
+                        'solution' => 'Moderate weights (60–70% of maximum), controlled movements. The goal is balance, not exhaustion.',
+                        'example' => 'Instead of heavy barbell squats at 100 kg: goblet squats with 16–20 kg, clean technique, 3×12 reps.',
+                    ],
+                    [
+                        'title' => 'Ignoring Mobility Completely',
+                        'problem' => 'Only training strength, skipping stretching and mobility work.',
+                        'consequence' => 'Muscles continue to shorten, range of motion decreases. Typical result: restricted shoulder mobility, stiff hips, chronic neck tension.',
+                        'solution' => 'Every session includes mobility work. Additionally: 5–10 minutes of daily stretching in the morning or evening.',
+                        'example' => 'Daily routine: 90/90 hip stretch (60s per side) + thoracic spine rotation (10 per side) + shoulder wall slides (10 reps).',
+                    ],
+                    [
+                        'title' => 'Training the Back Incorrectly',
+                        'problem' => 'Back training only with hyperextensions or isolated exercises instead of functional movements.',
+                        'consequence' => 'Isolated exercises strengthen individual muscles but not the coordination of core, hips and legs during lifting – exactly what tradespeople need.',
+                        'solution' => 'Use functional back exercises: deadlift variations, rows, farmer walks. These train the entire posterior chain as a unit.',
+                        'example' => 'Instead of 3×15 back extensions on a machine: 3×10 Romanian deadlifts with dumbbells + 3×30s farmer walks.',
+                    ],
+                    [
+                        'title' => 'Avoiding Leg Work Due to Knee Pain',
+                        'problem' => 'Skipping leg training because knees "are already stressed enough" from kneeling and climbing stairs.',
+                        'consequence' => 'Weak quadriceps and glutes cannot stabilise the knee joint. Menisci and ligaments bear the load alone – wear accelerates.',
+                        'solution' => 'Targeted leg training strengthens the knee-stabilising muscles (quadriceps, hamstrings, glutes). Knee-friendly exercises: glute bridges, step-ups, lunges.',
+                        'example' => 'A tiler with knee pain: 3× per week glute bridges (3×15) + step-ups (3×10 per leg). After 6 weeks: noticeably fewer complaints.',
+                    ],
+                    [
+                        'title' => 'Poor Nutrition Despite High Energy Expenditure',
+                        'problem' => 'Tradespeople burn 3,000–4,000 kcal daily but eat fast food at lunch and too little protein.',
+                        'consequence' => 'Muscles do not recover adequately, energy drops in the afternoon, injury susceptibility rises. Long-term: muscle loss despite physical work.',
+                        'solution' => 'Meal prep or prepared meals. Target: 1.6–2.0g protein per kg bodyweight, sufficient carbohydrates for the work demands.',
+                        'example' => 'At 85 kg: 136–170g protein daily. Sunday meal prep: 5× rice + chicken + vegetables. Snack: cottage cheese with oats.',
+                    ],
+                    [
+                        'title' => 'Weekend Warrior Training',
+                        'problem' => 'No training during the week, then 90 minutes all-out on both Saturday and Sunday.',
+                        'consequence' => 'Two intense sessions without recovery in between overload an already taxed body. Monday muscle soreness hampers work. No sustainable training progress.',
+                        'solution' => 'Spread 3 short sessions across the week (e.g. Mon/Wed/Fri or Tue/Thu/Sat). 40 minutes is enough – consistency beats intensity.',
+                        'example' => 'Instead of Sat 90 min + Sun 90 min: Mon 40 min (after work) + Wed 40 min + Fri 40 min. Result: better recovery, less soreness, more progress.',
+                    ],
+                ],
+                'summary' => 'Tradespeople rarely lack willpower – they lack training that fits their work demands. This plan is specifically tailored to the physical demands of manual trades and protects your body rather than adding to its burden.',
+            ],
+
+            'workout' => [
+                'weeks' => 8,
+                'workouts_per_week' => 3,
+                'duration_minutes' => 40,
+                'level' => 'Beginner to Advanced',
+                'equipment' => ['Dumbbells', 'Resistance Band', 'Mat'],
+
+                'schedule' => [
+
+                    [
+                        'day' => 'Day 1 – Back & Mobility',
+                        'focus' => 'Posterior chain strength, thoracic spine & hip mobility',
+                        'exercises' => [
+                            ['name' => 'Romanian Deadlift (Dumbbells)', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'Single-Arm Dumbbell Row', 'sets' => 3, 'reps' => '10–12 per side', 'rest' => '60s'],
+                            ['name' => 'Face Pulls (Resistance Band)', 'sets' => 3, 'reps' => '15–20', 'rest' => '45s'],
+                            ['name' => 'Thoracic Spine Rotation', 'sets' => 2, 'reps' => '10 per side', 'rest' => '30s'],
+                            ['name' => '90/90 Hip Stretch', 'sets' => 2, 'reps' => '45s per side', 'rest' => '30s'],
+                        ],
+                    ],
+
+                    [
+                        'day' => 'Day 2 – Shoulders & Upper Body Balance',
+                        'focus' => 'Rotator cuff, rear deltoids, pressing strength',
+                        'exercises' => [
+                            ['name' => 'Dumbbell Shoulder Press', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'External Rotation (Resistance Band)', 'sets' => 3, 'reps' => '15 per side', 'rest' => '45s'],
+                            ['name' => 'Push-ups', 'sets' => 3, 'reps' => '8–15', 'rest' => '60s'],
+                            ['name' => 'Farmer Walk (Dumbbells)', 'sets' => 3, 'reps' => '30s', 'rest' => '45s'],
+                            ['name' => 'Dead Bug', 'sets' => 3, 'reps' => '8 per side', 'rest' => '45s'],
+                        ],
+                    ],
+
+                    [
+                        'day' => 'Day 3 – Legs, Knees & Core',
+                        'focus' => 'Knee stability, glutes & leg alignment, core strength',
+                        'exercises' => [
+                            ['name' => 'Goblet Squat (Dumbbell)', 'sets' => 3, 'reps' => '10–12', 'rest' => '60s'],
+                            ['name' => 'Step-ups (Bench or Step)', 'sets' => 3, 'reps' => '10 per leg', 'rest' => '60s'],
+                            ['name' => 'Glute Bridges', 'sets' => 3, 'reps' => '15–20', 'rest' => '45s'],
+                            ['name' => 'Pallof Press (Resistance Band)', 'sets' => 3, 'reps' => '10 per side', 'rest' => '45s'],
+                            ['name' => 'Wall Sit', 'sets' => 3, 'reps' => '30–45s', 'rest' => '45s'],
+                        ],
+                    ],
+
+                ],
+
+                'progression' => 'Weeks 1–2: Learn technique, light weights, build mobility | Weeks 3–4: Moderately increase weight, add reps | Weeks 5–6: Shorten rest periods, intensify mobility work | Weeks 7–8: Higher weights, full range of motion, maximum stability',
+                'tips' => [
+                    '1.6–2.0g protein per kg bodyweight – especially important with physical work',
+                    'Train moderately in the evening, not to exhaustion – the goal is balance, not burnout',
+                    '7–8 hours sleep for recovery from both work demands AND training',
+                    'On rest days: 5–10 min mobility routine (shoulders, hips, thoracic spine)',
+                    'Stay hydrated: at least 2.5–3 litres with physical work + training',
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Isn\'t my physical job enough exercise?',
+                    'answer' => 'No. Work loads your body one-sidedly – always the same movement patterns, often in awkward positions. Targeted corrective training strengthens the neglected muscle groups and protects against wear.',
+                ],
+                [
+                    'question' => 'Can I still train after a hard day at work?',
+                    'answer' => 'Yes. This plan is designed for moderate intensity – 40 minutes focused on balance, not exhaustion. Most tradespeople report less tension and more energy after 2–3 weeks.',
+                ],
+                [
+                    'question' => 'Do I need a gym for this plan?',
+                    'answer' => 'No. Dumbbells, a resistance band and a mat are all you need. Every exercise works at home or in the garage.',
                 ],
             ],
         ],

@@ -19,5 +19,6 @@ return [
         'fat_loss' => 'fat-loss',
         'abs' => 'abs',
         'over_40' => 'over-40',
+        'tradesperson' => 'tradesperson',
     ],
 ];

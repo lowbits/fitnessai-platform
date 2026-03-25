@@ -15,6 +15,7 @@ return [
         'fat_loss' => 'Trainingsplan Fettabbau',
         'abs' => 'Trainingsplan Bauchmuskeln',
         'over_40' => 'Trainingsplan ab 40',
+        'tradesperson' => 'Trainingsplan Handwerker',
         'all' => 'Alle Trainingspläne →',
     ],
     'product' => [
