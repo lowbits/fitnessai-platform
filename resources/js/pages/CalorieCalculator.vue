@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import LabeledInput from '@/components/form/LabeledInput.vue';
+import NumberInput from '@/components/form/NumberInput.vue';
+import SelectInput from '@/components/form/SelectInput.vue';
 import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import { Button } from '@/components/ui/button';
@@ -19,7 +22,7 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 const schemaJson = computed(() =>
     props.schema.map((s) => JSON.stringify(s)),
@@ -28,22 +31,27 @@ const schemaJson = computed(() =>
 // Calculator state
 const form = reactive({
     gender: 'male' as 'male' | 'female',
-    age: null as number | null,
-    weight: null as number | null,
-    height: null as number | null,
+    age: '' as string,
+    weight: '' as string,
+    height: '' as string,
     activity: '1.55' as string,
     goal: 'maintain' as 'lose' | 'maintain' | 'gain',
 });
 
 const hasCalculated = ref(false);
 
+// Parse form values
+const age = computed(() => parseFloat(form.age) || 0);
+const weight = computed(() => parseFloat(form.weight) || 0);
+const height = computed(() => parseFloat(form.height) || 0);
+
 // Mifflin-St Jeor formula
 const bmr = computed(() => {
-    if (!form.age || !form.weight || !form.height) return 0;
+    if (!age.value || !weight.value || !height.value) return 0;
     if (form.gender === 'male') {
-        return 10 * form.weight + 6.25 * form.height - 5 * form.age + 5;
+        return 10 * weight.value + 6.25 * height.value - 5 * age.value + 5;
     }
-    return 10 * form.weight + 6.25 * form.height - 5 * form.age - 161;
+    return 10 * weight.value + 6.25 * height.value - 5 * age.value - 161;
 });
 
 const tdee = computed(() => {
@@ -60,7 +68,6 @@ const goalCalories = computed(() => {
 const macros = computed(() => {
     const cal = goalCalories.value;
     if (form.goal === 'lose') {
-        // Higher protein for muscle preservation
         const protein = Math.round((cal * 0.35) / 4);
         const fat = Math.round((cal * 0.3) / 9);
         const carbs = Math.round((cal * 0.35) / 4);
@@ -72,7 +79,6 @@ const macros = computed(() => {
         const carbs = Math.round((cal * 0.45) / 4);
         return { protein, fat, carbs };
     }
-    // Maintain
     const protein = Math.round((cal * 0.3) / 4);
     const fat = Math.round((cal * 0.3) / 9);
     const carbs = Math.round((cal * 0.4) / 4);
@@ -80,13 +86,7 @@ const macros = computed(() => {
 });
 
 const isValid = computed(
-    () =>
-        form.age &&
-        form.age > 0 &&
-        form.weight &&
-        form.weight > 0 &&
-        form.height &&
-        form.height > 0,
+    () => age.value > 0 && weight.value > 0 && height.value > 0,
 );
 
 const calculate = () => {
@@ -97,12 +97,27 @@ const calculate = () => {
 
 const faqs = computed(() => {
     return (
-        props.schema[1] as { mainEntity: { name: string; acceptedAnswer: { text: string } }[] }
+        props.schema[1] as {
+            mainEntity: {
+                name: string;
+                acceptedAnswer: { text: string };
+            }[];
+        }
     ).mainEntity.map((q) => ({
         question: q.name,
         answer: q.acceptedAnswer.text,
     }));
 });
+
+const comparisonFeatures = computed(() => [
+    { key: 'dailyCalories', calculator: true, fytrr: true },
+    { key: 'macroSplit', calculator: true, fytrr: true },
+    { key: 'mealPlan', calculator: false, fytrr: true },
+    { key: 'swapMeals', calculator: false, fytrr: true },
+    { key: 'shoppingList', calculator: false, fytrr: true },
+    { key: 'workoutPlan', calculator: false, fytrr: true },
+    { key: 'progressAdapt', calculator: false, fytrr: true },
+]);
 </script>
 
 <template>
@@ -157,17 +172,17 @@ const faqs = computed(() => {
                 >
                     <!-- Gender -->
                     <div class="mb-6">
-                        <label class="mb-2 block text-sm font-medium text-gray-300">
+                        <label class="mb-2 block text-primary-25">
                             {{ t('calorieCalculator.form.gender') }}
                         </label>
                         <div class="flex gap-3">
                             <button
                                 type="button"
-                                class="flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition"
+                                class="flex-1 rounded-xl border p-2 text-sm font-medium transition md:p-4"
                                 :class="
                                     form.gender === 'male'
-                                        ? 'border-primary-500 bg-primary-500/10 text-primary-400'
-                                        : 'border-dark-surfaces-500 text-gray-400 hover:border-gray-400'
+                                        ? 'border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5 text-white'
+                                        : 'border-dark-surfaces-25 text-secondary-200'
                                 "
                                 @click="form.gender = 'male'"
                             >
@@ -175,11 +190,11 @@ const faqs = computed(() => {
                             </button>
                             <button
                                 type="button"
-                                class="flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition"
+                                class="flex-1 rounded-xl border p-2 text-sm font-medium transition md:p-4"
                                 :class="
                                     form.gender === 'female'
-                                        ? 'border-primary-500 bg-primary-500/10 text-primary-400'
-                                        : 'border-dark-surfaces-500 text-gray-400 hover:border-gray-400'
+                                        ? 'border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5 text-white'
+                                        : 'border-dark-surfaces-25 text-secondary-200'
                                 "
                                 @click="form.gender = 'female'"
                             >
@@ -189,132 +204,97 @@ const faqs = computed(() => {
                     </div>
 
                     <!-- Age, Weight, Height -->
-                    <div class="mb-6 grid grid-cols-3 gap-4">
-                        <div>
-                            <label
-                                for="age"
-                                class="mb-2 block text-sm font-medium text-gray-300"
-                            >
-                                {{ t('calorieCalculator.form.age') }}
-                            </label>
-                            <input
+                    <div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                        <LabeledInput
+                            :label="t('calorieCalculator.form.age')"
+                            name="age"
+                        >
+                            <NumberInput
                                 id="age"
-                                v-model.number="form.age"
+                                name="age"
+                                :placeholder="t('calorieCalculator.form.agePlaceholder')"
+                                v-model="form.age"
                                 type="number"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
                                 min="14"
                                 max="100"
-                                :placeholder="t('calorieCalculator.form.agePlaceholder')"
-                                class="w-full rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 px-4 py-3 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none"
                             />
-                        </div>
-                        <div>
-                            <label
-                                for="weight"
-                                class="mb-2 block text-sm font-medium text-gray-300"
-                            >
-                                {{ t('calorieCalculator.form.weight') }}
-                            </label>
-                            <input
+                        </LabeledInput>
+                        <LabeledInput
+                            :label="t('calorieCalculator.form.weight')"
+                            name="weight"
+                        >
+                            <NumberInput
                                 id="weight"
-                                v-model.number="form.weight"
+                                name="weight"
+                                :placeholder="t('calorieCalculator.form.weightPlaceholder')"
+                                v-model="form.weight"
+                                suffix="kg"
                                 type="number"
+                                inputmode="decimal"
+                                step="0.5"
                                 min="30"
                                 max="300"
-                                :placeholder="t('calorieCalculator.form.weightPlaceholder')"
-                                class="w-full rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 px-4 py-3 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none"
                             />
-                        </div>
-                        <div>
-                            <label
-                                for="height"
-                                class="mb-2 block text-sm font-medium text-gray-300"
-                            >
-                                {{ t('calorieCalculator.form.height') }}
-                            </label>
-                            <input
+                        </LabeledInput>
+                        <LabeledInput
+                            :label="t('calorieCalculator.form.height')"
+                            name="height"
+                        >
+                            <NumberInput
                                 id="height"
-                                v-model.number="form.height"
+                                name="height"
+                                :placeholder="t('calorieCalculator.form.heightPlaceholder')"
+                                v-model="form.height"
+                                suffix="cm"
                                 type="number"
+                                inputmode="numeric"
+                                pattern="[0-9]*"
                                 min="100"
                                 max="250"
-                                :placeholder="t('calorieCalculator.form.heightPlaceholder')"
-                                class="w-full rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 px-4 py-3 text-white placeholder-gray-500 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none"
                             />
-                        </div>
+                        </LabeledInput>
                     </div>
 
                     <!-- Activity Level -->
-                    <div class="mb-6">
-                        <label
-                            for="activity"
-                            class="mb-2 block text-sm font-medium text-gray-300"
-                        >
-                            {{ t('calorieCalculator.form.activity') }}
-                        </label>
-                        <select
+                    <LabeledInput
+                        :label="t('calorieCalculator.form.activity')"
+                        name="activity"
+                        class="mb-6"
+                    >
+                        <SelectInput
                             id="activity"
+                            name="activity"
                             v-model="form.activity"
-                            class="w-full rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 px-4 py-3 text-white focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none"
                         >
-                            <option value="1.2">
-                                {{ t('calorieCalculator.form.sedentary') }}
-                            </option>
-                            <option value="1.375">
-                                {{ t('calorieCalculator.form.light') }}
-                            </option>
-                            <option value="1.55">
-                                {{ t('calorieCalculator.form.moderate') }}
-                            </option>
-                            <option value="1.725">
-                                {{ t('calorieCalculator.form.active') }}
-                            </option>
-                            <option value="1.9">
-                                {{ t('calorieCalculator.form.veryActive') }}
-                            </option>
-                        </select>
-                    </div>
+                            <option value="1.2">{{ t('calorieCalculator.form.sedentary') }}</option>
+                            <option value="1.375">{{ t('calorieCalculator.form.light') }}</option>
+                            <option value="1.55">{{ t('calorieCalculator.form.moderate') }}</option>
+                            <option value="1.725">{{ t('calorieCalculator.form.active') }}</option>
+                            <option value="1.9">{{ t('calorieCalculator.form.veryActive') }}</option>
+                        </SelectInput>
+                    </LabeledInput>
 
                     <!-- Goal -->
                     <div class="mb-8">
-                        <label class="mb-2 block text-sm font-medium text-gray-300">
+                        <label class="mb-2 block text-primary-25">
                             {{ t('calorieCalculator.form.goal') }}
                         </label>
                         <div class="flex gap-3">
                             <button
+                                v-for="g in (['lose', 'maintain', 'gain'] as const)"
+                                :key="g"
                                 type="button"
-                                class="flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition"
+                                class="flex-1 rounded-xl border p-2 text-sm font-medium transition md:p-4"
                                 :class="
-                                    form.goal === 'lose'
-                                        ? 'border-primary-500 bg-primary-500/10 text-primary-400'
-                                        : 'border-dark-surfaces-500 text-gray-400 hover:border-gray-400'
+                                    form.goal === g
+                                        ? 'border-primary-200 bg-linear-to-tr from-transparent to-primary-300/5 text-white'
+                                        : 'border-dark-surfaces-25 text-secondary-200'
                                 "
-                                @click="form.goal = 'lose'"
+                                @click="form.goal = g"
                             >
-                                {{ t('calorieCalculator.form.lose') }}
-                            </button>
-                            <button
-                                type="button"
-                                class="flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition"
-                                :class="
-                                    form.goal === 'maintain'
-                                        ? 'border-primary-500 bg-primary-500/10 text-primary-400'
-                                        : 'border-dark-surfaces-500 text-gray-400 hover:border-gray-400'
-                                "
-                                @click="form.goal = 'maintain'"
-                            >
-                                {{ t('calorieCalculator.form.maintain') }}
-                            </button>
-                            <button
-                                type="button"
-                                class="flex-1 rounded-lg border px-4 py-3 text-sm font-medium transition"
-                                :class="
-                                    form.goal === 'gain'
-                                        ? 'border-primary-500 bg-primary-500/10 text-primary-400'
-                                        : 'border-dark-surfaces-500 text-gray-400 hover:border-gray-400'
-                                "
-                                @click="form.goal = 'gain'"
-                            >
-                                {{ t('calorieCalculator.form.gain') }}
+                                {{ t(`calorieCalculator.form.${g}`) }}
                             </button>
                         </div>
                     </div>
@@ -329,29 +309,43 @@ const faqs = computed(() => {
                         {{ t('calorieCalculator.form.calculate') }}
                     </Button>
 
+                    <!-- Trust element -->
+                    <p class="mt-3 text-center text-xs text-gray-400">
+                        {{ t('calorieCalculator.form.trust') }}
+                    </p>
+
                     <!-- Results (pre-reserved space to avoid CLS) -->
                     <div
                         class="mt-8 min-h-[280px]"
                         :class="{ 'opacity-0': !hasCalculated }"
                     >
-                        <div
-                            v-if="hasCalculated"
-                            class="space-y-6"
-                        >
+                        <div v-if="hasCalculated" class="space-y-6">
                             <!-- Main Result -->
                             <div
                                 class="rounded-xl border border-primary-500/30 bg-primary-500/5 p-6 text-center"
                             >
-                                <p class="text-sm font-medium text-gray-400">
-                                    {{ t('calorieCalculator.result.dailyNeeds') }}
+                                <p
+                                    class="text-sm font-medium text-gray-400"
+                                >
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.dailyNeeds',
+                                        )
+                                    }}
                                 </p>
                                 <p
                                     class="mt-1 text-5xl font-bold text-primary-400"
                                 >
                                     {{ goalCalories.toLocaleString() }}
                                 </p>
-                                <p class="mt-1 text-sm text-gray-400">
-                                    {{ t('calorieCalculator.result.kcalPerDay') }}
+                                <p
+                                    class="mt-1 text-sm text-gray-400"
+                                >
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.kcalPerDay',
+                                        )
+                                    }}
                                 </p>
                             </div>
 
@@ -361,40 +355,64 @@ const faqs = computed(() => {
                                     class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                 >
                                     <p class="text-xs text-gray-400">
-                                        {{ t('calorieCalculator.result.bmr') }}
+                                        {{
+                                            t(
+                                                'calorieCalculator.result.bmr',
+                                            )
+                                        }}
                                     </p>
                                     <p
                                         class="mt-1 text-lg font-semibold text-white"
                                     >
-                                        {{ Math.round(bmr).toLocaleString() }}
+                                        {{
+                                            Math.round(
+                                                bmr,
+                                            ).toLocaleString()
+                                        }}
                                     </p>
-                                    <p class="text-xs text-gray-400">kcal</p>
+                                    <p class="text-xs text-gray-400">
+                                        kcal
+                                    </p>
                                 </div>
                                 <div
                                     class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                 >
                                     <p class="text-xs text-gray-400">
-                                        {{ t('calorieCalculator.result.tdee') }}
+                                        {{
+                                            t(
+                                                'calorieCalculator.result.tdee',
+                                            )
+                                        }}
                                     </p>
                                     <p
                                         class="mt-1 text-lg font-semibold text-white"
                                     >
                                         {{ tdee.toLocaleString() }}
                                     </p>
-                                    <p class="text-xs text-gray-400">kcal</p>
+                                    <p class="text-xs text-gray-400">
+                                        kcal
+                                    </p>
                                 </div>
                                 <div
                                     class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                 >
                                     <p class="text-xs text-gray-400">
-                                        {{ t('calorieCalculator.result.goalLabel') }}
+                                        {{
+                                            t(
+                                                'calorieCalculator.result.goalLabel',
+                                            )
+                                        }}
                                     </p>
                                     <p
                                         class="mt-1 text-lg font-semibold text-primary-400"
                                     >
-                                        {{ goalCalories.toLocaleString() }}
+                                        {{
+                                            goalCalories.toLocaleString()
+                                        }}
                                     </p>
-                                    <p class="text-xs text-gray-400">kcal</p>
+                                    <p class="text-xs text-gray-400">
+                                        kcal
+                                    </p>
                                 </div>
                             </div>
 
@@ -403,14 +421,22 @@ const faqs = computed(() => {
                                 <h3
                                     class="mb-3 text-sm font-medium text-gray-300"
                                 >
-                                    {{ t('calorieCalculator.result.macros') }}
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.macros',
+                                        )
+                                    }}
                                 </h3>
                                 <div class="grid grid-cols-3 gap-4">
                                     <div
                                         class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                     >
                                         <p class="text-xs text-gray-400">
-                                            {{ t('calorieCalculator.result.protein') }}
+                                            {{
+                                                t(
+                                                    'calorieCalculator.result.protein',
+                                                )
+                                            }}
                                         </p>
                                         <p
                                             class="mt-1 text-lg font-semibold text-white"
@@ -422,7 +448,11 @@ const faqs = computed(() => {
                                         class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                     >
                                         <p class="text-xs text-gray-400">
-                                            {{ t('calorieCalculator.result.carbs') }}
+                                            {{
+                                                t(
+                                                    'calorieCalculator.result.carbs',
+                                                )
+                                            }}
                                         </p>
                                         <p
                                             class="mt-1 text-lg font-semibold text-white"
@@ -434,7 +464,11 @@ const faqs = computed(() => {
                                         class="rounded-lg border border-dark-surfaces-500 bg-dark-surfaces-700 p-4 text-center"
                                     >
                                         <p class="text-xs text-gray-400">
-                                            {{ t('calorieCalculator.result.fat') }}
+                                            {{
+                                                t(
+                                                    'calorieCalculator.result.fat',
+                                                )
+                                            }}
                                         </p>
                                         <p
                                             class="mt-1 text-lg font-semibold text-white"
@@ -445,12 +479,29 @@ const faqs = computed(() => {
                                 </div>
                             </div>
 
-                            <!-- CTA -->
+                            <!-- CTA with dynamic calories -->
                             <div
                                 class="rounded-xl border border-primary-500/20 bg-primary-500/5 p-6 text-center"
                             >
-                                <p class="text-sm font-medium text-white">
-                                    {{ t('calorieCalculator.result.ctaText') }}
+                                <p
+                                    class="text-base font-medium text-white"
+                                >
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.ctaHeadline',
+                                        )
+                                    }}
+                                </p>
+                                <p class="mt-2 text-sm text-gray-300">
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.ctaText',
+                                            {
+                                                calories:
+                                                    goalCalories.toLocaleString(),
+                                            },
+                                        )
+                                    }}
                                 </p>
                                 <GenerateFitnessPlanModal
                                     utm-content="calorie_calculator_result"
@@ -459,11 +510,74 @@ const faqs = computed(() => {
                                 >
                                     <button
                                         @click="open"
-                                        class="mt-3 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-6 py-3 text-sm font-semibold text-dark-surfaces-900 transition hover:bg-primary-400"
+                                        class="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-dark-surfaces-900 transition hover:bg-primary-400"
                                     >
-                                        {{ t('calorieCalculator.result.ctaButton') }}
+                                        {{
+                                            t(
+                                                'calorieCalculator.result.ctaButton',
+                                            )
+                                        }}
                                     </button>
                                 </GenerateFitnessPlanModal>
+                                <p class="mt-2 text-xs text-gray-400">
+                                    {{
+                                        t(
+                                            'calorieCalculator.result.ctaSubline',
+                                        )
+                                    }}
+                                </p>
+                            </div>
+
+                            <!-- Comparison Table -->
+                            <div class="overflow-hidden rounded-xl border border-dark-surfaces-500">
+                                <table class="w-full text-sm">
+                                    <thead>
+                                        <tr class="bg-dark-surfaces-700">
+                                            <th class="px-4 py-3 text-left font-medium text-gray-300">
+                                                {{ t('calorieCalculator.comparison.feature') }}
+                                            </th>
+                                            <th class="px-4 py-3 text-center font-medium text-gray-300">
+                                                {{ t('calorieCalculator.comparison.calculator') }}
+                                            </th>
+                                            <th class="px-4 py-3 text-center font-medium text-primary-400">
+                                                Fytrr
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            v-for="(feat, i) in comparisonFeatures"
+                                            :key="feat.key"
+                                            :class="i % 2 === 0 ? 'bg-dark-surfaces-800' : 'bg-dark-surfaces-800/50'"
+                                        >
+                                            <td class="px-4 py-3 text-gray-300">
+                                                {{ t(`calorieCalculator.comparison.features.${feat.key}`) }}
+                                            </td>
+                                            <td class="px-4 py-3 text-center">
+                                                <span v-if="feat.calculator" class="text-primary-400">&#10003;</span>
+                                                <span v-else class="text-gray-500">&#10007;</span>
+                                            </td>
+                                            <td class="px-4 py-3 text-center">
+                                                <span class="text-primary-400">&#10003;</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Objection Handling -->
+                            <div class="space-y-3">
+                                <div
+                                    v-for="objection in ['needApp', 'cost', 'cancel']"
+                                    :key="objection"
+                                    class="flex gap-3 text-sm"
+                                >
+                                    <span class="mt-0.5 shrink-0 text-primary-400">&#8594;</span>
+                                    <p class="text-gray-400">
+                                        <strong class="text-gray-300">{{ t(`calorieCalculator.objections.${objection}.q`) }}</strong>
+                                        {{ t(`calorieCalculator.objections.${objection}.a`) }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -474,52 +588,118 @@ const faqs = computed(() => {
             <section class="px-4 pb-16 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-3xl">
                     <article class="prose prose-invert max-w-none">
-                        <h2 class="font-display text-2xl font-bold text-white">
+                        <!-- H2: How the calculator works -->
+                        <h2
+                            class="font-display text-2xl font-bold text-white"
+                        >
                             {{ t('calorieCalculator.content.h2_1') }}
                         </h2>
-                        <p class="text-gray-300 leading-relaxed">
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p1') }}
                         </p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li>
+                                {{
+                                    t(
+                                        'calorieCalculator.content.formula_male',
+                                    )
+                                }}
+                            </li>
+                            <li>
+                                {{
+                                    t(
+                                        'calorieCalculator.content.formula_female',
+                                    )
+                                }}
+                            </li>
+                        </ul>
+                        <p class="leading-relaxed text-gray-300">
+                            {{ t('calorieCalculator.content.p1b') }}
+                        </p>
 
-                        <h3 class="mt-8 font-display text-xl font-bold text-white">
-                            {{ t('calorieCalculator.content.h3_1') }}
-                        </h3>
-                        <p class="text-gray-300 leading-relaxed">
+                        <!-- H2: What is BMR -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_2') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p2') }}
                         </p>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>{{ t('calorieCalculator.content.formula_male') }}</li>
-                            <li>{{ t('calorieCalculator.content.formula_female') }}</li>
-                        </ul>
-                        <p class="text-gray-300 leading-relaxed">
+
+                        <!-- H2: Calories for weight loss -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_3') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p3') }}
                         </p>
 
-                        <h3 class="mt-8 font-display text-xl font-bold text-white">
-                            {{ t('calorieCalculator.content.h3_2') }}
-                        </h3>
-                        <p class="text-gray-300 leading-relaxed">
+                        <!-- H2: Calories for muscle gain -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_4') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p4') }}
                         </p>
-                        <ul class="space-y-2 text-gray-300">
-                            <li v-for="(level, i) in ['sedentary', 'light', 'moderate', 'active', 'veryActive']" :key="i">
-                                <strong class="text-white">{{ t(`calorieCalculator.content.levels.${level}.label`) }}:</strong>
-                                {{ t(`calorieCalculator.content.levels.${level}.desc`) }}
-                            </li>
-                        </ul>
 
-                        <h3 class="mt-8 font-display text-xl font-bold text-white">
-                            {{ t('calorieCalculator.content.h3_3') }}
-                        </h3>
-                        <p class="text-gray-300 leading-relaxed">
+                        <!-- H2: Women vs Men -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_5') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p5') }}
                         </p>
 
-                        <h3 class="mt-8 font-display text-xl font-bold text-white">
-                            {{ t('calorieCalculator.content.h3_4') }}
-                        </h3>
-                        <p class="text-gray-300 leading-relaxed">
+                        <!-- H2: Activity levels -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_6') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
                             {{ t('calorieCalculator.content.p6') }}
+                        </p>
+                        <ul class="space-y-2 text-gray-300">
+                            <li
+                                v-for="level in [
+                                    'sedentary',
+                                    'light',
+                                    'moderate',
+                                    'active',
+                                    'veryActive',
+                                ]"
+                                :key="level"
+                            >
+                                <strong class="text-white">
+                                    {{
+                                        t(
+                                            `calorieCalculator.content.levels.${level}.label`,
+                                        )
+                                    }}:
+                                </strong>
+                                {{
+                                    t(
+                                        `calorieCalculator.content.levels.${level}.desc`,
+                                    )
+                                }}
+                            </li>
+                        </ul>
+
+                        <!-- H2: Next step -->
+                        <h2
+                            class="mt-10 font-display text-2xl font-bold text-white"
+                        >
+                            {{ t('calorieCalculator.content.h2_7') }}
+                        </h2>
+                        <p class="leading-relaxed text-gray-300">
+                            {{ t('calorieCalculator.content.p7') }}
                         </p>
                     </article>
                 </div>

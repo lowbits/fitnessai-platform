@@ -21,8 +21,8 @@ class CalorieCalculatorController extends Controller
                 ? 'Kalorienrechner: Täglichen Kalorienbedarf berechnen'
                 : 'Calorie Calculator: Calculate Your Daily Calorie Needs',
             'description' => $locale === 'de'
-                ? 'Berechne deinen täglichen Kalorienbedarf in 30 Sekunden. Kostenloser Kalorienrechner für Abnehmen, Zunehmen oder Gewicht halten.'
-                : 'Calculate your daily calorie needs in 30 seconds. Free calorie calculator for weight loss, muscle gain or maintenance.',
+                ? 'Berechne deinen täglichen Kalorienbedarf in 30 Sekunden. Kostenloser Kalorienrechner für Abnehmen, Zunehmen oder Gewicht halten — von Fitness-Experten entwickelt.'
+                : 'Calculate your daily calorie needs in 30 seconds. Free calorie calculator for weight loss, muscle gain or maintenance — developed by fitness experts.',
             'canonical' => "{$baseUrl}/{$locale}/{$currentPath}",
         ];
 
