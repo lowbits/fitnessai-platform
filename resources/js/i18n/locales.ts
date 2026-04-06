@@ -1135,7 +1135,7 @@ export const locales = {
         },
         about: {
             hero: {
-                h1: "Personal training shouldn't cost €150 per hour.",
+                h1: "Personal training doesn't have to cost €150 per hour.",
                 subline:
                     "That's why Fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for €3.99/month.",
             },
@@ -1143,7 +1143,7 @@ export const locales = {
                 heading: 'My Story',
                 p1: "Hi, I'm Tobias.",
                 p2: "I've been training for over 15 years. First without a plan, then with too many plans, then with a coach who cost me €120 per session. The results were good. But sustainable? Not affordable for most people.",
-                p3: "Since 2018, I've been building fitness apps. Not because I'm a startup guy, but because I wanted to solve a problem: good coaching shouldn't depend on your bank balance.",
+                p3: "Since 2018, I've been building fitness apps. Not because I'm a startup guy, but because I wanted to solve a problem: good coaching doesn't have to depend on your bank balance.",
                 p4: 'Fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.',
                 p5: "I'm a developer. I work on this project alone. No team of 50, no venture capital. Just one guy building an app he uses every day.",
             },
@@ -2595,7 +2595,7 @@ export const locales = {
         },
         about: {
             hero: {
-                h1: 'Personal Training sollte nicht 150\u00a0\u20ac pro Stunde kosten.',
+                h1: 'Personal Training muss nicht 150\u00a0\u20ac pro Stunde kosten.',
                 subline:
                     'Deshalb gibt es Fytrr. Ein KI Personal Coach, der Trainingsplan, Ern\u00e4hrungsplan und Tracking in einer App vereint \u2014 f\u00fcr 3,99\u00a0\u20ac/Monat.',
             },
@@ -2603,7 +2603,7 @@ export const locales = {
                 heading: 'Meine Geschichte',
                 p1: 'Hi, ich bin Tobias.',
                 p2: 'Ich trainiere seit \u00fcber 15 Jahren. Erst ohne Plan, dann mit zu vielen Pl\u00e4nen, dann mit einem Coach, der mich 120\u00a0\u20ac pro Session gekostet hat. Das Ergebnis war gut. Aber nachhaltig? F\u00fcr die meisten Leute nicht bezahlbar.',
-                p3: 'Seit 2018 baue ich Fitness-Apps. Nicht weil ich ein Startup-Typ bin, sondern weil ich ein Problem l\u00f6sen wollte: Gutes Coaching sollte nicht vom Kontostand abh\u00e4ngen.',
+                p3: 'Seit 2018 baue ich Fitness-Apps. Nicht weil ich ein Startup-Typ bin, sondern weil ich ein Problem l\u00f6sen wollte: Gutes Coaching muss nicht vom Kontostand abh\u00e4ngen.',
                 p4: 'Fytrr ist das Ergebnis. Kein aufgeblasenes Feature-Monster, sondern ein schlanker KI-Coach, der dir sagt, was du trainieren und essen sollst. Jeden Tag. Angepasst an dich.',
                 p5: 'Ich bin Entwickler. Ich sitze alleine an diesem Projekt. Kein Team von 50 Leuten, kein Venture Capital. Nur ein Typ, der eine App baut, die er selbst jeden Tag benutzt.',
             },
