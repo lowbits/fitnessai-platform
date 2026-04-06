@@ -80,6 +80,7 @@ class HandleInertiaRequests extends Middleware
             'appUrl' => "/{$locale}/app",
             'calorieCalculatorUrl' => LaravelLocalization::localizeURL('/'.trans('routes.free_tools_calorie_calculator', [], $locale), $locale),
             'blogUrl' => LaravelLocalization::localizeURL('/'.trans('routes.blog_index', [], $locale), $locale),
+            'aboutUrl' => LaravelLocalization::localizeURL('/'.trans('routes.about', [], $locale), $locale),
         ];
 
         foreach ($workoutPlanTypes as $internalType) {
@@ -103,6 +104,7 @@ class HandleInertiaRequests extends Middleware
             'app' => trans('footer.product.app', [], $locale),
             'calorieCalculator' => trans('footer.product.calorie_calculator', [], $locale),
             'blog' => trans('footer.product.blog', [], $locale),
+            'about' => trans('footer.product.about', [], $locale),
             'legal' => trans('footer.legal.heading', [], $locale),
             'language' => trans('footer.language.heading', [], $locale),
             'description' => trans('footer.description', [], $locale),

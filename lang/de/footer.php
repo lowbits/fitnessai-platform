@@ -23,6 +23,7 @@ return [
         'app' => 'App',
         'calorie_calculator' => 'Kalorienrechner',
         'blog' => 'Blog',
+        'about' => 'Über uns',
     ],
     'legal' => [
         'heading' => 'Legal',

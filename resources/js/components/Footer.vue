@@ -20,11 +20,17 @@ interface FooterLinks {
         product: string;
         home: string;
         app: string;
+        calorieCalculator: string;
+        blog: string;
+        about: string;
         legal: string;
         language: string;
         description: string;
         copyright: string;
     };
+    calorieCalculatorUrl: string;
+    blogUrl: string;
+    aboutUrl: string;
     appStoreUrl: string;
     appUrl: string;
 }
@@ -217,6 +223,27 @@ watch(selectedLanguage, (newLocale) => {
                                 }"
                             >
                                 {{ footerLinks.labels.blog }}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                :href="footerLinks.aboutUrl"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.aboutUrl,
+                                            ),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.aboutUrl,
+                                            ),
+                                        ),
+                                }"
+                            >
+                                {{ footerLinks.labels.about }}
                             </Link>
                         </li>
                     </ul>

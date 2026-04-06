@@ -8,6 +8,7 @@ return [
     'free_tools_calorie_calculator' => 'kostenlose-tools/kalorienrechner',
     'blog_index' => 'blog',
     'blog_article' => 'blog/{slug}',
+    'about' => 'ueber-uns',
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 

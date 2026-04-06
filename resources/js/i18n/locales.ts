@@ -1133,6 +1133,59 @@ export const locales = {
             appCtaButton: '7 days free \u2014 create my plan',
             faqHeading: 'Frequently Asked Questions',
         },
+        about: {
+            hero: {
+                h1: "Personal training shouldn't cost €150 per hour.",
+                subline:
+                    "That's why Fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for €3.99/month.",
+            },
+            story: {
+                heading: 'My Story',
+                p1: "Hi, I'm Tobias.",
+                p2: "I've been training for over 15 years. First without a plan, then with too many plans, then with a coach who cost me €120 per session. The results were good. But sustainable? Not affordable for most people.",
+                p3: "Since 2018, I've been building fitness apps. Not because I'm a startup guy, but because I wanted to solve a problem: good coaching shouldn't depend on your bank balance.",
+                p4: 'Fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.',
+                p5: "I'm a developer. I work on this project alone. No team of 50, no venture capital. Just one guy building an app he uses every day.",
+            },
+            why: {
+                heading: 'Why Fytrr?',
+                problemHeading: 'The Problem',
+                problemText:
+                    "A good personal trainer costs €50-150 per hour. Training twice a week means €400-1,200 per month. Most people can't afford that.",
+                ideaHeading: 'The Idea',
+                ideaText:
+                    'What if an app could do what a trainer does? Not perfectly. But well enough that you make real progress — without taking out a loan.',
+                resultHeading: 'The Result',
+                resultText:
+                    'Fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.',
+            },
+            features: {
+                heading: 'What Fytrr Can Do',
+                workoutPlan: 'Workout Plan',
+                workoutPlanText:
+                    'tailored to your goal, experience and equipment',
+                nutritionPlan: 'Nutrition Plan',
+                nutritionPlanText:
+                    'personalised to your calorie needs and preferences',
+                swapMeals: 'Swap Meals',
+                swapMealsText: "don't like broccoli? No problem, swap it out",
+                tracking: 'Tracking',
+                trackingText: 'see your progress, stay on track',
+                aiAdaptation: 'AI Adaptation',
+                aiAdaptationText: 'the plan evolves with you',
+            },
+            stats: {
+                heading: 'Numbers',
+                users: 'Users',
+                pricePerMonth: 'per month after 7-day free trial',
+                developerMission: 'Developer. 1 Mission.',
+            },
+            cta: {
+                heading: 'Try it out. 7 days free.',
+                button: 'Get started',
+                appStoreLink: 'Or download from the App Store',
+            },
+        },
         calorieCalculator: {
             hero: {
                 h1: 'Calorie Calculator — How Many Calories Do You Need?',
@@ -2539,6 +2592,60 @@ export const locales = {
                 'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
             appCtaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
             faqHeading: 'H\u00e4ufig gestellte Fragen',
+        },
+        about: {
+            hero: {
+                h1: 'Personal Training sollte nicht 150\u00a0\u20ac pro Stunde kosten.',
+                subline:
+                    'Deshalb gibt es Fytrr. Ein KI Personal Coach, der Trainingsplan, Ern\u00e4hrungsplan und Tracking in einer App vereint \u2014 f\u00fcr 3,99\u00a0\u20ac/Monat.',
+            },
+            story: {
+                heading: 'Meine Geschichte',
+                p1: 'Hi, ich bin Tobias.',
+                p2: 'Ich trainiere seit \u00fcber 15 Jahren. Erst ohne Plan, dann mit zu vielen Pl\u00e4nen, dann mit einem Coach, der mich 120\u00a0\u20ac pro Session gekostet hat. Das Ergebnis war gut. Aber nachhaltig? F\u00fcr die meisten Leute nicht bezahlbar.',
+                p3: 'Seit 2018 baue ich Fitness-Apps. Nicht weil ich ein Startup-Typ bin, sondern weil ich ein Problem l\u00f6sen wollte: Gutes Coaching sollte nicht vom Kontostand abh\u00e4ngen.',
+                p4: 'Fytrr ist das Ergebnis. Kein aufgeblasenes Feature-Monster, sondern ein schlanker KI-Coach, der dir sagt, was du trainieren und essen sollst. Jeden Tag. Angepasst an dich.',
+                p5: 'Ich bin Entwickler. Ich sitze alleine an diesem Projekt. Kein Team von 50 Leuten, kein Venture Capital. Nur ein Typ, der eine App baut, die er selbst jeden Tag benutzt.',
+            },
+            why: {
+                heading: 'Warum Fytrr?',
+                problemHeading: 'Das Problem',
+                problemText:
+                    'Ein guter Personal Trainer kostet 50-150\u00a0\u20ac pro Stunde. Wer 2x pro Woche trainiert, zahlt 400-1.200\u00a0\u20ac im Monat. Das k\u00f6nnen sich die meisten nicht leisten.',
+                ideaHeading: 'Die Idee',
+                ideaText:
+                    'Was, wenn eine App das kann, was ein Trainer macht? Nicht perfekt. Aber gut genug, dass du echte Fortschritte machst \u2014 ohne einen Kredit aufzunehmen.',
+                resultHeading: 'Das Ergebnis',
+                resultText:
+                    'Fytrr erstellt dir einen individuellen Trainingsplan und Ern\u00e4hrungsplan. Die App passt sich an dein Ziel, dein Level und deinen Alltag an. Und sie kostet weniger als ein einziger Kaffee pro Woche.',
+            },
+            features: {
+                heading: 'Was Fytrr kann',
+                workoutPlan: 'Trainingsplan',
+                workoutPlanText:
+                    'angepasst an dein Ziel, deine Erfahrung und dein Equipment',
+                nutritionPlan: 'Ern\u00e4hrungsplan',
+                nutritionPlanText:
+                    'personalisiert auf deinen Kalorienbedarf und deine Vorlieben',
+                swapMeals: 'Mahlzeiten tauschen',
+                swapMealsText:
+                    'du magst kein Brokkoli? Kein Problem, tausch es aus',
+                tracking: 'Tracking',
+                trackingText: 'Fortschritt sehen, dranbleiben',
+                aiAdaptation: 'KI-Anpassung',
+                aiAdaptationText: 'der Plan entwickelt sich mit dir weiter',
+            },
+            stats: {
+                heading: 'Zahlen',
+                users: 'Nutzer',
+                pricePerMonth: 'pro Monat nach 7 Tagen gratis',
+                developerMission: 'Entwickler. 1 Mission.',
+            },
+            cta: {
+                heading: 'Probier es aus. 7 Tage kostenlos.',
+                button: 'Jetzt starten',
+                appStoreLink: 'Oder direkt im App Store laden',
+            },
         },
         calorieCalculator: {
             hero: {

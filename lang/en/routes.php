@@ -8,6 +8,7 @@ return [
     'free_tools_calorie_calculator' => 'free-tools/calorie-calculator',
     'blog_index' => 'blog',
     'blog_article' => 'blog/{slug}',
+    'about' => 'about',
     'workout_plans_index' => 'free-workout-plan',
     'workout_plans_type' => 'free-workout-plan/{type}',
 
