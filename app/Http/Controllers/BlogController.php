@@ -36,8 +36,8 @@ class BlogController extends Controller
 
         $meta = [
             'title' => $locale === 'de'
-                ? 'Blog — Fitness, Ernährung & Training | Fytrr'
-                : 'Blog — Fitness, Nutrition & Training | Fytrr',
+                ? 'Blog — Fitness, Ernährung & Training'
+                : 'Blog — Fitness, Nutrition & Training',
             'description' => $locale === 'de'
                 ? 'Ratgeber rund um Training, Ernährung und Fitness. Wissenschaftlich fundiert, praxisnah und kostenlos.'
                 : 'Guides on training, nutrition and fitness. Science-based, practical and free.',
