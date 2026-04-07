@@ -13,249 +13,226 @@ class GenerateSitemapCommand extends Command
 
     protected $description = 'Generate the sitemap with all pages including workout plans';
 
-    public function handle()
+    /** @var string[] */
+    private const LOCALES = ['de', 'en'];
+
+    /**
+     * Static pages to include in the sitemap.
+     * When adding a new page, just add an entry here.
+     *
+     * - 'route_key': translation key from lang/xx/routes.php (null for fixed paths)
+     * - 'path': fixed path segment (ignored when route_key is set)
+     * - 'priority': sitemap priority (0.0–1.0)
+     * - 'changeFrequency': how often the page changes
+     *
+     * @return array<int, array{route_key: string|null, path: string, priority: float, changeFrequency: string}>
+     */
+    private function staticPages(): array
+    {
+        return [
+            ['route_key' => null, 'path' => '', 'priority' => 1.0, 'changeFrequency' => 'weekly'],
+            ['route_key' => null, 'path' => 'app', 'priority' => 0.8, 'changeFrequency' => 'monthly'],
+            ['route_key' => 'routes.about', 'path' => '', 'priority' => 0.7, 'changeFrequency' => 'monthly'],
+            ['route_key' => 'routes.free_tools_calorie_calculator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly'],
+            ['route_key' => 'routes.imprint', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
+            ['route_key' => 'routes.data_privacy', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
+            ['route_key' => 'routes.terms', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
+            ['route_key' => 'routes.disclaimer', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
+        ];
+    }
+
+    public function handle(): int
     {
         $this->info('Starting sitemap generation...');
 
         $sitemap = Sitemap::create();
-        $locales = ['de', 'en'];
         $baseUrl = config('app.url');
 
-        foreach ($locales as $locale) {
+        foreach (self::LOCALES as $locale) {
             app()->setLocale($locale);
-
             $this->info("Processing locale: {$locale}");
 
-            // Homepage
-            $homepageUrl = Url::create("/{$locale}")
-                ->setLastModificationDate(Carbon::now())
-                ->setPriority(1.0)
-                ->setChangeFrequency('weekly');
-
-            // Add alternates for homepage
-            foreach ($locales as $altLocale) {
-                if ($altLocale !== $locale) {
-                    $homepageUrl->addAlternate("{$baseUrl}/{$altLocale}", $altLocale);
-                }
-            }
-
-            $sitemap->add($homepageUrl);
-
-            // App page
-            $appUrl = Url::create("/{$locale}/app")
-                ->setLastModificationDate(Carbon::now())
-                ->setPriority(0.8)
-                ->setChangeFrequency('monthly');
-
-            foreach ($locales as $altLocale) {
-                if ($altLocale !== $locale) {
-                    $appUrl->addAlternate("{$baseUrl}/{$altLocale}/app", $altLocale);
-                }
-            }
-
-            $sitemap->add($appUrl);
-
-            $this->info("Added app page: /{$locale}/app");
-
-            // Calorie Calculator
-            $calcPath = trans('routes.free_tools_calorie_calculator', [], $locale);
-            $calcUrl = Url::create("/{$locale}/{$calcPath}")
-                ->setLastModificationDate(Carbon::now())
-                ->setPriority(0.9)
-                ->setChangeFrequency('monthly');
-
-            foreach ($locales as $altLocale) {
-                if ($altLocale !== $locale) {
-                    $altCalcPath = trans('routes.free_tools_calorie_calculator', [], $altLocale);
-                    $calcUrl->addAlternate("{$baseUrl}/{$altLocale}/{$altCalcPath}", $altLocale);
-                }
-            }
-
-            $sitemap->add($calcUrl);
-
-            $this->info("Added calorie calculator: /{$locale}/{$calcPath}");
-
-            // Workout Plans
-            $planTypes = $this->getPlanTypes();
-
-            if (! empty($planTypes)) {
-                $basePath = trans('routes.workout_plans_index', [], $locale);
-
-                // Index Page - use latest update from all plans
-                $latestUpdate = $this->getLatestPlanUpdate($planTypes);
-
-                $indexUrl = Url::create("/{$locale}/{$basePath}")
-                    ->setLastModificationDate($latestUpdate)
-                    ->setPriority(0.9)
-                    ->setChangeFrequency('weekly');
-
-                // Add alternates for index page
-                foreach ($locales as $altLocale) {
-                    if ($altLocale !== $locale) {
-                        $altBasePath = trans('routes.workout_plans_index', [], $altLocale);
-                        $indexUrl->addAlternate("{$baseUrl}/{$altLocale}/{$altBasePath}", $altLocale);
-                    }
-                }
-
-                $sitemap->add($indexUrl);
-
-                $this->info("Added workout plans index: /{$locale}/{$basePath}");
-
-                // Individual Plan Pages
-                foreach ($planTypes as $type => $data) {
-                    $lastMod = $this->getPlanLastModified($data);
-
-                    $url = Url::create("/{$locale}/{$basePath}/{$type}")
-                        ->setLastModificationDate($lastMod)
-                        ->setPriority(0.8)
-                        ->setChangeFrequency('monthly');
-
-                    // Add hreflang alternates for same workout plan in other languages
-                    if (isset($data['internal_type'])) {
-                        $alternates = $this->getAlternateUrls($data['internal_type'], $locale);
-                        foreach ($alternates as $altLocale => $altUrl) {
-                            $url->addAlternate($altUrl, $altLocale);
-                        }
-                    }
-
-                    $sitemap->add($url);
-
-                    $this->info("Added plan: {$type}");
-                }
-            }
-
-            // Blog Index
-            $blogIndexUrl = Url::create("/{$locale}/blog")
-                ->setLastModificationDate(Carbon::now())
-                ->setPriority(0.8)
-                ->setChangeFrequency('weekly');
-
-            foreach ($locales as $altLocale) {
-                if ($altLocale !== $locale) {
-                    $blogIndexUrl->addAlternate("{$baseUrl}/{$altLocale}/blog", $altLocale);
-                }
-            }
-
-            $sitemap->add($blogIndexUrl);
-
-            $this->info("Added blog index: /{$locale}/blog");
-
-            // Blog Articles
-            $blogArticles = config("blog.{$locale}", []);
-
-            foreach ($blogArticles as $slug => $articleData) {
-                $lastMod = $this->getPlanLastModified($articleData);
-
-                $blogUrl = Url::create("/{$locale}/blog/{$slug}")
-                    ->setLastModificationDate($lastMod)
-                    ->setPriority(0.8)
-                    ->setChangeFrequency('monthly');
-
-                // Add hreflang alternates
-                if (isset($articleData['internal_slug'])) {
-                    foreach ($locales as $altLocale) {
-                        if ($altLocale === $locale) {
-                            continue;
-                        }
-                        $altArticles = config("blog.{$altLocale}", []);
-                        foreach ($altArticles as $altSlug => $altData) {
-                            if (($altData['internal_slug'] ?? '') === $articleData['internal_slug']) {
-                                $blogUrl->addAlternate("{$baseUrl}/{$altLocale}/blog/{$altSlug}", $altLocale);
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                $sitemap->add($blogUrl);
-
-                $this->info("Added blog article: /{$locale}/blog/{$slug}");
-            }
-
-            // Legal Pages
-            $legalPageMappings = [
-                'de' => [
-                    'agb' => 'terms-and-conditions',
-                    'datenschutz' => 'privacy-policy',
-                ],
-                'en' => [
-                    'terms-and-conditions' => 'agb',
-                    'privacy-policy' => 'datenschutz',
-                ],
-            ];
-
-            if (isset($legalPageMappings[$locale])) {
-                foreach ($legalPageMappings[$locale] as $page => $alternatePage) {
-                    $legalUrl = Url::create("/{$locale}/{$page}")
-                        ->setLastModificationDate(Carbon::now()->subMonths(1))
-                        ->setPriority(0.3)
-                        ->setChangeFrequency('yearly');
-
-                    // Add alternate for the other language
-                    $altLocale = $locale === 'de' ? 'en' : 'de';
-                    $legalUrl->addAlternate("{$baseUrl}/{$altLocale}/{$alternatePage}", $altLocale);
-
-                    $sitemap->add($legalUrl);
-                }
-
-                $this->info("Added legal pages for {$locale}");
-            }
+            $this->addStaticPages($sitemap, $locale, $baseUrl);
+            $this->addWorkoutPlans($sitemap, $locale, $baseUrl);
+            $this->addBlogPages($sitemap, $locale, $baseUrl);
         }
 
-        // Save sitemap
         $sitemap->writeToFile(public_path('sitemap.xml'));
 
-        $this->info('✅ Sitemap generated successfully!');
-        $this->info('📍 Location: '.public_path('sitemap.xml'));
-        $this->info('🔗 URL: '.$baseUrl.'/sitemap.xml');
+        $this->info('Sitemap generated successfully at '.$baseUrl.'/sitemap.xml');
 
         return Command::SUCCESS;
     }
 
-    /**
-     * Get plan types from config for current locale
-     */
-    private function getPlanTypes(): array
+    private function addStaticPages(Sitemap $sitemap, string $locale, string $baseUrl): void
     {
-        $locale = app()->getLocale();
+        foreach ($this->staticPages() as $page) {
+            $fullPath = $this->buildLocalizedPath($locale, $page['route_key'], $page['path']);
 
-        return config("freeWorkouts.{$locale}", []);
+            $url = Url::create($fullPath)
+                ->setLastModificationDate(Carbon::now())
+                ->setPriority($page['priority'])
+                ->setChangeFrequency($page['changeFrequency']);
+
+            $this->addAlternates($url, $locale, $baseUrl, $page['route_key'], $page['path']);
+
+            $sitemap->add($url);
+            $this->info("  Added: {$fullPath}");
+        }
+    }
+
+    private function addWorkoutPlans(Sitemap $sitemap, string $locale, string $baseUrl): void
+    {
+        $planTypes = config("freeWorkouts.{$locale}", []);
+
+        if (empty($planTypes)) {
+            return;
+        }
+
+        $basePath = trans('routes.workout_plans_index', [], $locale);
+
+        // Index page
+        $indexUrl = Url::create("/{$locale}/{$basePath}")
+            ->setLastModificationDate($this->getLatestPlanUpdate($planTypes))
+            ->setPriority(0.9)
+            ->setChangeFrequency('weekly');
+
+        $this->addAlternates($indexUrl, $locale, $baseUrl, 'routes.workout_plans_index');
+
+        $sitemap->add($indexUrl);
+        $this->info("  Added: /{$locale}/{$basePath}");
+
+        // Individual plan pages
+        foreach ($planTypes as $type => $data) {
+            $url = Url::create("/{$locale}/{$basePath}/{$type}")
+                ->setLastModificationDate($this->parseDate($data))
+                ->setPriority(0.8)
+                ->setChangeFrequency('monthly');
+
+            if (isset($data['internal_type'])) {
+                $this->addWorkoutPlanAlternates($url, $data['internal_type'], $locale, $baseUrl);
+            }
+
+            $sitemap->add($url);
+            $this->info("  Added: /{$locale}/{$basePath}/{$type}");
+        }
+    }
+
+    private function addBlogPages(Sitemap $sitemap, string $locale, string $baseUrl): void
+    {
+        // Blog index
+        $blogIndexUrl = Url::create("/{$locale}/blog")
+            ->setLastModificationDate(Carbon::now())
+            ->setPriority(0.8)
+            ->setChangeFrequency('weekly');
+
+        $this->addAlternates($blogIndexUrl, $locale, $baseUrl, null, 'blog');
+
+        $sitemap->add($blogIndexUrl);
+        $this->info("  Added: /{$locale}/blog");
+
+        // Blog articles
+        foreach (config("blog.{$locale}", []) as $slug => $articleData) {
+            $blogUrl = Url::create("/{$locale}/blog/{$slug}")
+                ->setLastModificationDate($this->parseDate($articleData))
+                ->setPriority(0.8)
+                ->setChangeFrequency('monthly');
+
+            if (isset($articleData['internal_slug'])) {
+                $this->addBlogAlternates($blogUrl, $articleData['internal_slug'], $locale, $baseUrl);
+            }
+
+            $sitemap->add($blogUrl);
+            $this->info("  Added: /{$locale}/blog/{$slug}");
+        }
     }
 
     /**
-     * Get last modification date for a plan
+     * Build a locale-prefixed path, resolving route translations when applicable.
      */
-    private function getPlanLastModified(array $planData): Carbon
+    private function buildLocalizedPath(string $locale, ?string $routeKey, string $fallbackPath = ''): string
     {
-        // Priority: last_updated_at > published_at > now
-        if (isset($planData['last_updated_at'])) {
-            try {
-                return Carbon::parse($planData['last_updated_at']);
-            } catch (\Exception $e) {
-                // Fallback if date parsing fails
+        $segment = $routeKey ? trans($routeKey, [], $locale) : $fallbackPath;
+
+        return $segment !== '' ? "/{$locale}/{$segment}" : "/{$locale}";
+    }
+
+    /**
+     * Add hreflang alternates for all other locales.
+     */
+    private function addAlternates(Url $url, string $currentLocale, string $baseUrl, ?string $routeKey = null, string $fallbackPath = ''): void
+    {
+        foreach (self::LOCALES as $altLocale) {
+            if ($altLocale === $currentLocale) {
+                continue;
+            }
+
+            $altPath = $this->buildLocalizedPath($altLocale, $routeKey, $fallbackPath);
+            $url->addAlternate("{$baseUrl}{$altPath}", $altLocale);
+        }
+    }
+
+    /**
+     * Add hreflang alternates for a workout plan matched by internal_type.
+     */
+    private function addWorkoutPlanAlternates(Url $url, string $internalType, string $currentLocale, string $baseUrl): void
+    {
+        foreach (self::LOCALES as $altLocale) {
+            if ($altLocale === $currentLocale) {
+                continue;
+            }
+
+            $plans = config("freeWorkouts.{$altLocale}", []);
+
+            foreach ($plans as $slug => $data) {
+                if (($data['internal_type'] ?? '') === $internalType) {
+                    $basePath = trans('routes.workout_plans_index', [], $altLocale);
+                    $url->addAlternate("{$baseUrl}/{$altLocale}/{$basePath}/{$slug}", $altLocale);
+                    break;
+                }
             }
         }
+    }
 
-        if (isset($planData['published_at'])) {
-            try {
-                return Carbon::parse($planData['published_at']);
-            } catch (\Exception $e) {
-                // Fallback if date parsing fails
+    /**
+     * Add hreflang alternates for a blog article matched by internal_slug.
+     */
+    private function addBlogAlternates(Url $url, string $internalSlug, string $currentLocale, string $baseUrl): void
+    {
+        foreach (self::LOCALES as $altLocale) {
+            if ($altLocale === $currentLocale) {
+                continue;
+            }
+
+            foreach (config("blog.{$altLocale}", []) as $altSlug => $altData) {
+                if (($altData['internal_slug'] ?? '') === $internalSlug) {
+                    $url->addAlternate("{$baseUrl}/{$altLocale}/blog/{$altSlug}", $altLocale);
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Parse a date from config data, falling back to now.
+     */
+    private function parseDate(array $data): Carbon
+    {
+        foreach (['last_updated_at', 'published_at'] as $key) {
+            if (isset($data[$key])) {
+                return Carbon::parse($data[$key]);
             }
         }
 
         return Carbon::now();
     }
 
-    /**
-     * Get the latest update date from all plans
-     */
     private function getLatestPlanUpdate(array $planTypes): Carbon
     {
-        $latest = Carbon::now()->subYear(); // Fallback to 1 year ago
+        $latest = Carbon::now()->subYear();
 
         foreach ($planTypes as $data) {
-            $planDate = $this->getPlanLastModified($data);
+            $planDate = $this->parseDate($data);
 
             if ($planDate->gt($latest)) {
                 $latest = $planDate;
@@ -263,35 +240,5 @@ class GenerateSitemapCommand extends Command
         }
 
         return $latest;
-    }
-
-    /**
-     * Get alternate language URLs for the same workout plan
-     * Matches plans by internal_type across different locales
-     */
-    private function getAlternateUrls(string $internalType, string $currentLocale): array
-    {
-        $baseUrl = config('app.url');
-        $alternates = [];
-        $locales = ['de', 'en'];
-
-        foreach ($locales as $locale) {
-            if ($locale === $currentLocale) {
-                continue; // Skip current locale
-            }
-
-            $plans = config("freeWorkouts.{$locale}", []);
-
-            // Find the plan with matching internal_type
-            foreach ($plans as $slug => $data) {
-                if (isset($data['internal_type']) && $data['internal_type'] === $internalType) {
-                    $basePath = trans('routes.workout_plans_index', [], $locale);
-                    $alternates[$locale] = "{$baseUrl}/{$locale}/{$basePath}/{$slug}";
-                    break;
-                }
-            }
-        }
-
-        return $alternates;
     }
 }
