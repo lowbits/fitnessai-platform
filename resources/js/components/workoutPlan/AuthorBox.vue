@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
 interface Author {
     name: string;
     title: string;
@@ -21,6 +24,10 @@ interface Props {
 withDefaults(defineProps<Props>(), {
     showDisclosure: true,
 });
+
+const aboutUrl = computed(
+    () => (usePage().props.footerLinks as { aboutUrl: string })?.aboutUrl,
+);
 </script>
 
 <template>
@@ -49,7 +56,15 @@ withDefaults(defineProps<Props>(), {
                     class="mb-1 text-lg font-bold text-white sm:text-xl"
                     itemprop="name"
                 >
-                    {{ author.name }}
+                    <a
+                        v-if="aboutUrl"
+                        :href="aboutUrl"
+                        class="transition hover:text-primary-400"
+                        itemprop="url"
+                    >
+                        {{ author.name }}
+                    </a>
+                    <template v-else>{{ author.name }}</template>
                 </h3>
                 <p
                     class="mb-2 text-sm font-medium text-secondary-200"

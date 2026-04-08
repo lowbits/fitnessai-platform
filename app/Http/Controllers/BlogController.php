@@ -147,6 +147,14 @@ class BlogController extends Controller
             ],
         ];
 
+        if (! empty($article['seo_image'])) {
+            $articleSchema['image'] = [
+                '@type' => 'ImageObject',
+                'url' => config('app.url').$article['seo_image'],
+                'caption' => $article['seo_image_alt'] ?? $article['h1'],
+            ];
+        }
+
         $schemas = [$articleSchema];
 
         if (! empty($article['faqs'])) {
@@ -161,6 +169,20 @@ class BlogController extends Controller
                         'text' => $faq['answer'],
                     ],
                 ], $article['faqs']),
+            ];
+        }
+
+        if (! empty($article['how_to_steps'])) {
+            $schemas[] = [
+                '@context' => 'https://schema.org',
+                '@type' => 'HowTo',
+                'name' => $article['h1'],
+                'description' => $article['description'],
+                'step' => array_map(fn (array $step) => [
+                    '@type' => 'HowToStep',
+                    'name' => $step['name'],
+                    'text' => $step['text'],
+                ], $article['how_to_steps']),
             ];
         }
 

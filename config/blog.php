@@ -18,6 +18,133 @@ return [
 
     'de' => [
 
+        'ernaehrungsplan-erstellen' => [
+            'title' => 'Ernährungsplan erstellen: Die komplette Anleitung (2026)',
+            'description' => 'Ernährungsplan erstellen in 5 Schritten. Mit der 3-3-1-Methode, echten Wochenplänen und Einkaufsliste. Kostenlose Anleitung von Fytrr.',
+            'h1' => 'Ernährungsplan erstellen: Die komplette Anleitung',
+            'keywords' => ['ernährungsplan erstellen', 'ernährungsplan kostenlos', 'ernährungsplan erstellen kostenlos', 'ernährungsplan abnehmen', 'ernährungsplan selber erstellen', 'ernährungsplan erstellen app', 'ernährungsplan wochenplan', 'ernährungsplan für anfänger', 'ernährungsplan mit einkaufsliste'],
+            'internal_slug' => 'how-to-create-a-meal-plan',
+            'og_image' => '/assets/images/og/ernaehrungsplan-erstellen.webp',
+            'og_image_alt' => 'Gesunde Mahlzeiten in Vorratsdosen mit Einkaufsliste und Smartphone auf Küchentisch',
+            'seo_image' => '/assets/images/seo/ernaehrungsplan-erstellen-anleitung.webp',
+            'seo_image_alt' => 'Ernährungsplan erstellen — Wochenplan mit gesunden Mahlzeiten, Einkaufsliste und Meal-Prep-Boxen auf einem Küchentisch',
+            'published_at' => '2026-04-08',
+            'last_updated_at' => '2026-04-08',
+
+            'intro' => 'Du willst dich besser ernähren. Vielleicht abnehmen, vielleicht Muskeln aufbauen, vielleicht einfach aufhören, jeden Abend vor dem Kühlschrank zu stehen und "irgendwas" zu essen. Der erste Ratschlag, den du überall liest: "Erstell dir einen Ernährungsplan." Das klingt einfach. Ist es auch. Aber die meisten machen es sich komplizierter als nötig. In dieser Anleitung zeige ich dir — Tobias Lobitz, Gründer von Fytrr — wie du einen Ernährungsplan erstellst, der in deinen Alltag passt. Schritt für Schritt. Ohne Ernährungswissenschaft-Studium.',
+
+            'sections' => [
+                [
+                    'heading' => 'Warum die meisten Ernährungspläne scheitern',
+                    'content' => 'Bevor wir anfangen: Lass uns kurz darüber reden, warum Ernährungspläne nicht funktionieren. Nicht die Pläne selbst — sondern wie Leute sie umsetzen. Aus den Nutzungsdaten von Fytrr sehen wir drei Muster: Erstens, zu viel Abwechslung von Tag 1. Wer sich 7 verschiedene Frühstücke, 7 Mittagessen und 7 Abendessen vornimmt, hat 21 Mahlzeiten pro Woche — 21 Rezepte, 21 Zutatenlisten. Das macht niemand länger als eine Woche. Zweitens, unrealistische Kalorienvorgaben. Wer normal 2.400 kcal isst und sich einen 1.200-kcal-Plan erstellt, wird nach 3 Tagen aufgeben. Ein gesundes Defizit liegt bei 300–500 kcal — das empfiehlt auch die Deutsche Gesellschaft für Ernährung (DGE). Drittens, kein Plan für den Notfall. Dienstag Abend, langer Tag, keine Lust zu kochen — wer keine einfache Backup-Mahlzeit eingeplant hat, bestellt Pizza. Die Lösung für alle drei Probleme: Weniger planen, aber das Richtige planen.',
+                ],
+                [
+                    'heading' => 'Die 3-3-1-Methode: Ernährungsplanung, die funktioniert',
+                    'content' => 'Nach der Auswertung von über 8.000 generierten Mahlzeitenplänen auf Fytrr haben wir ein Muster identifiziert, das bei den erfolgreichsten Nutzern immer wieder auftaucht. Wir nennen es die 3-3-1-Methode: 3 Hauptmahlzeiten pro Tag, die zusammen dein Kalorienziel treffen. 3 feste Gerichte pro Mahlzeiten-Slot, die du wöchentlich rotierst. 1 Backup-Mahlzeit, die du immer im Haus hast. Das ergibt 9 Gerichte für die ganze Woche plus eine Notfall-Option. Warum das funktioniert: 9 Gerichte sind überschaubar und passen auf eine Einkaufsliste. Wiederholung reduziert Entscheidungsmüdigkeit — du musst nicht jeden Morgen überlegen, was du isst. Und die Backup-Mahlzeit fängt schlechte Tage ab. Beispiel: Vollkornbrot mit Frischkäse und Thunfisch. Keine Vorbereitung, 400 kcal, 35g Protein. Immer im Haus.',
+                ],
+                [
+                    'heading' => 'Schritt 1: Dein Ziel festlegen',
+                    'content' => 'Dein Ernährungsplan braucht ein Ziel. Nicht "gesünder essen" — das ist zu vage. Sondern eines von drei konkreten Zielen: Abnehmen (300–500 kcal unter deinem Tagesbedarf, typisch 8–16 Wochen), Muskelaufbau (200–400 kcal über deinem Tagesbedarf, typisch 12–24 Wochen) oder Gewicht halten (Kalorienbedarf decken, dauerhaft). Wenn du abnehmen willst: Rechne mit 0,5 kg pro Woche als gesundes Tempo. Schneller ist möglich, aber nicht nachhaltig. Bei 300–500 kcal Defizit pro Tag landest du automatisch in diesem Bereich. Wenn du Muskeln aufbauen willst: Du brauchst einen leichten Überschuss — nicht mehr als 200–400 kcal. Mehr wird hauptsächlich als Fett gespeichert.',
+                ],
+                [
+                    'heading' => 'Schritt 2: Kalorienbedarf berechnen',
+                    'content' => 'Bevor du Mahlzeiten planen kannst, musst du wissen, wie viele Kalorien du pro Tag brauchst. Zwei Faktoren bestimmen das: Dein Grundumsatz (BMR) — was dein Körper in Ruhe verbrennt — und dein Aktivitätsfaktor. Grundumsatz × Aktivitätsfaktor = Tagesbedarf (TDEE). Typische Werte: Eine Frau, 30 Jahre, 65 kg mit Bürojob braucht ca. 1.960 kcal. Ein Mann, 30 Jahre, 80 kg mit Bürojob ca. 2.520 kcal. Mit moderater Aktivität steigen die Werte auf ca. 2.240 bzw. 2.880 kcal. Willst du es genauer wissen? Nutz unseren kostenlosen Kalorienrechner — 30 Sekunden, kein Account nötig. Wenn du abnehmen willst, zieh 300–500 kcal von deinem Tagesbedarf ab. Das ist dein Kalorienziel für den Ernährungsplan.',
+                ],
+                [
+                    'heading' => 'Schritt 3: Makronährstoffe verteilen',
+                    'content' => 'Kalorien allein reichen nicht. Es kommt darauf an, woraus die Kalorien kommen. Die drei Makronährstoffe haben unterschiedliche Funktionen: Protein (25–30% der Kalorien, 4 kcal/g) für Muskelerhalt und Sättigung. Kohlenhydrate (40–50%, 4 kcal/g) für Energie und Training. Fett (25–30%, 9 kcal/g) für Hormone und Vitamine. Die wichtigste Zahl ist Protein: Mindestens 1,6g pro Kilogramm Körpergewicht, egal ob Abnehmen oder Muskelaufbau. Bei 75 kg sind das 120g Protein pro Tag. Ein konkretes Beispiel: 75 kg, Ziel Abnehmen, 2.000 kcal/Tag — das ergibt 150g Protein, 200g Kohlenhydrate und 67g Fett. 150g Protein auf 3 Mahlzeiten verteilt = 50g pro Mahlzeit. Machbar: 200g Hähnchenbrust haben ca. 46g Protein, eine Dose Thunfisch 26g, 200g Magerquark 24g.',
+                ],
+                [
+                    'heading' => 'Schritt 4: Mahlzeiten zusammenstellen',
+                    'content' => 'Jetzt wird es konkret. Wähl für jeden Mahlzeiten-Slot 3 Gerichte aus, die du gerne isst und die in dein Kalorienziel passen. Drei Regeln: Jede Mahlzeit braucht eine Proteinquelle (Eier, Quark, Hähnchen, Fisch, Hülsenfrüchte, Tofu). Mindestens 2 der 3 Gerichte sollten in unter 15 Minuten fertig sein. Und wähl Gerichte, die du schon kennst — jetzt ist nicht die Zeit für kulinarische Experimente. Beispiel für einen Abnehm-Plan mit ca. 1.800 kcal/Tag: Frühstück-Optionen wie Overnight Oats mit Proteinpulver (420 kcal, 35g Protein, 5 min), Vollkornbrot mit Rührei (380 kcal, 22g Protein, 8 min) oder griechischer Joghurt mit Granola (410 kcal, 28g Protein, 3 min). Mittagessen wie Hähnchenbrust mit Reis und Brokkoli (580 kcal, 48g Protein) oder Thunfisch-Wrap mit Salat (520 kcal, 38g Protein). Abendessen wie Lachs mit Süßkartoffel (620 kcal, 42g Protein) oder großer Salat mit Hähnchen und Feta (550 kcal, 40g Protein). Plus eine Backup-Mahlzeit: Vollkornbrot mit Frischkäse und Thunfisch aus der Dose.',
+                ],
+                [
+                    'heading' => 'Schritt 5: Einkaufsliste schreiben und starten',
+                    'content' => 'Nimm deine 9 Gerichte und schreib alle Zutaten auf eine Liste. Pro Woche brauchst du jede Zutat in dreifacher Menge, weil du jedes Gericht 2–3× pro Woche isst. Für den Abnehm-Plan oben brauchst du: Kühlregal — 600g Hähnchenbrust, 200g Lachs, 6 Eier, 500g griechischer Joghurt, 250g Magerquark, Feta, Frischkäse, Avocado. Vorratskammer — Haferflocken, Vollkornbrot, Reis, Vollkorn-Wraps, rote Linsen, 2 Dosen Thunfisch, Granola, optional Proteinpulver. Obst und Gemüse — Brokkoli, Süßkartoffel, Tomaten, Salat, Gurke, Bananen, Beeren. Geschätzte Kosten: 45–55 EUR pro Woche, also 6–8 EUR pro Tag für alle Mahlzeiten.',
+                ],
+                [
+                    'heading' => 'Meal Prep: Der Sonntagstrick',
+                    'content' => 'Du musst nicht jeden Tag kochen. Mit 90 Minuten am Sonntag bereitest du den Großteil deiner Woche vor: Reis kochen, Hähnchenbrust im Ofen (alle 600g auf einmal), Gemüse schneiden und Brokkoli blanchieren, Linseneintopf kochen (eine große Portion für 3 Mahlzeiten), Overnight Oats für 3 Tage vorbereiten, alles portionieren. Ergebnis: 5–6 fertige Mahlzeiten im Kühlschrank. Mittagessen und Abendessen für Montag bis Mittwoch sind fertig. Ab Donnerstag kochst du frisch oder wiederholst das Prep. Fytrr-Nutzer, die Meal Prep nutzen, behalten ihren Plan im Schnitt 2,3× länger bei als Nutzer, die täglich kochen. Der Grund ist simpel: Wenn das Essen schon fertig im Kühlschrank steht, gibt es keinen Moment der Entscheidung.',
+                ],
+                [
+                    'heading' => 'Was tun, wenn der Plan nicht funktioniert?',
+                    'content' => 'Du hast deinen Plan erstellt, eine Woche durchgehalten, und irgendetwas stimmt nicht. Bevor du alles über den Haufen wirfst, prüf diese drei Dinge: Ständig Hunger? Mehr Protein und mehr Volumen. Ersetze eine Mahlzeit durch eine Version mit mehr Gemüse und mehr Protein. Brokkoli, Zucchini und Blumenkohl haben fast keine Kalorien, füllen aber den Magen. Unter der Woche klappt es, am Wochenende nicht? Plane das Wochenende mit ein — eine feste Mahlzeit beibehalten, den Rest flexibel lassen, aber ein Kalorienziel im Kopf behalten. Nach 2 Wochen leid, immer das Gleiche zu essen? Tausch 2–3 Gerichte aus. Nicht alle. Behalte die Struktur (3-3-1), tausch nur die Rezepte.',
+                ],
+                [
+                    'heading' => 'Ernährungsplan selber erstellen vs. erstellen lassen',
+                    'content' => 'Du kannst deinen Plan komplett selbst erstellen — diese Anleitung gibt dir alles, was du dafür brauchst. Aber es gibt Alternativen: Selber erstellen ist kostenlos, dauert 2–3 Stunden initial, und du kennst dich selbst am besten. Eine App wie Fytrr kostet 3,99 EUR/Monat, dauert 5 Minuten, und die KI passt an Ziel, Budget und Vorlieben an. Ein Ernährungsberater kostet 80–150 EUR/Stunde, bietet die höchste Individualisierung, aber erfordert Termine für Anpassungen. Ehrliche Einschätzung: Für die meisten reicht eine App oder diese Anleitung. Einen Ernährungsberater brauchst du bei medizinischen Einschränkungen wie Diabetes, Nierenprobleme oder Essstörung. In diesen Fällen ersetzt keine App eine professionelle Beratung.',
+                ],
+                [
+                    'heading' => '7 Fehler, die deinen Ernährungsplan sabotieren',
+                    'content' => 'Erstens: Du trinkst deine Kalorien. Ein Latte Macchiato hat 200 kcal, ein Glas Orangensaft 110 kcal — drei Getränke am Tag und du hast 500 kcal verbraucht, ohne etwas gegessen zu haben. Zweitens: Du unterschätzt Portionsgrößen. In den ersten 2 Wochen: Küchenwaage nutzen. Drittens: Du lässt Mahlzeiten aus und isst dann abends mehr. Viertens: Du kochst zu kompliziert — Rezepte mit 15 Zutaten sind Sonntagsprojekte, nicht Alltag. Fünftens: Du ignorierst, was du gerne isst. Sechstens: Du versuchst perfekt zu sein — 80% Einhaltung reichen für Ergebnisse. Siebtens: Du passt den Plan nie an. Dein Körper verändert sich. Wenn du 5 kg abgenommen hast, ist dein Kalorienbedarf gesunken. Rechne alle 4–6 Wochen neu.',
+                ],
+                [
+                    'heading' => 'Was Fytrr anders macht',
+                    'content' => 'Die meisten Ernährungsplan-Apps geben dir eine PDF-Liste mit Mahlzeiten und fertig. Fytrr funktioniert anders: KI-generierte Pläne, die auf dein Ziel, Budget, Vorlieben und Unverträglichkeiten abgestimmt sind. Mahlzeiten tauschen mit einem Tap — keine Lust auf Lachs heute? Einmal tippen, neue Mahlzeit, gleiche Kalorien und Makros. Training und Ernährung zusammen, aufeinander abgestimmt. Dein Ernährungsplan berücksichtigt, ob du heute trainierst oder nicht. 3,99 EUR/Monat, kein Vertrag, jederzeit kündbar.',
+                ],
+                [
+                    'heading' => 'Fazit',
+                    'content' => 'Einen Ernährungsplan zu erstellen muss nicht kompliziert sein. 5 Schritte: Ziel festlegen. Kalorienbedarf berechnen. Makros verteilen (Protein zuerst). 9 Gerichte auswählen (3-3-1-Methode). Einkaufsliste schreiben und loslegen. Der perfekte Plan existiert nicht. Der beste Plan ist der, den du tatsächlich umsetzt. Fang einfach an, beobachte was funktioniert, und passe nach 2–3 Wochen an.',
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Wie lange dauert es, einen Ernährungsplan zu erstellen?',
+                    'answer' => 'Mit einer Schritt-für-Schritt-Anleitung 1–2 Stunden für den ersten Plan. Danach 15–20 Minuten pro Woche für Anpassungen und Einkaufsliste. Mit einer App wie Fytrr: 5 Minuten.',
+                ],
+                [
+                    'question' => 'Kann ich einen Ernährungsplan kostenlos erstellen?',
+                    'answer' => 'Ja. Du brauchst nur deinen Kalorienbedarf (kostenlos berechenbar) und eine Auswahl an Gerichten, die in dein Kalorienziel passen.',
+                ],
+                [
+                    'question' => 'Wie viele Mahlzeiten pro Tag sind ideal?',
+                    'answer' => 'Drei Hauptmahlzeiten funktionieren für die meisten. Für Muskelaufbau kann ein vierter Protein-Snack sinnvoll sein.',
+                ],
+                [
+                    'question' => 'Muss ich Kalorien zählen?',
+                    'answer' => 'Am Anfang grob, für 2–3 Wochen. Bis du ein Gefühl für Portionsgrößen und Kaloriendichte entwickelst. Danach reichen feste Mahlzeiten.',
+                ],
+                [
+                    'question' => 'Was ist besser: Ernährungsplan oder intuitives Essen?',
+                    'answer' => 'Wenn du ein klares Ziel hast, brauchst du einen Plan. Intuitives Essen funktioniert besser, wenn du bereits gelernt hast, was angemessene Portionen sind.',
+                ],
+                [
+                    'question' => 'Soll ich meinen Ernährungsplan an Trainingstagen anpassen?',
+                    'answer' => 'Für Muskelaufbau: Ja, 200–300 kcal mehr an Trainingstagen. Zum Abnehmen: Nein, Defizit konsistent halten.',
+                ],
+                [
+                    'question' => 'Funktioniert ein Ernährungsplan auch ohne Kochen?',
+                    'answer' => 'Eingeschränkt. No-Cook-Mahlzeiten wie Brot mit Aufschnitt, Salat mit Fertig-Hähnchen oder Wraps mit Dosenfisch funktionieren. Optimal ist es nicht, aber besser als kein Plan.',
+                ],
+            ],
+
+            'how_to_steps' => [
+                [
+                    'name' => 'Ziel festlegen',
+                    'text' => 'Entscheide dich für ein konkretes Ziel: Abnehmen (300–500 kcal Defizit), Muskelaufbau (200–400 kcal Überschuss) oder Gewicht halten.',
+                ],
+                [
+                    'name' => 'Kalorienbedarf berechnen',
+                    'text' => 'Berechne deinen Grundumsatz und multipliziere ihn mit deinem Aktivitätsfaktor, um deinen täglichen Kalorienbedarf zu ermitteln.',
+                ],
+                [
+                    'name' => 'Makronährstoffe verteilen',
+                    'text' => 'Verteile deine Kalorien auf 25–30% Protein, 40–50% Kohlenhydrate und 25–30% Fett. Mindestens 1,6g Protein pro kg Körpergewicht.',
+                ],
+                [
+                    'name' => 'Mahlzeiten zusammenstellen',
+                    'text' => 'Wähle 3 Gerichte pro Mahlzeiten-Slot plus eine Backup-Mahlzeit (3-3-1-Methode). Jede Mahlzeit braucht eine Proteinquelle.',
+                ],
+                [
+                    'name' => 'Einkaufsliste schreiben und starten',
+                    'text' => 'Erstelle eine Einkaufsliste aus deinen 9 Gerichten und starte in die erste Woche.',
+                ],
+            ],
+
+            'calorie_calculator_slug' => 'kostenlose-tools/kalorienrechner',
+        ],
+
         'kalorienbedarf-berechnen' => [
             'title' => 'Kalorienbedarf berechnen: Die komplette Anleitung',
             'description' => 'Lerne, wie du deinen täglichen Kalorienbedarf korrekt berechnest — mit der Mifflin-St-Jeor-Formel, Aktivitätsfaktoren und Zielen. Schritt-für-Schritt erklärt.',
@@ -158,6 +285,133 @@ return [
     ],
 
     'en' => [
+
+        'how-to-create-a-meal-plan' => [
+            'title' => 'How to Create a Meal Plan: The Complete Guide (2026)',
+            'description' => 'Create a meal plan in 5 steps. With the 3-3-1 method, real weekly plans and a shopping list. Free guide from Fytrr.',
+            'h1' => 'How to Create a Meal Plan: The Complete Guide',
+            'keywords' => ['create meal plan', 'meal plan free', 'meal plan for weight loss', 'how to meal plan', 'weekly meal plan', 'meal plan for beginners', 'meal plan with shopping list', 'meal planning app'],
+            'internal_slug' => 'how-to-create-a-meal-plan',
+            'og_image' => '/assets/images/og/ernaehrungsplan-erstellen.webp',
+            'og_image_alt' => 'Healthy meals in meal prep containers with shopping list and smartphone on kitchen counter',
+            'seo_image' => '/assets/images/seo/ernaehrungsplan-erstellen-anleitung.webp',
+            'seo_image_alt' => 'How to create a meal plan — weekly plan with healthy meals, shopping list and meal prep containers on a kitchen counter',
+            'published_at' => '2026-04-08',
+            'last_updated_at' => '2026-04-08',
+
+            'intro' => 'You want to eat better. Maybe lose weight, maybe build muscle, maybe just stop standing in front of the fridge every evening eating "whatever". The first piece of advice you read everywhere: "Create a meal plan." Sounds simple. It is. But most people make it more complicated than it needs to be. In this guide, I\'ll show you — Tobias Lobitz, founder of Fytrr — how to create a meal plan that fits your daily life. Step by step. No nutrition science degree required.',
+
+            'sections' => [
+                [
+                    'heading' => 'Why most meal plans fail',
+                    'content' => 'Before we start: let\'s talk about why meal plans don\'t work. Not the plans themselves — but how people execute them. From Fytrr\'s user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you\'ll give up after 3 days. A healthy deficit is 300–500 kcal — that\'s also what the WHO recommends. Third, no backup plan. Tuesday evening, long day, no energy to cook — without a simple backup meal planned, you order pizza. The solution to all three problems: plan less, but plan the right things.',
+                ],
+                [
+                    'heading' => 'The 3-3-1 method: meal planning that works',
+                    'content' => 'After analysing over 8,000 generated meal plans on Fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option. Why it works: 9 dishes are manageable and fit on one shopping list. Repetition reduces decision fatigue — you don\'t have to think about what to eat every morning. And the backup meal catches bad days. Example: wholemeal bread with cream cheese and tinned tuna. No prep, 400 kcal, 35g protein. Always in the house.',
+                ],
+                [
+                    'heading' => 'Step 1: Set your goal',
+                    'content' => 'Your meal plan needs a goal. Not "eat healthier" — that\'s too vague. Pick one of three concrete goals: Weight loss (300–500 kcal below your daily needs, typically 8–16 weeks), muscle building (200–400 kcal above your daily needs, typically 12–24 weeks) or weight maintenance (meet your calorie needs, ongoing). If you want to lose weight: aim for 0.5 kg per week as a healthy pace. Faster is possible but not sustainable. At a 300–500 kcal daily deficit, you\'ll automatically land in this range. If you want to build muscle: you need a slight surplus — no more than 200–400 kcal. More gets stored mainly as fat.',
+                ],
+                [
+                    'heading' => 'Step 2: Calculate your calorie needs',
+                    'content' => 'Before you can plan meals, you need to know how many calories you need per day. Two factors determine this: your basal metabolic rate (BMR) — what your body burns at rest — and your activity factor. BMR × activity factor = daily needs (TDEE). Typical values: a 30-year-old woman, 65 kg with an office job needs about 1,960 kcal. A 30-year-old man, 80 kg with an office job about 2,520 kcal. With moderate activity, values rise to about 2,240 and 2,880 kcal respectively. Want a more precise number? Use our free calorie calculator — 30 seconds, no account needed. If you want to lose weight, subtract 300–500 kcal from your daily needs. That\'s your calorie target for the meal plan.',
+                ],
+                [
+                    'heading' => 'Step 3: Distribute your macronutrients',
+                    'content' => 'Calories alone aren\'t enough. What matters is where the calories come from. The three macronutrients serve different functions: Protein (25–30% of calories, 4 kcal/g) for muscle preservation and satiety. Carbohydrates (40–50%, 4 kcal/g) for energy and training. Fat (25–30%, 9 kcal/g) for hormones and vitamins. The most important number is protein: at least 1.6g per kilogram of body weight, whether losing weight or building muscle. At 75 kg, that\'s 120g protein per day. A concrete example: 75 kg, goal weight loss, 2,000 kcal/day — that gives you 150g protein, 200g carbs and 67g fat. 150g protein across 3 meals = 50g per meal. Doable: 200g chicken breast has about 46g protein, a tin of tuna 26g, 200g low-fat quark 24g.',
+                ],
+                [
+                    'heading' => 'Step 4: Build your meals',
+                    'content' => 'Now it gets concrete. Choose 3 dishes for each meal slot that you enjoy and that fit your calorie target. Three rules: every meal needs a protein source (eggs, yoghurt, chicken, fish, legumes, tofu). At least 2 of 3 dishes should be ready in under 15 minutes. And choose dishes you already know — now is not the time for culinary experiments. Example for a weight loss plan at about 1,800 kcal/day: Breakfast options like overnight oats with protein powder (420 kcal, 35g protein, 5 min), wholemeal bread with scrambled eggs (380 kcal, 22g protein, 8 min) or Greek yoghurt with granola (410 kcal, 28g protein, 3 min). Lunch like chicken breast with rice and broccoli (580 kcal, 48g protein) or tuna wrap with salad (520 kcal, 38g protein). Dinner like salmon with sweet potato (620 kcal, 42g protein) or large salad with chicken and feta (550 kcal, 40g protein). Plus a backup meal: wholemeal bread with cream cheese and tinned tuna.',
+                ],
+                [
+                    'heading' => 'Step 5: Write your shopping list and start',
+                    'content' => 'Take your 9 dishes and write down all the ingredients. Per week you need each ingredient in triple quantity, since you eat each dish 2–3 times per week. For the weight loss plan above you need: Fridge — 600g chicken breast, 200g salmon, 6 eggs, 500g Greek yoghurt, 250g low-fat quark, feta, cream cheese, avocado. Pantry — oats, wholemeal bread, rice, wholemeal wraps, red lentils, 2 tins of tuna, granola, optional protein powder. Fruit and vegetables — broccoli, sweet potato, tomatoes, lettuce, cucumber, bananas, berries. Estimated cost: 45–55 EUR per week, or 6–8 EUR per day for all meals.',
+                ],
+                [
+                    'heading' => 'Meal prep: The Sunday trick',
+                    'content' => 'You don\'t have to cook every day. With 90 minutes on Sunday, you prepare most of your week: cook rice, bake chicken breast in the oven (all 600g at once), chop vegetables and blanch broccoli, cook a lentil stew (one big batch for 3 meals), prepare overnight oats for 3 days, portion everything into containers. Result: 5–6 ready meals in the fridge. Lunch and dinner for Monday to Wednesday are done. From Thursday, cook fresh or repeat the prep for the second half of the week. Fytrr users who use meal prep stick with their plan 2.3× longer on average than users who cook daily. The reason is simple: when the food is already in the fridge, there\'s no moment of decision.',
+                ],
+                [
+                    'heading' => 'What to do when the plan isn\'t working',
+                    'content' => 'You\'ve created your plan, stuck with it for a week, and something\'s off. Before you throw everything out, check these three things: Constantly hungry? More protein and more volume. Replace a meal with a version that has more vegetables and more protein. Broccoli, courgette and cauliflower have almost no calories but fill the stomach. Weekdays work but weekends don\'t? Plan the weekend in — keep one fixed meal (e.g. breakfast), leave the rest flexible but keep a calorie target in mind. Bored after 2 weeks of the same food? Swap 2–3 dishes. Not all of them. Keep the structure (3-3-1), just swap the recipes.',
+                ],
+                [
+                    'heading' => 'Creating a meal plan yourself vs. letting an app do it',
+                    'content' => 'You can create your plan entirely yourself — this guide gives you everything you need. But there are alternatives: Creating it yourself is free, takes 2–3 hours initially, and you know yourself best. An app like Fytrr costs 3.99 EUR/month, takes 5 minutes, and the AI adapts to your goal, budget and preferences. A nutritionist costs 80–150 EUR/hour, offers the highest personalisation, but requires appointments for adjustments. Honest assessment: for most people, an app or this guide is enough. You need a nutritionist if you have medical conditions like diabetes, kidney problems or eating disorders. In those cases, no app replaces professional advice.',
+                ],
+                [
+                    'heading' => '7 mistakes that sabotage your meal plan',
+                    'content' => 'First: you drink your calories. A latte macchiato has 200 kcal, a glass of orange juice 110 kcal — three drinks a day and you\'ve consumed 500 kcal without eating anything. Second: you underestimate portion sizes. For the first 2 weeks: use a kitchen scale. Third: you skip meals and then overeat in the evening. Fourth: you cook too elaborately — recipes with 15 ingredients are Sunday projects, not everyday meals. Fifth: you ignore what you actually like to eat. Sixth: you try to be perfect — 80% adherence is enough for results. Seventh: you never adjust the plan. Your body changes. If you\'ve lost 5 kg, your calorie needs have dropped. Recalculate every 4–6 weeks.',
+                ],
+                [
+                    'heading' => 'What Fytrr does differently',
+                    'content' => 'Most meal plan apps give you a PDF list of meals and that\'s it. Fytrr works differently: AI-generated plans tailored to your goal, budget, preferences and intolerances. Swap meals with one tap — don\'t fancy salmon today? One tap, new meal, same calories and macros. Training and nutrition together, coordinated. Your meal plan takes into account whether you\'re training today or not. 3.99 EUR/month, no contract, cancel anytime.',
+                ],
+                [
+                    'heading' => 'Conclusion',
+                    'content' => 'Creating a meal plan doesn\'t have to be complicated. 5 steps: Set your goal. Calculate your calorie needs. Distribute your macros (protein first). Choose 9 dishes (3-3-1 method). Write your shopping list and get started. The perfect plan doesn\'t exist. The best plan is the one you actually follow through on. Start simple, observe what works, and adjust after 2–3 weeks.',
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'How long does it take to create a meal plan?',
+                    'answer' => 'With a step-by-step guide, 1–2 hours for the first plan. After that, 15–20 minutes per week for adjustments and the shopping list. With an app like Fytrr: 5 minutes.',
+                ],
+                [
+                    'question' => 'Can I create a meal plan for free?',
+                    'answer' => 'Yes. All you need is your calorie requirement (free to calculate) and a selection of dishes that fit your calorie target.',
+                ],
+                [
+                    'question' => 'How many meals per day are ideal?',
+                    'answer' => 'Three main meals work for most people. For muscle building, a fourth protein snack can be useful.',
+                ],
+                [
+                    'question' => 'Do I need to count calories?',
+                    'answer' => 'Roughly at first, for 2–3 weeks. Until you develop a feel for portion sizes and calorie density. After that, sticking to your fixed meals is enough.',
+                ],
+                [
+                    'question' => 'Which is better: a meal plan or intuitive eating?',
+                    'answer' => 'If you have a clear goal, you need a plan. Intuitive eating works better once you\'ve already learned what appropriate portions look like.',
+                ],
+                [
+                    'question' => 'Should I adjust my meal plan on training days?',
+                    'answer' => 'For muscle building: yes, 200–300 kcal more on training days. For weight loss: no, keep the deficit consistent.',
+                ],
+                [
+                    'question' => 'Can a meal plan work without cooking?',
+                    'answer' => 'To a degree. No-cook meals like bread with deli meat, salad with rotisserie chicken or wraps with tinned fish work. Not optimal, but better than no plan.',
+                ],
+            ],
+
+            'how_to_steps' => [
+                [
+                    'name' => 'Set your goal',
+                    'text' => 'Choose a concrete goal: weight loss (300–500 kcal deficit), muscle building (200–400 kcal surplus) or weight maintenance.',
+                ],
+                [
+                    'name' => 'Calculate your calorie needs',
+                    'text' => 'Calculate your basal metabolic rate and multiply it by your activity factor to determine your daily calorie needs.',
+                ],
+                [
+                    'name' => 'Distribute your macronutrients',
+                    'text' => 'Split your calories into 25–30% protein, 40–50% carbohydrates and 25–30% fat. At least 1.6g protein per kg body weight.',
+                ],
+                [
+                    'name' => 'Build your meals',
+                    'text' => 'Choose 3 dishes per meal slot plus one backup meal (3-3-1 method). Every meal needs a protein source.',
+                ],
+                [
+                    'name' => 'Write your shopping list and start',
+                    'text' => 'Create a shopping list from your 9 dishes and start your first week.',
+                ],
+            ],
+
+            'calorie_calculator_slug' => 'free-tools/calorie-calculator',
+        ],
 
         'calorie-needs' => [
             'title' => 'How to Calculate Your Daily Calorie Needs: Complete Guide',

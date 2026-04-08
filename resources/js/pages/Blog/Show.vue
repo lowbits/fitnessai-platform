@@ -36,6 +36,8 @@ interface Article {
     sections: Section[];
     faqs: FAQ[];
     calorie_calculator_slug?: string;
+    seo_image?: string;
+    seo_image_alt?: string;
 }
 
 interface Props {
@@ -132,6 +134,21 @@ const calculatorUrl = computed(
                             {{ publishedAt }}
                         </time>
                     </div>
+                </div>
+            </section>
+
+            <!-- Featured Image -->
+            <section
+                v-if="article.seo_image"
+                class="px-4 pb-8 sm:px-6 lg:px-8"
+            >
+                <div class="mx-auto max-w-3xl">
+                    <img
+                        :src="article.seo_image"
+                        :alt="article.seo_image_alt ?? article.h1"
+                        class="w-full rounded-2xl"
+                        loading="eager"
+                    />
                 </div>
             </section>
 
