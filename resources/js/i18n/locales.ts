@@ -56,8 +56,10 @@ export const locales = {
                     body: 'Achieve your fitness goals with AI-generated workout & nutrition plans that adapt to your progress.',
                 },
             },
+            disclaimer:
+                'fytrr provides AI-generated fitness and nutrition guidance for informational purposes. It is not a substitute for professional medical advice, diagnosis, or treatment. Consult a physician before starting any new exercise or diet program.',
             cta: {
-                title: 'Start Your AI-Powered Workout Today!',
+                title: 'How Our AI Workout Plan Generator Works',
                 subtitle:
                     'Get a complimentary AI-generated workout & nutrition plan designed specifically for you.',
             },
@@ -144,9 +146,14 @@ export const locales = {
                 cta: 'Download on the App Store',
                 cta_sub: '7 days free trial',
             },
+            blog: {
+                title: 'From Our Blog',
+                subtitle: 'Science-based guides on training, nutrition and fitness.',
+                readMore: 'Read article',
+            },
             testimonials: {
                 label: 'Real Stories, Inspiring Success',
-                title: 'Empowering Fitness Journeys with AI',
+                title: 'What Fytrr Users Say',
                 subtitle:
                     'Hear firsthand how our innovative AI-Fitness Tool has revolutionized workouts and nutrition for people just like you.',
                 review1: {
@@ -163,9 +170,27 @@ export const locales = {
                 },
                 review3: {
                     title: 'Amazing App',
-                    body: "I've been testing this app for about 30 days and I'm very satisfied. It helped me lose weight and improve my fitness. The meals are easy to prepare, taste great, and keep you full, so staying in a calorie deficit is effortless. I'm already looking forward to upcoming features.",
+                    body: "I've been testing this app for about 30 days and I'm very satisfied. It helped me lose weight and improve my fitness. The meals are easy to prepare, taste great, and keep you full, so staying in a calorie deficit is effortless.",
                     author: 'Benedikt Kuhlmann',
                     date: 'Feb 5, 2026',
+                },
+                review4: {
+                    title: 'The Best App for Gaining or Losing Weight',
+                    body: "I always had trouble gaining weight — with fytrr I finally made it. You get a clear meal plan and workout plan every single day.",
+                    author: 'olele-dbld',
+                    date: 'Mar 28, 2026',
+                },
+                review5: {
+                    title: 'Super Helpful',
+                    body: "The new update made the app so much clearer. And being able to edit your workout directly during training is an absolute game changer! No more detours, just adjust on the fly and keep going.",
+                    author: 'R\u00fcblikuchen',
+                    date: 'Mar 27, 2026',
+                },
+                review6: {
+                    title: 'Excellent App!',
+                    body: 'The AI intelligently adapts workout plans to my fitness level and goals. The exercises are clearly explained, motivation stays high, and progress is easy to track. Ideal for anyone who wants to train flexibly and effectively.',
+                    author: 'russainboy',
+                    date: 'Feb 6, 2026',
                 },
             },
             footer: {
@@ -1498,8 +1523,10 @@ export const locales = {
                     body: 'Erreiche deine Fitnessziele mit KI-generierten Trainings- und Ernährungsplänen, die sich deinem Fortschritt anpassen.',
                 },
             },
+            disclaimer:
+                'fytrr bietet KI-generierte Fitness- und Ernährungshinweise zu Informationszwecken. Dies ersetzt keine professionelle medizinische Beratung, Diagnose oder Behandlung. Konsultiere einen Arzt, bevor du ein neues Trainings- oder Ernährungsprogramm beginnst.',
             cta: {
-                title: 'Starte noch heute dein KI-gestütztes Training!',
+                title: 'So funktioniert unser KI-Trainingsplan-Generator',
                 subtitle:
                     'Erhalte einen kostenlosen KI-generierten Trainings- und Ernährungsplan, speziell für dich entwickelt.',
             },
@@ -1589,9 +1616,14 @@ export const locales = {
                 cta: 'Im App Store laden',
                 cta_sub: '7 Tage kostenlos testen',
             },
+            blog: {
+                title: 'Aus unserem Blog',
+                subtitle: 'Wissenschaftlich fundierte Ratgeber zu Training, Ernährung und Fitness.',
+                readMore: 'Artikel lesen',
+            },
             testimonials: {
                 label: 'Echte Geschichten, inspirierender Erfolg',
-                title: 'KI-gestützte Fitness-Transformationen',
+                title: 'Das sagen Fytrr-Nutzer',
                 subtitle:
                     'Erfahre aus erster Hand, wie unser innovatives KI-Fitness-Tool Workouts und Ernährung für Menschen wie dich revolutioniert hat.',
                 review1: {
@@ -1608,9 +1640,27 @@ export const locales = {
                 },
                 review3: {
                     title: 'Tolle App',
-                    body: 'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern. Die Mahlzeiten sind einfach zuzubereiten, schmecken hervorragend und machen satt, sodass man problemlos im Kaloriendefizit bleibt. Ich freue mich schon auf die kommenden Funktionen.',
+                    body: 'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern. Die Mahlzeiten sind einfach zuzubereiten, schmecken hervorragend und machen satt, sodass man problemlos im Kaloriendefizit bleibt.',
                     author: 'Benedikt Kuhlmann',
                     date: '5. Feb. 2026',
+                },
+                review4: {
+                    title: 'Die beste App zum zunehmen oder abnehmen',
+                    body: 'Ich hatte immer Probleme mit zunehmen, mit fytrr habe ich es endlich geschafft. Man bekommt jeden Tag einen klaren Ern\u00e4hrungsplan und Trainingsplan.',
+                    author: 'olele-dbld',
+                    date: '28. M\u00e4rz 2026',
+                },
+                review5: {
+                    title: 'Super hilfreich',
+                    body: 'Das neue Update hat die App so viel \u00fcbersichtlicher gemacht. Und dass man das Workout jetzt direkt w\u00e4hrend des Trainings bearbeiten kann, ist ein absoluter Game Changer! Keine umst\u00e4ndlichen Umwege mehr, einfach spontan anpassen und weitermachen.',
+                    author: 'R\u00fcblikuchen',
+                    date: '27. M\u00e4rz 2026',
+                },
+                review6: {
+                    title: 'Sehr gute App!',
+                    body: 'Die KI passt die Trainingspl\u00e4ne intelligent an mein Fitnesslevel und meine Ziele an. Die \u00dcbungen sind verst\u00e4ndlich erkl\u00e4rt, die Motivation bleibt hoch und der Fortschritt ist gut nachvollziehbar. Ideal f\u00fcr alle, die flexibel und effektiv trainieren wollen.',
+                    author: 'russainboy',
+                    date: '6. Feb. 2026',
                 },
             },
             footer: {

@@ -19,6 +19,8 @@ defineProps<{
             <img
                 width="180"
                 height="125"
+                loading="lazy"
+                decoding="async"
                 class="h-full w-auto object-contain"
                 :src="illustrationPath"
                 :alt="`${headline} illustration`"

@@ -16,8 +16,20 @@ use Inertia\Inertia;
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localizationRedirect', 'localeSessionRedirect', 'localeViewPath']], function () {
     /** ADD ALL LOCALIZED ROUTES INSIDE THIS GROUP **/
     Route::get('/', function () {
+        $locale = app()->getLocale();
+        $articles = config("blog.{$locale}", []);
+
+        $blogPosts = collect($articles)->take(3)->map(fn ($article, $slug) => [
+            'title' => $article['h1'],
+            'description' => $article['description'],
+            'url' => "/{$locale}/blog/{$slug}",
+            'image' => $article['og_image'] ?? null,
+            'imageAlt' => $article['og_image_alt'] ?? $article['h1'],
+        ])->values()->all();
+
         return Inertia::render('Welcome', [
             'durationDays' => (int) config('plans.duration_days'),
+            'blogPosts' => $blogPosts,
         ]);
     })->name('home');
 

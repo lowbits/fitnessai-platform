@@ -15,13 +15,14 @@ import ShoppingBagIcon from '@/components/icons/ShoppingBagIcon.vue';
 import TableIcon from '@/components/icons/TableIcon.vue';
 import TrackingIcon from '@/components/icons/TrackingIcon.vue';
 import { useSelectedLanguage } from '@/composables/useSelectedLanguage';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head, Link, usePage } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const page = usePage();
-defineProps<{
+const props = defineProps<{
     durationDays: number;
+    blogPosts: Array<{ title: string; description: string; url: string; image: string | null; imageAlt: string }>;
 }>();
 
 const { t } = useI18n();
@@ -109,19 +110,51 @@ const reviewData = computed(() => ({
         '@type': 'AggregateRating',
         ratingValue: '5',
         bestRating: '5',
-        ratingCount: '4',
+        ratingCount: '6',
     },
     inLanguage: 'de',
     review: [
         {
             '@type': 'Review',
+            author: { '@type': 'Person', name: 'olele-dbld' },
+            datePublished: '2026-03-28',
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+            name: 'Die beste App zum zunehmen oder abnehmen',
+            reviewBody:
+                'Ich hatte immer Probleme mit zunehmen, mit fytrr habe ich es endlich geschafft. Man bekommt jeden Tag einen klaren Ernährungsplan und Trainingsplan.',
+        },
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Rüblikuchen' },
+            datePublished: '2026-03-27',
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+            name: 'Super hilfreich',
+            reviewBody:
+                'Das neue Update hat die App so viel übersichtlicher gemacht. Und dass man das Workout jetzt direkt während des Trainings bearbeiten kann, ist ein absoluter Game Changer!',
+        },
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'russainboy' },
+            datePublished: '2026-02-06',
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+            name: 'Sehr gute App!',
+            reviewBody:
+                'Die KI passt die Trainingspläne intelligent an mein Fitnesslevel und meine Ziele an. Die Übungen sind verständlich erklärt, die Motivation bleibt hoch und der Fortschritt ist gut nachvollziehbar.',
+        },
+        {
+            '@type': 'Review',
+            author: { '@type': 'Person', name: 'Benedikt Kuhlmann' },
+            datePublished: '2026-02-05',
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
+            name: 'Tolle App',
+            reviewBody:
+                'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern.',
+        },
+        {
+            '@type': 'Review',
             author: { '@type': 'Person', name: 'Sh0owzy' },
             datePublished: '2026-02-04',
-            reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '5',
-                bestRating: '5',
-            },
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
             name: 'Top App',
             reviewBody:
                 'Habe in wenigen Minuten einen personalisierten Trainingsplan erstellt bekommen.',
@@ -130,27 +163,10 @@ const reviewData = computed(() => ({
             '@type': 'Review',
             author: { '@type': 'Person', name: 'Jazzilalala' },
             datePublished: '2026-01-30',
-            reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '5',
-                bestRating: '5',
-            },
+            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
             name: 'Motivation pur',
             reviewBody:
-                'Ich durfte die App testen und ich bin vor allem von dem sportlichen Teil total begeistert. Das Training ist abwechslungsreich und das obwohl ich „nur" zu Hause trainiere. Ich war nie sehr motiviert aber ich bin jetzt schon seit über einem Monat dabei und schon fast süchtig nach dem Training!',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'Benedikt Kuhlmann' },
-            datePublished: '2026-02-05',
-            reviewRating: {
-                '@type': 'Rating',
-                ratingValue: '5',
-                bestRating: '5',
-            },
-            name: 'Tolle App',
-            reviewBody:
-                'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern. Die Mahlzeiten sind einfach zuzubereiten, schmecken hervorragend und machen satt, sodass man problemlos im Kaloriendefizit bleibt. Ich freue mich schon auf die kommenden Funktionen.',
+                'Das Training ist abwechslungsreich und das obwohl ich nur zu Hause trainiere. Ich bin jetzt schon seit über einem Monat dabei und schon fast süchtig nach dem Training!',
         },
     ],
 }));
@@ -378,6 +394,11 @@ const faqData = computed(() => ({
                 </div>
             </div>
 
+            <!-- Health Disclaimer -->
+            <p class="mx-auto mt-8 max-w-2xl text-center text-xs leading-relaxed text-gray-500">
+                {{ $t('welcome.disclaimer') }}
+            </p>
+
             <section id="features" class="container mx-auto mt-32">
                 <div class="mt-20 space-y-5 text-white">
                     <p class="text-sm text-primary-500">
@@ -490,9 +511,13 @@ const faqData = computed(() => ({
                     </p>
                 </div>
 
-                <div class="mt-12 grid grid-cols-1 gap-8 md:grid-cols-3">
+                <div
+                    class="mt-12 flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4 [scrollbar-width:none] [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:hidden"
+                >
                     <article
-                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+                        v-for="r in 6"
+                        :key="r"
+                        class="flex w-80 shrink-0 snap-start flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8 md:w-96"
                     >
                         <div class="flex items-center gap-1 text-yellow-400">
                             <svg
@@ -509,89 +534,72 @@ const faqData = computed(() => ({
                             </svg>
                         </div>
                         <h3 class="mt-4 text-lg font-semibold text-white">
-                            {{ $t('welcome.testimonials.review1.title') }}
+                            {{ $t(`welcome.testimonials.review${r}.title`) }}
                         </h3>
                         <p
                             class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
                         >
-                            {{ $t('welcome.testimonials.review1.body') }}
+                            {{ $t(`welcome.testimonials.review${r}.body`) }}
                         </p>
                         <div class="mt-4 text-sm text-secondary-300">
                             <span class="font-medium text-white">
-                                {{ $t('welcome.testimonials.review1.author') }}
+                                {{ $t(`welcome.testimonials.review${r}.author`) }}
                             </span>
                             &middot;
-                            {{ $t('welcome.testimonials.review1.date') }}
+                            {{ $t(`welcome.testimonials.review${r}.date`) }}
                         </div>
                     </article>
+                </div>
+            </section>
 
-                    <article
-                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+            <!-- From Our Blog -->
+            <section
+                v-if="props.blogPosts.length"
+                class="container mx-auto mt-32"
+            >
+                <header class="text-center">
+                    <h2
+                        class="font-display text-3xl font-bold tracking-tight text-white"
                     >
-                        <div class="flex items-center gap-1 text-yellow-400">
-                            <svg
-                                v-for="n in 5"
-                                :key="n"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                class="h-5 w-5"
-                            >
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                                />
-                            </svg>
-                        </div>
-                        <h3 class="mt-4 text-lg font-semibold text-white">
-                            {{ $t('welcome.testimonials.review2.title') }}
-                        </h3>
-                        <p
-                            class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
-                        >
-                            {{ $t('welcome.testimonials.review2.body') }}
-                        </p>
-                        <div class="mt-4 text-sm text-secondary-300">
-                            <span class="font-medium text-white">
-                                {{ $t('welcome.testimonials.review2.author') }}
-                            </span>
-                            &middot;
-                            {{ $t('welcome.testimonials.review2.date') }}
-                        </div>
-                    </article>
-
-                    <article
-                        class="flex flex-col rounded-2xl border border-dark-surfaces-25 bg-dark-surfaces-900 p-8"
+                        {{ $t('welcome.blog.title') }}
+                    </h2>
+                    <p class="mt-2 text-gray-400">
+                        {{ $t('welcome.blog.subtitle') }}
+                    </p>
+                </header>
+                <div
+                    class="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3"
+                >
+                    <Link
+                        v-for="post in props.blogPosts"
+                        :key="post.url"
+                        :href="post.url"
+                        class="overflow-hidden rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-800 transition hover:border-primary-500/30"
                     >
-                        <div class="flex items-center gap-1 text-yellow-400">
-                            <svg
-                                v-for="n in 5"
-                                :key="n"
-                                xmlns="http://www.w3.org/2000/svg"
-                                viewBox="0 0 20 20"
-                                fill="currentColor"
-                                class="h-5 w-5"
+                        <img
+                            v-if="post.image"
+                            :src="post.image"
+                            :alt="post.imageAlt"
+                            width="600"
+                            height="315"
+                            loading="lazy"
+                            decoding="async"
+                            class="aspect-[1.91/1] w-full object-cover"
+                        />
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-white">
+                                {{ post.title }}
+                            </h3>
+                            <p class="mt-2 text-sm leading-relaxed text-gray-400">
+                                {{ post.description }}
+                            </p>
+                            <span
+                                class="mt-4 inline-block text-sm font-medium text-primary-400"
                             >
-                                <path
-                                    d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"
-                                />
-                            </svg>
-                        </div>
-                        <h3 class="mt-4 text-lg font-semibold text-white">
-                            {{ $t('welcome.testimonials.review3.title') }}
-                        </h3>
-                        <p
-                            class="mt-2 flex-1 text-sm leading-relaxed text-secondary-300"
-                        >
-                            {{ $t('welcome.testimonials.review3.body') }}
-                        </p>
-                        <div class="mt-4 text-sm text-secondary-300">
-                            <span class="font-medium text-white">
-                                {{ $t('welcome.testimonials.review3.author') }}
+                                {{ $t('welcome.blog.readMore') }} &rarr;
                             </span>
-                            &middot;
-                            {{ $t('welcome.testimonials.review3.date') }}
                         </div>
-                    </article>
+                    </Link>
                 </div>
             </section>
 
@@ -688,7 +696,7 @@ const faqData = computed(() => ({
                                 <a
                                     :href="APP_STORE_URL"
                                     target="_blank"
-                                    rel="noopener"
+                                    rel="noopener noreferrer"
                                     class="font-medium text-primary-25 underline transition-colors hover:text-primary-300"
                                 >
                                     {{ $t('welcome.faq.app.download_link') }}
