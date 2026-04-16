@@ -99,16 +99,16 @@ export const locales = {
                 contactLink: 'reach out to us',
                 accuracy: {
                     question: 'How accurate is an AI-generated nutrition plan?',
-                    answer: 'The accuracy of an AI-generated nutrition plan depends on the quality of data and algorithms used. With proper inputs, our AI provides highly accurate, personalized recommendations based on your individual needs, goals, and current fitness level. Our system is continuously updated with the latest research to ensure optimal results.',
+                    answer: 'The accuracy depends on the quality of data and algorithms. Our AI calculates calorie needs using the Mifflin-St Jeor equation (Mifflin et al., 1990) and distributes macronutrients based on ISSN protein guidelines (J\u00e4ger et al., 2017). With proper inputs, the system delivers personalized recommendations tailored to your goals, fitness level, and dietary needs.',
                 },
                 dietitian: {
                     question:
                         'Will an AI-generated plan replace the need for a dietitian?',
-                    answer: 'No, our AI-generated plans should complement, not replace, professional advice from licensed dietitians or healthcare providers. While our AI provides personalized recommendations and daily guidance, we always recommend consulting with healthcare professionals before making significant dietary or fitness changes, especially if you have specific health conditions.',
+                    answer: 'No, our AI-generated plans should complement, not replace, professional advice from licensed dietitians or healthcare providers. The ACSM recommends consulting a healthcare professional before starting any new exercise program, especially with pre-existing conditions. Our AI provides personalized daily guidance, but professional medical advice is always recommended.',
                 },
                 safety: {
                     question: 'How can I be sure the plan is safe for me?',
-                    answer: 'Before starting any new fitness or nutrition program, we recommend consulting with your healthcare provider, especially if you have existing health conditions, injuries, or dietary restrictions. Our AI takes your input into account, but professional medical advice is always recommended for your safety.',
+                    answer: 'We follow the ACSM pre-participation health screening guidelines (ACSM, 2021) in our questionnaire design. However, before starting any new fitness or nutrition program, we recommend consulting your healthcare provider — especially if you have existing health conditions, injuries, or dietary restrictions.',
                 },
                 restrictions: {
                     question:
@@ -1567,17 +1567,17 @@ export const locales = {
                 accuracy: {
                     question:
                         'Wie genau ist ein KI-generierter Ernährungsplan?',
-                    answer: 'Die Genauigkeit eines KI-generierten Ernährungsplans hängt von der Qualität der verwendeten Daten und Algorithmen ab. Mit korrekten Eingaben liefert unsere KI hochpräzise, personalisierte Empfehlungen basierend auf deinen individuellen Bedürfnissen, Zielen und deinem aktuellen Fitnesslevel. Unser System wird kontinuierlich mit den neuesten Forschungsergebnissen aktualisiert, um optimale Ergebnisse zu gewährleisten.',
+                    answer: 'Die Genauigkeit h\u00e4ngt von der Qualit\u00e4t der Daten und Algorithmen ab. Unsere KI berechnet den Kalorienbedarf mit der Mifflin-St-Jeor-Formel (Mifflin et al., 1990) und verteilt Makron\u00e4hrstoffe basierend auf den ISSN-Proteinrichtlinien (J\u00e4ger et al., 2017). Mit korrekten Eingaben liefert das System personalisierte Empfehlungen, die auf deine Ziele, dein Fitnesslevel und deine Ern\u00e4hrungsbed\u00fcrfnisse zugeschnitten sind.',
                 },
                 dietitian: {
                     question:
-                        'Ersetzt ein KI-generierter Plan die Notwendigkeit eines Ernährungsberaters?',
-                    answer: 'Nein, unsere KI-generierten Pläne sollten professionellen Rat von lizenzierten Ernährungsberatern oder medizinischen Fachkräften ergänzen, nicht ersetzen. Während unsere KI personalisierte Empfehlungen und tägliche Anleitungen bietet, empfehlen wir immer die Konsultation von medizinischen Fachleuten, bevor du bedeutende Ernährungs- oder Fitnessänderungen vornimmst, besonders wenn du spezifische Gesundheitszustände hast.',
+                        'Ersetzt ein KI-generierter Plan die Notwendigkeit eines Ern\u00e4hrungsberaters?',
+                    answer: 'Nein, unsere KI-generierten Pl\u00e4ne sollten professionellen Rat erg\u00e4nzen, nicht ersetzen. Das ACSM empfiehlt, vor Beginn eines neuen Trainingsprogramms einen Arzt zu konsultieren — besonders bei Vorerkrankungen. Unsere KI bietet personalisierte t\u00e4gliche Anleitungen, aber professionelle medizinische Beratung wird immer empfohlen.',
                 },
                 safety: {
                     question:
-                        'Wie kann ich sicher sein, dass der Plan für mich sicher ist?',
-                    answer: 'Bevor du ein neues Fitness- oder Ernährungsprogramm startest, empfehlen wir die Rücksprache mit deinem Arzt, besonders wenn du bestehende Gesundheitsprobleme, Verletzungen oder Ernährungseinschränkungen hast. Unsere KI berücksichtigt deine Eingaben, aber professioneller medizinischer Rat wird immer für deine Sicherheit empfohlen.',
+                        'Wie kann ich sicher sein, dass der Plan f\u00fcr mich sicher ist?',
+                    answer: 'Wir orientieren uns am ACSM-Gesundheitsscreening (ACSM, 2021) bei der Gestaltung unseres Fragebogens. Dennoch empfehlen wir, vor Beginn eines neuen Fitness- oder Ern\u00e4hrungsprogramms deinen Arzt zu konsultieren — besonders bei bestehenden Gesundheitsproblemen, Verletzungen oder Ern\u00e4hrungseinschr\u00e4nkungen.',
                 },
                 restrictions: {
                     question:

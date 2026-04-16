@@ -14,7 +14,7 @@ const { language: selectedLanguage } = useSelectedLanguage();
                     height="303"
                     class="h-auto w-28"
                     src="/fytrr-logo.svg"
-                    alt="fytrr.com logo"
+                    alt="fytrr — AI workout and meal plan generator"
                 />
             </Link>
         </nav>

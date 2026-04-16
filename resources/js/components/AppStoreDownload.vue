@@ -20,7 +20,7 @@ const { t, locale } = useI18n();
             <div class="rounded-xl border border-gray-600 bg-white p-2">
                 <img
                     :src="qrCode"
-                    alt="QR Code - App Store"
+                    alt="QR code to download fytrr app from Apple App Store"
                     width="400"
                     height="400"
                     class="h-28 w-28"
@@ -48,7 +48,7 @@ const { t, locale } = useI18n();
         >
             <img
                 :src="`/assets/badges/App_Store_Badge_${locale.toUpperCase()}.svg`"
-                alt="Download on App Store"
+                alt="Download fytrr on the Apple App Store"
                 width="120"
                 height="40"
                 class="h-10 w-auto"

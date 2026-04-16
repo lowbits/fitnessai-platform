@@ -81,7 +81,7 @@ watch(selectedLanguage, (newLocale) => {
                             width="892"
                             height="323"
                             src="/fytrr-logo.png?v2"
-                            alt="Logo fytrr.com footer"
+                            alt="fytrr logo"
                         />
                     </Link>
                     <p class="mt-3 text-sm text-gray-400">
@@ -310,7 +310,7 @@ watch(selectedLanguage, (newLocale) => {
                     >
                         <img
                             :src="`/assets/badges/App_Store_Badge_${selectedLanguage.toUpperCase()}.svg`"
-                            alt="Download on App Store"
+                            alt="Download fytrr on the Apple App Store"
                             width="120"
                             height="40"
                             class="h-10 w-auto"

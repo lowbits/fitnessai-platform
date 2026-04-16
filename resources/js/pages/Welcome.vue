@@ -112,7 +112,7 @@ const reviewData = computed(() => ({
         bestRating: '5',
         ratingCount: '6',
     },
-    inLanguage: 'de',
+    inLanguage: language.value === 'de' ? 'de-DE' : 'en-GB',
     review: [
         {
             '@type': 'Review',
@@ -372,7 +372,7 @@ const faqData = computed(() => ({
                         width="1230"
                         height="785"
                         fetchpriority="low"
-                        alt="Abstract gradient background"
+                        alt=""
                         class="h-auto w-full max-w-7xl object-contain opacity-50"
                         loading="lazy"
                         decoding="async"
@@ -381,6 +381,7 @@ const faqData = computed(() => ({
 
                 <div class="z-10 mx-auto max-w-xl">
                     <h2
+                        id="how-it-works"
                         class="text-center text-5xl font-bold tracking-tight text-white"
                     >
                         {{ $t('welcome.cta.title') }}
@@ -420,6 +421,7 @@ const faqData = computed(() => ({
                         :headline="$t('welcome.features.plans.headline')"
                         :body="$t('welcome.features.plans.body')"
                         illustration-path="/assets/illustrations/plan-wireframe.svg"
+                        illustration-alt="AI-generated personalized workout and meal plan interface"
                     >
                         <template #icon>
                             <FingerprintIcon />
@@ -431,6 +433,7 @@ const faqData = computed(() => ({
                         "
                         :body="$t('welcome.features.food_intolerances.body')"
                         illustration-path="/assets/illustrations/food-intolerances.svg"
+                        illustration-alt="Dietary restriction options including vegan, keto and allergy-free meal planning"
                         is-preview
                         preview-label="In App"
                     >
@@ -444,6 +447,7 @@ const faqData = computed(() => ({
                         "
                         :body="$t('welcome.features.progressive_plans.body')"
                         illustration-path="/assets/illustrations/progressive-plans.png"
+                        illustration-alt="Progressive overload workout plan adjusting intensity weekly"
                         is-preview
                         preview-label="In App"
                     >
@@ -455,6 +459,7 @@ const faqData = computed(() => ({
                         :headline="$t('welcome.features.coach.headline')"
                         :body="$t('welcome.features.coach.body')"
                         illustration-path="/assets/illustrations/messenger-wireframe.png"
+                        illustration-alt="Mona AI fitness coach chat interface answering nutrition questions"
                         is-preview
                         preview-label="In App"
                     >
@@ -466,6 +471,7 @@ const faqData = computed(() => ({
                         :headline="$t('welcome.features.tracking.headline')"
                         :body="$t('welcome.features.tracking.body')"
                         illustration-path="/assets/illustrations/tracking.png"
+                        illustration-alt="Workout and nutrition progress tracking dashboard"
                         is-preview
                         preview-label="In App"
                     >
@@ -477,6 +483,7 @@ const faqData = computed(() => ({
                         :headline="$t('welcome.features.shopping.headline')"
                         :body="$t('welcome.features.shopping.body')"
                         illustration-path="/assets/illustrations/shopping-cart.png"
+                        illustration-alt="AI-generated grocery shopping list from personalized meal plan"
                         is-preview
                         preview-label="In App"
                     >
@@ -554,6 +561,7 @@ const faqData = computed(() => ({
 
             <!-- From Our Blog -->
             <section
+                id="blog"
                 v-if="props.blogPosts.length"
                 class="container mx-auto mt-32"
             >

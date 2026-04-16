@@ -3,6 +3,7 @@ defineProps<{
     headline: string;
     body: string;
     illustrationPath: string;
+    illustrationAlt?: string;
     isPreview?: boolean;
     previewLabel?: string;
 }>();
@@ -23,7 +24,7 @@ defineProps<{
                 decoding="async"
                 class="h-full w-auto object-contain"
                 :src="illustrationPath"
-                :alt="`${headline} illustration`"
+                :alt="illustrationAlt ?? `${headline} illustration`"
             />
         </header>
 

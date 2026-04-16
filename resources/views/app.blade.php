@@ -87,10 +87,10 @@
     @if(count($breadcrumbs) > 1)
     <script type="application/ld+json">
         {!! json_encode([
-            '@context' => 'https://schema.org',
-            '@type' => 'BreadcrumbList',
+            "\x40context" => 'https://schema.org',
+            "\x40type" => 'BreadcrumbList',
             'itemListElement' => collect($breadcrumbs)->map(fn ($crumb, $i) => [
-                '@type' => 'ListItem',
+                "\x40type" => 'ListItem',
                 'position' => $i + 1,
                 'name' => $crumb['name'],
                 'item' => $crumb['url'],
@@ -102,19 +102,19 @@
     {{-- Standalone Organization schema --}}
     <script type="application/ld+json">
         {!! json_encode([
-            '@context' => 'https://schema.org',
-            '@type' => 'Organization',
+            "\x40context" => 'https://schema.org',
+            "\x40type" => 'Organization',
             'name' => 'fytrr',
             'url' => config('app.url'),
             'logo' => config('app.url') . '/apple-touch-icon.png',
             'foundingDate' => '2024',
             'founder' => [
-                '@type' => 'Person',
+                "\x40type" => 'Person',
                 'name' => 'Tobias Lobitz',
             ],
             'description' => __('meta.description'),
             'contactPoint' => [
-                '@type' => 'ContactPoint',
+                "\x40type" => 'ContactPoint',
                 'email' => 'hello@fytrr.com',
                 'contactType' => 'customer support',
             ],
