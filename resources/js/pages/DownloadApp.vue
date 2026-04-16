@@ -24,9 +24,11 @@ interface Props {
     utmMedium?: string;
     utmCampaign?: string;
     isAccountReady: boolean;
+    schema: object;
 }
 
 const props = defineProps<Props>();
+const schemaJson = JSON.stringify(props.schema);
 
 const DEEP_LINK_URL = 'fytrr://';
 
@@ -86,6 +88,9 @@ onMounted(() => {
     <Head :title="t('downloadApp.meta.title')">
         <meta name="description" :content="t('downloadApp.meta.description')" />
         <link rel="canonical" :href="canonicalUrl" />
+        <component :is="'script'" type="application/ld+json">
+            {{ schemaJson }}
+        </component>
     </Head>
 
     <GuestLayout>

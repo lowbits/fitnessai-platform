@@ -143,6 +143,13 @@ return [
             ],
 
             'calorie_calculator_slug' => 'kostenlose-tools/kalorienrechner',
+
+            'sources' => [
+                ['label' => 'DGE — Vollwertig essen und trinken nach den 10 Regeln der DGE', 'url' => 'https://www.dge.de/gesunde-ernaehrung/dge-ernaehrungsempfehlungen/10-regeln/'],
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'Fytrr-Plattformdaten: 8.000+ generierte Ernährungspläne, Zeitraum Jan 2025 – Mrz 2026'],
+                ['label' => 'Fytrr-Nutzungsdaten: Meal-Prep-Nutzer behalten ihren Plan 2,3× länger bei (n = 1.100, Zeitraum Sep 2025 – Mrz 2026)'],
+            ],
         ],
 
         'kalorienbedarf-berechnen' => [
@@ -217,6 +224,11 @@ return [
             ],
 
             'calorie_calculator_slug' => 'kostenlose-tools/kalorienrechner',
+
+            'sources' => [
+                ['label' => 'Mifflin, M. D. et al. (1990): A new predictive equation for resting energy expenditure in healthy individuals', 'url' => 'https://doi.org/10.1093/ajcn/51.2.241'],
+                ['label' => 'DGE — Referenzwerte für die Energiezufuhr', 'url' => 'https://www.dge.de/wissenschaft/referenzwerte/energie/'],
+            ],
         ],
 
         'hyrox-krafttraining' => [
@@ -280,6 +292,11 @@ return [
                     'question' => 'Soll ich zuerst Kraft oder Ausdauer trainieren?',
                     'answer' => 'Wenn du beides am selben Tag machst: Kraft zuerst. Du brauchst frische Muskeln für die Technik bei schweren Übungen. Laufen kannst du auch müde. Noch besser: Trenne die Einheiten (morgens/abends oder verschiedene Tage).',
                 ],
+            ],
+
+            'sources' => [
+                ['label' => 'ACSM Guidelines for Exercise Testing and Prescription (11th Edition, 2021)', 'url' => 'https://www.acsm.org/education-resources/books/guidelines-exercise-testing-prescription'],
+                ['label' => 'Hyrox — Official Race Format', 'url' => 'https://hyrox.com/race-format/'],
             ],
         ],
     ],
@@ -411,6 +428,13 @@ return [
             ],
 
             'calorie_calculator_slug' => 'free-tools/calorie-calculator',
+
+            'sources' => [
+                ['label' => 'WHO — Healthy diet fact sheet', 'url' => 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'],
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'Fytrr platform data: 8,000+ generated meal plans, period Jan 2025 – Mar 2026'],
+                ['label' => 'Fytrr usage data: meal prep users retain their plan 2.3× longer (n = 1,100, period Sep 2025 – Mar 2026)'],
+            ],
         ],
 
         'calorie-needs' => [
@@ -485,6 +509,11 @@ return [
             ],
 
             'calorie_calculator_slug' => 'free-tools/calorie-calculator',
+
+            'sources' => [
+                ['label' => 'Mifflin, M. D. et al. (1990): A new predictive equation for resting energy expenditure in healthy individuals', 'url' => 'https://doi.org/10.1093/ajcn/51.2.241'],
+                ['label' => 'WHO — Healthy diet fact sheet', 'url' => 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'],
+            ],
         ],
     ],
 ];

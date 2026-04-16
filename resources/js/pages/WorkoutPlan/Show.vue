@@ -81,6 +81,10 @@ interface Props {
             example: string;
         }>;
     };
+    sources?: Array<{
+        label: string;
+        url?: string;
+    }>;
     schema: object;
 }
 
@@ -166,6 +170,31 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         />
 
         <FAQSection :faqs="faqs" />
+
+        <!-- Sources -->
+        <section
+            v-if="sources?.length"
+            class="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8"
+        >
+            <h2 class="mb-4 text-lg font-semibold text-white">
+                {{ $t('workout_plan.sourcesHeading') }}
+            </h2>
+            <ol class="list-decimal space-y-2 pl-5 text-sm text-gray-400">
+                <li v-for="(source, i) in sources" :key="i">
+                    <a
+                        v-if="source.url"
+                        :href="source.url"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="underline transition hover:text-primary-300"
+                    >
+                        {{ source.label }}
+                    </a>
+                    <span v-else>{{ source.label }}</span>
+                </li>
+            </ol>
+        </section>
+
         <RelatedPlans :plans="relatedPlans" />
 
         <GenerateFitnessPlanModal

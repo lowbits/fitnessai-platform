@@ -179,6 +179,9 @@ return [
                     'Krafttraining priorisieren für Muskelerhalt',
                     '7–9 Stunden Schlaf für optimale Regeneration',
                     'Alltagsbewegung erhöhen (z. B. 8.000–10.000 Schritte)',
+                    'Trainingsgewichte und Wiederholungen dokumentieren, um Fortschritte sichtbar zu machen',
+                    'Mindestens 2–3 Liter Wasser täglich trinken – Dehydration bremst den Fettstoffwechsel',
+                    'An trainingsfreien Tagen leichte Bewegung wie Spazierengehen oder Yoga einplanen',
                 ],
             ],
 
@@ -195,6 +198,24 @@ return [
                     'question' => 'Wann sehe ich erste Ergebnisse?',
                     'answer' => 'Viele spüren bereits nach 2–3 Wochen mehr Energie. Sichtbare Veränderungen zeigen sich meist nach 4–6 Wochen.',
                 ],
+                [
+                    'question' => 'Kann ich gleichzeitig Muskeln aufbauen und Fett verlieren?',
+                    'answer' => 'Ja, besonders als Anfänger oder Wiedereinsteiger ist eine sogenannte Body Recomposition möglich. Wichtig: ausreichend Protein (1,6–2,0 g/kg) und ein moderates Kaloriendefizit von maximal 500 kcal.',
+                ],
+                [
+                    'question' => 'Sollte ich vor oder nach dem Training essen?',
+                    'answer' => 'Eine leichte Mahlzeit mit Kohlenhydraten und Protein etwa 1–2 Stunden vor dem Training liefert Energie. Nach dem Training unterstützt eine proteinreiche Mahlzeit innerhalb von 2 Stunden die Regeneration.',
+                ],
+                [
+                    'question' => 'Wie wichtig ist die Herzfrequenz beim Fettabbau?',
+                    'answer' => 'Die oft zitierte "Fettverbrennungszone" bei niedriger Intensität ist ein Mythos. Entscheidend ist der Gesamtkalorienverbrauch. HIIT verbrennt in kürzerer Zeit mehr Kalorien und erzeugt zusätzlich den Nachbrenneffekt (EPOC).',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'Willis, L. H. et al. (2012): Effects of aerobic and/or resistance training on body mass and fat mass in overweight or obese adults', 'url' => 'https://doi.org/10.1152/japplphysiol.01370.2011'],
+                ['label' => 'LaForgia, J. et al. (2006): Effects of exercise intensity and duration on the excess post-exercise oxygen consumption', 'url' => 'https://doi.org/10.2165/00007256-200636120-00002'],
+                ['label' => 'Heymsfield, S. B. et al. (2002): Body-size dependence of resting energy expenditure can be attributed to nonadipose tissue', 'url' => 'https://doi.org/10.1152/ajpendo.00070.2002'],
+                ['label' => 'ACSM Position Stand: Appropriate Physical Activity Intervention Strategies for Weight Loss (2009)', 'url' => 'https://doi.org/10.1249/MSS.0b013e3181949333'],
             ],
         ],
 
@@ -356,6 +377,9 @@ return [
                     'Proteinaufnahme 2,0–2,2 g pro kg Körpergewicht',
                     'Gewichte oder Wiederholungen wöchentlich steigern',
                     'Regeneration ernst nehmen (Schlaf & Pausen)',
+                    'Trainingslog führen – nur was gemessen wird, kann gezielt verbessert werden',
+                    'Kreatin-Monohydrat (3–5 g täglich) ist das am besten erforschte Supplement für Muskelaufbau',
+                    'Proteinzufuhr gleichmäßig auf 3–4 Mahlzeiten verteilen, um die Muskelproteinsynthese zu maximieren',
                 ],
             ],
 
@@ -372,6 +396,23 @@ return [
                     'question' => 'Wann sehe ich Muskelwachstum?',
                     'answer' => 'Kraftsteigerungen treten oft nach 2–3 Wochen auf, sichtbare Muskelzuwächse meist nach 6–8 Wochen.',
                 ],
+                [
+                    'question' => 'Wie viele Sätze pro Muskelgruppe sind optimal?',
+                    'answer' => 'Studien empfehlen 10–20 Sätze pro Muskelgruppe pro Woche für maximales Muskelwachstum. Anfänger profitieren bereits von 10–12 Sätzen, Fortgeschrittene können bis zu 20 Sätze steigern.',
+                ],
+                [
+                    'question' => 'Ist Muskelkater ein Zeichen für gutes Training?',
+                    'answer' => 'Nicht unbedingt. Muskelkater zeigt eine ungewohnte Belastung an, ist aber kein verlässlicher Indikator für Muskelwachstum. Wichtiger ist progressive Überlastung – also die regelmäßige Steigerung von Gewicht, Wiederholungen oder Volumen.',
+                ],
+                [
+                    'question' => 'Sollte ich als Anfänger Supplements nehmen?',
+                    'answer' => 'Supplements sind kein Muss, aber Kreatin-Monohydrat (3–5 g täglich) ist das am besten erforschte und nachweislich wirksame Supplement für Kraft und Muskelaufbau. Proteinpulver kann helfen, den täglichen Proteinbedarf einfacher zu decken.',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'Schoenfeld, B. J. et al. (2017): Dose-response relationship between weekly resistance training volume and increases in muscle mass', 'url' => 'https://doi.org/10.1007/s40279-016-0543-8'],
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'ACSM Position Stand: Progression Models in Resistance Training for Healthy Adults (2009)', 'url' => 'https://doi.org/10.1249/MSS.0b013e3181915670'],
             ],
         ],
 
@@ -504,6 +545,8 @@ return [
                     'Saubere Technik ist wichtiger als Intensität',
                     'Mindestens ein Ruhetag zwischen den Einheiten',
                     'Regelmäßigkeit schlägt Perfektion',
+                    'Vor jedem Training 5 Minuten aufwärmen – z. B. lockeres Gehen oder Armkreisen',
+                    'Übungen bei Bedarf vereinfachen (z. B. Kniebeugen nur halb so tief oder Liegestütze an der Wand)',
                 ],
             ],
 
@@ -520,6 +563,22 @@ return [
                     'question' => 'Wann sehe ich erste Fortschritte?',
                     'answer' => 'Viele Anfänger spüren bereits nach 1–2 Wochen mehr Energie, bessere Beweglichkeit und steigende Kraft.',
                 ],
+                [
+                    'question' => 'Was soll ich tun, wenn eine Übung zu schwer ist?',
+                    'answer' => 'Jede Übung lässt sich vereinfachen: Liegestütze an der Wand statt am Boden, Kniebeugen mit kleinerem Bewegungsumfang oder Plank auf den Knien. Wichtig ist, die Bewegung sauber auszuführen – die volle Variante kommt mit der Zeit.',
+                ],
+                [
+                    'question' => 'Sollte ich als Anfänger auch auf die Ernährung achten?',
+                    'answer' => 'Ja, aber halte es einfach: Iss ausreichend Protein (ca. 1,6 g pro kg Körpergewicht), trinke genug Wasser und iss abwechslungsreich. Komplizierte Diäten sind am Anfang nicht nötig.',
+                ],
+                [
+                    'question' => 'Ist Muskelkater normal und sollte ich trotzdem trainieren?',
+                    'answer' => 'Leichter Muskelkater in den ersten Wochen ist völlig normal und zeigt, dass dein Körper sich anpasst. Leichtes Training oder Spazierengehen kann die Regeneration fördern. Bei starkem Muskelkater lieber einen zusätzlichen Ruhetag einlegen.',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'ACSM Guidelines for Exercise Testing and Prescription (11th Edition, 2021)', 'url' => 'https://www.acsm.org/education-resources/books/guidelines-exercise-testing-prescription'],
+                ['label' => 'Ralston, G. W. et al. (2017): The Effect of Weekly Set Volume on Strength Gain', 'url' => 'https://doi.org/10.1007/s40279-017-0762-7'],
             ],
         ],
 
@@ -1738,6 +1797,9 @@ return [
                     'Prioritize strength training to preserve muscle mass',
                     'Aim for 7–9 hours of sleep per night',
                     'Increase daily movement outside of workouts',
+                    'Track your weights and reps to measure progress and stay motivated',
+                    'Drink at least 2–3 liters of water daily — dehydration slows fat metabolism',
+                    'On rest days, stay active with light walks or yoga to support recovery',
                 ],
             ],
             'why_it_works' => [
@@ -1834,6 +1896,24 @@ return [
                     'question' => 'When can I expect results?',
                     'answer' => 'Improved energy and performance often appear after 2–3 weeks. Visible fat loss typically follows after 4–6 weeks.',
                 ],
+                [
+                    'question' => 'Can I build muscle and lose fat at the same time?',
+                    'answer' => 'Yes, especially as a beginner or someone returning to training. This is called body recomposition. The key is sufficient protein intake (1.6–2.0 g/kg) combined with a moderate calorie deficit of no more than 500 kcal.',
+                ],
+                [
+                    'question' => 'Should I eat before or after working out?',
+                    'answer' => 'A light meal with carbohydrates and protein about 1–2 hours before training provides energy. After training, a protein-rich meal within 2 hours supports recovery and muscle preservation.',
+                ],
+                [
+                    'question' => 'How important is heart rate for fat loss?',
+                    'answer' => 'The often-cited "fat-burning zone" at low intensity is a myth. What matters most is total calorie expenditure. HIIT burns more calories in less time and creates an additional afterburn effect (EPOC) that keeps calorie expenditure elevated for hours.',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'Willis, L. H. et al. (2012): Effects of aerobic and/or resistance training on body mass and fat mass in overweight or obese adults', 'url' => 'https://doi.org/10.1152/japplphysiol.01370.2011'],
+                ['label' => 'LaForgia, J. et al. (2006): Effects of exercise intensity and duration on the excess post-exercise oxygen consumption', 'url' => 'https://doi.org/10.2165/00007256-200636120-00002'],
+                ['label' => 'Heymsfield, S. B. et al. (2002): Body-size dependence of resting energy expenditure can be attributed to nonadipose tissue', 'url' => 'https://doi.org/10.1152/ajpendo.00070.2002'],
+                ['label' => 'ACSM Position Stand: Appropriate Physical Activity Intervention Strategies for Weight Loss (2009)', 'url' => 'https://doi.org/10.1249/MSS.0b013e3181949333'],
             ],
         ],
 
@@ -1990,6 +2070,9 @@ return [
                     'Protein intake of 2.0–2.2 g per kg of body weight',
                     'Track weights and aim for gradual progression',
                     'Allow at least one full rest day per week',
+                    'Keep a training log — what gets measured gets improved',
+                    'Creatine monohydrate (3–5 g daily) is the most evidence-backed supplement for muscle growth',
+                    'Spread protein intake across 3–4 meals to maximize muscle protein synthesis throughout the day',
                 ],
             ],
 
@@ -2006,6 +2089,23 @@ return [
                     'question' => 'When will I see muscle gains?',
                     'answer' => 'Strength improvements often appear within 2–3 weeks. Visible muscle growth usually follows after 6–8 weeks.',
                 ],
+                [
+                    'question' => 'How many sets per muscle group per week are optimal?',
+                    'answer' => 'Research suggests 10–20 sets per muscle group per week for maximum hypertrophy. Beginners benefit from 10–12 sets, while more advanced lifters can progress toward 20 sets.',
+                ],
+                [
+                    'question' => 'Is muscle soreness a sign of a good workout?',
+                    'answer' => 'Not necessarily. Soreness indicates unfamiliar stress, but it is not a reliable indicator of muscle growth. Progressive overload — consistently increasing weight, reps, or volume — is what drives hypertrophy.',
+                ],
+                [
+                    'question' => 'Should beginners take supplements?',
+                    'answer' => 'Supplements are not required, but creatine monohydrate (3–5 g daily) is the most well-researched and proven supplement for strength and muscle growth. Protein powder can help meet daily protein targets more conveniently.',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'Schoenfeld, B. J. et al. (2017): Dose-response relationship between weekly resistance training volume and increases in muscle mass', 'url' => 'https://doi.org/10.1007/s40279-016-0543-8'],
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'ACSM Position Stand: Progression Models in Resistance Training for Healthy Adults (2009)', 'url' => 'https://doi.org/10.1249/MSS.0b013e3181915670'],
             ],
         ],
 
@@ -2136,6 +2236,8 @@ return [
                     'Focus on consistency rather than intensity',
                     'Use controlled movements and proper form',
                     'Allow at least one rest day between sessions',
+                    'Warm up for 5 minutes before each workout — light walking or arm circles work well',
+                    'Scale exercises to your level (e.g. wall push-ups instead of floor push-ups, half-depth squats)',
                 ],
             ],
 
@@ -2152,6 +2254,22 @@ return [
                     'question' => 'When will I notice progress?',
                     'answer' => 'Most beginners feel stronger and more confident within the first 1–2 weeks. Visible changes usually follow after a few weeks.',
                 ],
+                [
+                    'question' => 'What should I do if an exercise is too hard?',
+                    'answer' => 'Every exercise can be simplified: wall push-ups instead of floor push-ups, half-depth squats, or planks on your knees. Focus on performing the movement with good form — the full version will come with time.',
+                ],
+                [
+                    'question' => 'Should beginners also pay attention to nutrition?',
+                    'answer' => 'Yes, but keep it simple: eat enough protein (around 1.6 g per kg of body weight), drink plenty of water, and eat a variety of whole foods. Complicated diets are not necessary when starting out.',
+                ],
+                [
+                    'question' => 'Is muscle soreness normal and should I still train?',
+                    'answer' => 'Mild soreness in the first few weeks is completely normal and shows your body is adapting. Light activity like walking can aid recovery. If soreness is severe, take an extra rest day before your next session.',
+                ],
+            ],
+            'sources' => [
+                ['label' => 'ACSM Guidelines for Exercise Testing and Prescription (11th Edition, 2021)', 'url' => 'https://www.acsm.org/education-resources/books/guidelines-exercise-testing-prescription'],
+                ['label' => 'Ralston, G. W. et al. (2017): The Effect of Weekly Set Volume on Strength Gain', 'url' => 'https://doi.org/10.1007/s40279-017-0762-7'],
             ],
         ],
 

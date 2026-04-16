@@ -121,6 +121,7 @@ const calculatorUrl = computed(
                         {{ t('blog.label') }}
                     </p>
                     <h1
+                        data-speakable="headline"
                         class="mt-2 font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
                     >
                         {{ article.h1 }}
@@ -157,7 +158,10 @@ const calculatorUrl = computed(
                 <div class="mx-auto max-w-3xl">
                     <article class="prose prose-invert max-w-none">
                         <!-- Intro -->
-                        <p class="text-lg leading-relaxed text-gray-300">
+                        <p
+                            data-speakable="summary"
+                            class="text-lg leading-relaxed text-gray-300"
+                        >
                             {{ article.intro }}
                         </p>
 
@@ -236,6 +240,32 @@ const calculatorUrl = computed(
                 :heading="t('blog.faqHeading')"
                 class="rounded-2xl"
             />
+
+            <!-- Sources -->
+            <section
+                v-if="article.sources?.length"
+                class="mx-auto max-w-3xl px-4 pb-16 sm:px-6 lg:px-8"
+            >
+                <h2
+                    class="mb-4 text-lg font-semibold text-white"
+                >
+                    {{ t('blog.sourcesHeading') }}
+                </h2>
+                <ol class="list-decimal space-y-2 pl-5 text-sm text-gray-400">
+                    <li v-for="(source, i) in article.sources" :key="i">
+                        <a
+                            v-if="source.url"
+                            :href="source.url"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="underline transition hover:text-primary-300"
+                        >
+                            {{ source.label }}
+                        </a>
+                        <span v-else>{{ source.label }}</span>
+                    </li>
+                </ol>
+            </section>
         </div>
     </GuestLayout>
 </template>

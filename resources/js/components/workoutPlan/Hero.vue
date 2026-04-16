@@ -59,6 +59,7 @@ defineEmits<{
 
             <!-- H1 Title -->
             <h1
+                data-speakable="headline"
                 class="font-display text-4xl leading-tight font-bold text-white sm:text-5xl lg:text-6xl"
             >
                 {{ title }}
@@ -66,6 +67,7 @@ defineEmits<{
 
             <!-- Intro Text -->
             <p
+                data-speakable="summary"
                 class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-gray-300 sm:text-xl"
             >
                 {{ intro }}

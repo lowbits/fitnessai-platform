@@ -56,8 +56,30 @@ class DownloadAppController extends Controller
             }
         }
 
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'MobileApplication',
+            'name' => 'fytrr — KI Personal Trainer',
+            'operatingSystem' => 'iOS',
+            'applicationCategory' => 'HealthApplication',
+            'url' => $appStoreUrl,
+            'downloadUrl' => $appStoreUrl,
+            'offers' => [
+                '@type' => 'Offer',
+                'price' => '0',
+                'priceCurrency' => 'EUR',
+                'description' => 'Free 7-day trial, then 3.99 EUR/month',
+            ],
+            'author' => [
+                '@type' => 'Organization',
+                'name' => 'fytrr',
+                'url' => config('app.url'),
+            ],
+        ];
+
         return Inertia::render('DownloadApp', [
             'userName' => $user?->name,
+            'schema' => $schema,
             'bodyGoal' => $user?->profile?->body_goal?->value,
             'setPasswordUrl' => $setPasswordUrl,
             'setPasswordDeepLink' => $setPasswordDeepLink,

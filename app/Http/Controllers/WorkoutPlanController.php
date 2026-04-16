@@ -14,9 +14,9 @@ class WorkoutPlanController extends Controller
     private function getPlanTypes(): array
     {
         $locale = app()->getLocale();
+
         return config("freeWorkouts.{$locale}", []);
     }
-
 
     /**
      * Get default author based on current locale
@@ -24,6 +24,7 @@ class WorkoutPlanController extends Controller
     private function getDefaultAuthor(): array
     {
         $locale = app()->getLocale();
+
         return config("freeWorkouts.default_author.{$locale}", []);
     }
 
@@ -65,11 +66,27 @@ class WorkoutPlanController extends Controller
         // Get labels from config
         $labels = config("freeWorkouts.index_labels.{$locale}", []);
 
+        $baseUrl = config('app.url');
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => $metaData['title'],
+            'description' => $metaData['description'],
+            'url' => $metaData['canonical'],
+            'hasPart' => $plans->map(fn (array $plan) => [
+                '@type' => 'Article',
+                'headline' => $plan['title'],
+                'description' => $plan['description'],
+                'url' => $baseUrl.$plan['url'],
+            ])->values()->all(),
+        ];
+
         return Inertia::render('WorkoutPlan/Index', [
             'plans' => $plans,
             'meta' => $metaData,
             'alternateUrls' => $alternateUrls,
             'labels' => $labels,
+            'schema' => $schema,
         ]);
     }
 
@@ -82,7 +99,7 @@ class WorkoutPlanController extends Controller
         $planTypes = $this->getPlanTypes();
 
         // Check if type exists in current locale
-        if (!isset($planTypes[$type])) {
+        if (! isset($planTypes[$type])) {
             abort(404);
         }
 
@@ -114,6 +131,7 @@ class WorkoutPlanController extends Controller
             'faqs' => $faqs,
             'relatedPlans' => $relatedPlans,
             'alternateUrls' => $alternateUrls,
+            'sources' => $planData['sources'] ?? [],
             'schema' => $this->generateSchemaMarkup($type, $planData, $exampleWorkout, $faqs, $author, $reviewer),
         ]);
     }
@@ -188,15 +206,16 @@ class WorkoutPlanController extends Controller
     {
         $planTypes = $this->getPlanTypes();
         $allTypes = array_keys($planTypes);
-        $related = array_filter($allTypes, fn($t) => $t !== $type);
+        $related = array_filter($allTypes, fn ($t) => $t !== $type);
         $related = array_slice($related, 0, 3);
 
         return collect($related)->map(function ($relatedType) use ($planTypes) {
             $data = $planTypes[$relatedType];
+
             return [
                 'type' => $relatedType,
                 'title' => $data['h1'],
-                'description' => substr($data['intro'], 0, 120) . '...',
+                'description' => substr($data['intro'], 0, 120).'...',
                 'url' => route('workout-plan.show', $relatedType),
             ];
         })->values()->all();
@@ -218,16 +237,24 @@ class WorkoutPlanController extends Controller
                     'name' => $author['name'],
                     'jobTitle' => $author['title'],
                     'image' => url($author['image']),
+                    'sameAs' => [
+                        'https://instagram.com/getfytrr',
+                        'https://www.linkedin.com/in/tobiaslobitz/',
+                    ],
                 ],
                 'datePublished' => now()->parse($planData['published_at'])->toIso8601String() ?? now()->toIso8601String(),
                 'dateModified' => now()->parse($planData['last_updated_at'])->toIso8601String(),
+                'speakable' => [
+                    '@type' => 'SpeakableSpecification',
+                    'cssSelector' => ['[data-speakable="headline"]', '[data-speakable="summary"]'],
+                ],
             ],
             // HowTo Schema
             [
                 '@type' => 'HowTo',
                 'name' => $planData['h1'],
                 'description' => $planData['intro'],
-                'totalTime' => 'P' . $workout['weeks'] . 'W',
+                'totalTime' => 'P'.$workout['weeks'].'W',
             ],
             // FAQ Schema
             [

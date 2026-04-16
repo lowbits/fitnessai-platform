@@ -18,6 +18,10 @@ interface Props {
     schema: object;
     appStoreUrl: string;
     authorImage: string;
+    credentials: {
+        heading: string;
+        items: Array<{ label: string; detail: string }>;
+    };
 }
 
 const props = defineProps<Props>();
@@ -206,6 +210,34 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
                             </p>
                         </li>
                     </ul>
+                </div>
+            </section>
+
+            <!-- Credentials -->
+            <section
+                v-if="credentials?.items?.length"
+                class="px-4 pb-16 sm:px-6 lg:px-8"
+            >
+                <div class="mx-auto max-w-3xl">
+                    <h2
+                        class="font-display text-2xl font-bold text-white sm:text-3xl"
+                    >
+                        {{ credentials.heading }}
+                    </h2>
+                    <dl class="mt-6 space-y-4">
+                        <div
+                            v-for="(item, i) in credentials.items"
+                            :key="i"
+                            class="rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-800 p-5"
+                        >
+                            <dt class="text-sm font-semibold text-primary-400">
+                                {{ item.label }}
+                            </dt>
+                            <dd class="mt-1 text-sm leading-relaxed text-gray-300">
+                                {{ item.detail }}
+                            </dd>
+                        </div>
+                    </dl>
                 </div>
             </section>
 

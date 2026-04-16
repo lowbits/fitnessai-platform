@@ -29,9 +29,11 @@ interface Props {
         ctaText: string;
         ctaButton: string;
     };
+    schema: object;
 }
 
 const props = defineProps<Props>();
+const schemaJson = JSON.stringify(props.schema);
 </script>
 
 <template>
@@ -58,6 +60,9 @@ const props = defineProps<Props>();
                 property="og:image"
                 content="https://fytrr.com/fitness-plan.png"
             />
+            <component :is="'script'" type="application/ld+json">
+                {{ schemaJson }}
+            </component>
         </Head>
 
         <Header />

@@ -19,23 +19,14 @@ class AboutController extends Controller
             $alternateUrls[$loc] = "{$baseUrl}/{$loc}/".trans('routes.about', [], $loc);
         }
 
-        $meta = $locale === 'de'
-            ? [
-                'title' => 'Über Fytrr — Die Geschichte hinter deinem KI Personal Coach',
-                'description' => 'Fytrr macht Personal Training bezahlbar. Gegründet von Tobias Lobitz — Entwickler, Fitness-Enthusiast, 15 Jahre Trainingserfahrung. Lerne uns kennen.',
-                'keywords' => ['fytrr', 'über uns', 'personal training app', 'ki personal coach', 'fitness app', 'tobias lobitz'],
-            ]
-            : [
-                'title' => 'About Fytrr — The Story Behind Your AI Personal Coach',
-                'description' => 'Fytrr makes personal training affordable. Founded by Tobias Lobitz — developer, fitness enthusiast, 15 years of training experience. Get to know us.',
-                'keywords' => ['fytrr', 'about us', 'personal training app', 'ai personal coach', 'fitness app', 'tobias lobitz'],
-            ];
-
-        $meta['canonical'] = $canonical;
-        $meta['ogImage'] = "{$baseUrl}/assets/images/og/ueber-uns-og.webp";
-        $meta['ogImageAlt'] = $locale === 'de'
-            ? 'Fytrr — Dein KI Personal Coach'
-            : 'Fytrr — Your AI Personal Coach';
+        $meta = [
+            'title' => trans('about.meta.title'),
+            'description' => trans('about.meta.description'),
+            'keywords' => trans('about.meta.keywords'),
+            'canonical' => $canonical,
+            'ogImage' => "{$baseUrl}/assets/images/og/ueber-uns-og.webp",
+            'ogImageAlt' => trans('about.meta.og_image_alt'),
+        ];
 
         $schema = [
             '@context' => 'https://schema.org',
@@ -43,22 +34,18 @@ class AboutController extends Controller
             'mainEntity' => [
                 '@type' => 'Person',
                 'name' => 'Tobias Lobitz',
-                'jobTitle' => $locale === 'de' ? 'Gründer & Entwickler' : 'Founder & Developer',
-                'description' => $locale === 'de'
-                    ? 'Entwickler und Fitness-Enthusiast mit über 15 Jahren Trainingserfahrung. Baut seit 2018 Fitness-Apps.'
-                    : 'Developer and fitness enthusiast with over 15 years of training experience. Building fitness apps since 2018.',
+                'jobTitle' => trans('about.schema.job_title'),
+                'description' => trans('about.schema.description'),
+                'sameAs' => [
+                    'https://instagram.com/getfytrr',
+                    'https://www.linkedin.com/in/tobiaslobitz/',
+                ],
                 'worksFor' => [
                     '@type' => 'Organization',
                     'name' => 'Fytrr',
                     'url' => $baseUrl,
                 ],
-                'knowsAbout' => [
-                    'Fitness',
-                    'Krafttraining',
-                    $locale === 'de' ? 'Ernährung' : 'Nutrition',
-                    'App-Entwicklung',
-                    $locale === 'de' ? 'Künstliche Intelligenz' : 'Artificial Intelligence',
-                ],
+                'knowsAbout' => trans('about.schema.knows_about'),
             ],
         ];
 
@@ -68,6 +55,7 @@ class AboutController extends Controller
             'schema' => $schema,
             'appStoreUrl' => config('app.app_store.ios.url'),
             'authorImage' => '/assets/authors/tobias.avif',
+            'credentials' => trans('about.credentials'),
         ]);
     }
 }

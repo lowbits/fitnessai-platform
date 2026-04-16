@@ -1,0 +1,247 @@
+# fytrr
+
+> AI-powered fitness app that creates personalized workout and meal plans in 60 seconds.
+
+fytrr is a fitness planning platform built by Tobias Lobitz. It uses artificial intelligence to generate individualized workout routines and nutrition plans based on your goals, fitness level, and available equipment. Available as a mobile app (iOS) and web application.
+
+Website: https://fytrr.com
+App Store: https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695
+Price: 3.99 EUR/month (7-day free trial, cancel anytime)
+Languages: German, English
+
+---
+
+## About
+
+### Founder
+
+Tobias Lobitz — Founder & Software Developer. Developing fitness software since 2018. Personal training experience: 15 years of strength training.
+
+### The Story
+
+Personal training doesn't have to cost 150 EUR per hour. That's why Fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for 3.99 EUR/month.
+
+Tobias has been training for over 15 years. First without a plan, then with too many plans, then with a coach who cost 120 EUR per session. The results were good. But sustainable? Not affordable for most people.
+
+Since 2018, he has been building fitness apps. Not because he's a startup guy, but because he wanted to solve a problem: good coaching doesn't have to depend on your bank balance.
+
+Fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.
+
+### The Problem
+
+A good personal trainer costs 50-150 EUR per hour. Training twice a week means 400-1,200 EUR per month. Most people can't afford that.
+
+### The Idea
+
+What if an app could do what a trainer does? Not perfectly. But well enough that you make real progress — without taking out a loan.
+
+### The Result
+
+Fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.
+
+### Key Features
+
+- Workout Plan — tailored to your goal, experience and equipment
+- Nutrition Plan — personalised to your calorie needs and preferences
+- Swap Meals — don't like something? No problem, swap it out with one tap, same calories and macros
+- Tracking — see your progress, stay on track
+- AI Adaptation — the plan evolves with you
+
+### Stats
+
+- 1,100+ users
+- Available on iOS App Store
+- 3.99 EUR/month after 7-day free trial
+- 1 developer. 1 mission.
+
+---
+
+## Free Tools
+
+### Calorie Calculator
+
+URL (DE): https://fytrr.com/de/kostenlose-tools/kalorienrechner
+URL (EN): https://fytrr.com/en/free-tools/calorie-calculator
+
+Calculate your daily calorie needs in 30 seconds — for weight loss, muscle gain or maintenance. Free, instant, science-based. Uses the Mifflin-St Jeor equation to calculate your Basal Metabolic Rate (BMR) and Total Daily Energy Expenditure (TDEE) based on gender, age, weight, height, activity level and goal.
+
+Activity factors: Sedentary (1.2), Lightly active (1.375), Moderately active (1.55), Very active (1.725), Extremely active (1.9).
+
+Goal adjustments: Weight loss subtracts 300-500 kcal from TDEE. Muscle gain adds 200-400 kcal to TDEE. Maintenance stays at TDEE.
+
+---
+
+## Free Workout Plans
+
+URL (DE): https://fytrr.com/de/kostenloser-trainingsplan
+URL (EN): https://fytrr.com/en/free-workout-plan
+
+10 free, science-based workout plans for every goal. Free, personalized and available immediately.
+
+### Weight Loss Workout Plan — 8 Weeks
+
+This structured 8-week workout plan combines strength training and cardio to reduce body fat, preserve muscle mass, and improve metabolic health. 3 workouts per week, 45 minutes each. Suitable for beginner to advanced.
+
+Why it works: Combining strength and cardio maximizes fat loss (up to 40% more effective than cardio alone). The afterburn effect (EPOC) burns additional calories for up to 48 hours post-workout. Preserving muscle prevents the yo-yo effect. Progressive structure prevents plateaus. Three sessions per week supports sustainable fat loss of 0.5-1 kg per week.
+
+### Muscle Building Workout Plan — 12 Weeks
+
+This 12-week workout plan is based on progressive overload and combines muscle growth, strength gains, and adequate recovery.
+
+### Beginner Workout Plan — 6 Weeks
+
+This 6-week beginner plan helps you learn fundamental movement patterns, build strength, and develop a sustainable training routine.
+
+### Home Workout Plan — No Equipment
+
+This 8-week workout plan shows you how to build strength, endurance and muscle with pure bodyweight training at home — no gym needed.
+
+### Women's Workout Plan — Targeted & Effective
+
+This 8-week workout plan combines strength training and cardio specifically designed for toning, definition and building a strong, feminine physique.
+
+### New Year Reset Workout Plan — 6 Weeks
+
+This 6-week fitness reset helps you get back into a sustainable training routine after breaks or a fresh start. Focus on strength, endurance, flexibility and long-term progress.
+
+### Strength Training Plan — 10 Weeks
+
+This 10-week strength training plan focuses on the barbell and dumbbell exercises that really matter. Built on progressive overload and a 4-day upper/lower body split, you'll systematically develop full-body strength.
+
+### Fat Loss Training Plan — 8 Weeks
+
+This 8-week plan uses superset-based strength training and metabolic conditioning to maximize calorie burn while preserving muscle mass. 4 sessions per week, 40 minutes each.
+
+### Abs Workout Plan — 8 Weeks
+
+This 8-week plan systematically develops your entire core musculature. Three focused sessions per week train stability, rotational strength and flexion — for visible abs and functional core strength.
+
+### Over-40 Training Plan
+
+A workout plan specifically designed for training over 40, accounting for recovery needs and joint health.
+
+---
+
+## Blog
+
+### How to Create a Meal Plan: The Complete Guide (2026)
+
+URL (DE): https://fytrr.com/de/blog/ernaehrungsplan-erstellen
+URL (EN): https://fytrr.com/en/blog/how-to-create-a-meal-plan
+Author: Tobias Lobitz
+Published: 2026-04-08
+
+You want to eat better. Maybe lose weight, maybe build muscle, maybe just stop standing in front of the fridge every evening eating "whatever". The first piece of advice you read everywhere: "Create a meal plan." Sounds simple. It is. But most people make it more complicated than it needs to be.
+
+#### Why most meal plans fail
+
+From Fytrr's user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you'll give up after 3 days. A healthy deficit is 300-500 kcal. Third, no backup plan.
+
+#### The 3-3-1 method: meal planning that works
+
+After analysing over 8,000 generated meal plans on Fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option.
+
+#### Step 1: Set your goal
+
+Pick one of three concrete goals: Weight loss (300-500 kcal below your daily needs, typically 8-16 weeks), muscle building (200-400 kcal above your daily needs, typically 12-24 weeks) or weight maintenance (meet your calorie needs, ongoing).
+
+#### Step 2: Calculate your calorie needs
+
+Two factors determine your daily calorie needs: your basal metabolic rate (BMR) — what your body burns at rest — and your activity factor. BMR x activity factor = daily needs (TDEE). Typical values: a 30-year-old woman, 65 kg with an office job needs about 1,960 kcal. A 30-year-old man, 80 kg with an office job about 2,520 kcal.
+
+#### Step 3: Distribute your macronutrients
+
+Protein (25-30% of calories, 4 kcal/g) for muscle preservation and satiety. Carbohydrates (40-50%, 4 kcal/g) for energy and training. Fat (25-30%, 9 kcal/g) for hormones and vitamins. The most important number is protein: at least 1.6g per kilogram of body weight.
+
+#### Step 4: Build your meals
+
+Choose 3 dishes for each meal slot that you enjoy and that fit your calorie target. Three rules: every meal needs a protein source. At least 2 of 3 dishes should be ready in under 15 minutes. And choose dishes you already know.
+
+#### Step 5: Write your shopping list and start
+
+Take your 9 dishes and write down all the ingredients. Estimated cost: 45-55 EUR per week, or 6-8 EUR per day for all meals.
+
+#### Meal prep: The Sunday trick
+
+With 90 minutes on Sunday, you prepare most of your week. Fytrr users who use meal prep stick with their plan 2.3x longer on average than users who cook daily.
+
+#### FAQ
+
+- How long does it take to create a meal plan? With a step-by-step guide, 1-2 hours for the first plan. With an app like Fytrr: 5 minutes.
+- Can I create a meal plan for free? Yes. All you need is your calorie requirement and a selection of dishes that fit your calorie target.
+- How many meals per day are ideal? Three main meals work for most people.
+- Do I need to count calories? Roughly at first, for 2-3 weeks.
+- Which is better: a meal plan or intuitive eating? If you have a clear goal, you need a plan.
+- Should I adjust my meal plan on training days? For muscle building: yes, 200-300 kcal more. For weight loss: no, keep the deficit consistent.
+- Can a meal plan work without cooking? To a degree. No-cook meals work. Not optimal, but better than no plan.
+
+---
+
+### How to Calculate Your Daily Calorie Needs: Complete Guide
+
+URL (DE): https://fytrr.com/de/blog/kalorienbedarf-berechnen
+URL (EN): https://fytrr.com/en/blog/calorie-needs
+Author: Tobias Lobitz
+Published: 2026-03-25
+
+How many calories do you need per day? This question is the first and most important step towards any nutrition goal — whether you want to lose weight, build muscle or maintain.
+
+#### What are calorie needs?
+
+Your calorie needs are the amount of energy (measured in kilocalories, kcal) your body requires per day to maintain all functions and sustain your current weight. They consist of two components: your basal metabolic rate (BMR) and the additional energy burned through physical activity. Together, they form your total daily energy expenditure (TDEE).
+
+#### Step 1: Calculate your basal metabolic rate
+
+The most accurate formula is the Mifflin-St Jeor equation: For men: BMR = 10 x weight (kg) + 6.25 x height (cm) - 5 x age - 5. For women: BMR = 10 x weight (kg) + 6.25 x height (cm) - 5 x age - 161.
+
+#### Step 2: Determine your activity factor
+
+Sedentary (1.2), Lightly active (1.375), Moderately active (1.55), Very active (1.725), Extremely active (1.9). The most common mistake: overestimating your activity level.
+
+#### Step 3: Calculate your TDEE
+
+BMR x activity factor = TDEE.
+
+#### Step 4: Adjust for your goal
+
+For weight loss: subtract 300-500 kcal. For muscle gain: add 200-400 kcal. For maintenance: eat at TDEE level.
+
+#### Calorie needs for women vs. men
+
+Women: typically 1,600-2,400 kcal/day. Men: typically 2,000-3,000 kcal/day. The difference is mainly due to lower muscle mass and smaller body frames. An individual calculation is always better than averages.
+
+#### Common mistakes
+
+Overestimating activity level. Inaccurate calorie tracking (people underestimate intake by 30-50% on average). Recalculating too rarely. Counting net calories by eating back exercise calories.
+
+#### FAQ
+
+- How often should I recalculate? Every 4-6 weeks.
+- Do I really need to count calories? Not permanently. 2-3 weeks of tracking to develop a feel for portion sizes.
+- Which formula is better: Harris-Benedict or Mifflin-St Jeor? Mifflin-St Jeor is more accurate for most people.
+- Why am I not losing weight despite being in a deficit? Most common reasons: calories underestimated, activity factor too high, or water retention masking fat loss.
+
+---
+
+### Krafttraining fuer Hyrox: Warum Ausdauer nicht reicht
+
+URL (DE): https://fytrr.com/de/blog/hyrox-krafttraining
+Author: Tobias Lobitz
+Published: 2026-03-25
+
+Hyrox consists of 8 running rounds of 1 km each, followed by a strength station. The stations include SkiErg, Sled Push (152/102 kg), Sled Pull (103/78 kg), Burpee Broad Jumps, Rowing, Farmer's Carry, Sandbag Lunges, and Wall Balls. Most people don't lose time on the runs — they lose it at the stations.
+
+What you need is Kraftausdauer (strength endurance) — the ability to move moderate loads over many repetitions. Key areas: leg strength, upper body pull/push strength, grip strength, and core stability.
+
+Recommended approach for 12-16 weeks: Weeks 1-6 build raw strength (squats, deadlifts, rows, overhead press, lunges, farmer's carry). Weeks 7-12 transition to strength endurance. Weeks 13-16 Hyrox-specific training.
+
+Top 5 exercises for Hyrox preparation: Squats, Deadlifts, Dumbbell Rows, Overhead Press, Farmer's Carry.
+
+---
+
+## Legal
+
+- Privacy Policy: https://fytrr.com/en/privacy-policy
+- Terms and Conditions: https://fytrr.com/en/terms-and-conditions
+- Imprint: https://fytrr.com/en/imprint
+- Disclaimer: https://fytrr.com/en/disclaimer

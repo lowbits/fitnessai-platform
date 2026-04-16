@@ -1,0 +1,47 @@
+# fytrr
+
+> AI-powered fitness app that creates personalized workout and meal plans in 60 seconds.
+
+fytrr is a fitness planning platform built by Tobias Lobitz. It uses artificial intelligence to generate individualized workout routines and nutrition plans based on your goals, fitness level, and available equipment. Available as a mobile app (iOS) and web application.
+
+## Key Features
+
+- AI-generated personalized workout plans
+- AI-generated personalized meal plans with grocery lists
+- Calorie and macro tracking
+- Body progress tracking
+- Workout logging and scheduling
+- Meal replacement suggestions based on preferences
+
+## Free Tools
+
+- [Calorie Calculator (DE)](https://fytrr.com/de/kostenlose-tools/kalorienrechner): Calculate your BMR and daily calorie needs (TDEE)
+- [Calorie Calculator (EN)](https://fytrr.com/en/free-tools/calorie-calculator): Calculate your BMR and daily calorie needs (TDEE)
+
+## Free Workout Plans
+
+- [Workout Plans Overview (DE)](https://fytrr.com/de/kostenloser-trainingsplan): 10 free science-based workout plans
+- [Workout Plans Overview (EN)](https://fytrr.com/en/free-workout-plan): 10 free science-based workout plans
+
+## Blog
+
+- [Blog (DE)](https://fytrr.com/de/blog): Fitness and nutrition articles in German
+- [Blog (EN)](https://fytrr.com/en/blog): Fitness and nutrition articles in English
+
+## About
+
+- [About Us (DE)](https://fytrr.com/de/ueber-uns): About the founder and mission
+- [About Us (EN)](https://fytrr.com/en/about): About the founder and mission
+
+## App
+
+- [Download (iOS)](https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695)
+
+## Legal
+
+- [Privacy Policy (DE)](https://fytrr.com/de/datenschutz)
+- [Privacy Policy (EN)](https://fytrr.com/en/privacy-policy)
+- [Terms (DE)](https://fytrr.com/de/agb)
+- [Terms (EN)](https://fytrr.com/en/terms-and-conditions)
+- [Imprint (DE)](https://fytrr.com/de/impressum)
+- [Imprint (EN)](https://fytrr.com/en/imprint)

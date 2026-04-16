@@ -35,23 +35,31 @@ class BlogController extends Controller
         }
 
         $meta = [
-            'title' => $locale === 'de'
-                ? 'Blog — Fitness, Ernährung & Training'
-                : 'Blog — Fitness, Nutrition & Training',
-            'description' => $locale === 'de'
-                ? 'Ratgeber rund um Training, Ernährung und Fitness. Wissenschaftlich fundiert, praxisnah und kostenlos.'
-                : 'Guides on training, nutrition and fitness. Science-based, practical and free.',
+            'title' => trans('blog.meta.title'),
+            'description' => trans('blog.meta.description'),
             'canonical' => $canonical,
         ];
 
         $labels = [
-            'heading' => 'Blog',
-            'readMore' => $locale === 'de' ? 'Artikel lesen' : 'Read article',
-            'ctaHeading' => $locale === 'de' ? 'Von der Theorie zur Praxis' : 'From theory to practice',
-            'ctaText' => $locale === 'de'
-                ? 'Fytrr erstellt dir einen personalisierten Trainings- und Ernährungsplan — mit KI, in 60 Sekunden. 7 Tage kostenlos testen.'
-                : 'Fytrr creates a personalised workout and nutrition plan — with AI, in 60 seconds. Try it free for 7 days.',
-            'ctaButton' => $locale === 'de' ? '7 Tage kostenlos — meinen Plan erstellen' : '7 days free — create my plan',
+            'heading' => trans('blog.labels.heading'),
+            'readMore' => trans('blog.labels.read_more'),
+            'ctaHeading' => trans('blog.labels.cta_heading'),
+            'ctaText' => trans('blog.labels.cta_text'),
+            'ctaButton' => trans('blog.labels.cta_button'),
+        ];
+
+        $schema = [
+            '@context' => 'https://schema.org',
+            '@type' => 'CollectionPage',
+            'name' => trans('blog.meta.title'),
+            'description' => trans('blog.meta.description'),
+            'url' => $canonical,
+            'hasPart' => array_map(fn (array $post) => [
+                '@type' => 'Article',
+                'headline' => $post['title'],
+                'description' => $post['description'],
+                'url' => "{$baseUrl}{$post['url']}",
+            ], $posts),
         ];
 
         return Inertia::render('Blog/Index', [
@@ -60,6 +68,7 @@ class BlogController extends Controller
             'meta' => $meta,
             'alternateUrls' => $alternateUrls,
             'labels' => $labels,
+            'schema' => $schema,
         ]);
     }
 
@@ -139,11 +148,19 @@ class BlogController extends Controller
                 '@type' => 'Person',
                 'name' => $author['name'],
                 'jobTitle' => $author['title'],
+                'sameAs' => [
+                    'https://instagram.com/getfytrr',
+                    'https://www.linkedin.com/in/tobiaslobitz/',
+                ],
             ],
             'publisher' => [
                 '@type' => 'Organization',
                 'name' => 'Fytrr',
                 'url' => config('app.url'),
+            ],
+            'speakable' => [
+                '@type' => 'SpeakableSpecification',
+                'cssSelector' => ['[data-speakable="headline"]', '[data-speakable="summary"]'],
             ],
         ];
 
@@ -169,20 +186,6 @@ class BlogController extends Controller
                         'text' => $faq['answer'],
                     ],
                 ], $article['faqs']),
-            ];
-        }
-
-        if (! empty($article['how_to_steps'])) {
-            $schemas[] = [
-                '@context' => 'https://schema.org',
-                '@type' => 'HowTo',
-                'name' => $article['h1'],
-                'description' => $article['description'],
-                'step' => array_map(fn (array $step) => [
-                    '@type' => 'HowToStep',
-                    'name' => $step['name'],
-                    'text' => $step['text'],
-                ], $article['how_to_steps']),
             ];
         }
 

@@ -1,4 +1,4 @@
-@php use App\Helpers\LocalizationHelper; @endphp
+@php use App\Helpers\LocalizationHelper; use Illuminate\Support\Str; @endphp
     <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 <head>
@@ -54,7 +54,79 @@
           hreflang="x-default"
           href="{{ LaravelLocalization::getLocalizedURL(config('app.fallback_locale'), null, [], true) }}" />
 
+    {{-- BreadcrumbList schema --}}
+    @php
+        $baseUrl = config('app.url');
+        $locale = app()->getLocale();
+        $path = request()->path();
+        $segments = array_values(array_filter(explode('/', $path)));
+
+        // Remove locale prefix
+        if (!empty($segments) && in_array($segments[0], ['de', 'en'])) {
+            array_shift($segments);
+        }
+
+        $breadcrumbs = [['name' => 'Home', 'url' => "{$baseUrl}/{$locale}"]];
+        $currentUrl = "{$baseUrl}/{$locale}";
+
+        foreach ($segments as $i => $segment) {
+            $currentUrl .= "/{$segment}";
+            $name = ucfirst(str_replace(['-', '_'], ' ', $segment));
+            $breadcrumbs[] = ['name' => $name, 'url' => $currentUrl];
+        }
+
+        // Override last breadcrumb name with page title from Inertia props if available
+        if (isset($page['props']['meta']['title']) && count($breadcrumbs) > 1) {
+            $title = $page['props']['meta']['title'];
+            // Strip site name suffix if present
+            $breadcrumbs[count($breadcrumbs) - 1]['name'] = Str::before($title, ' |');
+        } elseif (isset($page['props']['article']['h1'])) {
+            $breadcrumbs[count($breadcrumbs) - 1]['name'] = $page['props']['article']['h1'];
+        }
+    @endphp
+    @if(count($breadcrumbs) > 1)
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'BreadcrumbList',
+            'itemListElement' => collect($breadcrumbs)->map(fn ($crumb, $i) => [
+                '@type' => 'ListItem',
+                'position' => $i + 1,
+                'name' => $crumb['name'],
+                'item' => $crumb['url'],
+            ])->all(),
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+    @endif
+
+    {{-- Standalone Organization schema --}}
+    <script type="application/ld+json">
+        {!! json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => 'fytrr',
+            'url' => config('app.url'),
+            'logo' => config('app.url') . '/apple-touch-icon.png',
+            'foundingDate' => '2024',
+            'founder' => [
+                '@type' => 'Person',
+                'name' => 'Tobias Lobitz',
+            ],
+            'description' => __('meta.description'),
+            'contactPoint' => [
+                '@type' => 'ContactPoint',
+                'email' => 'hello@fytrr.com',
+                'contactType' => 'customer support',
+            ],
+            'sameAs' => [
+                'https://instagram.com/getfytrr',
+                'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695',
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
     <!-- Privacy-friendly analytics by Plausible -->
+    <link rel="preconnect" href="https://plausible.io" crossorigin>
     <script async src="https://plausible.io/js/pa-5NooHzKTVU8I9YKYq0POF.js"></script>
     <script>
         window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};

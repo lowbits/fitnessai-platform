@@ -468,6 +468,7 @@ export const locales = {
                 disclosure:
                     'This workout plan was created with AI assistance and reviewed by certified professionals. All recommendations are based on current sports science and evidence-based principles.',
             },
+            sourcesHeading: 'Sources',
         },
         form_panel: {
             submit: 'Continue',
@@ -1132,6 +1133,7 @@ export const locales = {
                 'Fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
             appCtaButton: '7 days free \u2014 create my plan',
             faqHeading: 'Frequently Asked Questions',
+            sourcesHeading: 'Sources',
         },
         about: {
             hero: {
@@ -1917,6 +1919,7 @@ export const locales = {
                 disclosure:
                     'Dieser Trainingsplan wurde mit KI-Unterstützung erstellt und von zertifizierten Fachleuten überprüft. Alle Empfehlungen basieren auf aktueller Sportforschung und evidenzbasierten Prinzipien.',
             },
+            sourcesHeading: 'Quellen',
         },
         form_panel: {
             submit: 'Weiter',
@@ -2592,6 +2595,7 @@ export const locales = {
                 'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
             appCtaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
             faqHeading: 'H\u00e4ufig gestellte Fragen',
+            sourcesHeading: 'Quellen',
         },
         about: {
             hero: {
