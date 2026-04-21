@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Helpers\LocalizationHelper;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
@@ -38,6 +39,8 @@ class HandleInertiaRequests extends Middleware
     {
         $locale = app()->getLocale();
 
+        $alternateUrls = LocalizationHelper::getAlternateUrls();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -46,17 +49,18 @@ class HandleInertiaRequests extends Middleware
             ],
             'currentLocale' => $locale,
             'locales' => LaravelLocalization::getSupportedLocales(),
+            'alternateUrls' => $alternateUrls,
             'server' => [
                 'isLocal' => config('app.env') === 'local',
             ],
-            'footerLinks' => $this->getFooterLinks($locale),
+            'footerLinks' => $this->getFooterLinks($locale, $alternateUrls),
         ];
     }
 
     /**
      * Get footer links with translations
      */
-    private function getFooterLinks(string $locale): array
+    private function getFooterLinks(string $locale, array $alternateUrls): array
     {
         $workoutPlanTypes = [
             'weight_loss',
@@ -130,14 +134,14 @@ class HandleInertiaRequests extends Middleware
             }
         }
 
-        // Add language switcher data
+        // Add language switcher data with correctly translated slugs
         $links['languages'] = [];
 
         foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties) {
             $links['languages'][$localeCode] = [
                 'name' => $properties['native'],
                 'code' => $localeCode,
-                'url' => LaravelLocalization::getLocalizedURL($localeCode),
+                'url' => $alternateUrls[$localeCode] ?? LaravelLocalization::getLocalizedURL($localeCode),
                 'active' => $localeCode === $locale,
             ];
         }

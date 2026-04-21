@@ -1,4 +1,9 @@
-@php use App\Helpers\LocalizationHelper; use Illuminate\Support\Str; @endphp
+@php
+    use App\Helpers\LocalizationHelper;
+    use Illuminate\Support\Str;
+
+    $alternateUrls = LocalizationHelper::getAlternateUrls();
+@endphp
     <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 <head>
@@ -47,12 +52,12 @@
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
         <link rel="alternate"
               hreflang="{{ $localeCode }}"
-              href="{{ LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" />
+              href="{{ $alternateUrls[$localeCode] ?? LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" />
     @endforeach
 
     <link rel="alternate"
           hreflang="x-default"
-          href="{{ LaravelLocalization::getLocalizedURL(config('app.fallback_locale'), null, [], true) }}" />
+          href="{{ $alternateUrls[config('app.fallback_locale')] ?? LaravelLocalization::getLocalizedURL(config('app.fallback_locale'), null, [], true) }}" />
 
     {{-- BreadcrumbList schema --}}
     @php

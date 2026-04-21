@@ -29,11 +29,6 @@ class BlogController extends Controller
 
         $canonical = "{$baseUrl}/{$locale}/blog";
 
-        $alternateUrls = [];
-        foreach (['de', 'en'] as $loc) {
-            $alternateUrls[$loc] = "{$baseUrl}/{$loc}/blog";
-        }
-
         $meta = [
             'title' => trans('blog.meta.title'),
             'description' => trans('blog.meta.description'),
@@ -66,7 +61,6 @@ class BlogController extends Controller
             'posts' => $posts,
             'author' => $author,
             'meta' => $meta,
-            'alternateUrls' => $alternateUrls,
             'labels' => $labels,
             'schema' => $schema,
         ]);
@@ -86,8 +80,6 @@ class BlogController extends Controller
         $baseUrl = config('app.url');
 
         $canonical = "{$baseUrl}/{$locale}/blog/{$slug}";
-        $alternateUrls = $this->generateAlternateUrls($article['internal_slug']);
-
         $ogImage = isset($article['og_image'])
             ? "{$baseUrl}{$article['og_image']}"
             : null;
@@ -107,30 +99,10 @@ class BlogController extends Controller
             'meta' => $meta,
             'article' => $article,
             'author' => $author,
-            'alternateUrls' => $alternateUrls,
             'schema' => $schema,
             'publishedAt' => now()->parse($article['published_at'])->toFormattedDateString(),
             'lastUpdatedAt' => now()->parse($article['last_updated_at'])->toFormattedDateString(),
         ]);
-    }
-
-    private function generateAlternateUrls(string $internalSlug): array
-    {
-        $baseUrl = config('app.url');
-        $urls = [];
-
-        foreach (['de', 'en'] as $locale) {
-            $articles = config("blog.{$locale}", []);
-
-            foreach ($articles as $slug => $data) {
-                if (($data['internal_slug'] ?? '') === $internalSlug) {
-                    $urls[$locale] = "{$baseUrl}/{$locale}/blog/{$slug}";
-                    break;
-                }
-            }
-        }
-
-        return $urls;
     }
 
     private function buildSchema(array $article, array $author, string $canonical, string $locale): array

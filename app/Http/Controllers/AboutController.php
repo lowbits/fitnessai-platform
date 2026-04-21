@@ -14,11 +14,6 @@ class AboutController extends Controller
 
         $canonical = "{$baseUrl}/{$locale}/".trans('routes.about', [], $locale);
 
-        $alternateUrls = [];
-        foreach (['de', 'en'] as $loc) {
-            $alternateUrls[$loc] = "{$baseUrl}/{$loc}/".trans('routes.about', [], $loc);
-        }
-
         $meta = [
             'title' => trans('about.meta.title'),
             'description' => trans('about.meta.description'),
@@ -51,7 +46,6 @@ class AboutController extends Controller
 
         return Inertia::render('About', [
             'meta' => $meta,
-            'alternateUrls' => $alternateUrls,
             'schema' => $schema,
             'appStoreUrl' => config('app.app_store.ios.url'),
             'authorImage' => '/assets/authors/tobias.avif',

@@ -56,13 +56,6 @@ class WorkoutPlanController extends Controller
             'canonical' => LaravelLocalization::localizeURL("/{$basePath}", $locale),
         ];
 
-        // Generate alternate URLs for hreflang
-        $alternateUrls = [];
-        foreach (['de', 'en'] as $alternateLocale) {
-            $alternateBasePath = trans('routes.workout_plans_index', [], $alternateLocale);
-            $alternateUrls[$alternateLocale] = LaravelLocalization::localizeURL("/{$alternateBasePath}", $alternateLocale);
-        }
-
         // Get labels from config
         $labels = config("freeWorkouts.index_labels.{$locale}", []);
 
@@ -84,7 +77,6 @@ class WorkoutPlanController extends Controller
         return Inertia::render('WorkoutPlan/Index', [
             'plans' => $plans,
             'meta' => $metaData,
-            'alternateUrls' => $alternateUrls,
             'labels' => $labels,
             'schema' => $schema,
         ]);
@@ -116,7 +108,6 @@ class WorkoutPlanController extends Controller
         $exampleWorkout = $this->getExampleWorkout($internalType, $locale);
         $faqs = $this->getFAQs($internalType, $locale);
         $relatedPlans = $this->getRelatedPlans($type, $locale);
-        $alternateUrls = $this->generateAlternateUrls($internalType);
 
         return Inertia::render('WorkoutPlan/Show', [
             'type' => $type,
@@ -130,37 +121,9 @@ class WorkoutPlanController extends Controller
             'workout' => $exampleWorkout,
             'faqs' => $faqs,
             'relatedPlans' => $relatedPlans,
-            'alternateUrls' => $alternateUrls,
             'sources' => $planData['sources'] ?? [],
             'schema' => $this->generateSchemaMarkup($type, $planData, $exampleWorkout, $faqs, $author, $reviewer),
         ]);
-    }
-
-    /**
-     * Generate alternate URLs using LaravelLocalization with translated slugs
-     */
-    private function generateAlternateUrls(string $internalType): array
-    {
-        $urls = [];
-
-        foreach (['de', 'en'] as $locale) {
-            // Get translated slug from lang files
-            $translatedSlug = trans("routes.type.{$internalType}", [], $locale);
-
-            if ($translatedSlug === "routes.type.{$internalType}") {
-                // Translation not found, skip
-                continue;
-            }
-
-            // Get base path from routes translation
-            $basePath = trans('routes.workout_plans_index', [], $locale);
-            $path = "/{$basePath}/{$translatedSlug}";
-
-            // Use LaravelLocalization to generate proper URL
-            $urls[$locale] = LaravelLocalization::localizeURL($path, $locale);
-        }
-
-        return $urls;
     }
 
     /**
