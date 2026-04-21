@@ -168,6 +168,105 @@ test('generates plans for user with RevenueCat subscription', function () {
     Carbon::setTestNow();
 });
 
+test('generates plans for user with canceled but not yet expired subscription', function () {
+    Queue::fake();
+    Notification::fake();
+
+    Carbon::setTestNow(Carbon::parse('2026-01-09')); // Thursday
+
+    $user = User::factory()->create();
+
+    // Create canceled RevenueCat subscription with future period end (e.g. yearly canceled mid-term)
+    $user->subscriptions()->forceCreate([
+        'billable_id' => $user->id,
+        'billable_type' => $user->getMorphClass(),
+        'name' => 'main',
+        'product_id' => 'fytrr_premium_yearly_v2',
+        'status' => 'canceled',
+        'price' => '30.00',
+        'currency' => 'CHF',
+        'store' => 'app_store',
+        'current_period_ended_at' => now()->addYear(),
+    ]);
+
+    // Create plan that started Monday (generation day = Thursday)
+    $plan = Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => Carbon::parse('2026-01-06'), // Monday
+        'end_date' => now()->addYear(),
+        'duration_days' => 365,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    WorkoutPlan::create([
+        'plan_id' => $plan->id,
+        'date' => now()->subDays(2),
+        'day_number' => 1,
+        'status' => 'generated',
+        'workout_name' => 'Day 1',
+        'workout_type' => 'strength',
+    ]);
+
+    $this->artisan('plans:generate-weekly')
+        ->assertSuccessful();
+
+    // Should still generate plans — subscription is paid through next year
+    Queue::assertPushed(\App\Jobs\GenerateUserWorkoutPlan::class);
+    Queue::assertPushed(\App\Jobs\GenerateUserMealPlan::class);
+
+    Carbon::setTestNow();
+});
+
+test('skips user with expired subscription', function () {
+    Queue::fake();
+    Notification::fake();
+
+    Carbon::setTestNow(Carbon::parse('2026-01-09')); // Thursday
+
+    $user = User::factory()->create();
+
+    // Create expired RevenueCat subscription
+    $user->subscriptions()->forceCreate([
+        'billable_id' => $user->id,
+        'billable_type' => $user->getMorphClass(),
+        'name' => 'main',
+        'product_id' => 'fytrr_premium_monthly',
+        'status' => 'expired',
+        'price' => '9.99',
+        'currency' => 'CHF',
+        'store' => 'app_store',
+        'current_period_ended_at' => now()->subWeek(),
+    ]);
+
+    Plan::create([
+        'user_id' => $user->id,
+        'plan_name' => 'Test Plan',
+        'status' => 'active',
+        'start_date' => Carbon::parse('2026-01-06'),
+        'end_date' => now()->addDays(27),
+        'duration_days' => 30,
+        'daily_calories' => 2000,
+        'daily_protein_g' => 150,
+        'daily_carbs_g' => 200,
+        'daily_fat_g' => 60,
+        'workouts_per_week' => 3,
+    ]);
+
+    $this->artisan('plans:generate-weekly')
+        ->expectsOutput('No users with active subscriptions and plans found.')
+        ->assertSuccessful();
+
+    Queue::assertNothingPushed();
+
+    Carbon::setTestNow();
+});
+
 test('skips user when not their generation day', function () {
     Queue::fake();
     Notification::fake();

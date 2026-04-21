@@ -39,11 +39,8 @@ class GenerateWeeklyPlans extends Command
         // Get users with active subscriptions and active plans
         $users = User::where(function ($query) {
             $query->whereHas('subscriptions', function ($q) {
-                $q->where('status', 'active')
-                    ->where(function ($sq) {
-                        $sq->whereNull('current_period_ended_at')
-                            ->orWhere('current_period_ended_at', '>', now());
-                    });
+                $q->whereNull('current_period_ended_at')
+                    ->orWhere('current_period_ended_at', '>', now());
             })->orWhereHas('legacySubscription', function ($q) {
                 $q->active();
             });
