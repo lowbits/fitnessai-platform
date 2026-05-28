@@ -22,6 +22,8 @@ class LocalizationHelper
             $url = match ($routeName) {
                 'workout-plan.show' => static::workoutPlanShowUrl($route->parameter('type'), $locale),
                 'blog.show' => static::blogShowUrl($route->parameter('slug'), $locale),
+                'landing.free-workout-meal-plan' => static::landingPagePairUrl($locale, 'de', 'landing_personal_meal_plan'),
+                'landing.personal-meal-plan' => static::landingPagePairUrl($locale, 'en', 'landing_free_workout_meal_plan'),
                 default => LaravelLocalization::getLocalizedURL($locale, null, [], true),
             };
 
@@ -50,6 +52,20 @@ class LocalizationHelper
         $basePath = trans('routes.workout_plans_index', [], $targetLocale);
 
         return LaravelLocalization::localizeURL("/{$basePath}/{$translatedSlug}", $targetLocale);
+    }
+
+    /**
+     * Resolve a hreflang URL for a landing page paired across locales.
+     */
+    private static function landingPagePairUrl(string $targetLocale, string $pairedLocale, string $pairedRouteKey): ?string
+    {
+        if ($targetLocale !== $pairedLocale) {
+            return null;
+        }
+
+        $path = trans("routes.{$pairedRouteKey}", [], $pairedLocale);
+
+        return LaravelLocalization::localizeURL("/{$path}", $pairedLocale);
     }
 
     /**

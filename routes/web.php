@@ -64,6 +64,37 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     Route::get(LaravelLocalization::transRoute('routes.blog_article'), [BlogController::class, 'show'])
         ->name('blog.show');
 
+    // Transactional Landing Pages
+    Route::get(LaravelLocalization::transRoute('routes.landing_free_workout_meal_plan'), function () {
+        if (app()->getLocale() !== 'en') {
+            abort(404);
+        }
+
+        return Inertia::render('Landing/FreeWorkoutAndMealPlan', [
+            'durationDays' => (int) config('plans.duration_days'),
+        ]);
+    })->name('landing.free-workout-meal-plan');
+
+    Route::get(LaravelLocalization::transRoute('routes.landing_personal_meal_plan'), function () {
+        if (app()->getLocale() !== 'de') {
+            abort(404);
+        }
+
+        return Inertia::render('Landing/PersonalMealPlan', [
+            'durationDays' => (int) config('plans.duration_days'),
+        ]);
+    })->name('landing.personal-meal-plan');
+
+    Route::get(LaravelLocalization::transRoute('routes.landing_ai_workout_plan_generator'), function () {
+        if (app()->getLocale() !== 'en') {
+            abort(404);
+        }
+
+        return Inertia::render('Landing/AiWorkoutPlanGenerator', [
+            'durationDays' => (int) config('plans.duration_days'),
+        ]);
+    })->name('landing.ai-workout-plan-generator');
+
     // Public Workout Plan Pages (SEO-optimized)
     Route::get(LaravelLocalization::transRoute('routes.workout_plans_index'), [WorkoutPlanController::class, 'index'])
         ->name('workout-plan.index');

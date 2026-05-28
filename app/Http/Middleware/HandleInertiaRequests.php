@@ -85,6 +85,7 @@ class HandleInertiaRequests extends Middleware
             'calorieCalculatorUrl' => LaravelLocalization::localizeURL('/'.trans('routes.free_tools_calorie_calculator', [], $locale), $locale),
             'blogUrl' => LaravelLocalization::localizeURL('/'.trans('routes.blog_index', [], $locale), $locale),
             'aboutUrl' => LaravelLocalization::localizeURL('/'.trans('routes.about', [], $locale), $locale),
+            'landingPages' => $this->getLandingPageLinks($locale),
         ];
 
         foreach ($workoutPlanTypes as $internalType) {
@@ -151,5 +152,29 @@ class HandleInertiaRequests extends Middleware
         }
 
         return $links;
+    }
+
+    /**
+     * Get landing page links for the current locale.
+     *
+     * @return array<int, array{url: string, label: string}>
+     */
+    private function getLandingPageLinks(string $locale): array
+    {
+        $pages = match ($locale) {
+            'en' => [
+                ['route_key' => 'landing_free_workout_meal_plan', 'label' => 'Free Workout & Meal Plan'],
+                ['route_key' => 'landing_ai_workout_plan_generator', 'label' => 'AI Workout Plan Generator'],
+            ],
+            'de' => [
+                ['route_key' => 'landing_personal_meal_plan', 'label' => 'Persönlicher Ernährungsplan'],
+            ],
+            default => [],
+        };
+
+        return array_map(fn (array $page) => [
+            'url' => "/{$locale}/".trans("routes.{$page['route_key']}", [], $locale),
+            'label' => $page['label'],
+        ], $pages);
     }
 }

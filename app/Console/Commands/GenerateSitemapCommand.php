@@ -34,6 +34,9 @@ class GenerateSitemapCommand extends Command
             ['route_key' => null, 'path' => 'app', 'priority' => 0.8, 'changeFrequency' => 'monthly'],
             ['route_key' => 'routes.about', 'path' => '', 'priority' => 0.7, 'changeFrequency' => 'monthly'],
             ['route_key' => 'routes.free_tools_calorie_calculator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly'],
+            ['route_key' => 'routes.landing_free_workout_meal_plan', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['en']],
+            ['route_key' => 'routes.landing_personal_meal_plan', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['de']],
+            ['route_key' => 'routes.landing_ai_workout_plan_generator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['en']],
             ['route_key' => 'routes.imprint', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
             ['route_key' => 'routes.data_privacy', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
             ['route_key' => 'routes.terms', 'path' => '', 'priority' => 0.3, 'changeFrequency' => 'yearly'],
@@ -67,6 +70,11 @@ class GenerateSitemapCommand extends Command
     private function addStaticPages(Sitemap $sitemap, string $locale, string $baseUrl): void
     {
         foreach ($this->staticPages() as $page) {
+            // Skip pages restricted to specific locales
+            if (isset($page['locales']) && ! in_array($locale, $page['locales'])) {
+                continue;
+            }
+
             $fullPath = $this->buildLocalizedPath($locale, $page['route_key'], $page['path']);
 
             $url = Url::create($fullPath)
@@ -157,11 +165,26 @@ class GenerateSitemapCommand extends Command
         return $segment !== '' ? "/{$locale}/{$segment}" : "/{$locale}";
     }
 
+    /** @var array<string, array{locale: string, route_key: string}> Landing page hreflang pairs */
+    private const LANDING_PAGE_PAIRS = [
+        'routes.landing_free_workout_meal_plan' => ['locale' => 'de', 'route_key' => 'routes.landing_personal_meal_plan'],
+        'routes.landing_personal_meal_plan' => ['locale' => 'en', 'route_key' => 'routes.landing_free_workout_meal_plan'],
+    ];
+
     /**
      * Add hreflang alternates for all other locales.
      */
     private function addAlternates(Url $url, string $currentLocale, string $baseUrl, ?string $routeKey = null, string $fallbackPath = ''): void
     {
+        // Handle landing pages paired across different route keys
+        if ($routeKey && isset(self::LANDING_PAGE_PAIRS[$routeKey])) {
+            $pair = self::LANDING_PAGE_PAIRS[$routeKey];
+            $altPath = $this->buildLocalizedPath($pair['locale'], $pair['route_key']);
+            $url->addAlternate("{$baseUrl}{$altPath}", $pair['locale']);
+
+            return;
+        }
+
         foreach (self::LOCALES as $altLocale) {
             if ($altLocale === $currentLocale) {
                 continue;

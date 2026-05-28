@@ -33,6 +33,7 @@ interface FooterLinks {
     aboutUrl: string;
     appStoreUrl: string;
     appUrl: string;
+    landingPages: { url: string; label: string }[];
 }
 
 const footerLinks = computed(() => page.props.footerLinks as FooterLinks);
@@ -151,6 +152,43 @@ watch(selectedLanguage, (newLocale) => {
                         </li>
                         <li>
                             <Link
+                                :href="footerLinks.appUrl"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            footerLinks.appUrl,
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            footerLinks.appUrl,
+                                        ),
+                                }"
+                            >
+                                {{ footerLinks.labels.app }}
+                            </Link>
+                        </li>
+                        <li
+                            v-for="(landing, i) in footerLinks.landingPages"
+                            :key="`landing-${i}`"
+                        >
+                            <Link
+                                :href="landing.url"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(landing.url),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(landing.url),
+                                        ),
+                                }"
+                            >
+                                {{ landing.label }}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
                                 :href="footerLinks.indexUrl"
                                 :class="{
                                     'font-semibold text-secondary-200':
@@ -168,23 +206,6 @@ watch(selectedLanguage, (newLocale) => {
                                 }"
                             >
                                 {{ footerLinks.labels.heading }}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                :href="footerLinks.appUrl"
-                                :class="{
-                                    'font-semibold text-secondary-200':
-                                        $page.url.startsWith(
-                                            footerLinks.appUrl,
-                                        ),
-                                    'text-gray-300 transition hover:text-secondary-100':
-                                        !$page.url.startsWith(
-                                            footerLinks.appUrl,
-                                        ),
-                                }"
-                            >
-                                {{ footerLinks.labels.app }}
                             </Link>
                         </li>
                         <li>

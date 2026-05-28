@@ -12,6 +12,8 @@ return [
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 
+    'landing_personal_meal_plan' => 'persoenlicher-ernaehrungsplan',
+
     'type' => [
         'weight_loss' => 'abnehmen',
         'muscle_gain' => 'muskelaufbau',
