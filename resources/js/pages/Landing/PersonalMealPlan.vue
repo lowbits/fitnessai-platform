@@ -5,11 +5,10 @@ import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanMod
 import { Button } from '@/components/ui/button';
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { Head } from '@inertiajs/vue3';
 import { computed } from 'vue';
 
-const page = usePage();
-const props = defineProps<{
+defineProps<{
     durationDays: number;
     alternateUrls: Record<string, string>;
 }>();
