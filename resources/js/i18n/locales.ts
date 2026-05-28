@@ -7,12 +7,12 @@ export const locales = {
         welcome: {
             meta: {
                 locale: 'en',
-                title: 'Free Workout & Nutrition Plan Generator | fytrr',
-                title_short: 'Create Free Workout & Nutrition Plan | fytrr',
+                title: 'Free Workout & Meal Plan Generator | fytrr',
+                title_short: 'Free Workout & Meal Plan Generator | fytrr',
                 description:
-                    'Create your free 7-day workout & nutrition plan as PDF. AI-powered, personalized & no signup required. Start now!',
+                    'Create your free personalized workout and meal plan in 60 seconds. AI-powered diet and exercise plans as PDF. No signup needed.',
                 description_social:
-                    'Free 7-day workout & nutrition plan as PDF. Generated with AI – personalized for muscle gain, fat loss or endurance.',
+                    'Create your free personalized workout and meal plan in 60 seconds. AI-powered diet and exercise plans as PDF. No signup needed.',
                 theme_color: '#667eea',
                 og: {
                     type: 'website',
@@ -1473,13 +1473,13 @@ export const locales = {
         welcome: {
             meta: {
                 locale: 'de',
-                title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+                title: 'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 title_short:
-                    'Kostenlosen Trainings- & Ernährungsplan erstellen | fytrr',
+                    'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 description:
-                    'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung. Jetzt starten!',
+                    'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
                 description_social:
-                    'Kostenloser 7-Tage Trainings- & Ernährungsplan als PDF. Erstellt mit KI – individuell für Muskelaufbau, Fettabbau oder Ausdauer.',
+                    'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
                 theme_color: '#667eea',
                 og: {
                     type: 'website',

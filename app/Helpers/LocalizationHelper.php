@@ -7,6 +7,27 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 class LocalizationHelper
 {
     /**
+     * Landing pages: which locale they exist in, and their cross-locale hreflang pair (if any).
+     * Key = route name, value = [locale => route_key, ...] mapping for each valid locale.
+     *
+     * @var array<string, array<string, string>>
+     */
+    private const LANDING_PAGE_ALTERNATES = [
+        'landing.free-workout-meal-plan' => [
+            'en' => 'landing_free_workout_meal_plan',
+            'de' => 'landing_personal_meal_plan',     // cross-locale pair
+        ],
+        'landing.personal-meal-plan' => [
+            'de' => 'landing_personal_meal_plan',
+            'en' => 'landing_free_workout_meal_plan',  // cross-locale pair
+        ],
+        'landing.ai-workout-plan-generator' => [
+            'en' => 'landing_ai_workout_plan_generator',
+            // no DE version
+        ],
+    ];
+
+    /**
      * Generate alternate URLs for the current route across all supported locales.
      * Handles translated route parameters (slugs) that getLocalizedURL() cannot resolve.
      *
@@ -18,12 +39,20 @@ class LocalizationHelper
         $routeName = $route?->getName();
         $urls = [];
 
+        // Landing pages: use explicit alternate mapping
+        if (isset(self::LANDING_PAGE_ALTERNATES[$routeName])) {
+            foreach (self::LANDING_PAGE_ALTERNATES[$routeName] as $locale => $routeKey) {
+                $path = trans("routes.{$routeKey}", [], $locale);
+                $urls[$locale] = LaravelLocalization::localizeURL("/{$path}", $locale);
+            }
+
+            return $urls;
+        }
+
         foreach (array_keys(LaravelLocalization::getSupportedLocales()) as $locale) {
             $url = match ($routeName) {
                 'workout-plan.show' => static::workoutPlanShowUrl($route->parameter('type'), $locale),
                 'blog.show' => static::blogShowUrl($route->parameter('slug'), $locale),
-                'landing.free-workout-meal-plan' => static::landingPagePairUrl($locale, 'de', 'landing_personal_meal_plan'),
-                'landing.personal-meal-plan' => static::landingPagePairUrl($locale, 'en', 'landing_free_workout_meal_plan'),
                 default => LaravelLocalization::getLocalizedURL($locale, null, [], true),
             };
 
@@ -52,20 +81,6 @@ class LocalizationHelper
         $basePath = trans('routes.workout_plans_index', [], $targetLocale);
 
         return LaravelLocalization::localizeURL("/{$basePath}/{$translatedSlug}", $targetLocale);
-    }
-
-    /**
-     * Resolve a hreflang URL for a landing page paired across locales.
-     */
-    private static function landingPagePairUrl(string $targetLocale, string $pairedLocale, string $pairedRouteKey): ?string
-    {
-        if ($targetLocale !== $pairedLocale) {
-            return null;
-        }
-
-        $path = trans("routes.{$pairedRouteKey}", [], $pairedLocale);
-
-        return LaravelLocalization::localizeURL("/{$path}", $pairedLocale);
     }
 
     /**
