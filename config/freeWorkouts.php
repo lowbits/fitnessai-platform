@@ -25,6 +25,9 @@ return [
             'ctaHeading' => 'Bereit für dein Training?',
             'ctaText' => 'Wähle den passenden Plan für dein Ziel und starte noch heute mit deinem kostenlosen, wissenschaftlich fundierten Trainingsprogramm.',
             'ctaButton' => 'Personalisierten Plan erstellen',
+            'crossLinkText' => 'Ernährungsplan dazu erstellen?',
+            'crossLinkUrl' => '/de/persoenlicher-ernaehrungsplan',
+            'crossLinkLabel' => 'Persönlichen Ernährungsplan erstellen',
         ],
         'en' => [
             'meta_title' => 'Free Personalized Workout Plans for Every Goal',
@@ -35,6 +38,9 @@ return [
             'ctaHeading' => 'Ready for Your Training?',
             'ctaText' => 'Choose the right plan for your goal and start today with your free, science-based training program.',
             'ctaButton' => 'Generate Personalized Plan',
+            'crossLinkText' => 'Looking for a meal plan too?',
+            'crossLinkUrl' => '/en/free-workout-and-meal-plan',
+            'crossLinkLabel' => 'Get a combined workout and meal plan',
         ],
     ],
 

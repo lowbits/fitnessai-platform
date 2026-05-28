@@ -10,6 +10,11 @@ import { useI18n } from 'vue-i18n';
 interface Section {
     heading: string;
     content: string;
+    cta?: {
+        text: string;
+        url: string;
+        label: string;
+    };
 }
 
 interface FAQ {
@@ -195,6 +200,20 @@ const calculatorUrl = computed(
                             <p class="leading-relaxed text-gray-300">
                                 {{ section.content }}
                             </p>
+                            <div
+                                v-if="section.cta"
+                                class="mt-6 rounded-xl border border-primary-500/20 bg-primary-500/5 p-6"
+                            >
+                                <p class="text-gray-300">
+                                    {{ section.cta.text }}
+                                </p>
+                                <a
+                                    :href="section.cta.url"
+                                    class="mt-3 inline-block font-semibold text-primary-400 hover:text-primary-300"
+                                >
+                                    {{ section.cta.label }} &rarr;
+                                </a>
+                            </div>
                         </template>
                     </article>
 

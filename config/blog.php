@@ -85,6 +85,11 @@ return [
                 [
                     'heading' => 'Fazit',
                     'content' => 'Einen Ernährungsplan zu erstellen muss nicht kompliziert sein. 5 Schritte: Ziel festlegen. Kalorienbedarf berechnen. Makros verteilen (Protein zuerst). 9 Gerichte auswählen (3-3-1-Methode). Einkaufsliste schreiben und loslegen. Der perfekte Plan existiert nicht. Der beste Plan ist der, den du tatsächlich umsetzt. Fang einfach an, beobachte was funktioniert, und passe nach 2–3 Wochen an.',
+                    'cta' => [
+                        'text' => 'Oder lass unsere KI deinen persönlichen Ernährungsplan erstellen.',
+                        'url' => '/de/persoenlicher-ernaehrungsplan',
+                        'label' => 'Jetzt persönlichen Ernährungsplan erstellen',
+                    ],
                 ],
             ],
 
@@ -370,6 +375,11 @@ return [
                 [
                     'heading' => 'Conclusion',
                     'content' => 'Creating a meal plan doesn\'t have to be complicated. 5 steps: Set your goal. Calculate your calorie needs. Distribute your macros (protein first). Choose 9 dishes (3-3-1 method). Write your shopping list and get started. The perfect plan doesn\'t exist. The best plan is the one you actually follow through on. Start simple, observe what works, and adjust after 2–3 weeks.',
+                    'cta' => [
+                        'text' => 'Or let our AI create your meal plan with a matching workout.',
+                        'url' => '/en/free-workout-and-meal-plan',
+                        'label' => 'Create your free workout and meal plan',
+                    ],
                 ],
             ],
 

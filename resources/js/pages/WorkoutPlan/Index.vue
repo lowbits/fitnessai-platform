@@ -28,6 +28,9 @@ interface Props {
         ctaHeading: string;
         ctaText: string;
         ctaButton: string;
+        crossLinkText?: string;
+        crossLinkUrl?: string;
+        crossLinkLabel?: string;
     };
     schema: object;
 }
@@ -121,6 +124,22 @@ const schemaJson = JSON.stringify(props.schema);
                     />
                 </div>
             </section>
+
+            <!-- Cross-link to landing page -->
+            <div
+                v-if="props.labels.crossLinkText"
+                class="mt-10 rounded-xl border border-primary-500/20 bg-primary-500/5 p-6 text-center"
+            >
+                <span class="text-gray-300">
+                    {{ props.labels.crossLinkText }}
+                </span>
+                <Link
+                    :href="props.labels.crossLinkUrl"
+                    class="ml-2 font-semibold text-primary-400 hover:text-primary-300"
+                >
+                    {{ props.labels.crossLinkLabel }} &rarr;
+                </Link>
+            </div>
 
             <!-- CTA Section -->
             <section
