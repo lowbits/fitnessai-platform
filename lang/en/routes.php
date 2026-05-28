@@ -13,6 +13,7 @@ return [
     'workout_plans_type' => 'free-workout-plan/{type}',
 
     'landing_free_workout_meal_plan' => 'free-workout-and-meal-plan',
+    'landing_personal_meal_plan' => 'personal-meal-plan',
     'landing_ai_workout_plan_generator' => 'ai-workout-plan-generator',
 
     'type' => [

@@ -12,7 +12,9 @@ return [
     'workout_plans_index' => 'kostenloser-trainingsplan',
     'workout_plans_type' => 'kostenloser-trainingsplan/{type}',
 
+    'landing_free_workout_meal_plan' => 'kostenloses-training-und-ernaehrungsplan',
     'landing_personal_meal_plan' => 'persoenlicher-ernaehrungsplan',
+    'landing_ai_workout_plan_generator' => 'ki-trainingsplan-generator',
 
     'type' => [
         'weight_loss' => 'abnehmen',
