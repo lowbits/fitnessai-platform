@@ -46,18 +46,14 @@ class WorkoutPlanController extends Controller
             ];
         })->values();
 
-        $metaData = [
-            'title' => $locale === 'de'
-                ? 'Kostenlose Trainingspläne - Für jedes Ziel'
-                : 'Free Workout Plans - For Every Goal',
-            'description' => $locale === 'de'
-                ? 'Entdecke kostenlose, wissenschaftlich fundierte Trainingspläne für jedes Ziel: Abnehmen, Muskelaufbau, Anfänger, Zuhause & mehr. Sofort starten!'
-                : 'Discover free, science-based workout plans for every goal: Weight Loss, Muscle Gain, Beginners, Home & more. Start now!',
-            'canonical' => LaravelLocalization::localizeURL("/{$basePath}", $locale),
-        ];
-
         // Get labels from config
         $labels = config("freeWorkouts.index_labels.{$locale}", []);
+
+        $metaData = [
+            'title' => $labels['meta_title'],
+            'description' => $labels['meta_description'],
+            'canonical' => LaravelLocalization::localizeURL("/{$basePath}", $locale),
+        ];
 
         $baseUrl = config('app.url');
         $schema = [

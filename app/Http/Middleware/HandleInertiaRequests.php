@@ -138,10 +138,14 @@ class HandleInertiaRequests extends Middleware
         $links['languages'] = [];
 
         foreach (LaravelLocalization::getSupportedLocales() as $localeCode => $properties) {
+            if (! isset($alternateUrls[$localeCode])) {
+                continue;
+            }
+
             $links['languages'][$localeCode] = [
                 'name' => $properties['native'],
                 'code' => $localeCode,
-                'url' => $alternateUrls[$localeCode] ?? LaravelLocalization::getLocalizedURL($localeCode),
+                'url' => $alternateUrls[$localeCode],
                 'active' => $localeCode === $locale,
             ];
         }

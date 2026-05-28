@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'title' => 'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+    'title' => 'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
     'title_short' => 'Kostenlosen Trainings- & Ernährungsplan erstellen | fytrr',
-    'description' => 'Erstelle deinen kostenlosen 7-Tage Trainings- & Ernährungsplan als PDF. KI-basiert, individuell & ohne Anmeldung. Jetzt starten!',
-    'description_social' => 'Kostenloser 7-Tage Trainings- & Ernährungsplan als PDF. Erstellt mit KI – individuell für Muskelaufbau, Fettabbau oder Ausdauer.',
+    'description' => 'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
+    'description_social' => 'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
     'theme_color' => '#667eea',
     'og' => [
         'type' => 'website',
@@ -15,4 +15,3 @@ return [
         'site' => '@fytrr',
     ],
 ];
-

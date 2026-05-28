@@ -43,21 +43,23 @@
     <meta property="og:locale" content="{{ LaravelLocalization::getCurrentLocaleRegional() }}">
 
     @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
-        @if($localeCode !== LaravelLocalization::getCurrentLocale())
+        @if($localeCode !== LaravelLocalization::getCurrentLocale() && isset($alternateUrls[$localeCode]))
             <meta property="og:locale:alternate" content="{{ $properties['regional'] }}">
         @endif
     @endforeach
 
     {{-- Hreflang tags --}}
-    @foreach(LaravelLocalization::getSupportedLocales() as $localeCode => $properties)
+    @foreach($alternateUrls as $localeCode => $url)
         <link rel="alternate"
               hreflang="{{ $localeCode }}"
-              href="{{ $alternateUrls[$localeCode] ?? LaravelLocalization::getLocalizedURL($localeCode, null, [], true) }}" />
+              href="{{ $url }}" />
     @endforeach
 
-    <link rel="alternate"
-          hreflang="x-default"
-          href="{{ $alternateUrls[config('app.fallback_locale')] ?? LaravelLocalization::getLocalizedURL(config('app.fallback_locale'), null, [], true) }}" />
+    @if(isset($alternateUrls[config('app.fallback_locale')]))
+        <link rel="alternate"
+              hreflang="x-default"
+              href="{{ $alternateUrls[config('app.fallback_locale')] }}" />
+    @endif
 
     {{-- BreadcrumbList schema --}}
     @php

@@ -1,10 +1,10 @@
 <?php
 
 return [
-    'title' => 'Personalized AI Workout & Meal Plans in 60 Seconds | fytrr',
+    'title' => 'Free Workout & Meal Plan Generator | fytrr',
     'title_short' => 'fytrr - Your Personal AI Trainer',
-    'description' => 'Get a personalized AI workout and meal plan in 60 seconds. Tailored to your goals, fitness level, and equipment. Start free today.',
-    'description_social' => 'Get a personalized AI workout and meal plan in 60 seconds. Built for muscle gain, fat loss, or endurance. Start free.',
+    'description' => 'Create your free personalized workout and meal plan in 60 seconds. AI-powered diet and exercise plans as PDF. No signup needed.',
+    'description_social' => 'Create your free personalized workout and meal plan in 60 seconds. AI-powered diet and exercise plans as PDF. No signup needed.',
     'theme_color' => '#667eea',
     'og' => [
         'type' => 'website',
@@ -15,4 +15,3 @@ return [
         'site' => '@fytrr',
     ],
 ];
-

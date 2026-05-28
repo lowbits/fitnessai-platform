@@ -17,6 +17,8 @@ return [
     ],
     'index_labels' => [
         'de' => [
+            'meta_title' => 'Kostenloser Trainingsplan erstellen - Für jedes Ziel',
+            'meta_description' => 'Trainingsplan kostenlos erstellen mit Ernährungsplan. Für Abnehmen, Muskelaufbau, Anfänger, Zuhause ohne Geräte. KI-basiert, sofort als PDF.',
             'heading' => 'Kostenlose Trainingspläne',
             'intro' => 'Entdecke unsere wissenschaftlich fundierten Trainingspläne für jedes Ziel. Kostenlos, personalisiert und sofort verfügbar.',
             'viewPlan' => 'Plan ansehen',
@@ -25,6 +27,8 @@ return [
             'ctaButton' => 'Personalisierten Plan erstellen',
         ],
         'en' => [
+            'meta_title' => 'Free Personalized Workout Plans for Every Goal',
+            'meta_description' => 'Free personalized workout plans for weight loss, muscle gain, beginners, and home training. AI-generated, science-based. Get your plan in 60 seconds.',
             'heading' => 'Free Workout Plans',
             'intro' => 'Discover our science-based workout plans for every goal. Free, personalized and available immediately.',
             'viewPlan' => 'View Plan',
@@ -39,8 +43,8 @@ return [
            Abnehmen
         ============================ */
         'abnehmen' => [
-            'title' => 'Kostenloser Trainingsplan zum Abnehmen – 8 Wochen',
-            'description' => 'Kostenloser 8-Wochen-Trainingsplan zum Abnehmen. Kraft- & Cardio-Training für nachhaltigen Fettabbau – Zuhause & Gym.',
+            'title' => 'Kostenloser Trainingsplan zum Abnehmen – für Zuhause & Gym',
+            'description' => 'Trainingsplan zum Abnehmen kostenlos: 8 Wochen, für Zuhause ohne Geräte oder im Gym. Mit Ernährungstipps. Sofort als PDF, ohne Anmeldung.',
             'h1' => 'Trainingsplan zum Abnehmen – nachhaltig Fett verlieren',
             'intro' => 'Dieser strukturierte 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio, um Fett abzubauen, Muskeln zu erhalten und den Stoffwechsel nachhaltig zu steigern.',
             'internal_type' => 'weight_loss',
@@ -223,8 +227,8 @@ return [
            MUSKELAUFBAU
         ============================ */
         'muskelaufbau' => [
-            'title' => 'Trainingsplan Muskelaufbau – 12 Wochen',
-            'description' => 'Kostenloser 12-Wochen-Trainingsplan für Muskelaufbau mit progressiver Belastungssteigerung. Ideal für Anfänger und Fortgeschrittene.',
+            'title' => 'Kostenloser Trainingsplan Muskelaufbau – 12 Wochen',
+            'description' => 'Trainingsplan Muskelaufbau kostenlos: 12 Wochen mit progressiver Belastungssteigerung. Für Anfänger und Fortgeschrittene. Als PDF laden.',
             'h1' => 'Muskelaufbau Trainingsplan – systematisch stärker werden',
             'intro' => 'Dieser 12-Wochen-Trainingsplan basiert auf progressiver Überlastung und kombiniert Muskelwachstum, Kraftsteigerung und ausreichende Regeneration.',
             'internal_type' => 'muscle_gain',
@@ -420,8 +424,8 @@ return [
            Anfänger
         ============================ */
         'anfaenger' => [
-            'title' => 'Trainingsplan für Anfänger – 6 Wochen',
-            'description' => 'Der perfekte Einstieg ins Training. Sicher, strukturiert und nachhaltig – ideal für Anfänger ohne Vorerfahrung.',
+            'title' => 'Kostenloser Trainingsplan für Anfänger – 6 Wochen',
+            'description' => 'Trainingsplan für Anfänger kostenlos: 6 Wochen, sicher und strukturiert. Für Zuhause oder Gym, ohne Vorerfahrung. Sofort als PDF starten.',
             'h1' => 'Trainingsplan für Anfänger – sicher & effektiv starten',
             'intro' => 'Dieser 6-Wochen-Anfängerplan hilft dir, grundlegende Bewegungen zu erlernen, Kraft aufzubauen und eine stabile Trainingsroutine zu entwickeln.',
             'internal_type' => 'beginner',
@@ -586,8 +590,8 @@ return [
            Zuhause
         ============================ */
         'zuhause' => [
-            'title' => 'Trainingsplan für Zuhause – Ohne Geräte effektiv trainieren',
-            'description' => 'Effektives Home Workout ohne Geräte. Bodyweight Training für jedes Fitnesslevel – 8 Wochen strukturiert & kostenlos.',
+            'title' => 'Kostenloser Trainingsplan für Zuhause ohne Geräte',
+            'description' => 'Trainingsplan für Zuhause ohne Geräte, kostenlos. 8 Wochen Bodyweight Training für jedes Level. Sofort als PDF, ohne Anmeldung.',
             'h1' => 'Trainingsplan für Zuhause: Effektiv ohne Geräte',
             'intro' => 'Dieser 8-Wochen-Trainingsplan zeigt dir, wie du mit reinem Körpergewicht zuhause Kraft, Ausdauer und Muskulatur aufbaust – ganz ohne Fitnessstudio.',
             'internal_type' => 'home',
@@ -743,8 +747,8 @@ return [
            Frauen
         ============================ */
         'frauen' => [
-            'title' => 'Trainingsplan für Frauen – Gezielt & Effektiv',
-            'description' => 'Strukturierter Kraft- & Cardio-Trainingsplan speziell für Frauen. Fokus auf Straffung, Definition & Fettabbau – 8 Wochen.',
+            'title' => 'Kostenloser Trainingsplan für Frauen – Gym & Zuhause',
+            'description' => 'Kostenloser Trainingsplan für Frauen: 8 Wochen Kraft- und Cardio-Training. Für Straffung, Fettabbau und Definition. Als PDF, ohne Anmeldung.',
             'h1' => 'Trainingsplan für Frauen: Straff & Stark',
             'intro' => 'Dieser 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio gezielt für Straffung, Definition und einen starken, femininen Körper.',
             'internal_type' => 'women',
@@ -1235,7 +1239,7 @@ return [
         ============================ */
         'fettabbau' => [
             'title' => 'Kostenloser Fettabbau Trainingsplan – 8 Wochen',
-            'description' => 'Kostenloser 8-Wochen-Trainingsplan für Fettabbau. Supersatz-basiertes Kraft- und Konditionstraining für maximale Fettverbrennung bei Muskelerhalt.',
+            'description' => '8-Wochen Fettabbau Trainingsplan kostenlos. Kraft- und Konditionstraining mit Supersätzen. Fett verbrennen, Muskeln erhalten. Als PDF laden.',
             'h1' => 'Fettabbau Trainingsplan – Fett verbrennen, Muskeln behalten',
             'intro' => 'Dieser 8-Wochen-Trainingsplan nutzt Supersatz-basiertes Krafttraining und metabolisches Konditionstraining, um den Kalorienverbrauch zu maximieren und gleichzeitig Muskelmasse zu erhalten. 4 Einheiten pro Woche à 40 Minuten.',
             'internal_type' => 'fat_loss',
@@ -1413,7 +1417,7 @@ return [
         ============================ */
         'bauchmuskeltraining' => [
             'title' => 'Kostenloser Bauchmuskel-Trainingsplan – 8 Wochen',
-            'description' => 'Kostenloser 8-Wochen-Trainingsplan für Bauchmuskeln. Gezieltes Core-Training mit Anti-Bewegungs-, Rotations- und Flexionsübungen – Zuhause & Gym.',
+            'description' => 'Bauchmuskel-Trainingsplan kostenlos: 8 Wochen gezieltes Core-Training für Zuhause und Gym. Ohne Geräte möglich. Sofort als PDF starten.',
             'h1' => 'Bauchmuskel-Trainingsplan – Starker Core in 8 Wochen',
             'intro' => 'Dieser 8-Wochen-Trainingsplan entwickelt deine gesamte Rumpfmuskulatur systematisch. Drei fokussierte Einheiten pro Woche trainieren Stabilität, Rotationskraft und Flexion – für sichtbare Bauchmuskeln und funktionale Kernkraft.',
             'internal_type' => 'abs',
@@ -1579,7 +1583,7 @@ return [
         ============================ */
         'ueber-40-training' => [
             'title' => 'Kostenloser Trainingsplan ab 40 – 10 Wochen',
-            'description' => 'Kostenloser 10-Wochen-Trainingsplan für Ü40. Gelenkschonendes Kraft- & Mobilitätstraining gegen Muskelverlust, Steifheit und Knochendichteverlust.',
+            'description' => 'Trainingsplan ab 40 kostenlos: 10 Wochen gelenkschonendes Kraft- und Mobilitätstraining. Gegen Muskelverlust, für mehr Beweglichkeit. Als PDF.',
             'h1' => 'Trainingsplan ab 40 – Stark und beweglich bleiben',
             'intro' => 'Dieser 10-Wochen-Trainingsplan wurde speziell für Trainierende ab 40 entwickelt. Drei ausgewogene Einheiten pro Woche kombinieren Krafttraining, Mobilität und Gleichgewicht – gelenkschonend, progressiv und alltagstauglich.',
             'internal_type' => 'over_40',
@@ -1744,7 +1748,7 @@ return [
     'en' => [
         'weight-loss' => [
             'title' => 'Free Weight Loss Workout Plan – 8 Weeks',
-            'description' => 'Free 8-week weight loss workout plan. Structured strength and cardio training for sustainable fat loss – suitable for home or gym.',
+            'description' => 'Free 8-week weight loss exercise plan. Strength and cardio training for fast, sustainable results. Works at home or gym. PDF, no signup.',
             'h1' => 'Weight Loss Workout Plan – Lose Fat Sustainably',
             'intro' => 'This structured 8-week workout plan combines strength training and cardio to reduce body fat, preserve muscle mass, and improve metabolic health.',
             'internal_type' => 'weight_loss',
@@ -1918,8 +1922,8 @@ return [
         ],
 
         'muscle-gain' => [
-            'title' => 'Free Muscle Building Workout Plan – 12 Weeks',
-            'description' => 'Free 12-week muscle building workout plan. Structured strength training with progressive overload for sustainable muscle growth.',
+            'title' => 'Free Muscle Gain Workout Plan – 12-Week Program',
+            'description' => 'Free muscle gain workout plan for 12 weeks. Progressive overload training to build strength and size. PDF download, no signup.',
             'h1' => 'Muscle Building Workout Plan – Build Strength & Muscle',
             'intro' => 'This 12-week muscle building program is designed to systematically increase strength and muscle mass through progressive overload and structured training.',
             'keywords' => ['muscle building workout plan', 'hypertrophy training', 'strength training program', 'build muscle'],
@@ -2110,8 +2114,8 @@ return [
         ],
 
         'beginner' => [
-            'title' => 'Beginner Workout Plan – 6 Weeks',
-            'description' => 'The ideal beginner workout plan. Safe, structured and easy to follow – perfect for starting fitness training at home or in the gym.',
+            'title' => 'Free Beginner Workout Plan – 6 Weeks',
+            'description' => 'Free 6-week beginner workout plan. Safe, structured, easy to follow. Perfect for starting at home or gym. No experience needed, no signup.',
             'h1' => 'Beginner Workout Plan – Start Training Safely',
             'intro' => 'This 6-week beginner workout plan helps you learn fundamental movements, build basic strength and establish a sustainable training routine.',
             'keywords' => ['beginner workout plan', 'fitness for beginners', 'starter workout plan', 'beginner fitness'],
@@ -2274,8 +2278,8 @@ return [
         ],
 
         'home' => [
-            'title' => 'Home Workout Plan – Train Effectively Without Equipment',
-            'description' => 'Effective 8-week home workout plan with no equipment required. Structured bodyweight training for all fitness levels.',
+            'title' => 'Free Home Workout Plan Without Equipment – 8 Weeks',
+            'description' => 'Free 8-week home workout plan, no equipment needed. Bodyweight training for all levels. Works for weight loss and muscle gain. PDF download.',
             'h1' => 'Home Workout Plan – Train Effectively Without a Gym',
             'intro' => 'This 8-week home workout plan uses bodyweight exercises only. It helps you build strength, improve endurance and stay consistent without needing a gym.',
             'keywords' => ['home workout plan', 'bodyweight training', 'no equipment workout', 'home fitness'],
@@ -2432,8 +2436,8 @@ return [
         ],
 
         'women' => [
-            'title' => 'Workout Plan for Women – Targeted & Effective',
-            'description' => 'Structured 8-week workout plan for women. Strength and cardio training for toning, definition and overall fitness.',
+            'title' => 'Free Workout Plan for Women – 8 Weeks',
+            'description' => 'Free 8-week workout plan for women. Strength and cardio for toning, fat loss, and definition. Works at home or gym. PDF, no signup.',
             'h1' => 'Workout Plan for Women – Strength, Tone & Balance',
             'intro' => 'This 8-week workout plan is designed specifically for women and combines strength training and cardio to improve muscle tone, definition and overall fitness.',
             'keywords' => ['workout plan for women', 'women fitness training', 'female workout plan', 'toning workout'],
@@ -2746,8 +2750,8 @@ return [
            Strength
         ============================ */
         'strength' => [
-            'title' => 'Free Strength Training Plan – 10 Weeks',
-            'description' => 'Free 10-week strength training plan. Build real-world strength with compound lifts, progressive overload and structured periodisation – gym-based.',
+            'title' => 'Free Strength Training Programs – 10-Week Plan',
+            'description' => 'Free strength training programs with progressive overload and compound lifts. 10-week plan for all levels. PDF download, no signup.',
             'h1' => 'Strength Training Plan – Get Stronger in 10 Weeks',
             'intro' => 'This 10-week strength training programme focuses on the barbell and dumbbell lifts that matter most. Built around progressive overload and a 4-day upper/lower split, it develops full-body strength for lifters of all levels.',
             'internal_type' => 'strength',
@@ -2924,8 +2928,8 @@ return [
            Fat Loss
         ============================ */
         'fat-loss' => [
-            'title' => 'Free Fat Loss Workout Plan – 8 Weeks',
-            'description' => 'Free 8-week fat loss workout plan. Superset-based strength and conditioning to burn fat, preserve muscle and boost metabolism.',
+            'title' => 'Free 8-Week Fat Loss Workout Plan & Program',
+            'description' => 'Free 8-week fat loss program with superset training. 4 sessions per week, 40 min each. Burns fat, preserves muscle. PDF download, no signup.',
             'h1' => 'Fat Loss Workout Plan – Burn Fat and Keep Your Muscle',
             'intro' => 'This 8-week fat loss programme uses superset-based strength training and metabolic conditioning to maximise calorie burn while preserving lean muscle. Designed for 4 sessions per week at 40 minutes each.',
             'internal_type' => 'fat_loss',
@@ -3102,8 +3106,8 @@ return [
            Abs
         ============================ */
         'abs' => [
-            'title' => 'Free Abs Workout Plan – 8 Weeks',
-            'description' => 'Free 8-week abs workout plan. Targeted core training with anti-movement, rotation and flexion exercises – suitable for home or gym.',
+            'title' => 'Free 8-Week Abs Workout Plan – Home & Gym',
+            'description' => 'Free 8-week abs workout plan for defined core muscles. No equipment needed. Works at home or gym. Get your plan as PDF in 60 seconds.',
             'h1' => 'Abs Workout Plan – Build a Strong Core in 8 Weeks',
             'intro' => 'This 8-week abs workout plan develops your entire core musculature systematically. Three focused sessions per week train stability, rotational strength and flexion — for visible abs and functional core strength.',
             'internal_type' => 'abs',
@@ -3269,7 +3273,7 @@ return [
         ============================ */
         'over-40' => [
             'title' => 'Free Over-40 Workout Plan – 10 Weeks',
-            'description' => 'Free 10-week workout plan for over 40. Joint-friendly strength and mobility training to fight muscle loss, stiffness and bone density decline.',
+            'description' => 'Free 10-week workout plan for over 40. Joint-friendly strength and mobility training. Fight muscle loss and stay active. PDF, no signup.',
             'h1' => 'Over-40 Workout Plan – Stay Strong and Mobile',
             'intro' => 'This 10-week workout plan is designed specifically for trainees over 40. Three balanced sessions per week combine strength training, mobility and balance work — joint-friendly, progressive and practical for everyday life.',
             'internal_type' => 'over_40',

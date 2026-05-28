@@ -19,8 +19,8 @@ return [
     'de' => [
 
         'ernaehrungsplan-erstellen' => [
-            'title' => 'Ernährungsplan erstellen: Die komplette Anleitung (2026)',
-            'description' => 'Ernährungsplan erstellen in 5 Schritten. Mit der 3-3-1-Methode, echten Wochenplänen und Einkaufsliste. Kostenlose Anleitung von Fytrr.',
+            'title' => 'Persönlichen Ernährungsplan erstellen kostenlos - Anleitung (2026)',
+            'description' => 'Ernährungsplan erstellen in 5 Schritten, kostenlos. Mit der 3-3-1-Methode, Wochenplänen und Einkaufsliste. Für Sport, Abnehmen und Muskelaufbau.',
             'h1' => 'Ernährungsplan erstellen: Die komplette Anleitung',
             'keywords' => ['ernährungsplan erstellen', 'ernährungsplan kostenlos', 'ernährungsplan erstellen kostenlos', 'ernährungsplan abnehmen', 'ernährungsplan selber erstellen', 'ernährungsplan erstellen app', 'ernährungsplan wochenplan', 'ernährungsplan für anfänger', 'ernährungsplan mit einkaufsliste'],
             'internal_slug' => 'how-to-create-a-meal-plan',
@@ -304,8 +304,8 @@ return [
     'en' => [
 
         'how-to-create-a-meal-plan' => [
-            'title' => 'How to Create a Meal Plan: The Complete Guide (2026)',
-            'description' => 'Create a meal plan in 5 steps. With the 3-3-1 method, real weekly plans and a shopping list. Free guide from Fytrr.',
+            'title' => 'How to Create a Meal Plan: Free Complete Guide (2026)',
+            'description' => 'Create a free workout and meal plan in 5 steps. Weekly plans, shopping list, and nutrition tips for weight loss and muscle gain. No signup.',
             'h1' => 'How to Create a Meal Plan: The Complete Guide',
             'keywords' => ['create meal plan', 'meal plan free', 'meal plan for weight loss', 'how to meal plan', 'weekly meal plan', 'meal plan for beginners', 'meal plan with shopping list', 'meal planning app'],
             'internal_slug' => 'how-to-create-a-meal-plan',
