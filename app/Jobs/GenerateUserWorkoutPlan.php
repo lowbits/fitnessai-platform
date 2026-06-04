@@ -21,6 +21,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
     public function __construct(
         public User $user,
         public Plan $plan,
+        public ?int $maxDays = null,
     ) {
         $this->onQueue('workouts');
     }
@@ -188,7 +189,8 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             return [null, null];
         }
 
-        $endDay = min($startDay + 6, $this->plan->duration_days); // 7 days at a time
+        $daysToGenerate = $this->maxDays ?? 7;
+        $endDay = min($startDay + $daysToGenerate - 1, $this->plan->duration_days);
 
         return [$startDay, $endDay];
     }

@@ -41,13 +41,13 @@ class CheckCompletedPlans extends Command
 
         foreach ($plans as $plan) {
             // Check if plan is 100% complete
-            $totalDays = (int)config('plans.duration_days');
+            $totalDays = $plan->duration_days;
             $mealPlansGenerated = $plan->mealPlans()->where('status', 'generated')->count();
             $workoutPlansGenerated = $plan->workoutPlans()->where('status', 'generated')->count();
 
             $isComplete = ($mealPlansGenerated === $totalDays) && ($workoutPlansGenerated === $totalDays);
 
-            if (!$isComplete) {
+            if (! $isComplete) {
                 continue;
             }
 
@@ -69,13 +69,12 @@ class CheckCompletedPlans extends Command
 
                 // Generate password reset token if user has no password
                 $passwordResetToken = null;
-                if (!filled($plan->user->password)) {
+                if (! filled($plan->user->password)) {
                     $passwordResetToken = $plan->user->getPasswordResetToken();
                 }
 
                 // Send plan ready notification with optional password reset token
                 $plan->user->notify(new PlanGenerationComplete($plan, $passwordResetToken));
-
 
                 // Mark as notified (add this column via migration)
                 $plan->update([

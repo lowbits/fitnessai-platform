@@ -2,13 +2,14 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
+ * @extends Factory<User>
  */
 class UserFactory extends Factory
 {
@@ -77,6 +78,27 @@ class UserFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'locale' => 'de',
+        ]);
+    }
+
+    public function onTrial(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'trial_ends_at' => now()->addDays(config('subscription.trial_days')),
+        ]);
+    }
+
+    public function trialExpired(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'trial_ends_at' => now()->subDay(),
+        ]);
+    }
+
+    public function withTrialDays(int $days): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'trial_ends_at' => now()->addDays($days),
         ]);
     }
 

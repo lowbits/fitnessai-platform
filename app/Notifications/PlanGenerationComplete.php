@@ -51,7 +51,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
 
         $this->plan->load(['mealPlans.meals', 'workoutPlans.exercises']);
 
-        $days = config('plans.duration_days');
+        $days = $this->plan->duration_days;
         $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
         $introKey = $isMobileAppOnboarding ? 'intro_app' : 'intro_pdf';
 
