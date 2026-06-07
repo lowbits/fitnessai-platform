@@ -64,7 +64,12 @@ class SetupMeilisearchRecipesCommand extends Command
             'difficulty',
             'tags',
             'allergens',
+            'meal_types',
+            'ingredient_names',
+            'total_time_minutes',
+            'calories',
             'is_verified',
+            'image_full',
         ]);
     }
 

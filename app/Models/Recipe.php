@@ -25,6 +25,7 @@ class Recipe extends Model
             'instructions' => 'array',
             'tags' => 'array',
             'allergens' => 'array',
+            'meal_types' => 'array',
             'is_verified' => 'boolean',
             'needs_translation' => 'boolean',
         ];
@@ -68,6 +69,17 @@ class Recipe extends Model
             'difficulty' => $this->difficulty,
             'tags' => $this->tags ?? [],
             'allergens' => $this->allergens ?? [],
+            'meal_types' => $this->meal_types ?? [],
+            'calories' => $this->calories,
+            'protein_g' => (float) $this->protein_g,
+            'total_time_minutes' => ($this->prep_time_minutes ?? 0) + ($this->cook_time_minutes ?? 0),
+            'ingredient_names' => collect($this->ingredients ?? [])
+                ->pluck('name')
+                ->map(fn ($name) => strtolower(trim($name)))
+                ->values()
+                ->toArray(),
+            'image_full' => $this->image_full,
+            'image_isolated' => $this->image_isolated,
             'is_verified' => $this->is_verified,
         ];
     }

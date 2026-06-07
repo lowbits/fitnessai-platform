@@ -22,11 +22,15 @@ use App\Http\Controllers\Api\V2\Workouts\ReplaceWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\Workouts\UpdateWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
 use App\Http\Controllers\Api\V3\MobileOnboardingController;
+use App\Http\Controllers\Api\V3\RecipeSuggestionsController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v3')->group(function () {
     Route::post('/onboarding', [MobileOnboardingController::class, 'store'])
         ->middleware('throttle:3,1');
+
+    Route::get('/recipe-suggestions', RecipeSuggestionsController::class)
+        ->middleware('throttle:30,1');
 });
 
 Route::prefix('v2')->group(function () {

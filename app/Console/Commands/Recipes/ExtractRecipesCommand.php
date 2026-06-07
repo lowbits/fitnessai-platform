@@ -15,6 +15,7 @@ class ExtractRecipesCommand extends Command
     protected $signature = 'recipes:extract
                             {--dry-run : Show what would be created without writing to the database}
                             {--limit= : Limit the number of recipes to process}
+                            {--ids= : Extract specific meals by ID (comma-separated, e.g. --ids=1,5,23)}
                             {--fresh : Clear all recipes before extracting}';
 
     protected $description = 'Extract unique recipes from meals into the recipes master table, using Meilisearch hybrid search to deduplicate';
@@ -37,12 +38,17 @@ class ExtractRecipesCommand extends Command
     {
         $dryRun = $this->option('dry-run');
         $limit = $this->option('limit') ? (int) $this->option('limit') : null;
+        $ids = $this->option('ids')
+            ? array_map('intval', explode(',', $this->option('ids')))
+            : null;
 
         if ($dryRun) {
             $this->warn('🔍 Dry run mode — no data will be written.');
         }
 
-        if ($limit) {
+        if ($ids) {
+            $this->info('🎯 Extracting specific meal IDs: '.implode(', ', $ids));
+        } elseif ($limit) {
             $this->info("🧪 Limiting to {$limit} recipe groups.");
         }
 
@@ -61,7 +67,11 @@ class ExtractRecipesCommand extends Command
         }
 
         $index = $client->index('recipes');
-        $uniqueNames = $this->getUniqueMealNames($limit);
+
+        $uniqueNames = $ids
+            ? $this->getUniqueMealNamesByIds($ids)
+            : $this->getUniqueMealNames($limit);
+
         $this->info("Found {$uniqueNames->count()} unique meal names to process.");
 
         $bar = $this->output->createProgressBar($uniqueNames->count());
@@ -131,6 +141,18 @@ class ExtractRecipesCommand extends Command
         return Command::SUCCESS;
     }
 
+    private function getUniqueMealNamesByIds(array $ids)
+    {
+        return DB::table('meals')
+            ->whereIn('id', $ids)
+            ->whereNotNull('name')
+            ->where('name', '!=', '')
+            ->select(DB::raw('LOWER(TRIM(name)) as canonical_name'))
+            ->distinct()
+            ->orderBy('canonical_name')
+            ->pluck('canonical_name');
+    }
+
     private function getUniqueMealNames(?int $limit)
     {
         $query = DB::table('meals')
@@ -172,6 +194,7 @@ class ExtractRecipesCommand extends Command
                 'meals.allergens',
                 'meals.primary_protein',
                 'meals.cuisine',
+                'meals.type',
                 'meals.image',
                 'meals.image_full',
                 'meals.image_isolated',
@@ -229,6 +252,7 @@ class ExtractRecipesCommand extends Command
                 'allergens' => $this->mergeJsonField($variants, 'allergens'),
                 'primary_protein' => $best->primary_protein,
                 'cuisine' => $best->cuisine,
+                'meal_types' => $variants->pluck('type')->filter()->unique()->values()->toArray() ?: null,
                 'image' => $variants->whereNotNull('image')->first()?->image,
                 'image_full' => $variants->whereNotNull('image_full')->first()?->image_full,
                 'image_isolated' => $variants->whereNotNull('image_isolated')->first()?->image_isolated,
