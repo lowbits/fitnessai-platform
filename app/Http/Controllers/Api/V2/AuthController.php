@@ -7,7 +7,6 @@ use App\Models\User;
 use Auth;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
@@ -18,7 +17,7 @@ class AuthController extends Controller
      */
     public function login(Request $request): JsonResponse
     {
-        Log::debug("User trying to login...");
+        Log::debug('User trying to login...');
         $validated = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -27,7 +26,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $validated['email'])->firstOrFail();
 
-        if (!Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
+        if (! Auth::attempt(['email' => $validated['email'], 'password' => $validated['password']])) {
             throw ValidationException::withMessages([
                 'email' => ['The provided credentials are incorrect.'],
             ]);
@@ -91,7 +90,6 @@ class AuthController extends Controller
         $subscription = $user->getSubscriptionDetails();
         $currentPlan = $user->plans()->where('status', 'active')->first();
 
-
         return response()->json([
             'user' => [
                 'id' => $user->id,
@@ -118,7 +116,7 @@ class AuthController extends Controller
                 'end_date' => $currentPlan->end_date->format('Y-m-d'),
                 'current_day' => $currentPlan->current_day,
                 'total_days' => $currentPlan->duration_days,
-                'goal' => $profile?->body_goal?->value ?? 'maintenance',
+                'goal' => $profile?->body_goal?->resolveCanonical()->value ?? 'get_fit',
                 'diet_type' => $profile?->diet_type?->value ?? 'balanced',
                 'fitness_level' => $profile?->skill_level?->value ?? 'beginner',
                 'nutrition_targets' => [
@@ -165,4 +163,3 @@ class AuthController extends Controller
         ]);
     }
 }
-

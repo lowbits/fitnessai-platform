@@ -383,11 +383,9 @@ export const locales = {
                 prefer_not_to_say: 'Prefer not to say',
             },
             bodyGoal: {
-                muscle_gain: 'Muscle Gain',
-                weight_loss: 'Weight Loss',
-                maintenance: 'Maintenance',
-                endurance: 'Endurance',
-                strength: 'Strength',
+                lose_weight: 'Lose Weight',
+                build_muscle: 'Build Muscle',
+                get_fit: 'Get Fit',
             },
             skillLevel: {
                 beginner: 'Beginner',
@@ -1855,11 +1853,9 @@ export const locales = {
                 prefer_not_to_say: 'Keine Angabe',
             },
             bodyGoal: {
-                muscle_gain: 'Muskelaufbau',
-                weight_loss: 'Gewichtsverlust',
-                maintenance: 'Erhaltung',
-                endurance: 'Ausdauer',
-                strength: 'Kraft',
+                lose_weight: 'Abnehmen',
+                build_muscle: 'Muskelaufbau',
+                get_fit: 'Fit werden',
             },
             skillLevel: {
                 beginner: 'Anfänger',

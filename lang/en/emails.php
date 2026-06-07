@@ -160,10 +160,8 @@ return [
     ],
 
     'body_goal_labels' => [
-        'muscle_gain' => 'Build Muscle',
-        'weight_loss' => 'Lose Weight',
-        'maintenance' => 'Stay Fit',
-        'endurance' => 'Build Endurance',
-        'strength' => 'Get Stronger',
+        'lose_weight' => 'Lose Weight',
+        'build_muscle' => 'Build Muscle',
+        'get_fit' => 'Get Fit',
     ],
 ];

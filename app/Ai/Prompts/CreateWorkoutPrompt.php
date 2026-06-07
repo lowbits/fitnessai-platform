@@ -294,13 +294,14 @@ PLACE,
             default => [35, 45],
         };
 
+        // Resolve deprecated goals to canonical
+        $canonicalGoal = $this->profile->body_goal->resolveCanonical()->value;
+
         // Adjust for goal (longer rest periods = longer workout)
-        $adjustment = match ($goal) {
-            'strength' => [10, 15],     // 2-5 min rest periods add up
-            'muscle_gain' => [5, 10],   // 60-90s rest
-            'endurance' => [0, 0],      // 30s or less rest
-            'weight_loss' => [0, 5],    // 30-45s rest, circuits
-            'maintenance' => [5, 5],    // moderate rest
+        $adjustment = match ($canonicalGoal) {
+            'build_muscle' => [5, 10],
+            'lose_weight' => [0, 5],
+            'get_fit' => [5, 5],
             default => [0, 5],
         };
 
@@ -316,7 +317,7 @@ PLACE,
 
     private function getStructureGuideline(): string
     {
-        $goal = $this->profile->body_goal->value;
+        $goal = $this->profile->body_goal->resolveCanonical()->value;
         $level = $this->profile->skill_level->value;
 
         if ($level === 'beginner') {
@@ -331,7 +332,7 @@ STRUCTURE;
         }
 
         return match ($goal) {
-            'weight_loss' => <<<'STRUCTURE'
+            'lose_weight' => <<<'STRUCTURE'
 **Workout Structure:**
 - Circuit or paired exercises to maintain elevated heart rate
 - Pair upper/lower body exercises for active recovery between sets
@@ -339,7 +340,7 @@ STRUCTURE;
 - Include 1-2 high-intensity intervals between strength blocks
 - Goal: keep heart rate in the fat-burning zone throughout
 STRUCTURE,
-            'muscle_gain' => match ($level) {
+            'build_muscle' => match ($level) {
                 'intermediate' => <<<'STRUCTURE'
 **Workout Structure:**
 - Straight sets for main compound lifts (first 2-3 exercises)
@@ -361,23 +362,7 @@ STRUCTURE,
 - Supersets allowed for isolation work
 STRUCTURE,
             },
-            'strength' => <<<'STRUCTURE'
-**Workout Structure:**
-- Straight sets only for main lifts — full recovery is critical
-- Main lifts first (squat/bench/deadlift/OHP variations)
-- Accessory work after main lifts at moderate intensity (RPE 6-7)
-- Never superset main compound movements
-- Quality of each rep matters more than volume
-STRUCTURE,
-            'endurance' => <<<'STRUCTURE'
-**Workout Structure:**
-- Circuit-style with minimal rest between exercises
-- Group exercises by movement pattern (push circuit, pull circuit, or alternating)
-- Include active recovery movements between high-intensity blocks
-- Maintain consistent pace — avoid going to failure on any single set
-- Goal: sustained work output over the full session
-STRUCTURE,
-            'maintenance' => <<<'STRUCTURE'
+            'get_fit' => <<<'STRUCTURE'
 **Workout Structure:**
 - Straight sets for compound movements
 - Moderate intensity throughout (RPE 6-7)
@@ -437,9 +422,9 @@ WARMUP;
 
     private function getGoalGuidelines(): string
     {
-        return match ($this->profile->body_goal->value) {
-            'muscle_gain' => <<<'GOAL'
-**Muscle Gain (Hypertrophy) Protocol:**
+        return match ($this->profile->body_goal->resolveCanonical()->value) {
+            'build_muscle' => <<<'GOAL'
+**Build Muscle (Hypertrophy) Protocol:**
 - Volume: 3-4 sets per exercise
 - Rep range: 8-12 reps (hypertrophy zone) — vary across exercises (e.g. 8, 10, 12)
 - Rest periods: 60-90 seconds between sets
@@ -450,8 +435,8 @@ WARMUP;
 - Focus on mind-muscle connection and controlled eccentric phase
 - Last set of each exercise can push to RPE 9 for additional stimulus
 GOAL,
-            'weight_loss' => <<<'GOAL'
-**Weight Loss (Fat Loss) Protocol:**
+            'lose_weight' => <<<'GOAL'
+**Lose Weight (Fat Loss) Protocol:**
 - Volume: 3 sets per exercise
 - Rep range: 12-15 reps — vary across exercises (e.g. 12, 15, 12)
 - Rest periods: 30-45 seconds (metabolic conditioning)
@@ -462,43 +447,7 @@ GOAL,
 - Prioritize compound movements for maximum calorie expenditure
 - Maintain muscle mass while creating caloric deficit through activity
 GOAL,
-            'strength' => <<<'GOAL'
-**Strength & Power Protocol:**
-- Volume: 4-6 sets for main lifts, 3 sets for accessories
-- Rep range: 3-6 reps for main lifts, 6-8 for accessories — never above 8
-- Rest periods: 2-5 minutes for main lifts (complete neuromuscular recovery), 90-120s for accessories
-- Tempo: 1-0-X-0 for main lifts (controlled eccentric, explosive concentric), 2-0-1-0 for accessories
-- RPE: 8-9.5 for main lifts (high intensity, near-maximal), 7-8 for accessories
-- Exercise selection: 90%+ compound movements (squat, deadlift, bench, overhead press)
-- Progressive overload: focus on increasing load week over week
-- Every rep should be performed with maximal intent and perfect form
-- Accessories exist to support the main lift, not replace it
-GOAL,
-            'endurance' => <<<'GOAL'
-**Muscular Endurance Protocol:**
-- Volume: 2-3 sets per exercise
-- Rep range: 15-25 reps (or 45-60 seconds time under tension) — vary across exercises (e.g. 15, 20, 25)
-- Rest periods: 30 seconds or less between exercises
-- Tempo: 1-0-1-0 (faster, rhythmic pace) — no need to slow down eccentrics
-- RPE: 5-7 (sustainable pace — should be able to maintain for all sets without form breakdown)
-- Mix resistance training with cardio-style movements
-- Focus on work capacity and cardiovascular conditioning
-- Circuit format preferred: move between exercises with minimal transition time
-- Goal is sustained output, not peak force — never train to failure
-GOAL,
-            'maintenance' => <<<'GOAL'
-**Maintenance Protocol:**
-- Volume: 3 sets per exercise
-- Rep range: 8-12 reps — balanced moderate volume
-- Rest periods: 60-90 seconds between sets
-- Tempo: 2-0-1-0 (controlled, moderate pace)
-- RPE: 6-7 (challenging but very sustainable — 3-4 reps in reserve)
-- Balanced mix of compound and isolation exercises
-- Maintain current strength and muscle mass without progressive overload
-- Enough stimulus to preserve, not so much to require extended recovery
-- Include variety to keep sessions engaging
-GOAL,
-            'general_fitness' => <<<'GOAL'
+            'get_fit' => <<<'GOAL'
 **General Fitness Protocol:**
 - Volume: 3 sets per exercise
 - Rep range: 10-12 reps

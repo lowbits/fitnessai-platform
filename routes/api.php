@@ -21,7 +21,13 @@ use App\Http\Controllers\Api\V2\Workouts\ReorderWorkoutExercisesController;
 use App\Http\Controllers\Api\V2\Workouts\ReplaceWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\Workouts\UpdateWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
+use App\Http\Controllers\Api\V3\MobileOnboardingController;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('v3')->group(function () {
+    Route::post('/onboarding', [MobileOnboardingController::class, 'store'])
+        ->middleware('throttle:3,1');
+});
 
 Route::prefix('v2')->group(function () {
     Route::post('/onboarding', [OnboardingController::class, 'store'])

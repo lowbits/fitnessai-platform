@@ -18,11 +18,9 @@ export function useTranslatedEnums() {
     ]);
 
     const BODY_GOALS = computed<EnumOption[]>(() => [
-        { value: 'muscle_gain', label: t('enums.bodyGoal.muscle_gain') },
-        { value: 'weight_loss', label: t('enums.bodyGoal.weight_loss') },
-        { value: 'maintenance', label: t('enums.bodyGoal.maintenance') },
-        { value: 'endurance', label: t('enums.bodyGoal.endurance') },
-        { value: 'strength', label: t('enums.bodyGoal.strength') },
+        { value: 'lose_weight', label: t('enums.bodyGoal.lose_weight') },
+        { value: 'build_muscle', label: t('enums.bodyGoal.build_muscle') },
+        { value: 'get_fit', label: t('enums.bodyGoal.get_fit') },
     ]);
 
     const SKILL_LEVELS = computed<EnumOption[]>(() => [

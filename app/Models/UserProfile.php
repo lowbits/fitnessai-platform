@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietStyle;
 use App\Enums\DietType;
 use App\Enums\Gender;
+use App\Enums\MealVariety;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Helpers\Metabolism;
@@ -35,6 +37,14 @@ class UserProfile extends Model
         'diet_style',
         'training_sessions_per_week',
         'training_days',
+        'selected_meals',
+        'food_dislikes',
+        'cooking_preference',
+        'meal_variety',
+        'meal_prep_enabled',
+        'favorite_meals',
+        'physical_limitations',
+        'physical_limitations_note',
     ];
 
     protected function casts(): array
@@ -49,6 +59,12 @@ class UserProfile extends Model
             'dietary_preference' => DietaryPreference::class,
             'diet_style' => DietStyle::class,
             'training_days' => 'array',
+            'selected_meals' => 'array',
+            'food_dislikes' => 'array',
+            'cooking_preference' => CookingPreference::class,
+            'meal_variety' => MealVariety::class,
+            'meal_prep_enabled' => 'boolean',
+            'physical_limitations' => 'array',
         ];
     }
 
@@ -71,6 +87,7 @@ class UserProfile extends Model
     public function calculateTDEE(): int
     {
         $bmr = $this->calculateBMR();
+
         return Metabolism::calculateTDEE(
             $bmr,
             $this->activity_level,
@@ -85,13 +102,12 @@ class UserProfile extends Model
     public function calculateDailyCalories(): int
     {
         $tdee = $this->calculateTDEE();
+
         return Metabolism::calculateDailyCalories($tdee, $this->body_goal);
     }
 
     /**
      * Calculate macro split in grams.
-     *
-     * @return MacroDistribution
      */
     public function calculateMacros(): MacroDistribution
     {
@@ -170,7 +186,6 @@ class UserProfile extends Model
             ?? $this->resolveDietaryPreference()->carbFatRatio();
     }
 
-
     public function getDietaryInfo(): string
     {
         return filled($this->dietary_preference?->value)
@@ -182,6 +197,4 @@ class UserProfile extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }
