@@ -115,6 +115,9 @@ class UserProfile extends Model
             bodyWeight: $this->user->getCurrentWeight(),
             goal: $this->body_goal,
             carbFatRatio: $this->resolveCarbFatRatio(),
+            gender: $this->gender,
+            age: $this->age,
+            height: $this->height_cm,
         );
     }
 
