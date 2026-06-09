@@ -5,6 +5,7 @@ namespace App\Ai\Prompts;
 use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietType;
+use App\Enums\MealVariety;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Stringable;
@@ -56,8 +57,7 @@ class CreateMealPlanPrompt implements Stringable
             $this->buildCookingConstraint(),
             $macroTargets,
             $coachingNotes,
-            $this->buildVarietyHint(),
-            $this->buildMealPrepHint(),
+            $this->buildVarietyAndPrepHint(),
             $this->buildFavoriteSignals(),
             "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}) — generate ".count($selectedMeals)." meals: {$mealList}",
             "Language: {$language} for ALL text fields (names, descriptions, ingredients, instructions, tags, allergens)",
@@ -143,34 +143,44 @@ class CreateMealPlanPrompt implements Stringable
         };
     }
 
-    private function buildVarietyHint(): string
+    private function buildVarietyAndPrepHint(): string
     {
         $variety = $this->profile->meal_variety;
-
-        if (! $variety) {
-            return '';
-        }
-
-        $maxRecipes = $variety->maxUniqueRecipesPerWeek();
-
-        return match ($variety->value) {
-            'low' => "Variety: low — repeat favorite meals across the week, max {$maxRecipes} unique recipes",
-            'high' => "Variety: high — every meal should be unique, aim for {$maxRecipes}+ different recipes per week",
-            default => '',
-        };
-    }
-
-    private function buildMealPrepHint(): string
-    {
-        if (! $this->profile->meal_prep_enabled) {
-            return '';
-        }
-
+        $mealPrep = $this->profile->meal_prep_enabled;
         $isPrepDay = $this->date->isSunday() || $this->dayNumber === 1;
 
-        return $isPrepDay
-            ? 'Meal prep day: prefer batch-friendly meals (large-batch stews, grain bowls, sheet pan recipes) that store well for 2-3 days'
-            : 'Leftovers OK: meals can use pre-prepared components from meal prep';
+        // Low variety + meal prep: cook once, eat 2-3 days
+        if ($variety === MealVariety::LOW && $mealPrep) {
+            return $isPrepDay
+                ? 'Meal style: meal prep — design batch-friendly meals (stews, grain bowls, sheet pan recipes) that store well. User will eat the same meals for 2-3 consecutive days. Create 2-3 unique meals that work as leftovers.'
+                : 'Meal style: meal prep — reuse meals from the most recent prep day. Same meal can repeat on consecutive days.';
+        }
+
+        // Low variety, no meal prep: familiar rotation but not consecutive
+        if ($variety === MealVariety::LOW && ! $mealPrep) {
+            return 'Meal style: keep it simple — use 5-7 familiar recipes across the week. Meals can repeat but NOT on consecutive days.';
+        }
+
+        // High variety + meal prep: prep diverse components, assemble differently
+        if ($variety === MealVariety::HIGH && $mealPrep) {
+            return $isPrepDay
+                ? 'Meal style: prep diverse components (grains, proteins, sauces) that can be assembled into different meals each day. Every meal should feel unique.'
+                : 'Meal style: use pre-prepared components but create a unique meal combination each day. No repeated meals.';
+        }
+
+        // High variety, no meal prep: everything unique
+        if ($variety === MealVariety::HIGH) {
+            return 'Meal style: every meal should be completely unique — no repeated meals across the entire plan.';
+        }
+
+        // Medium variety (default) — only add meal prep hint if enabled
+        if ($mealPrep) {
+            return $isPrepDay
+                ? 'Meal prep day: prefer batch-friendly meals that store well for 2-3 days.'
+                : 'Leftovers OK: meals can use pre-prepared components from meal prep.';
+        }
+
+        return '';
     }
 
     private function buildFavoriteSignals(): string

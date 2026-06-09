@@ -116,9 +116,9 @@ class AuthController extends Controller
                 'end_date' => $currentPlan->end_date->format('Y-m-d'),
                 'current_day' => $currentPlan->current_day,
                 'total_days' => $currentPlan->duration_days,
-                'goal' => $profile?->body_goal?->resolveCanonical()->value ?? 'get_fit',
-                'diet_type' => $profile?->diet_type?->value ?? 'balanced',
-                'fitness_level' => $profile?->skill_level?->value ?? 'beginner',
+                'goal' => $user->profile?->body_goal?->resolveCanonical()->value ?? 'get_fit',
+                'diet_type' => $user->profile?->diet_type?->value ?? 'balanced',
+                'fitness_level' => $user->profile?->skill_level?->value ?? 'beginner',
                 'nutrition_targets' => [
                     'daily_calories' => $currentPlan->daily_calories,
                     'protein_g' => $currentPlan->daily_protein_g,

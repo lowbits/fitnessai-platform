@@ -81,44 +81,52 @@ test('macro targets redistribute proportionally for selected meals', function ()
         ->not->toContain('Snack:');
 });
 
-test('prompt includes meal variety hint for low', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::LOW]);
+test('low variety + meal prep on prep day = batch-friendly meals', function () {
+    $sunday = Carbon::parse('2026-06-14');
+    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => true], $sunday);
 
-    expect($output)->toContain('Variety: low');
+    expect($output)->toContain('meal prep')->toContain('batch-friendly');
 });
 
-test('prompt includes meal variety hint for high', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::HIGH]);
+test('low variety + meal prep on non-prep day = reuse meals', function () {
+    $monday = Carbon::parse('2026-06-15');
+    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => true], $monday, dayNumber: 3);
 
-    expect($output)->toContain('Variety: high');
+    expect($output)->toContain('reuse meals');
 });
 
-test('prompt excludes variety hint for medium', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM]);
+test('low variety without meal prep = familiar rotation, not consecutive', function () {
+    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => false]);
 
-    expect($output)->not->toContain('Variety:');
+    expect($output)->toContain('NOT on consecutive days');
 });
 
-test('prompt includes meal prep hint on sunday', function () {
-    $sunday = Carbon::parse('2026-06-14'); // a Sunday
-    $output = createPrompt(['meal_prep_enabled' => true], $sunday);
+test('high variety + meal prep = diverse components', function () {
+    $sunday = Carbon::parse('2026-06-14');
+    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => true], $sunday);
+
+    expect($output)->toContain('diverse components');
+});
+
+test('high variety without meal prep = every meal unique', function () {
+    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => false]);
+
+    expect($output)->toContain('completely unique');
+});
+
+test('medium variety + meal prep = prep hint only', function () {
+    $sunday = Carbon::parse('2026-06-14');
+    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => true], $sunday);
 
     expect($output)->toContain('Meal prep day');
 });
 
-test('prompt includes leftover hint on non-prep day', function () {
-    $monday = Carbon::parse('2026-06-15');
-    $output = createPrompt(['meal_prep_enabled' => true], $monday, dayNumber: 3);
-
-    expect($output)->toContain('Leftovers OK');
-});
-
-test('prompt excludes meal prep when disabled', function () {
-    $output = createPrompt(['meal_prep_enabled' => false]);
+test('medium variety without meal prep = no hint', function () {
+    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => false]);
 
     expect($output)
-        ->not->toContain('Meal prep')
-        ->not->toContain('Leftovers');
+        ->not->toContain('Meal style')
+        ->not->toContain('Meal prep');
 });
 
 test('prompt includes favorite recipe signals', function () {
