@@ -162,6 +162,6 @@ return [
     'body_goal_labels' => [
         'lose_weight' => 'Lose Weight',
         'build_muscle' => 'Build Muscle',
-        'get_fit' => 'Get Fit',
+        'get_fit' => 'Get Fit & Feel Good',
     ],
 ];

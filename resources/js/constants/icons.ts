@@ -1,12 +1,20 @@
 import {
+    Armchair,
     Dumbbell,
     Fish,
+    Flame,
+    Footprints,
+    Hammer,
+    Heart,
     HouseHeart,
     Leaf,
     Mars,
     NonBinary,
+    PersonStanding,
     Salad,
     Sprout,
+    TrendingUp,
+    Trophy,
     UtensilsCrossed,
     Venus,
 } from 'lucide-vue-next';
@@ -22,6 +30,14 @@ export const iconRegistry = {
     utensilsCrossed: UtensilsCrossed,
     salad: Salad,
     fish: Fish,
+    flame: Flame,
+    heart: Heart,
+    armchair: Armchair,
+    personStanding: PersonStanding,
+    footprints: Footprints,
+    hammer: Hammer,
+    trendingUp: TrendingUp,
+    trophy: Trophy,
 } as const;
 
 export type IconName = keyof typeof iconRegistry;

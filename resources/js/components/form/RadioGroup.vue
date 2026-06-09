@@ -85,7 +85,7 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
                     <span class="flex flex-col">
                         <RadioGroupLabel
                             as="span"
-                            class="block font-medium text-white capitalize"
+                            class="block font-medium text-white"
                         >
                             <slot :item="item">
                                 <div class="flex items-center">

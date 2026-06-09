@@ -18,32 +18,22 @@ export function useTranslatedEnums() {
     ]);
 
     const BODY_GOALS = computed<EnumOption[]>(() => [
-        { value: 'lose_weight', label: t('enums.bodyGoal.lose_weight') },
-        { value: 'build_muscle', label: t('enums.bodyGoal.build_muscle') },
-        { value: 'get_fit', label: t('enums.bodyGoal.get_fit') },
+        { value: 'lose_weight', label: t('enums.bodyGoal.lose_weight'), icon: 'flame' },
+        { value: 'build_muscle', label: t('enums.bodyGoal.build_muscle'), icon: 'dumbbell' },
+        { value: 'get_fit', label: t('enums.bodyGoal.get_fit'), icon: 'heart' },
     ]);
 
     const SKILL_LEVELS = computed<EnumOption[]>(() => [
-        { value: 'beginner', label: t('enums.skillLevel.beginner') },
-        { value: 'intermediate', label: t('enums.skillLevel.intermediate') },
-        { value: 'advanced', label: t('enums.skillLevel.advanced') },
-        /*{ value: 'elite', label: t('enums.skillLevel.elite') },*/
+        { value: 'beginner', label: t('enums.skillLevel.beginner'), icon: 'sprout' },
+        { value: 'intermediate', label: t('enums.skillLevel.intermediate'), icon: 'trendingUp' },
+        { value: 'advanced', label: t('enums.skillLevel.advanced'), icon: 'trophy' },
     ]);
 
     const ACTIVITY_LEVELS = computed<EnumOption[]>(() => [
-        {
-            value: 'mainly_sitting',
-            label: t('enums.activityLevel.mainly_sitting'),
-        },
-        {
-            value: 'mainly_standing',
-            label: t('enums.activityLevel.mainly_standing'),
-        },
-        {
-            value: 'mainly_walking',
-            label: t('enums.activityLevel.mainly_walking'),
-        },
-        { value: 'hard_working', label: t('enums.activityLevel.hard_working') },
+        { value: 'mainly_sitting', label: t('enums.activityLevel.mainly_sitting'), icon: 'armchair' },
+        { value: 'mainly_standing', label: t('enums.activityLevel.mainly_standing'), icon: 'personStanding' },
+        { value: 'mainly_walking', label: t('enums.activityLevel.mainly_walking'), icon: 'footprints' },
+        { value: 'hard_working', label: t('enums.activityLevel.hard_working'), icon: 'hammer' },
     ]);
 
     const TRAINING_PLACES = computed<EnumOption[]>(() => [

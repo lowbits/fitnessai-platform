@@ -12,7 +12,7 @@ return [
         'lose_weight_description' => 'Lose body fat while maintaining muscle',
         'build_muscle' => 'Build Muscle',
         'build_muscle_description' => 'Build lean muscle mass and increase strength',
-        'get_fit' => 'Get Fit',
+        'get_fit' => 'Get Fit & Feel Good',
         'get_fit_description' => 'Improve overall fitness, endurance and body composition',
     ],
     'skillLevel' => [

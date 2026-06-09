@@ -6,11 +6,9 @@ export const GENDERS = [
 ] as const;
 
 export const BODY_GOALS = [
-    { value: 'muscle_gain', label: 'Muscle Gain' },
-    { value: 'weight_loss', label: 'Weight Loss' },
-    { value: 'maintenance', label: 'Maintenance' },
-    { value: 'endurance', label: 'Endurance' },
-    { value: 'strength', label: 'Strength' },
+    { value: 'lose_weight', label: 'Lose Weight' },
+    { value: 'build_muscle', label: 'Build Muscle' },
+    { value: 'get_fit', label: 'Get Fit' },
 ] as const;
 
 export const SKILL_LEVELS = [

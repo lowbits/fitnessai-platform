@@ -279,13 +279,9 @@ export const locales = {
                     headline: 'How active are you?',
                     subline: 'This helps us understand your daily energy needs',
                     activityLabel: 'Activity Level',
-                    activityHint: "What's your activity on an average day?",
-                    activityPlaceholder: 'Select Activity Level',
-                    activityError: 'Please select your activity level',
+                    skillHeadline: 'How experienced are you?',
+                    skillSubline: 'This helps us tailor the difficulty of your workouts',
                     skillLabel: 'Skill Level',
-                    skillHint: 'How experienced are you in fitness?',
-                    skillPlaceholder: 'Select Skill Level',
-                    skillError: 'Please select your skill level',
                 },
                 goal: {
                     headline: "What's your main goal?",
@@ -385,7 +381,7 @@ export const locales = {
             bodyGoal: {
                 lose_weight: 'Lose Weight',
                 build_muscle: 'Build Muscle',
-                get_fit: 'Get Fit',
+                get_fit: 'Get Fit & Feel Good',
             },
             skillLevel: {
                 beginner: 'Beginner',
@@ -1745,17 +1741,12 @@ export const locales = {
                         'Optional: Sag uns, ob du einem bestimmten Ernährungsansatz folgst',
                 },
                 activity: {
-                    headline: 'Aktivität',
+                    headline: 'Wie aktiv bist du?',
                     subline: 'So bestimmen wir deinen täglichen Energiebedarf',
                     activityLabel: 'Aktivitätslevel',
-                    activityHint:
-                        'Wie aktiv bist du an einem durchschnittlichen Tag?',
-                    activityPlaceholder: 'Aktivitätslevel auswählen',
-                    activityError: 'Bitte wähle dein Aktivitätslevel',
+                    skillHeadline: 'Wie erfahren bist du?',
+                    skillSubline: 'Damit passen wir den Schwierigkeitsgrad deiner Workouts an',
                     skillLabel: 'Erfahrungslevel',
-                    skillHint: 'Wie viel Trainingserfahrung hast du?',
-                    skillPlaceholder: 'Erfahrungslevel auswählen',
-                    skillError: 'Bitte wähle dein Erfahrungslevel',
                 },
                 goal: {
                     headline: 'Dein Ziel',
@@ -1854,8 +1845,8 @@ export const locales = {
             },
             bodyGoal: {
                 lose_weight: 'Abnehmen',
-                build_muscle: 'Muskelaufbau',
-                get_fit: 'Fit werden',
+                build_muscle: 'Muskeln aufbauen',
+                get_fit: 'Fit werden & wohlfühlen',
             },
             skillLevel: {
                 beginner: 'Anfänger',

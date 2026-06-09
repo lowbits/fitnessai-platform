@@ -170,7 +170,7 @@ return [
 
     'body_goal_labels' => [
         'lose_weight' => 'Abnehmen',
-        'build_muscle' => 'Muskelaufbau',
-        'get_fit' => 'Fit werden',
+        'build_muscle' => 'Muskeln aufbauen',
+        'get_fit' => 'Fit werden & wohlfühlen',
     ],
 ];
