@@ -45,7 +45,7 @@ class MobileOnboardingRequest extends FormRequest
                 'unique:users',
             ],
             'name' => ['required', 'string', 'max:255'],
-            'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:8', 'confirmed'],
             'language' => ['nullable', 'string', 'in:en,de'],
             'source' => ['sometimes', new Enum(UserSource::class)],
             'device_name' => ['sometimes', 'nullable', 'string', 'max:255'],
@@ -74,7 +74,8 @@ class MobileOnboardingRequest extends FormRequest
             'cooking_time' => ['sometimes', new Enum(CookingPreference::class)],
             'meal_variety' => ['sometimes', new Enum(MealVariety::class)],
             'meal_prep_enabled' => ['sometimes', 'boolean'],
-            'favorite_meals' => ['sometimes', 'nullable', 'string', 'max:1000'],
+            'favorite_recipes' => ['sometimes', 'array'],
+            'favorite_recipes.*' => ['integer', 'exists:recipes,id'],
 
             // Limitations
             'has_limitations' => ['sometimes', 'boolean'],

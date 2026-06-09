@@ -16,6 +16,9 @@ class ExtractRecipesCommand extends Command
                             {--dry-run : Show what would be created without writing to the database}
                             {--limit= : Limit the number of recipes to process}
                             {--ids= : Extract specific meals by ID (comma-separated, e.g. --ids=1,5,23)}
+                            {--meal-type= : Filter by meal type (breakfast, lunch, dinner, snack)}
+                            {--popular : Order by most frequently generated first}
+                            {--min-count=1 : Minimum times a meal was generated to be included}
                             {--fresh : Clear all recipes before extracting}';
 
     protected $description = 'Extract unique recipes from meals into the recipes master table, using Meilisearch hybrid search to deduplicate';
@@ -70,7 +73,12 @@ class ExtractRecipesCommand extends Command
 
         $uniqueNames = $ids
             ? $this->getUniqueMealNamesByIds($ids)
-            : $this->getUniqueMealNames($limit);
+            : $this->getUniqueMealNames(
+                limit: $limit,
+                mealType: $this->option('meal-type'),
+                popular: $this->option('popular'),
+                minCount: (int) $this->option('min-count'),
+            );
 
         $this->info("Found {$uniqueNames->count()} unique meal names to process.");
 
@@ -153,14 +161,32 @@ class ExtractRecipesCommand extends Command
             ->pluck('canonical_name');
     }
 
-    private function getUniqueMealNames(?int $limit)
-    {
+    private function getUniqueMealNames(
+        ?int $limit = null,
+        ?string $mealType = null,
+        bool $popular = false,
+        int $minCount = 1,
+    ) {
         $query = DB::table('meals')
+            ->whereNull('recipe_id')
             ->whereNotNull('name')
             ->where('name', '!=', '')
-            ->select(DB::raw('LOWER(TRIM(name)) as canonical_name'))
-            ->distinct()
-            ->orderBy('canonical_name');
+            ->select(DB::raw('LOWER(TRIM(name)) as canonical_name'), DB::raw('COUNT(*) as meal_count'))
+            ->groupBy(DB::raw('LOWER(TRIM(name))'));
+
+        if ($mealType) {
+            $query->where('type', $mealType);
+        }
+
+        if ($minCount > 1) {
+            $query->having(DB::raw('COUNT(*)'), '>=', $minCount);
+        }
+
+        if ($popular) {
+            $query->orderByDesc('meal_count');
+        } else {
+            $query->orderBy('canonical_name');
+        }
 
         if ($limit) {
             $query->limit($limit);

@@ -28,7 +28,7 @@ class EnrichExerciseTranslationsJob implements ShouldQueue
         public Exercise $exercise,
         public string $locale,
     ) {
-        $this->onQueue('exercises');
+        $this->onQueue('content');
     }
 
     public function handle(): void

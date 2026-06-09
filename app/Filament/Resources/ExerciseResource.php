@@ -14,6 +14,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -68,8 +69,19 @@ class ExerciseResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('id')
-                    ->sortable(),
+                ImageColumn::make('image')
+                    ->label('')
+                    ->state(function (Exercise $record) {
+                        if (! $record->image) {
+                            return null;
+                        }
+
+                        return str_starts_with($record->image, 'http')
+                            ? $record->image
+                            : config('services.r2.public_url').'/'.$record->image;
+                    })
+                    ->circular()
+                    ->size(40),
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),

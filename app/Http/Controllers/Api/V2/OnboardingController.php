@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Actions\NotifyAdmins;
 use App\Enums\UserSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OnboardingRequest;
@@ -13,10 +14,11 @@ use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 
 class OnboardingController extends Controller
 {
+    public function __construct(private readonly NotifyAdmins $notifyAdmins) {}
+
     public function store(OnboardingRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -95,7 +97,9 @@ class OnboardingController extends Controller
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
         // Notify admin(s) about new onboarding
-        $this->notifyAdmins($result['user'], $validated);
+        $this->notifyAdmins->send(
+            (new NewOnboardingStarted($result['user'], $validated))->delay(now()->addSeconds(5))
+        );
 
         $response = [
             'success' => true,
@@ -110,17 +114,5 @@ class OnboardingController extends Controller
         ];
 
         return response()->json($response, 201);
-    }
-
-    /**
-     * Notify admin(s) about new onboarding.
-     */
-    private function notifyAdmins(User $user, array $profileData): void
-    {
-        $adminEmails = config('app.admin_emails');
-
-        Notification::route('mail', $adminEmails)
-            ->notify((new NewOnboardingStarted($user, $profileData))->delay(now()->addSeconds(5)));
-
     }
 }

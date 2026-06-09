@@ -42,7 +42,6 @@ class UserProfile extends Model
         'cooking_preference',
         'meal_variety',
         'meal_prep_enabled',
-        'favorite_meals',
         'physical_limitations',
         'physical_limitations_note',
     ];

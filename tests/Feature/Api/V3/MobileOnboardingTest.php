@@ -4,6 +4,7 @@ use App\Enums\ActivityLevel;
 use App\Enums\Gender;
 use App\Jobs\GenerateUserMealPlan;
 use App\Jobs\GenerateUserWorkoutPlan;
+use App\Models\Recipe;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
@@ -29,6 +30,8 @@ function mobilePayload(array $overrides = []): array
         'training_place' => 'gym',
         'dietary_preference' => 'omnivore',
         'training_sessions' => 4,
+        'password' => 'password123',
+        'password_confirmation' => 'password123',
     ], $overrides);
 }
 
@@ -48,23 +51,26 @@ test('v3 onboarding creates user with trial and mobile source', function () {
 test('v3 onboarding stores meal preferences on profile', function () {
     Notification::fake();
 
+    $recipes = Recipe::factory()->count(2)->create();
+
     postJson('/api/v3/onboarding', mobilePayload([
         'selected_meals' => ['breakfast', 'lunch', 'dinner'],
         'dislikes' => ['pork', 'mushrooms'],
         'cooking_time' => 'quick',
         'meal_variety' => 'low',
         'meal_prep_enabled' => true,
-        'favorite_meals' => 'Pasta, Chicken Stir-fry',
+        'favorite_recipes' => $recipes->pluck('id')->toArray(),
     ]))->assertCreated();
 
-    $profile = User::where('email', 'mobile-test@example.com')->first()->profile;
+    $user = User::where('email', 'mobile-test@example.com')->first();
+    $profile = $user->profile;
 
     expect($profile->selected_meals)->toBe(['breakfast', 'lunch', 'dinner'])
         ->and($profile->food_dislikes)->toBe(['pork', 'mushrooms'])
         ->and($profile->cooking_preference->value)->toBe('quick')
         ->and($profile->meal_variety->value)->toBe('low')
         ->and($profile->meal_prep_enabled)->toBeTrue()
-        ->and($profile->favorite_meals)->toBe('Pasta, Chicken Stir-fry');
+        ->and($user->favoriteRecipes)->toHaveCount(2);
 });
 
 test('v3 onboarding stores physical limitations', function () {
@@ -95,7 +101,6 @@ test('v3 onboarding uses defaults for optional fields', function () {
         ->and($profile->cooking_preference->value)->toBe('normal')
         ->and($profile->meal_variety->value)->toBe('medium')
         ->and($profile->meal_prep_enabled)->toBeFalse()
-        ->and($profile->favorite_meals)->toBeNull()
         ->and($profile->physical_limitations)->toBe([]);
 });
 

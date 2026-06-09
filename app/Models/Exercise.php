@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasTranslations;
 use App\Observers\ExerciseObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Spatie\Sluggable\SlugOptions;
 #[ObservedBy([ExerciseObserver::class])]
 class Exercise extends Model
 {
-    use HasFactory, HasSlug, SoftDeletes;
+    use HasFactory, HasSlug, HasTranslations, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -97,31 +98,9 @@ class Exercise extends Model
         return $this->hasMany(WorkoutPlanExercise::class);
     }
 
-    public function translation(?string $locale = null): ?ExerciseTranslation
-    {
-        $locale = $locale ?? app()->getLocale();
-
-        return $this->translations->firstWhere('locale', $locale);
-    }
-
-    public function localizedName(?string $locale = null): string
-    {
-        return $this->translation($locale)?->name ?? $this->name;
-    }
-
-    public function localizedDescription(?string $locale = null): ?string
-    {
-        return $this->translation($locale)?->description ?? $this->description;
-    }
-
-    public function localizedInstructions(?string $locale = null): ?array
-    {
-        return $this->translation($locale)?->instructions ?? $this->instructions;
-    }
-
     public function localizedFormCues(?string $locale = null): ?string
     {
-        return $this->translation($locale)?->form_cues ?? $this->form_cues;
+        return $this->localized('form_cues', $locale);
     }
 
     public function scopeVerified($query)

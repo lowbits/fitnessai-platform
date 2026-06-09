@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use App\Actions\NotifyAdmins;
 use App\Enums\UserSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\MobileOnboardingRequest;
@@ -14,10 +15,12 @@ use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Log;
 
 class MobileOnboardingController extends Controller
 {
+    public function __construct(private readonly NotifyAdmins $notifyAdmins) {}
+
     public function store(MobileOnboardingRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -28,9 +31,7 @@ class MobileOnboardingController extends Controller
             $user = User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
-                'password' => isset($validated['password'])
-                    ? Hash::make($validated['password'])
-                    : null,
+                'password' => Hash::make($validated['password']),
                 'locale' => $validated['language'] ?? $request->header('Accept-Language', 'en'),
                 'source' => $source,
                 'trial_ends_at' => now()->addDays(config('subscription.trial_days')),
@@ -59,7 +60,6 @@ class MobileOnboardingController extends Controller
                 'cooking_preference' => $validated['cooking_time'] ?? 'normal',
                 'meal_variety' => $validated['meal_variety'] ?? 'medium',
                 'meal_prep_enabled' => $validated['meal_prep_enabled'] ?? false,
-                'favorite_meals' => $validated['favorite_meals'] ?? null,
 
                 // Limitations
                 'physical_limitations' => $validated['limitations'] ?? [],
@@ -83,6 +83,15 @@ class MobileOnboardingController extends Controller
                 'workouts_per_week' => $validated['training_sessions'],
             ]);
 
+            // Save recipe favorites
+            if (! empty($validated['favorite_recipes'])) {
+                $user->favoriteRecipes()->attach($validated['favorite_recipes']);
+                Log::info('[Onboarding] Recipe favorites saved', [
+                    'user_id' => $user->id,
+                    'recipe_ids' => $validated['favorite_recipes'],
+                ]);
+            }
+
             // Generate day 1 fast, then remaining trial days
             GenerateUserWorkoutPlan::dispatch($user, $plan, maxDays: 1);
             GenerateUserMealPlan::dispatch($user, $plan, maxDays: 1);
@@ -94,13 +103,15 @@ class MobileOnboardingController extends Controller
                 'user' => $user,
                 'profile' => $profile,
                 'plan' => $plan,
-                'has_password' => isset($validated['password']),
+                'has_password' => true,
             ];
         });
 
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
-        $this->notifyAdmins($result['user'], $validated);
+        $this->notifyAdmins->send(
+            (new NewOnboardingStarted($result['user'], $validated))->delay(now()->addSeconds(5))
+        );
 
         return response()->json([
             'success' => true,
@@ -113,13 +124,5 @@ class MobileOnboardingController extends Controller
             ],
             'profile' => $result['profile'],
         ], 201);
-    }
-
-    private function notifyAdmins(User $user, array $profileData): void
-    {
-        $adminEmails = config('app.admin_emails');
-
-        Notification::route('mail', $adminEmails)
-            ->notify((new NewOnboardingStarted($user, $profileData))->delay(now()->addSeconds(5)));
     }
 }

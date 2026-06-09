@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasTranslations;
 use App\Observers\RecipeObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Spatie\Sluggable\SlugOptions;
 #[ObservedBy([RecipeObserver::class])]
 class Recipe extends Model
 {
-    use HasFactory, HasSlug, SoftDeletes;
+    use HasFactory, HasSlug, HasTranslations, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -101,31 +102,14 @@ class Recipe extends Model
         return $this->hasMany(Meal::class);
     }
 
-    public function translation(?string $locale = null): ?RecipeTranslation
-    {
-        $locale = $locale ?? app()->getLocale();
-
-        return $this->translations->firstWhere('locale', $locale);
-    }
-
     public function localizedSlug(?string $locale = null): string
     {
-        return $this->translation($locale)?->slug ?? $this->slug;
+        return $this->localized('slug', $locale) ?? $this->slug;
     }
 
-    public function localizedName(?string $locale = null): string
+    public function localizedIngredients(?string $locale = null): ?array
     {
-        return $this->translation($locale)?->name ?? $this->name;
-    }
-
-    public function localizedDescription(?string $locale = null): ?string
-    {
-        return $this->translation($locale)?->description ?? $this->description;
-    }
-
-    public function localizedInstructions(?string $locale = null): ?array
-    {
-        return $this->translation($locale)?->instructions ?? $this->instructions;
+        return $this->localized('ingredients', $locale);
     }
 
     public function scopeVerified($query)
