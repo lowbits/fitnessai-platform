@@ -38,10 +38,8 @@ class NutritionPlannerAgent implements Agent, Conversational, HasTools
     }
 
     /**
-     * Build conversation history from previously generated days
-     * so the model avoids repetition and ensures cross-day variety.
-     *
-     * Capped to 4 most recent days to bound token count on long plans.
+     * Build conversation history from all previously generated days
+     * so the model can enforce variety rules across the full plan.
      */
     public function messages(): iterable
     {
@@ -50,11 +48,8 @@ class NutritionPlannerAgent implements Agent, Conversational, HasTools
             ->where('status', 'generated')
             ->where('id', '!=', $this->mealPlan->id)
             ->with('meals:id,meal_plan_id,type,name,ingredients,primary_protein,cuisine')
-            ->orderByDesc('day_number')
-            ->limit(4)
-            ->get()
-            ->sortBy('day_number')
-            ->values();
+            ->orderBy('day_number')
+            ->get();
 
         $messages = [];
 
@@ -63,7 +58,7 @@ class NutritionPlannerAgent implements Agent, Conversational, HasTools
 
             $lines = ["Day {$day->day_number} meals saved:"];
 
-            foreach ($day->meals as $meal) {
+            foreach ($day->meals->sortBy(fn ($m) => array_search($m->type, ['breakfast', 'lunch', 'snack', 'dinner'])) as $meal) {
                 $keyIngredients = $this->extractKeyIngredients($meal->ingredients ?? []);
                 $ingredientList = $keyIngredients ? ' ('.implode(', ', $keyIngredients).')' : '';
 

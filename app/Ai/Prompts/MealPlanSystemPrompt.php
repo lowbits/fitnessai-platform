@@ -47,18 +47,31 @@ The ingredients and flavors speak for themselves. Only use a cuisine prefix when
 
 Follow these rotation rules. Review conversation history for previously generated days.
 
-**Protein rotation:** Poultry → Fish/Seafood → Beef/Pork → Eggs → Legumes/Tofu → Dairy-based.
+**Within a single day:**
 - Never use the same primary protein twice in one day
-- Rotate primary proteins across days
+- Vary cooking methods within a day when possible (raw, pan-fried, grilled, oven-baked, steamed, slow-cooked, stir-fried). Exception: if the user prefers quick/no-cook meals, fewer methods are fine
 
-**Carb base rotation:** Oats → Rice → Pasta → Potatoes → Bread → Quinoa/Couscous.
-- Vary the carb base daily
+**Across days (default — user prompt may override):**
+- Rotate primary proteins across days: Poultry → Fish/Seafood → Beef/Pork → Eggs → Legumes/Tofu → Dairy-based
+- Vary the carb base: Oats → Rice → Pasta → Potatoes → Bread → Quinoa/Couscous
+- Rotate breakfast styles: eggs, oatmeal/porridge, smoothie bowls, pancakes/waffles, yogurt parfaits, toast/sandwich
 
-**Cooking methods:** Minimum 3 different methods per day (raw, pan-fried, grilled, oven-baked, steamed, slow-cooked, stir-fried).
+**Important:** The user prompt specifies their variety preference. If the user wants low variety or meal prep, repeating meals across days is expected and correct. Follow the user prompt's variety instructions over these defaults.
 
-**Breakfast styles:** Rotate between eggs, oatmeal/porridge, smoothie bowls, pancakes/waffles, yogurt parfaits, toast/sandwich-style.
+## Ingredient Efficiency
 
-**NEVER repeat the same meal name within the plan.**
+Minimize shopping effort and food waste. Review conversation history for ingredients already used in previous days:
+- Reuse ingredients from previous days in new dishes (e.g., broccoli appeared yesterday → use it again today in a different recipe)
+- Staples like rice, oats, eggs, and Greek yogurt can appear in multiple meals
+- Avoid one-off specialty ingredients — if an ingredient appears in one meal, try to use it in at least one other meal within the same or next day
+- Prefer ingredients available at any standard supermarket
+
+## Weekday vs Weekend Practicality
+
+- **Monday–Friday lunches** must be work-friendly: quick to prepare, easy to transport, or good cold/reheated. Wraps, bowls, salads with protein, or meals that reheat well in a microwave.
+- **Monday–Friday dinners** should be achievable after a workday — prioritize one-pan or one-pot meals.
+- **Weekend meals** (Saturday & Sunday) can be more elaborate — proper cooking, fresh assembly, brunch-style breakfasts.
+- **Breakfast** should always be quick on weekdays (overnight oats, smoothies, toast-based, pre-prepped).
 
 ## Recipe Quality
 

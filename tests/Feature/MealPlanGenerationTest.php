@@ -280,18 +280,17 @@ test('agent caps history to 4 most recent days', function () {
     $agent = new NutritionPlannerAgent($day7);
     $messages = collect($agent->messages());
 
-    // 4 days * 2 messages (user + assistant) = 8
-    expect($messages)->toHaveCount(8);
+    // 6 days * 2 messages (user + assistant) = 12 — full plan history
+    expect($messages)->toHaveCount(12);
 
-    // Should include days 3-6 (most recent 4), not days 1-2
-    expect($messages[0]->content)->toContain('Day 3');
-    expect($messages[1]->content)->toContain('Day 3 Breakfast');
-    expect($messages[6]->content)->toContain('Day 6');
+    // Should include all days 1-6
+    expect($messages[0]->content)->toContain('Day 1');
+    expect($messages[1]->content)->toContain('Day 1 Breakfast');
+    expect($messages[10]->content)->toContain('Day 6');
 
-    // Days 1 and 2 should not be present
     $allContent = $messages->pluck('content')->implode("\n");
-    expect($allContent)->not->toContain('Day 1 Breakfast');
-    expect($allContent)->not->toContain('Day 2 Breakfast');
+    expect($allContent)->toContain('Day 1 Breakfast');
+    expect($allContent)->toContain('Day 6 Breakfast');
 });
 
 test('system prompt contains culinary coherence rules', function () {
@@ -299,9 +298,9 @@ test('system prompt contains culinary coherence rules', function () {
 
     expect($systemPrompt)->toContain('Culinary Coherence');
     expect($systemPrompt)->toContain('no random mashups');
-    expect($systemPrompt)->toContain('NEVER repeat the same meal name');
+    expect($systemPrompt)->toContain('user prompt specifies their variety preference');
     expect($systemPrompt)->toContain('Do NOT prefix every meal with a country');
-    expect($systemPrompt)->toContain('Protein rotation');
+    expect($systemPrompt)->toContain('Rotate primary proteins');
 });
 
 test('user prompt contains pre-calculated per-meal macro ranges', function () {

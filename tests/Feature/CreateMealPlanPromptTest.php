@@ -81,52 +81,60 @@ test('macro targets redistribute proportionally for selected meals', function ()
         ->not->toContain('Snack:');
 });
 
-test('low variety + meal prep on prep day = batch-friendly meals', function () {
+test('low variety scales uniques to meal count', function () {
+    // 4 meals/day = 28 slots → ~7 uniques, max 4x
+    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => false]);
+
+    expect($output)->toContain('VARIETY RULE')->toContain('LOW')->toContain('unique recipes');
+});
+
+test('low variety + meal prep on prep day = batch-friendly', function () {
     $sunday = Carbon::parse('2026-06-14');
     $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => true], $sunday);
 
-    expect($output)->toContain('meal prep')->toContain('batch-friendly');
+    expect($output)->toContain('LOW')->toContain('batch-friendly');
 });
 
-test('low variety + meal prep on non-prep day = reuse meals', function () {
-    $monday = Carbon::parse('2026-06-15');
-    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => true], $monday, dayNumber: 3);
+test('medium variety with 3 meals produces satisfiable rule', function () {
+    // 3 meals/day = 21 slots → 11 uniques, max 2x (11×2=22 ≥ 21)
+    $output = createPrompt([
+        'meal_variety' => MealVariety::MEDIUM,
+        'meal_prep_enabled' => false,
+        'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+    ]);
 
-    expect($output)->toContain('reuse meals');
+    expect($output)
+        ->toContain('VARIETY RULE')
+        ->toContain('MEDIUM')
+        ->toContain('11 unique recipes')
+        ->toContain('MUST NOT appear more than 2x');
 });
 
-test('low variety without meal prep = familiar rotation, not consecutive', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => false]);
+test('medium variety with 4 meals produces satisfiable rule', function () {
+    // 4 meals/day = 28 slots → 14 uniques, max 2x (14×2=28 ≥ 28)
+    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => false]);
 
-    expect($output)->toContain('NOT on consecutive days');
+    expect($output)->toContain('14 unique recipes')->toContain('more than 2x');
 });
 
-test('high variety + meal prep = diverse components', function () {
-    $sunday = Carbon::parse('2026-06-14');
-    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => true], $sunday);
-
-    expect($output)->toContain('diverse components');
-});
-
-test('high variety without meal prep = every meal unique', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => false]);
-
-    expect($output)->toContain('completely unique');
-});
-
-test('medium variety + meal prep = prep hint only', function () {
+test('medium variety + meal prep on prep day includes prep hint', function () {
     $sunday = Carbon::parse('2026-06-14');
     $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => true], $sunday);
 
-    expect($output)->toContain('Meal prep day');
+    expect($output)->toContain('MEDIUM')->toContain('batch-friendly');
 });
 
-test('medium variety without meal prep = no hint', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => false]);
+test('high variety includes zero repeats rule', function () {
+    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => false]);
 
-    expect($output)
-        ->not->toContain('Meal style')
-        ->not->toContain('Meal prep');
+    expect($output)->toContain('HIGH')->toContain('zero repeats');
+});
+
+test('high variety + meal prep on prep day = diverse components', function () {
+    $sunday = Carbon::parse('2026-06-14');
+    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => true], $sunday);
+
+    expect($output)->toContain('HIGH')->toContain('diverse components');
 });
 
 test('prompt includes favorite recipe signals', function () {
