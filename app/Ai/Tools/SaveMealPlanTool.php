@@ -154,7 +154,7 @@ class SaveMealPlanTool implements Tool
                 'cuisine' => $schema->string()
                     ->description('Cuisine style (e.g. "german", "mediterranean", "asian", "american", "latin", "middle_eastern", "mixed").'),
             ])->withoutAdditionalProperties())
-                ->description('Array of 4 meals: breakfast, lunch, snack, dinner.')
+                ->description('Array of meals for the day, one per requested meal type.')
                 ->required(),
         ];
     }

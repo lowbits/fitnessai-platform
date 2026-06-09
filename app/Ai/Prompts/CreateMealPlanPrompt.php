@@ -2,6 +2,7 @@
 
 namespace App\Ai\Prompts;
 
+use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietType;
 use App\Models\UserProfile;
@@ -14,13 +15,15 @@ use Stringable;
  */
 class CreateMealPlanPrompt implements Stringable
 {
-    /** @var array<int, array{breakfast: float, lunch: float, snack: float, dinner: float}> */
+    /** @var array<int, array<string, float>> */
     private const MEAL_SPLITS = [
         ['breakfast' => 0.275, 'lunch' => 0.325, 'snack' => 0.125, 'dinner' => 0.275],
         ['breakfast' => 0.25, 'lunch' => 0.35, 'snack' => 0.10, 'dinner' => 0.30],
         ['breakfast' => 0.30, 'lunch' => 0.30, 'snack' => 0.15, 'dinner' => 0.25],
         ['breakfast' => 0.25, 'lunch' => 0.30, 'snack' => 0.15, 'dinner' => 0.30],
     ];
+
+    private const DEFAULT_MEALS = ['breakfast', 'lunch', 'snack', 'dinner'];
 
     public function __construct(
         private UserProfile $profile,
@@ -41,29 +44,59 @@ class CreateMealPlanPrompt implements Stringable
         $coachingNotes = $this->buildCoachingNotes($metabolismData, $preference);
         $goalAdjustment = sprintf('%+d', $metabolismData['goal_adjustment']);
         $dayOfWeek = $this->date->format('l');
-        $macroTargets = $this->buildMacroTargets($metabolismData);
+        $selectedMeals = $this->resolveSelectedMeals();
+        $macroTargets = $this->buildMacroTargets($metabolismData, $selectedMeals);
+        $mealList = implode(', ', $selectedMeals);
 
         $parts = [
-            "{$gender}, {$this->profile->age}y, {$this->profile->height}cm, {$weight}kg",
+            "{$gender}, {$this->profile->age}y, {$this->profile->height_cm}cm, {$weight}kg",
             "Goal: {$this->bodyGoal} ({$goalAdjustment} kcal) | Diet: {$preference->value} ({$preference->description()}) | Style: {$dietStyle}",
+            $this->buildDislikes(),
             "Activity: {$metabolismData['activity_multiplier']}x daily + {$metabolismData['training_sessions_per_week']}x training/week",
+            $this->buildCookingConstraint(),
             $macroTargets,
             $coachingNotes,
-            "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}) — generate 4 meals: breakfast, lunch, snack, dinner",
+            $this->buildVarietyHint(),
+            $this->buildMealPrepHint(),
+            $this->buildFavoriteSignals(),
+            "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}) — generate ".count($selectedMeals)." meals: {$mealList}",
             "Language: {$language} for ALL text fields (names, descriptions, ingredients, instructions, tags, allergens)",
         ];
 
         return implode("\n\n", array_filter($parts));
     }
 
-    private function buildMacroTargets(array $metabolismData): string
+    /**
+     * @return list<string>
+     */
+    private function resolveSelectedMeals(): array
+    {
+        $selected = $this->profile->selected_meals;
+
+        if (empty($selected)) {
+            return self::DEFAULT_MEALS;
+        }
+
+        // Preserve canonical order
+        return array_values(array_intersect(self::DEFAULT_MEALS, $selected));
+    }
+
+    /**
+     * @param  list<string>  $selectedMeals
+     */
+    private function buildMacroTargets(array $metabolismData, array $selectedMeals): string
     {
         $calories = $metabolismData['daily_calories'];
         $protein = $metabolismData['protein_g'];
         $carbs = $metabolismData['carbs_g'];
         $fat = $metabolismData['fat_g'];
 
-        $split = self::MEAL_SPLITS[($this->dayNumber - 1) % count(self::MEAL_SPLITS)];
+        $allSplits = self::MEAL_SPLITS[($this->dayNumber - 1) % count(self::MEAL_SPLITS)];
+
+        // Filter to selected meals and redistribute proportionally
+        $filtered = array_intersect_key($allSplits, array_flip($selectedMeals));
+        $sum = array_sum($filtered);
+        $split = array_map(fn (float $pct) => $pct / $sum, $filtered);
 
         $lines = ["Daily totals: {$calories} kcal | {$protein}g P | {$carbs}g C | {$fat}g F", ''];
 
@@ -82,6 +115,84 @@ class CreateMealPlanPrompt implements Stringable
         }
 
         return implode("\n", $lines);
+    }
+
+    private function buildDislikes(): string
+    {
+        $dislikes = $this->profile->food_dislikes;
+
+        if (empty($dislikes)) {
+            return '';
+        }
+
+        return 'NEVER use these ingredients: '.implode(', ', $dislikes);
+    }
+
+    private function buildCookingConstraint(): string
+    {
+        $pref = $this->profile->cooking_preference;
+
+        if (! $pref) {
+            return '';
+        }
+
+        return match ($pref) {
+            CookingPreference::QUICK => 'Cooking: max 15min total per meal (prefer quick, no-cook, or minimal-prep recipes)',
+            CookingPreference::ELABORATE => 'Cooking: user enjoys cooking — feel free to include more complex recipes (up to 60min)',
+            default => '',
+        };
+    }
+
+    private function buildVarietyHint(): string
+    {
+        $variety = $this->profile->meal_variety;
+
+        if (! $variety) {
+            return '';
+        }
+
+        $maxRecipes = $variety->maxUniqueRecipesPerWeek();
+
+        return match ($variety->value) {
+            'low' => "Variety: low — repeat favorite meals across the week, max {$maxRecipes} unique recipes",
+            'high' => "Variety: high — every meal should be unique, aim for {$maxRecipes}+ different recipes per week",
+            default => '',
+        };
+    }
+
+    private function buildMealPrepHint(): string
+    {
+        if (! $this->profile->meal_prep_enabled) {
+            return '';
+        }
+
+        $isPrepDay = $this->date->isSunday() || $this->dayNumber === 1;
+
+        return $isPrepDay
+            ? 'Meal prep day: prefer batch-friendly meals (large-batch stews, grain bowls, sheet pan recipes) that store well for 2-3 days'
+            : 'Leftovers OK: meals can use pre-prepared components from meal prep';
+    }
+
+    private function buildFavoriteSignals(): string
+    {
+        $favorites = $this->profile->user->favoriteRecipes ?? collect();
+
+        if ($favorites->isEmpty()) {
+            return '';
+        }
+
+        $cuisines = $favorites->pluck('cuisine')->filter()->unique()->values();
+        $proteins = $favorites->pluck('primary_protein')->filter()->unique()->values();
+
+        $parts = [];
+        if ($cuisines->isNotEmpty()) {
+            $parts[] = 'Preferred cuisines: '.$cuisines->implode(', ');
+        }
+        if ($proteins->isNotEmpty()) {
+            $parts[] = 'Preferred proteins: '.$proteins->implode(', ');
+        }
+
+        return implode(' | ', $parts);
     }
 
     /**
