@@ -17,12 +17,23 @@ use Stringable;
  */
 class CreateMealPlanPrompt implements Stringable
 {
-    /** @var array<int, array<string, float>> */
-    private const MEAL_SPLITS = [
-        ['breakfast' => 0.275, 'lunch' => 0.325, 'snack' => 0.125, 'dinner' => 0.275],
-        ['breakfast' => 0.25, 'lunch' => 0.35, 'snack' => 0.10, 'dinner' => 0.30],
-        ['breakfast' => 0.30, 'lunch' => 0.30, 'snack' => 0.15, 'dinner' => 0.25],
-        ['breakfast' => 0.25, 'lunch' => 0.30, 'snack' => 0.15, 'dinner' => 0.30],
+    /**
+     * Fixed per-slot share of daily calories.
+     *
+     * Constant across every day, by design. A varying day-by-day split causes
+     * exact-repeat meals (frozen at their original day's macros) to drift off
+     * the slot target when reused later — e.g. a lunch sized for a 0.35-share
+     * day becoming +153 kcal over when reused on a 0.30-share day. Keeping
+     * the split flat lets repeats land on target wherever they appear, and
+     * the user-perceived variety (recipes, cuisines, proteins) is unaffected.
+     *
+     * @var array<string, float>
+     */
+    private const MEAL_SPLIT = [
+        'breakfast' => 0.275,
+        'lunch' => 0.325,
+        'snack' => 0.125,
+        'dinner' => 0.275,
     ];
 
     private const DEFAULT_MEALS = ['breakfast', 'lunch', 'snack', 'dinner'];
@@ -104,9 +115,7 @@ class CreateMealPlanPrompt implements Stringable
         $carbs = $metabolismData['carbs_g'];
         $fat = $metabolismData['fat_g'];
 
-        $allSplits = self::MEAL_SPLITS[($this->dayNumber - 1) % count(self::MEAL_SPLITS)];
-
-        $filtered = array_intersect_key($allSplits, array_flip($userSelectedSlots));
+        $filtered = array_intersect_key(self::MEAL_SPLIT, array_flip($userSelectedSlots));
         $sum = array_sum($filtered);
         $split = $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
 
