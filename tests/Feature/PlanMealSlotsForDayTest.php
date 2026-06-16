@@ -149,6 +149,25 @@ test('LOW tier exhausts dinner budget by day 3', function () {
     expect($result['dinner']['action'])->toBe('repeat');
 });
 
+test('forbidden_meals is cross-slot: a new lunch sees prior dinners and breakfasts too', function () {
+    [$plan, $profile] = makePlanWithProfile(MealVariety::HIGH);
+
+    // Day 1: one of each slot — none should slip past the lunch on day 2.
+    seedDay($plan, 1, [
+        ['type' => 'breakfast', 'name' => 'Overnight Oats'],
+        ['type' => 'lunch', 'name' => 'Carbonara'],
+        ['type' => 'dinner', 'name' => 'Spinat-Ricotta-Lasagne'],
+    ]);
+
+    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 2, profile: $profile);
+
+    // The lunch slot's forbidden list must include the dinner (Lasagne) and
+    // the breakfast (Overnight Oats) — otherwise template-twin Cannelloni
+    // would slip through for lunch.
+    $names = $result['lunch']['forbidden_meals']->pluck('name')->all();
+    expect($names)->toContain('Overnight Oats', 'Carbonara', 'Spinat-Ricotta-Lasagne');
+});
+
 test('HIGH tier never returns REPEAT within first 7 days', function () {
     [$plan, $profile] = makePlanWithProfile(MealVariety::HIGH);
 
@@ -159,6 +178,6 @@ test('HIGH tier never returns REPEAT within first 7 days', function () {
 
     $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 7, profile: $profile);
 
-    expect($result['dinner']['action'])->toBe('new');
-    expect($result['dinner']['forbidden_meals'])->toHaveCount(6);
+    expect($result['dinner']['action'])->toBe('new')
+        ->and($result['dinner']['forbidden_meals'])->toHaveCount(6);
 });

@@ -38,6 +38,13 @@ class PlanMealSlotsForDay
 
         $result = [];
 
+        // Cross-slot twin guard: every NEW slot must differ on ≥1 of
+        // {protein, format, hero_veg} from EVERY prior meal this week,
+        // regardless of slot. Otherwise we get Lasagne-for-dinner /
+        // Cannelloni-for-lunch / Ravioli-for-lunch all classifying as
+        // dairy/bake/spinach and slipping through the per-slot check.
+        $allWeekForbidden = $priorMeals->unique('name')->values();
+
         foreach ($selectedSlots as $slot) {
             $slotMeals = $priorMeals->where('type', $slot);
             $distinctSoFar = $slotMeals->pluck('name')->unique()->count();
@@ -46,7 +53,7 @@ class PlanMealSlotsForDay
             if ($distinctSoFar < $target) {
                 $result[$slot] = [
                     'action' => 'new',
-                    'forbidden_meals' => $slotMeals->unique('name')->values(),
+                    'forbidden_meals' => $allWeekForbidden,
                 ];
 
                 continue;

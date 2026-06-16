@@ -2,6 +2,7 @@
 
 namespace App\Ai\Tools;
 
+use App\Enums\Allergen;
 use App\Enums\Cuisine;
 use App\Enums\HeroVeg;
 use App\Enums\MealFormat;
@@ -149,8 +150,8 @@ class SaveMealPlanTool implements Tool
                     ->description('Descriptive tags (e.g. "high-protein", "quick", "post-workout").'),
 
                 'allergens' => $schema->array()
-                    ->items($schema->string())
-                    ->description('Allergens present in this meal (e.g. "dairy", "gluten", "nuts").'),
+                    ->items($schema->string()->enum(array_column(Allergen::cases(), 'value')))
+                    ->description('EU-14 allergens present in this meal. Use ONLY these canonical lowercase keys. Do not include notes (e.g. "gluten-free possible") — that is not an allergen.'),
 
                 'primary_protein' => $schema->string()
                     ->description('Dominant protein source. Pick the single category that carries the protein. Use "mixed" only when there is genuinely no hero protein.')
@@ -168,7 +169,7 @@ class SaveMealPlanTool implements Tool
                     ->required(),
 
                 'hero_veg' => $schema->string()
-                    ->description('Dominant non-starch vegetable. Carb bases (potato, rice, pasta) are NOT hero_veg. Use "none" if the meal has no vegetable, "mixed" if several share the spotlight.')
+                    ->description('Dominant non-starch vegetable. PICK THE SINGLE most prominent vegetable even when multiple are present — this is a variety axis and "mixed" weakens dedup. Use "mixed" ONLY when 3+ vegetables truly share equal prominence. Use "none" only when the dish has no vegetable at all. Carb bases (potato, rice, pasta) are NEVER hero_veg.')
                     ->enum(array_column(HeroVeg::cases(), 'value'))
                     ->required(),
             ])->withoutAdditionalProperties())
