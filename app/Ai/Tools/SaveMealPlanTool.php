@@ -2,6 +2,10 @@
 
 namespace App\Ai\Tools;
 
+use App\Enums\Cuisine;
+use App\Enums\HeroVeg;
+use App\Enums\MealFormat;
+use App\Enums\PrimaryProtein;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use Exception;
@@ -149,10 +153,24 @@ class SaveMealPlanTool implements Tool
                     ->description('Allergens present in this meal (e.g. "dairy", "gluten", "nuts").'),
 
                 'primary_protein' => $schema->string()
-                    ->description('Primary protein source (e.g. "chicken", "fish", "beef", "pork", "eggs", "tofu", "legumes", "dairy", "mixed").'),
+                    ->description('Dominant protein source. Pick the single category that carries the protein. Use "mixed" only when there is genuinely no hero protein.')
+                    ->enum(array_column(PrimaryProtein::cases(), 'value'))
+                    ->required(),
 
                 'cuisine' => $schema->string()
-                    ->description('Cuisine style (e.g. "german", "mediterranean", "asian", "american", "latin", "middle_eastern", "mixed").'),
+                    ->description('Cuisine the meal belongs to. Use "mixed" only when no identifiable cuisine.')
+                    ->enum(array_column(Cuisine::cases(), 'value'))
+                    ->required(),
+
+                'format' => $schema->string()
+                    ->description('Visual format on the plate. bowl/pasta/noodles for Asian/wrap/sandwich/soup/salad/curry/bake/grill/sheet_pan/stir_fry/omelet/porridge/pancake/toast/yogurt_bowl/smoothie/pizza. Use mixed only if none fits.')
+                    ->enum(array_column(MealFormat::cases(), 'value'))
+                    ->required(),
+
+                'hero_veg' => $schema->string()
+                    ->description('Dominant non-starch vegetable. Carb bases (potato, rice, pasta) are NOT hero_veg. Use "none" if the meal has no vegetable, "mixed" if several share the spotlight.')
+                    ->enum(array_column(HeroVeg::cases(), 'value'))
+                    ->required(),
             ])->withoutAdditionalProperties())
                 ->description('Array of meals for the day, one per requested meal type.')
                 ->required(),
@@ -183,6 +201,8 @@ class SaveMealPlanTool implements Tool
                 'allergens' => $meal['allergens'] ?? [],
                 'primary_protein' => $meal['primary_protein'] ?? null,
                 'cuisine' => $meal['cuisine'] ?? null,
+                'format' => $meal['format'] ?? null,
+                'hero_veg' => $meal['hero_veg'] ?? null,
                 'status' => 'generated',
             ]);
         }

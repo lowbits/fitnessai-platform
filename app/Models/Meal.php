@@ -36,6 +36,8 @@ class Meal extends Model
         'allergens',
         'primary_protein',
         'cuisine',
+        'format',
+        'hero_veg',
         'status',
         'completed_at',
     ];

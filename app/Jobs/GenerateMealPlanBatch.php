@@ -200,6 +200,8 @@ class GenerateMealPlanBatch implements ShouldQueue
                 'allergens' => $source->allergens,
                 'primary_protein' => $source->primary_protein,
                 'cuisine' => $source->cuisine,
+                'format' => $source->format,
+                'hero_veg' => $source->hero_veg,
                 'status' => 'generated',
             ]);
         }
