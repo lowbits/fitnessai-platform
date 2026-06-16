@@ -237,8 +237,8 @@ return [
         ],
 
         'hyrox-krafttraining' => [
-            'title' => 'Krafttraining für Hyrox: Warum Ausdauer nicht reicht',
-            'description' => 'Du willst Hyrox machen? Dann reicht Laufen allein nicht. Erfahre, warum Krafttraining die Basis für deine Hyrox-Vorbereitung ist — und wie du startest.',
+            'title' => 'Hyrox Krafttraining: Stark werden für Sled, Burpees & Co.',
+            'description' => 'Hyrox heißt Sled-Push, Wall Balls, Burpees. Ohne gezieltes Krafttraining bleibst du stecken. Welche Übungen wirklich zählen und wie du startest.',
             'h1' => 'Krafttraining für Hyrox: Warum Ausdauer allein nicht reicht',
             'keywords' => ['hyrox krafttraining', 'krafttraining für hyrox', 'hyrox vorbereitung', 'hyrox training kraft', 'kraft aufbauen hyrox', 'hyrox anfänger kraft', 'hyrox trainingsplan krafttraining', 'wie stark muss man für hyrox sein'],
             'internal_slug' => 'hyrox-strength-training',

@@ -99,6 +99,11 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
         <meta name="description" :content="meta.description" />
         <link rel="canonical" :href="meta.canonical" />
         <meta
+            v-if="meta.noindex"
+            name="robots"
+            content="noindex,follow"
+        />
+        <meta
             v-if="meta.keywords?.length"
             name="keywords"
             :content="meta.keywords?.join(', ')"

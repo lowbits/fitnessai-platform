@@ -9,6 +9,7 @@ const { t } = useI18n();
     <Head>
         <title>{{ t('legal.terms.meta.title') }}</title>
         <meta name="description" :content="t('legal.terms.meta.description')" />
+        <meta name="robots" content="noindex,follow" />
     </Head>
     <GuestLayout>
         <div
