@@ -114,17 +114,19 @@ test('prompt omits REPEAT slots from generate list', function () {
         ->not->toContain('Carbonara');
 });
 
-test('prompt lists forbidden meals per slot with protein and cuisine', function () {
+test('prompt lists forbidden meals per slot with protein, format, hero_veg', function () {
     $forbidden = collect([
         new Meal([
             'name' => 'Grilled Chicken Salad',
             'primary_protein' => 'chicken',
-            'cuisine' => 'mediterranean',
+            'format' => 'salad',
+            'hero_veg' => 'lettuce',
         ]),
         new Meal([
-            'name' => 'Tuna Bowl',
-            'primary_protein' => 'fish',
-            'cuisine' => 'asian',
+            'name' => 'Tofu-Udon-Bowl',
+            'primary_protein' => 'tofu',
+            'format' => 'noodles',
+            'hero_veg' => 'broccoli',
         ]),
     ]);
 
@@ -135,15 +137,15 @@ test('prompt lists forbidden meals per slot with protein and cuisine', function 
 
     expect($output)
         ->toContain('Prior Lunch meals this week')
-        ->toContain('MUST differ in BOTH primary_protein AND cuisine')
-        ->toContain('"Grilled Chicken Salad" [protein: chicken, cuisine: mediterranean]')
-        ->toContain('"Tuna Bowl" [protein: fish, cuisine: asian]');
+        ->toContain('MUST differ on at least ONE of {primary_protein, format, hero_veg}')
+        ->toContain('"Grilled Chicken Salad" [protein: chicken, format: salad, hero_veg: lettuce]')
+        ->toContain('"Tofu-Udon-Bowl" [protein: tofu, format: noodles, hero_veg: broccoli]');
 });
 
 test('prompt omits forbidden section when no prior meals exist', function () {
     $output = createPrompt();
 
-    expect($output)->not->toContain('MUST differ in BOTH primary_protein');
+    expect($output)->not->toContain('MUST differ on at least ONE');
 });
 
 test('macro targets for NEW slots use natural per-day share, not renormalized over NEW only', function () {

@@ -15,8 +15,10 @@ use Illuminate\Support\Collection;
  * Variety is a budget: each tier has a target number of distinct recipes per
  * slot over a 7-day cycle. Days within budget get a fresh AI-designed meal —
  * the prior slot meals are passed as a forbidden list so the new one differs
- * meaningfully (different primary protein AND different cuisine). Days past
- * budget reuse the exact prior Meal record (same grams, same macros) — no AI
+ * on at least one of three axes (primary_protein, format, hero_veg) from
+ * every prior meal. That kills template-twins (e.g. tofu-broccoli udon and
+ * tofu-broccoli soba — same protein/format/veg, blocked). Days past budget
+ * reuse the exact prior Meal record (same grams, same macros) — no AI
  * regeneration, which kills the near-duplicate problem at the source.
  */
 class PlanMealSlotsForDay
