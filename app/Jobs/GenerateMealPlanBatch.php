@@ -2,15 +2,17 @@
 
 namespace App\Jobs;
 
+use App\Actions\PlanMealSlotsForDay;
 use App\Ai\Agents\NutritionPlannerAgent;
 use App\Ai\Prompts\CreateMealPlanPrompt;
-use App\Enums\MealVariety;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Messages\UserMessage;
@@ -34,6 +36,8 @@ class GenerateMealPlanBatch implements ShouldQueue
 
     public function handle(): void
     {
+        $slotPlanner = new PlanMealSlotsForDay;
+
         $this->user->load(['profile', 'favoriteRecipes']);
         $profile = $this->user->profile;
 
@@ -70,71 +74,18 @@ class GenerateMealPlanBatch implements ShouldQueue
                 continue;
             }
 
-            // For low-variety / meal-prep users: copy previous day's meals instead of regenerating
-            if ($this->canCopyPreviousDay($day, $profile)) {
-                $this->copyMealsFromPreviousDay($mealPlan, $day);
-
-                continue;
-            }
-
             // Clean up any partial meals from a previous failed attempt
             if ($mealPlan->meals()->exists()) {
                 $mealPlan->meals()->delete();
             }
 
+            $slotPlan = $slotPlanner->handle($this->plan, $day, $profile);
+
+            $this->logSlotPlan($day, $slotPlan);
+
             try {
-                $prompt = new CreateMealPlanPrompt(
-                    profile: $profile,
-                    locale: $this->user->locale,
-                    dayNumber: $day,
-                    date: $date,
-                    bodyGoal: $profile->body_goal->value,
-                );
-
-                $agent = new NutritionPlannerAgent($mealPlan);
-                $messages = collect($agent->messages());
-
-                Log::debug('[MealGen] System prompt', [
-                    'user_id' => $this->user->id,
-                    'system' => $agent->instructions(),
-                ]);
-
-                Log::debug("[MealGen] Conversation history for day {$day}", [
-                    'user_id' => $this->user->id,
-                    'history_messages' => $messages->map(fn ($m) => [
-                        'role' => $m instanceof UserMessage ? 'user' : 'assistant',
-                        'content' => $m->content,
-                    ])->all(),
-                ]);
-
-                Log::debug("[MealGen] User prompt for day {$day}", [
-                    'user_id' => $this->user->id,
-                    'prompt' => (string) $prompt,
-                ]);
-
-                $startTime = microtime(true);
-
-                $agent->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
-
-                $duration = microtime(true) - $startTime;
-
-                $mealPlan->refresh();
-
-                if ($mealPlan->status === 'generated') {
-                    Log::info("Generated meal plan for day {$day}", [
-                        'meal_plan_id' => $mealPlan->id,
-                        'meals_created' => $mealPlan->meals()->count(),
-                        'duration_seconds' => round($duration, 2),
-                    ]);
-                } else {
-                    Log::error("Meal plan agent did not save for day {$day}", [
-                        'meal_plan_id' => $mealPlan->id,
-                        'status' => $mealPlan->status,
-                    ]);
-                    $mealPlan->update(['status' => 'failed']);
-                }
+                $this->generateDay($mealPlan, $day, $date, $slotPlan);
             } catch (\Throwable $e) {
-
                 Log::debug($e);
                 Log::error("Failed to generate meal plan for day {$day}", [
                     'error' => $e->getMessage(),
@@ -154,95 +105,153 @@ class GenerateMealPlanBatch implements ShouldQueue
     }
 
     /**
-     * Check if this day can reuse the previous day's meals.
-     * Only for low-variety + meal-prep users, and not on the first day or prep days.
+     * @param  array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection, repeat_from?: Meal}>  $slotPlan
      */
-    private function canCopyPreviousDay(int $day, $profile): bool
+    private function generateDay(MealPlan $mealPlan, int $day, Carbon $date, array $slotPlan): void
     {
-        if ($day <= 1) {
-            return false;
+        $hasNewSlots = collect($slotPlan)->contains(fn ($s) => $s['action'] === 'new');
+
+        if ($hasNewSlots) {
+            $prompt = new CreateMealPlanPrompt(
+                profile: $this->user->profile,
+                locale: $this->user->locale,
+                dayNumber: $day,
+                date: $date,
+                bodyGoal: $this->user->profile->body_goal->value,
+                slotPlan: $slotPlan,
+            );
+
+            $agent = new NutritionPlannerAgent($mealPlan);
+            $messages = collect($agent->messages());
+
+            Log::debug('[MealGen] System prompt', [
+                'user_id' => $this->user->id,
+                'system' => $agent->instructions(),
+            ]);
+
+            Log::debug("[MealGen] Conversation history for day {$day}", [
+                'user_id' => $this->user->id,
+                'history_messages' => $messages->map(fn ($m) => [
+                    'role' => $m instanceof UserMessage ? 'user' : 'assistant',
+                    'content' => $m->content,
+                ])->all(),
+            ]);
+
+            Log::debug("[MealGen] User prompt for day {$day}", [
+                'user_id' => $this->user->id,
+                'prompt' => (string) $prompt,
+            ]);
+
+            $startTime = microtime(true);
+
+            $agent->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
+
+            $duration = microtime(true) - $startTime;
+
+            $mealPlan->refresh();
+
+            Log::info("AI generation finished for day {$day}", [
+                'meal_plan_id' => $mealPlan->id,
+                'meals_created' => $mealPlan->meals()->count(),
+                'duration_seconds' => round($duration, 2),
+            ]);
         }
 
-        $variety = $profile->meal_variety ?? MealVariety::MEDIUM;
-        $mealPrep = $profile->meal_prep_enabled ?? false;
-
-        // Only low variety + meal prep users get copied days
-        if ($variety !== MealVariety::LOW || ! $mealPrep) {
-            return false;
-        }
-
-        // Don't copy on prep days (Sunday or day 1) — generate fresh
-        $date = $this->plan->start_date->copy()->addDays($day - 1);
-        if ($date->isSunday()) {
-            return false;
-        }
-
-        // Check that the previous day was actually generated
-        $previousDay = MealPlan::where('plan_id', $this->plan->id)
-            ->where('day_number', $day - 1)
-            ->where('status', 'generated')
-            ->exists();
-
-        return $previousDay;
+        $this->insertRepeatedMeals($mealPlan, $slotPlan);
+        $this->finalizeMealPlan($mealPlan, $day);
     }
 
     /**
-     * Copy meals from the previous day to this day's meal plan.
-     * Saves an LLM call for low-variety meal-prep users.
+     * For each REPEAT slot, duplicate the chosen prior Meal record exactly.
+     * Same name, ingredients, grams, macros — no AI regeneration. Any meal of
+     * the same type the AI happened to generate is removed first.
+     *
+     * @param  array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection, repeat_from?: Meal}>  $slotPlan
      */
-    private function copyMealsFromPreviousDay(MealPlan $mealPlan, int $day): void
+    private function insertRepeatedMeals(MealPlan $mealPlan, array $slotPlan): void
     {
-        $previousMealPlan = MealPlan::where('plan_id', $this->plan->id)
-            ->where('day_number', $day - 1)
-            ->where('status', 'generated')
-            ->with('meals')
-            ->first();
+        foreach ($slotPlan as $type => $plan) {
+            if ($plan['action'] !== 'repeat' || ! isset($plan['repeat_from'])) {
+                continue;
+            }
 
-        if (! $previousMealPlan || $previousMealPlan->meals->isEmpty()) {
-            return;
-        }
+            $mealPlan->meals()->where('type', $type)->delete();
 
-        // Clean up any partial meals
-        $mealPlan->meals()->delete();
+            $source = $plan['repeat_from'];
 
-        foreach ($previousMealPlan->meals as $meal) {
             Meal::create([
                 'meal_plan_id' => $mealPlan->id,
-                'type' => $meal->type,
-                'name' => $meal->name,
-                'description' => $meal->description,
-                'calories' => $meal->calories,
-                'protein_g' => $meal->protein_g,
-                'carbs_g' => $meal->carbs_g,
-                'fat_g' => $meal->fat_g,
-                'fiber_g' => $meal->fiber_g,
-                'sugar_g' => $meal->sugar_g,
-                'ingredients' => $meal->ingredients,
-                'instructions' => $meal->instructions,
-                'prep_time_minutes' => $meal->prep_time_minutes,
-                'cook_time_minutes' => $meal->cook_time_minutes,
-                'difficulty' => $meal->difficulty,
-                'servings' => $meal->servings,
-                'tags' => $meal->tags,
-                'allergens' => $meal->allergens,
-                'primary_protein' => $meal->primary_protein,
-                'cuisine' => $meal->cuisine,
+                'type' => $source->type,
+                'name' => $source->name,
+                'description' => $source->description,
+                'calories' => $source->calories,
+                'protein_g' => $source->protein_g,
+                'carbs_g' => $source->carbs_g,
+                'fat_g' => $source->fat_g,
+                'fiber_g' => $source->fiber_g,
+                'sugar_g' => $source->sugar_g,
+                'ingredients' => $source->ingredients,
+                'instructions' => $source->instructions,
+                'prep_time_minutes' => $source->prep_time_minutes,
+                'cook_time_minutes' => $source->cook_time_minutes,
+                'difficulty' => $source->difficulty,
+                'servings' => $source->servings,
+                'tags' => $source->tags,
+                'allergens' => $source->allergens,
+                'primary_protein' => $source->primary_protein,
+                'cuisine' => $source->cuisine,
                 'status' => 'generated',
             ]);
+        }
+    }
+
+    private function finalizeMealPlan(MealPlan $mealPlan, int $day): void
+    {
+        $meals = $mealPlan->meals()->get();
+
+        if ($meals->isEmpty()) {
+            Log::error("Meal plan ended day {$day} with no meals", [
+                'meal_plan_id' => $mealPlan->id,
+            ]);
+            $mealPlan->update(['status' => 'failed']);
+
+            return;
         }
 
         $mealPlan->update([
             'status' => 'generated',
-            'total_calories' => $previousMealPlan->total_calories,
-            'total_protein_g' => $previousMealPlan->total_protein_g,
-            'total_carbs_g' => $previousMealPlan->total_carbs_g,
-            'total_fat_g' => $previousMealPlan->total_fat_g,
+            'total_calories' => $meals->sum('calories'),
+            'total_protein_g' => $meals->sum('protein_g'),
+            'total_carbs_g' => $meals->sum('carbs_g'),
+            'total_fat_g' => $meals->sum('fat_g'),
         ]);
 
-        Log::info("[MealGen] Copied day {$day} from day ".($day - 1).' (low variety + meal prep)', [
-            'user_id' => $this->user->id,
+        Log::info("Generated meal plan for day {$day}", [
             'meal_plan_id' => $mealPlan->id,
-            'meals_copied' => $previousMealPlan->meals->count(),
+            'meals_total' => $meals->count(),
+        ]);
+    }
+
+    /**
+     * @param  array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection, repeat_from?: Meal}>  $slotPlan
+     */
+    private function logSlotPlan(int $day, array $slotPlan): void
+    {
+        $summary = collect($slotPlan)->map(function (array $plan, string $slot) {
+            if ($plan['action'] === 'repeat') {
+                $repeat = $plan['repeat_from'] ?? null;
+
+                return "{$slot}=repeat(day{$repeat?->mealPlan?->day_number}: \"{$repeat?->name}\")";
+            }
+
+            $forbidden = ($plan['forbidden_meals'] ?? collect())->count();
+
+            return "{$slot}=new(forbidden: {$forbidden})";
+        })->values()->implode(' | ');
+
+        Log::info("[MealGen] Slot plan day {$day}: {$summary}", [
+            'user_id' => $this->user->id,
+            'plan_id' => $this->plan->id,
         ]);
     }
 }

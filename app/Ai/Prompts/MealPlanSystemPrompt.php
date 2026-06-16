@@ -43,20 +43,12 @@ Do NOT prefix every meal with a country or cuisine name.
 
 The ingredients and flavors speak for themselves. Only use a cuisine prefix when the dish is genuinely known by it (e.g., "Caesar Salad", "Pad Thai").
 
-## Variety Rotation System
+## Within-Day Variety
 
-Follow these rotation rules. Review conversation history for previously generated days.
-
-**Within a single day:**
 - Never use the same primary protein twice in one day
 - Vary cooking methods within a day when possible (raw, pan-fried, grilled, oven-baked, steamed, slow-cooked, stir-fried). Exception: if the user prefers quick/no-cook meals, fewer methods are fine
 
-**Across days (default — user prompt may override):**
-- Rotate primary proteins across days: Poultry → Fish/Seafood → Beef/Pork → Eggs → Legumes/Tofu → Dairy-based
-- Vary the carb base: Oats → Rice → Pasta → Potatoes → Bread → Quinoa/Couscous
-- Rotate breakfast styles: eggs, oatmeal/porridge, smoothie bowls, pancakes/waffles, yogurt parfaits, toast/sandwich
-
-**Important:** The user prompt specifies their variety preference. If the user wants low variety or meal prep, repeating meals across days is expected and correct. Follow the user prompt's variety instructions over these defaults.
+Across-day variety is managed by the user prompt's per-slot constraints — do not try to infer it from conversation history. If a slot lists "prior meals", your new meal for that slot must differ in BOTH primary_protein AND cuisine from every listed meal.
 
 ## Ingredient Efficiency
 

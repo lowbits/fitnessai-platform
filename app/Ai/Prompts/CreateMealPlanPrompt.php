@@ -5,9 +5,10 @@ namespace App\Ai\Prompts;
 use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietType;
-use App\Enums\MealVariety;
+use App\Models\Meal;
 use App\Models\UserProfile;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Stringable;
 
 /**
@@ -26,12 +27,16 @@ class CreateMealPlanPrompt implements Stringable
 
     private const DEFAULT_MEALS = ['breakfast', 'lunch', 'snack', 'dinner'];
 
+    /**
+     * @param  array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection<int, Meal>, repeat_from?: Meal}>  $slotPlan
+     */
     public function __construct(
         private UserProfile $profile,
         private string $locale,
         private int $dayNumber,
         private Carbon $date,
         private string $bodyGoal,
+        private array $slotPlan,
     ) {}
 
     public function __toString(): string
@@ -45,9 +50,9 @@ class CreateMealPlanPrompt implements Stringable
         $coachingNotes = $this->buildCoachingNotes($metabolismData, $preference);
         $goalAdjustment = sprintf('%+d', $metabolismData['goal_adjustment']);
         $dayOfWeek = $this->date->format('l');
-        $selectedMeals = $this->resolveSelectedMeals();
-        $macroTargets = $this->buildMacroTargets($metabolismData, $selectedMeals);
-        $mealList = implode(', ', $selectedMeals);
+        $newSlots = $this->newSlots();
+        $macroTargets = $this->buildMacroTargets($metabolismData, $this->resolveSelectedSlots(), $newSlots);
+        $mealList = implode(', ', $newSlots);
 
         $parts = [
             "{$gender}, {$this->profile->age}y, {$this->profile->height_cm}cm, {$weight}kg",
@@ -58,9 +63,8 @@ class CreateMealPlanPrompt implements Stringable
             $macroTargets,
             $coachingNotes,
             $this->buildFavoriteSignals(),
-            $this->buildVarietyAndPrepHint(),
-            "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}, ".($this->date->isWeekday() ? 'workday' : 'weekend').') — generate '.count($selectedMeals)." meals: {$mealList}",
-            'BEFORE generating: count how many times each meal name appears in the conversation history above. If a meal already hit its repeat limit, you MUST use a different recipe.',
+            $this->buildSlotConstraints(),
+            "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}, ".($this->date->isWeekday() ? 'workday' : 'weekend').') — generate '.count($newSlots)." meals: {$mealList}",
             "Language: {$language} for ALL text fields (names, descriptions, ingredients, instructions, tags, allergens)",
         ];
 
@@ -68,24 +72,32 @@ class CreateMealPlanPrompt implements Stringable
     }
 
     /**
+     * Slots the AI must generate today (NEW only — REPEAT slots are filled by PHP after).
+     *
      * @return list<string>
      */
-    private function resolveSelectedMeals(): array
+    private function newSlots(): array
     {
-        $selected = $this->profile->selected_meals;
-
-        if (empty($selected)) {
-            return self::DEFAULT_MEALS;
-        }
-
-        // Preserve canonical order
-        return array_values(array_intersect(self::DEFAULT_MEALS, $selected));
+        return array_values(array_filter(
+            array_keys($this->slotPlan),
+            fn (string $slot) => $this->slotPlan[$slot]['action'] === 'new',
+        ));
     }
 
     /**
-     * @param  list<string>  $selectedMeals
+     * Per-slot calorie/macro targets.
+     *
+     * Renormalization is done over the user's full selected slots — so a user
+     * who skipped snack still gets the missing 12.5% redistributed across the
+     * remaining 3 slots. But emit only NEW slot lines, because REPEAT slots
+     * already have fixed macros from their source meal. If we renormalized
+     * only over NEW slots, today's NEW slots would each be told to swell to
+     * cover the REPEAT slots' calories too — that's the day-5 5,400 kcal bug.
+     *
+     * @param  list<string>  $userSelectedSlots
+     * @param  list<string>  $newSlots
      */
-    private function buildMacroTargets(array $metabolismData, array $selectedMeals): string
+    private function buildMacroTargets(array $metabolismData, array $userSelectedSlots, array $newSlots): string
     {
         $calories = $metabolismData['daily_calories'];
         $protein = $metabolismData['protein_g'];
@@ -94,14 +106,17 @@ class CreateMealPlanPrompt implements Stringable
 
         $allSplits = self::MEAL_SPLITS[($this->dayNumber - 1) % count(self::MEAL_SPLITS)];
 
-        // Filter to selected meals and redistribute proportionally
-        $filtered = array_intersect_key($allSplits, array_flip($selectedMeals));
+        $filtered = array_intersect_key($allSplits, array_flip($userSelectedSlots));
         $sum = array_sum($filtered);
-        $split = array_map(fn (float $pct) => $pct / $sum, $filtered);
+        $split = $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
 
         $lines = ["Daily totals: {$calories} kcal | {$protein}g P | {$carbs}g C | {$fat}g F", ''];
 
         foreach ($split as $mealType => $pct) {
+            if (! in_array($mealType, $newSlots, true)) {
+                continue;
+            }
+
             $label = ucfirst($mealType);
             $calMin = (int) round($calories * $pct * 0.95);
             $calMax = (int) round($calories * $pct * 1.05);
@@ -116,6 +131,24 @@ class CreateMealPlanPrompt implements Stringable
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * The user's full selected slots (all 4 by default). Used as the base
+     * for macro normalization — distinct from `newSlots()` which is the
+     * subset the AI generates *today*.
+     *
+     * @return list<string>
+     */
+    private function resolveSelectedSlots(): array
+    {
+        $selected = $this->profile->selected_meals;
+
+        if (empty($selected)) {
+            return self::DEFAULT_MEALS;
+        }
+
+        return array_values(array_intersect(self::DEFAULT_MEALS, $selected));
     }
 
     private function buildDislikes(): string
@@ -144,75 +177,42 @@ class CreateMealPlanPrompt implements Stringable
         };
     }
 
-    private function buildVarietyAndPrepHint(): string
+    /**
+     * Per-slot constraints: for each NEW slot, list the prior slot meals already
+     * generated this week. The new meal MUST differ in BOTH primary protein AND
+     * cuisine from every listed meal — that's the "no near-duplicates" floor.
+     *
+     * REPEAT slots are not generated by the AI (PHP duplicates the prior Meal
+     * record after this call) — they're omitted from the prompt entirely.
+     */
+    private function buildSlotConstraints(): string
     {
-        $variety = $this->profile->meal_variety ?? MealVariety::MEDIUM;
-        $mealPrep = $this->profile->meal_prep_enabled ?? false;
-        $isPrepDay = $this->date->isSunday() || $this->dayNumber === 1;
-        $mealsPerDay = count($this->resolveSelectedMeals());
-        $weeklySlots = $mealsPerDay * 7;
+        $sections = [];
 
-        // Derive concrete numbers from repeat factor × actual meal slots
-        $rule = match ($variety) {
-            MealVariety::LOW => $this->buildLowVarietyRule($weeklySlots, $mealPrep, $isPrepDay),
-            MealVariety::MEDIUM => $this->buildMediumVarietyRule($weeklySlots, $mealPrep, $isPrepDay),
-            MealVariety::HIGH => $this->buildHighVarietyRule($mealPrep, $isPrepDay),
-        };
+        foreach ($this->slotPlan as $slot => $plan) {
+            if ($plan['action'] !== 'new') {
+                continue;
+            }
 
-        return $rule;
-    }
+            $forbidden = $plan['forbidden_meals'] ?? collect();
 
-    private function buildLowVarietyRule(int $slots, bool $mealPrep, bool $isPrepDay): string
-    {
-        // Low: each recipe ~3-4x per week
-        $uniques = (int) ceil($slots / 4);
-        $maxRepeat = (int) ceil($slots / $uniques);
+            if ($forbidden->isEmpty()) {
+                continue;
+            }
 
-        $base = "VARIETY RULE (MUST FOLLOW): LOW — use ~{$uniques} unique recipes this week. Each recipe can appear up to {$maxRepeat}x.";
+            $label = ucfirst($slot);
+            $lines = ["Prior {$label} meals this week — your new {$label} MUST differ in BOTH primary_protein AND cuisine from every one of these:"];
 
-        if ($mealPrep && $isPrepDay) {
-            return "{$base} Meal prep day: design batch-friendly meals (stews, grain bowls, sheet pan) that store well for 2-3 days. Same meal repeats on consecutive days as leftovers.";
+            foreach ($forbidden as $meal) {
+                $protein = $meal->primary_protein ?: '?';
+                $cuisine = $meal->cuisine ?: '?';
+                $lines[] = "- \"{$meal->name}\" [protein: {$protein}, cuisine: {$cuisine}]";
+            }
+
+            $sections[] = implode("\n", $lines);
         }
 
-        if ($mealPrep) {
-            return "{$base} Reuse meals from the most recent prep day. Same meal can repeat on consecutive days as leftovers.";
-        }
-
-        return "{$base} NEVER the same meal more than 3 days in a row.";
-    }
-
-    private function buildMediumVarietyRule(int $slots, bool $mealPrep, bool $isPrepDay): string
-    {
-        // Medium: each recipe ~2x per week (cook once, eat leftover next day)
-        $uniques = (int) ceil($slots / 2);
-        $maxRepeat = 2;
-
-        $base = "VARIETY RULE (MUST FOLLOW): MEDIUM — MUST use at least {$uniques} unique recipes this week. Each recipe MUST NOT appear more than {$maxRepeat}x. NEVER repeat the same meal on consecutive days.";
-
-        if ($mealPrep && $isPrepDay) {
-            return "{$base} Meal prep day: prefer batch-friendly meals that store well.";
-        }
-
-        if ($mealPrep) {
-            return "{$base} Leftovers OK: meals can use pre-prepared components.";
-        }
-
-        return $base;
-    }
-
-    private function buildHighVarietyRule(bool $mealPrep, bool $isPrepDay): string
-    {
-        $base = 'VARIETY RULE (MUST FOLLOW): HIGH — every meal MUST be unique, zero repeats across the entire plan.';
-
-        if ($mealPrep && $isPrepDay) {
-            return "{$base} Prep day: prepare diverse components (grains, proteins, sauces) that assemble into different meals each day.";
-        }
-
-        if ($mealPrep) {
-            return "{$base} Use pre-prepared components but create a unique combination each day.";
-        }
-
-        return $base;
+        return implode("\n\n", $sections);
     }
 
     private function buildFavoriteSignals(): string

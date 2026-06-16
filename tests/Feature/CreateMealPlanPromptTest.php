@@ -2,7 +2,7 @@
 
 use App\Ai\Prompts\CreateMealPlanPrompt;
 use App\Enums\CookingPreference;
-use App\Enums\MealVariety;
+use App\Models\Meal;
 use App\Models\Recipe;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -11,10 +11,27 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-function createPrompt(array $profileOverrides = [], ?Carbon $date = null, int $dayNumber = 1): string
+/**
+ * Build a default slot plan: every slot is NEW with no forbidden meals
+ * (the day-1 case). Tests that need REPEAT/forbidden override this.
+ *
+ * @param  list<string>|null  $selectedSlots
+ */
+function defaultSlotPlan(?array $selectedSlots = null): array
+{
+    $slots = $selectedSlots ?? ['breakfast', 'lunch', 'snack', 'dinner'];
+
+    return collect($slots)
+        ->mapWithKeys(fn (string $slot) => [$slot => ['action' => 'new', 'forbidden_meals' => collect()]])
+        ->all();
+}
+
+function createPrompt(array $profileOverrides = [], ?Carbon $date = null, int $dayNumber = 1, ?array $slotPlan = null): string
 {
     $profile = UserProfile::factory()->create($profileOverrides);
     $profile->load('user');
+
+    $selected = $profile->selected_meals ?: ['breakfast', 'lunch', 'snack', 'dinner'];
 
     $prompt = new CreateMealPlanPrompt(
         profile: $profile,
@@ -22,6 +39,7 @@ function createPrompt(array $profileOverrides = [], ?Carbon $date = null, int $d
         dayNumber: $dayNumber,
         date: $date ?? Carbon::parse('2026-06-09'),
         bodyGoal: $profile->body_goal->resolveCanonical()->value,
+        slotPlan: $slotPlan ?? defaultSlotPlan($selected),
     );
 
     return (string) $prompt;
@@ -57,8 +75,11 @@ test('prompt excludes cooking constraint for normal', function () {
     expect($output)->not->toContain('Cooking:');
 });
 
-test('prompt generates only selected meal types', function () {
-    $output = createPrompt(['selected_meals' => ['breakfast', 'lunch', 'dinner']]);
+test('prompt generates only NEW slots', function () {
+    $output = createPrompt(
+        ['selected_meals' => ['breakfast', 'lunch', 'dinner']],
+        slotPlan: defaultSlotPlan(['breakfast', 'lunch', 'dinner']),
+    );
 
     expect($output)
         ->toContain('generate 3 meals: breakfast, lunch, dinner')
@@ -71,70 +92,149 @@ test('prompt defaults to 4 meals when selected_meals is empty', function () {
     expect($output)->toContain('generate 4 meals: breakfast, lunch, snack, dinner');
 });
 
-test('macro targets redistribute proportionally for selected meals', function () {
-    $output = createPrompt(['selected_meals' => ['breakfast', 'dinner']]);
-
-    expect($output)
-        ->toContain('Breakfast:')
-        ->toContain('Dinner:')
-        ->not->toContain('Lunch:')
-        ->not->toContain('Snack:');
-});
-
-test('low variety scales uniques to meal count', function () {
-    // 4 meals/day = 28 slots → ~7 uniques, max 4x
-    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => false]);
-
-    expect($output)->toContain('VARIETY RULE')->toContain('LOW')->toContain('unique recipes');
-});
-
-test('low variety + meal prep on prep day = batch-friendly', function () {
-    $sunday = Carbon::parse('2026-06-14');
-    $output = createPrompt(['meal_variety' => MealVariety::LOW, 'meal_prep_enabled' => true], $sunday);
-
-    expect($output)->toContain('LOW')->toContain('batch-friendly');
-});
-
-test('medium variety with 3 meals produces satisfiable rule', function () {
-    // 3 meals/day = 21 slots → 11 uniques, max 2x (11×2=22 ≥ 21)
-    $output = createPrompt([
-        'meal_variety' => MealVariety::MEDIUM,
-        'meal_prep_enabled' => false,
-        'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+test('prompt omits REPEAT slots from generate list', function () {
+    $source = Meal::factory()->create([
+        'type' => 'lunch',
+        'name' => 'Carbonara',
+        'primary_protein' => 'pork',
+        'cuisine' => 'mediterranean',
     ]);
 
+    $slotPlan = [
+        'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'lunch' => ['action' => 'repeat', 'repeat_from' => $source],
+        'snack' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+    ];
+
+    $output = createPrompt(slotPlan: $slotPlan);
+
     expect($output)
-        ->toContain('VARIETY RULE')
-        ->toContain('MEDIUM')
-        ->toContain('11 unique recipes')
-        ->toContain('MUST NOT appear more than 2x');
+        ->toContain('generate 3 meals: breakfast, snack, dinner')
+        ->not->toContain('Carbonara');
 });
 
-test('medium variety with 4 meals produces satisfiable rule', function () {
-    // 4 meals/day = 28 slots → 14 uniques, max 2x (14×2=28 ≥ 28)
-    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => false]);
+test('prompt lists forbidden meals per slot with protein and cuisine', function () {
+    $forbidden = collect([
+        new Meal([
+            'name' => 'Grilled Chicken Salad',
+            'primary_protein' => 'chicken',
+            'cuisine' => 'mediterranean',
+        ]),
+        new Meal([
+            'name' => 'Tuna Bowl',
+            'primary_protein' => 'fish',
+            'cuisine' => 'asian',
+        ]),
+    ]);
 
-    expect($output)->toContain('14 unique recipes')->toContain('more than 2x');
+    $slotPlan = defaultSlotPlan();
+    $slotPlan['lunch'] = ['action' => 'new', 'forbidden_meals' => $forbidden];
+
+    $output = createPrompt(slotPlan: $slotPlan);
+
+    expect($output)
+        ->toContain('Prior Lunch meals this week')
+        ->toContain('MUST differ in BOTH primary_protein AND cuisine')
+        ->toContain('"Grilled Chicken Salad" [protein: chicken, cuisine: mediterranean]')
+        ->toContain('"Tuna Bowl" [protein: fish, cuisine: asian]');
 });
 
-test('medium variety + meal prep on prep day includes prep hint', function () {
-    $sunday = Carbon::parse('2026-06-14');
-    $output = createPrompt(['meal_variety' => MealVariety::MEDIUM, 'meal_prep_enabled' => true], $sunday);
+test('prompt omits forbidden section when no prior meals exist', function () {
+    $output = createPrompt();
 
-    expect($output)->toContain('MEDIUM')->toContain('batch-friendly');
+    expect($output)->not->toContain('MUST differ in BOTH primary_protein');
 });
 
-test('high variety includes zero repeats rule', function () {
-    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => false]);
+test('macro targets for NEW slots use natural per-day share, not renormalized over NEW only', function () {
+    // Day 5 → MEAL_SPLITS index 0: B=0.275, L=0.325, S=0.125, D=0.275 (sum 1.0).
+    // With 2 REPEAT slots (breakfast, snack) and 2 NEW (lunch, dinner), the
+    // emitted lunch/dinner targets must reflect their natural shares of the
+    // daily total — NOT inflated to fill 100% of the day. Bug fixed Day 5
+    // had AI told lunch=2,146 kcal (= 0.325/0.60 × daily). Should be ~1,290.
 
-    expect($output)->toContain('HIGH')->toContain('zero repeats');
+    $source = Meal::factory()->create();
+
+    $slotPlan = [
+        'breakfast' => ['action' => 'repeat', 'repeat_from' => $source],
+        'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'snack' => ['action' => 'repeat', 'repeat_from' => $source],
+        'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+    ];
+
+    $profile = UserProfile::factory()->create(['selected_meals' => null]);
+    $profile->load('user');
+
+    $prompt = (string) new CreateMealPlanPrompt(
+        profile: $profile,
+        locale: 'en',
+        dayNumber: 5,
+        date: Carbon::parse('2026-06-20'),
+        bodyGoal: $profile->body_goal->resolveCanonical()->value,
+        slotPlan: $slotPlan,
+    );
+
+    $daily = $profile->getMetabolismData()['daily_calories'];
+
+    // Lunch natural share = 0.325, ±5%
+    $lunchMin = (int) round($daily * 0.325 * 0.95);
+    $lunchMax = (int) round($daily * 0.325 * 1.05);
+    expect($prompt)->toContain("Lunch: {$lunchMin}-{$lunchMax} kcal");
+
+    // Dinner natural share = 0.275, ±5%
+    $dinnerMin = (int) round($daily * 0.275 * 0.95);
+    $dinnerMax = (int) round($daily * 0.275 * 1.05);
+    expect($prompt)->toContain("Dinner: {$dinnerMin}-{$dinnerMax} kcal");
+
+    // Only NEW slots should appear in the macro table.
+    expect($prompt)->not->toContain('Breakfast:');
+    expect($prompt)->not->toContain('Snack:');
+
+    // Sanity: prompted lunch + dinner together should be ~60% of daily total
+    // (not 100% — which was the bug).
+    expect($lunchMax + $dinnerMax)->toBeLessThan((int) round($daily * 0.7));
 });
 
-test('high variety + meal prep on prep day = diverse components', function () {
-    $sunday = Carbon::parse('2026-06-14');
-    $output = createPrompt(['meal_variety' => MealVariety::HIGH, 'meal_prep_enabled' => true], $sunday);
+test('macro targets renormalize over user-selected slots when user skipped one', function () {
+    // User skipped snack → 3 slots. Renormalization redistributes the missing
+    // 12.5% across the other 3. All 3 are NEW today → each one's emitted share
+    // is its natural × (1 / 0.875).
+    $slotPlan = [
+        'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+    ];
 
-    expect($output)->toContain('HIGH')->toContain('diverse components');
+    $profile = UserProfile::factory()->create([
+        'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+    ]);
+    $profile->load('user');
+
+    $prompt = (string) new CreateMealPlanPrompt(
+        profile: $profile,
+        locale: 'en',
+        dayNumber: 5,
+        date: Carbon::parse('2026-06-20'),
+        bodyGoal: $profile->body_goal->resolveCanonical()->value,
+        slotPlan: $slotPlan,
+    );
+
+    $daily = $profile->getMetabolismData()['daily_calories'];
+
+    // Renormalized lunch share = 0.325 / 0.875
+    $expectedLunch = (int) round($daily * (0.325 / 0.875) * 0.95);
+    expect($prompt)->toContain("Lunch: {$expectedLunch}");
+    expect($prompt)->not->toContain('Snack:');
+});
+
+test('prompt no longer contains prose variety rules', function () {
+    $output = createPrompt();
+
+    expect($output)
+        ->not->toContain('VARIETY RULE')
+        ->not->toContain('MUST FOLLOW')
+        ->not->toContain('unique recipes')
+        ->not->toContain('BEFORE generating: count');
 });
 
 test('prompt includes favorite recipe signals', function () {
@@ -155,6 +255,7 @@ test('prompt includes favorite recipe signals', function () {
         dayNumber: 1,
         date: Carbon::parse('2026-06-09'),
         bodyGoal: $profile->body_goal->resolveCanonical()->value,
+        slotPlan: defaultSlotPlan(),
     );
 
     expect((string) $prompt)
