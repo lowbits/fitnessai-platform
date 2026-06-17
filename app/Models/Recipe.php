@@ -67,12 +67,15 @@ class Recipe extends Model
             'search_text' => $searchText,
             'primary_protein' => $this->primary_protein,
             'cuisine' => $this->cuisine,
+            'format' => $this->format,
+            'hero_veg' => $this->hero_veg,
+            'source_locale' => $this->source_locale,
             'difficulty' => $this->difficulty,
             'tags' => $this->tags ?? [],
             'allergens' => $this->allergens ?? [],
             'meal_types' => $this->meal_types ?? [],
             'calories' => $this->calories,
-            'protein_g' => (float) $this->protein_g,
+            'protein_g' => (int) $this->protein_g,
             'total_time_minutes' => ($this->prep_time_minutes ?? 0) + ($this->cook_time_minutes ?? 0),
             'ingredient_names' => collect($this->ingredients ?? [])
                 ->pluck('name')

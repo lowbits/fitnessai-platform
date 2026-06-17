@@ -27,7 +27,7 @@ test('meal plan batch generates plans for each day using the agent', function ()
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertPrompted(fn () => true);
 
@@ -53,7 +53,7 @@ test('meal plan batch skips already generated days', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 2);
-    $job->handle();
+    dispatch_sync($job);
 
     // Only day 2 should trigger the agent (day 1 was skipped)
     NutritionPlannerAgent::assertPrompted(fn () => true);
@@ -79,7 +79,7 @@ test('meal plan batch retries failed days', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 1);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertPrompted(fn () => true);
 });
@@ -115,7 +115,7 @@ test('meal plan batch cleans up partial meals before retry', function () {
     expect($mealPlan->meals()->count())->toBe(1);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 1);
-    $job->handle();
+    dispatch_sync($job);
 
     // Old partial meals should have been cleaned up
     $mealPlan->refresh();
@@ -134,7 +134,7 @@ test('meal plan batch exits early without profile', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertNotPrompted(fn () => true);
 
@@ -391,7 +391,7 @@ test('batch skips AI when all slots are REPEAT and inserts exact duplicates', fu
 
     // Day 3: budget exhausted for both slots → all REPEAT → no AI call.
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 3, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertNotPrompted(fn () => true);
 
@@ -448,7 +448,7 @@ test('exact-repeat meal preserves grams and macros from source', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 3, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     $day3 = MealPlan::where(['plan_id' => $plan->id, 'day_number' => 3])->first();
     $repeated = $day3->meals->where('name', $source->name)->first();

@@ -2,11 +2,15 @@
 
 namespace App\Actions;
 
+use App\Enums\DietaryPreference;
 use App\Enums\MealVariety;
+use App\Enums\PrimaryProtein;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
+use App\Models\Recipe;
 use App\Models\UserProfile;
+use App\Services\RecipeFinder;
 use Illuminate\Support\Collection;
 
 /**
@@ -26,8 +30,18 @@ class PlanMealSlotsForDay
     /** @var list<string> */
     public const SLOTS = ['breakfast', 'lunch', 'snack', 'dinner'];
 
+    /** @var array<string, float> */
+    private const MEAL_SPLIT = [
+        'breakfast' => 0.275,
+        'lunch' => 0.325,
+        'snack' => 0.125,
+        'dinner' => 0.275,
+    ];
+
+    public function __construct(private readonly RecipeFinder $finder) {}
+
     /**
-     * @return array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection<int, Meal>, repeat_from?: Meal}>
+     * @return array<string, array{action: 'new'|'repeat'|'reuse', forbidden_meals?: Collection<int, Meal>, repeat_from?: Meal, recipe?: Recipe}>
      */
     public function handle(Plan $plan, int $dayNumber, UserProfile $profile): array
     {
@@ -35,32 +49,76 @@ class PlanMealSlotsForDay
         $targets = $tier->perSlotDistinctTargets();
         $selectedSlots = $this->resolveSelectedSlots($profile);
         $priorMeals = $this->fetchPriorWeekMeals($plan, $dayNumber);
+        $allWeekForbidden = $priorMeals->unique('name')->values();
+        $context = $this->finderContext($profile, $selectedSlots);
 
         $result = [];
-
-        $allWeekForbidden = $priorMeals->unique('name')->values();
 
         foreach ($selectedSlots as $slot) {
             $slotMeals = $priorMeals->where('type', $slot);
             $distinctSoFar = $slotMeals->pluck('name')->unique()->count();
             $target = $targets[$slot];
 
-            if ($distinctSoFar < $target) {
+            if ($distinctSoFar >= $target) {
                 $result[$slot] = [
-                    'action' => 'new',
-                    'forbidden_meals' => $allWeekForbidden,
+                    'action' => 'repeat',
+                    'repeat_from' => $this->pickRepeatCandidate($slotMeals, $dayNumber),
                 ];
 
                 continue;
             }
 
+            $recipe = $this->finder->findCandidate(
+                mealType: $slot,
+                targetKcal: $context['slot_kcal'][$slot],
+                locale: $context['locale'],
+                allowedProteins: $context['allowed_proteins'],
+                dislikes: $context['dislikes'],
+                forbiddenAxes: $allWeekForbidden,
+            );
+
+            if ($recipe !== null) {
+                $result[$slot] = ['action' => 'reuse', 'recipe' => $recipe];
+
+                continue;
+            }
+
             $result[$slot] = [
-                'action' => 'repeat',
-                'repeat_from' => $this->pickRepeatCandidate($slotMeals, $dayNumber),
+                'action' => 'new',
+                'forbidden_meals' => $allWeekForbidden,
             ];
         }
 
         return $result;
+    }
+
+    /**
+     * @param  list<string>  $selectedSlots
+     * @return array{locale: string, allowed_proteins: list<string>, dislikes: list<string>, slot_kcal: array<string, int>}
+     */
+    private function finderContext(UserProfile $profile, array $selectedSlots): array
+    {
+        $diet = $profile->resolveDietaryPreference();
+        $diet = $diet instanceof DietaryPreference ? $diet : DietaryPreference::OMNIVORE;
+
+        $allowed = array_map(fn (PrimaryProtein $p) => $p->value, PrimaryProtein::allowedFor($diet));
+
+        $metabolism = $profile->getMetabolismData();
+        $daily = (int) $metabolism['daily_calories'];
+
+        $filteredShares = array_intersect_key(self::MEAL_SPLIT, array_flip($selectedSlots));
+        $sum = array_sum($filteredShares) ?: 1.0;
+        $slotKcal = [];
+        foreach ($filteredShares as $slot => $share) {
+            $slotKcal[$slot] = (int) round($daily * ($share / $sum));
+        }
+
+        return [
+            'locale' => $profile->user->locale ?? 'en',
+            'allowed_proteins' => $allowed,
+            'dislikes' => array_map(fn (string $d) => mb_strtolower(trim($d)), $profile->food_dislikes ?? []),
+            'slot_kcal' => $slotKcal,
+        ];
     }
 
     /**

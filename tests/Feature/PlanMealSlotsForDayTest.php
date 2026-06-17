@@ -6,22 +6,22 @@ use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
-use App\Models\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
 function makePlanWithProfile(MealVariety $variety = MealVariety::MEDIUM): array
 {
-    $user = User::factory()->create();
-    $profile = UserProfile::factory()->create([
-        'user_id' => $user->id,
-        'meal_variety' => $variety,
-        'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
-    ]);
+    $user = User::factory()
+        ->withProfile([
+            'meal_variety' => $variety,
+            'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
+        ])
+        ->create();
+
     $plan = Plan::factory()->create(['user_id' => $user->id, 'duration_days' => 28, 'start_date' => now()]);
 
-    return [$plan, $profile];
+    return [$plan, $user->profile];
 }
 
 function seedDay(Plan $plan, int $dayNumber, array $meals): MealPlan
@@ -55,7 +55,7 @@ test('MealVariety per-slot distinct targets match spec', function () {
 test('day 1 returns NEW for every slot with empty forbidden lists', function () {
     [$plan, $profile] = makePlanWithProfile();
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 1, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
 
     expect($result)->toHaveKeys(['breakfast', 'lunch', 'snack', 'dinner']);
     foreach ($result as $slot => $entry) {
@@ -75,7 +75,7 @@ test('slot below distinct budget returns NEW with prior meals as forbidden', fun
         ['type' => 'lunch', 'name' => 'Tuna Bowl', 'primary_protein' => 'fish', 'cuisine' => 'asian'],
     ]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 3, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 3, profile: $profile);
 
     expect($result['lunch']['action'])->toBe('new');
     expect($result['lunch']['forbidden_meals']->pluck('name')->all())
@@ -93,7 +93,7 @@ test('slot at distinct budget returns REPEAT of a prior meal', function () {
         ['type' => 'lunch', 'name' => 'Tuna Bowl', 'primary_protein' => 'fish', 'cuisine' => 'asian'],
     ]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 3, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 3, profile: $profile);
 
     expect($result['lunch']['action'])->toBe('repeat');
     expect($result['lunch']['repeat_from']->name)
@@ -108,7 +108,7 @@ test('repeat candidate picks least-used meal first', function () {
     seedDay($plan, 2, [['type' => 'lunch', 'name' => 'Carbonara']]);
     seedDay($plan, 3, [['type' => 'lunch', 'name' => 'Tuna Bowl']]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 4, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 4, profile: $profile);
 
     expect($result['lunch']['action'])->toBe('repeat');
     expect($result['lunch']['repeat_from']->name)->toBe('Tuna Bowl');
@@ -122,7 +122,7 @@ test('variety budget resets at the start of week 2', function () {
     seedDay($plan, 7, [['type' => 'lunch', 'name' => 'Tuna Bowl']]);
 
     // Day 8 = start of week 2 → no prior meals in this week → NEW with empty forbidden.
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 8, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 8, profile: $profile);
 
     expect($result['lunch']['action'])->toBe('new');
     expect($result['lunch']['forbidden_meals'])->toBeEmpty();
@@ -132,7 +132,7 @@ test('respects user selected_meals (no snack slot when user did not pick it)', f
     [$plan, $profile] = makePlanWithProfile();
     $profile->update(['selected_meals' => ['breakfast', 'lunch', 'dinner']]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 1, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
 
     expect(array_keys($result))->toEqualCanonicalizing(['breakfast', 'lunch', 'dinner']);
 });
@@ -144,7 +144,7 @@ test('LOW tier exhausts dinner budget by day 3', function () {
     seedDay($plan, 1, [['type' => 'dinner', 'name' => 'Salmon Bowl']]);
     seedDay($plan, 2, [['type' => 'dinner', 'name' => 'Chicken Curry']]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 3, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 3, profile: $profile);
 
     expect($result['dinner']['action'])->toBe('repeat');
 });
@@ -159,7 +159,7 @@ test('forbidden_meals is cross-slot: a new lunch sees prior dinners and breakfas
         ['type' => 'dinner', 'name' => 'Spinat-Ricotta-Lasagne'],
     ]);
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 2, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 2, profile: $profile);
 
     // The lunch slot's forbidden list must include the dinner (Lasagne) and
     // the breakfast (Overnight Oats) — otherwise template-twin Cannelloni
@@ -176,7 +176,7 @@ test('HIGH tier never returns REPEAT within first 7 days', function () {
         seedDay($plan, $day, [['type' => 'dinner', 'name' => "Dinner Day {$day}"]]);
     }
 
-    $result = (new PlanMealSlotsForDay)->handle($plan, dayNumber: 7, profile: $profile);
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 7, profile: $profile);
 
     expect($result['dinner']['action'])->toBe('new')
         ->and($result['dinner']['forbidden_meals'])->toHaveCount(6);

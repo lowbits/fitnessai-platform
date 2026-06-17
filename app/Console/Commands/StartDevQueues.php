@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 class StartDevQueues extends Command
 {
     protected $signature = 'dev:queues';
+
     protected $description = 'Start all development queue workers and scheduler';
 
     private array $processes = [];
@@ -28,6 +29,7 @@ class StartDevQueues extends Command
             ['php', 'artisan', 'schedule:work'],
             ['php', 'artisan', 'queue:work', '--queue=workouts', '--timeout=3000'],
             ['php', 'artisan', 'queue:work', '--queue=nutrition', '--timeout=3000'],
+            ['php', 'artisan', 'queue:work', '--queue=images', '--timeout=3000'],
             ['php', 'artisan', 'queue:work', '--queue=default'],
         ];
 
@@ -37,7 +39,7 @@ class StartDevQueues extends Command
             $process->start();
 
             $this->processes[] = $process;
-            $this->info('✓ Started: ' . implode(' ', $command));
+            $this->info('✓ Started: '.implode(' ', $command));
         }
 
         $this->newLine();
@@ -59,8 +61,8 @@ class StartDevQueues extends Command
                 echo $process->getIncrementalErrorOutput();
 
                 // Restart if died
-                if (!$process->isRunning()) {
-                    $this->warn('⚠ Process died, restarting: ' . $process->getCommandLine());
+                if (! $process->isRunning()) {
+                    $this->warn('⚠ Process died, restarting: '.$process->getCommandLine());
                     $process->restart();
                 }
             }

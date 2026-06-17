@@ -8,6 +8,7 @@ use App\Ai\Prompts\CreateMealPlanPrompt;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
+use App\Models\Recipe;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,10 +35,8 @@ class GenerateMealPlanBatch implements ShouldQueue
         $this->onQueue('nutrition');
     }
 
-    public function handle(): void
+    public function handle(PlanMealSlotsForDay $slotPlanner): void
     {
-        $slotPlanner = new PlanMealSlotsForDay;
-
         $this->user->load(['profile', 'favoriteRecipes']);
         $profile = $this->user->profile;
 
@@ -157,16 +156,56 @@ class GenerateMealPlanBatch implements ShouldQueue
             ]);
         }
 
+        $this->insertReusedMeals($mealPlan, $slotPlan);
         $this->insertRepeatedMeals($mealPlan, $slotPlan);
         $this->finalizeMealPlan($mealPlan, $day);
     }
 
     /**
-     * For each REPEAT slot, duplicate the chosen prior Meal record exactly.
-     * Same name, ingredients, grams, macros — no AI regeneration. Any meal of
-     * the same type the AI happened to generate is removed first.
-     *
-     * @param  array<string, array{action: 'new'|'repeat', forbidden_meals?: Collection, repeat_from?: Meal}>  $slotPlan
+     * @param  array<string, array{action: string, forbidden_meals?: Collection, repeat_from?: Meal, recipe?: Recipe}>  $slotPlan
+     */
+    private function insertReusedMeals(MealPlan $mealPlan, array $slotPlan): void
+    {
+        foreach ($slotPlan as $type => $plan) {
+            if ($plan['action'] !== 'reuse' || ! isset($plan['recipe'])) {
+                continue;
+            }
+
+            $mealPlan->meals()->where('type', $type)->delete();
+
+            $recipe = $plan['recipe'];
+
+            Meal::create([
+                'meal_plan_id' => $mealPlan->id,
+                'recipe_id' => $recipe->id,
+                'type' => $type,
+                'name' => $recipe->name,
+                'description' => $recipe->description,
+                'calories' => $recipe->calories,
+                'protein_g' => $recipe->protein_g,
+                'carbs_g' => $recipe->carbs_g,
+                'fat_g' => $recipe->fat_g,
+                'fiber_g' => $recipe->fiber_g,
+                'sugar_g' => $recipe->sugar_g,
+                'ingredients' => $recipe->ingredients,
+                'instructions' => $recipe->instructions,
+                'prep_time_minutes' => $recipe->prep_time_minutes,
+                'cook_time_minutes' => $recipe->cook_time_minutes,
+                'difficulty' => $recipe->difficulty,
+                'servings' => $recipe->servings,
+                'tags' => $recipe->tags,
+                'allergens' => $recipe->allergens,
+                'primary_protein' => $recipe->primary_protein,
+                'cuisine' => $recipe->cuisine,
+                'format' => $recipe->format,
+                'hero_veg' => $recipe->hero_veg,
+                'status' => 'generated',
+            ]);
+        }
+    }
+
+    /**
+     * @param  array<string, array{action: string, forbidden_meals?: Collection, repeat_from?: Meal, recipe?: Recipe}>  $slotPlan
      */
     private function insertRepeatedMeals(MealPlan $mealPlan, array $slotPlan): void
     {
@@ -181,6 +220,7 @@ class GenerateMealPlanBatch implements ShouldQueue
 
             Meal::create([
                 'meal_plan_id' => $mealPlan->id,
+                'recipe_id' => $source->recipe_id,
                 'type' => $source->type,
                 'name' => $source->name,
                 'description' => $source->description,

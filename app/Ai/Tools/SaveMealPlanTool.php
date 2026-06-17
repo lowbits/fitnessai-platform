@@ -7,8 +7,12 @@ use App\Enums\Cuisine;
 use App\Enums\HeroVeg;
 use App\Enums\MealFormat;
 use App\Enums\PrimaryProtein;
+use App\Jobs\GenerateRecipeImage;
 use App\Models\Meal;
 use App\Models\MealPlan;
+use App\Models\Recipe;
+use App\Services\RecipeFinder;
+use App\Support\RecipeIngredientHash;
 use Exception;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Log;
@@ -180,9 +184,14 @@ class SaveMealPlanTool implements Tool
 
     private function saveMeals(array $meals): void
     {
+        $locale = $this->mealPlan->plan->user->locale ?? 'en';
+
         foreach ($meals as $meal) {
+            $recipe = $this->upsertRecipe($meal, $locale);
+
             Meal::create([
                 'meal_plan_id' => $this->mealPlan->id,
+                'recipe_id' => $recipe->id,
                 'type' => $meal['type'],
                 'name' => $meal['name'],
                 'description' => $meal['description'] ?? null,
@@ -207,6 +216,53 @@ class SaveMealPlanTool implements Tool
                 'status' => 'generated',
             ]);
         }
+    }
+
+    private function upsertRecipe(array $meal, string $locale): Recipe
+    {
+        $hash = RecipeIngredientHash::compute($meal['ingredients'] ?? [], $locale);
+
+        if ($existing = Recipe::where('ingredient_hash', $hash)->where('source_locale', $locale)->first()) {
+            return $existing;
+        }
+
+        if ($similar = app(RecipeFinder::class)->findSimilar($meal['name'], $meal['ingredients'] ?? [], $locale)) {
+            return $similar;
+        }
+
+        $recipe = Recipe::create([
+            'ingredient_hash' => $hash,
+            'source_locale' => $locale,
+            'name' => $meal['name'],
+            'description' => $meal['description'] ?? null,
+            'ingredients' => $meal['ingredients'] ?? [],
+            'instructions' => $meal['instructions'] ?? [],
+            'prep_time_minutes' => $meal['prep_time_minutes'] ?? null,
+            'cook_time_minutes' => $meal['cook_time_minutes'] ?? null,
+            'difficulty' => $meal['difficulty'] ?? 'Medium',
+            'servings' => 1,
+            'calories' => $meal['calories'],
+            'protein_g' => $meal['protein_g'],
+            'carbs_g' => $meal['carbs_g'],
+            'fat_g' => $meal['fat_g'],
+            'fiber_g' => $meal['fiber_g'] ?? null,
+            'sugar_g' => $meal['sugar_g'] ?? null,
+            'tags' => $meal['tags'] ?? [],
+            'allergens' => $meal['allergens'] ?? [],
+            'meal_types' => [$meal['type']],
+            'primary_protein' => $meal['primary_protein'] ?? null,
+            'cuisine' => $meal['cuisine'] ?? null,
+            'format' => $meal['format'] ?? null,
+            'hero_veg' => $meal['hero_veg'] ?? null,
+            'is_verified' => false,
+            'needs_translation' => false,
+        ]);
+
+        if (! app()->environment('testing')) {
+            GenerateRecipeImage::dispatch($recipe);
+        }
+
+        return $recipe;
     }
 
     private function calculateTotals(array $meals): array
