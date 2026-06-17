@@ -37,7 +37,6 @@ class MealPlan extends Model
 
     public function meals(): HasMany
     {
-        return $this->hasMany(Meal::class);
+        return $this->hasMany(Meal::class)->inEatOrder();
     }
 }
-

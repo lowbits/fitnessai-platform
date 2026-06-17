@@ -110,18 +110,16 @@ class PlanMealSlotsForDay
     }
 
     /**
-     * Pick the prior slot meal that has been used the fewest times this week
-     * (least-used spreads repeats evenly). Ties broken by earliest day_number.
-     *
      * @param  Collection<int, Meal>  $slotMeals
      */
     private function pickRepeatCandidate(Collection $slotMeals): Meal
     {
         $countsByName = $slotMeals->groupBy('name')->map->count();
+        $effort = fn (Meal $m) => ($m->prep_time_minutes ?? 0) + ($m->cook_time_minutes ?? 0);
 
         return $slotMeals
-            ->sort(fn (Meal $a, Meal $b) => [$countsByName[$a->name], $a->mealPlan->day_number]
-                <=> [$countsByName[$b->name], $b->mealPlan->day_number])
+            ->sort(fn (Meal $a, Meal $b) => [$countsByName[$a->name], $effort($a)]
+                <=> [$countsByName[$b->name], $effort($b)])
             ->first();
     }
 }

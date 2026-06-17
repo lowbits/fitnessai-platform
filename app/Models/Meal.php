@@ -63,6 +63,11 @@ class Meal extends Model
         return $this->belongsTo(Recipe::class);
     }
 
+    public function scopeInEatOrder($query)
+    {
+        return $query->orderByRaw("CASE type WHEN 'breakfast' THEN 1 WHEN 'lunch' THEN 2 WHEN 'snack' THEN 3 WHEN 'dinner' THEN 4 END");
+    }
+
     /**
      * Mark this meal as completed
      */

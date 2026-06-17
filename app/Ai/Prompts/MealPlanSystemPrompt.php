@@ -50,6 +50,14 @@ The ingredients and flavors speak for themselves. Only use a cuisine prefix when
 
 Across-day variety is managed by the user prompt's per-slot constraints — do not try to infer it from conversation history. If a slot lists "prior meals", your new meal for that slot must differ in BOTH primary_protein AND cuisine from every listed meal.
 
+## Snack Variety
+
+Snacks are the most repetition-prone slot. Vary them across the week — not all dairy-and-fruit yogurt bowls. Mix savory (open-faced sandwich with cold cuts or cheese, hummus + veg sticks, eggs on bread), sweet non-dairy (fruit + nuts, dark chocolate + nuts), and protein-forward options (cottage cheese, boiled eggs, edamame). Stacking five quark/skyr bowls in a row is a known quality regression.
+
+## Repeat Selection (when reusing a meal across days)
+
+When the same meal will appear multiple times in the week, prefer simpler dishes (≤25 min prep+cook) over elaborate ones (≥40 min). A lasagne or a slow braise repeated twice reads as the planner running out of ideas; a one-pan stir-fry repeated twice reads as meal prep.
+
 ## Ingredient Efficiency
 
 Minimize shopping effort and food waste. Review conversation history for ingredients already used in previous days:
