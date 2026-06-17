@@ -105,6 +105,13 @@ class CreateMealPlanPrompt implements Stringable
      * only over NEW slots, today's NEW slots would each be told to swell to
      * cover the REPEAT slots' calories too — that's the day-5 5,400 kcal bug.
      *
+     * When at least one slot is a REPEAT, the per-slot ranges (scoped to
+     * natural shares) won't sum to the full daily total — and the AI sees a
+     * math conflict between "Daily total: 2554" and ranges that max at 2346.
+     * The "Your budget for the NEW slots" line resolves this: it shows the
+     * AI exactly what its slots must sum to, leaving the repeat slot's share
+     * out of the equation since PHP will insert it after.
+     *
      * @param  list<string>  $userSelectedSlots
      * @param  list<string>  $newSlots
      */
@@ -119,7 +126,23 @@ class CreateMealPlanPrompt implements Stringable
         $sum = array_sum($filtered);
         $split = $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
 
-        $lines = ["Daily totals: {$calories} kcal | {$protein}g P | {$carbs}g C | {$fat}g F", ''];
+        $newShare = 0.0;
+        foreach ($newSlots as $slot) {
+            $newShare += $split[$slot] ?? 0.0;
+        }
+
+        $lines = ["Daily totals: {$calories} kcal | {$protein}g P | {$carbs}g C | {$fat}g F"];
+
+        if ($newShare < 0.999) {
+            $newCal = (int) round($calories * $newShare);
+            $newP = (int) round($protein * $newShare);
+            $newC = (int) round($carbs * $newShare);
+            $newF = (int) round($fat * $newShare);
+            $lines[] = "Your budget for the NEW slots you'll generate today: {$newCal} kcal | {$newP}g P | {$newC}g C | {$newF}g F";
+            $lines[] = '(The rest is locked in by PHP-inserted repeat slot(s) — do NOT regenerate them.)';
+        }
+
+        $lines[] = '';
 
         foreach ($split as $mealType => $pct) {
             if (! in_array($mealType, $newSlots, true)) {
