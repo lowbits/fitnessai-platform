@@ -159,12 +159,12 @@ class SaveMealPlanTool implements Tool
                     ->required(),
 
                 'cuisine' => $schema->string()
-                    ->description('Cuisine the meal belongs to. Use "mixed" only when no identifiable cuisine.')
+                    ->description('Cuisine the meal belongs to. Pattern hints: open-faced bread/sandwich with cold cuts or cheese → german. Skillet pasta or gnocchi dishes → italian. Shakshuka, hummus plates, couscous bowls → middle_eastern. Yogurt-and-toppings dishes without a strong cuisine signal → american. Use "mixed" only when there is genuinely no identifiable cuisine.')
                     ->enum(array_column(Cuisine::cases(), 'value'))
                     ->required(),
 
                 'format' => $schema->string()
-                    ->description('Visual format on the plate. bowl/pasta/noodles for Asian/wrap/sandwich/soup/salad/curry/bake/grill/sheet_pan/stir_fry/omelet/porridge/pancake/toast/yogurt_bowl/smoothie/pizza. Use mixed only if none fits.')
+                    ->description('Visual format on the plate. Pattern hints (the WHOLE-DISH structure, not a single ingredient): eggs-as-main even cooked in sauce → omelet (shakshuka, frittata, scramble). Strained-yogurt or fresh-cheese bowl with fruit/granola toppings → yogurt_bowl. Pasta-shape skillet or sauté → pasta (not stir_fry). Hot grain breakfast (oats, congee) → porridge. Use "mixed" ONLY when truly no format fits — NEVER as a default for ambiguous cases.')
                     ->enum(array_column(MealFormat::cases(), 'value'))
                     ->required(),
 

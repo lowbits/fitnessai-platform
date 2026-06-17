@@ -76,7 +76,7 @@ class CreateMealPlanPrompt implements Stringable
             $this->buildFavoriteSignals(),
             $this->buildSlotConstraints(),
             "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}, ".($this->date->isWeekday() ? 'workday' : 'weekend').') — generate '.count($newSlots)." meals: {$mealList}",
-            "Language: {$language} for ALL text fields (names, descriptions, ingredients, instructions, tags, allergens)",
+            "Language: {$language} for human-readable fields (name, description, ingredients[].name, instructions). Tags stay in the user's language. EXCEPT primary_protein, cuisine, format, hero_veg, allergens — those MUST be the canonical English enum values from the schema regardless of locale.",
         ];
 
         return implode("\n\n", array_filter($parts));

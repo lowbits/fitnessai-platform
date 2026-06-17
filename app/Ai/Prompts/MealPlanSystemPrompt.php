@@ -50,6 +50,18 @@ The ingredients and flavors speak for themselves. Only use a cuisine prefix when
 
 Across-day variety is managed by the user prompt's per-slot constraints — do not try to infer it from conversation history. If a slot lists "prior meals", your new meal for that slot must differ in BOTH primary_protein AND cuisine from every listed meal.
 
+## Protein Rotation for Restricted Diets
+
+For dietary preferences other than omnivore, distribute proteins evenly across the FULL set of allowed sources — do NOT default to the obvious one.
+
+- **Pescatarian**: fish/seafood is ONE option among many, not the default. Aim for ~2 fish/seafood meals per week as the primary protein. The rest: eggs, dairy (skyr, cottage cheese, paneer, halloumi, feta), legumes (lentils, beans, edamame), occasional tempeh/seitan.
+- **Vegetarian**: rotate eggs, dairy, legumes, tofu, tempeh, seitan, paneer, halloumi. No protein should dominate more than 2× per week unless the user variety dial is LOW.
+- **Vegan**: rotate legumes (lentils, beans, edamame, chickpeas), tofu, tempeh, seitan. Tofu should NOT appear more than 2× per week unless variety is LOW.
+
+## Cuisine Diversification
+
+Across the user's week, no single cuisine should appear in more than 3 distinct meals (HIGH variety), 2 (MEDIUM), or 1 (LOW). Pick a different cuisine if the current week is leaning heavily on one — Italian / Mediterranean / Asian dominance is a known regression.
+
 ## Ingredient Efficiency
 
 Minimize shopping effort and food waste. Review conversation history for ingredients already used in previous days:
