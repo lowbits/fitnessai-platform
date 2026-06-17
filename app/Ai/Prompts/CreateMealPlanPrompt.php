@@ -98,71 +98,90 @@ class CreateMealPlanPrompt implements Stringable
     /**
      * Per-slot calorie/macro targets.
      *
-     * Renormalization is done over the user's full selected slots — so a user
-     * who skipped snack still gets the missing 12.5% redistributed across the
-     * remaining 3 slots. But emit only NEW slot lines, because REPEAT slots
-     * already have fixed macros from their source meal. If we renormalized
-     * only over NEW slots, today's NEW slots would each be told to swell to
-     * cover the REPEAT slots' calories too — that's the day-5 5,400 kcal bug.
+     * Two presentation rules cover both common cases:
      *
-     * When at least one slot is a REPEAT, the per-slot ranges (scoped to
-     * natural shares) won't sum to the full daily total — and the AI sees a
-     * math conflict between "Daily total: 2554" and ranges that max at 2346.
-     * The "Your budget for the NEW slots" line resolves this: it shows the
-     * AI exactly what its slots must sum to, leaving the repeat slot's share
-     * out of the equation since PHP will insert it after.
+     * 1. Renormalization runs across the user's *full* selected slots, so a
+     *    user who skipped snack still gets the missing share redistributed
+     *    across the remaining 3 (their daily target stays whole).
+     *
+     * 2. Per-slot ranges are emitted only for NEW slots — REPEAT slots have
+     *    fixed macros from their source Meal and PHP inserts them after the
+     *    AI call. When that subset doesn't span the whole day, we add a
+     *    "Your budget" line so the AI's per-slot ranges actually sum to the
+     *    budget it's told to hit. Without it, the AI sees a math conflict
+     *    between "Daily total: 2554" and ranges that max at 2346 — and
+     *    Thomas lands at -303 kcal trying to honor the wrong target.
      *
      * @param  list<string>  $userSelectedSlots
      * @param  list<string>  $newSlots
      */
     private function buildMacroTargets(array $metabolismData, array $userSelectedSlots, array $newSlots): string
     {
-        $calories = $metabolismData['daily_calories'];
-        $protein = $metabolismData['protein_g'];
-        $carbs = $metabolismData['carbs_g'];
-        $fat = $metabolismData['fat_g'];
+        $split = $this->slotShares($userSelectedSlots);
+        $hasRepeatSlots = count($newSlots) < count($userSelectedSlots);
+        $newSlotsShare = array_sum(array_intersect_key($split, array_flip($newSlots)));
 
-        $filtered = array_intersect_key(self::MEAL_SPLIT, array_flip($userSelectedSlots));
-        $sum = array_sum($filtered);
-        $split = $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
+        $lines = [$this->macroLine('Daily totals', $metabolismData, 1.0)];
 
-        $newShare = 0.0;
-        foreach ($newSlots as $slot) {
-            $newShare += $split[$slot] ?? 0.0;
-        }
-
-        $lines = ["Daily totals: {$calories} kcal | {$protein}g P | {$carbs}g C | {$fat}g F"];
-
-        if ($newShare < 0.999) {
-            $newCal = (int) round($calories * $newShare);
-            $newP = (int) round($protein * $newShare);
-            $newC = (int) round($carbs * $newShare);
-            $newF = (int) round($fat * $newShare);
-            $lines[] = "Your budget for the NEW slots you'll generate today: {$newCal} kcal | {$newP}g P | {$newC}g C | {$newF}g F";
+        if ($hasRepeatSlots) {
+            $lines[] = $this->macroLine("Your budget for the NEW slots you'll generate today", $metabolismData, $newSlotsShare);
             $lines[] = '(The rest is locked in by PHP-inserted repeat slot(s) — do NOT regenerate them.)';
         }
 
         $lines[] = '';
 
-        foreach ($split as $mealType => $pct) {
-            if (! in_array($mealType, $newSlots, true)) {
-                continue;
+        foreach ($split as $slot => $pct) {
+            if (in_array($slot, $newSlots, true)) {
+                $lines[] = $this->macroRange(ucfirst($slot), $metabolismData, $pct);
             }
-
-            $label = ucfirst($mealType);
-            $calMin = (int) round($calories * $pct * 0.95);
-            $calMax = (int) round($calories * $pct * 1.05);
-            $pMin = (int) round($protein * $pct * 0.95);
-            $pMax = (int) round($protein * $pct * 1.05);
-            $cMin = (int) round($carbs * $pct * 0.95);
-            $cMax = (int) round($carbs * $pct * 1.05);
-            $fMin = (int) round($fat * $pct * 0.95);
-            $fMax = (int) round($fat * $pct * 1.05);
-
-            $lines[] = "{$label}: {$calMin}-{$calMax} kcal | {$pMin}-{$pMax}g P | {$cMin}-{$cMax}g C | {$fMin}-{$fMax}g F";
         }
 
         return implode("\n", $lines);
+    }
+
+    /**
+     * Renormalize MEAL_SPLIT against the user's selected slots so the shares
+     * always sum to 1.0 (a 3-slot user gets the snack share spread).
+     *
+     * @param  list<string>  $userSelectedSlots
+     * @return array<string, float>
+     */
+    private function slotShares(array $userSelectedSlots): array
+    {
+        $filtered = array_intersect_key(self::MEAL_SPLIT, array_flip($userSelectedSlots));
+        $sum = array_sum($filtered);
+
+        return $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
+    }
+
+    /**
+     * "Label: X kcal | Yg P | Zg C | Wg F" for a single share of the day's macros.
+     */
+    private function macroLine(string $label, array $metabolism, float $share): string
+    {
+        $cal = (int) round($metabolism['daily_calories'] * $share);
+        $p = (int) round($metabolism['protein_g'] * $share);
+        $c = (int) round($metabolism['carbs_g'] * $share);
+        $f = (int) round($metabolism['fat_g'] * $share);
+
+        return "{$label}: {$cal} kcal | {$p}g P | {$c}g C | {$f}g F";
+    }
+
+    /**
+     * "Label: min-max kcal | min-maxg P | ..." at ±5% around a slot's natural share.
+     */
+    private function macroRange(string $label, array $metabolism, float $share): string
+    {
+        $bounds = fn (string $key, float $factor) => (int) round($metabolism[$key] * $share * $factor);
+
+        return sprintf(
+            '%s: %d-%d kcal | %d-%dg P | %d-%dg C | %d-%dg F',
+            $label,
+            $bounds('daily_calories', 0.95), $bounds('daily_calories', 1.05),
+            $bounds('protein_g', 0.95), $bounds('protein_g', 1.05),
+            $bounds('carbs_g', 0.95), $bounds('carbs_g', 1.05),
+            $bounds('fat_g', 0.95), $bounds('fat_g', 1.05),
+        );
     }
 
     /**
