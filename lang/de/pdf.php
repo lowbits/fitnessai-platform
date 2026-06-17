@@ -31,7 +31,7 @@ return [
         'generating' => 'Ernährungsplan wird erstellt …',
         'help' => 'Fragen oder Unterstützung?',
         'contact' => 'Kontaktiere uns unter',
-        "meal_type" => [
+        'meal_type' => [
             'breakfast' => 'Frühstück',
             'lunch' => 'Mittagessen',
             'dinner' => 'Abendessen',
@@ -77,5 +77,11 @@ return [
         'help' => 'Fragen oder Unterstützung?',
         'contact' => 'Kontaktiere uns unter',
     ],
-];
 
+    'footer' => [
+        'title' => 'Hol dir das volle Erlebnis in der fytrr App',
+        'subtitle' => 'Workouts & Mahlzeiten tracken, Übungen tauschen und Fortschritte festhalten.',
+        'download' => 'App herunterladen',
+        'scan' => 'Zum Download scannen',
+    ],
+];

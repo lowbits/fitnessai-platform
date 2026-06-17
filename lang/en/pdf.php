@@ -31,7 +31,7 @@ return [
         'generating' => 'Generating meal plan...',
         'help' => 'Need help or have questions?',
         'contact' => 'Contact us at',
-        "meal_type" => [
+        'meal_type' => [
             'breakfast' => 'Breakfast',
             'lunch' => 'Lunch',
             'dinner' => 'Dinner',
@@ -77,5 +77,11 @@ return [
         'help' => 'Need help or have questions?',
         'contact' => 'Contact us at',
     ],
-];
 
+    'footer' => [
+        'title' => 'Get the full experience in the fytrr app',
+        'subtitle' => 'Track workouts & meals, swap exercises and log your progress.',
+        'download' => 'Download the app',
+        'scan' => 'Scan to download',
+    ],
+];

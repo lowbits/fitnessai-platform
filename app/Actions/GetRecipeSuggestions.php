@@ -2,7 +2,7 @@
 
 namespace App\Actions;
 
-use App\Ai\Agents\RecipeTaglineAgent;
+use App\Ai\Agents\FoodTranslatorAgent;
 use App\Enums\DietaryPreference;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -91,12 +91,14 @@ class GetRecipeSuggestions
 
         // Exclude user-specific dislikes — check both allergens and ingredients
         foreach ($dislikes as $dislike) {
-            $dislike = trim($dislike);
+            $dislike = strtolower(trim($dislike));
             if (! $dislike) {
                 continue;
             }
 
-            foreach ($this->synonyms(strtolower($dislike)) as $term) {
+            // Translate to English if needed, then expand synonyms
+            $english = $this->toEnglish($dislike);
+            foreach ($this->synonyms($english) as $term) {
                 $sanitized = $this->sanitize($term);
                 $filters[] = "allergens != '{$sanitized}'";
                 $filters[] = "ingredient_names != '{$sanitized}'";
@@ -155,6 +157,137 @@ class GetRecipeSuggestions
         return $map[$dislike] ?? [$dislike];
     }
 
+    /**
+     * Translate a food term to English. Cached forever per term.
+     * Uses AI for unknown terms, handles any language.
+     */
+    private function toEnglish(string $term): string
+    {
+        // Fast lookup from static map
+        if (isset(self::FOOD_TRANSLATIONS[$term])) {
+            return self::FOOD_TRANSLATIONS[$term];
+        }
+
+        // Already English
+        if (preg_match('/^[a-z ]+$/', $term)) {
+            return $term;
+        }
+
+        // Check if AI already translated this before
+        $cached = Cache::get('food_translate:'.md5($term));
+        if ($cached) {
+            return $cached;
+        }
+
+        // Unknown non-English term — translate via AI (fast, cheapest model)
+        try {
+            $translated = strtolower(trim((string) (new FoodTranslatorAgent)->prompt($term)));
+            Cache::forever('food_translate:'.md5($term), $translated);
+
+            return $translated;
+        } catch (\Throwable) {
+            return $term;
+        }
+    }
+
+    /**
+     * German → English food translation map.
+     * Covers the ~100 most common allergens, intolerances, and food dislikes.
+     */
+    private const FOOD_TRANSLATIONS = [
+        // Allergens & intolerances
+        'laktose' => 'lactose', 'milch' => 'milk', 'milcheiweiß' => 'dairy',
+        'kasein' => 'casein', 'molke' => 'whey',
+        'gluten' => 'gluten', 'weizen' => 'wheat', 'dinkel' => 'spelt',
+        'roggen' => 'rye', 'gerste' => 'barley', 'hafer' => 'oats',
+        'ei' => 'egg', 'eier' => 'eggs', 'hühnerei' => 'egg',
+        'soja' => 'soy', 'sojabohne' => 'soybean',
+        'erdnuss' => 'peanut', 'erdnüsse' => 'peanuts',
+        'nüsse' => 'nuts', 'schalenfrüchte' => 'tree nuts',
+        'haselnuss' => 'hazelnut', 'haselnüsse' => 'hazelnuts',
+        'walnuss' => 'walnut', 'walnüsse' => 'walnuts',
+        'mandel' => 'almond', 'mandeln' => 'almonds',
+        'cashew' => 'cashew', 'cashewnuss' => 'cashew',
+        'pistazie' => 'pistachio', 'pistazien' => 'pistachios',
+        'paranuss' => 'brazil nut', 'macadamia' => 'macadamia',
+        'pekannuss' => 'pecan',
+        'sesam' => 'sesame', 'sellerie' => 'celery', 'senf' => 'mustard',
+        'lupine' => 'lupin', 'weichtiere' => 'mollusks',
+        'sulfite' => 'sulfites', 'schwefeldioxid' => 'sulfites',
+        'fructose' => 'fructose', 'fruktose' => 'fructose',
+        'histamin' => 'histamine', 'sorbit' => 'sorbitol',
+
+        // Meat & fish
+        'schwein' => 'pork', 'schweinefleisch' => 'pork',
+        'rind' => 'beef', 'rindfleisch' => 'beef',
+        'hähnchen' => 'chicken', 'huhn' => 'chicken', 'hühnchen' => 'chicken',
+        'pute' => 'turkey', 'truthahn' => 'turkey',
+        'lamm' => 'lamb', 'lammfleisch' => 'lamb',
+        'wild' => 'game', 'wildfleisch' => 'game',
+        'ente' => 'duck', 'gans' => 'goose',
+        'wurst' => 'sausage', 'schinken' => 'ham', 'speck' => 'bacon',
+        'fleisch' => 'meat',
+        'fisch' => 'fish', 'lachs' => 'salmon', 'thunfisch' => 'tuna',
+        'kabeljau' => 'cod', 'forelle' => 'trout', 'hering' => 'herring',
+        'makrele' => 'mackerel', 'sardine' => 'sardine', 'sardinen' => 'sardines',
+        'garnelen' => 'shrimp', 'krabben' => 'crab', 'krebstiere' => 'shellfish',
+        'muscheln' => 'mussels', 'tintenfisch' => 'squid',
+        'meeresfrüchte' => 'seafood', 'krustentiere' => 'crustaceans',
+        'anchovis' => 'anchovies',
+
+        // Dairy
+        'käse' => 'cheese', 'joghurt' => 'yogurt', 'quark' => 'quark',
+        'sahne' => 'cream', 'butter' => 'butter', 'schmand' => 'sour cream',
+        'frischkäse' => 'cream cheese', 'mozzarella' => 'mozzarella',
+        'parmesan' => 'parmesan', 'feta' => 'feta',
+        'hüttenkäse' => 'cottage cheese', 'ricotta' => 'ricotta',
+        'skyr' => 'skyr',
+
+        // Fruits
+        'apfel' => 'apple', 'banane' => 'banana', 'erdbeere' => 'strawberry',
+        'erdbeeren' => 'strawberries', 'himbeere' => 'raspberry',
+        'heidelbeere' => 'blueberry', 'heidelbeeren' => 'blueberries',
+        'kirsche' => 'cherry', 'kirschen' => 'cherries',
+        'zitrone' => 'lemon', 'orange' => 'orange', 'birne' => 'pear',
+        'pfirsich' => 'peach', 'pflaume' => 'plum', 'traube' => 'grape',
+        'trauben' => 'grapes', 'ananas' => 'pineapple', 'mango' => 'mango',
+        'kiwi' => 'kiwi', 'wassermelone' => 'watermelon',
+        'grapefruit' => 'grapefruit', 'kokosnuss' => 'coconut',
+        'kokos' => 'coconut', 'dattel' => 'date', 'datteln' => 'dates',
+        'feige' => 'fig', 'feigen' => 'figs', 'avocado' => 'avocado',
+
+        // Vegetables
+        'tomate' => 'tomato', 'tomaten' => 'tomatoes',
+        'kartoffel' => 'potato', 'kartoffeln' => 'potatoes',
+        'süßkartoffel' => 'sweet potato',
+        'zwiebel' => 'onion', 'zwiebeln' => 'onions',
+        'knoblauch' => 'garlic', 'lauch' => 'leek',
+        'pilze' => 'mushrooms', 'pilz' => 'mushroom', 'champignons' => 'mushrooms',
+        'paprika' => 'bell pepper', 'chili' => 'chili',
+        'gurke' => 'cucumber', 'spinat' => 'spinach',
+        'brokkoli' => 'broccoli', 'blumenkohl' => 'cauliflower',
+        'kohl' => 'cabbage', 'rotkohl' => 'red cabbage',
+        'aubergine' => 'eggplant', 'zucchini' => 'zucchini',
+        'kürbis' => 'pumpkin', 'erbsen' => 'peas',
+        'bohnen' => 'beans', 'linsen' => 'lentils',
+        'kichererbsen' => 'chickpeas', 'mais' => 'corn',
+        'rote bete' => 'beetroot', 'spargel' => 'asparagus',
+        'grüne bohnen' => 'green beans', 'rosenkohl' => 'brussels sprouts',
+
+        // Grains & carbs
+        'reis' => 'rice', 'nudeln' => 'pasta', 'brot' => 'bread',
+        'couscous' => 'couscous', 'quinoa' => 'quinoa', 'bulgur' => 'bulgur',
+        'hirse' => 'millet', 'buchweizen' => 'buckwheat',
+
+        // Other
+        'honig' => 'honey', 'zucker' => 'sugar', 'zimt' => 'cinnamon',
+        'ingwer' => 'ginger', 'kurkuma' => 'turmeric',
+        'tofu' => 'tofu', 'tempeh' => 'tempeh', 'seitan' => 'seitan',
+        'kokosmilch' => 'coconut milk', 'erdnussbutter' => 'peanut butter',
+        'mandelmus' => 'almond butter', 'tahini' => 'tahini',
+        'olivenöl' => 'olive oil', 'kokosöl' => 'coconut oil',
+    ];
+
     private function sanitize(string $value): string
     {
         return preg_replace('/[^a-zA-Z0-9_ -]/', '', $value);
@@ -169,7 +302,6 @@ class GetRecipeSuggestions
             'id' => $hit['id'],
             'name' => $name,
             'name_en' => $hit['name'],
-            'tagline' => $this->getTagline($hit['id'], $hit['name'], $locale),
             'image' => $hit['image_full'] ? "{$baseUrl}/{$hit['image_full']}" : null,
             'image_full' => $hit['image_full'] ?? null,
             'image_isolated' => $hit['image_isolated'] ?? null,
@@ -178,13 +310,5 @@ class GetRecipeSuggestions
             'cooking_time_minutes' => $hit['total_time_minutes'] ?? 0,
             'meal_types' => $hit['meal_types'] ?? [],
         ];
-    }
-
-    private function getTagline(int $id, string $name, string $locale): string
-    {
-        return Cache::rememberForever(
-            "recipe_tagline:{$id}:{$locale}",
-            fn () => trim((string) (new RecipeTaglineAgent($locale))->prompt($name))
-        );
     }
 }
