@@ -7,6 +7,7 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
 use App\Models\User;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
@@ -99,6 +100,15 @@ class UserResource extends Resource
                         TextEntry::make('created_at')
                             ->dateTime(),
                     ])->columns(3),
+
+                Section::make('Day 1 Preview')
+                    ->description('Latest active plan — meals + workout for day 1')
+                    ->schema([
+                        ViewEntry::make('day_one_preview')
+                            ->hiddenLabel()
+                            ->view('filament.user.day-one-preview'),
+                    ])
+                    ->collapsible(),
 
                 Section::make('Profile')
                     ->schema([
