@@ -38,11 +38,6 @@ class PlanMealSlotsForDay
 
         $result = [];
 
-        // Cross-slot twin guard: every NEW slot must differ on ≥1 of
-        // {protein, format, hero_veg} from EVERY prior meal this week,
-        // regardless of slot. Otherwise we get Lasagne-for-dinner /
-        // Cannelloni-for-lunch / Ravioli-for-lunch all classifying as
-        // dairy/bake/spinach and slipping through the per-slot check.
         $allWeekForbidden = $priorMeals->unique('name')->values();
 
         foreach ($selectedSlots as $slot) {
@@ -61,7 +56,7 @@ class PlanMealSlotsForDay
 
             $result[$slot] = [
                 'action' => 'repeat',
-                'repeat_from' => $this->pickRepeatCandidate($slotMeals),
+                'repeat_from' => $this->pickRepeatCandidate($slotMeals, $dayNumber),
             ];
         }
 
@@ -112,14 +107,15 @@ class PlanMealSlotsForDay
     /**
      * @param  Collection<int, Meal>  $slotMeals
      */
-    private function pickRepeatCandidate(Collection $slotMeals): Meal
+    private function pickRepeatCandidate(Collection $slotMeals, int $todayDayNumber): Meal
     {
         $countsByName = $slotMeals->groupBy('name')->map->count();
+        $recency = fn (Meal $m) => $todayDayNumber - $m->mealPlan->day_number;
         $effort = fn (Meal $m) => ($m->prep_time_minutes ?? 0) + ($m->cook_time_minutes ?? 0);
 
         return $slotMeals
-            ->sort(fn (Meal $a, Meal $b) => [$countsByName[$a->name], $effort($a)]
-                <=> [$countsByName[$b->name], $effort($b)])
+            ->sort(fn (Meal $a, Meal $b) => [$countsByName[$a->name], $recency($a), $effort($a)]
+                <=> [$countsByName[$b->name], $recency($b), $effort($b)])
             ->first();
     }
 }

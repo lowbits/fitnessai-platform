@@ -132,8 +132,6 @@ test('prompt lists ALL prior meals across slots (cross-slot twin guard)', functi
         ]),
     ]);
 
-    // Both meals from different slots — lunch slot's forbidden_meals should
-    // include the dinner meal too (plan-wide enforcement).
     $slotPlan = defaultSlotPlan();
     $slotPlan['lunch'] = ['action' => 'new', 'forbidden_meals' => $forbidden];
 
@@ -141,9 +139,11 @@ test('prompt lists ALL prior meals across slots (cross-slot twin guard)', functi
 
     expect($output)
         ->toContain('Prior meals this week (across ALL slots)')
-        ->toContain('MUST differ on at least ONE of {primary_protein, format, hero_veg}')
-        ->toContain('"Spinat-Ricotta-Lasagne" [slot: dinner, protein: dairy, format: bake, hero_veg: spinach]')
-        ->toContain('"Tofu-Udon-Bowl" [slot: lunch, protein: tofu, format: noodles, hero_veg: broccoli]');
+        ->toContain('MUST differ on at least ONE of {primary_protein, format}')
+        ->toContain('"Spinat-Ricotta-Lasagne" [slot: dinner, protein: dairy, format: bake]')
+        ->toContain('"Tofu-Udon-Bowl" [slot: lunch, protein: tofu, format: noodles]')
+        ->not->toContain('hero_veg: spinach')
+        ->not->toContain('hero_veg: broccoli');
 });
 
 test('prompt omits forbidden section when no prior meals exist', function () {
