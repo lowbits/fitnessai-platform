@@ -87,6 +87,7 @@ class RecipeFinder
 
         return $candidates
             ->shuffle()
+            ->sortByDesc(fn (Recipe $r) => (int) $r->protein_g)
             ->sortByDesc(fn (Recipe $r) => $affinityScores[$r->id] ?? 0)
             ->take($limit)
             ->values();

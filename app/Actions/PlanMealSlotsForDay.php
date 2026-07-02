@@ -12,6 +12,7 @@ use App\Models\Recipe;
 use App\Models\UserProfile;
 use App\Services\Recipe\RecipeAffinity;
 use App\Services\Recipe\RecipeFinder;
+use App\Support\MealSlotBudget;
 use Illuminate\Support\Collection;
 
 /**
@@ -30,14 +31,6 @@ class PlanMealSlotsForDay
 {
     /** @var list<string> */
     public const SLOTS = ['breakfast', 'lunch', 'snack', 'dinner'];
-
-    /** @var array<string, float> */
-    private const MEAL_SPLIT = [
-        'breakfast' => 0.275,
-        'lunch' => 0.325,
-        'snack' => 0.125,
-        'dinner' => 0.275,
-    ];
 
     public function __construct(
         private readonly RecipeFinder $finder,
@@ -113,15 +106,11 @@ class PlanMealSlotsForDay
 
         $allowed = array_map(fn (PrimaryProtein $p) => $p->value, PrimaryProtein::allowedFor($diet));
 
-        $metabolism = $profile->getMetabolismData();
-        $daily = (int) $metabolism['daily_calories'];
-
-        $filteredShares = array_intersect_key(self::MEAL_SPLIT, array_flip($selectedSlots));
-        $sum = array_sum($filteredShares) ?: 1.0;
-        $slotKcal = [];
-        foreach ($filteredShares as $slot => $share) {
-            $slotKcal[$slot] = (int) round($daily * ($share / $sum));
-        }
+        $daily = (int) $profile->getMetabolismData()['daily_calories'];
+        $slotKcal = array_map(
+            fn (float $share) => (int) round($daily * $share),
+            MealSlotBudget::sharesFor($selectedSlots),
+        );
 
         return [
             'locale' => $profile->user->locale ?? 'en',

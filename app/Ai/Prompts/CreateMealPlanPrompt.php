@@ -7,6 +7,7 @@ use App\Enums\DietaryPreference;
 use App\Enums\DietType;
 use App\Models\Meal;
 use App\Models\UserProfile;
+use App\Support\MealSlotBudget;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Stringable;
@@ -17,25 +18,6 @@ use Stringable;
  */
 class CreateMealPlanPrompt implements Stringable
 {
-    /**
-     * Fixed per-slot share of daily calories.
-     *
-     * Constant across every day, by design. A varying day-by-day split causes
-     * exact-repeat meals (frozen at their original day's macros) to drift off
-     * the slot target when reused later — e.g. a lunch sized for a 0.35-share
-     * day becoming +153 kcal over when reused on a 0.30-share day. Keeping
-     * the split flat lets repeats land on target wherever they appear, and
-     * the user-perceived variety (recipes, cuisines, proteins) is unaffected.
-     *
-     * @var array<string, float>
-     */
-    private const MEAL_SPLIT = [
-        'breakfast' => 0.275,
-        'lunch' => 0.325,
-        'snack' => 0.125,
-        'dinner' => 0.275,
-    ];
-
     private const DEFAULT_MEALS = ['breakfast', 'lunch', 'snack', 'dinner'];
 
     /**
@@ -137,6 +119,13 @@ class CreateMealPlanPrompt implements Stringable
             }
         }
 
+        $lines[] = '';
+        $lines[] = 'HARD MACRO RULES (per-slot min/max above are boundaries, not suggestions):';
+        $lines[] = '- Every "Pg (min N)" must be met or exceeded — no protein undershoot per meal.';
+        $lines[] = '- Every "kcal (max N)" and "Cg (max N)" must not be exceeded — cut carbs before touching protein.';
+        $lines[] = '- Every "Fg (min N)" must be met or exceeded.';
+        $lines[] = '- If a dish naturally lands short on protein, add a lean source (whey, skyr, quark, cottage cheese, eggs, tofu, chicken breast, edamame). This is authentic across German, Mediterranean, Middle-Eastern and American cuisines — it does NOT break culinary coherence.';
+
         return implode("\n", $lines);
     }
 
@@ -149,10 +138,7 @@ class CreateMealPlanPrompt implements Stringable
      */
     private function slotShares(array $userSelectedSlots): array
     {
-        $filtered = array_intersect_key(self::MEAL_SPLIT, array_flip($userSelectedSlots));
-        $sum = array_sum($filtered);
-
-        return $sum > 0 ? array_map(fn (float $pct) => $pct / $sum, $filtered) : [];
+        return MealSlotBudget::sharesFor($userSelectedSlots);
     }
 
     /**
@@ -160,28 +146,28 @@ class CreateMealPlanPrompt implements Stringable
      */
     private function macroLine(string $label, array $metabolism, float $share): string
     {
-        $cal = (int) round($metabolism['daily_calories'] * $share);
-        $p = (int) round($metabolism['protein_g'] * $share);
-        $c = (int) round($metabolism['carbs_g'] * $share);
-        $f = (int) round($metabolism['fat_g'] * $share);
+        $m = MealSlotBudget::applyShare($metabolism, $share);
 
-        return "{$label}: {$cal} kcal | {$p}g P | {$c}g C | {$f}g F";
+        return "{$label}: {$m['calories']} kcal | {$m['protein_g']}g P | {$m['carbs_g']}g C | {$m['fat_g']}g F";
     }
 
     /**
-     * "Label: min-max kcal | min-maxg P | ..." at ±5% around a slot's natural share.
+     * "Label: {target} kcal (max) | {target}g P (min) | ..." — directional per macro.
+     * Protein/fat show floors (undershoot bad), kcal/carbs show ceilings (overshoot bad).
      */
     private function macroRange(string $label, array $metabolism, float $share): string
     {
-        $bounds = fn (string $key, float $factor) => (int) round($metabolism[$key] * $share * $factor);
+        $target = MealSlotBudget::applyShare($metabolism, $share);
+        $low = MealSlotBudget::applyShare($metabolism, $share * 0.95);
+        $high = MealSlotBudget::applyShare($metabolism, $share * 1.05);
 
         return sprintf(
-            '%s: %d-%d kcal | %d-%dg P | %d-%dg C | %d-%dg F',
+            '%s: %d kcal (max %d) | %dg P (min %d) | %dg C (max %d) | %dg F (min %d)',
             $label,
-            $bounds('daily_calories', 0.95), $bounds('daily_calories', 1.05),
-            $bounds('protein_g', 0.95), $bounds('protein_g', 1.05),
-            $bounds('carbs_g', 0.95), $bounds('carbs_g', 1.05),
-            $bounds('fat_g', 0.95), $bounds('fat_g', 1.05),
+            $target['calories'], $high['calories'],
+            $target['protein_g'], $low['protein_g'],
+            $target['carbs_g'], $high['carbs_g'],
+            $target['fat_g'], $low['fat_g'],
         );
     }
 
@@ -314,10 +300,6 @@ class CreateMealPlanPrompt implements Stringable
                 $preference === DietType::VEGETARIAN => 'Protein target is high for vegetarian. Leverage eggs, Greek yogurt, cottage cheese, and legumes generously.',
                 default => 'Protein target is high relative to total calories. Prioritize lean protein sources across all meals.',
             };
-        }
-
-        if ($metabolism['minimum_fat_enforced']) {
-            $notes[] = 'Minimum fat intake enforced for hormonal health. Do NOT reduce fat below target.';
         }
 
         if ($this->date->isMonday()) {
