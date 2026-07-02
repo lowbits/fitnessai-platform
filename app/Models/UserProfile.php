@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\CookingFrequency;
 use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietStyle;
@@ -24,7 +25,7 @@ class UserProfile extends Model
 
     protected $fillable = [
         'user_id',
-        'age',
+        'birthdate',
         'gender',
         'weight_kg',
         'height_cm',
@@ -39,9 +40,10 @@ class UserProfile extends Model
         'training_days',
         'selected_meals',
         'food_dislikes',
+        'disliked_recipe_ids',
         'cooking_preference',
+        'cooking_frequency',
         'meal_variety',
-        'meal_prep_enabled',
         'physical_limitations',
         'physical_limitations_note',
     ];
@@ -49,6 +51,7 @@ class UserProfile extends Model
     protected function casts(): array
     {
         return [
+            'birthdate' => 'date:Y-m-d',
             'gender' => Gender::class,
             'body_goal' => BodyGoal::class,
             'skill_level' => SkillLevel::class,
@@ -60,9 +63,10 @@ class UserProfile extends Model
             'training_days' => 'array',
             'selected_meals' => 'array',
             'food_dislikes' => 'array',
+            'disliked_recipe_ids' => 'array',
             'cooking_preference' => CookingPreference::class,
+            'cooking_frequency' => CookingFrequency::class,
             'meal_variety' => MealVariety::class,
-            'meal_prep_enabled' => 'boolean',
             'physical_limitations' => 'array',
         ];
     }
@@ -198,5 +202,10 @@ class UserProfile extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function getAgeAttribute(): ?int
+    {
+        return $this->birthdate?->age;
     }
 }

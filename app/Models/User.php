@@ -6,6 +6,7 @@ use App\Enums\UserSource;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -116,6 +117,21 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function favoriteRecipes(): BelongsToMany
     {
         return $this->belongsToMany(Recipe::class, 'recipe_favorites');
+    }
+
+    public function hasFavorited(?int $recipeId): bool
+    {
+        return $recipeId !== null && $this->favoriteRecipes()->whereKey($recipeId)->exists();
+    }
+
+    public function plan(): HasOne
+    {
+        return $this->hasOne(Plan::class);
+    }
+
+    protected function nextGenerationAt(): Attribute
+    {
+        return Attribute::get(fn () => $this->plan?->next_generation_at);
     }
 
     public function legacySubscription(): HasOne

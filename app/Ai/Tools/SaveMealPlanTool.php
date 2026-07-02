@@ -7,12 +7,10 @@ use App\Enums\Cuisine;
 use App\Enums\HeroVeg;
 use App\Enums\MealFormat;
 use App\Enums\PrimaryProtein;
-use App\Jobs\GenerateRecipeImage;
+use App\Enums\Unit;
 use App\Models\Meal;
 use App\Models\MealPlan;
-use App\Models\Recipe;
-use App\Services\RecipeFinder;
-use App\Support\RecipeIngredientHash;
+use App\Services\Recipe\RecipeUpserter;
 use Exception;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Log;
@@ -127,10 +125,11 @@ class SaveMealPlanTool implements Tool
                         ->description('Ingredient name in user language.')
                         ->required(),
                     'amount' => $schema->string()
-                        ->description('Quantity (e.g. "200", "1").')
+                        ->description('Quantity (e.g. "200", "1"). Use null/"" for unit=to_taste.')
                         ->required(),
                     'unit' => $schema->string()
-                        ->description('Unit of measurement (e.g. "g", "ml", "piece").')
+                        ->enum(array_column(Unit::cases(), 'value'))
+                        ->description('Canonical English unit. NEVER localize — use "piece" not "Stück", "tbsp" not "EL", "pinch" not "Prise".')
                         ->required(),
                 ])->withoutAdditionalProperties())
                     ->description('List of ingredients with amounts.'),
@@ -151,7 +150,7 @@ class SaveMealPlanTool implements Tool
 
                 'tags' => $schema->array()
                     ->items($schema->string())
-                    ->description('Descriptive tags (e.g. "high-protein", "quick", "post-workout").'),
+                    ->description('Descriptive tags (e.g. "high-protein", "quick", "post-workout"). MUST include the dietary classification tags this recipe qualifies for, cascading: a vegan recipe includes "vegan", "vegetarian", "pescatarian", "omnivore". A vegetarian recipe includes "vegetarian", "pescatarian", "omnivore". A fish/seafood recipe includes "pescatarian", "omnivore". A meat recipe includes "omnivore" only.'),
 
                 'allergens' => $schema->array()
                     ->items($schema->string()->enum(array_column(Allergen::cases(), 'value')))
@@ -184,10 +183,14 @@ class SaveMealPlanTool implements Tool
 
     private function saveMeals(array $meals): void
     {
-        $locale = $this->mealPlan->plan->user->locale ?? 'en';
+        $user = $this->mealPlan->plan->user;
+        $locale = $user->locale ?? 'en';
+        $dislikes = $user->profile?->food_dislikes ?? [];
+        $upserter = app(RecipeUpserter::class);
 
         foreach ($meals as $meal) {
-            $recipe = $this->upsertRecipe($meal, $locale);
+            $this->flagDislikeLeaks($meal, $dislikes, $user->id);
+            $recipe = $upserter->upsert($meal, $locale, $meal['type']);
 
             Meal::create([
                 'meal_plan_id' => $this->mealPlan->id,
@@ -201,7 +204,7 @@ class SaveMealPlanTool implements Tool
                 'fat_g' => $meal['fat_g'],
                 'fiber_g' => $meal['fiber_g'] ?? null,
                 'sugar_g' => $meal['sugar_g'] ?? null,
-                'ingredients' => $meal['ingredients'] ?? [],
+                'ingredients' => $recipe->ingredients,
                 'instructions' => $meal['instructions'] ?? [],
                 'prep_time_minutes' => $meal['prep_time_minutes'] ?? null,
                 'cook_time_minutes' => $meal['cook_time_minutes'] ?? null,
@@ -218,53 +221,6 @@ class SaveMealPlanTool implements Tool
         }
     }
 
-    private function upsertRecipe(array $meal, string $locale): Recipe
-    {
-        $hash = RecipeIngredientHash::compute($meal['ingredients'] ?? [], $locale);
-
-        if ($existing = Recipe::where('ingredient_hash', $hash)->where('source_locale', $locale)->first()) {
-            return $existing;
-        }
-
-        if ($similar = app(RecipeFinder::class)->findSimilar($meal['name'], $meal['ingredients'] ?? [], $locale)) {
-            return $similar;
-        }
-
-        $recipe = Recipe::create([
-            'ingredient_hash' => $hash,
-            'source_locale' => $locale,
-            'name' => $meal['name'],
-            'description' => $meal['description'] ?? null,
-            'ingredients' => $meal['ingredients'] ?? [],
-            'instructions' => $meal['instructions'] ?? [],
-            'prep_time_minutes' => $meal['prep_time_minutes'] ?? null,
-            'cook_time_minutes' => $meal['cook_time_minutes'] ?? null,
-            'difficulty' => $meal['difficulty'] ?? 'Medium',
-            'servings' => 1,
-            'calories' => $meal['calories'],
-            'protein_g' => $meal['protein_g'],
-            'carbs_g' => $meal['carbs_g'],
-            'fat_g' => $meal['fat_g'],
-            'fiber_g' => $meal['fiber_g'] ?? null,
-            'sugar_g' => $meal['sugar_g'] ?? null,
-            'tags' => $meal['tags'] ?? [],
-            'allergens' => $meal['allergens'] ?? [],
-            'meal_types' => [$meal['type']],
-            'primary_protein' => $meal['primary_protein'] ?? null,
-            'cuisine' => $meal['cuisine'] ?? null,
-            'format' => $meal['format'] ?? null,
-            'hero_veg' => $meal['hero_veg'] ?? null,
-            'is_verified' => false,
-            'needs_translation' => false,
-        ]);
-
-        if (! app()->environment('testing')) {
-            GenerateRecipeImage::dispatch($recipe);
-        }
-
-        return $recipe;
-    }
-
     private function calculateTotals(array $meals): array
     {
         return [
@@ -273,5 +229,37 @@ class SaveMealPlanTool implements Tool
             'carbs_g' => array_sum(array_column($meals, 'carbs_g')),
             'fat_g' => array_sum(array_column($meals, 'fat_g')),
         ];
+    }
+
+    /**
+     * Log when an AI-generated meal contains a disliked ingredient. Case-
+     * insensitive substring match in the user's own language — the AI
+     * generates in their locale, so a German user's "haselnuss" matches
+     * "Haselnuss"/"Haselnüsse" in the generated recipe.
+     *
+     * @param  list<string>  $dislikes
+     */
+    private function flagDislikeLeaks(array $meal, array $dislikes, int $userId): void
+    {
+        if (empty($dislikes)) {
+            return;
+        }
+
+        $needles = array_filter(array_map(fn (string $d) => mb_strtolower(trim($d)), $dislikes));
+
+        foreach ($meal['ingredients'] ?? [] as $ingredient) {
+            $name = mb_strtolower($ingredient['name'] ?? '');
+            foreach ($needles as $needle) {
+                if (str_contains($name, $needle)) {
+                    Log::warning('[MealGen] Disliked ingredient leaked into generated meal', [
+                        'meal_name' => $meal['name'] ?? null,
+                        'ingredient' => $ingredient['name'] ?? null,
+                        'matched_dislike' => $needle,
+                        'user_id' => $userId,
+                    ]);
+                    break;
+                }
+            }
+        }
     }
 }

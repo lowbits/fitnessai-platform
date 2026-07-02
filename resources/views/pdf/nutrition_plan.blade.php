@@ -423,7 +423,7 @@
 </div>
 
 <main>
-    <div class="hero-title">{{ __('pdf.nutrition_plan.personalized_title', ['days' => config('plans.duration_days', 28)]) }}</div>
+    <div class="hero-title">{{ __('pdf.nutrition_plan.personalized_title', ['days' => $plan->duration_days]) }}</div>
 
     <div class="targets">
         <p class="targets__heading">{{ __('pdf.nutrition_plan.daily_targets') }}</p>
@@ -515,7 +515,13 @@
                                                 <td>
                                                     @if(is_array($ingredient) || is_object($ingredient))
                                                         @php $ing = is_array($ingredient) ? $ingredient : (array) $ingredient; @endphp
-                                                        {{ $ing['name'] ?? 'Unknown' }}@if(isset($ing['amount']) && isset($ing['unit']))<span class="amount"> &ndash; {{ $ing['amount'] }}{{ $ing['unit'] }}</span>@endif
+                                                        @php
+                                                            $unit = $ing['unit'] ?? null;
+                                                            $amount = $ing['amount'] ?? null;
+                                                            $isToTaste = $unit === 'to_taste';
+                                                            $unitLabel = $unit ? __('units.'.$unit) : null;
+                                                        @endphp
+                                                        {{ $ing['name'] ?? 'Unknown' }}@if($isToTaste)<span class="amount"> &ndash; {{ $unitLabel }}</span>@elseif(filled($amount) && $unit)<span class="amount"> &ndash; {{ $amount }} {{ $unitLabel }}</span>@endif
                                                     @else
                                                         {{ $ingredient }}
                                                     @endif

@@ -91,4 +91,36 @@ class Meal extends Model
     {
         return $this->completed_at !== null;
     }
+
+    /**
+     * Full hero image URL — meal's own first, then recipe's. Nullable when
+     * neither exists; UI shows an empty state rather than a faked placeholder.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        $path = $this->image_full ?? $this->recipe?->image_full;
+
+        return $path ? $this->r2Url($path) : null;
+    }
+
+    /**
+     * Card / list thumbnail — prefers the background-removed isolated cutout,
+     * falls through meal → recipe → per-meal-type placeholder. Always returns
+     * a URL so list views never have a missing image.
+     */
+    public function getThumbnailUrlAttribute(): string
+    {
+        $path = $this->image_isolated
+            ?? $this->image_full
+            ?? $this->recipe?->image_isolated
+            ?? $this->recipe?->image_full
+            ?? 'meals/thumbnails/'.mb_strtolower($this->type).'_placeholder.png';
+
+        return $this->r2Url($path);
+    }
+
+    private function r2Url(string $path): string
+    {
+        return rtrim((string) config('services.r2.public_url'), '/').'/'.ltrim($path, '/');
+    }
 }

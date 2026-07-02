@@ -20,11 +20,10 @@ class RecipeFavoriteResource extends JsonResource
             'id' => $this->id,
             'name' => $this->localizedName($locale),
             'slug' => $this->localizedSlug($locale),
-            'calories' => $this->calories,
+            'calories' => (int) $this->calories,
             'protein_g' => (int) $this->protein_g,
-            'image' => $this->image_full
-                ? config('services.r2.public_url').'/'.$this->image_full
-                : null,
+            'image_url' => $this->image_url,
+            'thumbnail_url' => $this->thumbnail_url,
         ];
     }
 }

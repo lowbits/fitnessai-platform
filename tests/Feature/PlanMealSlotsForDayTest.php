@@ -100,10 +100,26 @@ test('slot at distinct budget returns REPEAT of a prior meal', function () {
         ->toBeIn(['Carbonara', 'Tuna Bowl']);
 });
 
-test('repeat candidate picks least-used meal first', function () {
+test('repeat candidate picks least-used meal first (and never yesterday)', function () {
     [$plan, $profile] = makePlanWithProfile(MealVariety::LOW);
 
-    // Carbonara used twice, Tuna Bowl once → next repeat should pick Tuna Bowl.
+    // Carbonara used twice (days 1, 3), Tuna Bowl once (day 2).
+    // For day 4: yesterday was Carbonara (day 3) → excluded. Tuna Bowl wins on least-used too.
+    seedDay($plan, 1, [['type' => 'lunch', 'name' => 'Carbonara']]);
+    seedDay($plan, 2, [['type' => 'lunch', 'name' => 'Tuna Bowl']]);
+    seedDay($plan, 3, [['type' => 'lunch', 'name' => 'Carbonara']]);
+
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 4, profile: $profile);
+
+    expect($result['lunch']['action'])->toBe('repeat');
+    expect($result['lunch']['repeat_from']->name)->toBe('Tuna Bowl');
+});
+
+test('repeat candidate never picks yesterday even when it would be least-used', function () {
+    [$plan, $profile] = makePlanWithProfile(MealVariety::LOW);
+
+    // Carbonara twice, Tuna Bowl yesterday. Without the rule, Tuna Bowl wins (least-used).
+    // With the rule, Carbonara wins because Tuna Bowl was yesterday.
     seedDay($plan, 1, [['type' => 'lunch', 'name' => 'Carbonara']]);
     seedDay($plan, 2, [['type' => 'lunch', 'name' => 'Carbonara']]);
     seedDay($plan, 3, [['type' => 'lunch', 'name' => 'Tuna Bowl']]);
@@ -111,7 +127,7 @@ test('repeat candidate picks least-used meal first', function () {
     $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 4, profile: $profile);
 
     expect($result['lunch']['action'])->toBe('repeat');
-    expect($result['lunch']['repeat_from']->name)->toBe('Tuna Bowl');
+    expect($result['lunch']['repeat_from']->name)->toBe('Carbonara');
 });
 
 test('variety budget resets at the start of week 2', function () {

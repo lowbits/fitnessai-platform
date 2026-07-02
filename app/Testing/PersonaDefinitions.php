@@ -26,7 +26,7 @@ class PersonaDefinitions
     {
         return [
             'lukas' => [
-                'age' => 23, 'gender' => Gender::MALE, 'weight_kg' => 95.0, 'height_cm' => 178,
+                'birthdate' => now()->subYears(23)->subMonths(6)->toDateString(), 'gender' => Gender::MALE, 'weight_kg' => 95.0, 'height_cm' => 178,
                 'body_goal' => BodyGoal::BUILD_MUSCLE, 'skill_level' => SkillLevel::BEGINNER,
                 'activity_level' => ActivityLevel::MAINLY_SITTING, 'training_place' => TrainingPlace::GYM,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::OMNIVORE,
@@ -35,7 +35,7 @@ class PersonaDefinitions
                 'food_dislikes' => ['pilze', 'rosenkohl', 'leber'], 'locale' => 'de',
             ],
             'anna' => [
-                'age' => 30, 'gender' => Gender::FEMALE, 'weight_kg' => 76.5, 'height_cm' => 178,
+                'birthdate' => now()->subYears(30)->subMonths(6)->toDateString(), 'gender' => Gender::FEMALE, 'weight_kg' => 76.5, 'height_cm' => 178,
                 'body_goal' => BodyGoal::LOSE_WEIGHT, 'skill_level' => SkillLevel::BEGINNER,
                 'activity_level' => ActivityLevel::MAINLY_WALKING, 'training_place' => TrainingPlace::HOME,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::PESCATARIAN,
@@ -44,7 +44,7 @@ class PersonaDefinitions
                 'food_dislikes' => ['tofu', 'kichererbsen'], 'locale' => 'de',
             ],
             'thomas' => [
-                'age' => 38, 'gender' => Gender::MALE, 'weight_kg' => 78.0, 'height_cm' => 183,
+                'birthdate' => now()->subYears(38)->subMonths(6)->toDateString(), 'gender' => Gender::MALE, 'weight_kg' => 78.0, 'height_cm' => 183,
                 'body_goal' => BodyGoal::BUILD_MUSCLE, 'skill_level' => SkillLevel::BEGINNER,
                 'activity_level' => ActivityLevel::MAINLY_SITTING, 'training_place' => TrainingPlace::GYM,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::VEGETARIAN,

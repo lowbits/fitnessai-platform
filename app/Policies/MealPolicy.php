@@ -4,8 +4,6 @@ namespace App\Policies;
 
 use App\Models\Meal;
 use App\Models\User;
-use App\Models\WorkoutPlan;
-use Illuminate\Auth\Access\Response;
 
 class MealPolicy
 {
@@ -22,7 +20,7 @@ class MealPolicy
      */
     public function view(User $user, Meal $meal): bool
     {
-        return false;
+        return $user->id === $meal->mealPlan->plan->user_id;
     }
 
     /**
@@ -40,8 +38,6 @@ class MealPolicy
     {
         return $user->id === $meal->mealPlan->plan->user_id;
     }
-
-
 
     /**
      * Determine whether the user can delete the model.

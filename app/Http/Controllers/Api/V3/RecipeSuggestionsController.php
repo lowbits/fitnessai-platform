@@ -13,9 +13,10 @@ class RecipeSuggestionsController extends Controller
 {
     public function __invoke(Request $request, GetRecipeSuggestions $action): JsonResponse
     {
-        $request->validate([
+        $validated = $request->validate([
             'dietary_preference' => ['sometimes', 'string'],
-            'dislikes' => ['sometimes', 'string'],
+            'dislikes' => ['sometimes', 'array'],
+            'dislikes.*' => ['string', 'max:100'],
             'cooking_time' => ['sometimes', new Enum(CookingPreference::class)],
             'meal_type' => ['sometimes', 'string', 'in:breakfast,lunch,dinner,snack'],
             'limit' => ['sometimes', 'integer', 'min:1', 'max:20'],
@@ -23,12 +24,12 @@ class RecipeSuggestionsController extends Controller
         ]);
 
         $recipes = $action->execute(
-            dietaryPreference: $request->input('dietary_preference'),
-            dislikes: $request->input('dislikes') ? explode(',', $request->input('dislikes')) : [],
-            cookingTime: $request->input('cooking_time'),
-            mealType: $request->input('meal_type'),
-            limit: $request->integer('limit', 8),
-            locale: $request->input('locale', config('app.fallback_locale')),
+            dietaryPreference: $validated['dietary_preference'] ?? null,
+            dislikes: $validated['dislikes'] ?? [],
+            cookingTime: $validated['cooking_time'] ?? null,
+            mealType: $validated['meal_type'] ?? null,
+            limit: $validated['limit'] ?? 8,
+            locale: $validated['locale'] ?? config('app.fallback_locale'),
         );
 
         return response()->json($recipes);

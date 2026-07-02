@@ -21,7 +21,11 @@ class GenerateRecipeImage implements ShouldQueue
 
     public int $timeout = 180;
 
-    public function __construct(public Recipe $recipe) {}
+    public function __construct(public Recipe $recipe)
+    {
+
+        $this->onQueue('images');
+    }
 
     public function handle(): void
     {

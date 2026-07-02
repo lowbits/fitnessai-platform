@@ -4,11 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Actions\RetryPlanGeneration;
 use App\Filament\Resources\WorkoutPlanResource\Pages;
+use App\Models\Plan;
 use App\Models\WorkoutPlan;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -91,7 +92,7 @@ class WorkoutPlanResource extends Resource
                         $plans = $records->whereIn('status', ['failed', 'pending'])->pluck('plan_id')->unique();
 
                         foreach ($plans as $planId) {
-                            $plan = \App\Models\Plan::with('user')->find($planId);
+                            $plan = Plan::with('user')->find($planId);
                             if ($plan) {
                                 RetryPlanGeneration::workouts($plan);
                             }
@@ -135,24 +136,17 @@ class WorkoutPlanResource extends Resource
                             ->label('Est. Calories'),
                         TextEntry::make('description')
                             ->columnSpanFull(),
-                    ])->columns(4),
+                    ])
+                    ->columns(4)
+                    ->columnSpanFull(),
 
                 Section::make('Exercises')
                     ->schema([
-                        RepeatableEntry::make('exercises')
-                            ->schema([
-                                TextEntry::make('name'),
-                                TextEntry::make('sets'),
-                                TextEntry::make('reps'),
-                                TextEntry::make('duration_seconds')
-                                    ->label('Duration (s)'),
-                                TextEntry::make('rest_seconds')
-                                    ->label('Rest (s)'),
-                                TextEntry::make('execution_style')
-                                    ->label('Style'),
-                            ])
-                            ->columns(6),
-                    ]),
+                        ViewEntry::make('exercises_list')
+                            ->hiddenLabel()
+                            ->view('filament.workout-plan.contents'),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

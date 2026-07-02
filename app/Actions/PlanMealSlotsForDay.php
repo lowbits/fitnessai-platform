@@ -10,7 +10,8 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\Recipe;
 use App\Models\UserProfile;
-use App\Services\RecipeFinder;
+use App\Services\Recipe\RecipeAffinity;
+use App\Services\Recipe\RecipeFinder;
 use Illuminate\Support\Collection;
 
 /**
@@ -38,7 +39,10 @@ class PlanMealSlotsForDay
         'dinner' => 0.275,
     ];
 
-    public function __construct(private readonly RecipeFinder $finder) {}
+    public function __construct(
+        private readonly RecipeFinder $finder,
+        private readonly RecipeAffinity $affinity,
+    ) {}
 
     /**
      * @return array<string, array{action: 'new'|'repeat'|'reuse', forbidden_meals?: Collection<int, Meal>, repeat_from?: Meal, recipe?: Recipe}>
@@ -51,6 +55,10 @@ class PlanMealSlotsForDay
         $priorMeals = $this->fetchPriorWeekMeals($plan, $dayNumber);
         $allWeekForbidden = $priorMeals->unique('name')->values();
         $context = $this->finderContext($profile, $selectedSlots);
+
+        $user = $profile->user;
+        $cooldownIds = $this->affinity->cooldownIds($user)->all();
+        $affinityScores = $this->affinity->scoresFor($user)->all();
 
         $result = [];
 
@@ -75,6 +83,8 @@ class PlanMealSlotsForDay
                 allowedProteins: $context['allowed_proteins'],
                 dislikes: $context['dislikes'],
                 forbiddenAxes: $allWeekForbidden,
+                excludeIds: $cooldownIds,
+                affinityScores: $affinityScores,
             );
 
             if ($recipe !== null) {
@@ -163,15 +173,23 @@ class PlanMealSlotsForDay
     }
 
     /**
+     * Picks a prior meal to reuse for the same slot. Hard rule: never reuse
+     * yesterday's meal — that creates the "same lunch and dinner two days in
+     * a row" monotony users hate. If the only option IS yesterday's, accept
+     * it (better than failing the slot).
+     *
      * @param  Collection<int, Meal>  $slotMeals
      */
     private function pickRepeatCandidate(Collection $slotMeals, int $todayDayNumber): Meal
     {
-        $countsByName = $slotMeals->groupBy('name')->map->count();
+        $notYesterday = $slotMeals->filter(fn (Meal $m) => $m->mealPlan->day_number !== $todayDayNumber - 1);
+        $pool = $notYesterday->isNotEmpty() ? $notYesterday : $slotMeals;
+
+        $countsByName = $pool->groupBy('name')->map->count();
         $recency = fn (Meal $m) => $todayDayNumber - $m->mealPlan->day_number;
         $effort = fn (Meal $m) => ($m->prep_time_minutes ?? 0) + ($m->cook_time_minutes ?? 0);
 
-        return $slotMeals
+        return $pool
             ->sort(fn (Meal $a, Meal $b) => [$countsByName[$a->name], $recency($a), $effort($a)]
                 <=> [$countsByName[$b->name], $recency($b), $effort($b)])
             ->first();

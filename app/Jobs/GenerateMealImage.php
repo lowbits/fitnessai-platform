@@ -23,7 +23,7 @@ class GenerateMealImage implements ShouldQueue
 
     public function __construct(public Meal $meal)
     {
-        $this->onQueue('nutrition');
+        $this->onQueue('images');
     }
 
     public function handle(): void

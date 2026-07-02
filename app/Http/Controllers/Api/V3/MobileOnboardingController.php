@@ -6,6 +6,7 @@ use App\Actions\NotifyAdmins;
 use App\Enums\UserSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\MobileOnboardingRequest;
+use App\Http\Resources\Api\V3\UserResource;
 use App\Jobs\GenerateUserMealPlan;
 use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\User;
@@ -32,38 +33,31 @@ class MobileOnboardingController extends Controller
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'locale' => $validated['language'] ?? $request->header('Accept-Language', 'en'),
+                'locale' => $validated['locale'] ?? $request->header('Accept-Language', 'en'),
                 'source' => $source,
                 'trial_ends_at' => now()->addDays(config('subscription.trial_days')),
             ]);
 
             $profile = $user->profile()->create([
-                // Body & training
-                'age' => Carbon::parse($validated['birthdate'])->age,
+                'birthdate' => Carbon::parse($validated['birthdate'])->startOfDay(),
                 'gender' => $validated['gender'],
-                'weight_kg' => $validated['weight'],
-                'height_cm' => $validated['height'],
+                'weight_kg' => $validated['weight_kg'],
+                'height_cm' => $validated['height_cm'],
                 'body_goal' => $validated['body_goal'],
                 'skill_level' => $validated['skill_level'],
                 'activity_level' => $validated['activity_level'],
                 'training_place' => $validated['training_place'],
-                'training_sessions_per_week' => $validated['training_sessions'],
+                'training_sessions_per_week' => $validated['training_sessions_per_week'],
                 'training_days' => $validated['training_days'] ?? null,
-
-                // Diet
                 'dietary_preference' => $validated['dietary_preference'],
-                'diet_style' => $validated['diet_style'] ?? null,
-
-                // Meal preferences (API → DB field mapping)
                 'selected_meals' => $validated['selected_meals'] ?? null,
-                'food_dislikes' => $validated['dislikes'] ?? [],
-                'cooking_preference' => $validated['cooking_time'] ?? 'normal',
+                'food_dislikes' => $validated['food_dislikes'] ?? [],
+                'disliked_recipe_ids' => $validated['disliked_recipes'] ?? [],
+                'cooking_preference' => $validated['cooking_preference'] ?? 'normal',
+                'cooking_frequency' => $validated['cooking_frequency'] ?? null,
                 'meal_variety' => $validated['meal_variety'] ?? 'medium',
-                'meal_prep_enabled' => $validated['meal_prep_enabled'] ?? false,
-
-                // Limitations
-                'physical_limitations' => $validated['limitations'] ?? [],
-                'physical_limitations_note' => $validated['limitations_note'] ?? null,
+                'physical_limitations' => $validated['physical_limitations'] ?? [],
+                'physical_limitations_note' => $validated['physical_limitations_note'] ?? null,
             ]);
 
             $dailyCalories = $profile->calculateDailyCalories();
@@ -80,7 +74,7 @@ class MobileOnboardingController extends Controller
                 'daily_protein_g' => $macros->proteinGrams,
                 'daily_carbs_g' => $macros->carbsGrams,
                 'daily_fat_g' => $macros->fatGrams,
-                'workouts_per_week' => $validated['training_sessions'],
+                'workouts_per_week' => $validated['training_sessions_per_week'],
             ]);
 
             // Save recipe favorites
@@ -116,13 +110,7 @@ class MobileOnboardingController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Onboarding completed successfully.',
-            'user' => [
-                'id' => $result['user']->id,
-                'email' => $result['user']->email,
-                'name' => $result['user']->name,
-                'email_verified' => false,
-            ],
-            'profile' => $result['profile'],
+            'user' => new UserResource($result['user']->load(['profile', 'plan'])),
         ], 201);
     }
 }

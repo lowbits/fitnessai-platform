@@ -40,7 +40,7 @@ class OnboardingController extends Controller
             }
 
             $profile = $user->profile()->create([
-                'age' => $validated['age'],
+                'birthdate' => now()->subYears((int) $validated['age'])->subMonths(6)->startOfDay(),
                 'gender' => $validated['gender'],
                 'weight_kg' => $validated['weight'],
                 'height_cm' => $validated['height'],

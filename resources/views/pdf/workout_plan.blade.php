@@ -441,7 +441,7 @@
 </div>
 
 <main>
-    <div class="hero-title">{{ __('pdf.workout_plan.personalized_title', ['days' => config('plans.duration_days', 28)]) }}</div>
+    <div class="hero-title">{{ __('pdf.workout_plan.personalized_title', ['days' => $plan->duration_days]) }}</div>
 
     <div class="overview">
         <p class="overview__heading">{{ __('pdf.workout_plan.training_overview') }}</p>

@@ -5,10 +5,12 @@ namespace App\Filament\Resources;
 use App\Enums\UserSource;
 use App\Filament\Resources\UserResource\Pages;
 use App\Filament\Resources\UserResource\RelationManagers;
+use App\Livewire\UserPlanDayBrowser;
 use App\Models\User;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Components\ViewEntry;
 use Filament\Resources\Resource;
+use Filament\Schemas\Components\Livewire;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Tables\Columns\IconColumn;
@@ -76,6 +78,7 @@ class UserResource extends Resource
     public static function infolist(Schema $infolist): Schema
     {
         return $infolist
+            ->columns(2)
             ->schema([
                 Section::make('User Details')
                     ->schema([
@@ -99,16 +102,7 @@ class UserResource extends Resource
                             ->dateTime(),
                         TextEntry::make('created_at')
                             ->dateTime(),
-                    ])->columns(3),
-
-                Section::make('Day 1 Preview')
-                    ->description('Latest active plan — meals + workout for day 1')
-                    ->schema([
-                        ViewEntry::make('day_one_preview')
-                            ->hiddenLabel()
-                            ->view('filament.user.day-one-preview'),
-                    ])
-                    ->collapsible(),
+                    ])->columns(2),
 
                 Section::make('Profile')
                     ->schema([
@@ -132,7 +126,24 @@ class UserResource extends Resource
                             ->label('Dietary Preference'),
                         TextEntry::make('profile.training_sessions_per_week')
                             ->label('Sessions/Week'),
-                    ])->columns(4),
+                    ])->columns(2),
+
+                Section::make('Computed Targets')
+                    ->description('Derived inputs the AI uses to build meal plans')
+                    ->schema([
+                        ViewEntry::make('computed_targets')
+                            ->hiddenLabel()
+                            ->view('filament.user.computed-targets'),
+                    ])
+                    ->columnSpanFull()
+                    ->collapsible(),
+
+                Section::make('Day Preview')
+                    ->description('Browse meals + workout day-by-day')
+                    ->schema([
+                        Livewire::make(UserPlanDayBrowser::class, fn (User $record): array => ['user' => $record]),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

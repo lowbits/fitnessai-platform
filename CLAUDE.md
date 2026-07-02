@@ -89,6 +89,16 @@ Authentication uses Laravel Sanctum tokens.
 - Prettier plugins auto-organize imports and sort Tailwind classes
 - Path alias: `@/*` maps to `resources/js/*`
 
+## Logging
+
+All `Log::*()` calls use `[Feature][SubComponent] Action` prefixes — describe the **feature/domain**, not the API wire layer.
+
+- ✅ `[MealAlternatives] Served`, `[MealGen][SaveTool] Saved successfully`, `[Onboarding] Recipe favorites saved`, `[RecipeFinder] Meilisearch search failed`
+- ❌ `[V3][Alternatives]` (version is wire-layer noise — would change to V4 later for the same logical event)
+- ❌ `Failed to generate meal alternatives` (no prefix, hard to grep)
+
+Convert old ad-hoc logs to this pattern opportunistically when touching the file.
+
 ===
 
 <laravel-boost-guidelines>

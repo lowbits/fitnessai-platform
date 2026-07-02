@@ -25,7 +25,7 @@ class UserProfileFactory extends Factory
     {
         return [
             'user_id' => User::factory(),
-            'age' => fake()->numberBetween(18, 65),
+            'birthdate' => fake()->dateTimeBetween('-65 years', '-18 years')->format('Y-m-d'),
             'gender' => fake()->randomElement(Gender::cases()),
             'weight_kg' => fake()->randomFloat(1, 50, 120),
             'height_cm' => fake()->randomFloat(1, 150, 200),

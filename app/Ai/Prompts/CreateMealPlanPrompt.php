@@ -71,12 +71,13 @@ class CreateMealPlanPrompt implements Stringable
             $this->buildDislikes(),
             "Activity: {$metabolismData['activity_multiplier']}x daily + {$metabolismData['training_sessions_per_week']}x training/week",
             $this->buildCookingConstraint(),
+            $this->buildCookingFrequency(),
             $macroTargets,
             $coachingNotes,
             $this->buildFavoriteSignals(),
             $this->buildSlotConstraints(),
             "Day {$this->dayNumber} ({$dayOfWeek}, {$this->date->format('Y-m-d')}, ".($this->date->isWeekday() ? 'workday' : 'weekend').') — generate '.count($newSlots)." meals: {$mealList}",
-            "Language: {$language} for human-readable fields (name, description, ingredients[].name, instructions). Tags stay in the user's language. EXCEPT primary_protein, cuisine, format, hero_veg, allergens — those MUST be the canonical English enum values from the schema regardless of locale.",
+            "Language: {$language} for human-readable fields (name, description, ingredients[].name, instructions). Tags stay in the user's language. EXCEPT primary_protein, cuisine, format, hero_veg, allergens, ingredients[].unit — those MUST be the canonical English enum values from the schema regardless of locale (e.g. use \"piece\" not \"Stück\", \"tbsp\" not \"EL\", \"pinch\" not \"Prise\").",
         ];
 
         return implode("\n\n", array_filter($parts));
@@ -210,7 +211,12 @@ class CreateMealPlanPrompt implements Stringable
             return '';
         }
 
-        return 'NEVER use these ingredients: '.implode(', ', $dislikes);
+        $list = implode(', ', $dislikes);
+
+        return "HARD CONSTRAINT — disliked ingredients: {$list}. "
+            .'NEVER include an ingredient whose name contains any of these strings (case-insensitive). '
+            ."This includes compound words: 'apfel' blocks 'Apfelmus', 'Apfelsaft'; 'haselnuss' blocks 'Haselnusscreme', 'Haselnussmus'. "
+            .'If you cannot make the dish without these ingredients, pick a different recipe entirely.';
     }
 
     private function buildCookingConstraint(): string
@@ -221,11 +227,26 @@ class CreateMealPlanPrompt implements Stringable
             return '';
         }
 
+        $isWorkday = $this->date->isWeekday();
+
         return match ($pref) {
-            CookingPreference::QUICK => 'Cooking: max 15min total per meal (prefer quick, no-cook, or minimal-prep recipes)',
-            CookingPreference::ELABORATE => 'Cooking: user enjoys cooking — feel free to include more complex recipes (up to 60min)',
-            default => '',
+            CookingPreference::QUICK => $isWorkday
+                ? 'Cooking: WORKDAY — max 12min total prep+cook per meal. User is busy. Prefer no-cook, sheet-pan, or one-pan recipes.'
+                : 'Cooking: WEEKEND — max 25min total prep+cook per meal. User still wants speed but has slightly more time.',
+
+            CookingPreference::NORMAL => $isWorkday
+                ? 'Cooking: WORKDAY — max 20min total prep+cook per meal. User can cook but is busy.'
+                : 'Cooking: WEEKEND — up to 45min total prep+cook OK. Feel free to include one slightly more elaborate "anchor" meal (Sunday roast, weekend brunch).',
+
+            CookingPreference::ELABORATE => $isWorkday
+                ? 'Cooking: WORKDAY — max 30min total prep+cook per meal. User enjoys cooking but works during the week.'
+                : 'Cooking: WEEKEND — up to 60min total prep+cook OK. User enjoys cooking — include at least one "anchor" recipe (Sunday roast, slow-braised dish, fresh pasta).',
         };
+    }
+
+    private function buildCookingFrequency(): string
+    {
+        return $this->profile->cooking_frequency?->promptHint() ?? '';
     }
 
     private function buildSlotConstraints(): string
@@ -297,6 +318,10 @@ class CreateMealPlanPrompt implements Stringable
 
         if ($metabolism['minimum_fat_enforced']) {
             $notes[] = 'Minimum fat intake enforced for hormonal health. Do NOT reduce fat below target.';
+        }
+
+        if ($this->date->isMonday()) {
+            $notes[] = 'Leftover hint: today is Monday after the weekend. Lunch CAN be framed as leftovers from a hearty weekend dinner (wrap, bowl, salad with cold protein). This is a nice-to-have, not a requirement — only do it if it fits naturally.';
         }
 
         return $notes ? 'Notes: '.implode(' ', $notes) : '';

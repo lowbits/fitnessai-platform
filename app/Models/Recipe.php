@@ -124,4 +124,28 @@ class Recipe extends Model
     {
         return 'slug';
     }
+
+    /**
+     * Absolute URL for the full recipe image, or null if not generated yet.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_full ? $this->r2Url($this->image_full) : null;
+    }
+
+    /**
+     * Absolute URL for the background-removed thumbnail, falling back to the
+     * full image when the isolated variant doesn't exist.
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        return $this->image_isolated
+            ? $this->r2Url($this->image_isolated)
+            : $this->image_url;
+    }
+
+    private function r2Url(string $path): string
+    {
+        return rtrim((string) config('services.r2.public_url'), '/').'/'.ltrim($path, '/');
+    }
 }

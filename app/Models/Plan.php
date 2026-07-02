@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Plan extends Model
 {
@@ -52,6 +53,20 @@ class Plan extends Model
         return $this->hasMany(WorkoutPlan::class);
     }
 
+    protected function nextGenerationAt(): Attribute
+    {
+        return Attribute::get(function (): ?Carbon {
+            if (! $this->start_date) {
+                return null;
+            }
+
+            $genDow = ($this->start_date->dayOfWeek + 3) % 7;
+            $today = now()->startOfDay();
+
+            return $today->copy()->addDays(($genDow - $today->dayOfWeek + 7) % 7);
+        });
+    }
+
     /**
      * Get the current day index based on start date (1-based)
      */
@@ -59,7 +74,7 @@ class Plan extends Model
     {
         return Attribute::make(
             get: function (): int {
-                if (!$this->start_date) {
+                if (! $this->start_date) {
                     return 0;
                 }
 
@@ -73,9 +88,8 @@ class Plan extends Model
                     return $this->duration_days;
                 }
 
-                return min((int)$daysSinceStart + 1, $this->duration_days);
+                return min((int) $daysSinceStart + 1, $this->duration_days);
             }
         );
     }
 }
-

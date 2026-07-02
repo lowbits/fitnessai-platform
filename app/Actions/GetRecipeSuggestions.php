@@ -3,7 +3,9 @@
 namespace App\Actions;
 
 use App\Ai\Agents\FoodTranslatorAgent;
+use App\Enums\Allergen;
 use App\Enums\DietaryPreference;
+use App\Enums\PrimaryProtein;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -30,7 +32,6 @@ class GetRecipeSuggestions
             'locale' => $locale,
         ]));
 
-        // Log dislikes to learn what users enter — review periodically to improve synonyms
         if (! empty($dislikes)) {
             Log::channel('single')->info('[RecipeSuggestions] Dislikes requested', [
                 'dislikes' => $dislikes,
@@ -81,27 +82,31 @@ class GetRecipeSuggestions
             }
         }
 
-        // Use DietaryPreference enum for excluded foods
+        $proteinEnumValues = array_column(PrimaryProtein::cases(), 'value');
+        $allergenEnumValues = array_column(Allergen::cases(), 'value');
+
         $dietary = DietaryPreference::tryFrom($dietaryPreference ?? '');
-        if ($dietary) {
-            foreach ($dietary->excludedFoods() as $food) {
-                $filters[] = "allergens != '".$this->sanitize($food)."'";
-            }
+        if ($dietary && $dietary !== DietaryPreference::OMNIVORE) {
+            $filters[] = 'tags = '.json_encode($dietary->value);
         }
 
-        // Exclude user-specific dislikes — check both allergens and ingredients
         foreach ($dislikes as $dislike) {
             $dislike = strtolower(trim($dislike));
             if (! $dislike) {
                 continue;
             }
 
-            // Translate to English if needed, then expand synonyms
             $english = $this->toEnglish($dislike);
             foreach ($this->synonyms($english) as $term) {
                 $sanitized = $this->sanitize($term);
-                $filters[] = "allergens != '{$sanitized}'";
-                $filters[] = "ingredient_names != '{$sanitized}'";
+                $quoted = json_encode($sanitized);
+                if (in_array($sanitized, $proteinEnumValues, true)) {
+                    $filters[] = "primary_protein != {$quoted}";
+                }
+                if (in_array($sanitized, $allergenEnumValues, true)) {
+                    $filters[] = "allergens != {$quoted}";
+                }
+                $filters[] = "ingredient_names != {$quoted}";
             }
         }
 

@@ -12,37 +12,18 @@ class MealController extends Controller
 {
     use Concerns\MapsThumbnails;
 
-    /**
-     * Get detailed meal information
-     */
-    public function show(Request $request, int $mealId): JsonResponse
+    public function show(Request $request, Meal $meal): JsonResponse
     {
+        Gate::authorize('view', $meal);
+
         $user = $request->user();
-
-        // Get meal from database
-        $meal = Meal::find($mealId);
-
-        if (! $meal) {
-            return response()->json([
-                'error' => 'Meal not found',
-                'message' => 'The requested meal does not exist',
-            ], 404);
-        }
-
-        // Verify the meal belongs to user's plan
-        $mealPlan = $meal->mealPlan;
-        if (! $mealPlan || $mealPlan->plan->user_id !== $user->id) {
-            return response()->json([
-                'error' => 'Unauthorized',
-                'message' => 'You do not have access to this meal',
-            ], 403);
-        }
 
         return response()->json([
             'id' => $meal->id,
+            'recipe_id' => $meal->recipe_id,
             'name' => $meal->name,
             'type' => ucfirst($meal->type),
-            'image' => $meal->image ?? $meal->type,
+            'image_url' => $meal->image_url,
             'thumbnail_url' => $this->mealThumbnail($meal),
             'description' => $meal->description,
 
@@ -67,6 +48,7 @@ class MealController extends Controller
             'tags' => $meal->tags ?? [],
             'allergens' => $meal->allergens ?? [],
             'completed_at' => $meal->completed_at,
+            'is_favorited' => $user->hasFavorited($meal->recipe_id),
         ]);
     }
 
