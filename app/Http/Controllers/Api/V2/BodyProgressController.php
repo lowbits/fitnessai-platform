@@ -27,7 +27,6 @@ class BodyProgressController extends Controller
             'notes' => 'nullable|string|max:1000',
         ]);
 
-
         $user = $request->user();
 
         $bodyProgress = $user->bodyProgress()->create([
@@ -60,7 +59,7 @@ class BodyProgressController extends Controller
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$bodyProgress) {
+        if (! $bodyProgress) {
             return response()->json([
                 'error' => 'Body progress entry not found',
             ], 404);
@@ -80,19 +79,38 @@ class BodyProgressController extends Controller
             'recorded_at' => 'nullable|date',
         ]);
 
-
         // Map API fields to database fields
         $updateData = [];
-        if ($request->has('weight')) $updateData['weight_kg'] = $validated['weight'];
-        if ($request->has('body_fat_percentage')) $updateData['body_fat_percentage'] = $validated['body_fat_percentage'];
-        if ($request->has('muscle_mass')) $updateData['muscle_mass_kg'] = $validated['muscle_mass'];
-        if ($request->has('waist_circumference')) $updateData['waist_circumference_cm'] = $validated['waist_circumference'];
-        if ($request->has('chest_circumference')) $updateData['chest_circumference_cm'] = $validated['chest_circumference'];
-        if ($request->has('hip_circumference')) $updateData['hip_circumference_cm'] = $validated['hip_circumference'];
-        if ($request->has('arm_circumference')) $updateData['arm_circumference_cm'] = $validated['arm_circumference'];
-        if ($request->has('thigh_circumference')) $updateData['thigh_circumference_cm'] = $validated['thigh_circumference'];
-        if ($request->has('notes')) $updateData['notes'] = $validated['notes'];
-        if ($request->has('recorded_at')) $updateData['recorded_at'] = $validated['recorded_at'];
+        if ($request->has('weight')) {
+            $updateData['weight_kg'] = $validated['weight'];
+        }
+        if ($request->has('body_fat_percentage')) {
+            $updateData['body_fat_percentage'] = $validated['body_fat_percentage'];
+        }
+        if ($request->has('muscle_mass')) {
+            $updateData['muscle_mass_kg'] = $validated['muscle_mass'];
+        }
+        if ($request->has('waist_circumference')) {
+            $updateData['waist_circumference_cm'] = $validated['waist_circumference'];
+        }
+        if ($request->has('chest_circumference')) {
+            $updateData['chest_circumference_cm'] = $validated['chest_circumference'];
+        }
+        if ($request->has('hip_circumference')) {
+            $updateData['hip_circumference_cm'] = $validated['hip_circumference'];
+        }
+        if ($request->has('arm_circumference')) {
+            $updateData['arm_circumference_cm'] = $validated['arm_circumference'];
+        }
+        if ($request->has('thigh_circumference')) {
+            $updateData['thigh_circumference_cm'] = $validated['thigh_circumference'];
+        }
+        if ($request->has('notes')) {
+            $updateData['notes'] = $validated['notes'];
+        }
+        if ($request->has('recorded_at')) {
+            $updateData['recorded_at'] = $validated['recorded_at'];
+        }
 
         $bodyProgress->update($updateData);
 
@@ -115,8 +133,6 @@ class BodyProgressController extends Controller
             'to' => 'nullable|date',
         ]);
 
-
-
         $query = $user->bodyProgress()->orderBy('recorded_at', 'desc');
 
         if ($request->from) {
@@ -132,6 +148,17 @@ class BodyProgressController extends Controller
         }
 
         $progress = $query->get();
+
+        // Seed the onboarding weight at account creation as the curve's baseline.
+        $startWeight = $user->profile?->weight_kg;
+        if ($startWeight !== null
+            && ! $progress->contains(fn (BodyProgress $p) => $p->recorded_at->isSameDay($user->created_at))) {
+            $progress->push(new BodyProgress([
+                'weight_kg' => $startWeight,
+                'recorded_at' => $user->created_at,
+            ]));
+            $progress = $progress->sortByDesc('recorded_at')->values();
+        }
 
         return response()->json([
             'data' => $progress,
@@ -150,7 +177,7 @@ class BodyProgressController extends Controller
             ->orderBy('recorded_at', 'desc')
             ->first();
 
-        if (!$latest) {
+        if (! $latest) {
             return response()->json([
                 'message' => 'No body progress entries found',
                 'data' => null,
@@ -173,7 +200,7 @@ class BodyProgressController extends Controller
             ->where('user_id', $user->id)
             ->first();
 
-        if (!$bodyProgress) {
+        if (! $bodyProgress) {
             return response()->json([
                 'error' => 'Body progress entry not found',
             ], 404);
@@ -186,4 +213,3 @@ class BodyProgressController extends Controller
         ]);
     }
 }
-
