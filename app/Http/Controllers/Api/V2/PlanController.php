@@ -7,6 +7,7 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutTracking;
+use App\Services\DayCompletionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -19,7 +20,7 @@ class PlanController extends Controller
     /**
      * Get meal and workout plan for a specific date
      */
-    public function getDayPlan(Request $request, string $date): JsonResponse
+    public function getDayPlan(Request $request, string $date, DayCompletionService $dayCompletion): JsonResponse
     {
         $user = $request->user();
 
@@ -100,6 +101,8 @@ class PlanController extends Controller
         $trackedCalories = $this->getTrackedCaloriesForDay($user, $requestDate);
         $trackedWorkouts = $this->getTrackedWorkoutsForDay($user, $workoutPlan);
 
+        $completion = $dayCompletion->for($user, $requestDate->toDateString(), $plan);
+
         return response()->json([
             'plan_id' => $plan->id,
             'plan_day' => $dayOfPlan,
@@ -113,6 +116,11 @@ class PlanController extends Controller
             'daily_totals' => $mealsData['totals'],
             'tracked_calories' => $trackedCalories,
             'tracked_workouts' => $trackedWorkouts,
+            'completion' => [
+                'perfect' => $completion->isPerfect,
+                'nutrition' => $completion->nutritionMet,
+                'workout' => $completion->workoutDone,
+            ],
             'message' => $this->getStatusMessage($overallStatus),
         ]);
     }
