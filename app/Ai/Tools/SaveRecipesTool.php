@@ -21,6 +21,9 @@ class SaveRecipesTool implements Tool
     /** @var list<int> */
     public array $createdIds = [];
 
+    /** @var list<int> Every recipe id we ended on — newly created OR matched via dedup. */
+    public array $upsertedIds = [];
+
     public function __construct(
         private readonly string $locale,
         private readonly string $mealType,
@@ -41,10 +44,13 @@ class SaveRecipesTool implements Tool
             $duped = 0;
 
             foreach ($recipes as $data) {
-                $before = $this->createdIds;
                 $recipe = $this->dryRun
                     ? null
                     : $upserter->upsert($data, $this->locale, $this->mealType);
+
+                if ($recipe) {
+                    $this->upsertedIds[] = $recipe->id;
+                }
 
                 if ($recipe && $recipe->wasRecentlyCreated) {
                     $this->createdIds[] = $recipe->id;

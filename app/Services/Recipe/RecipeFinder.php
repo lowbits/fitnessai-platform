@@ -65,8 +65,9 @@ class RecipeFinder
         array $affinityScores = [],
         int $limit = 5,
         ?string $query = null,
+        bool $constrainToMeal = true,
     ): Collection {
-        $filter = $this->buildFilter($mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes);
+        $filter = $this->buildFilter($mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes, $constrainToMeal);
         $hits = $this->search($filter, $query);
         $hitIds = $hits->pluck('id')->diff($excludeIds);
 
@@ -105,12 +106,16 @@ class RecipeFinder
         array $allowedProteins,
         array $dislikes,
         Collection $forbiddenAxes,
+        bool $constrainToMeal = true,
     ): string {
-        $filters = [
-            'meal_types = '.json_encode($mealType),
-            'source_locale = '.json_encode($locale),
-            sprintf('calories %d TO %d', (int) round($targetKcal * 0.85), (int) round($targetKcal * 1.15)),
-        ];
+        $filters = ['source_locale = '.json_encode($locale)];
+
+        // A named-dish wish drops the slot/calorie fit so the requested dish can
+        // surface; diet and dislikes stay enforced either way.
+        if ($constrainToMeal) {
+            $filters[] = 'meal_types = '.json_encode($mealType);
+            $filters[] = sprintf('calories %d TO %d', (int) round($targetKcal * 0.85), (int) round($targetKcal * 1.15));
+        }
 
         if (! empty($allowedProteins)) {
             $filters[] = 'primary_protein IN ['.collect($allowedProteins)->map(fn ($p) => json_encode($p))->implode(',').']';

@@ -25,6 +25,8 @@ class RecipeSeederAgent implements Agent, HasTools
         private readonly string $locale,
         private readonly int $count,
         bool $dryRun = false,
+        private readonly ?string $request = null,
+        private readonly ?int $targetKcal = null,
     ) {
         $this->saveTool = new SaveRecipesTool($this->locale, $this->mealType, $dryRun);
     }
@@ -36,7 +38,7 @@ class RecipeSeederAgent implements Agent, HasTools
 
     public function instructions(): string
     {
-        return (string) new SeedRecipesPrompt($this->diet, $this->mealType, $this->locale, $this->count);
+        return (string) new SeedRecipesPrompt($this->diet, $this->mealType, $this->locale, $this->count, $this->request, $this->targetKcal);
     }
 
     public function tools(): iterable
