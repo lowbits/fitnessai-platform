@@ -55,7 +55,7 @@ return [
             'intro' => 'Dieser strukturierte 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio, um Fett abzubauen, Muskeln zu erhalten und den Stoffwechsel nachhaltig zu steigern.',
             'internal_type' => 'weight_loss',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan beim Abnehmen funktioniert',
                 'content' => [
@@ -239,7 +239,7 @@ return [
             'intro' => 'Dieser 12-Wochen-Trainingsplan basiert auf progressiver Überlastung und kombiniert Muskelwachstum, Kraftsteigerung und ausreichende Regeneration.',
             'internal_type' => 'muscle_gain',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Warum dieser Muskelaufbau-Trainingsplan funktioniert',
@@ -436,7 +436,7 @@ return [
             'intro' => 'Dieser 6-Wochen-Anfängerplan hilft dir, grundlegende Bewegungen zu erlernen, Kraft aufzubauen und eine stabile Trainingsroutine zu entwickeln.',
             'internal_type' => 'beginner',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan für Anfänger funktioniert',
@@ -602,7 +602,7 @@ return [
             'intro' => 'Dieser 8-Wochen-Trainingsplan zeigt dir, wie du mit reinem Körpergewicht zuhause Kraft, Ausdauer und Muskulatur aufbaust – ganz ohne Fitnessstudio.',
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan für Zuhause funktioniert',
@@ -759,7 +759,7 @@ return [
             'intro' => 'Dieser 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio gezielt für Straffung, Definition und einen starken, femininen Körper.',
             'internal_type' => 'women',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan für Frauen funktioniert',
@@ -915,7 +915,7 @@ return [
             'intro' => 'Dieser 6-Wochen Fitness Reset hilft dir, nach Pausen oder einem Neustart wieder in eine nachhaltige Trainingsroutine zu finden. Fokus auf Kraft, Ausdauer, Beweglichkeit und langfristigen Fortschritt.',
             'internal_type' => 'new_year_reset',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
             'why_it_works' => [
                 'title' => 'Warum der Neujahrs-Trainingsplan funktioniert',
                 'content' => [
@@ -1072,7 +1072,7 @@ return [
             'intro' => 'Dieser 10-Wochen-Krafttrainingsplan konzentriert sich auf die Langhantel- und Kurzhantelübungen, die wirklich zählen. Aufgebaut auf progressiver Überlastung und einem 4-Tage-Oberkörper/Unterkörper-Split entwickelst du systematisch Ganzkörperkraft.',
             'internal_type' => 'strength',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 10,
@@ -1250,7 +1250,7 @@ return [
             'intro' => 'Dieser 8-Wochen-Trainingsplan nutzt Supersatz-basiertes Krafttraining und metabolisches Konditionstraining, um den Kalorienverbrauch zu maximieren und gleichzeitig Muskelmasse zu erhalten. 4 Einheiten pro Woche à 40 Minuten.',
             'internal_type' => 'fat_loss',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 8,
@@ -1428,7 +1428,7 @@ return [
             'intro' => 'Dieser 8-Wochen-Trainingsplan entwickelt deine gesamte Rumpfmuskulatur systematisch. Drei fokussierte Einheiten pro Woche trainieren Stabilität, Rotationskraft und Flexion – für sichtbare Bauchmuskeln und funktionale Kernkraft.',
             'internal_type' => 'abs',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 8,
@@ -1594,7 +1594,7 @@ return [
             'intro' => 'Dieser 10-Wochen-Trainingsplan wurde speziell für Trainierende ab 40 entwickelt. Drei ausgewogene Einheiten pro Woche kombinieren Krafttraining, Mobilität und Gleichgewicht – gelenkschonend, progressiv und alltagstauglich.',
             'internal_type' => 'over_40',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 10,
@@ -1759,7 +1759,7 @@ return [
             'intro' => 'This structured 8-week workout plan combines strength training and cardio to reduce body fat, preserve muscle mass, and improve metabolic health.',
             'internal_type' => 'weight_loss',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
             'workout' => [
                 'weeks' => 8,
                 'workouts_per_week' => 3,
@@ -1935,7 +1935,7 @@ return [
             'keywords' => ['muscle building workout plan', 'hypertrophy training', 'strength training program', 'build muscle'],
             'internal_type' => 'muscle_gain',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
             'why_it_works' => [
                 'title' => 'Why This Muscle Building Plan Works',
                 'content' => [
@@ -2127,7 +2127,7 @@ return [
             'keywords' => ['beginner workout plan', 'fitness for beginners', 'starter workout plan', 'beginner fitness'],
             'internal_type' => 'beginner',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Why this beginner workout plan works',
@@ -2291,7 +2291,7 @@ return [
             'keywords' => ['home workout plan', 'bodyweight training', 'no equipment workout', 'home fitness'],
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Why this home workout plan works',
@@ -2449,7 +2449,7 @@ return [
             'keywords' => ['workout plan for women', 'women fitness training', 'female workout plan', 'toning workout'],
             'internal_type' => 'women',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
 
             'why_it_works' => [
                 'title' => 'Why this workout plan for women works',
@@ -2606,7 +2606,7 @@ return [
             'keywords' => ['new year workout plan', 'fitness reset', 'workout restart', 'new year fitness'],
             'internal_type' => 'new_year_reset',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2025-12-24',
+            'last_updated_at' => '2026-07-20',
             'why_it_works' => [
                 'title' => 'Why the New Year workout reset works',
                 'content' => [
@@ -2762,7 +2762,7 @@ return [
             'intro' => 'This 10-week strength training programme focuses on the barbell and dumbbell lifts that matter most. Built around progressive overload and a 4-day upper/lower split, it develops full-body strength for lifters of all levels.',
             'internal_type' => 'strength',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 10,
@@ -2940,7 +2940,7 @@ return [
             'intro' => 'This 8-week fat loss programme uses superset-based strength training and metabolic conditioning to maximise calorie burn while preserving lean muscle. Designed for 4 sessions per week at 40 minutes each.',
             'internal_type' => 'fat_loss',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 8,
@@ -3118,7 +3118,7 @@ return [
             'intro' => 'This 8-week abs workout plan develops your entire core musculature systematically. Three focused sessions per week train stability, rotational strength and flexion — for visible abs and functional core strength.',
             'internal_type' => 'abs',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 8,
@@ -3284,7 +3284,7 @@ return [
             'intro' => 'This 10-week workout plan is designed specifically for trainees over 40. Three balanced sessions per week combine strength training, mobility and balance work — joint-friendly, progressive and practical for everyday life.',
             'internal_type' => 'over_40',
             'published_at' => '2026-03-12',
-            'last_updated_at' => '2026-03-12',
+            'last_updated_at' => '2026-07-20',
 
             'workout' => [
                 'weeks' => 10,
