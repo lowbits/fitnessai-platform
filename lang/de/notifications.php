@@ -27,6 +27,10 @@ return [
             'body' => 'Zeit deinen Körper zu versorgen mit: :meal',
         ],
     ],
+    'check_in' => [
+        'title' => 'Zeit für dein Check-in 💪',
+        'body' => 'Wie schwer bist du heute? Sag es Mona im Chat.',
+    ],
     'weekly_plans_generated' => [
         'title' => 'Deine nächste Woche ist bereit!',
         'body' => 'Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für deine Ziele!',
@@ -44,4 +48,3 @@ return [
         'body' => 'Dein personalisierter Trainings- & Ernährungsplan wartet auf dich.',
     ],
 ];
-

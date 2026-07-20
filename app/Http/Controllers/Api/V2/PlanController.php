@@ -121,6 +121,7 @@ class PlanController extends Controller
                 'nutrition' => $completion->nutritionMet,
                 'workout' => $completion->workoutDone,
             ],
+            'week_strip' => $dayCompletion->strip($user, $plan, $requestDate->toDateString()),
             'message' => $this->getStatusMessage($overallStatus),
         ]);
     }

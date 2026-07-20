@@ -27,6 +27,10 @@ return [
             'body' => 'Time to fuel your body with: :meal',
         ],
     ],
+    'check_in' => [
+        'title' => 'Time for your check-in 💪',
+        'body' => 'What does the scale say today? Tell Mona in the chat.',
+    ],
     'weekly_plans_generated' => [
         'title' => 'Your Next Week is Ready!',
         'body' => 'We just planned your upcoming week of workouts and meals. Time to crush your goals!',
@@ -41,6 +45,6 @@ return [
     ],
     'plan_completed' => [
         'title' => 'Your Plan is Ready 💪',
-        'body' => 'Your personalized workout & nutrition plan is waiting for you.'
+        'body' => 'Your personalized workout & nutrition plan is waiting for you.',
     ],
 ];

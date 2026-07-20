@@ -2,11 +2,8 @@
 
 namespace App\Services;
 
-use App\Models\CalorieTracking;
-use App\Models\Meal;
 use App\Models\Plan;
 use App\Models\User;
-use App\Models\WorkoutPlan;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Collection;
 
@@ -48,14 +45,13 @@ class StreakService
     public function for(User $user): array
     {
         $plan = $user->plans()->where('status', 'active')->first();
-        $goal = (int) ($plan?->daily_calories ?? 0);
 
         $activeDays = $this->activeDays($user);
-        $kcalByDay = $this->kcalByDay($user);
-        $perfectDays = $this->perfectDays($user, $plan, $goal, $kcalByDay)->flip();
-
         $streakDates = $this->currentStreakDates($activeDays);
-        $perfectInStreak = $streakDates->filter(fn (string $date) => $perfectDays->has($date))->count();
+
+        $perfectInStreak = $streakDates
+            ->filter(fn (string $date) => $this->dayCompletion->for($user, $date, $plan)->isPerfect)
+            ->count();
         $score = $streakDates->count() + $perfectInStreak * self::PERFECT_WEIGHT;
 
         return [
@@ -66,7 +62,7 @@ class StreakService
             'score' => $score,
             'tier' => $this->tierFor($score),
             'next_tier' => $this->nextTier($score),
-            'week' => $this->recentWeek($perfectDays, $kcalByDay, $goal),
+            'week' => $this->recentWeek($user, $plan),
         ];
     }
 
@@ -85,89 +81,6 @@ class StreakService
             ->pluck('completed_at');
 
         return $this->toDayKeys($foodDays->merge($workoutDays));
-    }
-
-    /**
-     * Total tracked calories per calendar day, keyed by `Y-m-d`.
-     *
-     * @return Collection<string, float>
-     */
-    private function kcalByDay(User $user): Collection
-    {
-        return $user->calorieTrackings()
-            ->selectRaw('tracked_date, SUM(calories) as total')
-            ->groupBy('tracked_date')
-            ->pluck('total', 'tracked_date')
-            ->mapWithKeys(fn ($total, $date) => [CarbonImmutable::parse($date)->toDateString() => (float) $total]);
-    }
-
-    /**
-     * Days (`Y-m-d`) that met the nutrition goal and — unless a rest day — the workout.
-     *
-     * @param  Collection<string, float>  $kcalByDay
-     * @return Collection<int, string>
-     */
-    private function perfectDays(User $user, ?Plan $plan, int $goal, Collection $kcalByDay): Collection
-    {
-        if (! $plan || $goal <= 0) {
-            return collect();
-        }
-
-        $recommendedComplete = $this->recommendedMealDays($user, $plan)->flip();
-
-        $workoutDone = $this->toDayKeys(
-            $user->workoutTrackings()->whereNotNull('completed_at')->pluck('completed_at')
-        )->flip();
-
-        $trainingDayNumbers = WorkoutPlan::where('plan_id', $plan->id)->pluck('day_number')->flip();
-
-        return $kcalByDay
-            ->filter(function (float $total, string $date) use ($goal, $recommendedComplete, $trainingDayNumbers, $workoutDone, $plan) {
-                $dayNumber = (int) $plan->start_date->diffInDays(CarbonImmutable::parse($date)) + 1;
-
-                return $this->dayCompletion->evaluate(
-                    kcal: $total,
-                    goal: $goal,
-                    recommendedMet: $recommendedComplete->has($date),
-                    isTrainingDay: $trainingDayNumbers->has($dayNumber),
-                    workoutDone: $workoutDone->has($date),
-                )->isPerfect;
-            })
-            ->keys()
-            ->values();
-    }
-
-    /**
-     * Dates (`Y-m-d`) on which every recommended meal for the day was tracked.
-     *
-     * @return Collection<int, string>
-     */
-    private function recommendedMealDays(User $user, Plan $plan): Collection
-    {
-        $plannedByDate = Meal::query()
-            ->join('meal_plans', 'meals.meal_plan_id', '=', 'meal_plans.id')
-            ->where('meal_plans.plan_id', $plan->id)
-            ->get(['meals.id', 'meal_plans.date'])
-            ->groupBy(fn (Meal $meal) => CarbonImmutable::parse($meal->date)->toDateString());
-
-        if ($plannedByDate->isEmpty()) {
-            return collect();
-        }
-
-        $trackedByDate = $user->calorieTrackings()
-            ->whereNotNull('meal_id')
-            ->get(['meal_id', 'tracked_date'])
-            ->groupBy(fn (CalorieTracking $tracking) => CarbonImmutable::parse($tracking->tracked_date)->toDateString());
-
-        return $plannedByDate
-            ->filter(function (Collection $meals, string $date) use ($trackedByDate) {
-                $planned = $meals->pluck('id')->unique();
-                $tracked = ($trackedByDate->get($date) ?? collect())->pluck('meal_id')->unique();
-
-                return $planned->isNotEmpty() && $planned->diff($tracked)->isEmpty();
-            })
-            ->keys()
-            ->values();
     }
 
     /**
@@ -215,20 +128,20 @@ class StreakService
     }
 
     /**
-     * Last seven days (oldest → today) with calorie progress and a perfect flag.
+     * Last seven days (oldest → today) with ring progress + perfect flag — the
+     * same {@see DayCompletionService::progressOn} the dashboard week strip uses,
+     * so both surfaces agree day-for-day.
      *
-     * @param  Collection<string, int>  $perfectDays  flipped set
-     * @param  Collection<string, float>  $kcalByDay
      * @return array<int, array{date: string, progress: float, complete: bool}>
      */
-    private function recentWeek(Collection $perfectDays, Collection $kcalByDay, int $goal): array
+    private function recentWeek(User $user, ?Plan $plan): array
     {
         return collect(range(6, 0))
-            ->map(function (int $daysAgo) use ($perfectDays, $kcalByDay, $goal) {
+            ->map(function (int $daysAgo) use ($user, $plan) {
                 $date = CarbonImmutable::today()->subDays($daysAgo)->toDateString();
-                $progress = $goal > 0 ? min(1.0, round($kcalByDay->get($date, 0.0) / $goal, 3)) : 0.0;
+                $entry = $plan ? $this->dayCompletion->progressOn($user, $plan, $date) : ['progress' => 0.0, 'complete' => false];
 
-                return ['date' => $date, 'progress' => $progress, 'complete' => $perfectDays->has($date)];
+                return ['date' => $date] + $entry;
             })
             ->all();
     }

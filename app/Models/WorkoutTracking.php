@@ -44,4 +44,3 @@ class WorkoutTracking extends Model
         return $this->hasMany(WorkoutTrackingExercise::class);
     }
 }
-
