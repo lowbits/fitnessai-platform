@@ -1501,9 +1501,9 @@ export const locales = {
         welcome: {
             meta: {
                 locale: 'de',
-                title: 'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+                title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 title_short:
-                    'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+                    'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 description:
                     'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
                 description_social:

@@ -3,7 +3,7 @@
 return [
     'meta' => [
         'title' => 'Blog — Fitness, Ernährung & Training',
-        'description' => 'Ratgeber rund um Training, Ernährung und Fitness. Wissenschaftlich fundiert, praxisnah und kostenlos.',
+        'description' => 'Ratgeber rund um Training, Ernährung und Fitness: Trainingspläne, Kalorienbedarf, Ernährungspläne und mehr. Wissenschaftlich fundiert und kostenlos.',
     ],
 
     'labels' => [

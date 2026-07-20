@@ -3,7 +3,7 @@
 return [
     'meta' => [
         'title' => 'Kalorienrechner: Täglichen Kalorienbedarf berechnen',
-        'description' => 'Berechne deinen täglichen Kalorienbedarf in 30 Sekunden. Kostenloser Kalorienrechner für Abnehmen, Zunehmen oder Gewicht halten — von Fitness-Experten entwickelt.',
+        'description' => 'Berechne deinen täglichen Kalorienbedarf in 30 Sekunden — zum Abnehmen, Zunehmen oder Gewicht halten. Kostenloser Kalorienrechner, wissenschaftlich fundiert.',
     ],
 
     'schema' => [
