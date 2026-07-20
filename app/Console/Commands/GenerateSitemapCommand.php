@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Carbon\Carbon;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Http;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
@@ -64,7 +65,56 @@ class GenerateSitemapCommand extends Command
 
         $this->info('Sitemap generated successfully at '.$baseUrl.'/sitemap.xml');
 
+        $this->submitToIndexNow($baseUrl);
+
         return Command::SUCCESS;
+    }
+
+    /**
+     * Notify IndexNow (Bing, Yandex, …) of the sitemap URLs so they recrawl.
+     * Skipped on non-public hosts, so local runs never ping the API.
+     */
+    private function submitToIndexNow(string $baseUrl): void
+    {
+        $key = config('services.indexnow.key');
+        $host = parse_url($baseUrl, PHP_URL_HOST);
+
+        if (! $key || ! $host || str_ends_with($host, '.test') || $host === 'localhost') {
+            $this->warn('IndexNow: skipped (non-public host or missing key).');
+
+            return;
+        }
+
+        $urls = $this->sitemapUrls(public_path('sitemap.xml'));
+
+        if ($urls === []) {
+            return;
+        }
+
+        $response = Http::acceptJson()->post(config('services.indexnow.endpoint'), [
+            'host' => $host,
+            'key' => $key,
+            'keyLocation' => rtrim($baseUrl, '/')."/{$key}.txt",
+            'urlList' => $urls,
+        ]);
+
+        $this->info(sprintf('IndexNow: submitted %d URLs (HTTP %d).', count($urls), $response->status()));
+    }
+
+    /**
+     * Extract the <loc> URLs from a generated sitemap file.
+     *
+     * @return array<int, string>
+     */
+    private function sitemapUrls(string $path): array
+    {
+        if (! is_file($path)) {
+            return [];
+        }
+
+        preg_match_all('/<loc>([^<]+)<\/loc>/', (string) file_get_contents($path), $matches);
+
+        return $matches[1] ?? [];
     }
 
     private function addStaticPages(Sitemap $sitemap, string $locale, string $baseUrl): void
