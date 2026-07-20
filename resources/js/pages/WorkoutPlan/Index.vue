@@ -92,7 +92,11 @@ const schemaJson = JSON.stringify(props.schema);
                 >
                     <div class="relative z-10">
                         <h2 class="mb-3 text-2xl font-bold text-white">
-                            {{ plan.title }}
+                            <Link
+                                :href="plan.url"
+                                class="transition hover:text-primary-300"
+                                >{{ plan.title }}</Link
+                            >
                         </h2>
                         <p class="mb-6 line-clamp-3 text-gray-300">
                             {{ plan.description }}

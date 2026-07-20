@@ -4,6 +4,20 @@ export const locales = {
             yes: 'Yes',
             no: 'No',
         },
+        nav: {
+            app: 'App',
+            mealPlan: 'Meal plan',
+            workoutPlans: 'Workout plans',
+            blog: 'Blog',
+            download: 'Get the app',
+        },
+        internalLinks: {
+            popularHeading: 'Popular free workout plans',
+            allPlans: 'All plans',
+            homeAnchor: 'home workout plan',
+            weightLossAnchor: 'workout plan for weight loss',
+            muscleGainAnchor: 'muscle-building workout plan',
+        },
         welcome: {
             meta: {
                 locale: 'en',
@@ -1469,6 +1483,20 @@ export const locales = {
         common: {
             yes: 'Ja',
             no: 'Nein',
+        },
+        nav: {
+            app: 'App',
+            mealPlan: 'Ernährungsplan',
+            workoutPlans: 'Trainingspläne',
+            blog: 'Blog',
+            download: 'App laden',
+        },
+        internalLinks: {
+            popularHeading: 'Beliebte kostenlose Trainingspläne',
+            allPlans: 'Alle Pläne',
+            homeAnchor: 'Trainingsplan für Zuhause',
+            weightLossAnchor: 'Trainingsplan zum Abnehmen',
+            muscleGainAnchor: 'Muskelaufbau Trainingsplan',
         },
         welcome: {
             meta: {

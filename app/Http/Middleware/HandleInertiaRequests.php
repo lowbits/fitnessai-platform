@@ -67,11 +67,7 @@ class HandleInertiaRequests extends Middleware
             'muscle_gain',
             'beginner',
             'home',
-            'women',
             'strength',
-            'fat_loss',
-            'abs',
-            'over_40',
         ];
 
         // Get base path from routes translation
@@ -82,6 +78,7 @@ class HandleInertiaRequests extends Middleware
             'indexUrl' => LaravelLocalization::localizeURL("/{$basePath}", $locale),
             'appStoreUrl' => config('app.app_store.ios.url'),
             'appUrl' => "/{$locale}/app",
+            'mealPlanUrl' => LaravelLocalization::localizeURL('/'.trans('routes.landing_personal_meal_plan', [], $locale), $locale),
             'calorieCalculatorUrl' => LaravelLocalization::localizeURL('/'.trans('routes.free_tools_calorie_calculator', [], $locale), $locale),
             'blogUrl' => LaravelLocalization::localizeURL('/'.trans('routes.blog_index', [], $locale), $locale),
             'aboutUrl' => LaravelLocalization::localizeURL('/'.trans('routes.about', [], $locale), $locale),
