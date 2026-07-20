@@ -58,4 +58,10 @@ return [
         'api_key' => env('PHOTOROOOM_API_KEY', 'sandbox_sk_pr_default_4c785cb9271319d33798336ce0e1e1c31e75399a'),
     ],
 
+    'indexnow' => [
+        // Public by design — this key is served at public/<key>.txt for domain verification.
+        'key' => env('INDEXNOW_KEY', 'cadcb149cb1d40cead98f92e71c0c536'),
+        'endpoint' => env('INDEXNOW_ENDPOINT', 'https://api.indexnow.org/indexnow'),
+    ],
+
 ];
