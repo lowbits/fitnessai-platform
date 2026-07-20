@@ -91,7 +91,7 @@ const toggleDay = (index: number) => {
                 </button>
 
                 <div
-                    v-if="expandedDay === index"
+                    v-show="expandedDay === index"
                     class="border-t border-dark-surfaces-500 p-6"
                 >
                     <div class="space-y-4">
