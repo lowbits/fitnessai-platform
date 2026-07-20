@@ -77,14 +77,14 @@ class GenerateSitemapCommand extends Command
     private function submitToIndexNow(string $baseUrl): void
     {
         $key = config('services.indexnow.key');
-        $host = parse_url($baseUrl, PHP_URL_HOST);
 
-        if (! $key || ! $host || str_ends_with($host, '.test') || $host === 'localhost') {
-            $this->warn('IndexNow: skipped (non-public host or missing key).');
+        if (! app()->isProduction() || ! $key) {
+            $this->warn('IndexNow: skipped (not production or missing key).');
 
             return;
         }
 
+        $host = parse_url($baseUrl, PHP_URL_HOST);
         $urls = $this->sitemapUrls(public_path('sitemap.xml'));
 
         if ($urls === []) {
