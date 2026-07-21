@@ -3,7 +3,7 @@
 return [
     'meta' => [
         'title' => 'Blog — Fitness, Nutrition & Training',
-        'description' => 'Guides on training, nutrition and fitness. Science-based, practical and free.',
+        'description' => 'Guides on training, nutrition and fitness: workout plans, calorie needs, meal planning and more. Science-based, practical and free.',
     ],
 
     'labels' => [

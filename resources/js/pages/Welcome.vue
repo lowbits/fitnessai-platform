@@ -28,6 +28,14 @@ const props = defineProps<{
 const { t } = useI18n();
 const { language } = useSelectedLanguage();
 
+const footerLinks = computed(
+    () =>
+        page.props.footerLinks as {
+            workoutPlans: Record<string, { url: string; label: string }>;
+            indexUrl: string;
+        },
+);
+
 const APP_STORE_URL =
     'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695';
 
@@ -715,6 +723,43 @@ const faqData = computed(() => ({
                 </div>
             </section>
         </div>
+
+        <nav
+            aria-label="Popular workout plans"
+            class="container mx-auto mt-28 px-6 md:px-0"
+        >
+            <div
+                class="mx-auto flex max-w-3xl flex-col items-center gap-5 rounded-3xl border border-dark-surfaces-25 bg-dark-surfaces-900/50 px-6 py-8"
+            >
+                <p
+                    class="text-xs font-semibold tracking-wider text-primary-500 uppercase"
+                >
+                    {{ $t('internalLinks.popularHeading') }}
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3">
+                    <Link
+                        :href="footerLinks.workoutPlans.weight_loss?.url"
+                        class="rounded-full border border-dark-surfaces-25 bg-dark-surfaces-800 px-4 py-2 text-sm font-medium text-secondary-200 transition hover:border-primary-500/40 hover:text-white"
+                        >{{ $t('internalLinks.weightLossAnchor') }}</Link
+                    >
+                    <Link
+                        :href="footerLinks.workoutPlans.home?.url"
+                        class="rounded-full border border-dark-surfaces-25 bg-dark-surfaces-800 px-4 py-2 text-sm font-medium text-secondary-200 transition hover:border-primary-500/40 hover:text-white"
+                        >{{ $t('internalLinks.homeAnchor') }}</Link
+                    >
+                    <Link
+                        :href="footerLinks.workoutPlans.muscle_gain?.url"
+                        class="rounded-full border border-dark-surfaces-25 bg-dark-surfaces-800 px-4 py-2 text-sm font-medium text-secondary-200 transition hover:border-primary-500/40 hover:text-white"
+                        >{{ $t('internalLinks.muscleGainAnchor') }}</Link
+                    >
+                    <Link
+                        :href="footerLinks.indexUrl"
+                        class="inline-flex items-center gap-1 px-4 py-2 text-sm font-semibold text-primary-400 transition hover:text-primary-300"
+                        >{{ $t('internalLinks.allPlans') }} &rarr;</Link
+                    >
+                </div>
+            </div>
+        </nav>
     </main>
     <Footer />
 </template>

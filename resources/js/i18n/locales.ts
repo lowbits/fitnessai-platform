@@ -4,6 +4,20 @@ export const locales = {
             yes: 'Yes',
             no: 'No',
         },
+        nav: {
+            app: 'App',
+            mealPlan: 'Meal plan',
+            workoutPlans: 'Workout plans',
+            blog: 'Blog',
+            download: 'Get the app',
+        },
+        internalLinks: {
+            popularHeading: 'Popular free workout plans',
+            allPlans: 'All plans',
+            homeAnchor: 'home workout plan',
+            weightLossAnchor: 'workout plan for weight loss',
+            muscleGainAnchor: 'muscle-building workout plan',
+        },
         welcome: {
             meta: {
                 locale: 'en',
@@ -1464,12 +1478,26 @@ export const locales = {
             yes: 'Ja',
             no: 'Nein',
         },
+        nav: {
+            app: 'App',
+            mealPlan: 'Ernährungsplan',
+            workoutPlans: 'Trainingspläne',
+            blog: 'Blog',
+            download: 'App laden',
+        },
+        internalLinks: {
+            popularHeading: 'Beliebte kostenlose Trainingspläne',
+            allPlans: 'Alle Pläne',
+            homeAnchor: 'Trainingsplan für Zuhause',
+            weightLossAnchor: 'Trainingsplan zum Abnehmen',
+            muscleGainAnchor: 'Muskelaufbau Trainingsplan',
+        },
         welcome: {
             meta: {
                 locale: 'de',
-                title: 'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+                title: 'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 title_short:
-                    'Persönlichen Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
+                    'Trainingsplan & Ernährungsplan kostenlos erstellen | fytrr',
                 description:
                     'Erstelle deinen persönlichen Trainingsplan und Ernährungsplan kostenlos mit KI. Individuell, als PDF, ohne Anmeldung. Für Zuhause oder Gym.',
                 description_social:
