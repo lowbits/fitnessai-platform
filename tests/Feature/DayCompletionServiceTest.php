@@ -64,7 +64,7 @@ it('completes a rest day on calories alone', function () {
 
 it('does not complete a training day without the workout', function () {
     [$user, $plan] = dcUserWithPlan();
-    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1]);
+    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1, 'workout_type' => 'strength']);
     dcTrackKcal($user, 2000);
 
     $c = dcService()->for($user, today()->toDateString());
@@ -76,7 +76,7 @@ it('does not complete a training day without the workout', function () {
 
 it('completes a training day once the workout is done', function () {
     [$user, $plan] = dcUserWithPlan();
-    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1]);
+    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1, 'workout_type' => 'strength']);
     dcTrackKcal($user, 2000);
     WorkoutTracking::factory()->create(['user_id' => $user->id, 'completed_at' => today()->toDateString()]);
 
