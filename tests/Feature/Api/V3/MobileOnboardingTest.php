@@ -15,6 +15,10 @@ use function Pest\Laravel\postJson;
 
 uses(RefreshDatabase::class);
 
+beforeEach(function () {
+    Bus::fake([GenerateUserWorkoutPlan::class, GenerateUserMealPlan::class]);
+});
+
 function mobilePayload(array $overrides = []): array
 {
     return array_merge([
@@ -22,20 +26,20 @@ function mobilePayload(array $overrides = []): array
         'name' => 'Mobile User',
         'birthdate' => '1998-01-15',
         'gender' => Gender::MALE->value,
-        'weight' => 80.0,
-        'height' => 180,
+        'weight_kg' => 80.0,
+        'height_cm' => 180,
         'body_goal' => 'build_muscle',
         'skill_level' => 'intermediate',
         'activity_level' => ActivityLevel::MAINLY_SITTING->value,
         'training_place' => 'gym',
         'dietary_preference' => 'omnivore',
-        'training_sessions' => 4,
+        'training_sessions_per_week' => 4,
         'password' => 'password123',
         'password_confirmation' => 'password123',
     ], $overrides);
 }
 
-test('v3 onboarding creates user with trial and mobile source', function () {
+test('v3 onboarding creates a mobile user without starting a trial', function () {
     Notification::fake();
 
     postJson('/api/v3/onboarding', mobilePayload())
@@ -44,8 +48,8 @@ test('v3 onboarding creates user with trial and mobile source', function () {
     $user = User::where('email', 'mobile-test@example.com')->first();
 
     expect($user->source->value)->toBe('mobile_apple')
-        ->and($user->trial_ends_at)->not->toBeNull()
-        ->and($user->isOnFreeTrial())->toBeTrue();
+        ->and($user->trial_ends_at)->toBeNull()
+        ->and($user->isOnFreeTrial())->toBeFalse();
 });
 
 test('v3 onboarding stores meal preferences on profile', function () {
@@ -55,10 +59,10 @@ test('v3 onboarding stores meal preferences on profile', function () {
 
     postJson('/api/v3/onboarding', mobilePayload([
         'selected_meals' => ['breakfast', 'lunch', 'dinner'],
-        'dislikes' => ['pork', 'mushrooms'],
-        'cooking_time' => 'quick',
+        'food_dislikes' => ['pork', 'mushrooms'],
+        'cooking_preference' => 'quick',
+        'cooking_frequency' => 'meal_prep',
         'meal_variety' => 'low',
-        'meal_prep_enabled' => true,
         'favorite_recipes' => $recipes->pluck('id')->toArray(),
     ]))->assertCreated();
 
@@ -68,8 +72,8 @@ test('v3 onboarding stores meal preferences on profile', function () {
     expect($profile->selected_meals)->toBe(['breakfast', 'lunch', 'dinner'])
         ->and($profile->food_dislikes)->toBe(['pork', 'mushrooms'])
         ->and($profile->cooking_preference->value)->toBe('quick')
+        ->and($profile->cooking_frequency->value)->toBe('meal_prep')
         ->and($profile->meal_variety->value)->toBe('low')
-        ->and($profile->meal_prep_enabled)->toBeTrue()
         ->and($user->favoriteRecipes)->toHaveCount(2);
 });
 
@@ -77,9 +81,8 @@ test('v3 onboarding stores physical limitations', function () {
     Notification::fake();
 
     postJson('/api/v3/onboarding', mobilePayload([
-        'has_limitations' => true,
-        'limitations' => ['knee', 'back'],
-        'limitations_note' => 'Knee surgery 3 months ago',
+        'physical_limitations' => ['knee', 'back'],
+        'physical_limitations_note' => 'Knee surgery 3 months ago',
     ]))->assertCreated();
 
     $profile = User::where('email', 'mobile-test@example.com')->first()->profile;
@@ -100,7 +103,6 @@ test('v3 onboarding uses defaults for optional fields', function () {
         ->and($profile->food_dislikes)->toBe([])
         ->and($profile->cooking_preference->value)->toBe('normal')
         ->and($profile->meal_variety->value)->toBe('medium')
-        ->and($profile->meal_prep_enabled)->toBeFalse()
         ->and($profile->physical_limitations)->toBe([]);
 });
 
@@ -135,13 +137,13 @@ test('v3 onboarding rejects old body_goal values', function () {
         ->assertJsonValidationErrors('body_goal');
 });
 
-test('v3 onboarding validates cooking_time enum', function () {
+test('v3 onboarding validates cooking_preference enum', function () {
     Notification::fake();
 
     postJson('/api/v3/onboarding', mobilePayload([
-        'cooking_time' => 'invalid',
+        'cooking_preference' => 'invalid',
     ]))->assertUnprocessable()
-        ->assertJsonValidationErrors('cooking_time');
+        ->assertJsonValidationErrors('cooking_preference');
 });
 
 test('v3 onboarding validates meal_variety enum', function () {

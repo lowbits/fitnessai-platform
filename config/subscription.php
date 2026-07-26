@@ -7,11 +7,13 @@ return [
     | Mobile Free Trial
     |--------------------------------------------------------------------------
     |
-    | Number of days a mobile user gets free access before the paywall.
-    | This controls trial_ends_at and the initial plan duration for mobile.
+    | Length of the free trial a mobile user can start from the paywall, and how
+    | many days at the start of the plan are unlocked without a subscription
+    | (0 = everything behind the paywall, 1 = the first day is a free preview).
     |
     */
-    'trial_days' => (int) env('TRIAL_DAYS', 3),
+    'trial_days' => (int) env('TRIAL_DAYS', 7),
+    'preview_days' => (int) env('PREVIEW_DAYS', 0),
 
     /*
     |--------------------------------------------------------------------------

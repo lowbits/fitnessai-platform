@@ -23,6 +23,8 @@ class PushNotificationController extends Controller
             'token' => ['required', ExpoPushToken::rule()],
             'device_name' => ['nullable', 'string', 'max:255'],
             'platform' => ['nullable', 'string', 'in:ios,android'],
+            'timezone' => ['nullable', 'timezone'],
+            'locale' => ['nullable', 'string', 'max:20'],
         ]);
 
         if ($validator->fails()) {
@@ -45,6 +47,8 @@ class PushNotificationController extends Controller
                 'expo_push_token' => $request->input('token'),
                 'device_name' => $request->input('device_name'),
                 'platform' => $request->input('platform'),
+                'timezone' => $request->input('timezone'),
+                'locale' => $request->input('locale'),
                 'last_used_at' => now(),
             ]
         );

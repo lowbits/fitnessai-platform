@@ -31,13 +31,6 @@ class ExpiringTrialsWidget extends BaseWidget
                             ->where('subscriptions.billable_type', 'App\\Models\\User')
                             ->where('subscriptions.status', 'active');
                     })
-                    ->whereNotExists(function ($query) {
-                        $query->select(DB::raw(1))
-                            ->from('subscriptions_legacy')
-                            ->whereColumn('subscriptions_legacy.user_id', 'plans.user_id')
-                            ->where('subscriptions_legacy.status', 'active')
-                            ->whereDate('subscriptions_legacy.ends_at', '>=', now());
-                    })
                     ->with('user')
                     ->orderBy('end_date')
             )

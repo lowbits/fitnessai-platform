@@ -39,3 +39,28 @@ Schedule::command('notifications:meal-reminders')
     ->dailyAt('12:00')
     ->withoutOverlapping()
     ->runInBackground();
+
+// ===== TRIAL REMINDER =====
+// Push + email nudge 2 days before the free trial ends (drives conversion).
+Schedule::command('notifications:trial-reminders')
+    ->dailyAt('10:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+
+// ===== STREAK REMINDER =====
+// Evening last-chance nudge when a user's streak is at risk (nothing tracked today).
+// Runs hourly; the command matches each user's local 20:00.
+Schedule::command('notifications:streak-reminders')
+    ->hourly()
+    ->between('18:00', '22:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+
+// ===== WEEKLY WEIGH-IN =====
+// Weekly check-in for users who haven't logged body progress this week.
+// Runs hourly; the command matches each user's local Sunday 10:00.
+Schedule::command('notifications:weekly-checkin')
+    ->hourly()
+    ->between('8:00', '12:00')
+    ->withoutOverlapping()
+    ->runInBackground();

@@ -110,7 +110,7 @@ class CreateRecipeTool implements Tool
                     'name' => $meal->name,
                     'calories' => (int) $meal->calories,
                     'protein_g' => (int) $meal->protein_g,
-                    'image_url' => $meal->recipe?->thumbnail_url,
+                    'thumbnail_url' => $meal->thumbnail_url,
                 ],
                 'cards' => [MealAlternativeCard::make($recipe, $meal, $locale)],
             ],

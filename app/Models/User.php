@@ -38,6 +38,9 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         'locale',
         'source',
         'trial_ends_at',
+        'provider',
+        'provider_id',
+        'avatar',
     ];
 
     /**
@@ -134,21 +137,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return Attribute::get(fn () => $this->plan?->next_generation_at);
     }
 
-    public function legacySubscription(): HasOne
-    {
-        return $this->hasOne(SubscriptionLegacy::class)->latestOfMany();
-    }
-
-    public function legacySubscriptions(): HasMany
-    {
-        return $this->hasMany(SubscriptionLegacy::class);
-    }
-
-    public function hasActiveLegacySubscription(): bool
-    {
-        return $this->legacySubscription && $this->legacySubscription->isActive();
-    }
-
     public function preferredLocale()
     {
         return $this->locale ?? 'en';
@@ -156,6 +144,15 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
 
     public function getTimezone(): string
     {
+        $deviceTimezone = $this->devices()
+            ->whereNotNull('timezone')
+            ->latest('last_used_at')
+            ->value('timezone');
+
+        if ($deviceTimezone) {
+            return $deviceTimezone;
+        }
+
         return match ($this->locale) {
             'de' => 'Europe/Berlin',
             default => 'UTC',
@@ -191,15 +188,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
 
     public function hasPaidSubscription(): bool
     {
-        if ($this->subscriptions()->whereIn('status', ['active', 'trial'])->exists()) {
-            return true;
-        }
-
-        if ($this->legacySubscription?->isActive()) {
-            return true;
-        }
-
-        return false;
+        return $this->subscriptions()->whereIn('status', ['active', 'trial'])->exists();
     }
 
     public function hasActiveSubscription(): bool
@@ -217,17 +206,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
                 'started_at' => $rc->created_at,
                 'expires_at' => $rc->current_period_ended_at,
                 'source' => 'revenuecat',
-            ];
-        }
-
-        if ($this->legacySubscription?->isActive()) {
-            return [
-                'has_active_subscription' => true,
-                'tier' => __($this->legacySubscription->type),
-                'status' => 'active',
-                'started_at' => $this->legacySubscription->starts_at,
-                'expires_at' => $this->legacySubscription->ends_at,
-                'source' => 'legacy',
             ];
         }
 

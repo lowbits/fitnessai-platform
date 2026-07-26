@@ -17,6 +17,8 @@ class UserDevice extends Model
         'expo_push_token',
         'device_name',
         'platform',
+        'timezone',
+        'locale',
         'last_used_at',
     ];
 

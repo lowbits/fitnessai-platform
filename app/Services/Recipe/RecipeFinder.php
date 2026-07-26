@@ -11,7 +11,10 @@ use Throwable;
 
 class RecipeFinder
 {
-    public function __construct(private readonly Client $client) {}
+    public function __construct(
+        private readonly Client $client,
+        private readonly FoodTermTranslator $translator,
+    ) {}
 
     /**
      * Find a single stored Recipe matching the slot's constraints.
@@ -121,8 +124,8 @@ class RecipeFinder
             $filters[] = 'primary_protein IN ['.collect($allowedProteins)->map(fn ($p) => json_encode($p))->implode(',').']';
         }
 
-        foreach ($dislikes as $dislike) {
-            $filters[] = 'ingredient_names != '.json_encode(mb_strtolower(trim($dislike)));
+        foreach ($this->translator->toEnglishMany($dislikes) as $dislike) {
+            $filters[] = 'ingredient_names != '.json_encode($dislike);
         }
 
         $forbiddenAxes

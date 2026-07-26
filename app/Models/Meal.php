@@ -113,10 +113,22 @@ class Meal extends Model
         $path = $this->image_isolated
             ?? $this->image_full
             ?? $this->recipe?->image_isolated
-            ?? $this->recipe?->image_full
-            ?? 'meals/thumbnails/'.mb_strtolower($this->type).'_placeholder.png';
+            ?? $this->recipe?->image_full;
 
-        return $this->r2Url($path);
+        return $path ? $this->r2Url($path) : self::placeholderThumbnailUrl($this->type);
+    }
+
+    /**
+     * Absolute URL of the shared per-slot placeholder thumbnail, served when a
+     * meal — or a candidate replacement recipe — has no photo of its own, so
+     * every meal surface falls back to the same asset.
+     */
+    public static function placeholderThumbnailUrl(string $type): string
+    {
+        $slot = mb_strtolower($type);
+        $base = rtrim((string) config('services.r2.public_url'), '/');
+
+        return "{$base}/meals/thumbnails/{$slot}_placeholder.png";
     }
 
     private function r2Url(string $path): string

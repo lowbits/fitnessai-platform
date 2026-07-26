@@ -25,7 +25,7 @@ class EnumLocaleTest extends TestCase
         ]);
 
         // When app locale is 'de', label() should return German
-        $this->assertEquals('Muskelaufbau', $user->profile->body_goal->label());
+        $this->assertEquals('Muskeln aufbauen', $user->profile->body_goal->label());
         $this->assertEquals('Baue Muskelmasse auf und steigere deine Kraft', $user->profile->body_goal->description());
     }
 
@@ -36,7 +36,7 @@ class EnumLocaleTest extends TestCase
         $bodyGoal = BodyGoal::MUSCLE_GAIN;
 
         $this->assertEquals('Build Muscle', $bodyGoal->label('en'));
-        $this->assertEquals('Muskelaufbau', $bodyGoal->label('de'));
+        $this->assertEquals('Muskeln aufbauen', $bodyGoal->label('de'));
     }
 
     public function test_auth_me_endpoint_returns_labels_in_user_preferred_locale()
@@ -54,6 +54,6 @@ class EnumLocaleTest extends TestCase
             ->getJson('/api/v2/auth/me');
 
         $response->assertStatus(200);
-        $response->assertJsonPath('user.profile.body_goal', 'Muskelaufbau');
+        $response->assertJsonPath('user.profile.body_goal', 'Muskeln aufbauen');
     }
 }

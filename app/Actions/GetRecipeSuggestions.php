@@ -51,6 +51,7 @@ class GetRecipeSuggestions
             ]);
 
             return collect($results->getHits())
+                ->unique('id')
                 ->shuffle()
                 ->take($limit)
                 ->map(fn (array $hit) => $this->formatHit($hit, $locale))

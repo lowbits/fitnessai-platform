@@ -6,6 +6,7 @@ enum UserSource: string
 {
     case WEB = 'web';
     case MOBILE_APPLE = 'mobile_apple';
+    case MOBILE_ANDROID = 'mobile_android';
 
     public function label(): string
     {
@@ -17,6 +18,7 @@ enum UserSource: string
         return match($this) {
             self::WEB => '💻',
             self::MOBILE_APPLE => '📱',
+            self::MOBILE_ANDROID => '📱',
         };
     }
 }

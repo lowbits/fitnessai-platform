@@ -23,6 +23,7 @@ class MealContextResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
+            'thumbnail_url' => $this->thumbnail_url,
             'calories' => (int) $this->calories,
             'protein_g' => (int) $this->protein_g,
             'carbs_g' => (int) $this->carbs_g,

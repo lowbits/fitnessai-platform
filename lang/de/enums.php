@@ -12,7 +12,7 @@ return [
         'lose_weight_description' => 'Verliere Körperfett bei gleichzeitigem Muskelerhalt',
         'build_muscle' => 'Muskeln aufbauen',
         'build_muscle_description' => 'Baue Muskelmasse auf und steigere deine Kraft',
-        'get_fit' => 'Fit werden & wohlfühlen',
+        'get_fit' => 'Fitter werden',
         'get_fit_description' => 'Verbessere deine allgemeine Fitness, Ausdauer und Körperzusammensetzung',
     ],
     'skillLevel' => [

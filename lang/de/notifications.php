@@ -31,6 +31,24 @@ return [
         'title' => 'Zeit für dein Check-in 💪',
         'body' => 'Wie schwer bist du heute? Sag es Mona im Chat.',
     ],
+    'trial_reminder' => [
+        'title' => '⏳ Deine Gratis-Woche endet bald',
+        'body' => 'Noch :days Tage – bleib dran und behalte deinen Plan.',
+        'email' => [
+            'subject' => 'Deine Gratis-Woche endet bald',
+            'greeting' => 'Hi :name,',
+            'intro' => 'Deine Gratis-Woche endet in :days Tagen.',
+            'body' => 'Behalte deinen persönlichen Plan, deine Workouts und deinen Coach – mach genau da weiter, wo du aufgehört hast.',
+        ],
+    ],
+    'streak_reminder' => [
+        'title' => '🔥 Halte deine Serie am Leben',
+        'body' => 'Du hast eine :count-Tage-Serie – tracke heute etwas, damit sie weiterläuft.',
+    ],
+    'weekly_checkin' => [
+        'title' => '⚖️ Wöchentlicher Check-in',
+        'body' => 'Zeit, dein Gewicht einzutragen und deinen Fortschritt zu sehen.',
+    ],
     'weekly_plans_generated' => [
         'title' => 'Deine nächste Woche ist bereit!',
         'body' => 'Wir haben deine kommende Woche mit Workouts und Mahlzeiten geplant. Zeit für deine Ziele!',

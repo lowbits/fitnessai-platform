@@ -71,8 +71,10 @@ $table->unique(['provider', 'provider_id']);
 `users.password` stays nullable (already is). Add `fillable`: `provider`, `provider_id`,
 `avatar` in `App\Models\User`.
 
-Optionally extend `App\Enums\UserSource` with `MOBILE_GOOGLE` for provenance parity with
-the existing `MOBILE_APPLE`.
+`App\Enums\UserSource` is the **registration platform** (`web` / `mobile_apple` /
+`mobile_android`) — *not* the login method. The login method lives in the new `provider`
+column. Keep them separate: a user can register from the iOS app (`mobile_apple`) yet
+sign in with Google (`provider = google`).
 
 ---
 
@@ -172,15 +174,13 @@ public function __invoke(SignupRequest $request): JsonResponse
 Centralised in `ResolveAccountFromCredential`:
 
 1. **Social, provider_id known** → return that user.
-2. **Social, email matches an existing user** → link (set `provider`/`provider_id` on it),
-   set `email_verified_at` if null, return it.
+2. **Social, email matches an existing user** → auto-link (set `provider`/`provider_id`
+   on it), stamp `email_verified_at = now()`, return it. **Unconditional** — no
+   verified-gate: mobile emails are never verified, so a gate would reject every
+   collision for no real security gain (accounts only come from the full onboarding
+   flow, not a throwaway register form).
 3. **Social, unknown** → create user (no password), `email_verified_at = now()`.
 4. **Password** → create user with hashed password (signup) / `Auth::attempt` (login).
-
-> **Decision required (product/security):** step 2 — auto-link a social login to an
-> existing email/password account, or reject and force password login first? Default
-> proposal: **auto-link** (email is provider-verified). One-line switch either way,
-> lives only here.
 
 ---
 
@@ -254,11 +254,12 @@ Centralised in `ResolveAccountFromCredential`:
 ## 14. Effort
 
 **Backend ≈ 2 days** (small classes, Socialite does the verification). Plus mobile
-native-module work and Apple/Google console setup, tracked separately.
+native-module work and Apple/Google console setup, tracked separately in the mobile-app
+repo doc `docs/SOCIAL_AUTH_MOBILE.md`.
 
-## Open decisions
+## Decisions (settled)
 
-1. **Email-collision linking** — auto-link vs reject (§7). *Default: auto-link.*
-2. **Web login for social users** — they have no password; `DownloadAppController`'s
-   `password && verified` gate would fail them. Fine if web is email-only; otherwise let
-   them `set-password` later.
+1. **Email-collision linking** — **auto-link, unconditionally** (§7); stamp
+   `email_verified_at` on link.
+2. **Web login for social users** — N/A, there are no web users.
+3. **Providers / placement** — Apple + Google; login screen + onboarding signup.

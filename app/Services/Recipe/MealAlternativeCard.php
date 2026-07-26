@@ -24,7 +24,7 @@ final class MealAlternativeCard
         return [
             'recipe_id' => $recipe->id,
             'name' => $recipe->localizedName($locale),
-            'image_url' => $recipe->thumbnail_url,
+            'thumbnail_url' => $recipe->thumbnail_url ?? Meal::placeholderThumbnailUrl($meal->type),
             'kcal' => $kcal,
             'protein_g' => $protein,
             'carbs_g' => (int) $recipe->carbs_g,

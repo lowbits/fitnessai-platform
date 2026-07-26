@@ -28,6 +28,7 @@ class UserProfile extends Model
         'birthdate',
         'gender',
         'weight_kg',
+        'goal_weight_kg',
         'height_cm',
         'body_goal',
         'skill_level',

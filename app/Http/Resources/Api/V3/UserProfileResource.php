@@ -24,6 +24,7 @@ class UserProfileResource extends JsonResource
             'height_cm' => (int) $this->height_cm,
 
             // Goal & training
+            'goal_weight_kg' => $this->goal_weight_kg !== null ? (float) $this->goal_weight_kg : null,
             'body_goal' => $this->body_goal?->value,
             'skill_level' => $this->skill_level?->value,
             'activity_level' => $this->activity_level?->value,

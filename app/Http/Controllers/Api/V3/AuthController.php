@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V3;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Api\V3\SubscriptionResource;
 use App\Http\Resources\Api\V3\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -30,7 +31,7 @@ class AuthController extends Controller
                     'fat_g' => $plan->daily_fat_g,
                 ],
             ] : null,
-            'subscription' => $user->getSubscriptionDetails(),
+            'subscription' => new SubscriptionResource($user),
             'settings' => [
                 'notifications_enabled' => true,
                 'workout_reminders' => true,

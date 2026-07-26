@@ -31,6 +31,24 @@ return [
         'title' => 'Time for your check-in 💪',
         'body' => 'What does the scale say today? Tell Mona in the chat.',
     ],
+    'trial_reminder' => [
+        'title' => '⏳ Your free week is almost over',
+        'body' => ':days days left — keep your plan and progress going.',
+        'email' => [
+            'subject' => 'Your free week is almost over',
+            'greeting' => 'Hi :name,',
+            'intro' => 'Your free week ends in :days days.',
+            'body' => 'Keep your personalized plan, workouts and coach — pick up right where you left off.',
+        ],
+    ],
+    'streak_reminder' => [
+        'title' => '🔥 Keep your streak alive',
+        'body' => "You're on a :count-day streak — log something today to keep it going.",
+    ],
+    'weekly_checkin' => [
+        'title' => '⚖️ Weekly check-in',
+        'body' => 'Time to log your weight and see your progress.',
+    ],
     'weekly_plans_generated' => [
         'title' => 'Your Next Week is Ready!',
         'body' => 'We just planned your upcoming week of workouts and meals. Time to crush your goals!',

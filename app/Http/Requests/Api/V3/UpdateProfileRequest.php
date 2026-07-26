@@ -37,6 +37,7 @@ class UpdateProfileRequest extends FormRequest
             'birthdate' => ['sometimes', 'date', 'before:-13 years', 'after:-120 years'],
             'gender' => ['sometimes', new Enum(Gender::class)],
             'height_cm' => ['sometimes', 'numeric', 'min:100', 'max:250'],
+            'goal_weight_kg' => ['sometimes', 'nullable', 'numeric', 'min:30', 'max:300'],
             'body_goal' => ['sometimes', Rule::in(array_map(fn ($g) => $g->value, BodyGoal::current()))],
             'skill_level' => ['sometimes', new Enum(SkillLevel::class)],
             'activity_level' => ['sometimes', new Enum(ActivityLevel::class)],

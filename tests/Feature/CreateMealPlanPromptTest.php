@@ -48,7 +48,7 @@ function createPrompt(array $profileOverrides = [], ?Carbon $date = null, int $d
 test('prompt includes food dislikes', function () {
     $output = createPrompt(['food_dislikes' => ['pork', 'mushrooms']]);
 
-    expect($output)->toContain('NEVER use these ingredients: pork, mushrooms');
+    expect($output)->toContain('disliked ingredients: pork, mushrooms');
 });
 
 test('prompt excludes dislikes line when empty', function () {
@@ -58,9 +58,10 @@ test('prompt excludes dislikes line when empty', function () {
 });
 
 test('prompt includes cooking constraint for quick', function () {
+    // Default date 2026-06-09 is a weekday → QUICK emits the WORKDAY constraint.
     $output = createPrompt(['cooking_preference' => CookingPreference::QUICK]);
 
-    expect($output)->toContain('max 15min total per meal');
+    expect($output)->toContain('max 12min total prep+cook per meal');
 });
 
 test('prompt includes cooking constraint for elaborate', function () {
@@ -69,10 +70,11 @@ test('prompt includes cooking constraint for elaborate', function () {
     expect($output)->toContain('enjoys cooking');
 });
 
-test('prompt excludes cooking constraint for normal', function () {
+test('prompt includes moderate cooking constraint for normal', function () {
+    // NORMAL now emits its own (moderate) constraint; weekday → WORKDAY variant.
     $output = createPrompt(['cooking_preference' => CookingPreference::NORMAL]);
 
-    expect($output)->not->toContain('Cooking:');
+    expect($output)->toContain('max 20min total prep+cook per meal');
 });
 
 test('prompt generates only NEW slots', function () {
@@ -182,15 +184,15 @@ test('macro targets for NEW slots use natural per-day share, not renormalized ov
 
     $daily = $profile->getMetabolismData()['daily_calories'];
 
-    // Lunch natural share = 0.325, ±5%
-    $lunchMin = (int) round($daily * 0.325 * 0.95);
+    // Lunch natural share = 0.325 → target kcal with a +5% max bound.
+    $lunchTarget = (int) round($daily * 0.325);
     $lunchMax = (int) round($daily * 0.325 * 1.05);
-    expect($prompt)->toContain("Lunch: {$lunchMin}-{$lunchMax} kcal");
+    expect($prompt)->toContain("Lunch: {$lunchTarget} kcal (max {$lunchMax})");
 
-    // Dinner natural share = 0.275, ±5%
-    $dinnerMin = (int) round($daily * 0.275 * 0.95);
+    // Dinner natural share = 0.275.
+    $dinnerTarget = (int) round($daily * 0.275);
     $dinnerMax = (int) round($daily * 0.275 * 1.05);
-    expect($prompt)->toContain("Dinner: {$dinnerMin}-{$dinnerMax} kcal");
+    expect($prompt)->toContain("Dinner: {$dinnerTarget} kcal (max {$dinnerMax})");
 
     // Only NEW slots should appear in the macro table.
     expect($prompt)->not->toContain('Breakfast:');
@@ -227,9 +229,9 @@ test('macro targets renormalize over user-selected slots when user skipped one',
 
     $daily = $profile->getMetabolismData()['daily_calories'];
 
-    // Renormalized lunch share = 0.325 / 0.875
-    $expectedLunch = (int) round($daily * (0.325 / 0.875) * 0.95);
-    expect($prompt)->toContain("Lunch: {$expectedLunch}");
+    // Renormalized lunch share = 0.325 / 0.875 → target kcal.
+    $expectedLunch = (int) round($daily * (0.325 / 0.875));
+    expect($prompt)->toContain("Lunch: {$expectedLunch} kcal");
     expect($prompt)->not->toContain('Snack:');
 });
 

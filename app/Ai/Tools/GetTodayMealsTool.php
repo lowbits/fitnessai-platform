@@ -98,7 +98,7 @@ class GetTodayMealsTool implements Tool
                 'protein_g' => (int) $meal->protein_g,
                 'carbs_g' => (int) $meal->carbs_g,
                 'fat_g' => (int) $meal->fat_g,
-                'image_url' => $meal->recipe?->thumbnail_url,
+                'thumbnail_url' => $meal->thumbnail_url,
             ])
             ->values()
             ->all();
