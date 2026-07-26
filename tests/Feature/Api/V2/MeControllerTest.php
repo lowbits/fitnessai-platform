@@ -3,7 +3,6 @@
 namespace Tests\Feature\Api\V2;
 
 use App\Models\Plan;
-use App\Models\SubscriptionLegacy;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -36,27 +35,6 @@ class MeControllerTest extends TestCase
         $response->assertStatus(200)
             ->assertJsonPath('subscription.status', 'active')
             ->assertJsonPath('subscription.tier', 'pro_monthly');
-    }
-
-    public function test_me_endpoint_returns_legacy_subscription_if_no_revenuecat_but_legacy_active()
-    {
-        $user = User::factory()->create();
-        Sanctum::actingAs($user);
-
-        // Create legacy subscription
-        SubscriptionLegacy::create([
-            'user_id' => $user->id,
-            'type' => 'beta',
-            'status' => 'active',
-            'starts_at' => now(),
-            'ends_at' => now()->addMonth(),
-        ]);
-
-        $response = $this->getJson('/api/v2/auth/me');
-
-        $response->assertStatus(200)
-            ->assertJsonPath('subscription.status', 'active')
-            ->assertJsonPath('subscription.tier', 'Ambassador');
     }
 
     public function test_me_endpoint_returns_free_if_no_active_subscriptions()

@@ -2,19 +2,23 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Actions\NotifyAdmins;
 use App\Enums\UserSource;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OnboardingRequest;
+use App\Jobs\GenerateUserMealPlan;
+use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\User;
 use App\Notifications\NewOnboardingStarted;
 use App\Notifications\OnboardingCompleteVerifyEmail;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Notification;
 
 class OnboardingController extends Controller
 {
+    public function __construct(private readonly NotifyAdmins $notifyAdmins) {}
+
     public function store(OnboardingRequest $request): JsonResponse
     {
         $validated = $request->validated();
@@ -30,8 +34,13 @@ class OnboardingController extends Controller
                 'source' => $validated['source'] ?? UserSource::WEB,
             ]);
 
+            // Only mobile users get a trial period
+            if ($user->source !== UserSource::WEB) {
+                $user->update(['trial_ends_at' => now()->addDays(config('subscription.trial_days'))]);
+            }
+
             $profile = $user->profile()->create([
-                'age' => $validated['age'],
+                'birthdate' => now()->subYears((int) $validated['age'])->subMonths(6)->startOfDay(),
                 'gender' => $validated['gender'],
                 'weight_kg' => $validated['weight'],
                 'height_cm' => $validated['height'],
@@ -49,20 +58,32 @@ class OnboardingController extends Controller
             $dailyCalories = $profile->calculateDailyCalories();
             $macros = $profile->calculateMacros();
 
-            $totalDays = (int) config('plans.duration_days');
+            $isMobile = $user->source !== UserSource::WEB;
+            $planDays = $isMobile
+                ? (int) config('subscription.trial_days')
+                : (int) config('subscription.pdf_plan_days');
 
-            // Create plan
             $plan = $user->plans()->create([
                 'plan_name' => ucfirst($validated['body_goal']).' Plan',
                 'start_date' => now(),
-                'duration_days' => $totalDays,
-                'end_date' => now()->addDays($totalDays),
+                'duration_days' => $planDays,
+                'end_date' => now()->addDays($planDays),
                 'daily_calories' => $dailyCalories,
                 'daily_protein_g' => $macros->proteinGrams,
                 'daily_carbs_g' => $macros->carbsGrams,
                 'daily_fat_g' => $macros->fatGrams,
                 'workouts_per_week' => $validated['training_sessions'],
             ]);
+
+            // Mobile: generate day 1 fast, then remaining trial days.
+            // Web: generation triggered after email verification via listeners.
+            if ($isMobile) {
+                GenerateUserWorkoutPlan::dispatch($user, $plan, maxDays: 1);
+                GenerateUserMealPlan::dispatch($user, $plan, maxDays: 1);
+
+                GenerateUserWorkoutPlan::dispatch($user, $plan);
+                GenerateUserMealPlan::dispatch($user, $plan);
+            }
 
             return [
                 'user' => $user,
@@ -76,7 +97,9 @@ class OnboardingController extends Controller
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
         // Notify admin(s) about new onboarding
-        $this->notifyAdmins($result['user'], $validated);
+        $this->notifyAdmins->send(
+            (new NewOnboardingStarted($result['user'], $validated))->delay(now()->addSeconds(5))
+        );
 
         $response = [
             'success' => true,
@@ -91,17 +114,5 @@ class OnboardingController extends Controller
         ];
 
         return response()->json($response, 201);
-    }
-
-    /**
-     * Notify admin(s) about new onboarding.
-     */
-    private function notifyAdmins(User $user, array $profileData): void
-    {
-        $adminEmails = config('app.admin_emails');
-
-        Notification::route('mail', $adminEmails)
-            ->notify((new NewOnboardingStarted($user, $profileData))->delay(now()->addSeconds(5)));
-
     }
 }

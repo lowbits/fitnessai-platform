@@ -4,28 +4,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    @include('pdf.partials.fonts')
+
     <style type="text/css" media="all">
         @page {
             size: A4;
-            margin: 0;
-        }
-
-        @media print {
-            html, body {
-                width: 210mm;
-                height: 297mm;
-            }
-
-            .page {
-                margin: 0;
-                border: initial;
-                border-radius: initial;
-                width: initial;
-                min-height: initial;
-                box-shadow: initial;
-                background: initial;
-                page-break-after: always;
-            }
+            /* Reserve bottom space on every page for the fixed download footer */
+            margin: 0 0 74px 0;
         }
 
         * {
@@ -34,196 +19,398 @@
 
         body {
             width: 100%;
-            height: 100%;
             padding: 0;
             margin: 0;
-            background-color: #CCDBE9;
-            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            font-size: 12pt;
-            line-height: 1.5;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 24px;
-            color: white;
-            background: rgb(8, 35, 62);
-            background: -moz-linear-gradient(67deg, rgba(8, 35, 62, 1) 0%, rgba(25, 31, 37, 1) 100%);
-            background: -webkit-linear-gradient(67deg, rgba(8, 35, 62, 1) 0%, rgba(25, 31, 37, 1) 100%);
-            background: linear-gradient(67deg, rgba(8, 35, 62, 1) 0%, rgba(25, 31, 37, 1) 100%);
-            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#08233e", endColorstr="#191f25", GradientType=1);
-        }
-
-        main {
-            padding: 24px;
-        }
-
-        .plan-infos {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 5px;
-        }
-
-        .plan-infos p {
-            margin: 0;
-            font-size: 11px;
-        }
-
-        #logo {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        #logo h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        #logo span {
-            font-size: 14px;
-        }
-
-        #content {
+            background-color: #E9EFF5;
+            font-family: "Nunito", "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 12px;
-            line-height: 1.6;
-            text-align: left;
+            line-height: 1.5;
             color: #12181E;
         }
 
-        h2 {
-            font-size: 18px;
-            margin-top: 30px;
-            margin-bottom: 15px;
-            color: #08233e;
-            border-bottom: 2px solid #48D670;
-            padding-bottom: 5px;
+        /* ---------- Cover header ---------- */
+        .cover {
+            background-color: #08233E;
+            color: #ffffff;
+            padding: 30px 36px 26px 36px;
+            border-bottom: 4px solid #48D670;
         }
 
-        h3 {
-            font-size: 15px;
-            margin-top: 15px;
-            margin-bottom: 10px;
-            color: #333;
+        .cover__table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .cover__logo-cell {
+            vertical-align: middle;
+        }
+
+        .cover__logo-cell img {
+            vertical-align: middle;
+        }
+
+        .cover__brand {
+            display: inline-block;
+            vertical-align: middle;
+            padding-left: 14px;
+        }
+
+        .cover__brand h1 {
+            margin: 0;
+            font-size: 24px;
             font-weight: bold;
+            letter-spacing: 0.2px;
         }
 
-        h4 {
+        .cover__brand span {
+            display: block;
+            font-size: 11px;
+            color: #9EC2E6;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+
+        .cover__meta-cell {
+            vertical-align: middle;
+            text-align: right;
+        }
+
+        .cover__meta {
+            border-collapse: collapse;
+            margin-left: auto;
+        }
+
+        .cover__meta td {
+            padding: 1px 0;
+            font-size: 10.5px;
+            vertical-align: top;
+        }
+
+        .cover__meta .label {
+            color: #9EC2E6;
+            padding-right: 10px;
+            text-align: right;
+        }
+
+        .cover__meta .value {
+            color: #ffffff;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        /* ---------- Main ---------- */
+        main {
+            padding: 28px 36px 8px 36px;
+        }
+
+        .hero-title {
+            text-align: center;
+            color: #08233E;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 4px 0 22px 0;
+            letter-spacing: 0.2px;
+        }
+
+        /* ---------- Overview panel ---------- */
+        .overview {
+            background: #F1F6FB;
+            border: 1px solid #E3EAF2;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin-bottom: 30px;
+        }
+
+        .overview__heading {
             font-size: 13px;
-            margin-top: 12px;
-            margin-bottom: 8px;
-            color: #08233e;
+            font-weight: bold;
+            color: #08233E;
+            margin: 0 0 14px 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-row {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 8px 0;
+        }
+
+        .stat {
+            background: #ffffff;
+            border: 1px solid #E3EAF2;
+            border-radius: 10px;
+            text-align: center;
+            padding: 12px 6px;
+        }
+
+        .stat.stat--primary {
+            background: #08233E;
+            border-color: #08233E;
+        }
+
+        .stat__value {
+            display: block;
+            font-size: 15px;
+            font-weight: bold;
+            color: #08233E;
+            line-height: 1.15;
+        }
+
+        .stat--primary .stat__value {
+            color: #48D670;
+        }
+
+        .stat__label {
+            display: block;
+            font-size: 9px;
+            color: #647488;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            margin-top: 4px;
+        }
+
+        .stat--primary .stat__label {
+            color: #9EC2E6;
+        }
+
+        /* ---------- Day / workout card ---------- */
+        .workout-day {
+            margin-bottom: 26px;
+        }
+
+        /* Day heading — shared style with the meal plan */
+        .day-heading {
+            font-size: 17px;
+            font-weight: bold;
+            color: #08233E;
+            margin: 30px 0 14px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #48D670;
+            letter-spacing: 0.2px;
+            page-break-after: avoid;
         }
 
         .workout-card {
-            page-break-inside: avoid;
-            margin-bottom: 30px;
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #E3EAF2;
+            border-radius: 12px;
+            background-color: #ffffff;
+            padding: 18px 20px;
         }
 
-        .workout-header {
-            background: linear-gradient(135deg, #48D670 0%, #56E97F 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            margin: -20px -20px 20px -20px;
+        .workout-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #08233E;
+            margin: 0 0 14px 0;
         }
 
         .workout-meta {
-            display: flex;
-            gap: 20px;
-            margin: 10px 0;
-            font-size: 11px;
-            flex-wrap: wrap;
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 6px 0;
+            margin-bottom: 14px;
         }
 
-        .workout-meta span {
-            background-color: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 5px;
-        }
-
-        .exercise-item {
-            page-break-inside: avoid;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: #f9f9f9;
-            border-left: 4px solid #48D670;
-            border-radius: 4px;
-        }
-
-        .exercise-sets {
-            display: flex;
-            gap: 15px;
-            margin: 10px 0;
-            font-size: 11px;
-            color: #666;
-        }
-
-        .rest-day {
-            background: linear-gradient(135deg, #9EB9D4 0%, #CCDBE9 100%);
-            color: #08233e;
-            padding: 30px;
+        .workout-meta td {
+            background-color: #F1F6FB;
+            border: 1px solid #E3EAF2;
             border-radius: 8px;
+            padding: 7px 10px;
+            font-size: 10px;
+            color: #3A4A5A;
             text-align: center;
-            margin-bottom: 20px;
         }
 
-        .info-box {
-            background-color: #e6eef5;
-            padding: 15px;
+        .workout-meta strong {
+            color: #08233E;
+        }
+
+        .workout-desc {
+            margin: 0 0 14px 0;
+            font-style: italic;
+            color: #647488;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .muscle-groups {
+            margin: 0 0 16px 0;
+            font-size: 11px;
+            color: #3A4A5A;
+        }
+
+        .muscle-groups strong {
+            color: #08233E;
+        }
+
+        .muscle-groups .accent {
+            color: #2BB673;
+            font-weight: bold;
+        }
+
+        .exercises-title {
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #08233E;
+            margin: 18px 0 12px 0;
+            padding-bottom: 6px;
+            border-bottom: 2px solid #48D670;
+        }
+
+        /* ---------- Exercise (compact list) ---------- */
+        .ex {
+            page-break-inside: avoid;
+            padding: 12px 0;
+            border-top: 1px solid #EEF2F7;
+        }
+
+        .ex.first {
+            border-top: none;
+            padding-top: 2px;
+        }
+
+        .ex__head {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .ex__num {
+            width: 22px;
+            vertical-align: top;
+            font-size: 12.5px;
+            font-weight: bold;
+            color: #48D670;
+        }
+
+        .ex__name {
+            vertical-align: top;
+            font-size: 12.5px;
+            font-weight: bold;
+            color: #08233E;
+            line-height: 1.35;
+        }
+
+        .ex__stats {
+            margin: 7px 0 0 22px;
+        }
+
+        .ex__pill {
+            display: inline-block;
+            background: #F1F6FB;
+            border: 1px solid #E3EAF2;
+            border-radius: 20px;
+            padding: 3px 9px;
+            font-size: 9px;
+            color: #647488;
+            margin-right: 5px;
+        }
+
+        .ex__pill strong {
+            color: #08233E;
+            font-size: 10px;
+        }
+
+        .ex__desc {
+            margin: 8px 0 0 22px;
+            font-size: 10.5px;
+            color: #647488;
+            line-height: 1.5;
+        }
+
+        .ex__line {
+            margin: 6px 0 0 22px;
+            font-size: 10px;
+            color: #7A8896;
+            line-height: 1.5;
+        }
+
+        .ex__line .lbl {
+            color: #08233E;
+            font-weight: bold;
+        }
+
+        .ex__cue {
+            color: #3A4A5A;
+        }
+
+        .notes-box {
+            background: #F1F6FB;
+            border: 1px solid #E3EAF2;
             border-radius: 8px;
-            margin: 20px 0;
+            padding: 13px 16px;
+            margin-top: 16px;
+            font-size: 11px;
         }
 
-        ul, ol {
-            margin: 5px 0 15px 0;
-            padding-left: 30px;
+        .notes-box strong {
+            color: #08233E;
         }
 
-        li {
-            margin-bottom: 5px;
-        }
-
-        hr {
-            margin: 30px 0;
-            border: none;
-            border-top: 1px solid #ddd;
-        }
-
-        /* Page Break Control - Prevent awkward breaks */
-        h2, h3, h4 {
-            page-break-after: avoid;
-            page-break-inside: avoid;
-            orphans: 3;
-            widows: 3;
-        }
-
-        .workout-day {
-            page-break-before: auto;
-            page-break-after: auto;
-        }
-
-        /* Don't prevent break inside exercise-list as it can be too large */
-        /* But keep individual exercises together */
-        .exercise-item {
-            page-break-inside: avoid;
-            orphans: 3;
-            widows: 3;
-        }
-
-        /* Keep form cues list together with heading */
-        .form-cues-section {
+        /* ---------- Rest day ---------- */
+        .rest-day {
+            border: 1px solid #D4E0EC;
+            background: #F1F6FB;
+            color: #08233E;
+            padding: 26px;
+            border-radius: 12px;
+            text-align: center;
             page-break-inside: avoid;
         }
 
-        ul, ol {
+        .rest-day .day-label {
+            display: block;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #647488;
+        }
+
+        .rest-day .rest-title {
+            display: block;
+            font-size: 17px;
+            font-weight: bold;
+            margin: 6px 0;
+        }
+
+        .rest-day p {
+            margin: 6px 0 0 0;
+            font-size: 11.5px;
+            color: #647488;
+        }
+
+        .generating {
+            color: #99A7B5;
+            font-style: italic;
+        }
+
+        /* ---------- Closing help box ---------- */
+        .help-box {
+            margin-top: 34px;
+            padding: 20px;
+            background: #F1F6FB;
+            border: 1px solid #E3EAF2;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .help-box p {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .help-box .contact {
+            margin-top: 5px;
+            color: #647488;
+        }
+
+        .help-box .contact strong {
+            color: #08233E;
+        }
+
+        p {
             orphans: 2;
             widows: 2;
         }
@@ -231,193 +418,162 @@
 </head>
 <body>
 
-<header>
-    <div id="logo">
-        <img src="{{public_path('apple-touch-icon.png')}}" width="40" alt="fitness ai logo">
-
-        <div>
-            <h1>{{ __('pdf.workout_plan.title') }}</h1>
-            <span>{{ __('pdf.workout_plan.powered_by') }}</span>
-        </div>
-    </div>
-
-    <div class="plan-infos">
-        <p>{{ __('pdf.workout_plan.user') }}: <strong>{{ $user->name }}</strong></p>
-        <p>{{ __('pdf.workout_plan.email') }}: <strong>{{ $user->email }}</strong></p>
-        <p>{{ __('pdf.workout_plan.plan') }}: <strong>{{ $plan->plan_name }}</strong></p>
-        <p>{{ __('pdf.workout_plan.duration') }}: <strong>{{ $plan->start_date->translatedFormat('M d, Y') }} - {{ $plan->end_date->translatedFormat('M d, Y') }}</strong></p>
-        <p>{{ __('pdf.workout_plan.generated') }}: <strong>{{ now()->translatedFormat('M d, Y') }}</strong></p>
-    </div>
-</header>
+<div class="cover">
+    <table class="cover__table">
+        <tr>
+            <td class="cover__logo-cell">
+                <img src="{{ public_path('apple-touch-icon.png') }}" width="44" height="44" alt="fytrr">
+                <span class="cover__brand">
+                    <h1>{{ __('pdf.workout_plan.title') }}</h1>
+                    <span>{{ __('pdf.workout_plan.powered_by') }}</span>
+                </span>
+            </td>
+            <td class="cover__meta-cell">
+                <table class="cover__meta">
+                    <tr><td class="label">{{ __('pdf.workout_plan.user') }}</td><td class="value">{{ $user->name }}</td></tr>
+                    <tr><td class="label">{{ __('pdf.workout_plan.plan') }}</td><td class="value">{{ $plan->plan_name }}</td></tr>
+                    <tr><td class="label">{{ __('pdf.workout_plan.duration') }}</td><td class="value">{{ $plan->start_date->translatedFormat('M d, Y') }} &ndash; {{ $plan->end_date->translatedFormat('M d, Y') }}</td></tr>
+                    <tr><td class="label">{{ __('pdf.workout_plan.generated') }}</td><td class="value">{{ now()->translatedFormat('M d, Y') }}</td></tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</div>
 
 <main>
-    <div id="content">
-        <h2 style="text-align: center; color: #08233e; margin-bottom: 30px;">{{ __('pdf.workout_plan.personalized_title', ['days' => config('plans.duration_days', 28)]) }}</h2>
+    <div class="hero-title">{{ __('pdf.workout_plan.personalized_title', ['days' => $plan->duration_days]) }}</div>
 
-        <div class="info-box">
-            <h3 style="margin-top: 0;">{{ __('pdf.workout_plan.training_overview') }}</h3>
-            <ul style="list-style: none; padding-left: 0;">
-                <li><strong>{{ __('pdf.workout_plan.goal') }}:</strong> {{ $user->profile->body_goal?->label() ?? __('pdf.workout_plan.not_specified') }}</li>
-                <li><strong>{{ __('pdf.workout_plan.workouts_per_week') }}:</strong> {{ $plan->workouts_per_week }}</li>
-                <li><strong>{{ __('pdf.workout_plan.training_place') }}:</strong> {{ $user->profile->training_place?->label() ?? 'Gym' }}</li>
-                <li><strong>{{ __('pdf.workout_plan.skill_level') }}:</strong> {{ $user->profile->skill_level?->label() ?? 'Beginner' }}</li>
-            </ul>
-        </div>
+    <div class="overview">
+        <p class="overview__heading">{{ __('pdf.workout_plan.training_overview') }}</p>
+        <table class="stat-row">
+            <tr>
+                <td class="stat stat--primary" width="25%">
+                    <span class="stat__value">{{ $plan->workouts_per_week }}</span>
+                    <span class="stat__label">{{ __('pdf.workout_plan.workouts_per_week') }}</span>
+                </td>
+                <td class="stat" width="25%">
+                    <span class="stat__value">{{ $user->profile->body_goal?->label() ?? __('pdf.workout_plan.not_specified') }}</span>
+                    <span class="stat__label">{{ __('pdf.workout_plan.goal') }}</span>
+                </td>
+                <td class="stat" width="25%">
+                    <span class="stat__value">{{ $user->profile->training_place?->label() ?? 'Gym' }}</span>
+                    <span class="stat__label">{{ __('pdf.workout_plan.training_place') }}</span>
+                </td>
+                <td class="stat" width="25%">
+                    <span class="stat__value">{{ $user->profile->skill_level?->label() ?? 'Beginner' }}</span>
+                    <span class="stat__label">{{ __('pdf.workout_plan.skill_level') }}</span>
+                </td>
+            </tr>
+        </table>
+    </div>
 
-        @foreach($workoutPlans as $workoutPlan)
-            <div class="workout-card workout-day">
-                @if($workoutPlan->workout_type === 'rest')
-                    <div class="rest-day">
-                        <h2 style="border: none; margin: 0; color: #08233e;">
-                            {{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}
-                        </h2>
-                        <h3 style="margin: 10px 0;">{{ __('pdf.workout_plan.rest_day') }}</h3>
-                        <p style="margin: 10px 0 0 0;">{{ __('pdf.workout_plan.rest_description') }}</p>
-                    </div>
-                @elseif($workoutPlan->status === 'generated')
-                    <div class="workout-header">
-                        <h2 style="border: none; margin: 0; padding: 0; color: white;">
-                            {{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}
-                        </h2>
-                        <h3 style="margin: 10px 0 0 0; color: white;">{{ $workoutPlan->workout_name }}</h3>
-                    </div>
+    @foreach($workoutPlans as $workoutPlan)
+        <div class="workout-day">
+            <div class="day-heading">{{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} &middot; {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}</div>
 
-                    <div class="workout-meta">
-                        <span><strong>{{ __('pdf.workout_plan.type') }}:</strong> {{ ucfirst($workoutPlan->workout_type) }}</span>
-                        @if($workoutPlan->difficulty)
-                            <span><strong>{{ __('pdf.workout_plan.difficulty') }}:</strong> {{ ucfirst($workoutPlan->difficulty) }}</span>
+            @if($workoutPlan->workout_type === 'rest')
+                <div class="rest-day">
+                    <span class="rest-title">{{ __('pdf.workout_plan.rest_day') }}</span>
+                    <p>{{ __('pdf.workout_plan.rest_description') }}</p>
+                </div>
+            @elseif($workoutPlan->status === 'generated')
+                <div class="workout-card">
+                    <div class="workout-name">{{ $workoutPlan->workout_name }}</div>
+
+                    <table class="workout-meta">
+                            <tr>
+                                <td><strong>{{ __('pdf.workout_plan.type') }}</strong><br>{{ ucfirst($workoutPlan->workout_type) }}</td>
+                                @if($workoutPlan->difficulty)
+                                    <td><strong>{{ __('pdf.workout_plan.difficulty') }}</strong><br>{{ ucfirst($workoutPlan->difficulty) }}</td>
+                                @endif
+                                @if($workoutPlan->estimated_duration_minutes)
+                                    <td><strong>{{ __('pdf.workout_plan.duration') }}</strong><br>~{{ $workoutPlan->estimated_duration_minutes }} min</td>
+                                @endif
+                                @if($workoutPlan->exercises->count() > 0)
+                                    <td><strong>{{ __('pdf.workout_plan.exercises') }}</strong><br>{{ $workoutPlan->exercises->count() }}</td>
+                                @endif
+                            </tr>
+                        </table>
+
+                        @if($workoutPlan->description)
+                            <p class="workout-desc">{{ $workoutPlan->description }}</p>
                         @endif
-                        @if($workoutPlan->estimated_duration_minutes)
-                            <span><strong>{{ __('pdf.workout_plan.duration') }}:</strong> ~{{ $workoutPlan->estimated_duration_minutes }} min</span>
+
+                        @if($workoutPlan->muscle_groups && is_array($workoutPlan->muscle_groups) && count($workoutPlan->muscle_groups) > 0)
+                            <p class="muscle-groups">
+                                <strong>{{ __('pdf.workout_plan.target_muscle_groups') }}:</strong>
+                                <span class="accent">{{ implode(', ', array_map('ucfirst', $workoutPlan->muscle_groups)) }}</span>
+                            </p>
                         @endif
+
                         @if($workoutPlan->exercises->count() > 0)
-                            <span><strong>{{ __('pdf.workout_plan.exercises') }}:</strong> {{ $workoutPlan->exercises->count() }}</span>
-                        @endif
-                    </div>
+                            <div class="exercises-title">{{ __('pdf.workout_plan.exercises') }}</div>
 
-                    @if($workoutPlan->description)
-                        <p style="margin: 15px 0; font-style: italic; color: #555;">{{ $workoutPlan->description }}</p>
-                    @endif
+                            @foreach($workoutPlan->exercises as $exercise)
+                                <div class="ex @if($loop->first) first @endif">
+                                    <table class="ex__head">
+                                        <tr>
+                                            <td class="ex__num">{{ $loop->iteration }}</td>
+                                            <td class="ex__name">{{ $exercise->exercise?->localizedName() ?? $exercise->name }}</td>
+                                        </tr>
+                                    </table>
 
-                    @if($workoutPlan->muscle_groups && is_array($workoutPlan->muscle_groups) && count($workoutPlan->muscle_groups) > 0)
-                        <div style="margin: 15px 0;">
-                            <strong>{{ __('pdf.workout_plan.target_muscle_groups') }}:</strong>
-                            <span style="color: #48D670;">{{ implode(', ', array_map('ucfirst', $workoutPlan->muscle_groups)) }}</span>
-                        </div>
-                    @endif
-
-                    @if($workoutPlan->exercises->count() > 0)
-                        <h3 style="margin-top: 25px; margin-bottom: 15px; color: #08233e; font-size: 16px; border-bottom: 2px solid #48D670; padding-bottom: 8px;">{{ __('pdf.workout_plan.exercises') }}</h3>
-
-                        @foreach($workoutPlan->exercises as $exercise)
-                            <table style="width: 100%; margin-bottom: 20px; border-collapse: collapse; border: 1px solid #ddd;">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2" style="text-align: left; padding: 16px 18px; background-color: #08233e; color: white; font-size: 13px; font-weight: bold; border-bottom: 3px solid #48D670;">
-                                            {{ $loop->iteration }}. {{ $exercise->exercise?->localizedName() ?? $exercise->name }}
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody style="background-color: #ffffff;">
-                                    <tr>
-                                        <td colspan="2" style="padding: 12px 18px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
-                                            <table style="width: 100%; border-collapse: collapse;">
-                                                <tr>
-                                                    @if($exercise->sets)
-                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>{{ __('pdf.workout_plan.sets') }}:</strong> {{ $exercise->sets }}
-                                                        </td>
-                                                    @endif
-                                                    @if($exercise->reps)
-                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>{{ __('pdf.workout_plan.reps') }}:</strong> {{ $exercise->reps }}
-                                                        </td>
-                                                    @endif
-                                                    @if($exercise->duration_seconds)
-                                                        <td style="padding: 5px 15px 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>{{ __('pdf.workout_plan.duration') }}:</strong> {{ $exercise->duration_seconds }}s
-                                                        </td>
-                                                    @endif
-                                                    @if($exercise->rest_seconds)
-                                                        <td style="padding: 5px 0; font-size: 11px; color: #333;">
-                                                            <strong>{{ __('pdf.workout_plan.rest') }}:</strong> {{ $exercise->rest_seconds }}s
-                                                        </td>
-                                                    @endif
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
+                                    @if($exercise->sets || $exercise->reps || $exercise->duration_seconds || $exercise->rest_seconds)
+                                        <div class="ex__stats">
+                                            @if($exercise->sets)<span class="ex__pill"><strong>{{ $exercise->sets }}</strong> {{ __('pdf.workout_plan.sets') }}</span>@endif
+                                            @if($exercise->reps)<span class="ex__pill"><strong>{{ $exercise->reps }}</strong> {{ __('pdf.workout_plan.reps') }}</span>@endif
+                                            @if($exercise->duration_seconds)<span class="ex__pill"><strong>{{ $exercise->duration_seconds }}s</strong> {{ __('pdf.workout_plan.duration') }}</span>@endif
+                                            @if($exercise->rest_seconds)<span class="ex__pill"><strong>{{ $exercise->rest_seconds }}s</strong> {{ __('pdf.workout_plan.rest') }}</span>@endif
+                                        </div>
+                                    @endif
 
                                     @if($exercise->description)
-                                        <tr>
-                                            <td colspan="2" style="padding: 12px 18px; color: #666; font-size: 11px; line-height: 1.6; border-bottom: 1px solid #e0e0e0;">
-                                                {{ $exercise->description }}
-                                            </td>
-                                        </tr>
+                                        <div class="ex__desc">{{ $exercise->description }}</div>
                                     @endif
 
                                     @if($exercise->form_cues && is_array($exercise->form_cues) && count($exercise->form_cues) > 0)
-                                        <tr>
-                                            <td colspan="2" style="padding: 15px 18px; vertical-align: top; background-color: #fff; border-bottom: 1px solid #e0e0e0;">
-                                                <strong style="color: #08233e; font-size: 12px; display: block; margin-bottom: 8px;">{{ __('pdf.workout_plan.form_cues') }}</strong>
-                                                <table style="width: 100%; border-collapse: collapse;">
-                                                    @foreach($exercise->form_cues as $cue)
-                                                        <tr>
-                                                            <td style="padding: 3px 0; font-size: 11px; vertical-align: top; width: 15px; color: #999;">•</td>
-                                                            <td style="padding: 3px 0; font-size: 11px; color: #333; line-height: 1.5;">
-                                                                {{ is_string($cue) ? $cue : json_encode($cue) }}
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </table>
-                                            </td>
-                                        </tr>
+                                        <div class="ex__line"><span class="lbl">{{ __('pdf.workout_plan.form_cues') }}:</span>
+                                            <span class="ex__cue">{{ implode('  ·  ', array_map(fn ($cue) => is_string($cue) ? $cue : json_encode($cue), $exercise->form_cues)) }}</span>
+                                        </div>
                                     @endif
 
                                     @if($exercise->equipment && is_array($exercise->equipment) && count($exercise->equipment) > 0)
-                                        <tr>
-                                            <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9; border-bottom: 1px solid #e0e0e0;">
-                                                <strong style="color: #333;">{{ __('pdf.workout_plan.equipment') }}:</strong>
-                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : json_encode($item); }, $exercise->equipment)) }}</span>
-                                            </td>
-                                        </tr>
+                                        <div class="ex__line"><span class="lbl">{{ __('pdf.workout_plan.equipment') }}:</span>
+                                            {{ implode(', ', array_map(fn ($item) => is_string($item) ? $item : json_encode($item), $exercise->equipment)) }}
+                                        </div>
                                     @endif
 
                                     @if($exercise->alternatives && is_array($exercise->alternatives) && count($exercise->alternatives) > 0)
-                                        <tr>
-                                            <td colspan="2" style="padding: 12px 18px; font-size: 11px; background-color: #f9f9f9;">
-                                                <strong style="color: #333;">{{ __('pdf.workout_plan.alternatives') }}:</strong>
-                                                <span style="color: #666; margin-left: 8px;">{{ implode(', ', array_map(function($item) { return is_string($item) ? $item : ($item['name'] ?? json_encode($item)); }, $exercise->alternatives)) }}</span>
-                                            </td>
-                                        </tr>
+                                        <div class="ex__line"><span class="lbl">{{ __('pdf.workout_plan.alternatives') }}:</span>
+                                            {{ implode(', ', array_map(fn ($item) => is_string($item) ? $item : ($item['name'] ?? json_encode($item)), $exercise->alternatives)) }}
+                                        </div>
                                     @endif
-                                </tbody>
-                            </table>
-                        @endforeach
-                    @endif
+                                </div>
+                            @endforeach
+                        @endif
 
-                    @if($workoutPlan->notes)
-                        <div class="info-box" style="margin-top: 20px;">
-                            <strong>{{ __('pdf.workout_plan.notes') }}:</strong>
-                            <p style="margin: 5px 0 0 0;">{{ $workoutPlan->notes }}</p>
-                        </div>
-                    @endif
-                @else
-                    <h2>{{ __('pdf.workout_plan.day') }} {{ $workoutPlan->day_number }} - {{ $workoutPlan->date->translatedFormat('l, M d, Y') }}</h2>
-                    <p style="color: #999; font-style: italic;">{{ __('pdf.workout_plan.generating') }}</p>
-                @endif
-            </div>
-
-            <hr>
-        @endforeach
-
-        <div style="margin-top: 40px; padding: 20px; background-color: #e6eef5; border-radius: 8px; text-align: center;">
-            <p style="margin: 0; font-size: 14px;"><strong>{{ __('pdf.workout_plan.help') }}</strong></p>
-            <p style="margin: 5px 0 0 0;">{{ __('pdf.workout_plan.contact') }} <strong>hello@fytrr.com</strong></p>
+                        @if($workoutPlan->notes)
+                            <div class="notes-box">
+                                <strong>{{ __('pdf.workout_plan.notes') }}:</strong>
+                                <p style="margin: 5px 0 0 0;">{{ $workoutPlan->notes }}</p>
+                            </div>
+                        @endif
+                </div>
+            @else
+                <div class="workout-card">
+                    <p class="generating">{{ __('pdf.workout_plan.generating') }}</p>
+                </div>
+            @endif
         </div>
+    @endforeach
+
+    <div class="help-box">
+        <p><strong>{{ __('pdf.workout_plan.help') }}</strong></p>
+        <p class="contact">{{ __('pdf.workout_plan.contact') }} <strong>hello@fytrr.com</strong></p>
     </div>
 </main>
 
+@include('pdf.partials.app_footer')
+
 </body>
 </html>
-

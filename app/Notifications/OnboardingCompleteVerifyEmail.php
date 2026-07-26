@@ -40,7 +40,7 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
         app()->setLocale($notifiable->locale ?? 'en');
 
         $verificationUrl = $this->verificationUrl($notifiable);
-        $days = config('plans.duration_days');
+        $days = $this->plan->duration_days;
         $isMobileAppOnboarding = $notifiable->source == UserSource::MOBILE_APPLE;
 
         // Log deep link URL in local environment
@@ -50,7 +50,7 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
                 'email' => $notifiable->email,
                 'url' => $verificationUrl,
                 'deep_link' => str_replace(config('app.url'), 'fytrr://', $verificationUrl),
-                'command' => 'xcrun simctl openurl booted ' . str_replace(config('app.url'), 'fytrr://', $verificationUrl)
+                'command' => 'xcrun simctl openurl booted '.str_replace(config('app.url'), 'fytrr://', $verificationUrl),
             ]);
         }
 
@@ -63,9 +63,9 @@ class OnboardingCompleteVerifyEmail extends Notification implements ShouldQueue
             ->line(__('emails.verify_email.verify_text'))
             ->action(__('emails.verify_email.verify_button'), $verificationUrl)
             ->line(__('emails.verify_email.what_next'))
-            ->line('• ' . __('emails.verify_email.steps.create'))
-            ->line('• ' . __("emails.verify_email.steps.$receiveKey"))
-            ->line('• ' . __('emails.verify_email.steps.ready'))
+            ->line('• '.__('emails.verify_email.steps.create'))
+            ->line('• '.__("emails.verify_email.steps.$receiveKey"))
+            ->line('• '.__('emails.verify_email.steps.ready'))
             ->line(__('emails.verify_email.valid'))
             ->line('')
             ->line(__('emails.verify_email.ignore'))

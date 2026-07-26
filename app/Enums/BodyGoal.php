@@ -1,84 +1,83 @@
 <?php
 
-// app/Enums/BodyGoal.php
-
 namespace App\Enums;
 
-/**
- * Body Goal Enum
- *
- * Defines user's fitness goal and associated calorie adjustments.
- * Used in user_profiles.body_goal column.
- */
 enum BodyGoal: string
 {
+    // Current goals
+    case LOSE_WEIGHT = 'lose_weight';
+    case BUILD_MUSCLE = 'build_muscle';
+    case GET_FIT = 'get_fit';
+
+    // Deprecated — kept for old user data compatibility
     case MUSCLE_GAIN = 'muscle_gain';
     case WEIGHT_LOSS = 'weight_loss';
     case MAINTENANCE = 'maintenance';
     case ENDURANCE = 'endurance';
     case STRENGTH = 'strength';
 
-    /**
-     * Get human-readable label for frontend display.
-     */
     public function label(?string $locale = null): string
     {
-        return __('enums.bodyGoal.'.$this->value, [], $locale);
+        return __('enums.bodyGoal.'.$this->resolveCanonical()->value, [], $locale);
     }
 
-    /**
-     * Get detailed description of this goal.
-     */
     public function description(?string $locale = null): string
     {
-        return __('enums.bodyGoal.'.$this->value.'_description', [], $locale);
+        return __('enums.bodyGoal.'.$this->resolveCanonical()->value.'_description', [], $locale);
     }
 
-    /**
-     * Get calorie adjustment for this goal.
-     * Applied to TDEE when calculating daily calorie target.
-     *
-     * @return int Calorie adjustment (+/- kcal)
-     */
     public function calorieAdjustment(): int
     {
-        return match ($this) {
-            self::MUSCLE_GAIN => 300,   // Caloric surplus for muscle growth
-            self::WEIGHT_LOSS => -500,  // Caloric deficit for fat loss
-            self::MAINTENANCE => 0,     // Maintain current weight
-            self::ENDURANCE => 200,     // Slight surplus for energy demands
-            self::STRENGTH => 250,      // Moderate surplus for strength gains
+        return match ($this->resolveCanonical()) {
+            self::LOSE_WEIGHT => -500,
+            self::BUILD_MUSCLE => 300,
+            self::GET_FIT => 0,
         };
     }
 
     public function actionLabel(?string $locale = null): string
     {
-        return __('emails.body_goal_labels.'.$this->value, [], $locale);
+        return __('emails.body_goal_labels.'.$this->resolveCanonical()->value, [], $locale);
     }
 
     /**
-     * Protein intake per kg body weight for this goal.
-     *
-     * Based on ISSN Position Stand (2017) + 2024/2025 research:
-     * - Muscle gain: 1.6–2.2 g/kg → 2.0 as practical target
-     * - Weight loss: 2.3–3.1 g/kg → 2.5 to preserve lean mass in deficit
-     * - Strength: similar to muscle gain, slightly higher
-     * - Endurance: 1.4–1.8 g/kg
-     * - Maintenance: 1.4–2.0 g/kg → 1.8 as middle ground
+     * Protein intake per kg body weight.
      *
      * @see https://pubmed.ncbi.nlm.nih.gov/28642676/
      */
-    /**
-     * Get action-oriented label for email copy (e.g. "Build Muscle", "Muskelaufbau").
-     */
     public function proteinPerKg(): float
     {
-        return match ($this) {
-            self::MUSCLE_GAIN => 2.0,
-            self::STRENGTH => 2.2,
-            self::WEIGHT_LOSS => 2.5,
-            self::ENDURANCE => 1.6,
-            self::MAINTENANCE => 1.8,
+        return match ($this->resolveCanonical()) {
+            self::LOSE_WEIGHT => 2.5,
+            self::BUILD_MUSCLE => 2.0,
+            self::GET_FIT => 1.8,
         };
+    }
+
+    /**
+     * Map deprecated cases to their canonical replacement.
+     */
+    public function resolveCanonical(): self
+    {
+        return match ($this) {
+            self::WEIGHT_LOSS => self::LOSE_WEIGHT,
+            self::MUSCLE_GAIN, self::STRENGTH => self::BUILD_MUSCLE,
+            self::MAINTENANCE, self::ENDURANCE => self::GET_FIT,
+            default => $this,
+        };
+    }
+
+    /**
+     * Only the 3 current goals — use for validation and UI.
+     *
+     * @return list<self>
+     */
+    public static function current(): array
+    {
+        return [
+            self::LOSE_WEIGHT,
+            self::BUILD_MUSCLE,
+            self::GET_FIT,
+        ];
     }
 }

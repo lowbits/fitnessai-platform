@@ -21,7 +21,50 @@ use App\Http\Controllers\Api\V2\Workouts\ReorderWorkoutExercisesController;
 use App\Http\Controllers\Api\V2\Workouts\ReplaceWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\Workouts\UpdateWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
+use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
+use App\Http\Controllers\Api\V3\Auth\LoginController;
+use App\Http\Controllers\Api\V3\Auth\SignupController;
+use App\Http\Controllers\Api\V3\CoachController;
+use App\Http\Controllers\Api\V3\MealAlternativesController;
+use App\Http\Controllers\Api\V3\MobileOnboardingController;
+use App\Http\Controllers\Api\V3\PlanDayController;
+use App\Http\Controllers\Api\V3\PlanWeekController;
+use App\Http\Controllers\Api\V3\ProfileController;
+use App\Http\Controllers\Api\V3\RecipeFavoriteController;
+use App\Http\Controllers\Api\V3\RecipeSuggestionsController;
+use App\Http\Controllers\Api\V3\StatsController;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('v3')->group(function () {
+    Route::post('/onboarding', [MobileOnboardingController::class, 'store'])
+        ->middleware('throttle:3,1');
+
+    Route::prefix('auth')->group(function () {
+        Route::post('/signup', SignupController::class)->middleware('throttle:3,1');
+        Route::post('/login', LoginController::class)->middleware('throttle:5,1');
+
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::get('/me', [V3AuthController::class, 'me']);
+        });
+    });
+
+    Route::get('/recipes/suggestions', RecipeSuggestionsController::class)
+        ->middleware('throttle:30,1');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('/stats', StatsController::class);
+        Route::get('/plan/day/{date}', PlanDayController::class);
+        Route::get('/plan/week/{date?}', PlanWeekController::class);
+        Route::patch('/profile', [ProfileController::class, 'update']);
+        Route::get('/recipes/favorites', [RecipeFavoriteController::class, 'index']);
+        Route::post('/recipes/{recipe:id}/favorite', [RecipeFavoriteController::class, 'store']);
+        Route::delete('/recipes/{recipe:id}/favorite', [RecipeFavoriteController::class, 'destroy']);
+        Route::post('/meals/{meal}/alternatives', MealAlternativesController::class)
+            ->name('v3.meals.alternatives');
+        Route::post('/coach/messages', CoachController::class)
+            ->name('v3.coach.messages');
+    });
+});
 
 Route::prefix('v2')->group(function () {
     Route::post('/onboarding', [OnboardingController::class, 'store'])
@@ -50,7 +93,7 @@ Route::prefix('v2')->group(function () {
     // Protected routes requiring authentication
     Route::middleware('auth:sanctum')->group(function () {
         Route::get('/plan/day/{date}', [PlanController::class, 'getDayPlan']);
-        Route::get('/meals/{mealId}', [MealController::class, 'show']);
+        Route::get('/meals/{meal}', [MealController::class, 'show']);
         Route::post('/meals/{meal}/alternatives', GetMealAlternativesController::class)->name('meals.alternatives');
         Route::post('/meals/{meal}/replace', ReplaceMealController::class)->name('meals.replace');
         Route::delete('/meals/{meal}', [MealController::class, 'destroy'])->name('meals.destroy');

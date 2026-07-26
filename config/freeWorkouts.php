@@ -49,8 +49,8 @@ return [
            Abnehmen
         ============================ */
         'abnehmen' => [
-            'title' => 'Kostenloser Trainingsplan zum Abnehmen – für Zuhause & Gym',
-            'description' => 'Trainingsplan zum Abnehmen kostenlos: 8 Wochen, für Zuhause ohne Geräte oder im Gym. Mit Ernährungstipps. Sofort als PDF, ohne Anmeldung.',
+            'title' => 'Trainingsplan Abnehmen: 8 Wochen kostenlos (Gym & Zuhause)',
+            'description' => '8 Wochen Trainingsplan zum Abnehmen: 4 Tage pro Woche, mit Ernährungstipps. Für Gym oder Zuhause ohne Geräte. Kostenlos als PDF, ohne Anmeldung.',
             'h1' => 'Trainingsplan zum Abnehmen – nachhaltig Fett verlieren',
             'intro' => 'Dieser strukturierte 8-Wochen-Trainingsplan kombiniert Krafttraining und Cardio, um Fett abzubauen, Muskeln zu erhalten und den Stoffwechsel nachhaltig zu steigern.',
             'internal_type' => 'weight_loss',
@@ -233,8 +233,8 @@ return [
            MUSKELAUFBAU
         ============================ */
         'muskelaufbau' => [
-            'title' => 'Kostenloser Trainingsplan Muskelaufbau – 12 Wochen',
-            'description' => 'Trainingsplan Muskelaufbau kostenlos: 12 Wochen mit progressiver Belastungssteigerung. Für Anfänger und Fortgeschrittene. Als PDF laden.',
+            'title' => 'Muskelaufbau Trainingsplan kostenlos: 12-Wochen-Plan (PDF)',
+            'description' => '12-Wochen-Muskelaufbau-Plan mit 4 Trainingstagen pro Woche, Übungen, Sätzen und Steigerung. Kostenlos als PDF, ohne Anmeldung. Jetzt loslegen.',
             'h1' => 'Muskelaufbau Trainingsplan – systematisch stärker werden',
             'intro' => 'Dieser 12-Wochen-Trainingsplan basiert auf progressiver Überlastung und kombiniert Muskelwachstum, Kraftsteigerung und ausreichende Regeneration.',
             'internal_type' => 'muscle_gain',
@@ -430,8 +430,8 @@ return [
            Anfänger
         ============================ */
         'anfaenger' => [
-            'title' => 'Kostenloser Trainingsplan für Anfänger – 6 Wochen',
-            'description' => 'Trainingsplan für Anfänger kostenlos: 6 Wochen, sicher und strukturiert. Für Zuhause oder Gym, ohne Vorerfahrung. Sofort als PDF starten.',
+            'title' => 'Trainingsplan Anfänger kostenlos: 6 Wochen für Gym & Zuhause',
+            'description' => 'Anfänger Trainingsplan: 6 Wochen, 3 Tage pro Woche. Für Gym oder Zuhause, ohne Vorerfahrung. Kostenlos als PDF, ohne Anmeldung. Jetzt starten.',
             'h1' => 'Trainingsplan für Anfänger – sicher & effektiv starten',
             'intro' => 'Dieser 6-Wochen-Anfängerplan hilft dir, grundlegende Bewegungen zu erlernen, Kraft aufzubauen und eine stabile Trainingsroutine zu entwickeln.',
             'internal_type' => 'beginner',
@@ -911,6 +911,7 @@ return [
         'neujahrs-trainingsplan' => [
             'title' => 'Neujahrs Trainingsplan – 6 Wochen Fitness Reset',
             'description' => 'Der ideale Trainingsplan für deinen Neustart ins neue Jahr. ✓ 6 Wochen Reset ✓ Kraft, Cardio & Mobility ✓ Nachhaltig & sicher',
+            'noindex' => true,
             'h1' => 'Neujahrs Trainingsplan: Dein 6-Wochen Fitness Reset',
             'intro' => 'Dieser 6-Wochen Fitness Reset hilft dir, nach Pausen oder einem Neustart wieder in eine nachhaltige Trainingsroutine zu finden. Fokus auf Kraft, Ausdauer, Beweglichkeit und langfristigen Fortschritt.',
             'internal_type' => 'new_year_reset',
@@ -1066,8 +1067,8 @@ return [
            Krafttraining
         ============================ */
         'krafttraining' => [
-            'title' => 'Kostenloser Krafttrainingsplan – 10 Wochen',
-            'description' => 'Kostenloser 10-Wochen-Krafttrainingsplan. Maximale Kraft mit Grundübungen, progressiver Überlastung und strukturierter Periodisierung – fürs Gym.',
+            'title' => 'Krafttrainingsplan kostenlos: 10 Wochen, 4 Tage, PDF',
+            'description' => '10 Wochen Krafttrainingsplan mit Grundübungen, klarem Wochen-Split und Steigerungs-Schema. Kostenlos als PDF, ohne Anmeldung. Jetzt starten.',
             'h1' => 'Krafttrainingsplan – In 10 Wochen stärker werden',
             'intro' => 'Dieser 10-Wochen-Krafttrainingsplan konzentriert sich auf die Langhantel- und Kurzhantelübungen, die wirklich zählen. Aufgebaut auf progressiver Überlastung und einem 4-Tage-Oberkörper/Unterkörper-Split entwickelst du systematisch Ganzkörperkraft.',
             'internal_type' => 'strength',
@@ -3114,6 +3115,7 @@ return [
         'abs' => [
             'title' => 'Free 8-Week Abs Workout Plan – Home & Gym',
             'description' => 'Free 8-week abs workout plan for defined core muscles. No equipment needed. Works at home or gym. Get your plan as PDF in 60 seconds.',
+            'noindex' => true,
             'h1' => 'Abs Workout Plan – Build a Strong Core in 8 Weeks',
             'intro' => 'This 8-week abs workout plan develops your entire core musculature systematically. Three focused sessions per week train stability, rotational strength and flexion — for visible abs and functional core strength.',
             'internal_type' => 'abs',

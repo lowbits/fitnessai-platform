@@ -22,8 +22,8 @@ describe('exercises:enrich command', function () {
             ->assertSuccessful()
             ->expectsOutputToContain('1 enrichment jobs and 2 translation jobs');
 
-        Queue::assertPushedOn('exercises', EnrichExerciseJob::class);
-        Queue::assertPushedOn('exercises', EnrichExerciseTranslationsJob::class);
+        Queue::assertPushedOn('content',EnrichExerciseJob::class);
+        Queue::assertPushedOn('content',EnrichExerciseTranslationsJob::class);
     });
 
     it('skips exercises that are already enriched without --force', function () {
@@ -49,7 +49,7 @@ describe('exercises:enrich command', function () {
             ->assertSuccessful()
             ->expectsOutputToContain('1 enrichment jobs');
 
-        Queue::assertPushedOn('exercises', EnrichExerciseJob::class);
+        Queue::assertPushedOn('content',EnrichExerciseJob::class);
     });
 
     it('filters by --ids option', function () {

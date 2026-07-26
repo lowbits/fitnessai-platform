@@ -3,7 +3,7 @@
         "laravel-boost": {
             "command": "/Users/lobitz/Library/Application Support/Herd/bin/php84",
             "args": [
-                "/Users/lobitz/git/fitnessai-webapp-v2/artisan",
+                "/Users/lobitz/git/fytrr/platform/artisan",
                 "boost:mcp"
             ]
         },
@@ -13,7 +13,7 @@
                 "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
             ],
             "env": {
-                "SITE_PATH": "/Users/lobitz/git/fitnessai-webapp-v2"
+                "SITE_PATH": "/Users/lobitz/git/fytrr/platform"
             }
         }
     }

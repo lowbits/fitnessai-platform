@@ -2,6 +2,7 @@
 
 use App\Models\BodyProgress;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
@@ -15,7 +16,6 @@ test('user can track body progress with only weight', function () {
         ->postJson('/api/v2/track/body-progress', [
             'weight' => 75.50,
         ]);
-
 
     $response->assertStatus(201)
         ->assertJsonStructure([
@@ -93,7 +93,6 @@ test('weight is required when creating body progress', function () {
         ->postJson('/api/v2/track/body-progress', [
             'body_fat_percentage' => 20.0,
         ]);
-
 
     $response->assertStatus(422)
         ->assertJsonValidationErrorFor('weight');
@@ -208,7 +207,7 @@ test('user can get filtered body progress history', function () {
     ]);
 
     $response = $this->actingAs($this->user, 'sanctum')
-        ->getJson('/api/v2/track/body-progress?from=' . now()->subDays(7)->toDateString());
+        ->getJson('/api/v2/track/body-progress?from='.now()->subDays(7)->toDateString());
 
     $response->assertStatus(200)
         ->assertJsonCount(2, 'data');
@@ -417,3 +416,28 @@ test('trend only compares to previous entry, not other users', function () {
         ]);
 });
 
+test('history seeds the onboarding weight as the baseline when there are no logs', function () {
+    $this->user->profile()->save(UserProfile::factory()->make(['weight_kg' => 100]));
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->getJson('/api/v2/track/body-progress')
+        ->assertOk()
+        ->assertJsonPath('count', 1);
+
+    expect((float) $response->json('data.0.weight'))->toBe(100.0)
+        ->and($response->json('data.0.id'))->toBeNull();
+});
+
+test('history keeps the start weight as the earliest point alongside logs', function () {
+    $this->user->forceFill(['created_at' => now()->subDays(5)])->save();
+    $this->user->profile()->save(UserProfile::factory()->make(['weight_kg' => 100]));
+    $this->user->bodyProgress()->create(['weight_kg' => 98, 'recorded_at' => now()]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->getJson('/api/v2/track/body-progress')
+        ->assertOk()
+        ->assertJsonPath('count', 2);
+
+    // desc order: newest log first, seeded start last
+    expect((float) $response->json('data.1.weight'))->toBe(100.0);
+});

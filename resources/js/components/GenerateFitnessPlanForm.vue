@@ -10,7 +10,6 @@ import FormTab from '@/components/form/FormTab.vue';
 import LabeledInput from '@/components/form/LabeledInput.vue';
 import NumberInput from '@/components/form/NumberInput.vue';
 import RadioGroup from '@/components/form/RadioGroup.vue';
-import SelectInput from '@/components/form/SelectInput.vue';
 import Email from '@/components/icons/email.vue';
 import { Input } from '@/components/ui/input';
 import { useTracking } from '@/composables/useTracking';
@@ -36,7 +35,6 @@ const {
     ACTIVITY_LEVELS,
     TRAINING_PLACES,
     DIETARY_PREFERENCES,
-    DIET_STYLES,
 } = useTranslatedEnums();
 
 // State
@@ -135,14 +133,21 @@ const validateStep = (step: number): boolean => {
     clearErrors();
 
     switch (step) {
-        case 0: // Gender
+        case 0: // Body Goal
+            if (!form.body_goal) {
+                setError('body_goal', t('form.validation.bodyGoalRequired'));
+                return false;
+            }
+            break;
+
+        case 1: // Gender
             if (!form.gender) {
                 setError('gender', t('form.validation.genderRequired'));
                 return false;
             }
             break;
 
-        case 1: // Age, Height, Weight
+        case 2: // Age, Height, Weight
             const errors: Record<string, string> = {};
             if (!form.age) errors.age = t('form.validation.ageRequired');
             if (!form.height)
@@ -156,7 +161,7 @@ const validateStep = (step: number): boolean => {
             }
             break;
 
-        case 2: // Dietary Preference
+        case 3: // Dietary Preference
             if (!form.dietary_preference) {
                 setError(
                     'dietary_preference',
@@ -166,14 +171,7 @@ const validateStep = (step: number): boolean => {
             }
             break;
 
-        case 3: // Diet Style
-            if (form.has_diet_style && !form.diet_style) {
-                setError('diet_style', t('form.validation.dietStyleRequired'));
-                return false;
-            }
-            break;
-
-        case 4: // Activity Level & Skill Level
+        case 4: // Activity Level
             if (!form.activity_level) {
                 setError(
                     'activity_level',
@@ -181,18 +179,14 @@ const validateStep = (step: number): boolean => {
                 );
                 return false;
             }
+            break;
+
+        case 5: // Skill Level
             if (!form.skill_level) {
                 setError(
                     'skill_level',
                     t('form.validation.skillLevelRequired'),
                 );
-                return false;
-            }
-            break;
-
-        case 5: // Body Goal
-            if (!form.body_goal) {
-                setError('body_goal', t('form.validation.bodyGoalRequired'));
                 return false;
             }
             break;
@@ -244,7 +238,7 @@ const nextStep = () => {
         });
 
         // Show app upsell after gender step on mobile iOS
-        if (activeStep.value === 0 && isMobileIos) {
+        if (activeStep.value === 1 && isMobileIos) {
             showAppUpsell.value = true;
             return;
         }
@@ -472,6 +466,27 @@ const submit = async () => {
 
         <TabGroup v-else :selectedIndex="activeStep" @change="goToStep">
             <TabPanels class="mt-2 flex flex-col">
+                <!-- Step 0: Body Goal -->
+                <FormPanel
+                    :headline="$t('form.steps.goal.headline')"
+                    :subline="$t('form.steps.goal.subline')"
+                    @click:next="nextStep"
+                >
+                    <RadioGroup
+                        v-model="form.body_goal"
+                        name="body_goal"
+                        :label="$t('form.steps.goal.label')"
+                        :items="BODY_GOALS"
+                    />
+
+                    <div
+                        v-if="form.errors?.body_goal"
+                        class="text-sm text-red-400"
+                    >
+                        {{ form.errors.body_goal }}
+                    </div>
+                </FormPanel>
+
                 <!-- Step 1: Gender -->
                 <FormPanel
                     :headline="$t('form.steps.gender.headline')"
@@ -594,170 +609,46 @@ const submit = async () => {
                     </FormGroup>
                 </FormPanel>
 
-                <!-- Step 4: Diet Style -->
-                <FormPanel
-                    :headline="$t('form.steps.dietStyle.headline')"
-                    :subline="$t('form.steps.dietStyle.subline')"
-                    @click:next="nextStep"
-                >
-                    <FormGroup class="mt-4 flex flex-col">
-                        <LabeledInput
-                            :label="$t('form.steps.diet.hasStyleQuestion')"
-                            name=""
-                            :hint="$t('form.steps.diet.hasStyleQuestionHint')"
-                        >
-                            <div class="flex gap-4">
-                                <button
-                                    type="button"
-                                    class="flex-1 rounded-xl border-2 py-3 transition"
-                                    :class="
-                                        form.has_diet_style
-                                            ? 'border-primary-500 bg-primary-500/10 text-white'
-                                            : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
-                                    "
-                                    @click="form.has_diet_style = true"
-                                >
-                                    {{ $t('common.yes') }}
-                                </button>
-                                <button
-                                    type="button"
-                                    class="flex-1 rounded-xl border-2 py-3 transition"
-                                    :class="
-                                        !form.has_diet_style
-                                            ? 'border-primary-500 bg-primary-500/10 text-white'
-                                            : 'border-dark-surfaces-600 hover:border-dark-surfaces-400 bg-dark-surfaces-500 text-secondary-300'
-                                    "
-                                    @click="
-                                        form.has_diet_style = false;
-                                        form.diet_style = '';
-                                    "
-                                >
-                                    {{ $t('common.no') }}
-                                </button>
-                            </div>
-                        </LabeledInput>
-
-                        <LabeledInput
-                            v-if="form.has_diet_style"
-                            full-width
-                            :label="$t('form.steps.diet.styleLabel')"
-                            name="diet_style"
-                            :hint="$t('form.steps.diet.styleHint')"
-                            :errors="form.errors.diet_style"
-                            class="mt-3"
-                        >
-                            <SelectInput
-                                id="diet_style"
-                                name="diet_style"
-                                v-model="form.diet_style"
-                                :default-label="
-                                    $t('form.steps.diet.stylePlaceholder')
-                                "
-                            >
-                                <option
-                                    v-for="style in DIET_STYLES"
-                                    :key="style.value"
-                                    :value="style.value"
-                                >
-                                    {{ style.label }}
-                                </option>
-                            </SelectInput>
-                        </LabeledInput>
-                    </FormGroup>
-                </FormPanel>
-
-                <!-- Step 4: Activity & Skill Level -->
+                <!-- Step 4: Activity Level -->
                 <FormPanel
                     :headline="$t('form.steps.activity.headline')"
                     :subline="$t('form.steps.activity.subline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup wrap class="mt-4">
-                        <LabeledInput
-                            full-width
-                            :label="$t('form.steps.activity.activityLabel')"
-                            name="activity_level"
-                            :hint="$t('form.steps.activity.activityHint')"
-                            :errors="form.errors.activity_level"
-                        >
-                            <SelectInput
-                                id="activity_level"
-                                name="activity_level"
-                                v-model="form.activity_level"
-                                :default-label="
-                                    $t(
-                                        'form.steps.activity.activityPlaceholder',
-                                    )
-                                "
-                            >
-                                <option
-                                    v-for="activity in ACTIVITY_LEVELS"
-                                    :key="activity.value"
-                                    :value="activity.value"
-                                >
-                                    {{ activity.label }}
-                                </option>
-                            </SelectInput>
-                        </LabeledInput>
+                    <RadioGroup
+                        v-model="form.activity_level"
+                        name="activity_level"
+                        :label="$t('form.steps.activity.activityLabel')"
+                        :items="ACTIVITY_LEVELS"
+                    />
 
-                        <LabeledInput
-                            full-width
-                            :label="$t('form.steps.activity.skillLabel')"
-                            name="skill_level"
-                            :hint="$t('form.steps.activity.skillHint')"
-                            :errors="form.errors.skill_level"
-                        >
-                            <SelectInput
-                                id="skill_level"
-                                name="skill_level"
-                                v-model="form.skill_level"
-                                :default-label="
-                                    $t('form.steps.activity.skillPlaceholder')
-                                "
-                            >
-                                <option
-                                    v-for="skill in SKILL_LEVELS"
-                                    :key="skill.value"
-                                    :value="skill.value"
-                                >
-                                    {{ skill.label }}
-                                </option>
-                            </SelectInput>
-                        </LabeledInput>
-                    </FormGroup>
+                    <div
+                        v-if="form.errors?.activity_level"
+                        class="text-sm text-red-400"
+                    >
+                        {{ form.errors.activity_level }}
+                    </div>
                 </FormPanel>
 
-                <!-- Step 5: Body Goal -->
+                <!-- Step 5: Skill Level -->
                 <FormPanel
-                    :headline="$t('form.steps.goal.headline')"
-                    :subline="$t('form.steps.goal.subline')"
+                    :headline="$t('form.steps.activity.skillHeadline')"
+                    :subline="$t('form.steps.activity.skillSubline')"
                     @click:next="nextStep"
                 >
-                    <FormGroup class="mt-4">
-                        <LabeledInput
-                            full-width
-                            :label="$t('form.steps.goal.label')"
-                            name="body_goal"
-                            :errors="form.errors.body_goal"
-                        >
-                            <SelectInput
-                                id="body_goal"
-                                name="body_goal"
-                                v-model="form.body_goal"
-                                :default-label="
-                                    $t('form.steps.goal.placeholder')
-                                "
-                            >
-                                <option
-                                    v-for="goal in BODY_GOALS"
-                                    :key="goal.value"
-                                    :value="goal.value"
-                                >
-                                    {{ goal.label }}
-                                </option>
-                            </SelectInput>
-                        </LabeledInput>
-                    </FormGroup>
+                    <RadioGroup
+                        v-model="form.skill_level"
+                        name="skill_level"
+                        :label="$t('form.steps.activity.skillLabel')"
+                        :items="SKILL_LEVELS"
+                    />
+
+                    <div
+                        v-if="form.errors?.skill_level"
+                        class="text-sm text-red-400"
+                    >
+                        {{ form.errors.skill_level }}
+                    </div>
                 </FormPanel>
 
                 <!-- Step 6: Training Place -->

@@ -30,7 +30,7 @@ class EnrichExerciseJob implements ShouldQueue
         public Exercise $exercise,
         public bool $force = false,
     ) {
-        $this->onQueue('exercises');
+        $this->onQueue('content');
     }
 
     public function handle(): void

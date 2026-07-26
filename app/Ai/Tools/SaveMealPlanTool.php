@@ -2,8 +2,15 @@
 
 namespace App\Ai\Tools;
 
+use App\Enums\Allergen;
+use App\Enums\Cuisine;
+use App\Enums\HeroVeg;
+use App\Enums\MealFormat;
+use App\Enums\PrimaryProtein;
+use App\Enums\Unit;
 use App\Models\Meal;
 use App\Models\MealPlan;
+use App\Services\Recipe\RecipeUpserter;
 use Exception;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Log;
@@ -118,10 +125,11 @@ class SaveMealPlanTool implements Tool
                         ->description('Ingredient name in user language.')
                         ->required(),
                     'amount' => $schema->string()
-                        ->description('Quantity (e.g. "200", "1").')
+                        ->description('Quantity (e.g. "200", "1"). Use null/"" for unit=to_taste.')
                         ->required(),
                     'unit' => $schema->string()
-                        ->description('Unit of measurement (e.g. "g", "ml", "piece").')
+                        ->enum(array_column(Unit::cases(), 'value'))
+                        ->description('Canonical English unit. NEVER localize — use "piece" not "Stück", "tbsp" not "EL", "pinch" not "Prise".')
                         ->required(),
                 ])->withoutAdditionalProperties())
                     ->description('List of ingredients with amounts.'),
@@ -142,28 +150,51 @@ class SaveMealPlanTool implements Tool
 
                 'tags' => $schema->array()
                     ->items($schema->string())
-                    ->description('Descriptive tags (e.g. "high-protein", "quick", "post-workout").'),
+                    ->description('Descriptive tags (e.g. "high-protein", "quick", "post-workout"). MUST include the dietary classification tags this recipe qualifies for, cascading: a vegan recipe includes "vegan", "vegetarian", "pescatarian", "omnivore". A vegetarian recipe includes "vegetarian", "pescatarian", "omnivore". A fish/seafood recipe includes "pescatarian", "omnivore". A meat recipe includes "omnivore" only.'),
 
                 'allergens' => $schema->array()
-                    ->items($schema->string())
-                    ->description('Allergens present in this meal (e.g. "dairy", "gluten", "nuts").'),
+                    ->items($schema->string()->enum(array_column(Allergen::cases(), 'value')))
+                    ->description('EU-14 allergens present in this meal. Use ONLY these canonical lowercase keys. Do not include notes (e.g. "gluten-free possible") — that is not an allergen.'),
 
                 'primary_protein' => $schema->string()
-                    ->description('Primary protein source (e.g. "chicken", "fish", "beef", "pork", "eggs", "tofu", "legumes", "dairy", "mixed").'),
+                    ->description('Dominant protein source. Pick the single category that carries the protein. Use "mixed" only when there is genuinely no hero protein.')
+                    ->enum(array_column(PrimaryProtein::cases(), 'value'))
+                    ->required(),
 
                 'cuisine' => $schema->string()
-                    ->description('Cuisine style (e.g. "german", "mediterranean", "asian", "american", "latin", "middle_eastern", "mixed").'),
+                    ->description('Cuisine the meal belongs to. Pattern hints: open-faced bread/sandwich with cold cuts or cheese → german. Skillet pasta or gnocchi dishes → italian. Shakshuka, hummus plates, couscous bowls → middle_eastern. Yogurt-and-toppings dishes without a strong cuisine signal → american. Use "mixed" only when there is genuinely no identifiable cuisine.')
+                    ->enum(array_column(Cuisine::cases(), 'value'))
+                    ->required(),
+
+                'format' => $schema->string()
+                    ->description('Visual format on the plate. Pattern hints (the WHOLE-DISH structure, not a single ingredient): eggs-as-main even cooked in sauce → omelet (shakshuka, frittata, scramble). Strained-yogurt or fresh-cheese bowl with fruit/granola toppings → yogurt_bowl. Pasta-shape skillet or sauté → pasta (not stir_fry). Hot grain breakfast (oats, congee) → porridge. Use "mixed" ONLY when truly no format fits — NEVER as a default for ambiguous cases.')
+                    ->enum(array_column(MealFormat::cases(), 'value'))
+                    ->required(),
+
+                'hero_veg' => $schema->string()
+                    ->description('Dominant non-starch vegetable. PICK THE SINGLE most prominent vegetable even when multiple are present — this is a variety axis and "mixed" weakens dedup. Use "mixed" ONLY when 3+ vegetables truly share equal prominence. Use "none" only when the dish has no vegetable at all. Carb bases (potato, rice, pasta) are NEVER hero_veg.')
+                    ->enum(array_column(HeroVeg::cases(), 'value'))
+                    ->required(),
             ])->withoutAdditionalProperties())
-                ->description('Array of 4 meals: breakfast, lunch, snack, dinner.')
+                ->description('Array of meals for the day, one per requested meal type.')
                 ->required(),
         ];
     }
 
     private function saveMeals(array $meals): void
     {
+        $user = $this->mealPlan->plan->user;
+        $locale = $user->locale ?? 'en';
+        $dislikes = $user->profile?->food_dislikes ?? [];
+        $upserter = app(RecipeUpserter::class);
+
         foreach ($meals as $meal) {
+            $this->flagDislikeLeaks($meal, $dislikes, $user->id);
+            $recipe = $upserter->upsert($meal, $locale, $meal['type']);
+
             Meal::create([
                 'meal_plan_id' => $this->mealPlan->id,
+                'recipe_id' => $recipe->id,
                 'type' => $meal['type'],
                 'name' => $meal['name'],
                 'description' => $meal['description'] ?? null,
@@ -173,7 +204,7 @@ class SaveMealPlanTool implements Tool
                 'fat_g' => $meal['fat_g'],
                 'fiber_g' => $meal['fiber_g'] ?? null,
                 'sugar_g' => $meal['sugar_g'] ?? null,
-                'ingredients' => $meal['ingredients'] ?? [],
+                'ingredients' => $recipe->ingredients,
                 'instructions' => $meal['instructions'] ?? [],
                 'prep_time_minutes' => $meal['prep_time_minutes'] ?? null,
                 'cook_time_minutes' => $meal['cook_time_minutes'] ?? null,
@@ -183,6 +214,8 @@ class SaveMealPlanTool implements Tool
                 'allergens' => $meal['allergens'] ?? [],
                 'primary_protein' => $meal['primary_protein'] ?? null,
                 'cuisine' => $meal['cuisine'] ?? null,
+                'format' => $meal['format'] ?? null,
+                'hero_veg' => $meal['hero_veg'] ?? null,
                 'status' => 'generated',
             ]);
         }
@@ -196,5 +229,37 @@ class SaveMealPlanTool implements Tool
             'carbs_g' => array_sum(array_column($meals, 'carbs_g')),
             'fat_g' => array_sum(array_column($meals, 'fat_g')),
         ];
+    }
+
+    /**
+     * Log when an AI-generated meal contains a disliked ingredient. Case-
+     * insensitive substring match in the user's own language — the AI
+     * generates in their locale, so a German user's "haselnuss" matches
+     * "Haselnuss"/"Haselnüsse" in the generated recipe.
+     *
+     * @param  list<string>  $dislikes
+     */
+    private function flagDislikeLeaks(array $meal, array $dislikes, int $userId): void
+    {
+        if (empty($dislikes)) {
+            return;
+        }
+
+        $needles = array_filter(array_map(fn (string $d) => mb_strtolower(trim($d)), $dislikes));
+
+        foreach ($meal['ingredients'] ?? [] as $ingredient) {
+            $name = mb_strtolower($ingredient['name'] ?? '');
+            foreach ($needles as $needle) {
+                if (str_contains($name, $needle)) {
+                    Log::warning('[MealGen] Disliked ingredient leaked into generated meal', [
+                        'meal_name' => $meal['name'] ?? null,
+                        'ingredient' => $ingredient['name'] ?? null,
+                        'matched_dislike' => $needle,
+                        'user_id' => $userId,
+                    ]);
+                    break;
+                }
+            }
+        }
     }
 }

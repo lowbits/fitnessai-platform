@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'g' => 'g',
+    'kg' => 'kg',
+    'ml' => 'ml',
+    'l' => 'l',
+    'tbsp' => 'tbsp',
+    'tsp' => 'tsp',
+    'cup' => 'cup',
+    'piece' => 'piece',
+    'slice' => 'slice',
+    'clove' => 'clove',
+    'leaf' => 'leaf',
+    'sprig' => 'sprig',
+    'head' => 'head',
+    'bunch' => 'bunch',
+    'stick' => 'stick',
+    'pinch' => 'pinch',
+    'dash' => 'dash',
+    'drop' => 'drop',
+    'handful' => 'handful',
+    'can' => 'can',
+    'jar' => 'jar',
+    'package' => 'package',
+    'to_taste' => 'to taste',
+    'whole' => 'whole',
+];

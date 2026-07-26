@@ -42,8 +42,8 @@ class CalorieTracking extends Model
     public function getSourceAttribute(): string
     {
         return match (true) {
-            !is_null($this->external_id) => 'search',
-            !is_null($this->meal_id) => 'plan',
+            ! is_null($this->external_id) => 'search',
+            ! is_null($this->meal_id) => 'plan',
             default => 'manual',
         };
     }

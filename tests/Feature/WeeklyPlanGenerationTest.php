@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Plan;
-use App\Models\SubscriptionLegacy;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Carbon\Carbon;
@@ -18,13 +17,7 @@ test('command runs daily and checks individual user generation days', function (
     $user = User::factory()->create();
 
     // Create subscription
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     // Create plan that started on Friday (so generation day = Monday)
     $plan = Plan::create([
@@ -69,13 +62,7 @@ test('generates plans for user on their generation day', function () {
     $user = User::factory()->create();
 
     // Create subscription
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     // Create plan that started Monday (generation day = Thursday)
     $plan = Plan::create([
@@ -275,13 +262,7 @@ test('skips user when not their generation day', function () {
 
     $user = User::factory()->create();
 
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     // Plan started Friday, so generation day = Monday (not Thursday)
     $plan = Plan::create([
@@ -365,13 +346,7 @@ test('calculates correct generation day based on plan start date', function () {
 
         $user = User::factory()->create();
 
-        SubscriptionLegacy::create([
-            'user_id' => $user->id,
-            'type' => 'beta',
-            'status' => 'active',
-            'starts_at' => now(),
-            'ends_at' => now()->addMonth(),
-        ]);
+        $user->update(['trial_ends_at' => now()->addMonth()]);
 
         $plan = Plan::create([
             'user_id' => $user->id,
@@ -414,13 +389,7 @@ test('skips user who already has 7+ days of future plans', function () {
 
     $user = User::factory()->create();
 
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     $plan = Plan::create([
         'user_id' => $user->id,
@@ -465,13 +434,7 @@ test('only generates workouts when --only=workouts is passed', function () {
 
     $user = User::factory()->create();
 
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     $plan = Plan::create([
         'user_id' => $user->id,
@@ -513,13 +476,7 @@ test('only generates meals when --only=meals is passed', function () {
 
     $user = User::factory()->create();
 
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     $plan = Plan::create([
         'user_id' => $user->id,
@@ -566,13 +523,7 @@ test('sends delayed notification when plans are generated', function () {
 
     $user = User::factory()->create();
 
-    SubscriptionLegacy::create([
-        'user_id' => $user->id,
-        'type' => 'beta',
-        'status' => 'active',
-        'starts_at' => now(),
-        'ends_at' => now()->addMonth(),
-    ]);
+    $user->update(['trial_ends_at' => now()->addMonth()]);
 
     $plan = Plan::create([
         'user_id' => $user->id,

@@ -105,13 +105,10 @@ class WorkoutUserPrompt implements Stringable
 
     private function buildGoalProtocol(): string
     {
-        return match ($this->profile->body_goal->value) {
-            'muscle_gain' => 'Protocol: 3-4 sets, 8-12 reps, 60-90s rest, tempo 3-0-1-0/2-0-1-0, RPE 7-9. 70% compound, 30% isolation. Slow eccentrics. Last set RPE 9.',
-            'weight_loss' => 'Protocol: 3 sets, 12-15 reps, 30-45s rest, tempo 2-0-1-0, RPE 6-8. Circuit-style, maintain heart rate. Include HIIT intervals.',
-            'strength' => 'Protocol: 4-6 sets main/3 accessory, 3-6 reps main/6-8 accessory, 2-5min rest main/90-120s accessory, tempo 1-0-X-0/2-0-1-0, RPE 8-9.5/7-8. 90%+ compound. Explosive concentric.',
-            'endurance' => 'Protocol: 2-3 sets, 15-25 reps, ≤30s rest, tempo 1-0-1-0, RPE 5-7. Circuit format, sustained output, never to failure.',
-            'maintenance' => 'Protocol: 3 sets, 8-12 reps, 60-90s rest, tempo 2-0-1-0, RPE 6-7. Balanced compound/isolation. Preserve, don\'t overreach.',
-            'general_fitness' => 'Protocol: 3 sets, 10-12 reps, 60s rest, tempo 2-0-1-0, RPE 6-8. Balanced. Include mobility.',
+        return match ($this->profile->body_goal->resolveCanonical()->value) {
+            'build_muscle' => 'Protocol: 3-4 sets, 8-12 reps, 60-90s rest, tempo 3-0-1-0/2-0-1-0, RPE 7-9. 70% compound, 30% isolation. Slow eccentrics. Last set RPE 9.',
+            'lose_weight' => 'Protocol: 3 sets, 12-15 reps, 30-45s rest, tempo 2-0-1-0, RPE 6-8. Circuit-style, maintain heart rate. Include HIIT intervals.',
+            'get_fit' => 'Protocol: 3 sets, 8-12 reps, 60-90s rest, tempo 2-0-1-0, RPE 6-7. Balanced compound/isolation. Moderate intensity.',
             default => 'Protocol: 3 sets, 10-12 reps, 60s rest, tempo 2-0-1-0, RPE 6-8.',
         };
     }
@@ -125,12 +122,12 @@ class WorkoutUserPrompt implements Stringable
             return 'Structure: Straight sets only. No supersets/circuits. Focus on form and confidence.';
         }
 
-        return match ($goal) {
-            'muscle_gain' => 'Structure: Straight sets for compounds → superset antagonist isolation → burnout set.',
-            'weight_loss' => 'Structure: Circuit/paired exercises, upper/lower alternating, HIIT between blocks.',
-            'strength' => 'Structure: Straight sets only for main lifts. Full recovery. Accessories support the main lift.',
-            'endurance' => 'Structure: Circuit with minimal rest, group by movement pattern.',
-            'maintenance' => 'Structure: Straight sets for compounds, optional supersets for isolation.',
+        $canonicalGoal = $this->profile->body_goal->resolveCanonical()->value;
+
+        return match ($canonicalGoal) {
+            'build_muscle' => 'Structure: Straight sets for compounds → superset antagonist isolation → burnout set.',
+            'lose_weight' => 'Structure: Circuit/paired exercises, upper/lower alternating, HIIT between blocks.',
+            'get_fit' => 'Structure: Straight sets for compounds, optional supersets for isolation.',
             default => 'Structure: Straight sets for compounds, supersets optional for isolation.',
         };
     }

@@ -169,10 +169,8 @@ return [
     ],
 
     'body_goal_labels' => [
-        'muscle_gain' => 'Muskelaufbau',
-        'weight_loss' => 'Abnehmen',
-        'maintenance' => 'Fit bleiben',
-        'endurance' => 'Ausdauer verbessern',
-        'strength' => 'Stärker werden',
+        'lose_weight' => 'Abnehmen',
+        'build_muscle' => 'Muskeln aufbauen',
+        'get_fit' => 'Fit werden & wohlfühlen',
     ],
 ];

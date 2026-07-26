@@ -29,11 +29,6 @@ class StatsOverviewWidget extends BaseWidget
             ->where('status', 'active')
             ->count();
 
-        $activeLegacySubscriptions = DB::table('subscriptions_legacy')
-            ->where('status', 'active')
-            ->whereDate('ends_at', '>=', now())
-            ->count();
-
         $subscriptionChart = $this->getSubscriptionChartData();
 
         $failedWorkoutPlans = WorkoutPlan::where('status', 'failed')->count();
@@ -61,8 +56,7 @@ class StatsOverviewWidget extends BaseWidget
                 ->chart($mobileChart)
                 ->color('info'),
 
-            Stat::make('Active Subscriptions', number_format($activeSubscriptions + $activeLegacySubscriptions))
-                ->description("RC: {$activeSubscriptions} / Legacy: {$activeLegacySubscriptions}")
+            Stat::make('Active Subscriptions', number_format($activeSubscriptions))
                 ->chart($subscriptionChart)
                 ->color('primary'),
 

@@ -43,22 +43,35 @@ Do NOT prefix every meal with a country or cuisine name.
 
 The ingredients and flavors speak for themselves. Only use a cuisine prefix when the dish is genuinely known by it (e.g., "Caesar Salad", "Pad Thai").
 
-## Variety Rotation System
+## Within-Day Variety
 
-Follow these rotation rules. Review conversation history for previously generated days.
-
-**Protein rotation:** Poultry → Fish/Seafood → Beef/Pork → Eggs → Legumes/Tofu → Dairy-based.
 - Never use the same primary protein twice in one day
-- Rotate primary proteins across days
+- Vary cooking methods within a day when possible (raw, pan-fried, grilled, oven-baked, steamed, slow-cooked, stir-fried). Exception: if the user prefers quick/no-cook meals, fewer methods are fine
 
-**Carb base rotation:** Oats → Rice → Pasta → Potatoes → Bread → Quinoa/Couscous.
-- Vary the carb base daily
+Across-day variety is managed by the user prompt's per-slot constraints — do not try to infer it from conversation history. If a slot lists "prior meals", your new meal for that slot must differ in BOTH primary_protein AND cuisine from every listed meal.
 
-**Cooking methods:** Minimum 3 different methods per day (raw, pan-fried, grilled, oven-baked, steamed, slow-cooked, stir-fried).
+## Snack Variety
 
-**Breakfast styles:** Rotate between eggs, oatmeal/porridge, smoothie bowls, pancakes/waffles, yogurt parfaits, toast/sandwich-style.
+Snacks are the most repetition-prone slot. Vary them across the week — not all dairy-and-fruit yogurt bowls. Mix savory (open-faced sandwich with cold cuts or cheese, hummus + veg sticks, eggs on bread), sweet non-dairy (fruit + nuts, dark chocolate + nuts), and protein-forward options (cottage cheese, boiled eggs, edamame). Stacking five quark/skyr bowls in a row is a known quality regression.
 
-**NEVER repeat the same meal name within the plan.**
+## Repeat Selection (when reusing a meal across days)
+
+When the same meal will appear multiple times in the week, prefer simpler dishes (≤25 min prep+cook) over elaborate ones (≥40 min). A lasagne or a slow braise repeated twice reads as the planner running out of ideas; a one-pan stir-fry repeated twice reads as meal prep.
+
+## Ingredient Efficiency
+
+Minimize shopping effort and food waste. Review conversation history for ingredients already used in previous days:
+- Reuse ingredients from previous days in new dishes (e.g., broccoli appeared yesterday → use it again today in a different recipe)
+- Staples like rice, oats, eggs, and Greek yogurt can appear in multiple meals
+- Avoid one-off specialty ingredients — if an ingredient appears in one meal, try to use it in at least one other meal within the same or next day
+- Prefer ingredients available at any standard supermarket
+
+## Weekday vs Weekend Practicality
+
+- **Monday–Friday lunches** must be work-friendly: quick to prepare, easy to transport, or good cold/reheated. Wraps, bowls, salads with protein, or meals that reheat well in a microwave.
+- **Monday–Friday dinners** should be achievable after a workday — prioritize one-pan or one-pot meals.
+- **Weekend meals** (Saturday & Sunday) can be more elaborate — proper cooking, fresh assembly, brunch-style breakfasts.
+- **Breakfast** should always be quick on weekdays (overnight oats, smoothies, toast-based, pre-prepped).
 
 ## Recipe Quality
 

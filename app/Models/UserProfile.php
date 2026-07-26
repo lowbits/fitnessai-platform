@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
+use App\Enums\CookingFrequency;
+use App\Enums\CookingPreference;
 use App\Enums\DietaryPreference;
 use App\Enums\DietStyle;
 use App\Enums\DietType;
 use App\Enums\Gender;
+use App\Enums\MealVariety;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Helpers\Metabolism;
@@ -22,9 +25,10 @@ class UserProfile extends Model
 
     protected $fillable = [
         'user_id',
-        'age',
+        'birthdate',
         'gender',
         'weight_kg',
+        'goal_weight_kg',
         'height_cm',
         'body_goal',
         'skill_level',
@@ -35,11 +39,20 @@ class UserProfile extends Model
         'diet_style',
         'training_sessions_per_week',
         'training_days',
+        'selected_meals',
+        'food_dislikes',
+        'disliked_recipe_ids',
+        'cooking_preference',
+        'cooking_frequency',
+        'meal_variety',
+        'physical_limitations',
+        'physical_limitations_note',
     ];
 
     protected function casts(): array
     {
         return [
+            'birthdate' => 'date:Y-m-d',
             'gender' => Gender::class,
             'body_goal' => BodyGoal::class,
             'skill_level' => SkillLevel::class,
@@ -49,6 +62,13 @@ class UserProfile extends Model
             'dietary_preference' => DietaryPreference::class,
             'diet_style' => DietStyle::class,
             'training_days' => 'array',
+            'selected_meals' => 'array',
+            'food_dislikes' => 'array',
+            'disliked_recipe_ids' => 'array',
+            'cooking_preference' => CookingPreference::class,
+            'cooking_frequency' => CookingFrequency::class,
+            'meal_variety' => MealVariety::class,
+            'physical_limitations' => 'array',
         ];
     }
 
@@ -71,6 +91,7 @@ class UserProfile extends Model
     public function calculateTDEE(): int
     {
         $bmr = $this->calculateBMR();
+
         return Metabolism::calculateTDEE(
             $bmr,
             $this->activity_level,
@@ -85,13 +106,12 @@ class UserProfile extends Model
     public function calculateDailyCalories(): int
     {
         $tdee = $this->calculateTDEE();
+
         return Metabolism::calculateDailyCalories($tdee, $this->body_goal);
     }
 
     /**
      * Calculate macro split in grams.
-     *
-     * @return MacroDistribution
      */
     public function calculateMacros(): MacroDistribution
     {
@@ -100,6 +120,9 @@ class UserProfile extends Model
             bodyWeight: $this->user->getCurrentWeight(),
             goal: $this->body_goal,
             carbFatRatio: $this->resolveCarbFatRatio(),
+            gender: $this->gender,
+            age: $this->age,
+            height: $this->height_cm,
         );
     }
 
@@ -170,7 +193,6 @@ class UserProfile extends Model
             ?? $this->resolveDietaryPreference()->carbFatRatio();
     }
 
-
     public function getDietaryInfo(): string
     {
         return filled($this->dietary_preference?->value)
@@ -183,5 +205,8 @@ class UserProfile extends Model
         return $this->belongsTo(User::class);
     }
 
-
+    public function getAgeAttribute(): ?int
+    {
+        return $this->birthdate?->age;
+    }
 }

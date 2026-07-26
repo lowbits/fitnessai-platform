@@ -14,6 +14,7 @@ class RecipeTranslation extends Model
         return [
             'aliases' => 'array',
             'instructions' => 'array',
+            'ingredients' => 'array',
         ];
     }
 

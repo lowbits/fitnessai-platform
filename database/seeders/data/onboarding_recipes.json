@@ -1,0 +1,3013 @@
+[
+    {
+        "name": "Baked Cod with Roasted Potatoes and Green Beans",
+        "slug": "baked-cod-with-roasted-potatoes-and-green-beans",
+        "description": "Oven-baked cod with lemon and herbs, served with a small portion of roasted potatoes and tender green beans for a lean, satisfying dinner.",
+        "ingredients": [
+            {
+                "name": "Cod fillet",
+                "unit": "g",
+                "amount": "190"
+            },
+            {
+                "name": "Potatoes",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Green beans",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic powder",
+                "unit": "g",
+                "amount": "1"
+            },
+            {
+                "name": "Dried parsley",
+                "unit": "g",
+                "amount": "1"
+            },
+            {
+                "name": "Salt",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Preheat oven to 200°C. Cut potatoes into small cubes.",
+            "Toss potatoes with 5g olive oil, salt, and pepper. Roast on a tray for 20 minutes, turning once.",
+            "Place cod on the tray (or a second tray). Season with garlic powder, parsley, salt, pepper, lemon juice, and drizzle with remaining 5g olive oil.",
+            "Bake cod 10–12 minutes until it flakes easily; continue roasting potatoes until tender and browned.",
+            "Meanwhile, steam green beans 5–6 minutes until crisp-tender. Serve everything together with extra lemon if desired."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 25,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 316,
+        "protein_g": "37.00",
+        "carbs_g": "13.00",
+        "fat_g": "12.00",
+        "fiber_g": "4.00",
+        "sugar_g": "3.00",
+        "tags": [
+            "high-protein",
+            "oven-baked",
+            "balanced",
+            "lean",
+            "post-workout",
+            "weight-loss",
+            "light-dinner",
+            "dinner",
+            "family-dinner",
+            "weeknight-dinner",
+            "weeknight",
+            "lean-protein",
+            "steamed",
+            "gluten-free",
+            "family-friendly",
+            "roasted",
+            "sheet-pan",
+            "high-carb",
+            "low-carb",
+            "muscle-gain",
+            "weekend dinner",
+            "low-carb-friendly"
+        ],
+        "allergens": [
+            "fish",
+            "dairy"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Baked Salmon with Roasted Potatoes and Green Beans",
+        "slug": "baked-salmon-with-roasted-potatoes-and-green-beans",
+        "description": "Oven-baked salmon with lemon and herbs, served with crispy roasted potatoes and tender green beans for a balanced, recovery-focused dinner.",
+        "ingredients": [
+            {
+                "name": "Salmon fillet",
+                "unit": "g",
+                "amount": "160"
+            },
+            {
+                "name": "Potatoes",
+                "unit": "g",
+                "amount": "450"
+            },
+            {
+                "name": "Green beans",
+                "unit": "g",
+                "amount": "180"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "12"
+            },
+            {
+                "name": "Lemon",
+                "unit": "piece",
+                "amount": "1"
+            },
+            {
+                "name": "Garlic",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Dried oregano",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Salt",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "tsp",
+                "amount": "0.5"
+            }
+        ],
+        "instructions": [
+            "Heat oven to 220°C \/ 425°F. Cut potatoes into wedges, toss with half the olive oil, salt, pepper, and half the minced garlic.",
+            "Roast potatoes on a sheet pan for 25 minutes, flipping once halfway.",
+            "Add salmon to the pan, drizzle with remaining olive oil, lemon juice, oregano, remaining garlic, salt, and pepper; roast 12–14 minutes until salmon flakes easily.",
+            "Meanwhile, steam or boil green beans until tender-crisp (5–7 minutes), then season with a pinch of salt and a squeeze of lemon.",
+            "Plate salmon with roasted potatoes and green beans; add extra lemon wedges if desired."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 40,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 813,
+        "protein_g": "37.00",
+        "carbs_g": "99.00",
+        "fat_g": "29.00",
+        "fiber_g": "12.00",
+        "sugar_g": "7.00",
+        "tags": [
+            "high-protein",
+            "oven-baked",
+            "balanced",
+            "dinner",
+            "high-calorie",
+            "high-carb",
+            "muscle-gain",
+            "omega-3",
+            "post-workout",
+            "strength-gain",
+            "family-friendly",
+            "recovery",
+            "meal-prep",
+            "weight-loss",
+            "family dinner",
+            "family-dinner",
+            "recovery-dinner",
+            "family-style"
+        ],
+        "allergens": [
+            "fish",
+            "dairy"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Baked Salmon with Sweet Potato Mash and Steamed Broccoli",
+        "slug": "baked-salmon-with-sweet-potato-mash-and-steamed-broccoli",
+        "description": "A nutritious and flavorful dinner featuring baked salmon fillet, creamy sweet potato mash, and tender steamed broccoli, seasoned with herbs and lemon.",
+        "ingredients": [
+            {
+                "name": "salmon fillet",
+                "unit": "g",
+                "amount": "180"
+            },
+            {
+                "name": "sweet potato",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "broccoli",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "olive oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "garlic powder",
+                "unit": "g",
+                "amount": "3"
+            },
+            {
+                "name": "dried herbs (thyme, rosemary)",
+                "unit": "g",
+                "amount": "2"
+            },
+            {
+                "name": "salt and pepper",
+                "unit": "",
+                "amount": "to taste"
+            }
+        ],
+        "instructions": [
+            "Preheat the oven to 200°C (180°C fan). Place the salmon fillet on a baking tray lined with parchment paper. Drizzle with olive oil, lemon juice, garlic powder, dried herbs, salt, and pepper. Bake for 12-15 minutes until cooked through.",
+            "Peel and dice the sweet potato. Boil in salted water for 10-12 minutes until tender. Drain and mash with a fork or potato masher.",
+            "Steam the broccoli for 5-7 minutes until tender but still crisp.",
+            "Plate the salmon alongside the sweet potato mash and steamed broccoli. Drizzle any remaining lemon juice from the baking tray over the salmon."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 25,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 600,
+        "protein_g": "60.00",
+        "carbs_g": "48.00",
+        "fat_g": "20.00",
+        "fiber_g": "12.00",
+        "sugar_g": "10.00",
+        "tags": [
+            "dinner",
+            "pescatarian-friendly",
+            "high-protein",
+            "balanced",
+            "post-workout",
+            "oven-baked",
+            "omega-3",
+            "balanced dinner",
+            "gluten-free"
+        ],
+        "allergens": [
+            "fish",
+            "dairy"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "mixed",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Beef and Vegetable Stir-Fry with Jasmine Rice",
+        "slug": "beef-and-vegetable-stir-fry-with-jasmine-rice",
+        "description": "Tender beef strips and colorful vegetables quickly stir-fried in a savory sauce, served over fluffy jasmine rice—simple, satisfying, and perfect for muscle gain.",
+        "ingredients": [
+            {
+                "name": "Lean beef strips",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Jasmine rice (dry)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Bell pepper",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Carrot",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Broccoli florets",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Soy sauce",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "Oyster sauce",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "Sesame oil",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Neutral cooking oil (canola or sunflower)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Fresh ginger",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Cornstarch",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Water",
+                "unit": "ml",
+                "amount": "30"
+            }
+        ],
+        "instructions": [
+            "Cook jasmine rice according to package directions.",
+            "Mix soy sauce, oyster sauce, water, and cornstarch to make a quick stir-fry sauce.",
+            "Heat neutral oil in a wok or large pan over high heat; stir-fry beef 2–3 minutes until browned, then remove to a plate.",
+            "Add garlic and ginger, then stir-fry vegetables 3–4 minutes until crisp-tender.",
+            "Return beef to the pan, pour in the sauce, and toss 1–2 minutes until glossy; finish with sesame oil.",
+            "Serve the stir-fry over the cooked rice."
+        ],
+        "prep_time_minutes": 12,
+        "cook_time_minutes": 15,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 739,
+        "protein_g": "26.00",
+        "carbs_g": "97.00",
+        "fat_g": "27.00",
+        "fiber_g": "6.00",
+        "sugar_g": "11.00",
+        "tags": [
+            "high-protein",
+            "meal-prep",
+            "post-workout",
+            "balanced",
+            "stir-fry",
+            "dinner",
+            "muscle-gain",
+            "weeknight",
+            "balanced-dinner",
+            "quick",
+            "training-day-dinner",
+            "stir-fried",
+            "high-carb",
+            "training-day"
+        ],
+        "allergens": [
+            "soy",
+            "sesame",
+            "shellfish",
+            "shellfish (oyster sauce may contain)",
+            "gluten",
+            "molluscs",
+            "mollusks"
+        ],
+        "primary_protein": "beef",
+        "cuisine": "asian",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Beef Meatballs with Tomato Pasta",
+        "slug": "beef-meatballs-with-tomato-pasta",
+        "description": "Lean beef meatballs served with whole wheat pasta in a rich tomato sauce and a side of steamed green beans for a classic satisfying dinner.",
+        "ingredients": [
+            {
+                "name": "lean ground beef",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "whole wheat pasta",
+                "unit": "g",
+                "amount": "110"
+            },
+            {
+                "name": "passata",
+                "unit": "g",
+                "amount": "250"
+            },
+            {
+                "name": "green beans",
+                "unit": "g",
+                "amount": "180"
+            },
+            {
+                "name": "breadcrumbs",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "egg",
+                "unit": "piece",
+                "amount": "1"
+            },
+            {
+                "name": "parmesan",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "olive oil",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "garlic",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "onion",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "dried basil",
+                "unit": "g",
+                "amount": "2"
+            },
+            {
+                "name": "salt",
+                "unit": "g",
+                "amount": "3"
+            },
+            {
+                "name": "black pepper",
+                "unit": "g",
+                "amount": "2"
+            }
+        ],
+        "instructions": [
+            "Mix the ground beef with breadcrumbs, egg, parmesan, half of the minced onion, salt, and pepper, then form into small meatballs.",
+            "Heat half of the olive oil in a pan and brown the meatballs on all sides, then lower the heat and cook through.",
+            "Cook the whole wheat pasta in salted boiling water until al dente.",
+            "In a second pan, sauté the remaining onion and garlic in olive oil, add the passata and basil, and simmer for 10 minutes.",
+            "Steam the green beans until tender-crisp.",
+            "Serve the pasta with tomato sauce, beef meatballs, and green beans on the side."
+        ],
+        "prep_time_minutes": 20,
+        "cook_time_minutes": 25,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 815,
+        "protein_g": "55.00",
+        "carbs_g": "90.00",
+        "fat_g": "26.00",
+        "fiber_g": "12.00",
+        "sugar_g": "13.00",
+        "tags": [
+            "high-protein",
+            "hearty",
+            "post-workout",
+            "balanced",
+            "family-style",
+            "muscle-gain",
+            "family-friendly",
+            "classic-dinner",
+            "comfort-food",
+            "dinner",
+            "meal-prep",
+            "classic",
+            "training-day",
+            "pasta-dish",
+            "pan-seared",
+            "pasta",
+            "pan-fried",
+            "steamed",
+            "family-dinner",
+            "home-cooking",
+            "pasta dish",
+            "high-carb",
+            "lunch"
+        ],
+        "allergens": [
+            "gluten",
+            "eggs",
+            "dairy",
+            "egg"
+        ],
+        "primary_protein": "beef",
+        "cuisine": "italian",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Berry Protein Overnight Oats",
+        "slug": "berry-protein-overnight-oats",
+        "description": "Creamy overnight oats with Greek yogurt, whey protein, blueberries, banana, and a spoonful of almond butter for a balanced muscle-gain breakfast.",
+        "ingredients": [
+            {
+                "name": "rolled oats",
+                "unit": "g",
+                "amount": "70"
+            },
+            {
+                "name": "Greek yogurt",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "whey protein powder",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "semi-skimmed milk",
+                "unit": "ml",
+                "amount": "150"
+            },
+            {
+                "name": "blueberries",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "banana",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "almond butter",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "chia seeds",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "cinnamon",
+                "unit": "g",
+                "amount": "2"
+            }
+        ],
+        "instructions": [
+            "Add the rolled oats, whey protein, chia seeds, and cinnamon to a jar or bowl.",
+            "Stir in the milk and Greek yogurt until smooth and well combined.",
+            "Top with sliced banana, blueberries, and almond butter.",
+            "Cover and refrigerate overnight or for at least 6 hours.",
+            "Serve cold and stir before eating."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 570,
+        "protein_g": "35.00",
+        "carbs_g": "68.00",
+        "fat_g": "19.00",
+        "fiber_g": "10.00",
+        "sugar_g": "22.00",
+        "tags": [
+            "high-protein",
+            "meal-prep",
+            "no-cook",
+            "balanced",
+            "muscle-gain",
+            "strength-gain",
+            "high-fiber",
+            "make-ahead",
+            "quick",
+            "balanced-breakfast",
+            "post-workout",
+            "kid-friendly",
+            "overnight",
+            "high-energy",
+            "pre-workout",
+            "fiber-rich",
+            "vegetarian",
+            "overnight-oats",
+            "breakfast",
+            "strength-support",
+            "quick breakfast"
+        ],
+        "allergens": [
+            "dairy",
+            "nuts",
+            "gluten",
+            "peanuts",
+            "tree nuts"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "mixed",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Chicken Burrito Bowl with Cilantro-Lime Rice",
+        "slug": "chicken-burrito-bowl-with-cilantro-lime-rice",
+        "description": "A hearty burrito bowl with juicy pan-seared chicken, fluffy cilantro-lime rice, black beans, corn, salsa, and a little cheddar for a balanced, high-energy lunch.",
+        "ingredients": [
+            {
+                "name": "Chicken breast",
+                "unit": "g",
+                "amount": "140"
+            },
+            {
+                "name": "Long-grain rice (dry)",
+                "unit": "g",
+                "amount": "95"
+            },
+            {
+                "name": "Black beans (canned, drained)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Corn kernels (frozen or canned, drained)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Cheddar cheese, grated",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "Avocado",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Salsa",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Greek yogurt (2%)",
+                "unit": "g",
+                "amount": "50"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Lime",
+                "unit": "piece",
+                "amount": "1"
+            },
+            {
+                "name": "Fresh cilantro",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Ground cumin",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Smoked paprika",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Salt",
+                "unit": "to taste",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "to taste",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Cook the rice according to package directions. Fluff, then stir in chopped cilantro, a squeeze of lime, and a pinch of salt.",
+            "Season chicken with cumin, smoked paprika, salt, and pepper. Pan-sear in olive oil over medium-high heat for 4–6 minutes per side, then rest 3 minutes and slice.",
+            "Warm the black beans and corn in the same pan for 2–3 minutes.",
+            "Assemble the bowl: rice, chicken, beans, corn, salsa, diced avocado, grated cheddar, and a dollop of Greek yogurt. Finish with extra lime if desired."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 20,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 930,
+        "protein_g": "44.00",
+        "carbs_g": "112.00",
+        "fat_g": "34.00",
+        "fiber_g": "15.00",
+        "sugar_g": "10.00",
+        "tags": [
+            "high-protein",
+            "high-carb",
+            "post-workout",
+            "balanced",
+            "meal-prep",
+            "training-day",
+            "meal-prep-friendly",
+            "muscle-gain",
+            "pan-seared",
+            "pan-fried",
+            "rice-bowl",
+            "bowl",
+            "gluten-free",
+            "grilled",
+            "training-fuel",
+            "one-bowl"
+        ],
+        "allergens": [
+            "dairy"
+        ],
+        "primary_protein": "chicken",
+        "cuisine": "latin",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Chicken rice bowl with roasted vegetables",
+        "slug": "chicken-rice-bowl-with-roasted-vegetables",
+        "description": "A balanced bowl with grilled chicken breast, steamed rice, and oven-roasted zucchini and bell pepper, finished with a light lemon herb dressing.",
+        "ingredients": [
+            {
+                "name": "chicken breast",
+                "unit": "g",
+                "amount": "220"
+            },
+            {
+                "name": "cooked rice",
+                "unit": "g",
+                "amount": "130"
+            },
+            {
+                "name": "zucchini",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "red bell pepper",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "olive oil",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "lemon juice",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "dried oregano",
+                "unit": "g",
+                "amount": "2"
+            },
+            {
+                "name": "garlic powder",
+                "unit": "g",
+                "amount": "2"
+            },
+            {
+                "name": "salt",
+                "unit": "g",
+                "amount": "2"
+            },
+            {
+                "name": "black pepper",
+                "unit": "g",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Preheat the oven to 200°C and toss the zucchini and bell pepper with half of the olive oil, salt, and pepper.",
+            "Roast the vegetables for 20 minutes until tender and lightly browned.",
+            "Season the chicken breast with oregano, garlic powder, salt, and pepper, then grill in a hot pan until cooked through.",
+            "Warm the rice and build the bowl with rice, roasted vegetables, and sliced chicken.",
+            "Finish with lemon juice and the remaining olive oil before serving."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 25,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 570,
+        "protein_g": "60.00",
+        "carbs_g": "38.00",
+        "fat_g": "19.00",
+        "fiber_g": "6.00",
+        "sugar_g": "8.00",
+        "tags": [
+            "high-protein",
+            "balanced",
+            "meal-prep",
+            "post-workout",
+            "grilled",
+            "lunch",
+            "muscle-gain",
+            "oven-baked",
+            "roasted",
+            "family-friendly",
+            "oven-roasted",
+            "high-energy"
+        ],
+        "allergens": [
+            "dairy"
+        ],
+        "primary_protein": "chicken",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Chicken Teriyaki Rice Bowl with Broccoli",
+        "slug": "chicken-teriyaki-rice-bowl-with-broccoli",
+        "description": "Pan-seared chicken glazed in a simple teriyaki-style sauce, served over rice with steamed broccoli and sesame for a satisfying training-day lunch.",
+        "ingredients": [
+            {
+                "name": "Chicken breast",
+                "unit": "g",
+                "amount": "140"
+            },
+            {
+                "name": "Jasmine rice (dry)",
+                "unit": "g",
+                "amount": "85"
+            },
+            {
+                "name": "Broccoli florets",
+                "unit": "g",
+                "amount": "180"
+            },
+            {
+                "name": "Soy sauce",
+                "unit": "ml",
+                "amount": "20"
+            },
+            {
+                "name": "Honey",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Rice vinegar",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Fresh ginger",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Sesame oil",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Sesame seeds",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Cornstarch",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Water",
+                "unit": "ml",
+                "amount": "60"
+            }
+        ],
+        "instructions": [
+            "Cook the rice according to package directions.",
+            "Steam the broccoli for 5–6 minutes until tender-crisp.",
+            "Mix soy sauce, honey, rice vinegar, grated garlic and ginger, water, and cornstarch until smooth.",
+            "Heat sesame oil in a pan over medium-high heat. Sear chicken for 4–5 minutes per side until cooked through.",
+            "Pour in the sauce and simmer 1–2 minutes until glossy and thick, turning chicken to coat. Slice the chicken.",
+            "Assemble the bowl: rice, broccoli, chicken, and a sprinkle of sesame seeds."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 18,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 704,
+        "protein_g": "36.00",
+        "carbs_g": "85.00",
+        "fat_g": "24.00",
+        "fiber_g": "6.00",
+        "sugar_g": "11.00",
+        "tags": [
+            "high-carb",
+            "post-workout",
+            "balanced",
+            "meal-prep",
+            "high-protein",
+            "stir-fried",
+            "rice-bowl",
+            "steamed",
+            "pan-fried",
+            "stir-fry",
+            "muscle-gain",
+            "stir-fry-style",
+            "family-friendly",
+            "quick",
+            "asian-inspired"
+        ],
+        "allergens": [
+            "soy",
+            "sesame",
+            "gluten"
+        ],
+        "primary_protein": "chicken",
+        "cuisine": "asian",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Chocolate-Banana Protein Smoothie",
+        "slug": "chocolate-banana-protein-smoothie",
+        "description": "A thick, satisfying smoothie with banana, oats, soy milk, and chocolate protein—ideal for an easy protein hit between meals.",
+        "ingredients": [
+            {
+                "name": "Banana",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Unsweetened soy milk",
+                "unit": "ml",
+                "amount": "300"
+            },
+            {
+                "name": "Vegan chocolate protein powder (pea\/soy blend)",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "Rolled oats",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "Natural peanut butter",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Unsweetened cocoa powder",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Ice cubes",
+                "unit": "g",
+                "amount": "100"
+            }
+        ],
+        "instructions": [
+            "Add soy milk, banana, protein powder, oats, cocoa powder, and peanut butter to a blender.",
+            "Blend until completely smooth and creamy.",
+            "Add ice and blend again for a thicker texture.",
+            "Taste and adjust thickness with a splash of soy milk if needed.",
+            "Pour into a glass and drink immediately."
+        ],
+        "prep_time_minutes": 5,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 416,
+        "protein_g": "25.00",
+        "carbs_g": "52.00",
+        "fat_g": "11.00",
+        "fiber_g": "7.00",
+        "sugar_g": "18.00",
+        "tags": [
+            "high-protein",
+            "quick",
+            "post-workout",
+            "no-cook",
+            "smoothie"
+        ],
+        "allergens": [
+            "soy",
+            "tree nuts (almond)",
+            "gluten (oats may contain)",
+            "peanuts"
+        ],
+        "primary_protein": "mixed",
+        "cuisine": "mixed",
+        "meal_types": [
+            "snack"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Cottage Cheese Bowl with Apple and Walnuts",
+        "slug": "cottage-cheese-bowl-with-apple-and-walnuts",
+        "description": "A simple snack bowl with cottage cheese, diced apple, toasted walnuts, and a drizzle of honey, served with oatcakes on the side.",
+        "ingredients": [
+            {
+                "name": "cottage cheese",
+                "unit": "g",
+                "amount": "250"
+            },
+            {
+                "name": "apple",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "walnuts",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "honey",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "oatcakes",
+                "unit": "g",
+                "amount": "35"
+            },
+            {
+                "name": "cinnamon",
+                "unit": "g",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Toast the walnuts in a dry pan for 2 to 3 minutes until fragrant.",
+            "Dice the apple into small pieces.",
+            "Spoon the cottage cheese into a bowl and top with apple, toasted walnuts, honey, and cinnamon.",
+            "Serve with oatcakes on the side."
+        ],
+        "prep_time_minutes": 8,
+        "cook_time_minutes": 3,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 430,
+        "protein_g": "30.00",
+        "carbs_g": "46.00",
+        "fat_g": "14.00",
+        "fiber_g": "6.00",
+        "sugar_g": "24.00",
+        "tags": [
+            "high-protein",
+            "quick",
+            "no-cook",
+            "balanced",
+            "snack",
+            "vegetarian",
+            "balanced snack"
+        ],
+        "allergens": [
+            "dairy",
+            "nuts",
+            "tree nuts",
+            "gluten"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "american",
+        "meal_types": [
+            "snack"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Cottage Cheese with Pineapple and Almonds",
+        "slug": "cottage-cheese-with-pineapple-and-almonds",
+        "description": "A refreshing and protein-rich snack combining creamy cottage cheese, sweet pineapple chunks, and crunchy almonds for a quick energy boost.",
+        "ingredients": [
+            {
+                "name": "cottage cheese (2% fat)",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "pineapple (fresh, diced)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "almonds (sliced)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "honey",
+                "unit": "ml",
+                "amount": "5"
+            }
+        ],
+        "instructions": [
+            "Place cottage cheese in a bowl.",
+            "Top with diced pineapple and sliced almonds.",
+            "Drizzle with honey and mix gently.",
+            "Serve immediately or chill for 10 minutes for a refreshing snack."
+        ],
+        "prep_time_minutes": 5,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 253,
+        "protein_g": "12.00",
+        "carbs_g": "30.00",
+        "fat_g": "9.00",
+        "fiber_g": "4.00",
+        "sugar_g": "22.00",
+        "tags": [
+            "high-protein",
+            "quick",
+            "snack",
+            "post-workout",
+            "vegetarian",
+            "light",
+            "no-cook",
+            "balanced"
+        ],
+        "allergens": [
+            "dairy",
+            "nuts"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "mixed",
+        "meal_types": [
+            "snack"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Egg Fried Rice with Edamame and Vegetables",
+        "slug": "egg-fried-rice-with-edamame-and-vegetables",
+        "description": "A classic, savory fried rice with fluffy scrambled eggs, edamame, and crisp veggies—perfect for meal prep and post-training carbs.",
+        "ingredients": [
+            {
+                "name": "Cooked jasmine rice (cooled)",
+                "unit": "g",
+                "amount": "300"
+            },
+            {
+                "name": "Eggs",
+                "unit": "piece",
+                "amount": "2"
+            },
+            {
+                "name": "Shelled edamame (frozen)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Carrot (diced)",
+                "unit": "g",
+                "amount": "70"
+            },
+            {
+                "name": "Frozen peas",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Spring onion (sliced)",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "Soy sauce",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "Sesame oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "Neutral cooking oil",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic (minced)",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Fresh ginger (grated)",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Whisk the eggs with a pinch of pepper. Heat a large pan or wok with half the neutral oil and scramble the eggs; remove to a plate.",
+            "Add remaining oil to the pan. Sauté garlic, ginger, carrot, and peas for 2–3 minutes.",
+            "Add edamame and the cold cooked rice; stir-fry 3–4 minutes, breaking up clumps until hot.",
+            "Stir in soy sauce and sesame oil, then fold the scrambled eggs back in.",
+            "Finish with spring onion and serve hot."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 12,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 683,
+        "protein_g": "30.00",
+        "carbs_g": "92.00",
+        "fat_g": "20.00",
+        "fiber_g": "10.00",
+        "sugar_g": "8.00",
+        "tags": [
+            "high-protein",
+            "stir-fry",
+            "post-workout",
+            "quick",
+            "one-pan",
+            "balanced",
+            "meal-prep",
+            "high-carb"
+        ],
+        "allergens": [
+            "eggs",
+            "soy",
+            "sesame"
+        ],
+        "primary_protein": "eggs",
+        "cuisine": "asian",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Garlic Shrimp with Zucchini Noodles",
+        "slug": "garlic-shrimp-with-zucchini-noodles",
+        "description": "A light and flavorful dinner featuring succulent garlic shrimp served over fresh zucchini noodles, tossed in a hint of olive oil and lemon.",
+        "ingredients": [
+            {
+                "name": "shrimp",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "zucchini",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "garlic",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "olive oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "lemon juice",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "salt",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "red pepper flakes",
+                "unit": "pinch",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Spiralize the zucchini into noodles and set aside.",
+            "Heat olive oil in a pan over medium heat. Add minced garlic and sauté for 30 seconds.",
+            "Add shrimp to the pan, season with salt, black pepper, and red pepper flakes, and cook for 2-3 minutes on each side until pink.",
+            "Remove the pan from heat and stir in lemon juice.",
+            "In a separate pan, lightly sauté the zucchini noodles for 1-2 minutes until just tender.",
+            "Serve the garlic shrimp over the zucchini noodles."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 8,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 273,
+        "protein_g": "35.00",
+        "carbs_g": "12.00",
+        "fat_g": "10.00",
+        "fiber_g": "2.00",
+        "sugar_g": "5.00",
+        "tags": [
+            "high-protein",
+            "low-carb",
+            "quick",
+            "stir-fried",
+            "ketogenic",
+            "dinner",
+            "light"
+        ],
+        "allergens": [
+            "shellfish",
+            "dairy"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Greek Yogurt Berry Overnight Oats",
+        "slug": "greek-yogurt-berry-overnight-oats",
+        "description": "Creamy overnight oats layered with Greek yogurt, berries, chia seeds, and a spoonful of almond butter for a balanced, high-protein breakfast.",
+        "ingredients": [
+            {
+                "name": "rolled oats",
+                "unit": "g",
+                "amount": "70"
+            },
+            {
+                "name": "Greek yogurt",
+                "unit": "g",
+                "amount": "250"
+            },
+            {
+                "name": "semi-skimmed milk",
+                "unit": "ml",
+                "amount": "150"
+            },
+            {
+                "name": "blueberries",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "banana",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "chia seeds",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "almond butter",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "honey",
+                "unit": "g",
+                "amount": "10"
+            }
+        ],
+        "instructions": [
+            "Add the rolled oats, milk, chia seeds, and half of the Greek yogurt to a jar or container.",
+            "Stir well, cover, and refrigerate overnight or for at least 4 hours.",
+            "Top with the remaining Greek yogurt, blueberries, sliced banana, and almond butter before serving.",
+            "Finish with a drizzle of honey and serve chilled."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 620,
+        "protein_g": "36.00",
+        "carbs_g": "74.00",
+        "fat_g": "21.00",
+        "fiber_g": "11.00",
+        "sugar_g": "20.00",
+        "tags": [
+            "high-protein",
+            "meal-prep",
+            "quick",
+            "balanced",
+            "overnight-oats",
+            "make-ahead",
+            "no-cook",
+            "weight-loss",
+            "training-day-breakfast",
+            "breakfast",
+            "vegetarian",
+            "muscle-gain"
+        ],
+        "allergens": [
+            "dairy",
+            "nuts",
+            "gluten",
+            "tree nuts",
+            "peanuts"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "mixed",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Grilled Chicken and Quinoa Salad",
+        "slug": "grilled-chicken-and-quinoa-salad",
+        "description": "A hearty salad with grilled chicken breast, protein-rich quinoa, fresh vegetables, and a light lemon-olive oil dressing for a nutritious and filling lunch.",
+        "ingredients": [
+            {
+                "name": "chicken breast",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "quinoa, cooked",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "cucumber, diced",
+                "unit": "g",
+                "amount": "50"
+            },
+            {
+                "name": "cherry tomatoes, halved",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "red onion, thinly sliced",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "olive oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "salt and pepper",
+                "unit": "",
+                "amount": "to taste"
+            }
+        ],
+        "instructions": [
+            "Season the chicken breast with salt and pepper, then grill or pan-fry for 6-7 minutes on each side until fully cooked. Let it rest for 5 minutes, then slice.",
+            "In a bowl, combine the cooked quinoa, diced cucumber, halved cherry tomatoes, and sliced red onion.",
+            "In a small separate bowl, whisk together olive oil, lemon juice, salt, and pepper to make the dressing.",
+            "Add the sliced chicken to the quinoa and vegetable mixture.",
+            "Drizzle the dressing over the salad and toss gently to combine.",
+            "Serve immediately or refrigerate for up to 2 hours."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 15,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 485,
+        "protein_g": "48.00",
+        "carbs_g": "38.00",
+        "fat_g": "16.00",
+        "fiber_g": "7.00",
+        "sugar_g": "5.00",
+        "tags": [
+            "high-protein",
+            "meal-prep",
+            "balanced",
+            "post-workout"
+        ],
+        "allergens": [
+            "gluten",
+            "dairy"
+        ],
+        "primary_protein": "chicken",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Lentil Bolognese with Whole Wheat Spaghetti",
+        "slug": "lentil-bolognese-with-whole-wheat-spaghetti",
+        "description": "Hearty lentil-tomato sauce simmered with classic aromatics and served over whole wheat spaghetti—comforting, high-carb and protein-friendly.",
+        "ingredients": [
+            {
+                "name": "Whole wheat spaghetti (dry)",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "Cooked brown lentils (drained)",
+                "unit": "g",
+                "amount": "220"
+            },
+            {
+                "name": "Canned crushed tomatoes",
+                "unit": "g",
+                "amount": "250"
+            },
+            {
+                "name": "Onion (diced)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Carrot (diced)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Celery (diced)",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Garlic (minced)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "Tomato paste",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "Dried oregano",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Dried basil",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "tsp",
+                "amount": "0.5"
+            },
+            {
+                "name": "Salt",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Nutritional yeast",
+                "unit": "g",
+                "amount": "10"
+            }
+        ],
+        "instructions": [
+            "Cook spaghetti in salted water until al dente; reserve a splash of pasta water and drain.",
+            "Heat olive oil in a pot. Sauté onion, carrot, and celery 6–8 minutes until softened.",
+            "Add garlic and tomato paste; cook 1 minute until fragrant.",
+            "Stir in crushed tomatoes, lentils, oregano, basil, salt, and pepper. Simmer 10–12 minutes, adding a little water if needed.",
+            "Toss pasta with the sauce, loosening with reserved pasta water if necessary.",
+            "Serve topped with nutritional yeast."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 25,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 800,
+        "protein_g": "35.00",
+        "carbs_g": "105.00",
+        "fat_g": "26.00",
+        "fiber_g": "18.00",
+        "sugar_g": "12.00",
+        "tags": [
+            "high-protein",
+            "comfort-food",
+            "meal-prep",
+            "high-fiber",
+            "post-workout",
+            "balanced",
+            "vegetarian",
+            "stovetop",
+            "family-friendly",
+            "high-carb",
+            "family-style"
+        ],
+        "allergens": [
+            "gluten",
+            "soy",
+            "dairy"
+        ],
+        "primary_protein": "legumes",
+        "cuisine": "mediterranean",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Paneer Tikka Rice Bowl with Cucumber Raita",
+        "slug": "paneer-tikka-rice-bowl-with-cucumber-raita",
+        "description": "Oven-baked paneer tikka over fluffy basmati rice with a refreshing cucumber raita and crisp salad for a balanced, high-protein lunch.",
+        "ingredients": [
+            {
+                "name": "Basmati rice (dry)",
+                "unit": "g",
+                "amount": "95"
+            },
+            {
+                "name": "Paneer",
+                "unit": "g",
+                "amount": "170"
+            },
+            {
+                "name": "Greek yogurt (2%)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Bell pepper",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "Red onion",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Tikka masala spice mix",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Cucumber",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Fresh coriander",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Salt",
+                "unit": "tsp",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Cook basmati rice according to package directions; keep warm.",
+            "Heat oven to 220°C. Toss paneer cubes, bell pepper, and red onion with olive oil, tikka spice mix, half the yogurt, lemon juice, and salt.",
+            "Spread on a baking tray and bake 12–15 minutes, turning once, until lightly charred at the edges.",
+            "Make raita: mix remaining yogurt with grated cucumber, a pinch of salt, and chopped coriander.",
+            "Assemble the bowl: rice on the bottom, paneer tikka on top, raita on the side."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 20,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 833,
+        "protein_g": "45.00",
+        "carbs_g": "100.00",
+        "fat_g": "25.00",
+        "fiber_g": "8.00",
+        "sugar_g": "10.00",
+        "tags": [
+            "high-protein",
+            "muscle-gain",
+            "balanced",
+            "oven-baked",
+            "meal-prep",
+            "post-workout",
+            "high-carb"
+        ],
+        "allergens": [
+            "dairy"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "middle_eastern",
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Peanut Butter Banana Oatmeal with Greek Yogurt",
+        "slug": "peanut-butter-banana-oatmeal-with-greek-yogurt",
+        "description": "A hearty bowl of creamy oats topped with sliced bananas, rich peanut butter, and a dollop of Greek yogurt for extra protein. Drizzled with honey and sprinkled with chia seeds for added texture and nutrients.",
+        "ingredients": [
+            {
+                "name": "rolled oats",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "milk (1.5% fat)",
+                "unit": "ml",
+                "amount": "250"
+            },
+            {
+                "name": "Greek yogurt (10% fat)",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "banana",
+                "unit": "medium",
+                "amount": "1"
+            },
+            {
+                "name": "peanut butter (smooth)",
+                "unit": "g",
+                "amount": "30"
+            },
+            {
+                "name": "honey",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "chia seeds",
+                "unit": "g",
+                "amount": "10"
+            }
+        ],
+        "instructions": [
+            "Bring milk to a gentle simmer in a saucepan.",
+            "Stir in rolled oats and cook over low heat for 5-7 minutes, stirring occasionally, until creamy.",
+            "Remove from heat and let it sit for 2 minutes.",
+            "Slice the banana and mix half into the oatmeal.",
+            "Top the oatmeal with Greek yogurt, peanut butter, remaining banana slices, honey, and chia seeds.",
+            "Stir gently before serving."
+        ],
+        "prep_time_minutes": 5,
+        "cook_time_minutes": 10,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 850,
+        "protein_g": "55.00",
+        "carbs_g": "95.00",
+        "fat_g": "28.00",
+        "fiber_g": "14.00",
+        "sugar_g": "30.00",
+        "tags": [
+            "high-protein",
+            "high-fiber",
+            "quick",
+            "meal-prep",
+            "muscle-gain",
+            "vegetarian",
+            "post-workout"
+        ],
+        "allergens": [
+            "dairy",
+            "peanuts",
+            "gluten"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "mixed",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Peanut Butter Banana Protein Smoothie",
+        "slug": "peanut-butter-banana-protein-smoothie",
+        "description": "A thick, satisfying smoothie with whey, banana, oats, and peanut butter—perfect between meals to keep calories and protein on track without feeling heavy.",
+        "ingredients": [
+            {
+                "name": "Whey protein powder",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "Banana",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Rolled oats",
+                "unit": "g",
+                "amount": "25"
+            },
+            {
+                "name": "Peanut butter",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Unsweetened almond milk (or dairy milk)",
+                "unit": "ml",
+                "amount": "200"
+            },
+            {
+                "name": "Ground cinnamon",
+                "unit": "g",
+                "amount": "1"
+            },
+            {
+                "name": "Ice cubes (optional)",
+                "unit": "pieces",
+                "amount": "4"
+            }
+        ],
+        "instructions": [
+            "Add almond milk, banana, oats, whey protein, peanut butter, and cinnamon to a blender.",
+            "Blend until completely smooth (30–45 seconds). Add ice and blend again if you want it thicker.",
+            "Taste and adjust thickness with a splash more milk if needed. Drink immediately."
+        ],
+        "prep_time_minutes": 5,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 336,
+        "protein_g": "29.00",
+        "carbs_g": "41.00",
+        "fat_g": "7.00",
+        "fiber_g": "5.00",
+        "sugar_g": "18.00",
+        "tags": [
+            "post-workout",
+            "quick",
+            "protein-rich",
+            "snack",
+            "protein",
+            "protein-smoothie",
+            "high-protein",
+            "smoothie",
+            "drinkable-snack",
+            "pre-workout",
+            "weight-loss",
+            "portable",
+            "drinkable",
+            "high-carb",
+            "muscle-gain",
+            "calorie-dense",
+            "no-cook"
+        ],
+        "allergens": [
+            "milk",
+            "peanuts",
+            "soy",
+            "gluten",
+            "dairy",
+            "Peanuts",
+            "Dairy",
+            "Milk",
+            "Tree nuts",
+            "gluten (oats may contain)",
+            "Gluten (may contain, from oats)",
+            "Gluten",
+            "gluten (possible cross-contamination in oats)",
+            "Gluten (may contain if oats cross-contaminated)",
+            "nuts",
+            "peanut",
+            "tree nuts"
+        ],
+        "primary_protein": null,
+        "cuisine": null,
+        "meal_types": [
+            "snack"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Pork Tenderloin with Roasted Potatoes and Green Beans",
+        "slug": "pork-tenderloin-with-roasted-potatoes-and-green-beans",
+        "description": "Juicy herb-rubbed pork tenderloin served with crispy roasted potatoes and simply sautéed green beans—classic strength-focused dinner plate.",
+        "ingredients": [
+            {
+                "name": "Pork tenderloin",
+                "unit": "g",
+                "amount": "180"
+            },
+            {
+                "name": "Potatoes",
+                "unit": "g",
+                "amount": "450"
+            },
+            {
+                "name": "Green beans",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "Butter",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Rosemary (fresh or dried)",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Paprika",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Salt",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            }
+        ],
+        "instructions": [
+            "Heat oven to 220°C\/425°F. Cut potatoes into wedges, toss with 10g olive oil, paprika, rosemary, salt and pepper; roast 30–35 minutes, flipping once.",
+            "Season pork with salt, pepper and rosemary. Sear in a hot pan with 5g olive oil for 2–3 minutes per side until browned.",
+            "Transfer pork to the oven (or keep in the pan if oven-safe) and roast 12–15 minutes until just cooked; rest 5 minutes, then slice.",
+            "Sauté green beans in butter with minced garlic for 5–6 minutes until bright and tender-crisp; finish with lemon juice and a pinch of salt.",
+            "Plate sliced pork with roasted potatoes and green beans."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 35,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 930,
+        "protein_g": "44.00",
+        "carbs_g": "108.00",
+        "fat_g": "33.00",
+        "fiber_g": "12.00",
+        "sugar_g": "10.00",
+        "tags": [
+            "balanced",
+            "high-protein",
+            "oven-baked",
+            "training-day",
+            "family-style",
+            "balanced-dinner",
+            "dinner",
+            "family-dinner",
+            "family-friendly",
+            "strength-gain",
+            "home-cooking",
+            "hearty",
+            "sheet-pan",
+            "muscle-gain",
+            "meal-prep",
+            "high-carb",
+            "pan-seared",
+            "lean",
+            "comfort-food",
+            "recovery-dinner",
+            "strength-support",
+            "post-workout",
+            "hearty-dinner",
+            "classic-dinner"
+        ],
+        "allergens": [
+            "mustard",
+            "dairy"
+        ],
+        "primary_protein": "pork",
+        "cuisine": "mixed",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Protein Overnight Oats with Banana and Peanut Butter",
+        "slug": "protein-overnight-oats-with-banana-and-peanut-butter",
+        "description": "Creamy overnight oats blended with soy yogurt and vanilla protein, topped with banana and a drizzle of peanut butter for a balanced, training-friendly breakfast.",
+        "ingredients": [
+            {
+                "name": "Rolled oats",
+                "unit": "g",
+                "amount": "70"
+            },
+            {
+                "name": "Unsweetened soy milk",
+                "unit": "ml",
+                "amount": "250"
+            },
+            {
+                "name": "Unsweetened soy yogurt",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "Vanilla pea protein powder",
+                "unit": "g",
+                "amount": "35"
+            },
+            {
+                "name": "Chia seeds",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Banana",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Peanut butter",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "Cinnamon",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Pinch of salt",
+                "unit": "pinch",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "In a bowl or jar, mix oats, soy milk, soy yogurt, protein powder, chia seeds, cinnamon, and a pinch of salt until smooth.",
+            "Cover and refrigerate for at least 4 hours (or overnight) to thicken.",
+            "In the morning, stir well; add a splash of soy milk if you want it looser.",
+            "Top with sliced banana and drizzle peanut butter over the top.",
+            "Serve chilled (or warm gently in the microwave if preferred)."
+        ],
+        "prep_time_minutes": 8,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 698,
+        "protein_g": "45.00",
+        "carbs_g": "84.00",
+        "fat_g": "20.00",
+        "fiber_g": "13.00",
+        "sugar_g": "18.00",
+        "tags": [
+            "high-protein",
+            "high-carb",
+            "muscle-gain",
+            "meal-prep",
+            "quick",
+            "breakfast",
+            "post-workout",
+            "no-cook",
+            "fiber-rich",
+            "balanced",
+            "make-ahead",
+            "strength-gain",
+            "overnight",
+            "training-day",
+            "overnight-oats",
+            "oats",
+            "balanced-breakfast",
+            "oatmeal",
+            "pre-workout",
+            "strength",
+            "high-fiber"
+        ],
+        "allergens": [
+            "dairy",
+            "peanuts",
+            "nuts",
+            "soy",
+            "gluten (oats may contain)"
+        ],
+        "primary_protein": "legumes",
+        "cuisine": "american",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Scrambled Eggs with Smoked Salmon and Avocado Toast",
+        "slug": "scrambled-eggs-with-smoked-salmon-and-avocado-toast",
+        "description": "A protein-packed breakfast with fluffy scrambled eggs, smoked salmon, and creamy avocado on whole-grain toast. Perfect for a balanced start to the day.",
+        "ingredients": [
+            {
+                "name": "eggs",
+                "unit": "pieces",
+                "amount": "4"
+            },
+            {
+                "name": "smoked salmon",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "whole-grain bread",
+                "unit": "slices",
+                "amount": "2"
+            },
+            {
+                "name": "avocado",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "olive oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "salt",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "lemon juice",
+                "unit": "ml",
+                "amount": "5"
+            }
+        ],
+        "instructions": [
+            "Whisk the eggs in a bowl with salt and black pepper.",
+            "Heat olive oil in a non-stick pan over medium heat and scramble the eggs until soft and fluffy.",
+            "Toast the whole-grain bread slices until crispy.",
+            "Mash the avocado and spread it evenly on the toasted bread. Drizzle with lemon juice.",
+            "Place the scrambled eggs on one slice of toast and top with smoked salmon. Serve with the second slice of toast on the side."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 10,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 880,
+        "protein_g": "83.00",
+        "carbs_g": "78.00",
+        "fat_g": "27.00",
+        "fiber_g": "12.00",
+        "sugar_g": "6.00",
+        "tags": [
+            "high-protein",
+            "quick",
+            "balanced",
+            "post-workout"
+        ],
+        "allergens": [
+            "eggs",
+            "fish",
+            "gluten",
+            "dairy"
+        ],
+        "primary_protein": "eggs",
+        "cuisine": "mixed",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Smoky Tempeh Burrito Bowl with Cilantro-Lime Rice",
+        "slug": "smoky-tempeh-burrito-bowl-with-cilantro-lime-rice",
+        "description": "A restaurant-style burrito bowl with smoky seared tempeh, cilantro-lime rice, black beans, corn, crunchy veg, and a tangy Greek-yogurt crema.",
+        "ingredients": [
+            {
+                "name": "Tempeh",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "Cooked white rice",
+                "unit": "g",
+                "amount": "250"
+            },
+            {
+                "name": "Black beans (cooked, drained)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Corn kernels",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Red bell pepper (diced)",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "Cherry tomatoes (halved)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Romaine lettuce (shredded)",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Avocado",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Greek yogurt (0–2% fat)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Lime (juice + zest)",
+                "unit": "each",
+                "amount": "1"
+            },
+            {
+                "name": "Fresh cilantro (chopped)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Smoked paprika",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Ground cumin",
+                "unit": "tsp",
+                "amount": "1"
+            },
+            {
+                "name": "Garlic powder",
+                "unit": "tsp",
+                "amount": "0.5"
+            },
+            {
+                "name": "Soy sauce or tamari",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Salt",
+                "unit": "to taste",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "to taste",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Slice tempeh into thin strips. Toss with soy sauce (or tamari), smoked paprika, cumin, garlic powder, and black pepper.",
+            "Heat olive oil in a skillet over medium-high heat. Sear tempeh 3–4 minutes per side until browned and smoky.",
+            "Stir lime juice, lime zest, and chopped cilantro into the warm cooked rice; season lightly with salt.",
+            "Make crema: mix Greek yogurt with a squeeze of lime juice, a pinch of salt, and pepper. Thin with 1–2 tbsp water if needed.",
+            "Assemble bowls: cilantro-lime rice, black beans, corn, lettuce, tomatoes, bell pepper, avocado, and seared tempeh.",
+            "Drizzle with yogurt crema and add extra cilantro and lime if desired."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 15,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 840,
+        "protein_g": "52.00",
+        "carbs_g": "113.00",
+        "fat_g": "23.00",
+        "fiber_g": "18.00",
+        "sugar_g": "11.00",
+        "tags": [
+            "high-protein",
+            "vegetarian",
+            "meal-prep",
+            "post-workout",
+            "high-fiber",
+            "strength",
+            "muscle-gain",
+            "meal-prep-friendly",
+            "balanced",
+            "Mexican-inspired",
+            "lunch",
+            "batch-cook"
+        ],
+        "allergens": [
+            "soy",
+            "dairy"
+        ],
+        "primary_protein": null,
+        "cuisine": null,
+        "meal_types": [
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Spinach & Feta Egg-White Scramble with Wholegrain Toast",
+        "slug": "spinach-feta-egg-white-scramble-with-wholegrain-toast",
+        "description": "Fluffy egg-white scramble with wilted spinach and tangy feta, served with a slice of toasted wholegrain bread for a satisfying, low-carb-lean breakfast.",
+        "ingredients": [
+            {
+                "name": "Egg whites",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "Whole egg",
+                "unit": "piece",
+                "amount": "1"
+            },
+            {
+                "name": "Fresh spinach",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Feta cheese",
+                "unit": "g",
+                "amount": "30"
+            },
+            {
+                "name": "Wholegrain bread",
+                "unit": "g",
+                "amount": "40"
+            },
+            {
+                "name": "Olive oil",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Salt",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            }
+        ],
+        "instructions": [
+            "Toast the wholegrain bread until golden.",
+            "Heat olive oil in a nonstick pan over medium heat. Add spinach and cook 1–2 minutes until wilted.",
+            "Whisk egg whites with the whole egg, salt, and pepper. Pour into the pan.",
+            "Cook gently, stirring, until softly set. Crumble feta over the top and fold through for 30 seconds.",
+            "Serve the scramble with the toast on the side."
+        ],
+        "prep_time_minutes": 5,
+        "cook_time_minutes": 7,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 419,
+        "protein_g": "41.00",
+        "carbs_g": "22.00",
+        "fat_g": "18.00",
+        "fiber_g": "5.00",
+        "sugar_g": "4.00",
+        "tags": [
+            "high-protein",
+            "balanced",
+            "quick",
+            "breakfast",
+            "pan-fried",
+            "savory-breakfast",
+            "low-carb",
+            "low-sugar"
+        ],
+        "allergens": [
+            "eggs",
+            "dairy",
+            "gluten"
+        ],
+        "primary_protein": "eggs",
+        "cuisine": "mixed",
+        "meal_types": [
+            "breakfast"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Spinach Ricotta Pasta Bake",
+        "slug": "spinach-ricotta-pasta-bake",
+        "description": "Comforting baked pasta with ricotta, spinach, tomato sauce, and mozzarella for a satisfying vegetarian dinner with classic Italian flavors.",
+        "ingredients": [
+            {
+                "name": "penne pasta",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "ricotta",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "mozzarella",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "spinach",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "tomato passata",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "onion",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "garlic",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "olive oil",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Parmesan",
+                "unit": "g",
+                "amount": "15"
+            },
+            {
+                "name": "dried basil",
+                "unit": "g",
+                "amount": "2"
+            }
+        ],
+        "instructions": [
+            "Cook the penne in salted water until just al dente, then drain.",
+            "Sauté the onion and garlic in olive oil, add the spinach, and cook until wilted.",
+            "Stir in the tomato passata, basil, and ricotta until combined into a creamy sauce.",
+            "Fold in the cooked pasta, transfer to a baking dish, and top with mozzarella and Parmesan.",
+            "Bake at 190°C for 20 minutes until bubbling and lightly golden on top."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 30,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 689,
+        "protein_g": "30.00",
+        "carbs_g": "90.00",
+        "fat_g": "22.00",
+        "fiber_g": "9.00",
+        "sugar_g": "12.00",
+        "tags": [
+            "high-protein",
+            "comfort-food",
+            "vegetarian",
+            "oven-baked",
+            "balanced",
+            "meal-prep"
+        ],
+        "allergens": [
+            "dairy",
+            "gluten"
+        ],
+        "primary_protein": "dairy",
+        "cuisine": "italian",
+        "meal_types": [
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Teriyaki Salmon Rice Bowl",
+        "slug": "teriyaki-salmon-rice-bowl",
+        "description": "Pan-seared salmon with glossy teriyaki sauce served over fluffy rice with steamed edamame and crisp cucumber for a balanced, hearty lunch.",
+        "ingredients": [
+            {
+                "name": "Salmon fillet (skinless)",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Jasmine rice (dry)",
+                "unit": "g",
+                "amount": "85"
+            },
+            {
+                "name": "Edamame (shelled, frozen)",
+                "unit": "g",
+                "amount": "100"
+            },
+            {
+                "name": "Cucumber",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Carrot",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Soy sauce",
+                "unit": "ml",
+                "amount": "15"
+            },
+            {
+                "name": "Mirin",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Honey",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Rice vinegar",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "Sesame oil",
+                "unit": "ml",
+                "amount": "5"
+            },
+            {
+                "name": "Sesame seeds",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Neutral oil (for pan)",
+                "unit": "ml",
+                "amount": "5"
+            }
+        ],
+        "instructions": [
+            "Cook rice according to package directions and keep warm.",
+            "Whisk soy sauce, mirin, honey, and rice vinegar in a small bowl.",
+            "Steam edamame for 4–5 minutes; slice cucumber and julienne the carrot.",
+            "Pan-sear salmon in neutral oil over medium-high heat for 3–4 minutes per side until cooked through.",
+            "Pour in the sauce and simmer 30–60 seconds to glaze the salmon.",
+            "Assemble the bowl: rice, edamame, cucumber, carrot, salmon; finish with sesame oil and sesame seeds."
+        ],
+        "prep_time_minutes": 15,
+        "cook_time_minutes": 15,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 785,
+        "protein_g": "30.00",
+        "carbs_g": "101.00",
+        "fat_g": "30.00",
+        "fiber_g": "8.00",
+        "sugar_g": "12.00",
+        "tags": [
+            "high-protein",
+            "post-workout",
+            "balanced",
+            "meal-prep",
+            "athlete-friendly",
+            "lunch",
+            "omega-3",
+            "oven-baked",
+            "muscle-gain",
+            "rice-bowl",
+            "quick dinner",
+            "meal-bowl",
+            "rice bowl",
+            "high-carb",
+            "lunch-bowl"
+        ],
+        "allergens": [
+            "fish",
+            "soy",
+            "sesame"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "asian",
+        "meal_types": [
+            "lunch",
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Tofu & Vegetable Stir-Fry with Jasmine Rice",
+        "slug": "tofu-vegetable-stir-fry-with-jasmine-rice",
+        "description": "Crisp-tender vegetables and golden tofu in a savory ginger-garlic sauce, served over jasmine rice for a satisfying, balanced dinner.",
+        "ingredients": [
+            {
+                "name": "Jasmine rice (dry)",
+                "unit": "g",
+                "amount": "90"
+            },
+            {
+                "name": "Firm tofu",
+                "unit": "g",
+                "amount": "200"
+            },
+            {
+                "name": "Broccoli florets",
+                "unit": "g",
+                "amount": "150"
+            },
+            {
+                "name": "Red bell pepper",
+                "unit": "g",
+                "amount": "120"
+            },
+            {
+                "name": "Carrot",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Sesame oil",
+                "unit": "g",
+                "amount": "8"
+            },
+            {
+                "name": "Neutral cooking oil (e.g., rapeseed\/canola)",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Soy sauce",
+                "unit": "ml",
+                "amount": "20"
+            },
+            {
+                "name": "Rice vinegar",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Honey",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Fresh ginger (grated)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Garlic (minced)",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Cornstarch",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Water",
+                "unit": "ml",
+                "amount": "50"
+            },
+            {
+                "name": "Sesame seeds",
+                "unit": "g",
+                "amount": "5"
+            }
+        ],
+        "instructions": [
+            "Cook jasmine rice according to package directions.",
+            "Press tofu for 5 minutes, then cut into cubes. Toss with cornstarch and a pinch of salt.",
+            "Heat neutral oil in a wok\/pan over medium-high heat. Sear tofu 6–8 minutes, turning, until golden; remove to a plate.",
+            "Add broccoli, pepper, and carrot to the pan with a splash of water. Stir-fry 4–5 minutes until crisp-tender.",
+            "Whisk soy sauce, rice vinegar, honey, ginger, garlic, water, and sesame oil. Pour into the pan, add tofu back, and toss 1–2 minutes until glossy. Sprinkle sesame seeds and serve over rice."
+        ],
+        "prep_time_minutes": 12,
+        "cook_time_minutes": 18,
+        "difficulty": "Medium",
+        "servings": 1,
+        "calories": 775,
+        "protein_g": "38.00",
+        "carbs_g": "92.00",
+        "fat_g": "28.00",
+        "fiber_g": "10.00",
+        "sugar_g": "12.00",
+        "tags": [
+            "high-protein",
+            "stir-fry",
+            "balanced",
+            "training-day",
+            "plant-forward",
+            "post-workout",
+            "vegetarian",
+            "dinner"
+        ],
+        "allergens": [
+            "soy",
+            "sesame",
+            "gluten"
+        ],
+        "primary_protein": "tofu",
+        "cuisine": "asian",
+        "meal_types": [
+            "lunch",
+            "dinner"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Tuna Salad Sandwich on Wholegrain Bread",
+        "slug": "tuna-salad-sandwich-on-wholegrain-bread",
+        "description": "Classic tuna salad with crunchy celery and a touch of yogurt-mayo, served on wholegrain bread for a protein-forward afternoon boost.",
+        "ingredients": [
+            {
+                "name": "Canned tuna in water (drained)",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Wholegrain bread",
+                "unit": "g",
+                "amount": "90"
+            },
+            {
+                "name": "Greek yogurt (2%)",
+                "unit": "g",
+                "amount": "30"
+            },
+            {
+                "name": "Mayonnaise",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Celery",
+                "unit": "g",
+                "amount": "40"
+            },
+            {
+                "name": "Dijon mustard",
+                "unit": "g",
+                "amount": "5"
+            },
+            {
+                "name": "Lemon juice",
+                "unit": "ml",
+                "amount": "10"
+            },
+            {
+                "name": "Salt",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "Black pepper",
+                "unit": "pinch",
+                "amount": "1"
+            },
+            {
+                "name": "Lettuce leaves",
+                "unit": "g",
+                "amount": "30"
+            }
+        ],
+        "instructions": [
+            "In a bowl, mix tuna, Greek yogurt, mayonnaise, mustard, lemon juice, finely chopped celery, salt, and pepper.",
+            "Toast the bread lightly if desired.",
+            "Pile the tuna salad onto one slice, add lettuce, and close with the second slice.",
+            "Cut in half and serve."
+        ],
+        "prep_time_minutes": 10,
+        "cook_time_minutes": 2,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 359,
+        "protein_g": "22.00",
+        "carbs_g": "40.00",
+        "fat_g": "11.00",
+        "fiber_g": "7.00",
+        "sugar_g": "6.00",
+        "tags": [
+            "high-protein",
+            "quick",
+            "portable",
+            "snack",
+            "no-cook",
+            "post-workout",
+            "no-fuss",
+            "sandwich",
+            "balanced",
+            "high-carb",
+            "post-school"
+        ],
+        "allergens": [
+            "fish",
+            "gluten",
+            "eggs",
+            "mustard",
+            "dairy"
+        ],
+        "primary_protein": "fish",
+        "cuisine": "american",
+        "meal_types": [
+            "snack",
+            "lunch"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    },
+    {
+        "name": "Turkey & Cheese Wholegrain Sandwich with Apple",
+        "slug": "turkey-cheese-wholegrain-sandwich-with-apple",
+        "description": "A simple, satisfying sandwich with lean turkey and cheddar on wholegrain bread, paired with a crisp apple for extra carbs and fiber.",
+        "ingredients": [
+            {
+                "name": "Wholegrain bread",
+                "unit": "g",
+                "amount": "80"
+            },
+            {
+                "name": "Turkey breast slices",
+                "unit": "g",
+                "amount": "70"
+            },
+            {
+                "name": "Cheddar cheese",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "Lettuce",
+                "unit": "g",
+                "amount": "20"
+            },
+            {
+                "name": "Tomato",
+                "unit": "g",
+                "amount": "60"
+            },
+            {
+                "name": "Mustard",
+                "unit": "g",
+                "amount": "10"
+            },
+            {
+                "name": "Apple",
+                "unit": "g",
+                "amount": "150"
+            }
+        ],
+        "instructions": [
+            "Wash and slice the tomato; rinse the lettuce.",
+            "Spread mustard on one slice of bread.",
+            "Layer turkey, cheddar, lettuce, and tomato; close the sandwich with the second slice.",
+            "Serve with the apple on the side."
+        ],
+        "prep_time_minutes": 6,
+        "cook_time_minutes": 0,
+        "difficulty": "Easy",
+        "servings": 1,
+        "calories": 390,
+        "protein_g": "22.00",
+        "carbs_g": "45.00",
+        "fat_g": "13.00",
+        "fiber_g": "7.00",
+        "sugar_g": "16.00",
+        "tags": [
+            "quick",
+            "portable",
+            "balanced",
+            "snack",
+            "no-cook",
+            "school-friendly",
+            "high-protein",
+            "post-workout",
+            "sandwich",
+            "high-carb",
+            "kid-friendly"
+        ],
+        "allergens": [
+            "gluten",
+            "dairy",
+            "eggs"
+        ],
+        "primary_protein": "poultry",
+        "cuisine": "american",
+        "meal_types": [
+            "snack"
+        ],
+        "is_verified": false,
+        "needs_translation": false
+    }
+]

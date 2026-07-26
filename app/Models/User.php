@@ -3,22 +3,27 @@
 namespace App\Models;
 
 use App\Enums\UserSource;
+use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Password;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use NoopStudios\LaravelRevenueCat\Concerns\Billable;
+use NotificationChannels\Expo\ExpoPushToken;
 
 class User extends Authenticatable implements HasLocalePreference, MustVerifyEmail
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    /** @use HasFactory<UserFactory> */
     use Billable, HasApiTokens, HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
@@ -32,6 +37,10 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         'password',
         'locale',
         'source',
+        'trial_ends_at',
+        'provider',
+        'provider_id',
+        'avatar',
     ];
 
     /**
@@ -58,6 +67,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'password' => 'hashed',
             'two_factor_confirmed_at' => 'datetime',
             'source' => UserSource::class,
+            'trial_ends_at' => 'datetime',
         ];
     }
 
@@ -65,9 +75,9 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
      * Route notifications for the Expo channel.
      * Returns all device tokens for multicasting.
      *
-     * @return \Illuminate\Support\Collection<int, \NotificationChannels\Expo\ExpoPushToken>
+     * @return Collection<int, ExpoPushToken>
      */
-    public function routeNotificationForExpo(): \Illuminate\Support\Collection
+    public function routeNotificationForExpo(): Collection
     {
         return $this->devices->pluck('expo_push_token');
     }
@@ -102,19 +112,29 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(UserDevice::class);
     }
 
-    public function legacySubscription(): HasOne
+    public function recipeFavorites(): HasMany
     {
-        return $this->hasOne(SubscriptionLegacy::class)->latestOfMany();
+        return $this->hasMany(RecipeFavorite::class);
     }
 
-    public function legacySubscriptions(): HasMany
+    public function favoriteRecipes(): BelongsToMany
     {
-        return $this->hasMany(SubscriptionLegacy::class);
+        return $this->belongsToMany(Recipe::class, 'recipe_favorites');
     }
 
-    public function hasActiveLegacySubscription(): bool
+    public function hasFavorited(?int $recipeId): bool
     {
-        return $this->legacySubscription && $this->legacySubscription->isActive();
+        return $recipeId !== null && $this->favoriteRecipes()->whereKey($recipeId)->exists();
+    }
+
+    public function plan(): HasOne
+    {
+        return $this->hasOne(Plan::class);
+    }
+
+    protected function nextGenerationAt(): Attribute
+    {
+        return Attribute::get(fn () => $this->plan?->next_generation_at);
     }
 
     public function preferredLocale()
@@ -124,6 +144,15 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
 
     public function getTimezone(): string
     {
+        $deviceTimezone = $this->devices()
+            ->whereNotNull('timezone')
+            ->latest('last_used_at')
+            ->value('timezone');
+
+        if ($deviceTimezone) {
+            return $deviceTimezone;
+        }
+
         return match ($this->locale) {
             'de' => 'Europe/Berlin',
             default => 'UTC',
@@ -152,6 +181,21 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         });
     }
 
+    public function isOnFreeTrial(): bool
+    {
+        return $this->trial_ends_at !== null && $this->trial_ends_at->isFuture();
+    }
+
+    public function hasPaidSubscription(): bool
+    {
+        return $this->subscriptions()->whereIn('status', ['active', 'trial'])->exists();
+    }
+
+    public function hasActiveSubscription(): bool
+    {
+        return $this->isOnFreeTrial() || $this->hasPaidSubscription();
+    }
+
     public function getSubscriptionDetails(): array
     {
         if ($rc = $this->subscriptions()->where('status', 'active')->first()) {
@@ -165,14 +209,14 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             ];
         }
 
-        if ($this->legacySubscription?->isActive()) {
+        if ($this->isOnFreeTrial()) {
             return [
                 'has_active_subscription' => true,
-                'tier' => __($this->legacySubscription->type),
-                'status' => 'active',
-                'started_at' => $this->legacySubscription->starts_at,
-                'expires_at' => $this->legacySubscription->ends_at,
-                'source' => 'legacy',
+                'tier' => 'trial',
+                'status' => 'trial',
+                'started_at' => $this->created_at,
+                'expires_at' => $this->trial_ends_at,
+                'source' => 'app_trial',
             ];
         }
 

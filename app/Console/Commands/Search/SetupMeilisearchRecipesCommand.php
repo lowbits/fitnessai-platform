@@ -61,10 +61,18 @@ class SetupMeilisearchRecipesCommand extends Command
         $index->updateFilterableAttributes([
             'cuisine',
             'primary_protein',
+            'format',
+            'hero_veg',
+            'source_locale',
             'difficulty',
             'tags',
             'allergens',
+            'meal_types',
+            'ingredient_names',
+            'total_time_minutes',
+            'calories',
             'is_verified',
+            'image_full',
         ]);
     }
 

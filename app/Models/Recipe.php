@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasTranslations;
 use App\Observers\RecipeObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +15,7 @@ use Spatie\Sluggable\SlugOptions;
 #[ObservedBy([RecipeObserver::class])]
 class Recipe extends Model
 {
-    use HasFactory, HasSlug, SoftDeletes;
+    use HasFactory, HasSlug, HasTranslations, SoftDeletes;
 
     protected $guarded = ['id'];
 
@@ -25,6 +26,7 @@ class Recipe extends Model
             'instructions' => 'array',
             'tags' => 'array',
             'allergens' => 'array',
+            'meal_types' => 'array',
             'is_verified' => 'boolean',
             'needs_translation' => 'boolean',
         ];
@@ -65,9 +67,23 @@ class Recipe extends Model
             'search_text' => $searchText,
             'primary_protein' => $this->primary_protein,
             'cuisine' => $this->cuisine,
+            'format' => $this->format,
+            'hero_veg' => $this->hero_veg,
+            'source_locale' => $this->source_locale,
             'difficulty' => $this->difficulty,
             'tags' => $this->tags ?? [],
             'allergens' => $this->allergens ?? [],
+            'meal_types' => $this->meal_types ?? [],
+            'calories' => $this->calories,
+            'protein_g' => (int) $this->protein_g,
+            'total_time_minutes' => ($this->prep_time_minutes ?? 0) + ($this->cook_time_minutes ?? 0),
+            'ingredient_names' => collect($this->ingredients ?? [])
+                ->pluck('name')
+                ->map(fn ($name) => strtolower(trim($name)))
+                ->values()
+                ->toArray(),
+            'image_full' => $this->image_full,
+            'image_isolated' => $this->image_isolated,
             'is_verified' => $this->is_verified,
         ];
     }
@@ -89,31 +105,14 @@ class Recipe extends Model
         return $this->hasMany(Meal::class);
     }
 
-    public function translation(?string $locale = null): ?RecipeTranslation
-    {
-        $locale = $locale ?? app()->getLocale();
-
-        return $this->translations->firstWhere('locale', $locale);
-    }
-
     public function localizedSlug(?string $locale = null): string
     {
-        return $this->translation($locale)?->slug ?? $this->slug;
+        return $this->localized('slug', $locale) ?? $this->slug;
     }
 
-    public function localizedName(?string $locale = null): string
+    public function localizedIngredients(?string $locale = null): ?array
     {
-        return $this->translation($locale)?->name ?? $this->name;
-    }
-
-    public function localizedDescription(?string $locale = null): ?string
-    {
-        return $this->translation($locale)?->description ?? $this->description;
-    }
-
-    public function localizedInstructions(?string $locale = null): ?array
-    {
-        return $this->translation($locale)?->instructions ?? $this->instructions;
+        return $this->localized('ingredients', $locale);
     }
 
     public function scopeVerified($query)
@@ -124,5 +123,29 @@ class Recipe extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * Absolute URL for the full recipe image, or null if not generated yet.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image_full ? $this->r2Url($this->image_full) : null;
+    }
+
+    /**
+     * Absolute URL for the background-removed thumbnail, falling back to the
+     * full image when the isolated variant doesn't exist.
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        return $this->image_isolated
+            ? $this->r2Url($this->image_isolated)
+            : $this->image_url;
+    }
+
+    private function r2Url(string $path): string
+    {
+        return rtrim((string) config('services.r2.public_url'), '/').'/'.ltrim($path, '/');
     }
 }

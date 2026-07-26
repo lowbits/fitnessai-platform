@@ -15,7 +15,8 @@ class GenerateUserMealPlan implements ShouldQueue
 
     public function __construct(
         public User $user,
-        public Plan $plan
+        public Plan $plan,
+        public ?int $maxDays = null,
     ) {
         $this->onQueue('nutrition');
     }
@@ -70,7 +71,7 @@ class GenerateUserMealPlan implements ShouldQueue
     private function dispatchBatches(int $startDayNumber): void
     {
         $batchSize = 3; // Generate 3 days per batch
-        $daysToGenerate = 7;
+        $daysToGenerate = $this->maxDays ?? 7;
         $totalDays = min($startDayNumber + $daysToGenerate - 1, $this->plan->duration_days);
 
         $batches = [];

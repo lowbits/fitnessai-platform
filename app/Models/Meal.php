@@ -36,6 +36,8 @@ class Meal extends Model
         'allergens',
         'primary_protein',
         'cuisine',
+        'format',
+        'hero_veg',
         'status',
         'completed_at',
     ];
@@ -61,6 +63,11 @@ class Meal extends Model
         return $this->belongsTo(Recipe::class);
     }
 
+    public function scopeInEatOrder($query)
+    {
+        return $query->orderByRaw("CASE type WHEN 'breakfast' THEN 1 WHEN 'lunch' THEN 2 WHEN 'snack' THEN 3 WHEN 'dinner' THEN 4 END");
+    }
+
     /**
      * Mark this meal as completed
      */
@@ -83,5 +90,49 @@ class Meal extends Model
     public function isCompleted(): bool
     {
         return $this->completed_at !== null;
+    }
+
+    /**
+     * Full hero image URL — meal's own first, then recipe's. Nullable when
+     * neither exists; UI shows an empty state rather than a faked placeholder.
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        $path = $this->image_full ?? $this->recipe?->image_full;
+
+        return $path ? $this->r2Url($path) : null;
+    }
+
+    /**
+     * Card / list thumbnail — prefers the background-removed isolated cutout,
+     * falls through meal → recipe → per-meal-type placeholder. Always returns
+     * a URL so list views never have a missing image.
+     */
+    public function getThumbnailUrlAttribute(): string
+    {
+        $path = $this->image_isolated
+            ?? $this->image_full
+            ?? $this->recipe?->image_isolated
+            ?? $this->recipe?->image_full;
+
+        return $path ? $this->r2Url($path) : self::placeholderThumbnailUrl($this->type);
+    }
+
+    /**
+     * Absolute URL of the shared per-slot placeholder thumbnail, served when a
+     * meal — or a candidate replacement recipe — has no photo of its own, so
+     * every meal surface falls back to the same asset.
+     */
+    public static function placeholderThumbnailUrl(string $type): string
+    {
+        $slot = mb_strtolower($type);
+        $base = rtrim((string) config('services.r2.public_url'), '/');
+
+        return "{$base}/meals/thumbnails/{$slot}_placeholder.png";
+    }
+
+    private function r2Url(string $path): string
+    {
+        return rtrim((string) config('services.r2.public_url'), '/').'/'.ltrim($path, '/');
     }
 }

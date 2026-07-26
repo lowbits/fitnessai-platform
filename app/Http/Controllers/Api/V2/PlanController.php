@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\V2;
 
 use App\Http\Controllers\Controller;
 use App\Models\MealPlan;
+use App\Models\Plan;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutTracking;
+use App\Services\DayCompletionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -18,7 +20,7 @@ class PlanController extends Controller
     /**
      * Get meal and workout plan for a specific date
      */
-    public function getDayPlan(Request $request, string $date): JsonResponse
+    public function getDayPlan(Request $request, string $date, DayCompletionService $dayCompletion): JsonResponse
     {
         $user = $request->user();
 
@@ -73,9 +75,8 @@ class PlanController extends Controller
             ], 403);
         }
 
-        // TODO: Check subscription and lock status for premium features
-        // For now, allow access to all days
-        $isLocked = false;
+        // Day 1 is free; days 2+ require an active subscription or trial
+        $isLocked = $dayOfPlan > 1 && ! $user->hasActiveSubscription();
 
         // Get meal plan for this day
         $mealPlan = MealPlan::with('meals')
@@ -94,11 +95,13 @@ class PlanController extends Controller
         $workoutData = $this->formatWorkoutPlanResponse($workoutPlan, $user);
 
         // Determine overall status
-        $overallStatus = $this->determineOverallStatus($mealPlan, $workoutPlan);
+        $overallStatus = $this->determineOverallStatus($mealPlan, $workoutPlan, $plan, $dayOfPlan);
 
         // Get tracked calories and workouts for this day
         $trackedCalories = $this->getTrackedCaloriesForDay($user, $requestDate);
         $trackedWorkouts = $this->getTrackedWorkoutsForDay($user, $workoutPlan);
+
+        $completion = $dayCompletion->for($user, $requestDate->toDateString(), $plan);
 
         return response()->json([
             'plan_id' => $plan->id,
@@ -113,6 +116,12 @@ class PlanController extends Controller
             'daily_totals' => $mealsData['totals'],
             'tracked_calories' => $trackedCalories,
             'tracked_workouts' => $trackedWorkouts,
+            'completion' => [
+                'perfect' => $completion->isPerfect,
+                'nutrition' => $completion->nutritionMet,
+                'workout' => $completion->workoutDone,
+            ],
+            'week_strip' => $dayCompletion->strip($user, $plan, $requestDate->toDateString()),
             'message' => $this->getStatusMessage($overallStatus),
         ]);
     }
@@ -232,10 +241,12 @@ class PlanController extends Controller
     /**
      * Determine overall status of the day
      */
-    private function determineOverallStatus(?MealPlan $mealPlan, ?WorkoutPlan $workoutPlan): string
+    private function determineOverallStatus(?MealPlan $mealPlan, ?WorkoutPlan $workoutPlan, Plan $plan, int $dayOfPlan = 1): string
     {
-        $mealStatus = $mealPlan?->status ?? 'not_generated';
-        $workoutStatus = $workoutPlan?->status ?? 'not_generated';
+        // Day 1 is dispatched at onboarding before records exist — infer generating state
+        $awaitingGeneration = $dayOfPlan === 1 && ! $plan->generation_completed_at;
+        $mealStatus = $mealPlan?->status ?? ($awaitingGeneration ? 'pending' : 'not_generated');
+        $workoutStatus = $workoutPlan?->status ?? ($awaitingGeneration ? 'pending' : 'not_generated');
 
         // If either is generating, overall is generating
         if ($mealStatus === 'pending' || $workoutStatus === 'pending') {
@@ -256,9 +267,15 @@ class PlanController extends Controller
             return 'generated';
         }
 
-        // One is generated, other is pending/not yet
-        if ($mealStatus === 'generated' || $workoutStatus === 'generated') {
+        // One is generated, other is actively generating (pending)
+        if (($mealStatus === 'pending' || $workoutStatus === 'pending') &&
+            ($mealStatus === 'generated' || $workoutStatus === 'generated')) {
             return 'generating';
+        }
+
+        // At least one generated, nothing actively pending
+        if ($mealStatus === 'generated' || $workoutStatus === 'generated') {
+            return 'generated';
         }
 
         // Nothing generated, nothing pending

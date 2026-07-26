@@ -13,7 +13,7 @@ describe('UserProfile Model (Unit)', function () {
     it('calculates bmr without database', function () {
         $profile = UserProfile::factory()->create([
             'gender' => Gender::MALE,
-            'age' => 28,
+            'birthdate' => now()->subYears(28),
             'weight_kg' => 80.0,
             'height_cm' => 180.0,
         ]);
@@ -24,7 +24,7 @@ describe('UserProfile Model (Unit)', function () {
     it('calculates tdee without database', function () {
         $profile = UserProfile::factory()->create([
             'gender' => Gender::MALE,
-            'age' => 28,
+            'birthdate' => now()->subYears(28),
             'weight_kg' => 80.0,
             'height_cm' => 180.0,
             'activity_level' => ActivityLevel::MAINLY_SITTING,
@@ -40,7 +40,7 @@ describe('UserProfile Model (Unit)', function () {
     it('calculates daily calories without database', function () {
         $profile = UserProfile::factory()->create([
             'gender' => Gender::MALE,
-            'age' => 28,
+            'birthdate' => now()->subYears(28),
             'weight_kg' => 80.0,
             'height_cm' => 180.0,
             'activity_level' => ActivityLevel::MAINLY_SITTING,
@@ -57,7 +57,7 @@ describe('UserProfile Model (Unit)', function () {
     it('calculates macros without database', function () {
         $profile = UserProfile::factory()->create([
             'gender' => Gender::MALE,
-            'age' => 28,
+            'birthdate' => now()->subYears(28),
             'weight_kg' => 80.0,
             'height_cm' => 180.0,
             'activity_level' => ActivityLevel::MAINLY_SITTING,

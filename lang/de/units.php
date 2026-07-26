@@ -1,0 +1,28 @@
+<?php
+
+return [
+    'g' => 'g',
+    'kg' => 'kg',
+    'ml' => 'ml',
+    'l' => 'l',
+    'tbsp' => 'EL',
+    'tsp' => 'TL',
+    'cup' => 'Tasse',
+    'piece' => 'Stück',
+    'slice' => 'Scheibe',
+    'clove' => 'Zehe',
+    'leaf' => 'Blatt',
+    'sprig' => 'Zweig',
+    'head' => 'Kopf',
+    'bunch' => 'Bund',
+    'stick' => 'Stange',
+    'pinch' => 'Prise',
+    'dash' => 'Spritzer',
+    'drop' => 'Tropfen',
+    'handful' => 'Handvoll',
+    'can' => 'Dose',
+    'jar' => 'Glas',
+    'package' => 'Packung',
+    'to_taste' => 'nach Geschmack',
+    'whole' => 'ganzes',
+];

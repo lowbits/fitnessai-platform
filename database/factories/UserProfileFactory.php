@@ -6,32 +6,30 @@ use App\Enums\ActivityLevel;
 use App\Enums\BodyGoal;
 use App\Enums\DietaryPreference;
 use App\Enums\DietStyle;
-use App\Enums\DietType;
 use App\Enums\Gender;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Models\User;
+use App\Models\UserProfile;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\UserProfile>
+ * @extends Factory<UserProfile>
  */
 class UserProfileFactory extends Factory
 {
     /**
-     * Define the model's default state.
-     *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
         return [
             'user_id' => User::factory(),
-            'age' => fake()->numberBetween(18, 65),
+            'birthdate' => fake()->dateTimeBetween('-65 years', '-18 years')->format('Y-m-d'),
             'gender' => fake()->randomElement(Gender::cases()),
             'weight_kg' => fake()->randomFloat(1, 50, 120),
             'height_cm' => fake()->randomFloat(1, 150, 200),
-            'body_goal' => fake()->randomElement(BodyGoal::cases()),
+            'body_goal' => fake()->randomElement(BodyGoal::current()),
             'skill_level' => fake()->randomElement(SkillLevel::cases()),
             'activity_level' => fake()->randomElement(ActivityLevel::cases()),
             'training_place' => fake()->randomElement(TrainingPlace::cases()),
@@ -40,9 +38,6 @@ class UserProfileFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the profile is for a male user.
-     */
     public function male(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -50,9 +45,6 @@ class UserProfileFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the profile is for a female user.
-     */
     public function female(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -60,29 +52,39 @@ class UserProfileFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the profile has a muscle gain goal.
-     */
+    public function buildMuscle(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'body_goal' => BodyGoal::BUILD_MUSCLE,
+        ]);
+    }
+
+    public function loseWeight(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'body_goal' => BodyGoal::LOSE_WEIGHT,
+        ]);
+    }
+
+    public function getFit(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'body_goal' => BodyGoal::GET_FIT,
+        ]);
+    }
+
+    /** @deprecated Use buildMuscle() */
     public function muscleGain(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'body_goal' => BodyGoal::MUSCLE_GAIN,
-        ]);
+        return $this->buildMuscle();
     }
 
-    /**
-     * Indicate that the profile has a weight loss goal.
-     */
+    /** @deprecated Use loseWeight() */
     public function weightLoss(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'body_goal' => BodyGoal::WEIGHT_LOSS,
-        ]);
+        return $this->loseWeight();
     }
 
-    /**
-     * Indicate that the profile is for a beginner.
-     */
     public function beginner(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -90,9 +92,6 @@ class UserProfileFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the profile trains at a gym.
-     */
     public function gym(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -109,4 +108,3 @@ class UserProfileFactory extends Factory
         });
     }
 }
-

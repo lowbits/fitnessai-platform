@@ -21,6 +21,7 @@ const getTranslationArray = (key: string): string[] => {
             name="description"
             :content="t('legal.disclaimer.meta.description')"
         />
+        <meta name="robots" content="noindex,follow" />
     </Head>
     <GuestLayout>
         <div

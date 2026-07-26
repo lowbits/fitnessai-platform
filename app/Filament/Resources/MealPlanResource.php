@@ -5,10 +5,11 @@ namespace App\Filament\Resources;
 use App\Actions\RetryPlanGeneration;
 use App\Filament\Resources\MealPlanResource\Pages;
 use App\Models\MealPlan;
+use App\Models\Plan;
 use Filament\Actions\Action;
 use Filament\Actions\BulkAction;
-use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\ViewEntry;
 use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Schemas\Components\Section;
@@ -93,7 +94,7 @@ class MealPlanResource extends Resource
                         $plans = $records->whereIn('status', ['failed', 'pending'])->pluck('plan_id')->unique();
 
                         foreach ($plans as $planId) {
-                            $plan = \App\Models\Plan::with('user')->find($planId);
+                            $plan = Plan::with('user')->find($planId);
                             if ($plan) {
                                 RetryPlanGeneration::meals($plan);
                             }
@@ -135,25 +136,17 @@ class MealPlanResource extends Resource
                             ->label('Carbs (g)'),
                         TextEntry::make('total_fat_g')
                             ->label('Fat (g)'),
-                    ])->columns(4),
+                    ])
+                    ->columns(4)
+                    ->columnSpanFull(),
 
                 Section::make('Meals')
                     ->schema([
-                        RepeatableEntry::make('meals')
-                            ->schema([
-                                TextEntry::make('type')
-                                    ->badge(),
-                                TextEntry::make('name'),
-                                TextEntry::make('calories'),
-                                TextEntry::make('protein_g')
-                                    ->label('Protein'),
-                                TextEntry::make('carbs_g')
-                                    ->label('Carbs'),
-                                TextEntry::make('fat_g')
-                                    ->label('Fat'),
-                            ])
-                            ->columns(6),
-                    ]),
+                        ViewEntry::make('meals_grid')
+                            ->hiddenLabel()
+                            ->view('filament.meal-plan.contents'),
+                    ])
+                    ->columnSpanFull(),
             ]);
     }
 

@@ -12,6 +12,7 @@ const { t } = useI18n();
             name="description"
             :content="t('legal.data_privacy.meta.description')"
         />
+        <meta name="robots" content="noindex,follow" />
     </Head>
     <GuestLayout>
         <div

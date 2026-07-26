@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Actions\ReplaceMealWithRecipe;
 use App\Http\Controllers\Controller;
 use App\Jobs\ReplaceMealJob;
 use App\Models\Meal;
+use App\Models\Recipe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -12,22 +14,27 @@ use Illuminate\Support\Facades\Validator;
 
 class ReplaceMealController extends Controller
 {
-    /**
-     * Replace a meal with an alternative based on a recipe title instruction
-     */
-    public function __invoke(Request $request, Meal $meal): JsonResponse
+    public function __invoke(Request $request, ReplaceMealWithRecipe $replaceWithRecipe, Meal $meal): JsonResponse
     {
-        // Authorize using policy
         Gate::authorize('update', $meal);
 
-        // Validate input - instruction is the recipe title
         $validated = Validator::validate($request->all(), [
-            'instruction' => 'required|string|max:500',
+            'recipe_id' => ['sometimes', 'integer', 'exists:recipes,id'],
+            'instruction' => ['required_without:recipe_id', 'string', 'max:500'],
         ]);
 
-        $meal->update(['status' => 'replacing']);
+        if ($request->filled('recipe_id')) {
+            $recipe = Recipe::query()->findOrFail($validated['recipe_id']);
+            $newMeal = $replaceWithRecipe->execute($meal, $recipe);
 
-        // Dispatch the job to replace the meal with the given instruction (recipe title)
+            return response()->json([
+                'message' => 'Meal replaced.',
+                'meal_id' => $newMeal->id,
+                'recipe_id' => $recipe->id,
+            ], 200);
+        }
+
+        $meal->update(['status' => 'replacing']);
         ReplaceMealJob::dispatch($meal, $validated['instruction']);
 
         return response()->json([
@@ -37,4 +44,3 @@ class ReplaceMealController extends Controller
         ], 202);
     }
 }
-

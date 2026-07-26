@@ -13,7 +13,7 @@
                 "/Applications/Herd.app/Contents/Resources/herd-mcp.phar"
             ],
             "env": {
-                "SITE_PATH": "/Users/lobitz/git/fitnessai-webapp-v2"
+                "SITE_PATH": "/Users/lobitz/git/fytrr/platform"
             }
         }
     }

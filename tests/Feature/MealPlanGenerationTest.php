@@ -3,6 +3,7 @@
 use App\Ai\Agents\NutritionPlannerAgent;
 use App\Ai\Prompts\CreateMealPlanPrompt;
 use App\Ai\Prompts\MealPlanSystemPrompt;
+use App\Enums\MealVariety;
 use App\Jobs\GenerateMealPlanBatch;
 use App\Models\Meal;
 use App\Models\MealPlan;
@@ -26,7 +27,7 @@ test('meal plan batch generates plans for each day using the agent', function ()
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertPrompted(fn () => true);
 
@@ -52,7 +53,7 @@ test('meal plan batch skips already generated days', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 2);
-    $job->handle();
+    dispatch_sync($job);
 
     // Only day 2 should trigger the agent (day 1 was skipped)
     NutritionPlannerAgent::assertPrompted(fn () => true);
@@ -78,7 +79,7 @@ test('meal plan batch retries failed days', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 1);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertPrompted(fn () => true);
 });
@@ -114,7 +115,7 @@ test('meal plan batch cleans up partial meals before retry', function () {
     expect($mealPlan->meals()->count())->toBe(1);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 1);
-    $job->handle();
+    dispatch_sync($job);
 
     // Old partial meals should have been cleaned up
     $mealPlan->refresh();
@@ -133,7 +134,7 @@ test('meal plan batch exits early without profile', function () {
     ]);
 
     $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 3);
-    $job->handle();
+    dispatch_sync($job);
 
     NutritionPlannerAgent::assertNotPrompted(fn () => true);
 
@@ -280,18 +281,17 @@ test('agent caps history to 4 most recent days', function () {
     $agent = new NutritionPlannerAgent($day7);
     $messages = collect($agent->messages());
 
-    // 4 days * 2 messages (user + assistant) = 8
-    expect($messages)->toHaveCount(8);
+    // 6 days * 2 messages (user + assistant) = 12 — full plan history
+    expect($messages)->toHaveCount(12);
 
-    // Should include days 3-6 (most recent 4), not days 1-2
-    expect($messages[0]->content)->toContain('Day 3');
-    expect($messages[1]->content)->toContain('Day 3 Breakfast');
-    expect($messages[6]->content)->toContain('Day 6');
+    // Should include all days 1-6
+    expect($messages[0]->content)->toContain('Day 1');
+    expect($messages[1]->content)->toContain('Day 1 Breakfast');
+    expect($messages[10]->content)->toContain('Day 6');
 
-    // Days 1 and 2 should not be present
     $allContent = $messages->pluck('content')->implode("\n");
-    expect($allContent)->not->toContain('Day 1 Breakfast');
-    expect($allContent)->not->toContain('Day 2 Breakfast');
+    expect($allContent)->toContain('Day 1 Breakfast');
+    expect($allContent)->toContain('Day 6 Breakfast');
 });
 
 test('system prompt contains culinary coherence rules', function () {
@@ -299,9 +299,16 @@ test('system prompt contains culinary coherence rules', function () {
 
     expect($systemPrompt)->toContain('Culinary Coherence');
     expect($systemPrompt)->toContain('no random mashups');
-    expect($systemPrompt)->toContain('NEVER repeat the same meal name');
     expect($systemPrompt)->toContain('Do NOT prefix every meal with a country');
-    expect($systemPrompt)->toContain('Protein rotation');
+});
+
+test('system prompt no longer instructs AI to enforce cross-day variety itself', function () {
+    $systemPrompt = (string) new MealPlanSystemPrompt;
+
+    expect($systemPrompt)
+        ->not->toContain('Variety Rotation System')
+        ->not->toContain('user prompt specifies their variety preference')
+        ->toContain('Across-day variety is managed by the user prompt');
 });
 
 test('user prompt contains pre-calculated per-meal macro ranges', function () {
@@ -314,6 +321,12 @@ test('user prompt contains pre-calculated per-meal macro ranges', function () {
         dayNumber: 1,
         date: now(),
         bodyGoal: $profile->body_goal->value,
+        slotPlan: [
+            'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
+            'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
+            'snack' => ['action' => 'new', 'forbidden_meals' => collect()],
+            'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+        ],
     );
 
     $text = (string) $prompt;
@@ -333,6 +346,124 @@ test('user prompt contains pre-calculated per-meal macro ranges', function () {
     expect($text)->not->toContain('Critical Requirements');
     expect($text)->not->toContain('Ingredient Coherence');
     expect($text)->not->toContain('Variety & Cross-Day');
+});
+
+test('batch skips AI when all slots are REPEAT and inserts exact duplicates', function () {
+    NutritionPlannerAgent::fake();
+
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update([
+        'meal_variety' => MealVariety::LOW,
+        'selected_meals' => ['breakfast', 'lunch'],
+    ]);
+
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'duration_days' => 7,
+        'start_date' => now(),
+    ]);
+
+    // Low tier per-slot targets: breakfast=2, lunch=2.
+    // Seed days 1-2 with 2 distinct breakfasts and 2 distinct lunches.
+    $day1 = MealPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1, 'status' => 'generated']);
+    $b1 = Meal::factory()->create([
+        'meal_plan_id' => $day1->id, 'type' => 'breakfast', 'name' => 'Overnight Oats',
+        'calories' => 400, 'protein_g' => 25, 'carbs_g' => 50, 'fat_g' => 10,
+        'primary_protein' => 'dairy', 'cuisine' => 'american',
+        'ingredients' => [['name' => 'Oats', 'amount' => '80', 'unit' => 'g']],
+    ]);
+    Meal::factory()->create([
+        'meal_plan_id' => $day1->id, 'type' => 'lunch', 'name' => 'Carbonara',
+        'calories' => 700, 'protein_g' => 40, 'carbs_g' => 80, 'fat_g' => 25,
+        'primary_protein' => 'pork', 'cuisine' => 'mediterranean',
+        'ingredients' => [['name' => 'Pasta', 'amount' => '120', 'unit' => 'g']],
+    ]);
+
+    $day2 = MealPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 2, 'status' => 'generated']);
+    Meal::factory()->create([
+        'meal_plan_id' => $day2->id, 'type' => 'breakfast', 'name' => 'Scrambled Eggs',
+        'primary_protein' => 'eggs', 'cuisine' => 'american',
+    ]);
+    Meal::factory()->create([
+        'meal_plan_id' => $day2->id, 'type' => 'lunch', 'name' => 'Tuna Bowl',
+        'primary_protein' => 'fish', 'cuisine' => 'asian',
+    ]);
+
+    // Day 3: budget exhausted for both slots → all REPEAT → no AI call.
+    $job = new GenerateMealPlanBatch($user, $plan, startDay: 3, endDay: 3);
+    dispatch_sync($job);
+
+    NutritionPlannerAgent::assertNotPrompted(fn () => true);
+
+    $day3 = MealPlan::where(['plan_id' => $plan->id, 'day_number' => 3])->first();
+    expect($day3->status)->toBe('generated');
+    expect($day3->meals)->toHaveCount(2);
+
+    // The breakfast must be an exact copy of one of the seeded ones (new id, same content).
+    $bfast = $day3->meals->firstWhere('type', 'breakfast');
+    expect($bfast->name)->toBeIn(['Overnight Oats', 'Scrambled Eggs']);
+    expect($bfast->id)->not->toBe($b1->id);
+
+    $lunch = $day3->meals->firstWhere('type', 'lunch');
+    expect($lunch->name)->toBeIn(['Carbonara', 'Tuna Bowl']);
+});
+
+test('exact-repeat meal preserves grams and macros from source', function () {
+    NutritionPlannerAgent::fake();
+
+    $user = User::factory()->withProfile()->create();
+    $user->profile->update([
+        'meal_variety' => MealVariety::LOW,
+        'selected_meals' => ['lunch'],
+    ]);
+
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'duration_days' => 7,
+        'start_date' => now(),
+    ]);
+
+    $day1 = MealPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 1, 'status' => 'generated']);
+    $source = Meal::factory()->create([
+        'meal_plan_id' => $day1->id,
+        'type' => 'lunch',
+        'name' => 'Carbonara',
+        'calories' => 712,
+        'protein_g' => 41.5,
+        'carbs_g' => 82.0,
+        'fat_g' => 24.5,
+        'ingredients' => [
+            ['name' => 'Pasta', 'amount' => '120', 'unit' => 'g'],
+            ['name' => 'Eggs', 'amount' => '2', 'unit' => 'piece'],
+            ['name' => 'Bacon', 'amount' => '50', 'unit' => 'g'],
+        ],
+        'primary_protein' => 'pork',
+        'cuisine' => 'mediterranean',
+    ]);
+
+    $day2 = MealPlan::factory()->create(['plan_id' => $plan->id, 'day_number' => 2, 'status' => 'generated']);
+    Meal::factory()->create([
+        'meal_plan_id' => $day2->id, 'type' => 'lunch', 'name' => 'Tuna Bowl',
+        'primary_protein' => 'fish', 'cuisine' => 'asian',
+    ]);
+
+    $job = new GenerateMealPlanBatch($user, $plan, startDay: 3, endDay: 3);
+    dispatch_sync($job);
+
+    $day3 = MealPlan::where(['plan_id' => $plan->id, 'day_number' => 3])->first();
+    $repeated = $day3->meals->where('name', $source->name)->first();
+
+    if ($repeated) {
+        expect((float) $repeated->calories)->toBe((float) $source->calories);
+        expect((float) $repeated->protein_g)->toBe((float) $source->protein_g);
+        expect((float) $repeated->carbs_g)->toBe((float) $source->carbs_g);
+        expect((float) $repeated->fat_g)->toBe((float) $source->fat_g);
+        expect($repeated->ingredients)->toBe($source->ingredients);
+        expect($repeated->id)->not->toBe($source->id);
+    } else {
+        // Repeat picked the other meal (Tuna Bowl) — still valid behavior.
+        expect($day3->meals->pluck('name')->all())->toContain('Tuna Bowl');
+    }
 });
 
 test('agent instructions return system prompt', function () {
