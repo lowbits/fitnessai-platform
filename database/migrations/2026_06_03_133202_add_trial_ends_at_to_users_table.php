@@ -12,13 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->timestamp('trial_ends_at')->nullable()->after('remember_token');
-        });
+        // Guarded: MySQL auto-commits the ADD COLUMN, so a re-run after a failed
+        // backfill would otherwise trip over the already-existing column.
+        if (! Schema::hasColumn('users', 'trial_ends_at')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->timestamp('trial_ends_at')->nullable()->after('remember_token');
+            });
+        }
 
         // Set trial_ends_at for existing users based on their created_at
         $driver = Schema::getConnection()->getDriverName();
         $expression = match ($driver) {
+            'mysql', 'mariadb' => 'DATE_ADD(created_at, INTERVAL 7 DAY)',
             'pgsql' => "created_at + interval '7 days'",
             default => "datetime(created_at, '+7 days')",
         };
