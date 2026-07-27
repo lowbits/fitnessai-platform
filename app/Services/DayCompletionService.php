@@ -157,15 +157,31 @@ final class DayCompletionService
             ->exists();
     }
 
-    /** Whether every recommended meal planned for the day was tracked. */
+    /**
+     * Whether every recommended meal for the day was eaten.
+     *
+     * Active meals are each required to be tracked (unchanged). On top of that we
+     * add *genuinely skipped* meals — soft-deleted with no active meal in the same
+     * (meal_plan, type) slot — so skipping lunch/dinner can't let a breakfast-only
+     * day complete. A replaced meal is soft-deleted but has an active replacement
+     * in its slot, so it's excluded here and the new meal carries the requirement.
+     * An eaten-then-removed meal stays satisfied because its id is still tracked.
+     */
     private function recommendedMealsTracked(User $user, Plan $plan, string $date): bool
     {
-        $planned = Meal::query()
+        $dayMeals = fn () => Meal::query()
             ->join('meal_plans', 'meals.meal_plan_id', '=', 'meal_plans.id')
             ->where('meal_plans.plan_id', $plan->id)
-            ->whereDate('meal_plans.date', $date)
-            ->pluck('meals.id')
-            ->unique();
+            ->whereDate('meal_plans.date', $date);
+
+        $active = $dayMeals()->get(['meals.id', 'meals.type', 'meals.meal_plan_id']);
+        $activeSlots = $active->map(fn (Meal $m) => $m->meal_plan_id.'|'.$m->type)->unique();
+
+        $skipped = $dayMeals()->onlyTrashed()
+            ->get(['meals.id', 'meals.type', 'meals.meal_plan_id'])
+            ->reject(fn (Meal $m) => $activeSlots->contains($m->meal_plan_id.'|'.$m->type));
+
+        $planned = $active->pluck('id')->merge($skipped->pluck('id'))->unique();
 
         if ($planned->isEmpty()) {
             return false;
