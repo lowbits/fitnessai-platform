@@ -18,6 +18,84 @@ return [
 
     'de' => [
 
+        'kostenloser-7-tage-trainings-und-ernaehrungsplan' => [
+            'title' => 'Kostenloser 7-Tage-Trainings- und Ernährungsplan (PDF, ohne Anmeldung)',
+            'description' => 'Ein kompletter kostenloser 7-Tage-Trainings- und Ernährungsplan für diese Woche, plus eine personalisierte Version als PDF, ohne Anmeldung und ohne Kreditkarte.',
+            'h1' => 'Kostenloser 7-Tage-Trainings- und Ernährungsplan (PDF, ohne Anmeldung)',
+            'keywords' => ['kostenloser trainings und ernährungsplan', 'trainings und ernährungsplan pdf', '7 tage ernährungsplan', '7 tage trainingsplan', 'kostenloser ernährungsplan ohne anmeldung', 'trainingsplan pdf kostenlos', 'kostenloser fitnessplan'],
+            'internal_slug' => 'free-7-day-workout-and-meal-plan',
+            'published_at' => '2026-07-28',
+            'last_updated_at' => '2026-07-28',
+            'og_image' => '/assets/images/og/free-7-day-workout-and-meal-plan.webp',
+            'og_image_alt' => 'Aufgeschlagener Planer mit einem 7-Tage-Trainings- und Ernährungsplan, daneben Kurzhanteln, eine Trinkflasche, ein Smartphone und eine gesunde Schüssel mit gegrilltem Hähnchen und Salat auf einem Holztisch',
+            'seo_image' => '/assets/images/seo/free-7-day-workout-and-meal-plan.webp',
+            'seo_image_alt' => 'Aufgeschlagener Planer mit einem 7-Tage-Trainings- und Ernährungsplan, daneben Kurzhanteln, eine Trinkflasche, ein Smartphone und eine gesunde Schüssel mit gegrilltem Hähnchen und Salat auf einem Holztisch',
+
+            'intro' => 'Hier ist ein kompletter, kostenloser 7-Tage-Trainings- und Ernährungsplan, den du noch heute starten kannst. Unten findest du eine ganze Trainingswoche, kombiniert mit einer passenden Woche voller Mahlzeiten, plus eine Anleitung, wie du alles an deinen Körper und dein Ziel anpasst. Ein kurzer Hinweis zu „kostenlos“: Die meisten Fitness-Apps bieten eine 7-Tage-Testphase, aber nur, wenn du eine Karte hinterlegst, die dich nach Tag 7 automatisch belastet. Dieser Plan ist anders. Es gibt nichts zu kündigen und keine Karte zu hinterlegen. Du bekommst eine ganze Woche Training und Ernährung, und sie gehört dir. Wenn du das Lesen überspringen und direkt eine personalisierte Version möchtest: fytrr erstellt deinen eigenen 7-Tage-Trainings- und Ernährungsplan als PDF in etwa 60 Sekunden, ohne Anmeldung und ohne Kreditkarte.',
+
+            'sections' => [
+                [
+                    'heading' => 'Was dieser kostenlose Plan enthält',
+                    'content' => 'Jeder Plan hier deckt vier Dinge ab. Sieben Tage Training rund um einen einfachen, effektiven Wochen-Split. Sieben Tage Mahlzeiten mit einer ausgewogenen, proteinreichen Struktur. Eingebaute Erholung und Regeneration, denn eine gute Woche besteht nicht aus sieben harten Tagen. Und eine Möglichkeit, alles an deine Kalorien, dein Ziel und deine Ausrüstung anzupassen. Für das meiste davon brauchst du kein Fitnessstudio. Wo Ausrüstung hilft, gibt es eine Alternative für zuhause.',
+                ],
+                [
+                    'heading' => 'Der 7-Tage-Trainingsplan',
+                    'content' => 'Das ist eine ausgewogene Woche für Anfänger bis Fortgeschrittene: vier Trainingstage, zwei Tage aktive Erholung und ein kompletter Ruhetag. Wärme dich vor jeder Einheit fünf Minuten auf und lass bei jedem Satz ein bis zwei Wiederholungen im Tank. Montag ist Ganzkörper-Kraft: Kniebeugen, Liegestütze, vorgebeugtes Rudern und Plank, jeweils drei Sätze. Dienstag ist aktive Erholung, ein 30- bis 40-minütiger zügiger Spaziergang oder eine lockere Radrunde. Mittwoch trainiert den Oberkörper: Schulterdrücken, Latzug oder Band-Rudern, Kurzhantel-Bankdrücken, dazu Bizeps und Trizeps, jeweils drei Sätze. Donnerstag sind Mobilität und Dehnen für 20 bis 30 Minuten. Freitag ist Unterkörper: rumänisches Kreuzheben, Ausfallschritte, Glute Bridges und Wadenheben, jeweils drei Sätze. Samstag ist Konditionstraining, eine 20- bis 25-minütige Intervalleinheit oder ein längerer lockerer Lauf oder eine Radrunde. Sonntag ist kompletter Ruhetag, leichtes Gehen optional. Für Anfänger: Starte am unteren Ende der Satz- und Wiederholungsbereiche und lege jede Woche ein wenig drauf. Diese Steigerung, progressive Überlastung, ist das mit Abstand wichtigste Prinzip für Ergebnisse.',
+                ],
+                [
+                    'heading' => 'Der 7-Tage-Ernährungsplan',
+                    'content' => 'Die Mahlzeiten folgen einem einfachen Muster: Protein zu jeder Mahlzeit, viel Gemüse und Ballaststoffe und genug Kohlenhydrate, um dein Training zu befeuern. Die Portionsgrößen hängen von deinem Kalorienbedarf ab, der ersten Zahl, die es sich lohnt richtig zu treffen. Frühstücke wechseln zwischen griechischem Joghurt mit Haferflocken und Beeren, einem Gemüse-Omelett mit Vollkorntoast, einem Protein-Smoothie mit Banane, Overnight Oats mit Erdnussbutter und Rührei mit Avocado-Toast. Mittagessen umfassen Hähnchen mit Reis und gemischtem Gemüse, einen Thunfisch-Bohnen-Salat, einen Puten-Wrap mit Beilagensalat, eine Hähnchen-Quinoa-Bowl und Linsensuppe mit einem Vollkornbrötchen. Abendessen reichen von Lachs mit Kartoffeln und Salat über ein mageres Rindfleisch-Pfannengericht mit Reis, ein Tofu-Curry mit braunem Reis und Weißfisch mit Couscous und Gemüse bis zu Hähnchenschenkeln mit Süßkartoffel. Snacks bleiben einfach: ein Apfel mit einer Handvoll Nüsse, Hüttenkäse, gekochte Eier, griechischer Joghurt oder ein Proteinshake. Vegetarisch oder vegan? Tausche tierische Proteine gegen Tofu, Tempeh, Hülsenfrüchte, Eier wo erlaubt und ein hochwertiges Proteinpulver. Du brauchst eventuell etwas mehr Gesamtprotein, weil pflanzliche Quellen weniger konzentriert sind.',
+                ],
+                [
+                    'heading' => 'So passt du ihn an deinen Körper an',
+                    'content' => 'Ein Plan funktioniert, wenn die Menge an Essen zu deinem Ziel passt. Zwei schnelle Schritte. Erstens: Finde dein Kalorienziel. Nutze einen Kalorienrechner, um zu schätzen, wie viele Kalorien du zum Abnehmen, für den Muskelaufbau oder zum Halten brauchst. Zweitens: Priorisiere Protein. Ziele auf etwa 1,6 bis 2,2 Gramm pro Kilogramm Körpergewicht, wenn du trainierst, und baue den Rest deiner Kalorien aus Kohlenhydraten und Fett rund um dein Training auf. Von dort aus skalierst du die Portionen im Ernährungsplan nach oben oder unten, um deine Zahl zu treffen. Das Training bleibt gleich, nur die Essensmenge ändert sich mit deinem Ziel. Dieser Plan ist allgemeine Information für gesunde Erwachsene, keine medizinische Beratung. Wenn du eine Verletzung oder Vorerkrankung hast oder neu im Training bist, sprich vor dem Start mit einer qualifizierten Fachkraft.',
+                ],
+                [
+                    'heading' => 'Hol dir deinen eigenen 7-Tage-Plan als kostenloses PDF',
+                    'content' => 'Der Plan oben ist ein solider Ausgangspunkt, aber er ist nicht um dich herum gebaut. fytrr nimmt dein Ziel, deine Erfahrung und die Ausrüstung, die du hast, und erstellt einen personalisierten 7-Tage-Trainings- und Ernährungsplan. Du bekommst ihn als PDF, das du speichern, drucken und noch am selben Tag befolgen kannst: keine Kreditkarte, keine Anmeldung oder Konto, keine App-Installation nötig, und er ist in etwa 60 Sekunden fertig. Wenn du später Tracking, einen KI-Coach und einen Plan möchtest, der sich mit deinem Training anpasst, bietet die fytrr-App genau das. Die App ist ein kostenpflichtiges Abo mit einer 7-tägigen kostenlosen Testphase über den App Store, die zum Start eine Zahlungsmethode erfordert und jederzeit kündbar ist. Der kostenlose PDF-Plan oben bleibt so oder so kostenlos.',
+                    'cta' => [
+                        'text' => 'Hol dir einen personalisierten 7-Tage-Trainings- und Ernährungsplan als kostenloses PDF.',
+                        'url' => '/de/persoenlicher-ernaehrungsplan',
+                        'label' => 'Deinen kostenlosen 7-Tage-Plan holen',
+                    ],
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Ist dieser 7-Tage-Plan wirklich kostenlos?',
+                    'answer' => 'Ja. Du kannst den Plan auf dieser Seite kostenlos befolgen, und du kannst einen personalisierten 7-Tage-Trainings- und Ernährungsplan von fytrr als kostenloses PDF erstellen, ohne Karte und ohne Anmeldung.',
+                ],
+                [
+                    'question' => 'Brauche ich für diesen Plan ein Fitnessstudio?',
+                    'answer' => 'Nein. Die meisten Einheiten lassen sich zuhause mit dem eigenen Körpergewicht oder einem Paar Kurzhanteln oder Widerstandsbändern machen. Wo eine Maschine genannt wird, gibt es eine Alternative für zuhause.',
+                ],
+                [
+                    'question' => 'Kann ich mit einem 7-Tage-Plan abnehmen?',
+                    'answer' => 'Eine einzelne Woche verändert deinen Körper nicht, aber sie baut die Gewohnheit auf und startet, kombiniert mit einem kleinen Kaloriendefizit, den Prozess. Nutze einen Kalorienrechner, um ein sinnvolles Defizit festzulegen, statt zu hart zu kürzen.',
+                ],
+                [
+                    'question' => 'Wie unterscheidet sich das von einer 7-tägigen App-Testphase?',
+                    'answer' => 'Eine 7-Tage-Testphase erfordert meist eine Kreditkarte und belastet dich am Ende der Testphase, sofern du nicht kündigst. Das hier ist ein 7-Tage-Plan, der dir bleibt, ohne Karte und ohne etwas zu kündigen.',
+                ],
+                [
+                    'question' => 'Wie viel Protein sollte ich bei diesem Plan essen?',
+                    'answer' => 'Etwa 1,6 bis 2,2 Gramm pro Kilogramm Körpergewicht, wenn du regelmäßig trainierst. Verteile es über deine Mahlzeiten, mit einer Proteinquelle zu Frühstück, Mittag und Abendessen.',
+                ],
+                [
+                    'question' => 'Kann ich die Woche wiederholen?',
+                    'answer' => 'Ja. Wiederhole sie und lege jede Woche ein wenig drauf: etwas mehr Gewicht, eine Wiederholung mehr oder einen Satz mehr. Diese Steigerung treibt langfristig die Ergebnisse.',
+                ],
+            ],
+
+            'calorie_calculator_slug' => 'kostenlose-tools/kalorienrechner',
+
+            'sources' => [
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'WHO — Merkblatt zu gesunder Ernährung', 'url' => 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'],
+            ],
+        ],
+
         'ernaehrungsplan-erstellen' => [
             'title' => 'Persönlichen Ernährungsplan erstellen kostenlos - Anleitung (2026)',
             'description' => 'Ernährungsplan erstellen in 5 Schritten, kostenlos. Mit der 3-3-1-Methode, Wochenplänen und Einkaufsliste. Für Sport, Abnehmen und Muskelaufbau.',
@@ -31,16 +109,16 @@ return [
             'published_at' => '2026-04-08',
             'last_updated_at' => '2026-04-08',
 
-            'intro' => 'Du willst dich besser ernähren. Vielleicht abnehmen, vielleicht Muskeln aufbauen, vielleicht einfach aufhören, jeden Abend vor dem Kühlschrank zu stehen und "irgendwas" zu essen. Der erste Ratschlag, den du überall liest: "Erstell dir einen Ernährungsplan." Das klingt einfach. Ist es auch. Aber die meisten machen es sich komplizierter als nötig. In dieser Anleitung zeige ich dir — Tobias Lobitz, Gründer von Fytrr — wie du einen Ernährungsplan erstellst, der in deinen Alltag passt. Schritt für Schritt. Ohne Ernährungswissenschaft-Studium.',
+            'intro' => 'Du willst dich besser ernähren. Vielleicht abnehmen, vielleicht Muskeln aufbauen, vielleicht einfach aufhören, jeden Abend vor dem Kühlschrank zu stehen und "irgendwas" zu essen. Der erste Ratschlag, den du überall liest: "Erstell dir einen Ernährungsplan." Das klingt einfach. Ist es auch. Aber die meisten machen es sich komplizierter als nötig. In dieser Anleitung zeige ich dir — Tobias Lobitz, Gründer von fytrr — wie du einen Ernährungsplan erstellst, der in deinen Alltag passt. Schritt für Schritt. Ohne Ernährungswissenschaft-Studium.',
 
             'sections' => [
                 [
                     'heading' => 'Warum die meisten Ernährungspläne scheitern',
-                    'content' => 'Bevor wir anfangen: Lass uns kurz darüber reden, warum Ernährungspläne nicht funktionieren. Nicht die Pläne selbst — sondern wie Leute sie umsetzen. Aus den Nutzungsdaten von Fytrr sehen wir drei Muster: Erstens, zu viel Abwechslung von Tag 1. Wer sich 7 verschiedene Frühstücke, 7 Mittagessen und 7 Abendessen vornimmt, hat 21 Mahlzeiten pro Woche — 21 Rezepte, 21 Zutatenlisten. Das macht niemand länger als eine Woche. Zweitens, unrealistische Kalorienvorgaben. Wer normal 2.400 kcal isst und sich einen 1.200-kcal-Plan erstellt, wird nach 3 Tagen aufgeben. Ein gesundes Defizit liegt bei 300–500 kcal — das empfiehlt auch die Deutsche Gesellschaft für Ernährung (DGE). Drittens, kein Plan für den Notfall. Dienstag Abend, langer Tag, keine Lust zu kochen — wer keine einfache Backup-Mahlzeit eingeplant hat, bestellt Pizza. Die Lösung für alle drei Probleme: Weniger planen, aber das Richtige planen.',
+                    'content' => 'Bevor wir anfangen: Lass uns kurz darüber reden, warum Ernährungspläne nicht funktionieren. Nicht die Pläne selbst — sondern wie Leute sie umsetzen. Aus den Nutzungsdaten von fytrr sehen wir drei Muster: Erstens, zu viel Abwechslung von Tag 1. Wer sich 7 verschiedene Frühstücke, 7 Mittagessen und 7 Abendessen vornimmt, hat 21 Mahlzeiten pro Woche — 21 Rezepte, 21 Zutatenlisten. Das macht niemand länger als eine Woche. Zweitens, unrealistische Kalorienvorgaben. Wer normal 2.400 kcal isst und sich einen 1.200-kcal-Plan erstellt, wird nach 3 Tagen aufgeben. Ein gesundes Defizit liegt bei 300–500 kcal — das empfiehlt auch die Deutsche Gesellschaft für Ernährung (DGE). Drittens, kein Plan für den Notfall. Dienstag Abend, langer Tag, keine Lust zu kochen — wer keine einfache Backup-Mahlzeit eingeplant hat, bestellt Pizza. Die Lösung für alle drei Probleme: Weniger planen, aber das Richtige planen.',
                 ],
                 [
                     'heading' => 'Die 3-3-1-Methode: Ernährungsplanung, die funktioniert',
-                    'content' => 'Nach der Auswertung von über 8.000 generierten Mahlzeitenplänen auf Fytrr haben wir ein Muster identifiziert, das bei den erfolgreichsten Nutzern immer wieder auftaucht. Wir nennen es die 3-3-1-Methode: 3 Hauptmahlzeiten pro Tag, die zusammen dein Kalorienziel treffen. 3 feste Gerichte pro Mahlzeiten-Slot, die du wöchentlich rotierst. 1 Backup-Mahlzeit, die du immer im Haus hast. Das ergibt 9 Gerichte für die ganze Woche plus eine Notfall-Option. Warum das funktioniert: 9 Gerichte sind überschaubar und passen auf eine Einkaufsliste. Wiederholung reduziert Entscheidungsmüdigkeit — du musst nicht jeden Morgen überlegen, was du isst. Und die Backup-Mahlzeit fängt schlechte Tage ab. Beispiel: Vollkornbrot mit Frischkäse und Thunfisch. Keine Vorbereitung, 400 kcal, 35g Protein. Immer im Haus.',
+                    'content' => 'Nach der Auswertung von über 8.000 generierten Mahlzeitenplänen auf fytrr haben wir ein Muster identifiziert, das bei den erfolgreichsten Nutzern immer wieder auftaucht. Wir nennen es die 3-3-1-Methode: 3 Hauptmahlzeiten pro Tag, die zusammen dein Kalorienziel treffen. 3 feste Gerichte pro Mahlzeiten-Slot, die du wöchentlich rotierst. 1 Backup-Mahlzeit, die du immer im Haus hast. Das ergibt 9 Gerichte für die ganze Woche plus eine Notfall-Option. Warum das funktioniert: 9 Gerichte sind überschaubar und passen auf eine Einkaufsliste. Wiederholung reduziert Entscheidungsmüdigkeit — du musst nicht jeden Morgen überlegen, was du isst. Und die Backup-Mahlzeit fängt schlechte Tage ab. Beispiel: Vollkornbrot mit Frischkäse und Thunfisch. Keine Vorbereitung, 400 kcal, 35g Protein. Immer im Haus.',
                 ],
                 [
                     'heading' => 'Schritt 1: Dein Ziel festlegen',
@@ -64,7 +142,7 @@ return [
                 ],
                 [
                     'heading' => 'Meal Prep: Der Sonntagstrick',
-                    'content' => 'Du musst nicht jeden Tag kochen. Mit 90 Minuten am Sonntag bereitest du den Großteil deiner Woche vor: Reis kochen, Hähnchenbrust im Ofen (alle 600g auf einmal), Gemüse schneiden und Brokkoli blanchieren, Linseneintopf kochen (eine große Portion für 3 Mahlzeiten), Overnight Oats für 3 Tage vorbereiten, alles portionieren. Ergebnis: 5–6 fertige Mahlzeiten im Kühlschrank. Mittagessen und Abendessen für Montag bis Mittwoch sind fertig. Ab Donnerstag kochst du frisch oder wiederholst das Prep. Fytrr-Nutzer, die Meal Prep nutzen, behalten ihren Plan im Schnitt 2,3× länger bei als Nutzer, die täglich kochen. Der Grund ist simpel: Wenn das Essen schon fertig im Kühlschrank steht, gibt es keinen Moment der Entscheidung.',
+                    'content' => 'Du musst nicht jeden Tag kochen. Mit 90 Minuten am Sonntag bereitest du den Großteil deiner Woche vor: Reis kochen, Hähnchenbrust im Ofen (alle 600g auf einmal), Gemüse schneiden und Brokkoli blanchieren, Linseneintopf kochen (eine große Portion für 3 Mahlzeiten), Overnight Oats für 3 Tage vorbereiten, alles portionieren. Ergebnis: 5–6 fertige Mahlzeiten im Kühlschrank. Mittagessen und Abendessen für Montag bis Mittwoch sind fertig. Ab Donnerstag kochst du frisch oder wiederholst das Prep. fytrr-Nutzer, die Meal Prep nutzen, behalten ihren Plan im Schnitt 2,3× länger bei als Nutzer, die täglich kochen. Der Grund ist simpel: Wenn das Essen schon fertig im Kühlschrank steht, gibt es keinen Moment der Entscheidung.',
                 ],
                 [
                     'heading' => 'Was tun, wenn der Plan nicht funktioniert?',
@@ -72,15 +150,15 @@ return [
                 ],
                 [
                     'heading' => 'Ernährungsplan selber erstellen vs. erstellen lassen',
-                    'content' => 'Du kannst deinen Plan komplett selbst erstellen — diese Anleitung gibt dir alles, was du dafür brauchst. Aber es gibt Alternativen: Selber erstellen ist kostenlos, dauert 2–3 Stunden initial, und du kennst dich selbst am besten. Eine App wie Fytrr kostet 3,99 EUR/Monat, dauert 5 Minuten, und die KI passt an Ziel, Budget und Vorlieben an. Ein Ernährungsberater kostet 80–150 EUR/Stunde, bietet die höchste Individualisierung, aber erfordert Termine für Anpassungen. Ehrliche Einschätzung: Für die meisten reicht eine App oder diese Anleitung. Einen Ernährungsberater brauchst du bei medizinischen Einschränkungen wie Diabetes, Nierenprobleme oder Essstörung. In diesen Fällen ersetzt keine App eine professionelle Beratung.',
+                    'content' => 'Du kannst deinen Plan komplett selbst erstellen — diese Anleitung gibt dir alles, was du dafür brauchst. Aber es gibt Alternativen: Selber erstellen ist kostenlos, dauert 2–3 Stunden initial, und du kennst dich selbst am besten. Eine App wie fytrr kostet 3,99 EUR/Monat, dauert 5 Minuten, und die KI passt an Ziel, Budget und Vorlieben an. Ein Ernährungsberater kostet 80–150 EUR/Stunde, bietet die höchste Individualisierung, aber erfordert Termine für Anpassungen. Ehrliche Einschätzung: Für die meisten reicht eine App oder diese Anleitung. Einen Ernährungsberater brauchst du bei medizinischen Einschränkungen wie Diabetes, Nierenprobleme oder Essstörung. In diesen Fällen ersetzt keine App eine professionelle Beratung.',
                 ],
                 [
                     'heading' => '7 Fehler, die deinen Ernährungsplan sabotieren',
                     'content' => 'Erstens: Du trinkst deine Kalorien. Ein Latte Macchiato hat 200 kcal, ein Glas Orangensaft 110 kcal — drei Getränke am Tag und du hast 500 kcal verbraucht, ohne etwas gegessen zu haben. Zweitens: Du unterschätzt Portionsgrößen. In den ersten 2 Wochen: Küchenwaage nutzen. Drittens: Du lässt Mahlzeiten aus und isst dann abends mehr. Viertens: Du kochst zu kompliziert — Rezepte mit 15 Zutaten sind Sonntagsprojekte, nicht Alltag. Fünftens: Du ignorierst, was du gerne isst. Sechstens: Du versuchst perfekt zu sein — 80% Einhaltung reichen für Ergebnisse. Siebtens: Du passt den Plan nie an. Dein Körper verändert sich. Wenn du 5 kg abgenommen hast, ist dein Kalorienbedarf gesunken. Rechne alle 4–6 Wochen neu.',
                 ],
                 [
-                    'heading' => 'Was Fytrr anders macht',
-                    'content' => 'Die meisten Ernährungsplan-Apps geben dir eine PDF-Liste mit Mahlzeiten und fertig. Fytrr funktioniert anders: KI-generierte Pläne, die auf dein Ziel, Budget, Vorlieben und Unverträglichkeiten abgestimmt sind. Mahlzeiten tauschen mit einem Tap — keine Lust auf Lachs heute? Einmal tippen, neue Mahlzeit, gleiche Kalorien und Makros. Training und Ernährung zusammen, aufeinander abgestimmt. Dein Ernährungsplan berücksichtigt, ob du heute trainierst oder nicht. 3,99 EUR/Monat, kein Vertrag, jederzeit kündbar.',
+                    'heading' => 'Was fytrr anders macht',
+                    'content' => 'Die meisten Ernährungsplan-Apps geben dir eine PDF-Liste mit Mahlzeiten und fertig. fytrr funktioniert anders: KI-generierte Pläne, die auf dein Ziel, Budget, Vorlieben und Unverträglichkeiten abgestimmt sind. Mahlzeiten tauschen mit einem Tap — keine Lust auf Lachs heute? Einmal tippen, neue Mahlzeit, gleiche Kalorien und Makros. Training und Ernährung zusammen, aufeinander abgestimmt. Dein Ernährungsplan berücksichtigt, ob du heute trainierst oder nicht. 3,99 EUR/Monat, kein Vertrag, jederzeit kündbar.',
                 ],
                 [
                     'heading' => 'Fazit',
@@ -96,7 +174,7 @@ return [
             'faqs' => [
                 [
                     'question' => 'Wie lange dauert es, einen Ernährungsplan zu erstellen?',
-                    'answer' => 'Mit einer Schritt-für-Schritt-Anleitung 1–2 Stunden für den ersten Plan. Danach 15–20 Minuten pro Woche für Anpassungen und Einkaufsliste. Mit einer App wie Fytrr: 5 Minuten.',
+                    'answer' => 'Mit einer Schritt-für-Schritt-Anleitung 1–2 Stunden für den ersten Plan. Danach 15–20 Minuten pro Woche für Anpassungen und Einkaufsliste. Mit einer App wie fytrr: 5 Minuten.',
                 ],
                 [
                     'question' => 'Kann ich einen Ernährungsplan kostenlos erstellen?',
@@ -152,8 +230,8 @@ return [
             'sources' => [
                 ['label' => 'DGE — Vollwertig essen und trinken nach den 10 Regeln der DGE', 'url' => 'https://www.dge.de/gesunde-ernaehrung/dge-ernaehrungsempfehlungen/10-regeln/'],
                 ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
-                ['label' => 'Fytrr-Plattformdaten: 8.000+ generierte Ernährungspläne, Zeitraum Jan 2025 – Mrz 2026'],
-                ['label' => 'Fytrr-Nutzungsdaten: Meal-Prep-Nutzer behalten ihren Plan 2,3× länger bei (n = 1.100, Zeitraum Sep 2025 – Mrz 2026)'],
+                ['label' => 'fytrr-Plattformdaten: 8.000+ generierte Ernährungspläne, Zeitraum Jan 2025 – Mrz 2026'],
+                ['label' => 'fytrr-Nutzungsdaten: Meal-Prep-Nutzer behalten ihren Plan 2,3× länger bei (n = 1.100, Zeitraum Sep 2025 – Mrz 2026)'],
             ],
         ],
 
@@ -205,7 +283,7 @@ return [
                 ],
                 [
                     'heading' => 'Vom Kalorienwert zum Ernährungsplan',
-                    'content' => 'Du kennst jetzt deinen Kalorienbedarf — aber was isst du konkret? Genau hier wird es für die meisten schwierig. Die Theorie ist klar, die Umsetzung im Alltag nicht. Fytrr löst genau dieses Problem: Unsere KI erstellt dir einen personalisierten Ernährungsplan basierend auf deinem berechneten Kalorienziel. Jede Mahlzeit ist durchgerechnet, jedes Makro berücksichtigt — und du kannst Mahlzeiten jederzeit tauschen, wenn dir etwas nicht schmeckt. Dazu bekommst du einen passenden Trainingsplan. 7 Tage kostenlos testen.',
+                    'content' => 'Du kennst jetzt deinen Kalorienbedarf — aber was isst du konkret? Genau hier wird es für die meisten schwierig. Die Theorie ist klar, die Umsetzung im Alltag nicht. fytrr löst genau dieses Problem: Unsere KI erstellt dir einen personalisierten Ernährungsplan basierend auf deinem berechneten Kalorienziel. Jede Mahlzeit ist durchgerechnet, jedes Makro berücksichtigt — und du kannst Mahlzeiten jederzeit tauschen, wenn dir etwas nicht schmeckt. Dazu bekommst du einen passenden Trainingsplan. 7 Tage kostenlos testen.',
                 ],
             ],
 
@@ -267,12 +345,12 @@ return [
                     'content' => 'Wenn du 12-16 Wochen bis zu deinem Hyrox hast, hier ein sinnvoller Aufbau: Wochen 1-6 — Kraft aufbauen. 3-4× pro Woche Krafttraining mit Fokus auf Kniebeugen, Kreuzheben, Rudern, Schulterdrücken, Ausfallschritte und Farmer\'s Carry. Dazu 2× pro Woche lockeres Laufen (5-8 km). Wochen 7-12 — Übergang zu Kraftausdauer. Gewichte leicht reduzieren, Wiederholungen erhöhen (15-20 statt 8-12). Supersets und Circuits einbauen, Laufumfang leicht erhöhen. Wochen 13-16 — Hyrox-spezifisch (wenn möglich). Stationen simulieren, Sled-Training wenn verfügbar, Race-Pace üben. Der Punkt ist: Die ersten 6 Wochen sind reines Krafttraining. Kein Hyrox-spezifisches Training nötig. Einfach stärker werden.',
                 ],
                 [
-                    'heading' => 'Was Fytrr für deine Hyrox-Vorbereitung tun kann',
-                    'content' => 'Ehrlich gesagt: Fytrr ist keine Hyrox-App. Wir generieren keine Hyrox-spezifischen Trainingspläne mit Sled-Stationen und SkiErg-Intervallen. Was Fytrr kann: Dir einen soliden Krafttrainingsplan erstellen, der genau die Grundlagen abdeckt, die du für Hyrox brauchst. Personalisierter Kraftplan — sag der App dein Ziel, dein Level und wie oft du trainieren willst. Verschiedene Splits — Ganzkörper, Oberkörper/Unterkörper, Push/Pull/Legs. Ernährungsplan dazu — genug Protein für den Muskelaufbau, genug Kohlenhydrate für die Ausdauer. Für 3,99€/Monat. Für das Hyrox-spezifische Training in den letzten Wochen brauchst du dann ein Hyrox Gym oder einen spezialisierten Coach. Aber die Kraft-Basis? Die kannst du jetzt aufbauen.',
+                    'heading' => 'Was fytrr für deine Hyrox-Vorbereitung tun kann',
+                    'content' => 'Ehrlich gesagt: fytrr ist keine Hyrox-App. Wir generieren keine Hyrox-spezifischen Trainingspläne mit Sled-Stationen und SkiErg-Intervallen. Was fytrr kann: Dir einen soliden Krafttrainingsplan erstellen, der genau die Grundlagen abdeckt, die du für Hyrox brauchst. Personalisierter Kraftplan — sag der App dein Ziel, dein Level und wie oft du trainieren willst. Verschiedene Splits — Ganzkörper, Oberkörper/Unterkörper, Push/Pull/Legs. Ernährungsplan dazu — genug Protein für den Muskelaufbau, genug Kohlenhydrate für die Ausdauer. Für 3,99€/Monat. Für das Hyrox-spezifische Training in den letzten Wochen brauchst du dann ein Hyrox Gym oder einen spezialisierten Coach. Aber die Kraft-Basis? Die kannst du jetzt aufbauen.',
                 ],
                 [
                     'heading' => '5 Übungen, die dich am meisten auf Hyrox vorbereiten',
-                    'content' => 'Wenn du nur 5 Übungen machen könntest: 1. Kniebeugen — Basis für Sled Push, Lunges, Wall Balls. Kein Hyrox ohne starke Beine. 2. Kreuzheben — Trainiert den gesamten hinteren Körper plus Griffkraft. 3. Kurzhantel-Rudern — Zugkraft für Sled Pull, SkiErg, Rowing. Einarmig für zusätzliche Core-Arbeit. 4. Schulterdrücken — Stehend mit Kurzhanteln. Direkte Übertragung auf Wall Balls. 5. Farmer\'s Carry — Griffkraft, Core, Ganzkörperstabilität. Und es ist buchstäblich eine Hyrox-Station. Alle 5 findest du in einem typischen Fytrr-Kraftplan.',
+                    'content' => 'Wenn du nur 5 Übungen machen könntest: 1. Kniebeugen — Basis für Sled Push, Lunges, Wall Balls. Kein Hyrox ohne starke Beine. 2. Kreuzheben — Trainiert den gesamten hinteren Körper plus Griffkraft. 3. Kurzhantel-Rudern — Zugkraft für Sled Pull, SkiErg, Rowing. Einarmig für zusätzliche Core-Arbeit. 4. Schulterdrücken — Stehend mit Kurzhanteln. Direkte Übertragung auf Wall Balls. 5. Farmer\'s Carry — Griffkraft, Core, Ganzkörperstabilität. Und es ist buchstäblich eine Hyrox-Station. Alle 5 findest du in einem typischen fytrr-Kraftplan.',
                 ],
             ],
 
@@ -308,6 +386,84 @@ return [
 
     'en' => [
 
+        'free-7-day-workout-and-meal-plan' => [
+            'title' => 'Free 7-Day Workout and Meal Plan (PDF, No Signup)',
+            'description' => 'A complete free 7-day workout and meal plan you can follow this week, plus a way to get a personalized version as a PDF with no signup and no credit card.',
+            'h1' => 'Free 7-Day Workout and Meal Plan (PDF, No Signup)',
+            'keywords' => ['free 7 day workout and meal plan', 'free workout and meal plan pdf', '7 day meal plan', '7 day workout plan', 'free meal plan no signup', 'workout and meal plan pdf', 'free fitness plan'],
+            'internal_slug' => 'free-7-day-workout-and-meal-plan',
+            'published_at' => '2026-07-28',
+            'last_updated_at' => '2026-07-28',
+            'og_image' => '/assets/images/og/free-7-day-workout-and-meal-plan.webp',
+            'og_image_alt' => 'Open planner showing a 7-day workout and meal plan, next to dumbbells, a water bottle, a phone and a healthy grilled-chicken salad bowl on a wooden table',
+            'seo_image' => '/assets/images/seo/free-7-day-workout-and-meal-plan.webp',
+            'seo_image_alt' => 'Open planner showing a 7-day workout and meal plan, next to dumbbells, a water bottle, a phone and a healthy grilled-chicken salad bowl on a wooden table',
+
+            'intro' => 'Here is a complete, free 7-day workout and meal plan you can start today. Below you will find a full week of training paired with a matching week of meals, plus guidance on how to adjust it to your own body and goal. A quick note on "free": most fitness apps offer a 7-day trial, but only if you enter a card that charges you automatically after day 7. This plan is different. There is nothing to cancel and no card to enter. You get a full week of workouts and meals, and you keep it. If you would rather skip the reading and get a personalized version, fytrr generates your own 7-day workout and meal plan as a PDF in about 60 seconds, with no signup and no credit card.',
+
+            'sections' => [
+                [
+                    'heading' => 'What you get in this free plan',
+                    'content' => 'Every plan here covers four things. Seven days of training built around a simple, effective weekly split. Seven days of meals with a balanced, high-protein structure. Rest and recovery built in, because a good week is not seven hard days. And a way to personalize it to your calories, goal and equipment. You do not need a gym for most of this. Where equipment helps, there is a home-friendly swap.',
+                ],
+                [
+                    'heading' => 'The 7-day workout plan',
+                    'content' => 'This is a balanced beginner-to-intermediate week: four training days, two active-recovery days and one full rest day. Warm up for five minutes before each session and leave one or two reps in reserve on each set. Monday is full-body strength: squats, push-ups, bent-over rows and a plank, three sets each. Tuesday is active recovery, a 30-to-40-minute brisk walk or easy cycle. Wednesday targets the upper body: overhead press, lat pulldown or band rows, dumbbell chest press, plus biceps and triceps, three sets each. Thursday is mobility and stretching for 20 to 30 minutes. Friday is lower body: Romanian deadlifts, lunges, glute bridges and calf raises, three sets each. Saturday is conditioning, a 20-to-25-minute interval session or a longer easy run or ride. Sunday is full rest, with light walking optional. Beginners: start at the low end of the set and rep ranges and add a little each week. That progression, progressive overload, is the single most important principle for results.',
+                ],
+                [
+                    'heading' => 'The 7-day meal plan',
+                    'content' => 'The meals follow a simple pattern: protein at every meal, plenty of vegetables and fibre, and enough carbohydrate to fuel your training. Portion sizes depend on your calorie needs, which is the one number worth getting right first. Breakfasts rotate through Greek yogurt with oats and berries, a veggie omelette with wholegrain toast, a protein smoothie with banana, overnight oats with peanut butter, and scrambled eggs with avocado toast. Lunches include chicken with rice and mixed veg, a tuna and bean salad, a turkey wrap with a side salad, a chicken and quinoa bowl, and lentil soup with a wholegrain roll. Dinners cover salmon with potatoes and salad, a lean beef stir-fry with rice, a tofu curry with brown rice, white fish with couscous and veg, and chicken thighs with sweet potato. Snacks stay simple: an apple with a handful of nuts, cottage cheese, boiled eggs, Greek yogurt, or a protein shake. Vegetarian or vegan? Swap animal proteins for tofu, tempeh, legumes, eggs where allowed, and a quality protein powder. You may need slightly more total protein because plant sources are less concentrated.',
+                ],
+                [
+                    'heading' => 'How to personalize it to your body',
+                    'content' => 'A plan works when the amount of food matches your goal. Two quick steps. First, find your calorie target: use a calorie calculator to estimate how many calories you need for weight loss, muscle gain or maintenance. Second, prioritize protein: aim for roughly 1.6 to 2.2 grams per kilogram of bodyweight if you are training, and build the rest of your calories from carbohydrate and fat around your sessions. From there, scale the portions in the meal plan up or down to hit your number. The workout stays the same; only the food volume changes with your goal. This plan is general information for healthy adults, not medical advice. If you have an injury or a health condition, or are new to exercise, check with a qualified professional before starting.',
+                ],
+                [
+                    'heading' => 'Get your own 7-day plan as a free PDF',
+                    'content' => 'The plan above is a solid starting point, but it is not built around you. fytrr takes your goal, your experience and the equipment you have, and generates a personalized 7-day workout and meal plan. You get it as a PDF you can save, print and follow the same day: no credit card, no signup or account, no app install required, and it is ready in about 60 seconds. If you later want tracking, an AI coach and a plan that adapts as you train, the fytrr app offers all of that. The app is a paid subscription with a 7-day free trial through the App Store, which does require a payment method to start and can be cancelled anytime. The free PDF plan above stays free either way.',
+                    'cta' => [
+                        'text' => 'Get a personalized 7-day workout and meal plan as a free PDF.',
+                        'url' => '/en/free-workout-and-meal-plan',
+                        'label' => 'Get your free 7-day plan',
+                    ],
+                ],
+            ],
+
+            'faqs' => [
+                [
+                    'question' => 'Is this 7-day plan really free?',
+                    'answer' => 'Yes. You can follow the plan on this page at no cost, and you can generate a personalized 7-day workout and meal plan from fytrr as a free PDF with no card and no signup.',
+                ],
+                [
+                    'question' => 'Do I need a gym for this plan?',
+                    'answer' => 'No. Most sessions can be done at home with bodyweight or a pair of dumbbells or resistance bands. Where a machine is listed, there is a home-friendly alternative.',
+                ],
+                [
+                    'question' => 'Can I lose weight with a 7-day plan?',
+                    'answer' => 'A single week will not transform your body, but it builds the habit and, paired with a small calorie deficit, starts the process. Use a calorie calculator to set a sensible deficit rather than cutting too hard.',
+                ],
+                [
+                    'question' => 'How is this different from a 7-day free app trial?',
+                    'answer' => 'A 7-day trial usually requires a credit card and charges you when the trial ends unless you cancel. This is a 7-day plan you keep, with no card and nothing to cancel.',
+                ],
+                [
+                    'question' => 'How much protein should I eat on this plan?',
+                    'answer' => 'Around 1.6 to 2.2 grams per kilogram of bodyweight if you train regularly. Spread it across your meals, with a protein source at breakfast, lunch and dinner.',
+                ],
+                [
+                    'question' => 'Can I repeat the week?',
+                    'answer' => 'Yes. Repeat it and add a little each week: slightly more weight, one more rep, or one more set. That progression is what drives results over time.',
+                ],
+            ],
+
+            'calorie_calculator_slug' => 'free-tools/calorie-calculator',
+
+            'sources' => [
+                ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
+                ['label' => 'WHO — Healthy diet fact sheet', 'url' => 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'],
+            ],
+        ],
+
         'how-to-create-a-meal-plan' => [
             'title' => 'How to Create a Meal Plan: Free Complete Guide (2026)',
             'description' => 'Create a free workout and meal plan in 5 steps. Weekly plans, shopping list, and nutrition tips for weight loss and muscle gain. No signup.',
@@ -321,16 +477,16 @@ return [
             'published_at' => '2026-04-08',
             'last_updated_at' => '2026-04-08',
 
-            'intro' => 'You want to eat better. Maybe lose weight, maybe build muscle, maybe just stop standing in front of the fridge every evening eating "whatever". The first piece of advice you read everywhere: "Create a meal plan." Sounds simple. It is. But most people make it more complicated than it needs to be. In this guide, I\'ll show you — Tobias Lobitz, founder of Fytrr — how to create a meal plan that fits your daily life. Step by step. No nutrition science degree required.',
+            'intro' => 'You want to eat better. Maybe lose weight, maybe build muscle, maybe just stop standing in front of the fridge every evening eating "whatever". The first piece of advice you read everywhere: "Create a meal plan." Sounds simple. It is. But most people make it more complicated than it needs to be. In this guide, I\'ll show you — Tobias Lobitz, founder of fytrr — how to create a meal plan that fits your daily life. Step by step. No nutrition science degree required.',
 
             'sections' => [
                 [
                     'heading' => 'Why most meal plans fail',
-                    'content' => 'Before we start: let\'s talk about why meal plans don\'t work. Not the plans themselves — but how people execute them. From Fytrr\'s user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you\'ll give up after 3 days. A healthy deficit is 300–500 kcal — that\'s also what the WHO recommends. Third, no backup plan. Tuesday evening, long day, no energy to cook — without a simple backup meal planned, you order pizza. The solution to all three problems: plan less, but plan the right things.',
+                    'content' => 'Before we start: let\'s talk about why meal plans don\'t work. Not the plans themselves — but how people execute them. From fytrr\'s user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you\'ll give up after 3 days. A healthy deficit is 300–500 kcal — that\'s also what the WHO recommends. Third, no backup plan. Tuesday evening, long day, no energy to cook — without a simple backup meal planned, you order pizza. The solution to all three problems: plan less, but plan the right things.',
                 ],
                 [
                     'heading' => 'The 3-3-1 method: meal planning that works',
-                    'content' => 'After analysing over 8,000 generated meal plans on Fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option. Why it works: 9 dishes are manageable and fit on one shopping list. Repetition reduces decision fatigue — you don\'t have to think about what to eat every morning. And the backup meal catches bad days. Example: wholemeal bread with cream cheese and tinned tuna. No prep, 400 kcal, 35g protein. Always in the house.',
+                    'content' => 'After analysing over 8,000 generated meal plans on fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option. Why it works: 9 dishes are manageable and fit on one shopping list. Repetition reduces decision fatigue — you don\'t have to think about what to eat every morning. And the backup meal catches bad days. Example: wholemeal bread with cream cheese and tinned tuna. No prep, 400 kcal, 35g protein. Always in the house.',
                 ],
                 [
                     'heading' => 'Step 1: Set your goal',
@@ -354,7 +510,7 @@ return [
                 ],
                 [
                     'heading' => 'Meal prep: The Sunday trick',
-                    'content' => 'You don\'t have to cook every day. With 90 minutes on Sunday, you prepare most of your week: cook rice, bake chicken breast in the oven (all 600g at once), chop vegetables and blanch broccoli, cook a lentil stew (one big batch for 3 meals), prepare overnight oats for 3 days, portion everything into containers. Result: 5–6 ready meals in the fridge. Lunch and dinner for Monday to Wednesday are done. From Thursday, cook fresh or repeat the prep for the second half of the week. Fytrr users who use meal prep stick with their plan 2.3× longer on average than users who cook daily. The reason is simple: when the food is already in the fridge, there\'s no moment of decision.',
+                    'content' => 'You don\'t have to cook every day. With 90 minutes on Sunday, you prepare most of your week: cook rice, bake chicken breast in the oven (all 600g at once), chop vegetables and blanch broccoli, cook a lentil stew (one big batch for 3 meals), prepare overnight oats for 3 days, portion everything into containers. Result: 5–6 ready meals in the fridge. Lunch and dinner for Monday to Wednesday are done. From Thursday, cook fresh or repeat the prep for the second half of the week. fytrr users who use meal prep stick with their plan 2.3× longer on average than users who cook daily. The reason is simple: when the food is already in the fridge, there\'s no moment of decision.',
                 ],
                 [
                     'heading' => 'What to do when the plan isn\'t working',
@@ -362,15 +518,15 @@ return [
                 ],
                 [
                     'heading' => 'Creating a meal plan yourself vs. letting an app do it',
-                    'content' => 'You can create your plan entirely yourself — this guide gives you everything you need. But there are alternatives: Creating it yourself is free, takes 2–3 hours initially, and you know yourself best. An app like Fytrr costs 3.99 EUR/month, takes 5 minutes, and the AI adapts to your goal, budget and preferences. A nutritionist costs 80–150 EUR/hour, offers the highest personalisation, but requires appointments for adjustments. Honest assessment: for most people, an app or this guide is enough. You need a nutritionist if you have medical conditions like diabetes, kidney problems or eating disorders. In those cases, no app replaces professional advice.',
+                    'content' => 'You can create your plan entirely yourself — this guide gives you everything you need. But there are alternatives: Creating it yourself is free, takes 2–3 hours initially, and you know yourself best. An app like fytrr costs 3.99 EUR/month, takes 5 minutes, and the AI adapts to your goal, budget and preferences. A nutritionist costs 80–150 EUR/hour, offers the highest personalisation, but requires appointments for adjustments. Honest assessment: for most people, an app or this guide is enough. You need a nutritionist if you have medical conditions like diabetes, kidney problems or eating disorders. In those cases, no app replaces professional advice.',
                 ],
                 [
                     'heading' => '7 mistakes that sabotage your meal plan',
                     'content' => 'First: you drink your calories. A latte macchiato has 200 kcal, a glass of orange juice 110 kcal — three drinks a day and you\'ve consumed 500 kcal without eating anything. Second: you underestimate portion sizes. For the first 2 weeks: use a kitchen scale. Third: you skip meals and then overeat in the evening. Fourth: you cook too elaborately — recipes with 15 ingredients are Sunday projects, not everyday meals. Fifth: you ignore what you actually like to eat. Sixth: you try to be perfect — 80% adherence is enough for results. Seventh: you never adjust the plan. Your body changes. If you\'ve lost 5 kg, your calorie needs have dropped. Recalculate every 4–6 weeks.',
                 ],
                 [
-                    'heading' => 'What Fytrr does differently',
-                    'content' => 'Most meal plan apps give you a PDF list of meals and that\'s it. Fytrr works differently: AI-generated plans tailored to your goal, budget, preferences and intolerances. Swap meals with one tap — don\'t fancy salmon today? One tap, new meal, same calories and macros. Training and nutrition together, coordinated. Your meal plan takes into account whether you\'re training today or not. 3.99 EUR/month, no contract, cancel anytime.',
+                    'heading' => 'What fytrr does differently',
+                    'content' => 'Most meal plan apps give you a PDF list of meals and that\'s it. fytrr works differently: AI-generated plans tailored to your goal, budget, preferences and intolerances. Swap meals with one tap — don\'t fancy salmon today? One tap, new meal, same calories and macros. Training and nutrition together, coordinated. Your meal plan takes into account whether you\'re training today or not. 3.99 EUR/month, no contract, cancel anytime.',
                 ],
                 [
                     'heading' => 'Conclusion',
@@ -386,7 +542,7 @@ return [
             'faqs' => [
                 [
                     'question' => 'How long does it take to create a meal plan?',
-                    'answer' => 'With a step-by-step guide, 1–2 hours for the first plan. After that, 15–20 minutes per week for adjustments and the shopping list. With an app like Fytrr: 5 minutes.',
+                    'answer' => 'With a step-by-step guide, 1–2 hours for the first plan. After that, 15–20 minutes per week for adjustments and the shopping list. With an app like fytrr: 5 minutes.',
                 ],
                 [
                     'question' => 'Can I create a meal plan for free?',
@@ -442,8 +598,8 @@ return [
             'sources' => [
                 ['label' => 'WHO — Healthy diet fact sheet', 'url' => 'https://www.who.int/news-room/fact-sheets/detail/healthy-diet'],
                 ['label' => 'ISSN Position Stand: Protein and Exercise (Jäger et al., 2017)', 'url' => 'https://doi.org/10.1186/s12970-017-0177-8'],
-                ['label' => 'Fytrr platform data: 8,000+ generated meal plans, period Jan 2025 – Mar 2026'],
-                ['label' => 'Fytrr usage data: meal prep users retain their plan 2.3× longer (n = 1,100, period Sep 2025 – Mar 2026)'],
+                ['label' => 'fytrr platform data: 8,000+ generated meal plans, period Jan 2025 – Mar 2026'],
+                ['label' => 'fytrr usage data: meal prep users retain their plan 2.3× longer (n = 1,100, period Sep 2025 – Mar 2026)'],
             ],
         ],
 
@@ -495,7 +651,7 @@ return [
                 ],
                 [
                     'heading' => 'From calorie number to nutrition plan',
-                    'content' => 'You now know your calorie needs — but what do you actually eat? This is where most people struggle. The theory is clear, but putting it into practice daily is not. Fytrr solves exactly this problem: our AI creates a personalised nutrition plan based on your calculated calorie target. Every meal is calculated, every macro accounted for — and you can swap meals anytime if something doesn\'t suit you. Plus you get a matching workout plan. Try it free for 7 days.',
+                    'content' => 'You now know your calorie needs — but what do you actually eat? This is where most people struggle. The theory is clear, but putting it into practice daily is not. fytrr solves exactly this problem: our AI creates a personalised nutrition plan based on your calculated calorie target. Every meal is calculated, every macro accounted for — and you can swap meals anytime if something doesn\'t suit you. Plus you get a matching workout plan. Try it free for 7 days.',
                 ],
             ],
 
