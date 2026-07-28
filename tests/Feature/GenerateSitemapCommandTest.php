@@ -64,6 +64,28 @@ it('includes workout plan index for both locales', function () {
         ->toContain('/de/kostenloser-trainingsplan');
 });
 
+it('excludes noindex workout plans from the sitemap', function () {
+    // `abs` (en) and `neujahrs-trainingsplan` (de) are marked noindex in config/freeWorkouts.php.
+    // Submitting them would cause GSC "Submitted URL marked 'noindex'" errors.
+    expect(config('freeWorkouts.en.abs.noindex'))->toBeTrue();
+
+    $this->artisan('generate:sitemap')->assertSuccessful();
+
+    $sitemap = File::get(public_path('sitemap.xml'));
+
+    expect($sitemap)
+        ->not->toContain('/en/free-workout-plan/abs')
+        ->not->toContain('/de/kostenloser-trainingsplan/neujahrs-trainingsplan');
+});
+
+it('includes indexable workout plans in the sitemap', function () {
+    $this->artisan('generate:sitemap')->assertSuccessful();
+
+    $sitemap = File::get(public_path('sitemap.xml'));
+
+    expect($sitemap)->toContain('/en/free-workout-plan/strength');
+});
+
 it('includes hreflang alternates for static pages', function () {
     $this->artisan('generate:sitemap')->assertSuccessful();
 
