@@ -19,7 +19,7 @@ const canonical = `${baseUrl}/en/ai-workout-plan-generator`;
 const faqs = [
     {
         question: 'Is the AI workout plan generator really free?',
-        answer: 'Yes. You get a full personalized workout plan as a free PDF. No credit card, no account, no trial period. Fytrr offers a premium subscription for ongoing plans and meal tracking, but the initial plan generation is completely free.',
+        answer: 'Yes. You get a full personalized workout plan as a free PDF. No credit card, no account, no trial period. fytrr offers a premium subscription for ongoing plans and meal tracking, but the initial plan generation is completely free.',
     },
     {
         question: 'What information do I need to provide?',
@@ -43,7 +43,7 @@ const faqs = [
     },
     {
         question: 'Can I regenerate my plan if I do not like it?',
-        answer: 'With the free version, you get one plan. The Fytrr app lets you regenerate plans anytime and swap individual exercises or meals with one tap.',
+        answer: 'With the free version, you get one plan. The fytrr app lets you regenerate plans anytime and swap individual exercises or meals with one tap.',
     },
     {
         question: 'What format is the download?',
@@ -51,7 +51,7 @@ const faqs = [
     },
     {
         question: 'How is this different from ChatGPT workout plans?',
-        answer: 'ChatGPT gives you a generic list of exercises. Fytrr builds a structured progressive program with exercise selection logic, proper periodization, calculated training volume, and optional nutrition matching. The output is a formatted PDF, not a chat message.',
+        answer: 'ChatGPT gives you a generic list of exercises. fytrr builds a structured progressive program with exercise selection logic, proper periodization, calculated training volume, and optional nutrition matching. The output is a formatted PDF, not a chat message.',
     },
 ];
 
@@ -59,7 +59,7 @@ const webAppSchema = computed(() =>
     JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: 'Fytrr AI Workout Plan Generator',
+        name: 'fytrr AI Workout Plan Generator',
         description:
             'Free AI-powered workout plan generator. Create personalized training plans for any goal.',
         applicationCategory: 'HealthApplication',

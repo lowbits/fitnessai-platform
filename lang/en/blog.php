@@ -10,7 +10,7 @@ return [
         'heading' => 'Blog',
         'read_more' => 'Read article',
         'cta_heading' => 'From theory to practice',
-        'cta_text' => 'Fytrr creates a personalised workout and nutrition plan — with AI, in 60 seconds. Try it free for 7 days.',
+        'cta_text' => 'fytrr creates a personalised workout and nutrition plan — with AI, in 60 seconds. Try it free for 7 days.',
         'cta_button' => '7 days free — create my plan',
     ],
 ];

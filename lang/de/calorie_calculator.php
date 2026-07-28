@@ -7,13 +7,13 @@ return [
     ],
 
     'schema' => [
-        'name' => 'Fytrr Kalorienrechner',
+        'name' => 'fytrr Kalorienrechner',
     ],
 
     'faqs' => [
         [
             'question' => 'Wie genau ist der Kalorienrechner?',
-            'answer' => 'Unser Kalorienrechner nutzt die Mifflin-St-Jeor-Formel, die in Studien als genaueste Methode zur Berechnung des Grundumsatzes bestätigt wurde. Die Genauigkeit liegt bei ±10% des tatsächlichen Werts. Für noch präzisere Ergebnisse kannst du deinen Kalorienbedarf über 2–3 Wochen mit der Fytrr-App tracken.',
+            'answer' => 'Unser Kalorienrechner nutzt die Mifflin-St-Jeor-Formel, die in Studien als genaueste Methode zur Berechnung des Grundumsatzes bestätigt wurde. Die Genauigkeit liegt bei ±10% des tatsächlichen Werts. Für noch präzisere Ergebnisse kannst du deinen Kalorienbedarf über 2–3 Wochen mit der fytrr-App tracken.',
         ],
         [
             'question' => 'Wie viele Kalorien brauche ich zum Abnehmen?',
@@ -29,7 +29,7 @@ return [
         ],
         [
             'question' => 'Soll ich Kalorien tracken oder reicht der Rechner?',
-            'answer' => 'Der Rechner liefert einen guten Startwert. Für langfristigen Erfolg empfehlen wir, die ersten 2–3 Wochen die Kalorien zu tracken, um ein Gefühl für Portionsgrößen zu entwickeln. Die Fytrr-App erstellt dir automatisch einen personalisierten Ernährungsplan mit den richtigen Kalorienmengen.',
+            'answer' => 'Der Rechner liefert einen guten Startwert. Für langfristigen Erfolg empfehlen wir, die ersten 2–3 Wochen die Kalorien zu tracken, um ein Gefühl für Portionsgrößen zu entwickeln. Die fytrr-App erstellt dir automatisch einen personalisierten Ernährungsplan mit den richtigen Kalorienmengen.',
         ],
     ],
 ];

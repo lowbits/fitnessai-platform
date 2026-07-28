@@ -37,7 +37,7 @@ class AboutController extends Controller
                 ],
                 'worksFor' => [
                     '@type' => 'Organization',
-                    'name' => 'Fytrr',
+                    'name' => 'fytrr',
                     'url' => $baseUrl,
                 ],
                 'knowsAbout' => trans('about.schema.knows_about'),

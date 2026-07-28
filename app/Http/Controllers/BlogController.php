@@ -127,7 +127,7 @@ class BlogController extends Controller
             ],
             'publisher' => [
                 '@type' => 'Organization',
-                'name' => 'Fytrr',
+                'name' => 'fytrr',
                 'url' => config('app.url'),
             ],
             'speakable' => [

@@ -547,7 +547,7 @@ const comparisonFeatures = computed(() => [
                                             <th
                                                 class="px-4 py-3 text-center font-medium text-primary-400"
                                             >
-                                                Fytrr
+                                                fytrr
                                             </th>
                                         </tr>
                                     </thead>

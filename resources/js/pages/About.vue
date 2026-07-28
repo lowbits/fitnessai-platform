@@ -84,7 +84,7 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
                     <div class="mt-6 flex flex-col gap-8 sm:flex-row">
                         <img
                             :src="authorImage"
-                            alt="Tobias Lobitz — Founder of Fytrr"
+                            alt="Tobias Lobitz — Founder of fytrr"
                             class="h-48 w-48 shrink-0 self-start rounded-2xl border-2 border-primary-500/20 object-cover sm:h-56 sm:w-56"
                             itemscope
                             itemtype="https://schema.org/Person"
@@ -103,7 +103,7 @@ const schemaJson = computed(() => JSON.stringify(props.schema));
                 </div>
             </section>
 
-            <!-- Why Fytrr -->
+            <!-- Why fytrr -->
             <section class="px-4 pb-16 sm:px-6 lg:px-8">
                 <div class="mx-auto max-w-3xl">
                     <h2

@@ -21,6 +21,7 @@ interface FooterLinks {
         home: string;
         app: string;
         calorieCalculator: string;
+        macroCalculator: string;
         blog: string;
         about: string;
         legal: string;
@@ -29,6 +30,7 @@ interface FooterLinks {
         copyright: string;
     };
     calorieCalculatorUrl: string;
+    macroCalculatorUrl: string;
     blogUrl: string;
     aboutUrl: string;
     appStoreUrl: string;
@@ -227,6 +229,27 @@ watch(selectedLanguage, (newLocale) => {
                                 }"
                             >
                                 {{ footerLinks.labels.calorieCalculator }}
+                            </Link>
+                        </li>
+                        <li>
+                            <Link
+                                :href="footerLinks.macroCalculatorUrl"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.macroCalculatorUrl,
+                                            ),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(
+                                                footerLinks.macroCalculatorUrl,
+                                            ),
+                                        ),
+                                }"
+                            >
+                                {{ footerLinks.labels.macroCalculator }}
                             </Link>
                         </li>
                         <li>
