@@ -6,11 +6,13 @@ import { ref } from 'vue';
 interface Props {
     utmContent?: string;
     utmCampaign?: string;
+    prefill?: Record<string, string>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
     utmContent: 'unknown',
     utmCampaign: undefined,
+    prefill: undefined,
 });
 
 const showForm = ref(false);
@@ -58,6 +60,7 @@ const closeForm = () => {
                     :total-days="28"
                     :utm-content="props.utmContent"
                     :utm-campaign="props.utmCampaign"
+                    :prefill="props.prefill"
                     @success="closeForm"
                 />
             </div>

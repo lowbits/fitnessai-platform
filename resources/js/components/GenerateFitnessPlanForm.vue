@@ -20,6 +20,7 @@ const props = defineProps<{
     totalDays: number;
     utmContent?: string;
     utmCampaign?: string;
+    prefill?: Record<string, string>;
 }>();
 
 // i18n
@@ -68,6 +69,16 @@ const form = reactive({
     processing: false,
     errors: {} as Record<string, string>,
 });
+
+// Prefill from an upstream tool (e.g. the macro calculator) so the visitor
+// doesn't retype what they already entered. Only non-empty values are applied.
+if (props.prefill) {
+    for (const [key, value] of Object.entries(props.prefill)) {
+        if (value && key in form) {
+            (form as Record<string, unknown>)[key] = value;
+        }
+    }
+}
 
 // Helper methods for form
 const clearErrors = () => {

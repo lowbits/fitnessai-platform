@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V2\EmailVerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalorieCalculatorController;
 use App\Http\Controllers\DownloadAppController;
+use App\Http\Controllers\MacroCalculatorController;
 use App\Http\Controllers\WorkoutPlanController;
 use App\Models\Plan;
 use App\Models\User;
@@ -56,6 +57,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Calorie Calculator (SEO tool page)
     Route::get(LaravelLocalization::transRoute('routes.free_tools_calorie_calculator'), CalorieCalculatorController::class)
         ->name('calorie-calculator');
+
+    // Macro Calculator (SEO tool page)
+    Route::get(LaravelLocalization::transRoute('routes.free_tools_macro_calculator'), [MacroCalculatorController::class, 'index'])
+        ->name('macro-calculator');
 
     // Blog
     Route::get(LaravelLocalization::transRoute('routes.blog_index'), [BlogController::class, 'index'])

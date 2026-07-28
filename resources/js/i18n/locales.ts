@@ -162,12 +162,13 @@ export const locales = {
             },
             blog: {
                 title: 'From Our Blog',
-                subtitle: 'Science-based guides on training, nutrition and fitness.',
+                subtitle:
+                    'Science-based guides on training, nutrition and fitness.',
                 readMore: 'Read article',
             },
             testimonials: {
                 label: 'Real Stories, Inspiring Success',
-                title: 'What Fytrr Users Say',
+                title: 'What fytrr Users Say',
                 subtitle:
                     'Hear firsthand how our innovative AI-Fitness Tool has revolutionized workouts and nutrition for people just like you.',
                 review1: {
@@ -190,13 +191,13 @@ export const locales = {
                 },
                 review4: {
                     title: 'The Best App for Gaining or Losing Weight',
-                    body: "I always had trouble gaining weight — with fytrr I finally made it. You get a clear meal plan and workout plan every single day.",
+                    body: 'I always had trouble gaining weight — with fytrr I finally made it. You get a clear meal plan and workout plan every single day.',
                     author: 'olele-dbld',
                     date: 'Mar 28, 2026',
                 },
                 review5: {
                     title: 'Super Helpful',
-                    body: "The new update made the app so much clearer. And being able to edit your workout directly during training is an absolute game changer! No more detours, just adjust on the fly and keep going.",
+                    body: 'The new update made the app so much clearer. And being able to edit your workout directly during training is an absolute game changer! No more detours, just adjust on the fly and keep going.',
                     author: 'R\u00fcblikuchen',
                     date: 'Mar 27, 2026',
                 },
@@ -230,7 +231,7 @@ export const locales = {
             appUpsell: {
                 title: 'Want to test the app?',
                 subtitle:
-                    'Get your plan directly in the Fytrr app — with AI coaching, meal swaps, and more.',
+                    'Get your plan directly in the fytrr app — with AI coaching, meal swaps, and more.',
                 cta: 'Download from App Store',
                 skip: 'Continue without the app',
             },
@@ -294,7 +295,8 @@ export const locales = {
                     subline: 'This helps us understand your daily energy needs',
                     activityLabel: 'Activity Level',
                     skillHeadline: 'How experienced are you?',
-                    skillSubline: 'This helps us tailor the difficulty of your workouts',
+                    skillSubline:
+                        'This helps us tailor the difficulty of your workouts',
                     skillLabel: 'Skill Level',
                 },
                 goal: {
@@ -1145,9 +1147,9 @@ export const locales = {
                 title: 'Set Your Password',
             },
             title: 'Set Your Password',
-            subtitle: 'Your link will automatically open the Fytrr app',
+            subtitle: 'Your link will automatically open the fytrr app',
             description:
-                "Your link will automatically open the Fytrr app. If you don't have the app installed yet, download it below.",
+                "Your link will automatically open the fytrr app. If you don't have the app installed yet, download it below.",
             tip: {
                 label: '👆 Tip:',
                 text: 'If the app didn\'t open automatically, click the \"Open\" button in your browser.',
@@ -1155,7 +1157,7 @@ export const locales = {
             },
             activate_account: 'Activate Account',
             no_app: "Don't have the app?",
-            download_prompt: 'Download Fytrr to get started',
+            download_prompt: 'Download fytrr to get started',
         },
         blog: {
             label: 'Blog',
@@ -1163,7 +1165,7 @@ export const locales = {
             calculatorCtaLink: 'Open the free calorie calculator',
             appCtaHeadline: 'From theory to practice',
             appCtaText:
-                'Fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
+                'fytrr creates a personalised nutrition and workout plan based on your calorie needs \u2014 with recipes, shopping list and AI coach. Try it free for 7 days.',
             appCtaButton: '7 days free \u2014 create my plan',
             faqHeading: 'Frequently Asked Questions',
             sourcesHeading: 'Sources',
@@ -1172,18 +1174,18 @@ export const locales = {
             hero: {
                 h1: "Personal training doesn't have to cost €150 per hour.",
                 subline:
-                    "That's why Fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for €3.99/month.",
+                    "That's why fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for €3.99/month.",
             },
             story: {
                 heading: 'My Story',
                 p1: "Hi, I'm Tobias.",
                 p2: "I've been training for over 15 years. First without a plan, then with too many plans, then with a coach who cost me €120 per session. The results were good. But sustainable? Not affordable for most people.",
                 p3: "Since 2018, I've been building fitness apps. Not because I'm a startup guy, but because I wanted to solve a problem: good coaching doesn't have to depend on your bank balance.",
-                p4: 'Fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.',
+                p4: 'fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.',
                 p5: "I'm a developer. I work on this project alone. No team of 50, no venture capital. Just one guy building an app he uses every day.",
             },
             why: {
-                heading: 'Why Fytrr?',
+                heading: 'Why fytrr?',
                 problemHeading: 'The Problem',
                 problemText:
                     "A good personal trainer costs €50-150 per hour. Training twice a week means €400-1,200 per month. Most people can't afford that.",
@@ -1192,10 +1194,10 @@ export const locales = {
                     'What if an app could do what a trainer does? Not perfectly. But well enough that you make real progress — without taking out a loan.',
                 resultHeading: 'The Result',
                 resultText:
-                    'Fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.',
+                    'fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.',
             },
             features: {
-                heading: 'What Fytrr Can Do',
+                heading: 'What fytrr Can Do',
                 workoutPlan: 'Workout Plan',
                 workoutPlanText:
                     'tailored to your goal, experience and equipment',
@@ -1219,6 +1221,125 @@ export const locales = {
                 heading: 'Try it out. 7 days free.',
                 button: 'Get started',
                 appStoreLink: 'Or download from the App Store',
+            },
+        },
+        macroCalculator: {
+            hero: {
+                h1: 'Calculate your macros.',
+                accent: 'Simple. Scientific.',
+                subtitle:
+                    'Find out how much protein, carbs and fat you need each day — in 30 seconds. Dialled in with the Mifflin-St Jeor formula.',
+                annotation: 'no sign-up, instant results ✓',
+            },
+            form: {
+                gender: 'Gender',
+                age: 'Age',
+                weight: 'Weight',
+                height: 'Height',
+                activity: 'Daily activity',
+                sessions: 'Training days per week',
+                sessionsSuffix: '/week',
+                diet: 'Diet',
+                goal: 'Goal',
+                units: 'Units',
+                metric: 'Metric',
+                imperial: 'Imperial',
+            },
+            result: {
+                empty: 'Fill in your details to see your daily macros.',
+                dailyTarget: 'Your daily target',
+                kcalPerDay: 'kcal / day',
+                bmr: 'Basal rate',
+                tdee: 'Total burn',
+                protein: 'Protein',
+                carbs: 'Carbs',
+                fat: 'Fat',
+                mealSplit: 'Your day, roughly split',
+                breakfast: 'Breakfast',
+                lunch: 'Lunch',
+                dinner: 'Dinner',
+            },
+            inlineCta: {
+                headline: "You've got the numbers.",
+                subline: "What's missing is the plan that hits them every day.",
+                cta: 'Generate my plan',
+            },
+            method: {
+                eyebrow: 'The method',
+                h2: 'How we calculate your macros',
+                subtitle:
+                    'No black box. Here is exactly how the numbers above come together.',
+                formula:
+                    'BMR = 10 × kg + 6.25 × cm − 5 × age + s   (s = +5 male, −161 female)',
+                cards: {
+                    bmr: {
+                        title: 'Energy at rest',
+                        body: 'We estimate your basal metabolic rate with the Mifflin-St Jeor equation — the resting energy your body needs before any movement.',
+                    },
+                    activity: {
+                        title: 'Activity and training',
+                        body: 'Your daily activity level and your weekly training sessions are added on top to get your total energy expenditure, then adjusted for your goal.',
+                    },
+                    macros: {
+                        title: 'Protein first, then the rest',
+                        body: 'Protein is set from your goal and bodyweight (lean mass when cutting), fat is protected with a floor, and the remaining calories fill carbs and fat by your diet.',
+                    },
+                },
+            },
+            content: {
+                whatAreMacros: {
+                    h2: 'What are macronutrients?',
+                    body: 'Macronutrients — protein, carbohydrates and fat — are the three nutrients that provide energy. Protein and carbs deliver about 4 kcal per gram, fat about 9. Your calorie total decides whether you gain or lose weight, but the split between these three is what shapes the result: enough protein protects muscle, carbs fuel training, and fat supports hormones. A macro target gives you a concrete plan instead of a vague calorie number.',
+                },
+                losing: {
+                    h2: 'Macros for losing weight',
+                    body: 'To lose fat you eat fewer calories than you burn. We apply a moderate deficit of around 500 kcal, which supports steady fat loss of roughly half a kilo per week. Protein is deliberately high while cutting — about 2.5 g per kg of lean body mass — because it preserves muscle in a deficit and keeps you full. Carbs and fat fill the rest, so you still have energy to train hard and recover.',
+                },
+                muscle: {
+                    h2: 'Macros for building muscle',
+                    body: 'Building muscle needs a calorie surplus — a little more than you burn. We add a moderate surplus so you gain lean mass without unnecessary fat. Protein sits around 2.0 g per kg of bodyweight to supply the building blocks, while carbohydrates take a larger share to fuel heavy training and recovery. Progress is slow by nature: even in a good phase, expect to add muscle over months, not weeks.',
+                },
+                diet: {
+                    h2: 'Macros across different diets',
+                    body: 'Your diet changes the carb-to-fat balance, not the protein target. A balanced omnivore or pescatarian split leans slightly toward carbohydrates, while a vegetarian or vegan diet shifts a little further toward them. We always protect a minimum fat intake of 0.8 g per kg for hormonal health — especially important for women in a deficit. Whatever you eat, the calculator keeps your protein where it needs to be.',
+                },
+                example: {
+                    title: 'A worked example',
+                    body: 'Take a woman, 32, 68 kg, 170 cm, mostly walking during the day and training three times a week, aiming to lose weight on an omnivore diet. Her basal rate is about 1,422 kcal; with activity and training her total burn is roughly 2,350 kcal. A 500 kcal deficit lands her near 1,850 kcal a day — split into about 119 g protein, 206 g carbs and 61 g fat.',
+                },
+                disclaimer:
+                    'These results are science-based estimates for healthy adults and are a starting point, not individual medical or nutritional advice. If you are pregnant, have a medical condition or specific dietary needs, talk to a doctor or registered dietitian.',
+                sourcesTitle: 'Sources',
+                sources: {
+                    mifflin:
+                        'A new predictive equation for resting energy expenditure in healthy individuals.',
+                    helms: 'Evidence-based recommendations for natural bodybuilding contest preparation: nutrition and supplementation.',
+                    dge: 'German Nutrition Society reference values for nutrient intake.',
+                },
+                reviewed: 'Last reviewed: July 2026.',
+            },
+            faq: {
+                eyebrow: 'FAQ',
+                heading: 'Frequently asked questions',
+            },
+            furtherReading: {
+                heading: 'Keep reading',
+            },
+            relatedTools: {
+                heading: 'Related free tools',
+                calorie: 'Calorie calculator — find your daily calorie target',
+                mealPlan:
+                    'AI meal plan generator — turn your macros into meals',
+                workoutPlans:
+                    'Free workout plans — training that matches your goal',
+            },
+            upsell: {
+                eyebrow: 'Next step',
+                h2: 'From numbers to meals on your plate',
+                subtitle:
+                    'Knowing your macros is the easy part — hitting them every day is where fytrr comes in. Get a personalised plan with recipes, a shopping list and swappable meals that add up to your targets.',
+                cta: '7 days free — build my plan',
+                subline: 'Cancel anytime. No risk.',
             },
         },
         calorieCalculator: {
@@ -1262,7 +1383,7 @@ export const locales = {
                 fat: 'Fat',
                 ctaHeadline: 'You know how much to eat. But what exactly?',
                 ctaText:
-                    'Fytrr creates a personalised nutrition plan for exactly {calories} kcal \u2014 with recipes, shopping list and swappable meals.',
+                    'fytrr creates a personalised nutrition plan for exactly {calories} kcal \u2014 with recipes, shopping list and swappable meals.',
                 ctaButton: '7 days free \u2014 create my plan',
                 ctaSubline: 'Cancel anytime. No risk.',
             },
@@ -1282,7 +1403,7 @@ export const locales = {
             objections: {
                 needApp: {
                     q: 'Do I need the app?',
-                    a: 'If you just want your calorie number, the calculator is enough. If you want a plan that puts it into practice \u2014 try Fytrr.',
+                    a: 'If you just want your calorie number, the calculator is enough. If you want a plan that puts it into practice \u2014 try fytrr.',
                 },
                 cost: {
                     q: 'What does it cost?',
@@ -1334,11 +1455,11 @@ export const locales = {
                     },
                 },
                 h2_7: 'Next step: from calorie number to nutrition plan',
-                p7: 'A calorie calculator gives you a solid starting point, but real results come from consistency and a structured plan. Fytrr uses AI to build a personalised nutrition plan based on your calorie target, dietary preferences and fitness goals. Every meal is calculated, every macro is accounted for \u2014 and you can swap meals anytime. Try it free for 7 days.',
+                p7: 'A calorie calculator gives you a solid starting point, but real results come from consistency and a structured plan. fytrr uses AI to build a personalised nutrition plan based on your calorie target, dietary preferences and fitness goals. Every meal is calculated, every macro is accounted for \u2014 and you can swap meals anytime. Try it free for 7 days.',
             },
             furtherReading: {
                 heading: 'Further Reading',
-                appStoreText: 'Or download the Fytrr app directly:',
+                appStoreText: 'Or download the fytrr app directly:',
                 appStoreBadge: 'Download on the App Store',
             },
             faq: {
@@ -1347,9 +1468,9 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'Fytrr App — AI Personal Trainer for Workouts & Nutrition',
+                title: 'fytrr App — AI Personal Trainer for Workouts & Nutrition',
                 description:
-                    'Fytrr App: Your AI personal trainer for workout plans, meal plans & tracking. Try 7 days free. Download now on the App Store.',
+                    'fytrr App: Your AI personal trainer for workout plans, meal plans & tracking. Try 7 days free. Download now on the App Store.',
             },
             greeting: 'Hey {name}!',
             mobile: {
@@ -1372,7 +1493,7 @@ export const locales = {
                 text: 'Activate your account',
                 cta: 'Start for free now',
             },
-            openApp: 'Open Fytrr',
+            openApp: 'Open fytrr',
             alreadyInstalled: 'Already installed?',
             trustLine: 'Free \u00b7 No credit card required.',
             faq: {
@@ -1385,7 +1506,7 @@ export const locales = {
                     {
                         question:
                             'What makes fytrr different from other fitness apps?',
-                        answer: "Fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can't do.",
+                        answer: "fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can't do.",
                     },
                     {
                         question: 'Can I swap exercises or meals?',
@@ -1640,12 +1761,13 @@ export const locales = {
             },
             blog: {
                 title: 'Aus unserem Blog',
-                subtitle: 'Wissenschaftlich fundierte Ratgeber zu Training, Ernährung und Fitness.',
+                subtitle:
+                    'Wissenschaftlich fundierte Ratgeber zu Training, Ernährung und Fitness.',
                 readMore: 'Artikel lesen',
             },
             testimonials: {
                 label: 'Echte Geschichten, inspirierender Erfolg',
-                title: 'Das sagen Fytrr-Nutzer',
+                title: 'Das sagen fytrr-Nutzer',
                 subtitle:
                     'Erfahre aus erster Hand, wie unser innovatives KI-Fitness-Tool Workouts und Ernährung für Menschen wie dich revolutioniert hat.',
                 review1: {
@@ -1704,7 +1826,7 @@ export const locales = {
             appUpsell: {
                 title: 'Willst du die App testen?',
                 subtitle:
-                    'Erhalte deinen Plan direkt in der Fytrr App \u2014 mit KI-Coaching, Mahlzeiten-Tausch und mehr.',
+                    'Erhalte deinen Plan direkt in der fytrr App \u2014 mit KI-Coaching, Mahlzeiten-Tausch und mehr.',
                 cta: 'Aus dem App Store laden',
                 skip: 'Ohne App fortfahren',
             },
@@ -1773,7 +1895,8 @@ export const locales = {
                     subline: 'So bestimmen wir deinen täglichen Energiebedarf',
                     activityLabel: 'Aktivitätslevel',
                     skillHeadline: 'Wie erfahren bist du?',
-                    skillSubline: 'Damit passen wir den Schwierigkeitsgrad deiner Workouts an',
+                    skillSubline:
+                        'Damit passen wir den Schwierigkeitsgrad deiner Workouts an',
                     skillLabel: 'Erfahrungslevel',
                 },
                 goal: {
@@ -1874,7 +1997,7 @@ export const locales = {
             bodyGoal: {
                 lose_weight: 'Abnehmen',
                 build_muscle: 'Muskeln aufbauen',
-                get_fit: 'Fit werden & wohlfühlen',
+                get_fit: 'Fitter werden',
             },
             skillLevel: {
                 beginner: 'Anfänger',
@@ -2639,9 +2762,9 @@ export const locales = {
                 title: 'Passwort festlegen',
             },
             title: 'Passwort festlegen',
-            subtitle: 'Dein Link öffnet automatisch die Fytrr App',
+            subtitle: 'Dein Link öffnet automatisch die fytrr App',
             description:
-                'Dein Link öffnet automatisch die Fytrr App. Falls du die App noch nicht installiert hast, lade sie unten herunter.',
+                'Dein Link öffnet automatisch die fytrr App. Falls du die App noch nicht installiert hast, lade sie unten herunter.',
             tip: {
                 label: '👆 Tipp:',
                 safari: 'Falls sich die App nicht automatisch geöffnet hat, klicke auf den "Öffnen"-Button in deinem Browser.',
@@ -2649,7 +2772,7 @@ export const locales = {
             },
             activate_account: 'Konto aktivieren',
             no_app: 'Hast du die App noch nicht?',
-            download_prompt: 'Lade Fytrr herunter, um loszulegen',
+            download_prompt: 'Lade fytrr herunter, um loszulegen',
         },
         blog: {
             label: 'Blog',
@@ -2657,7 +2780,7 @@ export const locales = {
             calculatorCtaLink: 'Zum kostenlosen Kalorienrechner',
             appCtaHeadline: 'Von der Theorie zur Praxis',
             appCtaText:
-                'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
+                'fytrr erstellt dir einen personalisierten Ern\u00e4hrungs- und Trainingsplan basierend auf deinem Kalorienbedarf \u2014 mit Rezepten, Einkaufsliste und KI-Coach. 7 Tage kostenlos testen.',
             appCtaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
             faqHeading: 'H\u00e4ufig gestellte Fragen',
             sourcesHeading: 'Quellen',
@@ -2666,18 +2789,18 @@ export const locales = {
             hero: {
                 h1: 'Personal Training muss nicht 150\u00a0\u20ac pro Stunde kosten.',
                 subline:
-                    'Deshalb gibt es Fytrr. Ein KI Personal Coach, der Trainingsplan, Ern\u00e4hrungsplan und Tracking in einer App vereint \u2014 f\u00fcr 3,99\u00a0\u20ac/Monat.',
+                    'Deshalb gibt es fytrr. Ein KI Personal Coach, der Trainingsplan, Ern\u00e4hrungsplan und Tracking in einer App vereint \u2014 f\u00fcr 3,99\u00a0\u20ac/Monat.',
             },
             story: {
                 heading: 'Meine Geschichte',
                 p1: 'Hi, ich bin Tobias.',
                 p2: 'Ich trainiere seit \u00fcber 15 Jahren. Erst ohne Plan, dann mit zu vielen Pl\u00e4nen, dann mit einem Coach, der mich 120\u00a0\u20ac pro Session gekostet hat. Das Ergebnis war gut. Aber nachhaltig? F\u00fcr die meisten Leute nicht bezahlbar.',
                 p3: 'Seit 2018 baue ich Fitness-Apps. Nicht weil ich ein Startup-Typ bin, sondern weil ich ein Problem l\u00f6sen wollte: Gutes Coaching muss nicht vom Kontostand abh\u00e4ngen.',
-                p4: 'Fytrr ist das Ergebnis. Kein aufgeblasenes Feature-Monster, sondern ein schlanker KI-Coach, der dir sagt, was du trainieren und essen sollst. Jeden Tag. Angepasst an dich.',
+                p4: 'fytrr ist das Ergebnis. Kein aufgeblasenes Feature-Monster, sondern ein schlanker KI-Coach, der dir sagt, was du trainieren und essen sollst. Jeden Tag. Angepasst an dich.',
                 p5: 'Ich bin Entwickler. Ich sitze alleine an diesem Projekt. Kein Team von 50 Leuten, kein Venture Capital. Nur ein Typ, der eine App baut, die er selbst jeden Tag benutzt.',
             },
             why: {
-                heading: 'Warum Fytrr?',
+                heading: 'Warum fytrr?',
                 problemHeading: 'Das Problem',
                 problemText:
                     'Ein guter Personal Trainer kostet 50-150\u00a0\u20ac pro Stunde. Wer 2x pro Woche trainiert, zahlt 400-1.200\u00a0\u20ac im Monat. Das k\u00f6nnen sich die meisten nicht leisten.',
@@ -2686,10 +2809,10 @@ export const locales = {
                     'Was, wenn eine App das kann, was ein Trainer macht? Nicht perfekt. Aber gut genug, dass du echte Fortschritte machst \u2014 ohne einen Kredit aufzunehmen.',
                 resultHeading: 'Das Ergebnis',
                 resultText:
-                    'Fytrr erstellt dir einen individuellen Trainingsplan und Ern\u00e4hrungsplan. Die App passt sich an dein Ziel, dein Level und deinen Alltag an. Und sie kostet weniger als ein einziger Kaffee pro Woche.',
+                    'fytrr erstellt dir einen individuellen Trainingsplan und Ern\u00e4hrungsplan. Die App passt sich an dein Ziel, dein Level und deinen Alltag an. Und sie kostet weniger als ein einziger Kaffee pro Woche.',
             },
             features: {
-                heading: 'Was Fytrr kann',
+                heading: 'Was fytrr kann',
                 workoutPlan: 'Trainingsplan',
                 workoutPlanText:
                     'angepasst an dein Ziel, deine Erfahrung und dein Equipment',
@@ -2714,6 +2837,126 @@ export const locales = {
                 heading: 'Probier es aus. 7 Tage kostenlos.',
                 button: 'Jetzt starten',
                 appStoreLink: 'Oder direkt im App Store laden',
+            },
+        },
+        macroCalculator: {
+            hero: {
+                h1: 'Berechne deine Makros.',
+                accent: 'Einfach. Wissenschaftlich.',
+                subtitle:
+                    'Finde heraus, wie viel Protein, Kohlenhydrate und Fett du täglich brauchst – in 30 Sekunden. Maximal genaue Abstimmung nach der Mifflin-St-Jeor-Formel.',
+                annotation: 'ohne Anmeldung, sofort dein Ergebnis ✓',
+            },
+            form: {
+                gender: 'Geschlecht',
+                age: 'Alter',
+                weight: 'Gewicht',
+                height: 'Größe',
+                activity: 'Alltagsaktivität',
+                sessions: 'Trainingstage pro Woche',
+                sessionsSuffix: '/Woche',
+                diet: 'Ernährung',
+                goal: 'Ziel',
+                units: 'Einheiten',
+                metric: 'Metrisch',
+                imperial: 'Imperial',
+            },
+            result: {
+                empty: 'Trage deine Daten ein, um deine täglichen Makros zu sehen.',
+                dailyTarget: 'Dein Tagesziel',
+                kcalPerDay: 'kcal / Tag',
+                bmr: 'Grundumsatz',
+                tdee: 'Gesamtumsatz',
+                protein: 'Protein',
+                carbs: 'Kohlenhydrate',
+                fat: 'Fett',
+                mealSplit: 'Dein Tag, grob verteilt',
+                breakfast: 'Frühstück',
+                lunch: 'Mittag',
+                dinner: 'Abend',
+            },
+            inlineCta: {
+                headline: 'Zahlen hast du jetzt.',
+                subline: 'Was fehlt, ist der Plan, der sie jeden Tag trifft.',
+                cta: 'Plan generieren',
+            },
+            method: {
+                eyebrow: 'Die Methode',
+                h2: 'So berechnen wir deine Makros',
+                subtitle:
+                    'Keine Blackbox. Genau so kommen die Zahlen oben zustande.',
+                formula:
+                    'GU = 10 × kg + 6,25 × cm − 5 × Alter + s   (s = +5 männlich, −161 weiblich)',
+                cards: {
+                    bmr: {
+                        title: 'Energie in Ruhe',
+                        body: 'Wir schätzen deinen Grundumsatz mit der Mifflin-St-Jeor-Formel – die Energie, die dein Körper in Ruhe braucht, noch vor jeder Bewegung.',
+                    },
+                    activity: {
+                        title: 'Aktivität und Training',
+                        body: 'Dein Aktivitätsniveau im Alltag und deine wöchentlichen Trainingseinheiten kommen obendrauf und ergeben den Gesamtumsatz, den wir an dein Ziel anpassen.',
+                    },
+                    macros: {
+                        title: 'Zuerst Protein, dann der Rest',
+                        body: 'Protein richtet sich nach Ziel und Körpergewicht (im Defizit nach fettfreier Masse), Fett wird nach unten abgesichert, und die restlichen Kalorien füllen je nach Ernährung Kohlenhydrate und Fett.',
+                    },
+                },
+            },
+            content: {
+                whatAreMacros: {
+                    h2: 'Was sind Makronährstoffe?',
+                    body: 'Makronährstoffe – Protein, Kohlenhydrate und Fett – sind die drei energieliefernden Nährstoffe. Protein und Kohlenhydrate liefern rund 4 kcal pro Gramm, Fett etwa 9. Die Kalorienzahl entscheidet, ob du zu- oder abnimmst, aber die Verteilung auf diese drei formt das Ergebnis: Genug Protein schützt die Muskulatur, Kohlenhydrate liefern Trainingsenergie, Fett unterstützt den Hormonhaushalt. Ein Makroziel gibt dir einen konkreten Plan statt einer vagen Kalorienzahl.',
+                },
+                losing: {
+                    h2: 'Makros zum Abnehmen',
+                    body: 'Zum Abnehmen isst du weniger Kalorien, als du verbrauchst. Wir setzen ein moderates Defizit von rund 500 kcal an, das einen stetigen Fettverlust von etwa einem halben Kilo pro Woche unterstützt. Im Defizit ist das Protein bewusst hoch – etwa 2,5 g pro kg fettfreie Masse – denn es erhält die Muskulatur und hält satt. Kohlenhydrate und Fett füllen den Rest, damit du hart trainieren und dich erholen kannst.',
+                },
+                muscle: {
+                    h2: 'Makros für den Muskelaufbau',
+                    body: 'Muskelaufbau braucht einen Kalorienüberschuss – etwas mehr, als du verbrauchst. Wir setzen einen moderaten Überschuss an, damit du fettfreie Masse ohne unnötiges Fett aufbaust. Das Protein liegt bei rund 2,0 g pro kg Körpergewicht, während Kohlenhydrate einen größeren Anteil übernehmen, um schweres Training und Regeneration zu befeuern. Fortschritt ist von Natur aus langsam: Selbst in einer guten Phase baust du Muskeln über Monate auf, nicht über Wochen.',
+                },
+                diet: {
+                    h2: 'Makros bei verschiedenen Ernährungsformen',
+                    body: 'Deine Ernährungsform verändert das Verhältnis von Kohlenhydraten zu Fett, nicht das Proteinziel. Eine ausgewogene klassische oder pescetarische Ernährung tendiert etwas stärker zu Kohlenhydraten, eine vegetarische oder vegane Ernährung noch etwas mehr. Wir sichern immer eine Mindestmenge Fett von 0,8 g pro kg für den Hormonhaushalt – besonders wichtig für Frauen im Defizit. Egal was du isst: Der Rechner hält dein Protein dort, wo es sein soll.',
+                },
+                example: {
+                    title: 'Ein durchgerechnetes Beispiel',
+                    body: 'Nimm eine Frau, 32 Jahre, 68 kg, 170 cm, tagsüber überwiegend gehend und dreimal pro Woche im Training, mit dem Ziel abzunehmen bei klassischer Ernährung. Ihr Grundumsatz liegt bei etwa 1.422 kcal; mit Aktivität und Training beträgt ihr Gesamtumsatz rund 2.350 kcal. Ein Defizit von 500 kcal bringt sie auf etwa 1.850 kcal pro Tag – aufgeteilt in rund 119 g Protein, 206 g Kohlenhydrate und 61 g Fett.',
+                },
+                disclaimer:
+                    'Die Ergebnisse sind wissenschaftlich fundierte Schätzwerte für gesunde Erwachsene und ein Ausgangspunkt, keine individuelle medizinische oder ernährungsmedizinische Beratung. Bei Schwangerschaft, Vorerkrankungen oder besonderen Ernährungsbedürfnissen wende dich an eine Ärztin oder eine qualifizierte Ernährungsfachkraft.',
+                sourcesTitle: 'Quellen',
+                sources: {
+                    mifflin:
+                        'Eine neue Vorhersagegleichung für den Ruheenergieumsatz bei gesunden Menschen.',
+                    helms: 'Evidenzbasierte Empfehlungen zur Wettkampfvorbereitung im natural Bodybuilding: Ernährung und Supplementierung.',
+                    dge: 'Referenzwerte der Deutschen Gesellschaft für Ernährung für die Nährstoffzufuhr.',
+                },
+                reviewed: 'Zuletzt geprüft: Juli 2026.',
+            },
+            faq: {
+                eyebrow: 'FAQ',
+                heading: 'Häufige Fragen',
+            },
+            furtherReading: {
+                heading: 'Weiterlesen',
+            },
+            relatedTools: {
+                heading: 'Verwandte kostenlose Tools',
+                calorie:
+                    'Kalorienrechner – finde deinen täglichen Kalorienbedarf',
+                mealPlan:
+                    'KI-Ernährungsplan-Generator – aus Makros werden Mahlzeiten',
+                workoutPlans:
+                    'Kostenlose Trainingspläne – Training passend zu deinem Ziel',
+            },
+            upsell: {
+                eyebrow: 'Nächster Schritt',
+                h2: 'Von Zahlen zu Mahlzeiten auf dem Teller',
+                subtitle:
+                    'Deine Makros zu kennen ist der einfache Teil – sie jeden Tag zu treffen, ist der Job von fytrr. Hol dir einen persönlichen Plan mit Rezepten, Einkaufsliste und austauschbaren Mahlzeiten, die deine Ziele ergeben.',
+                cta: '7 Tage kostenlos – meinen Plan erstellen',
+                subline: 'Jederzeit kündbar. Ohne Risiko.',
             },
         },
         calorieCalculator: {
@@ -2759,7 +3002,7 @@ export const locales = {
                 ctaHeadline:
                     'Du wei\u00dft jetzt, wie viel du essen sollst. Aber was genau?',
                 ctaText:
-                    'Fytrr erstellt dir einen personalisierten Ern\u00e4hrungsplan f\u00fcr genau {calories} kcal \u2014 mit Rezepten, Einkaufsliste und Mahlzeiten, die du tauschen kannst.',
+                    'fytrr erstellt dir einen personalisierten Ern\u00e4hrungsplan f\u00fcr genau {calories} kcal \u2014 mit Rezepten, Einkaufsliste und Mahlzeiten, die du tauschen kannst.',
                 ctaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
                 ctaSubline: 'Jederzeit k\u00fcndbar. Kein Risiko.',
             },
@@ -2779,7 +3022,7 @@ export const locales = {
             objections: {
                 needApp: {
                     q: 'Brauche ich die App?',
-                    a: 'Wenn du nur deinen Kalorienbedarf wissen willst, reicht der Rechner. Wenn du einen Plan willst, der das f\u00fcr dich umsetzt \u2014 probier Fytrr.',
+                    a: 'Wenn du nur deinen Kalorienbedarf wissen willst, reicht der Rechner. Wenn du einen Plan willst, der das f\u00fcr dich umsetzt \u2014 probier fytrr.',
                 },
                 cost: {
                     q: 'Was kostet das?',
@@ -2831,11 +3074,11 @@ export const locales = {
                     },
                 },
                 h2_7: 'N\u00e4chster Schritt: Vom Kalorienwert zum Ern\u00e4hrungsplan',
-                p7: 'Ein Kalorienrechner gibt dir einen soliden Startwert, aber echte Ergebnisse kommen durch Konsequenz und einen strukturierten Plan. Fytrr nutzt KI, um einen personalisierten Ern\u00e4hrungsplan basierend auf deinem Kalorienziel, deinen Ern\u00e4hrungsvorlieben und Fitnesszielen zu erstellen. Jede Mahlzeit ist berechnet, jedes Makro ber\u00fccksichtigt \u2014 und du kannst Mahlzeiten jederzeit tauschen. Teste es 7 Tage kostenlos.',
+                p7: 'Ein Kalorienrechner gibt dir einen soliden Startwert, aber echte Ergebnisse kommen durch Konsequenz und einen strukturierten Plan. fytrr nutzt KI, um einen personalisierten Ern\u00e4hrungsplan basierend auf deinem Kalorienziel, deinen Ern\u00e4hrungsvorlieben und Fitnesszielen zu erstellen. Jede Mahlzeit ist berechnet, jedes Makro ber\u00fccksichtigt \u2014 und du kannst Mahlzeiten jederzeit tauschen. Teste es 7 Tage kostenlos.',
             },
             furtherReading: {
                 heading: 'Weiterlesen',
-                appStoreText: 'Oder lade die Fytrr App direkt herunter:',
+                appStoreText: 'Oder lade die fytrr App direkt herunter:',
                 appStoreBadge: 'Im App Store laden',
             },
             faq: {
@@ -2844,9 +3087,9 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'Fytrr App \u2014 KI Personal Trainer f\u00fcr Training & Ern\u00e4hrung',
+                title: 'fytrr App \u2014 KI Personal Trainer f\u00fcr Training & Ern\u00e4hrung',
                 description:
-                    'Fytrr App: Dein KI Personal Trainer f\u00fcr Ern\u00e4hrungsplan, Trainingsplan & Tracking. 7 Tage kostenlos testen. Jetzt im App Store.',
+                    'fytrr App: Dein KI Personal Trainer f\u00fcr Ern\u00e4hrungsplan, Trainingsplan & Tracking. 7 Tage kostenlos testen. Jetzt im App Store.',
             },
             greeting: 'Hey {name}!',
             mobile: {
@@ -2869,7 +3112,7 @@ export const locales = {
                 text: 'Konto aktivieren',
                 cta: 'Jetzt kostenlos starten',
             },
-            openApp: 'Fytrr \u00f6ffnen',
+            openApp: 'fytrr \u00f6ffnen',
             alreadyInstalled: 'Bereits installiert?',
             trustLine: 'Kostenlos \u00b7 Keine Kreditkarte n\u00f6tig.',
             faq: {
@@ -2882,7 +3125,7 @@ export const locales = {
                     {
                         question:
                             'Was unterscheidet fytrr von anderen Fitness-Apps?',
-                        answer: 'Fytrr nutzt KI, um einen wirklich personalisierten Plan basierend auf deinen Zielen, deinem Fitnesslevel und deinen Vorlieben zu erstellen. Dein KI-Coach Mona passt deine Workouts in Echtzeit an \u2014 das kann kein statisches PDF oder eine generische App.',
+                        answer: 'fytrr nutzt KI, um einen wirklich personalisierten Plan basierend auf deinen Zielen, deinem Fitnesslevel und deinen Vorlieben zu erstellen. Dein KI-Coach Mona passt deine Workouts in Echtzeit an \u2014 das kann kein statisches PDF oder eine generische App.',
                     },
                     {
                         question:

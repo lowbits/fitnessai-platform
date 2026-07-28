@@ -22,6 +22,7 @@ return [
         'home' => 'Home',
         'app' => 'App',
         'calorie_calculator' => 'Kalorienrechner',
+        'macro_calculator' => 'Makrorechner',
         'blog' => 'Blog',
         'about' => 'Über uns',
     ],
