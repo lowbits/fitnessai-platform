@@ -187,7 +187,7 @@ test('update validates training parameter types', function ($field, $value) {
 ]);
 
 test('update returns 404 for exercise not belonging to workout', function () {
-    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id]);
+    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id, 'day_number' => 2]);
     $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'order' => 1,

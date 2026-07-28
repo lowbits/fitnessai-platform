@@ -177,6 +177,29 @@ it('does not mark a day perfect when a recommended meal is missing and calories 
     expect(streak($user))->toMatchArray(['current' => 1, 'perfect_days' => 0]);
 });
 
+it('does not complete a day when meals are skipped and calories fall short', function () {
+    $user = streakUser();
+    $plan = activePlan($user, goal: 2000);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id, 'date' => daysAgo(0)]);
+
+    $breakfast = Meal::factory()->create(['meal_plan_id' => $mealPlan->id, 'type' => 'breakfast', 'calories' => 400]);
+    $lunch = Meal::factory()->create(['meal_plan_id' => $mealPlan->id, 'type' => 'lunch', 'calories' => 800]);
+    $dinner = Meal::factory()->create(['meal_plan_id' => $mealPlan->id, 'type' => 'dinner', 'calories' => 800]);
+
+    // Eat breakfast, then skip (soft-delete) lunch + dinner.
+    CalorieTracking::factory()->create([
+        'user_id' => $user->id,
+        'meal_id' => $breakfast->id,
+        'tracked_date' => daysAgo(0),
+        'calories' => 400,
+    ]);
+    $lunch->delete();
+    $dinner->delete();
+
+    // Skipping the other slots must not let a 400-kcal day count as perfect.
+    expect(streak($user))->toMatchArray(['perfect_days' => 0]);
+});
+
 it('marks a day perfect when custom calories land within tolerance below goal', function () {
     $user = streakUser();
     activePlan($user, goal: 2000);

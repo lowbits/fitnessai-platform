@@ -28,9 +28,9 @@ function weekPlan(User $user): Plan
 function weekGenerate(Plan $plan, int $offset): void
 {
     $date = $plan->start_date->copy()->addDays($offset)->toDateString();
-    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id, 'date' => $date, 'status' => 'generated']);
+    $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id, 'date' => $date, 'day_number' => $offset + 1, 'status' => 'generated']);
     Meal::factory()->count(3)->create(['meal_plan_id' => $mealPlan->id, 'status' => 'generated']);
-    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'date' => $date, 'status' => 'generated']);
+    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'date' => $date, 'day_number' => $offset + 1, 'status' => 'generated']);
 }
 
 it('rejects guests', function () {

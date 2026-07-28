@@ -119,7 +119,7 @@ test('reorder fails if exercise ids do not belong to workout', function () {
         'order' => 1,
     ]);
 
-    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id]);
+    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id, 'day_number' => 2]);
     $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'order' => 1,
@@ -301,7 +301,7 @@ test('replace uses canonical exercise data in response', function () {
 });
 
 test('replace returns 404 for exercise not belonging to workout', function () {
-    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id]);
+    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id, 'day_number' => 2]);
     $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'order' => 1,
@@ -398,7 +398,7 @@ test('remove re-orders remaining exercises correctly', function () {
 });
 
 test('remove returns 404 for exercise not belonging to workout', function () {
-    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id]);
+    $otherWorkout = WorkoutPlan::factory()->create(['plan_id' => $this->plan->id, 'day_number' => 2]);
     $otherExercise = WorkoutPlanExercise::factory()->create([
         'workout_plan_id' => $otherWorkout->id,
         'order' => 1,

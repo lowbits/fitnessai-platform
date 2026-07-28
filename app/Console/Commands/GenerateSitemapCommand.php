@@ -162,6 +162,14 @@ class GenerateSitemapCommand extends Command
 
         // Individual plan pages
         foreach ($planTypes as $type => $data) {
+            // Never submit noindex pages: doing so triggers Google Search Console's
+            // "Submitted URL marked 'noindex'" error and wastes crawl budget.
+            if ($data['noindex'] ?? false) {
+                $this->info("  Skipped (noindex): /{$locale}/{$basePath}/{$type}");
+
+                continue;
+            }
+
             $url = Url::create("/{$locale}/{$basePath}/{$type}")
                 ->setLastModificationDate($this->parseDate($data))
                 ->setPriority(0.8)
@@ -250,6 +258,11 @@ class GenerateSitemapCommand extends Command
 
             foreach ($plans as $slug => $data) {
                 if (($data['internal_type'] ?? '') === $internalType) {
+                    // Don't cross-link to a noindex counterpart — it stays out of the sitemap entirely.
+                    if ($data['noindex'] ?? false) {
+                        break;
+                    }
+
                     $basePath = trans('routes.workout_plans_index', [], $altLocale);
                     $url->addAlternate("{$baseUrl}/{$altLocale}/{$basePath}/{$slug}", $altLocale);
                     break;
