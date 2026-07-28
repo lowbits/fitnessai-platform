@@ -2,10 +2,10 @@
 
 return [
     'meta' => [
-        'title' => 'About Fytrr — The Story Behind Your AI Personal Coach',
-        'description' => 'Fytrr makes personal training affordable. Founded by Tobias Lobitz — developer, fitness enthusiast, 15 years of training experience. Get to know us.',
+        'title' => 'About fytrr — The Story Behind Your AI Personal Coach',
+        'description' => 'fytrr makes personal training affordable. Founded by Tobias Lobitz — developer, fitness enthusiast, 15 years of training experience. Get to know us.',
         'keywords' => ['fytrr', 'about us', 'personal training app', 'ai personal coach', 'fitness app', 'tobias lobitz'],
-        'og_image_alt' => 'Fytrr — Your AI Personal Coach',
+        'og_image_alt' => 'fytrr — Your AI Personal Coach',
     ],
 
     'schema' => [

@@ -19,13 +19,13 @@ Tobias Lobitz — Founder & Software Developer. Developing fitness software sinc
 
 ### The Story
 
-Personal training doesn't have to cost 150 EUR per hour. That's why Fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for 3.99 EUR/month.
+Personal training doesn't have to cost 150 EUR per hour. That's why fytrr exists. An AI personal coach that combines workout plans, nutrition plans and tracking in one app — for 3.99 EUR/month.
 
 Tobias has been training for over 15 years. First without a plan, then with too many plans, then with a coach who cost 120 EUR per session. The results were good. But sustainable? Not affordable for most people.
 
 Since 2018, he has been building fitness apps. Not because he's a startup guy, but because he wanted to solve a problem: good coaching doesn't have to depend on your bank balance.
 
-Fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.
+fytrr is the result. Not a bloated feature monster, but a lean AI coach that tells you what to train and eat. Every day. Tailored to you.
 
 ### The Problem
 
@@ -37,7 +37,7 @@ What if an app could do what a trainer does? Not perfectly. But well enough that
 
 ### The Result
 
-Fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.
+fytrr creates an individual workout plan and nutrition plan for you. The app adapts to your goal, your level and your daily life. And it costs less than a single coffee per week.
 
 ### Key Features
 
@@ -135,11 +135,11 @@ You want to eat better. Maybe lose weight, maybe build muscle, maybe just stop s
 
 #### Why most meal plans fail
 
-From Fytrr's user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you'll give up after 3 days. A healthy deficit is 300-500 kcal. Third, no backup plan.
+From fytrr's user data, we see three patterns: First, too much variety from day one. Planning 7 different breakfasts, 7 lunches and 7 dinners means 21 meals per week — 21 recipes, 21 ingredient lists. Nobody keeps that up for more than a week. Second, unrealistic calorie targets. If you normally eat 2,400 kcal and create a 1,200 kcal plan, you'll give up after 3 days. A healthy deficit is 300-500 kcal. Third, no backup plan.
 
 #### The 3-3-1 method: meal planning that works
 
-After analysing over 8,000 generated meal plans on Fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option.
+After analysing over 8,000 generated meal plans on fytrr, we identified a pattern among the most successful users. We call it the 3-3-1 method: 3 main meals per day that together hit your calorie target. 3 fixed dishes per meal slot that you rotate weekly. 1 backup meal that you always have at home. That gives you 9 dishes for the whole week plus an emergency option.
 
 #### Step 1: Set your goal
 
@@ -163,11 +163,11 @@ Take your 9 dishes and write down all the ingredients. Estimated cost: 45-55 EUR
 
 #### Meal prep: The Sunday trick
 
-With 90 minutes on Sunday, you prepare most of your week. Fytrr users who use meal prep stick with their plan 2.3x longer on average than users who cook daily.
+With 90 minutes on Sunday, you prepare most of your week. fytrr users who use meal prep stick with their plan 2.3x longer on average than users who cook daily.
 
 #### FAQ
 
-- How long does it take to create a meal plan? With a step-by-step guide, 1-2 hours for the first plan. With an app like Fytrr: 5 minutes.
+- How long does it take to create a meal plan? With a step-by-step guide, 1-2 hours for the first plan. With an app like fytrr: 5 minutes.
 - Can I create a meal plan for free? Yes. All you need is your calorie requirement and a selection of dishes that fit your calorie target.
 - How many meals per day are ideal? Three main meals work for most people.
 - Do I need to count calories? Roughly at first, for 2-3 weeks.

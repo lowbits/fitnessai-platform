@@ -136,7 +136,7 @@ onMounted(() => {
                                 >
                                     <img
                                         :src="openAppQrCode"
-                                        alt="QR Code - Open Fytrr"
+                                        alt="QR Code - Open fytrr"
                                         class="h-28 w-28"
                                     />
                                 </div>

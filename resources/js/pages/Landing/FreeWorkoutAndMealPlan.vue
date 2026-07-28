@@ -19,7 +19,7 @@ const canonical = `${baseUrl}/en/free-workout-and-meal-plan`;
 const faqs = [
     {
         question: 'Is the workout and meal plan really free?',
-        answer: 'Yes, completely free. You get a full workout plan and meal plan as PDF. No credit card, no account, no hidden costs. Fytrr offers a premium subscription for ongoing plans, but the initial plan is free.',
+        answer: 'Yes, completely free. You get a full workout plan and meal plan as PDF. No credit card, no account, no hidden costs. fytrr offers a premium subscription for ongoing plans, but the initial plan is free.',
     },
     {
         question: 'Can I customize my diet for allergies?',
@@ -39,11 +39,11 @@ const faqs = [
     },
     {
         question: 'How is this different from other free workout plans?',
-        answer: 'Most free plans give you a generic template. Fytrr uses AI to personalize everything: your calorie target, macro split, exercise selection, training volume, and meal timing are all calculated based on your body and goals. Plus you get both workout and nutrition in one plan.',
+        answer: 'Most free plans give you a generic template. fytrr uses AI to personalize everything: your calorie target, macro split, exercise selection, training volume, and meal timing are all calculated based on your body and goals. Plus you get both workout and nutrition in one plan.',
     },
     {
         question: 'What if I do not like a meal in the plan?',
-        answer: 'The free PDF plan includes a full week of meals. If you want to swap individual meals while keeping your macros intact, the Fytrr app lets you do that with one tap.',
+        answer: 'The free PDF plan includes a full week of meals. If you want to swap individual meals while keeping your macros intact, the fytrr app lets you do that with one tap.',
     },
 ];
 
@@ -51,7 +51,7 @@ const webAppSchema = computed(() =>
     JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: 'Fytrr Free Workout and Meal Plan Generator',
+        name: 'fytrr Free Workout and Meal Plan Generator',
         description:
             'Create a free personalized workout and meal plan. AI-powered, instant PDF download.',
         applicationCategory: 'HealthApplication',
@@ -161,7 +161,7 @@ const faqSchema = computed(() =>
                         meal plan makes strength training productive.
                     </p>
                     <p class="mt-4 leading-relaxed text-gray-300">
-                        Fytrr combines both into one personalized plan. Your
+                        fytrr combines both into one personalized plan. Your
                         exercise and diet plan are matched to each other:
                         training days get more carbs for energy, rest days
                         adjust calories down. Everything is calculated, nothing

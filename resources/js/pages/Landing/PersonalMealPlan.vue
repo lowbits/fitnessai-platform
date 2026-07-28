@@ -43,7 +43,7 @@ const faqs = [
     },
     {
         question: 'Wie oft sollte ich meinen Ernährungsplan aktualisieren?',
-        answer: 'Alle 4 bis 6 Wochen, oder wenn sich dein Gewicht, deine Aktivität oder dein Ziel verändert hat. Mit der Fytrr-App kannst du jederzeit einen neuen Plan generieren.',
+        answer: 'Alle 4 bis 6 Wochen, oder wenn sich dein Gewicht, deine Aktivität oder dein Ziel verändert hat. Mit der fytrr-App kannst du jederzeit einen neuen Plan generieren.',
     },
 ];
 
@@ -51,7 +51,7 @@ const webAppSchema = computed(() =>
     JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: 'Fytrr Persönlicher Ernährungsplan Generator',
+        name: 'fytrr Persönlicher Ernährungsplan Generator',
         description:
             'Erstelle deinen persönlichen Ernährungsplan kostenlos mit KI.',
         applicationCategory: 'HealthApplication',
@@ -162,7 +162,7 @@ const faqSchema = computed(() =>
                         deine Makronährstoffverteilung, Allergien und Diätform.
                     </p>
                     <p class="mt-4 leading-relaxed text-gray-300">
-                        Fytrr erstellt deinen personalisierten Ernährungsplan
+                        fytrr erstellt deinen personalisierten Ernährungsplan
                         mit KI basierend auf deinen Angaben. Kein Raten, kein
                         stundenlanges Recherchieren. In 60 Sekunden hast du
                         einen Plan, der auf dich zugeschnitten ist.

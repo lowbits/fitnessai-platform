@@ -2,10 +2,10 @@
 
 return [
     'meta' => [
-        'title' => 'Über Fytrr — Die Geschichte hinter deinem KI Personal Coach',
-        'description' => 'Fytrr macht Personal Training bezahlbar. Gegründet von Tobias Lobitz — Entwickler, Fitness-Enthusiast, 15 Jahre Trainingserfahrung. Lerne uns kennen.',
+        'title' => 'Über fytrr — Die Geschichte hinter deinem KI Personal Coach',
+        'description' => 'fytrr macht Personal Training bezahlbar. Gegründet von Tobias Lobitz — Entwickler, Fitness-Enthusiast, 15 Jahre Trainingserfahrung. Lerne uns kennen.',
         'keywords' => ['fytrr', 'über uns', 'personal training app', 'ki personal coach', 'fitness app', 'tobias lobitz'],
-        'og_image_alt' => 'Fytrr — Dein KI Personal Coach',
+        'og_image_alt' => 'fytrr — Dein KI Personal Coach',
     ],
 
     'schema' => [

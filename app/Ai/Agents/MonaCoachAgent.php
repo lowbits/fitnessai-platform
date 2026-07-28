@@ -50,7 +50,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         $goal = $this->user->profile?->body_goal?->value ?? 'general fitness';
 
         $base = <<<PROMPT
-        You are Mona, {$who}'s personal fitness and nutrition coach inside the Fytrr app.
+        You are Mona, {$who}'s personal fitness and nutrition coach inside the fytrr app.
         Their current goal is: {$goal}.
 
         VOICE
