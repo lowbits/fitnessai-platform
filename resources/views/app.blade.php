@@ -113,21 +113,49 @@
             "\x40type" => 'Organization',
             'name' => 'fytrr',
             'url' => config('app.url'),
-            'logo' => config('app.url') . '/apple-touch-icon.png',
+            'logo' => [
+                "\x40type" => 'ImageObject',
+                'url' => config('app.url') . '/apple-touch-icon.png',
+                'width' => 180,
+                'height' => 180,
+            ],
             'foundingDate' => '2024',
             'founder' => [
                 "\x40type" => 'Person',
                 'name' => 'Tobias Lobitz',
+                'url' => config('app.url') . '/en/about',
+                'sameAs' => [
+                    'https://www.linkedin.com/in/tobiaslobitz/',
+                ],
             ],
             'description' => __('meta.description'),
             'contactPoint' => [
                 "\x40type" => 'ContactPoint',
                 'email' => 'hello@fytrr.com',
                 'contactType' => 'customer support',
+                'availableLanguage' => ['en', 'de'],
             ],
             'sameAs' => [
                 'https://instagram.com/getfytrr',
                 'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695',
+                'https://www.linkedin.com/company/fytrr',
+                'https://www.wikidata.org/wiki/Q140796880',
+            ],
+        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+
+    {{-- WebSite schema --}}
+    <script type="application/ld+json">
+        {!! json_encode([
+            "\x40context" => 'https://schema.org',
+            "\x40type" => 'WebSite',
+            'name' => 'fytrr',
+            'url' => config('app.url'),
+            'inLanguage' => ['en', 'de'],
+            'publisher' => [
+                "\x40type" => 'Organization',
+                'name' => 'fytrr',
+                'url' => config('app.url'),
             ],
         ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
