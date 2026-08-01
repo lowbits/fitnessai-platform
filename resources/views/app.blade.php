@@ -1,6 +1,6 @@
 @php
     use App\Helpers\LocalizationHelper;
-    use Illuminate\Support\Str;
+    use App\Helpers\StructuredData;
 
     $alternateUrls = LocalizationHelper::getAlternateUrls();
 @endphp
@@ -61,104 +61,12 @@
               href="{{ $alternateUrls[config('app.fallback_locale')] }}" />
     @endif
 
-    {{-- BreadcrumbList schema --}}
-    @php
-        $baseUrl = config('app.url');
-        $locale = app()->getLocale();
-        $path = request()->path();
-        $segments = array_values(array_filter(explode('/', $path)));
-
-        // Remove locale prefix
-        if (!empty($segments) && in_array($segments[0], ['de', 'en'])) {
-            array_shift($segments);
-        }
-
-        $breadcrumbs = [['name' => 'Home', 'url' => "{$baseUrl}/{$locale}"]];
-        $currentUrl = "{$baseUrl}/{$locale}";
-
-        foreach ($segments as $i => $segment) {
-            $currentUrl .= "/{$segment}";
-            $name = ucfirst(str_replace(['-', '_'], ' ', $segment));
-            $breadcrumbs[] = ['name' => $name, 'url' => $currentUrl];
-        }
-
-        // Override last breadcrumb name with page title from Inertia props if available
-        if (isset($page['props']['meta']['title']) && count($breadcrumbs) > 1) {
-            $title = $page['props']['meta']['title'];
-            // Strip site name suffix if present
-            $breadcrumbs[count($breadcrumbs) - 1]['name'] = Str::before($title, ' |');
-        } elseif (isset($page['props']['article']['h1'])) {
-            $breadcrumbs[count($breadcrumbs) - 1]['name'] = $page['props']['article']['h1'];
-        }
-    @endphp
-    @if(count($breadcrumbs) > 1)
+    {{-- schema.org structured data (JSON-LD) --}}
+    @foreach(StructuredData::forRequest(app()->getLocale(), request()->path(), $page['props'] ?? null) as $schema)
     <script type="application/ld+json">
-        {!! json_encode([
-            "\x40context" => 'https://schema.org',
-            "\x40type" => 'BreadcrumbList',
-            'itemListElement' => collect($breadcrumbs)->map(fn ($crumb, $i) => [
-                "\x40type" => 'ListItem',
-                'position' => $i + 1,
-                'name' => $crumb['name'],
-                'item' => $crumb['url'],
-            ])->all(),
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+        {!! json_encode($schema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
     </script>
-    @endif
-
-    {{-- Standalone Organization schema --}}
-    <script type="application/ld+json">
-        {!! json_encode([
-            "\x40context" => 'https://schema.org',
-            "\x40type" => 'Organization',
-            'name' => 'fytrr',
-            'url' => config('app.url'),
-            'logo' => [
-                "\x40type" => 'ImageObject',
-                'url' => config('app.url') . '/apple-touch-icon.png',
-                'width' => 180,
-                'height' => 180,
-            ],
-            'foundingDate' => '2024',
-            'founder' => [
-                "\x40type" => 'Person',
-                'name' => 'Tobias Lobitz',
-                'url' => config('app.url') . '/en/about',
-                'sameAs' => [
-                    'https://www.linkedin.com/in/tobiaslobitz/',
-                ],
-            ],
-            'description' => __('meta.description'),
-            'contactPoint' => [
-                "\x40type" => 'ContactPoint',
-                'email' => 'hello@fytrr.com',
-                'contactType' => 'customer support',
-                'availableLanguage' => ['en', 'de'],
-            ],
-            'sameAs' => [
-                'https://instagram.com/getfytrr',
-                'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695',
-                'https://www.linkedin.com/company/fytrr',
-                'https://www.wikidata.org/wiki/Q140796880',
-            ],
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-    </script>
-
-    {{-- WebSite schema --}}
-    <script type="application/ld+json">
-        {!! json_encode([
-            "\x40context" => 'https://schema.org',
-            "\x40type" => 'WebSite',
-            'name' => 'fytrr',
-            'url' => config('app.url'),
-            'inLanguage' => ['en', 'de'],
-            'publisher' => [
-                "\x40type" => 'Organization',
-                'name' => 'fytrr',
-                'url' => config('app.url'),
-            ],
-        ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
-    </script>
+    @endforeach
 
     <!-- Privacy-friendly analytics by Plausible -->
     <link rel="preconnect" href="https://plausible.io" crossorigin>
