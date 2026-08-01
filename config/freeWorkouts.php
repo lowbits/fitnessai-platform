@@ -602,7 +602,7 @@ return [
             'intro' => 'Dieser kostenlose 8-Wochen-Trainingsplan für Zuhause braucht keine Geräte. Du trainierst viermal pro Woche nur mit deinem Körpergewicht und baust so Kraft, Muskulatur und Ausdauer auf. Jede Einheit dauert etwa 40 Minuten und passt sich von Anfänger bis Fortgeschritten an.',
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2026-07-20',
+            'last_updated_at' => '2026-08-01',
 
             'why_it_works' => [
                 'title' => 'Warum dieser Trainingsplan für Zuhause funktioniert',
@@ -2316,7 +2316,7 @@ return [
             'keywords' => ['home workout plan', 'bodyweight training', 'no equipment workout', 'home fitness'],
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
-            'last_updated_at' => '2026-07-20',
+            'last_updated_at' => '2026-08-01',
 
             'why_it_works' => [
                 'title' => 'Why this home workout plan works',
