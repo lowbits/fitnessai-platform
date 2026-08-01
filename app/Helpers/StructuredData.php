@@ -62,7 +62,9 @@ class StructuredData
                 'availableLanguage' => ['en', 'de'],
             ],
             'sameAs' => [
-                'https://instagram.com/getfytrr',
+                'https://www.instagram.com/getfytrr/',
+                'https://www.tiktok.com/@fytrr_app',
+                'https://www.youtube.com/@getfytrr',
                 'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695',
                 'https://www.linkedin.com/company/fytrr',
                 'https://www.wikidata.org/wiki/Q140796880',
