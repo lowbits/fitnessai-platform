@@ -108,77 +108,6 @@ const mobileAppData = computed(() => ({
     },
 }));
 
-const reviewData = computed(() => ({
-    '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
-    name: 'fytrr',
-    applicationCategory: 'HealthApplication',
-    operatingSystem: 'iOS',
-    aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '5',
-        bestRating: '5',
-        ratingCount: '6',
-    },
-    inLanguage: language.value === 'de' ? 'de-DE' : 'en-GB',
-    review: [
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'olele-dbld' },
-            datePublished: '2026-03-28',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Die beste App zum zunehmen oder abnehmen',
-            reviewBody:
-                'Ich hatte immer Probleme mit zunehmen, mit fytrr habe ich es endlich geschafft. Man bekommt jeden Tag einen klaren Ernährungsplan und Trainingsplan.',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'Rüblikuchen' },
-            datePublished: '2026-03-27',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Super hilfreich',
-            reviewBody:
-                'Das neue Update hat die App so viel übersichtlicher gemacht. Und dass man das Workout jetzt direkt während des Trainings bearbeiten kann, ist ein absoluter Game Changer!',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'russainboy' },
-            datePublished: '2026-02-06',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Sehr gute App!',
-            reviewBody:
-                'Die KI passt die Trainingspläne intelligent an mein Fitnesslevel und meine Ziele an. Die Übungen sind verständlich erklärt, die Motivation bleibt hoch und der Fortschritt ist gut nachvollziehbar.',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'Benedikt Kuhlmann' },
-            datePublished: '2026-02-05',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Tolle App',
-            reviewBody:
-                'Seit etwa 30 Tagen teste ich diese App und bin sehr zufrieden. Sie hat mir geholfen, Gewicht zu verlieren und meine Fitness zu verbessern.',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'Sh0owzy' },
-            datePublished: '2026-02-04',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Top App',
-            reviewBody:
-                'Habe in wenigen Minuten einen personalisierten Trainingsplan erstellt bekommen.',
-        },
-        {
-            '@type': 'Review',
-            author: { '@type': 'Person', name: 'Jazzilalala' },
-            datePublished: '2026-01-30',
-            reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            name: 'Motivation pur',
-            reviewBody:
-                'Das Training ist abwechslungsreich und das obwohl ich nur zu Hause trainiere. Ich bin jetzt schon seit über einem Monat dabei und schon fast süchtig nach dem Training!',
-        },
-    ],
-}));
-
 const faqData = computed(() => ({
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -296,9 +225,6 @@ const faqData = computed(() => ({
         </component>
         <component :is="'script'" type="application/ld+json">
             {{ JSON.stringify(faqData) }}
-        </component>
-        <component :is="'script'" type="application/ld+json">
-            {{ JSON.stringify(reviewData) }}
         </component>
     </Head>
 
