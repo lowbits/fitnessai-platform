@@ -185,22 +185,56 @@ class WorkoutPlanController extends Controller
      */
     private function generateSchemaMarkup(string $type, array $planData, array $workout, array $faqs, array $author, ?array $reviewer): array
     {
+        $baseUrl = config('app.url');
+
+        $canonical = str_starts_with($planData['canonical'], 'http')
+            ? $planData['canonical']
+            : $baseUrl.$planData['canonical'];
+
+        $publisher = [
+            '@type' => 'Organization',
+            'name' => 'fytrr',
+            'url' => $baseUrl,
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => $baseUrl.'/apple-touch-icon.png',
+                'width' => 180,
+                'height' => 180,
+            ],
+        ];
+
         $schemaGraph = [
             // Article Schema with Author & Reviewer
             [
                 '@type' => 'Article',
                 'headline' => $planData['h1'],
                 'description' => $planData['intro'],
+                'url' => $canonical,
+                'mainEntityOfPage' => $canonical,
+                'image' => [
+                    '@type' => 'ImageObject',
+                    'url' => $baseUrl.'/fitness-plan.png',
+                    'width' => 1536,
+                    'height' => 1024,
+                ],
                 'author' => [
                     '@type' => 'Person',
                     'name' => $author['name'],
                     'jobTitle' => $author['title'],
                     'image' => url($author['image']),
+                    'url' => $baseUrl.'/en/about',
+                    'worksFor' => [
+                        '@type' => 'Organization',
+                        'name' => 'fytrr',
+                        'url' => $baseUrl,
+                    ],
+                    'knowsAbout' => ['strength training', 'fitness', 'nutrition planning', 'workout programming'],
                     'sameAs' => [
                         'https://instagram.com/getfytrr',
                         'https://www.linkedin.com/in/tobiaslobitz/',
                     ],
                 ],
+                'publisher' => $publisher,
                 'datePublished' => now()->parse($planData['published_at'])->toIso8601String() ?? now()->toIso8601String(),
                 'dateModified' => now()->parse($planData['last_updated_at'])->toIso8601String(),
                 'speakable' => [
