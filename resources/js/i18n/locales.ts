@@ -501,7 +501,7 @@ export const locales = {
                 reviewed_by: 'Professionally reviewed by',
                 about_content: 'About our content',
                 disclosure:
-                    'This workout plan was created with AI assistance and reviewed by certified professionals. All recommendations are based on current sports science and evidence-based principles.',
+                    'This workout plan was created with AI assistance. All recommendations are based on current sports science and evidence-based principles.',
             },
             sourcesHeading: 'Sources',
         },
@@ -2105,7 +2105,7 @@ export const locales = {
                 reviewed_by: 'Fachlich geprüft von',
                 about_content: 'Über unsere Inhalte',
                 disclosure:
-                    'Dieser Trainingsplan wurde mit KI-Unterstützung erstellt und von zertifizierten Fachleuten überprüft. Alle Empfehlungen basieren auf aktueller Sportforschung und evidenzbasierten Prinzipien.',
+                    'Dieser Trainingsplan wurde mit KI-Unterstützung erstellt. Alle Empfehlungen basieren auf aktueller Sportforschung und evidenzbasierten Prinzipien.',
             },
             sourcesHeading: 'Quellen',
         },
