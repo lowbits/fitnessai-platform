@@ -92,61 +92,93 @@ const toggleDay = (index: number) => {
 
                 <div
                     v-show="expandedDay === index"
-                    class="border-t border-dark-surfaces-500 p-6"
+                    class="border-t border-dark-surfaces-500"
                 >
-                    <div class="space-y-4">
-                        <div
-                            v-for="(exercise, exIndex) in workout.exercises"
-                            :key="exIndex"
-                            class="flex items-start gap-4 rounded-lg bg-dark-surfaces-900/50 p-4"
-                        >
-                            <div
-                                class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-dark-surfaces-900"
-                            >
-                                {{ exIndex + 1 }}
-                            </div>
-                            <div class="flex-1">
-                                <h4 class="font-semibold text-white">
-                                    {{ exercise.name }}
-                                </h4>
-                                <div
-                                    class="mt-2 flex flex-wrap gap-3 text-sm text-gray-400"
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr
+                                    class="border-b border-dark-surfaces-500 text-gray-400"
                                 >
-                                    <span
-                                        >{{ exercise.sets }}
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 font-medium"
+                                    >
+                                        {{
+                                            $t(
+                                                'workout_plan.week_overview.exercise',
+                                            )
+                                        }}
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-4 py-3 font-medium"
+                                    >
                                         {{
                                             $t(
                                                 'workout_plan.week_overview.sets',
                                             )
-                                        }}</span
+                                        }}
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-4 py-3 font-medium"
                                     >
-                                    <span>•</span>
-                                    <span
-                                        >{{ exercise.reps }}
                                         {{
                                             $t(
                                                 'workout_plan.week_overview.reps',
                                             )
-                                        }}</span
+                                        }}
+                                    </th>
+                                    <th
+                                        scope="col"
+                                        class="px-6 py-3 font-medium"
                                     >
-                                    <span>•</span>
-                                    <span
-                                        >{{ exercise.rest }}
                                         {{
                                             $t(
                                                 'workout_plan.week_overview.rest',
                                             )
-                                        }}</span
-                                    >
-                                </div>
-                                <p
-                                    v-if="exercise.notes"
-                                    class="mt-2 text-sm text-gray-500"
+                                        }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr
+                                    v-for="(
+                                        exercise, exIndex
+                                    ) in workout.exercises"
+                                    :key="exIndex"
+                                    class="border-b border-dark-surfaces-500/40 last:border-0"
                                 >
-                                    {{ exercise.notes }}
-                                </p>
-                            </div>
-                        </div>
+                                    <td
+                                        class="px-6 py-3 font-medium text-white"
+                                    >
+                                        {{ exercise.name }}
+                                        <span
+                                            v-if="exercise.notes"
+                                            class="mt-1 block text-xs font-normal text-gray-500"
+                                        >
+                                            {{ exercise.notes }}
+                                        </span>
+                                    </td>
+                                    <td
+                                        class="px-4 py-3 whitespace-nowrap text-gray-300"
+                                    >
+                                        {{ exercise.sets }}
+                                    </td>
+                                    <td
+                                        class="px-4 py-3 whitespace-nowrap text-gray-300"
+                                    >
+                                        {{ exercise.reps }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-3 whitespace-nowrap text-gray-300"
+                                    >
+                                        {{ exercise.rest }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>

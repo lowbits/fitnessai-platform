@@ -599,7 +599,7 @@ return [
             'title' => 'Kostenloser Trainingsplan für Zuhause ohne Geräte',
             'description' => 'Trainingsplan für Zuhause ohne Geräte, kostenlos. 8 Wochen Bodyweight Training für jedes Level. Sofort als PDF, ohne Anmeldung.',
             'h1' => 'Trainingsplan für Zuhause: Effektiv ohne Geräte',
-            'intro' => 'Dieser 8-Wochen-Trainingsplan zeigt dir, wie du mit reinem Körpergewicht zuhause Kraft, Ausdauer und Muskulatur aufbaust – ganz ohne Fitnessstudio.',
+            'intro' => 'Dieser kostenlose 8-Wochen-Trainingsplan für Zuhause braucht keine Geräte. Du trainierst viermal pro Woche nur mit deinem Körpergewicht und baust so Kraft, Muskulatur und Ausdauer auf. Jede Einheit dauert etwa 40 Minuten und passt sich von Anfänger bis Fortgeschritten an.',
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
             'last_updated_at' => '2026-07-20',
@@ -741,6 +741,30 @@ return [
                 [
                     'question' => 'Kann ich ohne Geräte wirklich Muskeln aufbauen?',
                     'answer' => 'Ja. Durch progressive Überlastung (mehr Wiederholungen, langsameres Tempo, schwierigere Varianten) ist effektiver Muskelaufbau mit Bodyweight möglich.',
+                ],
+                [
+                    'question' => 'Kann ich mit diesem Plan zuhause abnehmen?',
+                    'answer' => 'Ja. Kombiniert mit einem leichten Kaloriendefizit unterstützen die vier wöchentlichen Einheiten den Fettabbau und erhalten dabei Muskulatur. Der Conditioning-Tag erhöht den Kalorienverbrauch, das Ganzkörper-Krafttraining hält den Stoffwechsel aktiv.',
+                ],
+                [
+                    'question' => 'Ist dieser Trainingsplan für Frauen geeignet?',
+                    'answer' => 'Ja. Der Plan ist nicht geschlechtsspezifisch. Dieselben Bodyweight-Progressionen bauen Kraft, Definition und Ausdauer für Frauen und Männer auf. Passe Wiederholungen und Varianten an dein Level an.',
+                ],
+                [
+                    'question' => 'Ist dieser Plan für Anfänger geeignet?',
+                    'answer' => 'Ja. Alle Übungen lassen sich an dein Level anpassen, dadurch eignet sich der Plan für Anfänger und Fortgeschrittene.',
+                ],
+                [
+                    'question' => 'Brauche ich viel Platz zum Training zuhause?',
+                    'answer' => 'Nein. Jede Übung passt auf die Fläche einer Yogamatte. Du kannst den kompletten Plan in einer kleinen Wohnung oder im Hotelzimmer ohne Geräte umsetzen.',
+                ],
+                [
+                    'question' => 'Wie mache ich ohne Gewichte weiter Fortschritte?',
+                    'answer' => 'Steigere Wiederholungen, verlangsame das Tempo, verkürze die Pausen oder wechsle zu einer schwierigeren Variante derselben Übung. Diese vier Hebel ersetzen zusätzliches Gewicht und sorgen für weiteren Kraft- und Muskelaufbau.',
+                ],
+                [
+                    'question' => 'Wie oft pro Woche sollte ich zuhause trainieren?',
+                    'answer' => 'Vier fokussierte Einheiten à 40 Minuten pro Woche sind das Ziel. Bei wenig Zeit funktionieren auch drei Einheiten. Lege zwischen harten Einheiten mindestens einen Ruhetag ein.',
                 ],
                 [
                     'question' => 'Wie lange dauert ein Home Workout?',
@@ -2288,7 +2312,7 @@ return [
             'title' => 'Free Home Workout Plan Without Equipment – 8 Weeks',
             'description' => 'Free 8-week home workout plan, no equipment needed. Bodyweight training for all levels. Works for weight loss and muscle gain. PDF download.',
             'h1' => 'Home Workout Plan – Train Effectively Without a Gym',
-            'intro' => 'This 8-week home workout plan uses bodyweight exercises only. It helps you build strength, improve endurance and stay consistent without needing a gym.',
+            'intro' => 'This free 8-week home workout plan needs no equipment. You train four times a week using only your body weight to build strength, muscle and endurance at home. Each session takes about 40 minutes and scales from beginner to advanced.',
             'keywords' => ['home workout plan', 'bodyweight training', 'no equipment workout', 'home fitness'],
             'internal_type' => 'home',
             'published_at' => '2025-12-24',
@@ -2432,8 +2456,32 @@ return [
                     'answer' => 'Yes. Bodyweight training is highly effective for building strength, endurance and muscle when exercises are structured properly.',
                 ],
                 [
+                    'question' => 'Can I build muscle at home without equipment?',
+                    'answer' => 'Yes. You build muscle at home by training close to failure and progressively making exercises harder. Use more reps, a slower tempo, shorter rest and tougher variations such as decline or archer push-ups. This plan builds that progression in over 8 weeks.',
+                ],
+                [
+                    'question' => 'Can I lose fat with this home workout plan?',
+                    'answer' => 'Yes. Paired with a small calorie deficit, the four weekly sessions support fat loss while preserving muscle. The conditioning day raises calorie burn and the full-body strength work keeps your metabolism elevated.',
+                ],
+                [
+                    'question' => 'Is this home workout plan suitable for women?',
+                    'answer' => 'Yes. The plan is not gender specific. The same bodyweight progressions build strength, tone and endurance for women and men. Scale the reps and variations to your current level.',
+                ],
+                [
                     'question' => 'Is this suitable for beginners?',
                     'answer' => 'Yes. All exercises can be scaled to match your fitness level, making this plan suitable for beginners and advanced users.',
+                ],
+                [
+                    'question' => 'Do I need much space to train at home?',
+                    'answer' => 'No. Every exercise fits in the space of a yoga mat, so you can complete the full plan in a small apartment or a hotel room with no equipment.',
+                ],
+                [
+                    'question' => 'How do I keep making progress without weights?',
+                    'answer' => 'Progress by adding reps, slowing the tempo, shortening rest, or moving to a harder variation of the same exercise. These four levers replace adding weight and drive continued strength and muscle gains.',
+                ],
+                [
+                    'question' => 'How many days per week should I train at home?',
+                    'answer' => 'Four focused 40 minute sessions per week is the target. If you are short on time, three sessions still work. Keep at least one rest day between hard sessions to recover.',
                 ],
                 [
                     'question' => 'How long are the workouts?',
