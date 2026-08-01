@@ -464,6 +464,7 @@ export const locales = {
                 sets: 'Sets',
                 reps: 'Reps',
                 rest: 'Rest',
+                exercise: 'Exercise',
             },
             faq: {
                 heading: 'Frequently Asked Questions',
@@ -2095,6 +2096,7 @@ export const locales = {
                 sets: 'Sätze',
                 reps: 'Wdh.',
                 rest: 'Pause',
+                exercise: 'Übung',
             },
             faq: {
                 heading: 'Häufig gestellte Fragen',
