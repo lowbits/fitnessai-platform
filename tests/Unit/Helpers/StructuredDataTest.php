@@ -26,7 +26,9 @@ describe('StructuredData::organization', function () {
 
         // sameAs anchors the entity across the platforms AI engines cross-check.
         expect($org['sameAs'])->toContain(
-            'https://instagram.com/getfytrr',
+            'https://www.instagram.com/getfytrr/',
+            'https://www.tiktok.com/@fytrr_app',
+            'https://www.youtube.com/@getfytrr',
             'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695',
             'https://www.linkedin.com/company/fytrr',
             'https://www.wikidata.org/wiki/Q140796880',
