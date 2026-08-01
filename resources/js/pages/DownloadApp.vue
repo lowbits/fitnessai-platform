@@ -79,6 +79,14 @@ const faqs = computed(() => {
     }));
 });
 
+const aboutFeatures = computed(() => {
+    const items = tm('downloadApp.about.features');
+    return (items as { title: string; text: string }[]).map((item) => ({
+        title: rt(item.title),
+        text: rt(item.text),
+    }));
+});
+
 onMounted(() => {
     trackEvent('Download App - Page View', utmProps.value);
 });
@@ -94,7 +102,22 @@ onMounted(() => {
     </Head>
 
     <GuestLayout>
-        <div class="container mx-auto max-w-5xl px-5 pt-7 pb-12">
+        <div
+            class="theme-v2 container mx-auto max-w-5xl bg-canvas px-5 py-12 text-ink"
+        >
+            <section class="pb-10 text-center lg:pb-14">
+                <h1
+                    class="mx-auto max-w-3xl text-4xl font-extrabold tracking-tight text-balance text-ink sm:text-5xl lg:text-6xl lg:leading-[1.02]"
+                >
+                    {{ t('downloadApp.hero.heading') }}
+                </h1>
+                <p
+                    class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted"
+                >
+                    {{ t('downloadApp.hero.subheading') }}
+                </p>
+            </section>
+
             <AppSection
                 :app-store-url="appStoreUrl"
                 :qr-code="appStoreQrCode"
@@ -238,10 +261,33 @@ onMounted(() => {
                 </div>
             </AppSection>
 
+            <section class="mt-16 border-t border-stroke pt-16">
+                <h2 class="text-3xl font-bold text-ink">
+                    {{ t('downloadApp.about.heading') }}
+                </h2>
+                <p class="mt-4 max-w-2xl leading-relaxed text-ink-muted">
+                    {{ t('downloadApp.about.intro') }}
+                </p>
+                <div class="mt-10 grid gap-5 sm:grid-cols-2">
+                    <div
+                        v-for="feature in aboutFeatures"
+                        :key="feature.title"
+                        class="rounded-[16px] border border-stroke bg-surface p-6"
+                    >
+                        <h3 class="text-lg font-semibold text-ink">
+                            {{ feature.title }}
+                        </h3>
+                        <p class="mt-2 leading-relaxed text-ink-muted">
+                            {{ feature.text }}
+                        </p>
+                    </div>
+                </div>
+            </section>
+
             <FAQSection
                 :faqs="faqs"
                 :heading="t('downloadApp.faq.heading')"
-                class="mt-12 rounded-2xl"
+                class="mt-16 rounded-2xl"
             />
         </div>
     </GuestLayout>

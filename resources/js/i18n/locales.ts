@@ -1472,6 +1472,33 @@ export const locales = {
                 description:
                     'fytrr App: Your AI personal trainer for workout plans, meal plans & tracking. Try 7 days free. Download now on the App Store.',
             },
+            hero: {
+                heading: 'The fytrr app: your AI personal trainer for iPhone',
+                subheading:
+                    'Get personalized workout and meal plans, macro tracking, and an AI coach that adapts to you. Free to start, no credit card required.',
+            },
+            about: {
+                heading: 'What you get with the fytrr app',
+                intro: 'fytrr is an AI fitness app for iPhone that builds a complete workout and nutrition plan around your goal, experience level, and available equipment. Your plan adapts as you progress, so it stays right for you week after week.',
+                features: [
+                    {
+                        title: 'AI workout plans',
+                        text: 'Structured training programs with progressive overload, built for the gym, home, or outdoors based on the equipment you have.',
+                    },
+                    {
+                        title: 'Meal plans with grocery lists',
+                        text: 'Nutrition matched to your calorie and macro targets, with a ready shopping list and one-tap meal swaps that keep your macros on track.',
+                    },
+                    {
+                        title: 'Progress and macro tracking',
+                        text: 'Log workouts, track calories and macros, and follow your body progress over time, all in one place.',
+                    },
+                    {
+                        title: 'Mona, your AI coach',
+                        text: 'An in-app AI coach that adjusts your plan when you are short on time, tired, or want a change. Just ask.',
+                    },
+                ],
+            },
             greeting: 'Hey {name}!',
             mobile: {
                 body: 'Just 2 steps to your {goal} plan in the app:',
@@ -3090,6 +3117,34 @@ export const locales = {
                 title: 'fytrr App \u2014 KI Personal Trainer f\u00fcr Training & Ern\u00e4hrung',
                 description:
                     'fytrr App: Dein KI Personal Trainer f\u00fcr Ern\u00e4hrungsplan, Trainingsplan & Tracking. 7 Tage kostenlos testen. Jetzt im App Store.',
+            },
+            hero: {
+                heading:
+                    'Die fytrr App: dein KI Personal Trainer f\u00fcrs iPhone',
+                subheading:
+                    'Personalisierte Trainings- und Ern\u00e4hrungspl\u00e4ne, Makro-Tracking und ein KI-Coach, der sich dir anpasst. Kostenlos starten, ohne Kreditkarte.',
+            },
+            about: {
+                heading: 'Was du mit der fytrr App bekommst',
+                intro: 'fytrr ist eine KI-Fitness-App f\u00fcrs iPhone, die einen kompletten Trainings- und Ern\u00e4hrungsplan rund um dein Ziel, dein Level und deine Ausr\u00fcstung erstellt. Dein Plan passt sich deinem Fortschritt an und bleibt so Woche f\u00fcr Woche stimmig.',
+                features: [
+                    {
+                        title: 'KI-Trainingspl\u00e4ne',
+                        text: 'Strukturierte Programme mit progressiver Belastungssteigerung, f\u00fcr Gym, Zuhause oder drau\u00dfen, je nach verf\u00fcgbarer Ausr\u00fcstung.',
+                    },
+                    {
+                        title: 'Ern\u00e4hrungspl\u00e4ne mit Einkaufsliste',
+                        text: 'Ern\u00e4hrung passend zu deinen Kalorien- und Makrozielen, mit fertiger Einkaufsliste und Gericht-Tausch per Tipp, der deine Makros h\u00e4lt.',
+                    },
+                    {
+                        title: 'Fortschritt und Makro-Tracking',
+                        text: 'Tracke Workouts, Kalorien und Makros und verfolge deinen K\u00f6rperfortschritt \u00fcber die Zeit, alles an einem Ort.',
+                    },
+                    {
+                        title: 'Mona, dein KI-Coach',
+                        text: 'Ein KI-Coach in der App, der deinen Plan anpasst, wenn du wenig Zeit hast, m\u00fcde bist oder Abwechslung willst. Frag sie einfach.',
+                    },
+                ],
             },
             greeting: 'Hey {name}!',
             mobile: {
