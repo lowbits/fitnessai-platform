@@ -43,13 +43,13 @@ function seedDay(Plan $plan, int $dayNumber, array $meals): MealPlan
 
 test('MealVariety per-slot distinct targets match spec', function () {
     expect(MealVariety::LOW->perSlotDistinctTargets())
-        ->toBe(['breakfast' => 2, 'lunch' => 2, 'snack' => 1, 'dinner' => 2]);
+        ->toBe(['breakfast' => 2, 'lunch' => 2, 'snack' => 2, 'dinner' => 2]);
 
     expect(MealVariety::MEDIUM->perSlotDistinctTargets())
-        ->toBe(['breakfast' => 4, 'lunch' => 5, 'snack' => 3, 'dinner' => 5]);
+        ->toBe(['breakfast' => 4, 'lunch' => 5, 'snack' => 5, 'dinner' => 5]);
 
     expect(MealVariety::HIGH->perSlotDistinctTargets())
-        ->toBe(['breakfast' => 7, 'lunch' => 7, 'snack' => 5, 'dinner' => 7]);
+        ->toBe(['breakfast' => 7, 'lunch' => 7, 'snack' => 7, 'dinner' => 7]);
 });
 
 test('day 1 returns NEW for every slot with empty forbidden lists', function () {

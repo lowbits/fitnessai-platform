@@ -9,9 +9,34 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 
 uses(RefreshDatabase::class);
+
+test('workout generation does not generate a day locked by a concurrent worker', function () {
+    WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');
+
+    $user = User::factory()->withProfile()->create();
+
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'start_date' => now()->startOfDay(),
+        'end_date' => now()->addDays(7)->startOfDay(),
+        'duration_days' => 7,
+        'workouts_per_week' => 7,
+    ]);
+
+    $held = Cache::lock("workout_gen:{$plan->id}:1", 10);
+    expect($held->get())->toBeTrue();
+
+    $job = new GenerateUserWorkoutPlan($user, $plan, maxDays: 1, lockWaitSeconds: 1);
+    $job->handle();
+
+    expect(WorkoutPlan::where('plan_id', $plan->id)->where('day_number', 1)->exists())->toBeFalse();
+
+    $held->release();
+});
 
 test('complete plan exits early without creating new records', function () {
     WorkoutProgrammerAgent::fake(fn () => 'Fake workout response');

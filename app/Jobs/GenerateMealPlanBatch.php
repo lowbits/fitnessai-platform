@@ -11,9 +11,11 @@ use App\Models\Plan;
 use App\Models\Recipe;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Enums\Lab;
 use Laravel\Ai\Messages\UserMessage;
@@ -30,7 +32,8 @@ class GenerateMealPlanBatch implements ShouldQueue
         public User $user,
         public Plan $plan,
         public int $startDay,
-        public int $endDay
+        public int $endDay,
+        public int $lockWaitSeconds = 120,
     ) {
         $this->onQueue('nutrition');
     }
@@ -58,41 +61,58 @@ class GenerateMealPlanBatch implements ShouldQueue
         for ($day = $this->startDay; $day <= $this->endDay; $day++) {
             $date = $this->plan->start_date->copy()->addDays($day - 1);
 
-            $mealPlan = MealPlan::firstOrCreate(
-                [
-                    'plan_id' => $this->plan->id,
-                    'day_number' => $day,
-                ],
-                [
-                    'date' => $date,
-                    'status' => 'pending',
-                ]
-            );
+            $lock = Cache::lock("meal_gen:{$this->plan->id}:{$day}", 300);
 
-            if ($mealPlan->status === 'generated') {
+            try {
+                $lock->block($this->lockWaitSeconds);
+            } catch (LockTimeoutException) {
+                Log::warning('[MealGen] Skipped day — generation lock not acquired', [
+                    'plan_id' => $this->plan->id,
+                    'day' => $day,
+                ]);
+
                 continue;
             }
 
-            // Clean up any partial meals from a previous failed attempt
-            if ($mealPlan->meals()->exists()) {
-                $mealPlan->meals()->delete();
-            }
-
-            $slotPlan = $slotPlanner->handle($this->plan, $day, $profile);
-
-            $this->logSlotPlan($day, $slotPlan);
-
             try {
-                $this->generateDay($mealPlan, $day, $date, $slotPlan);
-            } catch (\Throwable $e) {
-                Log::debug($e);
-                Log::error("Failed to generate meal plan for day {$day}", [
-                    'error' => $e->getMessage(),
-                    'error_class' => get_class($e),
-                    'batch_days' => "{$this->startDay}-{$this->endDay}",
-                ]);
+                $mealPlan = MealPlan::firstOrCreate(
+                    [
+                        'plan_id' => $this->plan->id,
+                        'day_number' => $day,
+                    ],
+                    [
+                        'date' => $date,
+                        'status' => 'pending',
+                    ]
+                );
 
-                $mealPlan->update(['status' => 'failed']);
+                if ($mealPlan->status === 'generated') {
+                    continue;
+                }
+
+                // Clean up any partial meals from a previous failed attempt
+                if ($mealPlan->meals()->exists()) {
+                    $mealPlan->meals()->delete();
+                }
+
+                $slotPlan = $slotPlanner->handle($this->plan, $day, $profile);
+
+                $this->logSlotPlan($day, $slotPlan);
+
+                try {
+                    $this->generateDay($mealPlan, $day, $date, $slotPlan);
+                } catch (\Throwable $e) {
+                    Log::debug($e);
+                    Log::error("Failed to generate meal plan for day {$day}", [
+                        'error' => $e->getMessage(),
+                        'error_class' => get_class($e),
+                        'batch_days' => "{$this->startDay}-{$this->endDay}",
+                    ]);
+
+                    $mealPlan->update(['status' => 'failed']);
+                }
+            } finally {
+                $lock->release();
             }
         }
 

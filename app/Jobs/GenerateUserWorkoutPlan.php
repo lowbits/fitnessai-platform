@@ -8,8 +8,10 @@ use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Exception;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Enums\Lab;
 use Throwable;
@@ -22,6 +24,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
         public User $user,
         public Plan $plan,
         public ?int $maxDays = null,
+        public int $lockWaitSeconds = 120,
     ) {
         $this->onQueue('workouts');
     }
@@ -65,83 +68,99 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 break;
             }
 
-            $isRestDay = $this->isRestDay($day, $workoutsPerWeek);
+            $lock = Cache::lock("workout_gen:{$this->plan->id}:{$day}", 300);
 
-            $workoutPlan = WorkoutPlan::firstOrCreate(
-                ['plan_id' => $this->plan->id, 'day_number' => $day],
-                ['date' => $date, 'status' => 'pending', 'workout_name' => $isRestDay ? 'Rest Day' : 'Workout Day', 'workout_type' => $isRestDay ? 'rest' : 'strength'],
-            );
-
-            // Skip already generated
-            if ($workoutPlan->status === 'generated') {
-                if (! $isRestDay) {
-                    $exerciseNames = $workoutPlan->exercises()->with('exercise')->get()->map(fn ($e) => $e->exercise?->name ?? $e->name)->take(3)->implode(', ');
-                    $generatedWorkoutsSummary[] = "Day $day: $workoutPlan->workout_name ($exerciseNames...)";
-                }
-
-                continue;
-            }
-
-            // Handle rest days without AI
-            if ($isRestDay) {
-                $workoutPlan->update([
-                    'status' => 'generated',
-                    'workout_name' => __('workouts.active_recovery', [], $this->user->locale),
-                    'workout_type' => 'rest',
-                    'description' => __('workouts.rest_description', [], $this->user->locale),
-                    'estimated_duration_minutes' => 0,
-                ]);
-
-                continue;
-            }
-
-            // Generate workout via AI agent
             try {
-                Log::info("[WorkoutGen] Calling AI agent for day $day", [
-                    'workout_plan_id' => $workoutPlan->id,
+                $lock->block($this->lockWaitSeconds);
+            } catch (LockTimeoutException) {
+                Log::warning("[WorkoutGen] Skipped day $day — generation lock not acquired", [
+                    'plan_id' => $this->plan->id,
                 ]);
 
-                $prompt = new CreateWorkoutPrompt(
-                    profile: $profile,
-                    locale: $this->user->locale,
-                    dayNumber: $day,
-                    workoutsPerWeek: $workoutsPerWeek,
-                    recentWorkouts: array_slice($generatedWorkoutsSummary, -5),
+                continue;
+            }
+
+            try {
+                $isRestDay = $this->isRestDay($day, $workoutsPerWeek);
+
+                $workoutPlan = WorkoutPlan::firstOrCreate(
+                    ['plan_id' => $this->plan->id, 'day_number' => $day],
+                    ['date' => $date, 'status' => 'pending', 'workout_name' => $isRestDay ? 'Rest Day' : 'Workout Day', 'workout_type' => $isRestDay ? 'rest' : 'strength'],
                 );
 
-                (new WorkoutProgrammerAgent($workoutPlan))
-                    ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
-
-                // Refresh to get updated data from SaveWorkoutPlanTool tool
-                $workoutPlan->refresh();
-
+                // Skip already generated
                 if ($workoutPlan->status === 'generated') {
-                    $exerciseNames = $workoutPlan->exercises()->with('exercise')->get()->map(fn ($e) => $e->exercise?->name ?? $e->name)->take(3)->implode(', ');
-                    $generatedWorkoutsSummary[] = "Day $day: $workoutPlan->workout_name ($exerciseNames...)";
+                    if (! $isRestDay) {
+                        $exerciseNames = $workoutPlan->exercises()->with('exercise')->get()->map(fn ($e) => $e->exercise?->name ?? $e->name)->take(3)->implode(', ');
+                        $generatedWorkoutsSummary[] = "Day $day: $workoutPlan->workout_name ($exerciseNames...)";
+                    }
 
-                    Log::info("[WorkoutGen] Day $day OK", [
-                        'workout_plan_id' => $workoutPlan->id,
-                        'workout_name' => $workoutPlan->workout_name,
-                        'workout_type' => $workoutPlan->workout_type,
-                        'exercises' => $workoutPlan->exercises()->count(),
+                    continue;
+                }
+
+                // Handle rest days without AI
+                if ($isRestDay) {
+                    $workoutPlan->update([
+                        'status' => 'generated',
+                        'workout_name' => __('workouts.active_recovery', [], $this->user->locale),
+                        'workout_type' => 'rest',
+                        'description' => __('workouts.rest_description', [], $this->user->locale),
+                        'estimated_duration_minutes' => 0,
                     ]);
-                } else {
-                    Log::warning("[WorkoutGen] Agent finished but status still '{$workoutPlan->status}' for day $day — likely SaveWorkoutPlanTool failed silently", [
+
+                    continue;
+                }
+
+                // Generate workout via AI agent
+                try {
+                    Log::info("[WorkoutGen] Calling AI agent for day $day", [
                         'workout_plan_id' => $workoutPlan->id,
-                        'status' => $workoutPlan->status,
+                    ]);
+
+                    $prompt = new CreateWorkoutPrompt(
+                        profile: $profile,
+                        locale: $this->user->locale,
+                        dayNumber: $day,
+                        workoutsPerWeek: $workoutsPerWeek,
+                        recentWorkouts: array_slice($generatedWorkoutsSummary, -5),
+                    );
+
+                    (new WorkoutProgrammerAgent($workoutPlan))
+                        ->prompt((string) $prompt, provider: [Lab::OpenAI, Lab::Mistral], model: config('ai.models.agent'));
+
+                    // Refresh to get updated data from SaveWorkoutPlanTool tool
+                    $workoutPlan->refresh();
+
+                    if ($workoutPlan->status === 'generated') {
+                        $exerciseNames = $workoutPlan->exercises()->with('exercise')->get()->map(fn ($e) => $e->exercise?->name ?? $e->name)->take(3)->implode(', ');
+                        $generatedWorkoutsSummary[] = "Day $day: $workoutPlan->workout_name ($exerciseNames...)";
+
+                        Log::info("[WorkoutGen] Day $day OK", [
+                            'workout_plan_id' => $workoutPlan->id,
+                            'workout_name' => $workoutPlan->workout_name,
+                            'workout_type' => $workoutPlan->workout_type,
+                            'exercises' => $workoutPlan->exercises()->count(),
+                        ]);
+                    } else {
+                        Log::warning("[WorkoutGen] Agent finished but status still '{$workoutPlan->status}' for day $day — likely SaveWorkoutPlanTool failed silently", [
+                            'workout_plan_id' => $workoutPlan->id,
+                            'status' => $workoutPlan->status,
+                        ]);
+
+                        $workoutPlan->update(['status' => 'failed']);
+                    }
+                } catch (Exception $e) {
+                    Log::error("[WorkoutGen] Exception on day $day: {$e->getMessage()}", [
+                        'workout_plan_id' => $workoutPlan->id,
+                        'exception' => $e::class,
                     ]);
 
                     $workoutPlan->update(['status' => 'failed']);
+
+                    continue;
                 }
-            } catch (Exception $e) {
-                Log::error("[WorkoutGen] Exception on day $day: {$e->getMessage()}", [
-                    'workout_plan_id' => $workoutPlan->id,
-                    'exception' => $e::class,
-                ]);
-
-                $workoutPlan->update(['status' => 'failed']);
-
-                continue;
+            } finally {
+                $lock->release();
             }
         }
 

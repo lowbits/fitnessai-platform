@@ -10,6 +10,7 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Cache;
 use Laravel\Ai\Messages\AssistantMessage;
 use Laravel\Ai\Messages\UserMessage;
 
@@ -464,6 +465,29 @@ test('exact-repeat meal preserves grams and macros from source', function () {
         // Repeat picked the other meal (Tuna Bowl) — still valid behavior.
         expect($day3->meals->pluck('name')->all())->toContain('Tuna Bowl');
     }
+});
+
+test('meal plan batch does not generate a day locked by a concurrent worker', function () {
+    NutritionPlannerAgent::fake();
+
+    $user = User::factory()->withProfile()->create();
+
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id,
+        'duration_days' => 7,
+        'start_date' => now(),
+    ]);
+
+    $held = Cache::lock("meal_gen:{$plan->id}:1", 10);
+    expect($held->get())->toBeTrue();
+
+    $job = new GenerateMealPlanBatch($user, $plan, startDay: 1, endDay: 1, lockWaitSeconds: 1);
+    dispatch_sync($job);
+
+    NutritionPlannerAgent::assertNotPrompted(fn () => true);
+    expect(MealPlan::where('plan_id', $plan->id)->where('day_number', 1)->exists())->toBeFalse();
+
+    $held->release();
 });
 
 test('agent instructions return system prompt', function () {
