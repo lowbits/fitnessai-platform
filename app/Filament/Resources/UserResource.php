@@ -75,7 +75,8 @@ class UserResource extends Resource
                     ->label('Web → Mobile')
                     ->queries(
                         true: fn ($query) => $query->converted(),
-                        false: fn ($query) => $query->where('source', UserSource::WEB)->whereDoesntHave('tokens'),
+                        false: fn ($query) => $query->where('source', UserSource::WEB)
+                            ->whereNot(fn ($query) => $query->converted()),
                     ),
             ])
             ->defaultSort('created_at', 'desc');

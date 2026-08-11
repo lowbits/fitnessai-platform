@@ -84,8 +84,10 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     }
 
     /**
-     * Any user who has used the mobile app: a native app signup, or a web-origin
-     * user who has since authenticated through the mobile API (has a Sanctum token).
+     * Any user who has used the mobile app. Durable signals: a native app signup,
+     * or a linked social provider (only ever set by mobile OAuth). A live Sanctum
+     * token also counts, but is transient — it is deleted on logout — so it can
+     * only add users, never gate them.
      *
      * @param  Builder<User>  $query
      */
@@ -93,6 +95,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     {
         $query->where(function (Builder $query): void {
             $query->whereIn('source', UserSource::nativeMobileCases())
+                ->orWhereNotNull('provider')
                 ->orWhereHas('tokens');
         });
     }
@@ -104,20 +107,27 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
      */
     public function scopeConverted(Builder $query): void
     {
-        $query->where('source', UserSource::WEB)->whereHas('tokens');
+        $query->where('source', UserSource::WEB)
+            ->where(function (Builder $query): void {
+                $query->whereNotNull('provider')
+                    ->orWhereHas('tokens');
+            });
     }
 
     public function isMobileUser(): bool
     {
-        return $this->source->isNativeMobile() || $this->hasUsedMobileApp();
+        return $this->source->isNativeMobile()
+            || $this->provider !== null
+            || $this->hasLiveMobileToken();
     }
 
     public function isConverted(): bool
     {
-        return $this->source === UserSource::WEB && $this->hasUsedMobileApp();
+        return $this->source === UserSource::WEB
+            && ($this->provider !== null || $this->hasLiveMobileToken());
     }
 
-    public function hasUsedMobileApp(): bool
+    public function hasLiveMobileToken(): bool
     {
         return ($this->tokens_count ?? $this->tokens()->count()) > 0;
     }

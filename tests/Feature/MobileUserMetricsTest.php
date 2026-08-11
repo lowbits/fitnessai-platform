@@ -37,6 +37,34 @@ it('counts a web user with a mobile token as converted', function () {
         ->and(User::converted()->count())->toBe(1);
 });
 
+it('counts a logged-out social user as converted via provider, without a token', function () {
+    $web = User::factory()->create([
+        'source' => UserSource::WEB,
+        'provider' => 'google',
+        'provider_id' => '114941339185466555627',
+    ]);
+
+    expect($web->tokens()->count())->toBe(0)
+        ->and($web->isMobileUser())->toBeTrue()
+        ->and($web->isConverted())->toBeTrue();
+
+    expect(User::mobile()->count())->toBe(1)
+        ->and(User::converted()->count())->toBe(1);
+});
+
+it('does not count a native social signup as converted', function () {
+    $native = User::factory()->create([
+        'source' => UserSource::MOBILE_APPLE,
+        'provider' => 'apple',
+        'provider_id' => 'apple-sub-123',
+    ]);
+
+    expect($native->isMobileUser())->toBeTrue()
+        ->and($native->isConverted())->toBeFalse();
+
+    expect(User::converted()->count())->toBe(0);
+});
+
 it('negates the mobile scope to isolate non-mobile users', function () {
     User::factory()->create(['source' => UserSource::MOBILE_APPLE]);
     $webConverted = User::factory()->create(['source' => UserSource::WEB]);
