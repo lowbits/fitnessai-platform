@@ -6,6 +6,7 @@ use App\Actions\RevenueCat\HandleInitialPurchaseAction;
 use App\Actions\RevenueCat\HandleProductChangeAction;
 use App\Actions\RevenueCat\HandleRenewalAction;
 use App\Actions\RevenueCat\HandleTransferAction;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 use NoopStudios\LaravelRevenueCat\Events\WebhookReceived;
 
@@ -47,7 +48,7 @@ class HandleRevenueCatWebhook
                 $this->handleCancellation($payload);
                 break;
             case 'NON_RENEWING_PURCHASE':
-                $this->handleNonRenewingPurchase($payload);
+                $this->initialPurchaseAction->execute($payload);
                 break;
             case 'SUBSCRIPTION_PAUSED':
                 $this->handleSubscriptionPaused($payload);
@@ -86,7 +87,7 @@ class HandleRevenueCatWebhook
         Log::info('Handling cancellation', ['payload' => $payload]);
 
         $event = $payload['event'];
-        $user = \App\Models\User::find($event['app_user_id']);
+        $user = User::find($event['app_user_id']);
 
         if (! $user) {
             Log::error('User not found for cancellation', [
@@ -109,11 +110,6 @@ class HandleRevenueCatWebhook
         }
     }
 
-    protected function handleNonRenewingPurchase(array $payload): void
-    {
-        Log::info('Handling non-renewing purchase', ['payload' => $payload]);
-    }
-
     protected function handleSubscriptionPaused(array $payload): void
     {
         Log::info('Handling subscription paused', ['payload' => $payload]);
@@ -132,7 +128,7 @@ class HandleRevenueCatWebhook
     protected function handleExpiration(array $payload): void
     {
         $event = $payload['event'];
-        $user = \App\Models\User::find($event['app_user_id']);
+        $user = User::find($event['app_user_id']);
 
         if (! $user) {
             Log::error('User not found for expiration', [
