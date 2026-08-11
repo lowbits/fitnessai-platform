@@ -3,11 +3,16 @@
 namespace App\Filament\Widgets;
 
 use App\Enums\UserSource;
+use App\Models\Exercise;
 use App\Models\MealPlan;
+use App\Models\Recipe;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 
 class StatsOverviewWidget extends BaseWidget
@@ -36,12 +41,24 @@ class StatsOverviewWidget extends BaseWidget
 
         $pendingJobs = DB::table('jobs')->count();
 
-        $convertedWebUsersCount = User::where('source', UserSource::WEB)->whereHas('tokens')->count();
+        $recipesCount = Recipe::count();
+        $exercisesCount = Exercise::count();
 
-        $mobileUsersCount = User::where('source', UserSource::MOBILE_APPLE)->count()
-            + $convertedWebUsersCount;
+        $recipesChart = $this->getDailyCountsForLastDays(Recipe::query(), 'created_at', 30);
+        $exercisesChart = $this->getDailyCountsForLastDays(Exercise::query(), 'created_at', 30);
+        $newRecipesThisWeek = array_sum(array_slice($recipesChart, -7));
+        $newExercisesThisWeek = array_sum(array_slice($exercisesChart, -7));
+
+        $mobileUsersCount = User::mobile()->count();
+        $convertedWebUsersCount = User::converted()->count();
+        $totalWebUsers = User::where('source', UserSource::WEB)->count();
+        $conversionRate = $totalWebUsers > 0
+            ? round($convertedWebUsersCount / $totalWebUsers * 100, 1)
+            : 0.0;
 
         $mobileChart = $this->getMobileUsersChartData();
+        $convertedChart = $this->getConvertedUsersChartData();
+        $newMobileThisWeek = array_sum(array_slice($mobileChart, -7));
 
         return [
             Stat::make('Total Users', number_format($totalUsers))
@@ -51,14 +68,32 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('success'),
 
             Stat::make('Mobile Users', number_format($mobileUsersCount))
-                ->description("{$convertedWebUsersCount} converted from web")
+                ->description("+{$newMobileThisWeek} this week")
                 ->descriptionIcon('heroicon-m-device-phone-mobile')
                 ->chart($mobileChart)
+                ->color('info'),
+
+            Stat::make('Web → Mobile', number_format($convertedWebUsersCount))
+                ->description("{$conversionRate}% of web users converted")
+                ->descriptionIcon('heroicon-m-arrow-trending-up')
+                ->chart($convertedChart)
                 ->color('info'),
 
             Stat::make('Active Subscriptions', number_format($activeSubscriptions))
                 ->chart($subscriptionChart)
                 ->color('primary'),
+
+            Stat::make('Recipes', number_format($recipesCount))
+                ->description("+{$newRecipesThisWeek} this week")
+                ->descriptionIcon('heroicon-m-book-open')
+                ->chart($recipesChart)
+                ->color('gray'),
+
+            Stat::make('Exercises', number_format($exercisesCount))
+                ->description("+{$newExercisesThisWeek} this week")
+                ->descriptionIcon('heroicon-m-bolt')
+                ->chart($exercisesChart)
+                ->color('gray'),
 
             Stat::make('Failed Workouts', number_format($failedWorkoutPlans))
                 ->color($failedWorkoutPlans > 0 ? 'danger' : 'success'),
@@ -75,7 +110,7 @@ class StatsOverviewWidget extends BaseWidget
      * @return array<int, int>
      */
     private function getDailyCountsForLastDays(
-        \Illuminate\Database\Eloquent\Builder $query,
+        Builder $query,
         string $dateColumn,
         int $days,
     ): array {
@@ -99,15 +134,42 @@ class StatsOverviewWidget extends BaseWidget
     {
         $start = now()->subDays(30)->startOfDay();
 
-        // Native mobile sign-ups per day
-        $nativeCounts = User::where('source', UserSource::MOBILE_APPLE)
+        $nativeCounts = User::whereIn('source', UserSource::nativeMobileCases())
             ->where('created_at', '>=', $start)
             ->selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->groupByRaw('DATE(created_at)')
             ->pluck('count', 'date');
 
-        // Web users who first logged in via mobile (first token created) per day
-        $convertedCounts = DB::table('personal_access_tokens')
+        $convertedCounts = $this->convertedCountsByDaySince($start);
+
+        return collect(range(0, 29))
+            ->map(fn (int $i) => ($nativeCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0)
+                + ($convertedCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0))
+            ->all();
+    }
+
+    /**
+     * @return array<int, int>
+     */
+    private function getConvertedUsersChartData(): array
+    {
+        $start = now()->subDays(30)->startOfDay();
+        $convertedCounts = $this->convertedCountsByDaySince($start);
+
+        return collect(range(0, 29))
+            ->map(fn (int $i) => $convertedCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0)
+            ->all();
+    }
+
+    /**
+     * Web-origin users bucketed by the day they first authenticated via mobile
+     * (their earliest personal access token).
+     *
+     * @return Collection<string, int>
+     */
+    private function convertedCountsByDaySince(Carbon $start): Collection
+    {
+        return DB::table('personal_access_tokens')
             ->join('users', function ($join) {
                 $join->on('personal_access_tokens.tokenable_id', '=', 'users.id')
                     ->where('personal_access_tokens.tokenable_type', '=', (new User)->getMorphClass())
@@ -118,11 +180,6 @@ class StatsOverviewWidget extends BaseWidget
             ->selectRaw('DATE(personal_access_tokens.created_at) as date, COUNT(*) as count')
             ->groupByRaw('DATE(personal_access_tokens.created_at)')
             ->pluck('count', 'date');
-
-        return collect(range(0, 29))
-            ->map(fn (int $i) => ($nativeCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0)
-                + ($convertedCounts[$start->copy()->addDays($i)->format('Y-m-d')] ?? 0))
-            ->all();
     }
 
     /**
