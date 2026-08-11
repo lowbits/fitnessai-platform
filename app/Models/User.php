@@ -6,6 +6,7 @@ use App\Enums\UserSource;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -80,6 +81,45 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function routeNotificationForExpo(): Collection
     {
         return $this->devices->pluck('expo_push_token');
+    }
+
+    /**
+     * Any user who has used the mobile app: a native app signup, or a web-origin
+     * user who has since authenticated through the mobile API (has a Sanctum token).
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeMobile(Builder $query): void
+    {
+        $query->where(function (Builder $query): void {
+            $query->whereIn('source', UserSource::nativeMobileCases())
+                ->orWhereHas('tokens');
+        });
+    }
+
+    /**
+     * Web-origin users who have since converted to the mobile app.
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeConverted(Builder $query): void
+    {
+        $query->where('source', UserSource::WEB)->whereHas('tokens');
+    }
+
+    public function isMobileUser(): bool
+    {
+        return $this->source->isNativeMobile() || $this->hasUsedMobileApp();
+    }
+
+    public function isConverted(): bool
+    {
+        return $this->source === UserSource::WEB && $this->hasUsedMobileApp();
+    }
+
+    public function hasUsedMobileApp(): bool
+    {
+        return ($this->tokens_count ?? $this->tokens()->count()) > 0;
     }
 
     public function profile(): HasOne

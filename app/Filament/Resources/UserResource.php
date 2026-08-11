@@ -46,8 +46,8 @@ class UserResource extends Resource
                     ->badge()
                     ->sortable(),
                 IconColumn::make('mobile_converted')
-                    ->label('Mobile')
-                    ->state(fn (User $record): bool => $record->source === UserSource::WEB && $record->tokens_count > 0)
+                    ->label('Converted')
+                    ->state(fn (User $record): bool => $record->isConverted())
                     ->boolean()
                     ->trueIcon('heroicon-o-device-phone-mobile')
                     ->falseIcon('heroicon-o-minus')
@@ -65,10 +65,16 @@ class UserResource extends Resource
             ->filters([
                 SelectFilter::make('source')
                     ->options(UserSource::class),
+                TernaryFilter::make('is_mobile')
+                    ->label('Mobile user')
+                    ->queries(
+                        true: fn ($query) => $query->mobile(),
+                        false: fn ($query) => $query->whereNot(fn ($query) => $query->mobile()),
+                    ),
                 TernaryFilter::make('mobile_converted')
                     ->label('Web → Mobile')
                     ->queries(
-                        true: fn ($query) => $query->where('source', UserSource::WEB)->whereHas('tokens'),
+                        true: fn ($query) => $query->converted(),
                         false: fn ($query) => $query->where('source', UserSource::WEB)->whereDoesntHave('tokens'),
                     ),
             ])
@@ -89,7 +95,7 @@ class UserResource extends Resource
                         TextEntry::make('tokens_count')
                             ->label('Mobile Converted')
                             ->state(fn (User $record): string => $record->source === UserSource::WEB
-                                ? ($record->loadCount('tokens')->tokens_count > 0 ? 'Yes' : 'No')
+                                ? ($record->isConverted() ? 'Yes' : 'No')
                                 : 'N/A (native)')
                             ->badge()
                             ->color(fn (string $state): string => match ($state) {
