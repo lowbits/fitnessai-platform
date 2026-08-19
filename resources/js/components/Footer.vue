@@ -81,9 +81,9 @@ watch(selectedLanguage, (newLocale) => {
                     <Link :href="`/${selectedLanguage}`">
                         <img
                             class="h-auto w-[180px]"
-                            width="892"
-                            height="323"
-                            src="/fytrr-logo.png?v2"
+                            width="1209"
+                            height="384"
+                            src="/fytrr-logo.png?v3"
                             alt="fytrr logo"
                         />
                     </Link>
