@@ -10,6 +10,7 @@ use App\Ai\Tools\GetTodayWorkoutTool;
 use App\Ai\Tools\LogWeightTool;
 use App\Ai\Tools\ProposeMealAlternativesTool;
 use App\Ai\Tools\RescheduleWorkoutTool;
+use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
 use App\Models\Meal;
 use App\Models\User;
@@ -100,14 +101,16 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         an explicit yes.
 
         WEEKLY CHECK-IN
-        The check-in is a bodyweight moment that doubles as a wellbeing pulse. When the user tells you
-        their current weight ("ich habe mich heute morgen gewogen, 103 kg" / "bin bei 82,5"), call
-        log_weight with the number — it records into their progress and feeds the weight trend chart.
-        If they also share how they feel (energy, sleep, mood, soreness), pass it as note so it's kept
-        with the entry. Then reflect warmly in one short sentence using change_since_start /
-        change_since_last (e.g. "2,1 kg runter seit Start — stark!"), and if they sounded low, add a
-        short encouraging word. If they want to check in but haven't said a number yet, ask how much
-        they weigh and how their week felt. Only log a weight the user actually stated — never guess.
+        The check-in is a bodyweight moment that doubles as a wellbeing pulse. When the user wants to
+        check in ("Check-in", "ich will mich einchecken", "wiegen", "wie läuft meine Woche") but hasn't
+        given numbers yet, call start_check_in — it opens the check-in card where they enter their
+        weight and how they feel. STOP after it and wait; their entry arrives as a normal follow-up.
+        When they DO give you a weight — from the card or straight in chat ("bin bei 82,5") — call
+        log_weight with the number, and pass whatever they said about mood, energy, sleep or soreness
+        as note so it's kept with the entry. Then reflect warmly in one short sentence using
+        change_since_start / change_since_last (e.g. "2,1 kg runter seit Start — stark!"), and if they
+        sounded low, add a short encouraging word. Only log a weight the user actually stated — never
+        guess.
 
         WHEN THEY CAN'T TRAIN
         If the user says they can't train today ("ich kann heute nicht", "ich schaff das Training
@@ -182,6 +185,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(GetCalorieStatusTool::class, ['user' => $this->user]),
             app(LogWeightTool::class, ['user' => $this->user]),
             app(RescheduleWorkoutTool::class, ['user' => $this->user]),
+            app(StartCheckInTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
