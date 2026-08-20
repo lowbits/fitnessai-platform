@@ -70,14 +70,15 @@ test('requires authentication', function () {
         ->assertUnauthorized();
 });
 
-test('answers a free user with a paywall upsell instead of serving Mona', function () {
+test('answers a free user with a paywall upsell widget instead of serving Mona', function () {
     $user = User::factory()->withProfile()->create();
 
-    $this->actingAs($user)->postJson(route('v3.coach.messages'), [
+    $response = $this->actingAs($user)->postJson(route('v3.coach.messages'), [
         'message' => 'Hallo',
-    ])
-        ->assertStatus(402)
-        ->assertJsonPath('error', 'subscription_required');
+    ])->assertStatus(200);
+
+    $widgets = collect($response->json('message.parts'))->where('type', 'widget')->pluck('name');
+    expect($widgets)->toContain('upsell');
 });
 
 test('validates the message is present', function () {

@@ -33,7 +33,6 @@ use App\Http\Controllers\Api\V3\ProfileController;
 use App\Http\Controllers\Api\V3\RecipeFavoriteController;
 use App\Http\Controllers\Api\V3\RecipeSuggestionsController;
 use App\Http\Controllers\Api\V3\StatsController;
-use App\Http\Middleware\EnsureActiveSubscription;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v3')->group(function () {
@@ -63,7 +62,6 @@ Route::prefix('v3')->group(function () {
         Route::post('/meals/{meal}/alternatives', MealAlternativesController::class)
             ->name('v3.meals.alternatives');
         Route::post('/coach/messages', CoachController::class)
-            ->middleware(EnsureActiveSubscription::class)
             ->name('v3.coach.messages');
     });
 });

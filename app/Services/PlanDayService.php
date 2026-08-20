@@ -23,9 +23,7 @@ final class PlanDayService
     public function build(User $user, Plan $plan, CarbonImmutable $date): DayPlan
     {
         $start = CarbonImmutable::parse($plan->start_date->toDateString());
-        $lastDay = $start->addDays((int) $plan->duration_days - 1);
-        $previewDays = (int) config('subscription.preview_days');
-        $access = DayAccess::forDate($date, $start, $lastDay, $previewDays, $user->hasActiveSubscription());
+        $access = $plan->accessOn($date, $user->hasActiveSubscription());
 
         if (! $access->hasContent()) {
             return $this->buildOutOfPlanDay($user, $plan, $date, $access);
