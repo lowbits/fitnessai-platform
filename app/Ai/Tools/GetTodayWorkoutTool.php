@@ -58,6 +58,8 @@ class GetTodayWorkoutTool implements Tool
                 'is_rest_day' => true,
                 'name' => $workout->workout_name,
                 'date' => $workout->date?->format('Y-m-d'),
+                'description' => $workout->description,
+                'thumbnail_url' => $workout->thumbnailUrl(),
                 'next_workout' => $nextCard,
             ]);
         }

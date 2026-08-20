@@ -64,7 +64,7 @@ trait InteractsWithPlan
             ->where('plan_id', $plan->id)
             ->whereDate('date', '>', today())
             ->where('workout_type', '!=', 'rest')
-            ->where('status', 'generated')
+            ->where('status', '!=', 'failed')
             ->orderBy('date')
             ->first();
     }
