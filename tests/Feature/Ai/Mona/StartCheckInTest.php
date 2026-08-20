@@ -11,7 +11,7 @@ test('it opens a check_in card with the last and start weight', function () {
 
     $result = json_decode((new StartCheckInTool($user))->handle(new Request([])), true);
 
-    expect($result['widget'])->toBe('check_in');
+    expect($result['widget'])->toBe('check_in_weight');
     expect($result['requires_input'])->toBeTrue();
     expect($result['data']['last_weight'])->toEqual(84.2);
     expect($result['data']['start_weight'])->toEqual(90.0);

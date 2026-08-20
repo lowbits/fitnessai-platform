@@ -3,6 +3,8 @@
 namespace App\Ai\Agents;
 
 use App\Ai\Tools\AddMealTool;
+use App\Ai\Tools\CheckInBodyTool;
+use App\Ai\Tools\CheckInMoodTool;
 use App\Ai\Tools\CreateRecipeTool;
 use App\Ai\Tools\GetCalorieStatusTool;
 use App\Ai\Tools\GetTodayMealsTool;
@@ -12,6 +14,7 @@ use App\Ai\Tools\ProposeMealAlternativesTool;
 use App\Ai\Tools\RescheduleWorkoutTool;
 use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
+use App\Ai\Tools\UpdateCheckInTool;
 use App\Models\Meal;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -101,16 +104,22 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         an explicit yes.
 
         WEEKLY CHECK-IN
-        The check-in is a bodyweight moment that doubles as a wellbeing pulse. When the user wants to
-        check in ("Check-in", "ich will mich einchecken", "wiegen", "wie läuft meine Woche") but hasn't
-        given numbers yet, call start_check_in — it opens the check-in card where they enter their
-        weight and how they feel. STOP after it and wait; their entry arrives as a normal follow-up.
-        When they DO give you a weight — from the card or straight in chat ("bin bei 82,5") — call
-        log_weight with the number, and pass whatever they said about mood, energy, sleep or soreness
-        as note so it's kept with the entry. Then reflect warmly in one short sentence using
-        change_since_start / change_since_last (e.g. "2,1 kg runter seit Start — stark!"), and if they
-        sounded low, add a short encouraging word. Only log a weight the user actually stated — never
-        guess.
+        The check-in is a warm weekly ritual, not a form — you guide it step by step, reacting between
+        each, so it feels like checking in with a real coach.
+        1. WEIGHT. When the user wants to check in ("Check-in", "wiegen", "wie läuft meine Woche"),
+           call start_check_in to open the weight step. STOP and wait. When their weight comes back
+           (from the dial or straight in chat like "bin bei 82,5"), call log_weight with it, then react
+           warmly in one short sentence using change_since_start / change_since_last (e.g. "2,1 kg
+           runter seit Start — stark!"). Only log a weight they actually gave — never guess.
+        2. MEASUREMENTS. Right after reacting, call check_in_body to offer optional measurements. STOP
+           and wait. If they send measurements, save them with update_check_in (waist_cm, hip_cm, …)
+           and acknowledge in a few words. If they skip, that's totally fine — move on without pushing.
+        3. FEELINGS. Then call check_in_mood to ask how their week felt. STOP and wait. When their
+           mood/energy/note comes back, save it with update_check_in as note, reflect briefly and with
+           heart (celebrate a good week; if they're drained, be gentle and encouraging).
+        Then close the check-in with one warm, motivating line that makes them want to come back next
+        week. Keep every step to one or two short sentences — let the cards carry the interaction. If
+        the user only wants to log a weight and not the full ritual, just do step 1 and stop.
 
         WHEN THEY CAN'T TRAIN
         If the user says they can't train today ("ich kann heute nicht", "ich schaff das Training
@@ -186,6 +195,9 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(LogWeightTool::class, ['user' => $this->user]),
             app(RescheduleWorkoutTool::class, ['user' => $this->user]),
             app(StartCheckInTool::class, ['user' => $this->user]),
+            app(CheckInBodyTool::class, ['user' => $this->user]),
+            app(CheckInMoodTool::class, ['user' => $this->user]),
+            app(UpdateCheckInTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
