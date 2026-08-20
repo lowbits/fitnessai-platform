@@ -38,7 +38,8 @@ class CoachController extends Controller
         if ($conversationId) {
             $owns = DB::table('agent_conversations')
                 ->where('id', $conversationId)
-                ->where('user_id', $user->id)
+                ->where('participant_type', $user::class)
+                ->where('participant_id', $user->id)
                 ->exists();
 
             abort_unless($owns, 403);

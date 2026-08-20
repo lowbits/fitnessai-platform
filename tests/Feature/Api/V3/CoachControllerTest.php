@@ -59,7 +59,10 @@ test('persists a conversation for the user', function () {
         'message' => 'Hallo',
     ])->assertStatus(200);
 
-    expect(DB::table('agent_conversations')->where('user_id', $user->id)->count())->toBe(1);
+    expect(DB::table('agent_conversations')
+        ->where('participant_type', $user::class)
+        ->where('participant_id', $user->id)
+        ->count())->toBe(1);
 });
 
 test('requires authentication', function () {
@@ -86,7 +89,8 @@ test('rejects continuing another user\'s conversation', function () {
     $conversationId = (string) Str::uuid();
     DB::table('agent_conversations')->insert([
         'id' => $conversationId,
-        'user_id' => $owner->id,
+        'participant_type' => $owner::class,
+        'participant_id' => $owner->id,
         'title' => 'Owner conversation',
         'created_at' => now(),
         'updated_at' => now(),
