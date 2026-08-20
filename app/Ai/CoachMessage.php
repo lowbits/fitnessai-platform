@@ -51,8 +51,6 @@ final class CoachMessage
         foreach ($response->toolResults as $result) {
             $envelope = $result->result;
 
-            // Tools return a JSON string from handle(); decode to the widget
-            // envelope { widget, requires_input, data }.
             if (is_string($envelope)) {
                 $decoded = json_decode($envelope, true);
                 if (json_last_error() === JSON_ERROR_NONE) {
@@ -60,8 +58,6 @@ final class CoachMessage
                 }
             }
 
-            // Only widget-producing tool results become parts; anything else
-            // (e.g. an error result) is left to Mona's text.
             if (! is_array($envelope) || ! isset($envelope['widget'])) {
                 continue;
             }

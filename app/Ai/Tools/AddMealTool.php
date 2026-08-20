@@ -129,8 +129,6 @@ class AddMealTool implements Tool
             'status' => 'generated',
         ]);
 
-        // Reuse the swap widget: the added meal is the "original", with other
-        // options as cards, so the client renders and commits it like any swap.
         return ToolResult::widget('meal_alternatives', $this->alternatives->for($this->user, $meal));
     }
 }
