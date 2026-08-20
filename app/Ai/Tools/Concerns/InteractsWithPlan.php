@@ -60,7 +60,8 @@ trait InteractsWithPlan
             return null;
         }
 
-        return WorkoutPlan::where('plan_id', $plan->id)
+        return WorkoutPlan::with('exercises.exercise')
+            ->where('plan_id', $plan->id)
             ->whereDate('date', '>', today())
             ->where('workout_type', '!=', 'rest')
             ->where('status', 'generated')

@@ -37,6 +37,8 @@ class LogWeightTool implements Tool
                 ->required(),
             'confirmed' => $schema->boolean()
                 ->description('Set to true only after the user has confirmed an unusually large change from their last weight.'),
+            'note' => $schema->string()
+                ->description('How the user says they feel this week (mood, energy, sleep) in their own words, if they shared it. Optional.'),
         ];
     }
 
@@ -67,9 +69,12 @@ class LogWeightTool implements Tool
             ]);
         }
 
+        $note = trim((string) ($request['note'] ?? ''));
+
         $this->user->bodyProgress()->create([
             'weight_kg' => $weight,
             'recorded_at' => now(),
+            'notes' => $note !== '' ? $note : null,
         ]);
 
         Log::debug('[Coach][LogWeight] Recorded', [

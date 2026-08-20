@@ -50,22 +50,22 @@ class GetTodayWorkoutTool implements Tool
             return ToolResult::error('workout_generation_failed', "Today's workout could not be generated.");
         }
 
-        if ($workout->workout_type === 'rest') {
-            $next = $this->nextWorkoutPlan($this->user);
+        $next = $this->nextWorkoutPlan($this->user);
+        $nextCard = $next ? $this->summarize($next) : null;
 
+        if ($workout->workout_type === 'rest') {
             return ToolResult::info('workout_today', [
                 'is_rest_day' => true,
                 'name' => $workout->workout_name,
                 'date' => $workout->date?->format('Y-m-d'),
-                'next_workout' => $next ? [
-                    'name' => $next->workout_name,
-                    'type' => $next->workout_type,
-                    'date' => $next->date?->format('Y-m-d'),
-                ] : null,
+                'next_workout' => $nextCard,
             ]);
         }
 
-        return ToolResult::info('workout_today', ['is_rest_day' => false] + $this->summarize($workout));
+        return ToolResult::info('workout_today', [
+            'is_rest_day' => false,
+            'next_workout' => $nextCard,
+        ] + $this->summarize($workout));
     }
 
     /**

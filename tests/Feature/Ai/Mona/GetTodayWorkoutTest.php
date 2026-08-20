@@ -65,6 +65,7 @@ test('a rest day reports is_rest_day with the next workout', function () {
 
     expect($result['data']['is_rest_day'])->toBeTrue();
     expect($result['data']['next_workout']['name'])->toBe('Push Day');
+    expect($result['data']['next_workout'])->toHaveKeys(['workout_id', 'date', 'exercises_count']);
 });
 
 test('a not-yet-generated workout returns workout_not_generated', function () {
