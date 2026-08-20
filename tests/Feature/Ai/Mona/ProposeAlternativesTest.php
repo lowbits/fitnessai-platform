@@ -4,10 +4,8 @@ use App\Ai\Tools\ProposeMealAlternativesTool;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
-use App\Models\Recipe;
 use App\Models\User;
-use App\Services\Recipe\RecipeAffinity;
-use App\Services\Recipe\RecipeFinder;
+use App\Services\Recipe\MealAlternatives;
 use Laravel\Ai\Tools\Request;
 
 function ownedMeal(): array
@@ -24,15 +22,17 @@ function ownedMeal(): array
     return [$user, $meal];
 }
 
-function proposeTool(User $user, $candidates): ProposeMealAlternativesTool
+function proposeTool(User $user, array $cards): ProposeMealAlternativesTool
 {
-    $finder = Mockery::mock(RecipeFinder::class);
-    $finder->shouldReceive('findCandidates')->andReturn(collect($candidates));
+    $alternatives = Mockery::mock(MealAlternatives::class);
+    $alternatives->shouldReceive('for')->andReturn([
+        'meal_id' => 0,
+        'slot' => 'lunch',
+        'original' => [],
+        'cards' => $cards,
+    ]);
 
-    $affinity = Mockery::mock(RecipeAffinity::class);
-    $affinity->shouldReceive('scoresFor')->andReturn(collect());
-
-    return new ProposeMealAlternativesTool($user, $finder, $affinity);
+    return new ProposeMealAlternativesTool($user, $alternatives);
 }
 
 test('no matching alternatives returns a typed no_alternatives signal', function () {
@@ -48,9 +48,8 @@ test('no matching alternatives returns a typed no_alternatives signal', function
 
 test('alternatives are returned as a meal_alternatives widget', function () {
     [$user, $meal] = ownedMeal();
-    $recipe = Recipe::factory()->create(['calories' => 580]);
 
-    $result = json_decode(proposeTool($user, [$recipe])->handle(new Request([
+    $result = json_decode(proposeTool($user, [['recipe_id' => 1]])->handle(new Request([
         'meal_id' => $meal->id,
     ])), true);
 

@@ -7,7 +7,7 @@ use App\Ai\Tools\Concerns\InteractsWithPlan;
 use App\Ai\Tools\Support\DailyBudget;
 use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
-use App\Services\Recipe\MealAlternativeCard;
+use App\Services\Recipe\MealAlternatives;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
@@ -32,6 +32,7 @@ class AddMealTool implements Tool
     public function __construct(
         private readonly User $user,
         private readonly MealDrafter $drafter,
+        private readonly MealAlternatives $alternatives,
     ) {}
 
     public function description(): Stringable|string
@@ -115,12 +116,10 @@ class AddMealTool implements Tool
             return ToolResult::error('draft_failed', 'Could not draft a meal right now — ask the user to try again.');
         }
 
-        $locale = $this->user->locale ?? 'en';
-
         $meal = $mealPlan->meals()->create([
             'recipe_id' => $recipe->id,
             'type' => $type,
-            'name' => $recipe->localizedName($locale),
+            'name' => $recipe->localizedName($this->user->locale ?? 'en'),
             'calories' => $recipe->calories,
             'protein_g' => $recipe->protein_g,
             'carbs_g' => $recipe->carbs_g,
@@ -130,10 +129,8 @@ class AddMealTool implements Tool
             'status' => 'generated',
         ]);
 
-        return ToolResult::widget('meal_added', [
-            'slot' => $type,
-            'meal' => MealAlternativeCard::make($recipe, $meal, $locale),
-            'remaining' => (int) round($budget->remaining - (int) $recipe->calories),
-        ]);
+        // Reuse the swap widget: the added meal is the "original", with other
+        // options as cards, so the client renders and commits it like any swap.
+        return ToolResult::widget('meal_alternatives', $this->alternatives->for($this->user, $meal));
     }
 }

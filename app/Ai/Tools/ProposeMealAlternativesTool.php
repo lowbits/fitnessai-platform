@@ -2,17 +2,11 @@
 
 namespace App\Ai\Tools;
 
-use App\Enums\DietaryPreference;
-use App\Enums\PrimaryProtein;
+use App\Ai\Tools\Support\ToolResult;
 use App\Models\Meal;
-use App\Models\Recipe;
 use App\Models\User;
-use App\Services\Recipe\MealAlternativeCard;
-use App\Services\Recipe\RecipeAffinity;
-use App\Services\Recipe\RecipeFinder;
+use App\Services\Recipe\MealAlternatives;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
 use Stringable;
@@ -20,17 +14,13 @@ use Stringable;
 /**
  * Proposes replacement meals for one of the user's meals. The AI passes the
  * meal_id (from get_today_meals or the seeded context); ownership is verified
- * here since the id comes from the model. Reuses RecipeFinder + RecipeAffinity
- * and returns card-ready data with macro deltas vs the original meal.
+ * here since the id comes from the model.
  */
 class ProposeMealAlternativesTool implements Tool
 {
-    private const TARGET = 5;
-
     public function __construct(
         private readonly User $user,
-        private readonly RecipeFinder $finder,
-        private readonly RecipeAffinity $affinity,
+        private readonly MealAlternatives $alternatives,
     ) {}
 
     public function description(): Stringable|string
@@ -60,89 +50,19 @@ class ProposeMealAlternativesTool implements Tool
         $meal = Meal::with(['mealPlan.plan', 'recipe'])->find($mealId);
 
         if (! $meal || $meal->mealPlan?->plan?->user_id !== $this->user->id) {
-            Log::warning('[Coach][ProposeAlternatives] Meal not found or not owned', [
-                'meal_id' => $mealId,
-                'user_id' => $this->user->id,
-            ]);
-
-            return json_encode(['error' => 'meal_not_found', 'cards' => []]);
+            return ToolResult::error('meal_not_found', 'That meal could not be found.', ['cards' => []]);
         }
 
         if ($meal->isCompleted()) {
-            Log::info('[Coach][ProposeAlternatives] Meal already eaten — not replaceable', [
-                'meal_id' => $mealId,
-                'user_id' => $this->user->id,
-            ]);
-
-            return json_encode([
-                'error' => 'meal_already_eaten',
-                'message' => 'This meal has already been eaten and can no longer be replaced.',
-                'cards' => [],
-            ]);
+            return ToolResult::error('meal_already_eaten', 'This meal has already been eaten and can no longer be replaced.', ['cards' => []]);
         }
 
-        $locale = $this->user->locale ?? 'en';
-        $cards = $this->findCandidates($meal, $wish)
-            ->map(fn (Recipe $recipe) => MealAlternativeCard::make($recipe, $meal, $locale))
-            ->values()
-            ->all();
+        $data = $this->alternatives->for($this->user, $meal, $wish);
 
-        Log::debug('[Coach][ProposeAlternatives] Built cards', [
-            'meal_id' => $meal->id,
-            'meal_type' => $meal->type,
-            'wish' => $wish,
-            'card_count' => count($cards),
-        ]);
-
-        if ($cards === []) {
-            return json_encode([
-                'error' => 'no_alternatives',
-                'message' => 'No matching recipes were found — offer to create one for them instead.',
-                'cards' => [],
-            ]);
+        if ($data['cards'] === []) {
+            return ToolResult::error('no_alternatives', 'No matching recipes were found — offer to create one for them instead.', ['cards' => []]);
         }
 
-        return json_encode([
-            'widget' => 'meal_alternatives',
-            'requires_input' => true,
-            'data' => [
-                'meal_id' => $meal->id,
-                'slot' => $meal->type,
-                'original' => [
-                    'name' => $meal->name,
-                    'calories' => (int) $meal->calories,
-                    'protein_g' => (int) $meal->protein_g,
-                    'thumbnail_url' => $meal->thumbnail_url,
-                ],
-                'cards' => $cards,
-            ],
-        ]);
-    }
-
-    /**
-     * @return Collection<int, Recipe>
-     */
-    private function findCandidates(Meal $meal, ?string $wish): Collection
-    {
-        $profile = $this->user->profile;
-        $diet = $profile?->resolveDietaryPreference();
-        $diet = $diet instanceof DietaryPreference ? $diet : DietaryPreference::OMNIVORE;
-
-        $allowedProteins = array_map(fn (PrimaryProtein $p) => $p->value, PrimaryProtein::allowedFor($diet));
-        $dislikes = array_map(fn (string $d) => mb_strtolower(trim($d)), $profile?->food_dislikes ?? []);
-
-        return $this->finder->findCandidates(
-            mealType: $meal->type,
-            targetKcal: (int) $meal->calories,
-            locale: $this->user->locale ?? 'en',
-            allowedProteins: $allowedProteins,
-            dislikes: $dislikes,
-            forbiddenAxes: collect(),
-            excludeIds: array_values(array_filter([$meal->recipe_id])),
-            affinityScores: $this->affinity->scoresFor($this->user)->all(),
-            limit: self::TARGET,
-            query: $wish,
-            constrainToMeal: $wish === null,
-        );
+        return ToolResult::widget('meal_alternatives', $data);
     }
 }

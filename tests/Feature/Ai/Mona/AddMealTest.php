@@ -7,7 +7,21 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\Recipe;
 use App\Models\User;
+use App\Services\Recipe\MealAlternatives;
 use Laravel\Ai\Tools\Request;
+
+function alternativesStub(): MealAlternatives
+{
+    $stub = Mockery::mock(MealAlternatives::class);
+    $stub->shouldReceive('for')->andReturn([
+        'meal_id' => 1,
+        'slot' => 'snack',
+        'original' => [],
+        'cards' => [['recipe_id' => 1]],
+    ]);
+
+    return $stub;
+}
 
 /**
  * Mona playbook — add a meal to today. The LLM drafting is faked so these
@@ -71,7 +85,7 @@ function neverDrafter(): MealDrafter
 test('with no active plan it returns no_active_plan', function () {
     $user = User::factory()->withProfile()->create();
 
-    $result = json_decode((new AddMealTool($user, neverDrafter()))->handle(new Request(['type' => 'snack'])), true);
+    $result = json_decode((new AddMealTool($user, neverDrafter(), alternativesStub()))->handle(new Request(['type' => 'snack'])), true);
 
     expect($result['error'])->toBe('no_active_plan');
 });
@@ -79,7 +93,7 @@ test('with no active plan it returns no_active_plan', function () {
 test('adding a main slot that already exists offers a swap instead', function () {
     [$user] = addMealFixture(existingMealTypes: ['lunch']);
 
-    $result = json_decode((new AddMealTool($user, neverDrafter()))->handle(new Request(['type' => 'lunch'])), true);
+    $result = json_decode((new AddMealTool($user, neverDrafter(), alternativesStub()))->handle(new Request(['type' => 'lunch'])), true);
 
     expect($result['error'])->toBe('slot_already_planned');
 });
@@ -87,7 +101,7 @@ test('adding a main slot that already exists offers a swap instead', function ()
 test('a named add over the goal asks to confirm first', function () {
     [$user] = addMealFixture(goal: 2000, eaten: 1900);
 
-    $result = json_decode((new AddMealTool($user, neverDrafter()))->handle(new Request([
+    $result = json_decode((new AddMealTool($user, neverDrafter(), alternativesStub()))->handle(new Request([
         'type' => 'snack',
         'approx_kcal' => 300,
     ])), true);
@@ -100,20 +114,20 @@ test('a confirmed over-goal add creates the meal', function () {
     [$user, $mealPlan] = addMealFixture(goal: 2000, eaten: 1900);
     $recipe = Recipe::factory()->create(['calories' => 300]);
 
-    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe)))->handle(new Request([
+    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe), alternativesStub()))->handle(new Request([
         'type' => 'snack',
         'approx_kcal' => 300,
         'confirmed' => true,
     ])), true);
 
-    expect($result['widget'])->toBe('meal_added');
+    expect($result['widget'])->toBe('meal_alternatives');
     expect($mealPlan->meals()->where('type', 'snack')->count())->toBe(1);
 });
 
 test('filling with barely any room left returns no_room', function () {
     [$user] = addMealFixture(goal: 2000, eaten: 1950);
 
-    $result = json_decode((new AddMealTool($user, neverDrafter()))->handle(new Request([
+    $result = json_decode((new AddMealTool($user, neverDrafter(), alternativesStub()))->handle(new Request([
         'fill_remaining' => true,
     ])), true);
 
@@ -124,11 +138,11 @@ test('filling open calories drafts and adds a snack', function () {
     [$user, $mealPlan] = addMealFixture(goal: 2000, eaten: 1500);
     $recipe = Recipe::factory()->create(['calories' => 500]);
 
-    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe)))->handle(new Request([
+    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe), alternativesStub()))->handle(new Request([
         'fill_remaining' => true,
     ])), true);
 
-    expect($result['widget'])->toBe('meal_added');
+    expect($result['widget'])->toBe('meal_alternatives');
     expect($mealPlan->meals()->where('type', 'snack')->count())->toBe(1);
 });
 
@@ -136,11 +150,11 @@ test('a snack within budget is added', function () {
     [$user, $mealPlan] = addMealFixture(goal: 2000, eaten: 1000);
     $recipe = Recipe::factory()->create(['calories' => 250]);
 
-    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe)))->handle(new Request([
+    $result = json_decode((new AddMealTool($user, fakeDrafter($recipe), alternativesStub()))->handle(new Request([
         'type' => 'snack',
         'approx_kcal' => 250,
     ])), true);
 
-    expect($result['widget'])->toBe('meal_added');
+    expect($result['widget'])->toBe('meal_alternatives');
     expect($mealPlan->meals()->where('type', 'snack')->count())->toBe(1);
 });
