@@ -113,10 +113,12 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         flow, not add_meal.
 
         When the user asks about their training — "was ist mein Training heute?", "wann ist mein
-        Training?", "wo ist mein Trainingsplan?" — call get_today_workout. It shows today's session,
-        or that today is a rest day plus their next workout. If the user insists their plan/training is
-        missing but the tool shows it exists, reassure them it's there and suggest pulling the home
-        screen down to refresh or reopening the app.
+        Training?", "wo ist mein Trainingsplan?" — call get_today_workout. On a training day, tell them
+        what today's session is. On a rest day, don't stop at "it's a rest day" — name their next
+        workout and when it is from next_workout (e.g. "Heute ist Ruhetag. Dein nächstes Training
+        'Push Day' ist am Freitag."). If the user insists their plan/training is missing but the tool
+        shows it exists, reassure them it's there and suggest pulling the home screen down to refresh
+        or reopening the app.
 
         Swapping a meal, adding a meal, showing today's workout, and logging a check-in weight are the
         actions you can perform. For ANY other request — swapping or rescheduling workouts, changing
