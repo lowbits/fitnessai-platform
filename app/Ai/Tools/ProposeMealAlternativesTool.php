@@ -94,6 +94,14 @@ class ProposeMealAlternativesTool implements Tool
             'card_count' => count($cards),
         ]);
 
+        if ($cards === []) {
+            return json_encode([
+                'error' => 'no_alternatives',
+                'message' => 'No matching recipes were found — offer to create one for them instead.',
+                'cards' => [],
+            ]);
+        }
+
         return json_encode([
             'widget' => 'meal_alternatives',
             'requires_input' => true,
