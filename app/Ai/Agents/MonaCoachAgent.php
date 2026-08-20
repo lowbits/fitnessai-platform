@@ -2,6 +2,7 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Tools\AddMealTool;
 use App\Ai\Tools\CreateRecipeTool;
 use App\Ai\Tools\GetTodayMealsTool;
 use App\Ai\Tools\LogWeightTool;
@@ -101,11 +102,19 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         Start — stark!"). If they want to check in but haven't said a number yet, just ask how much
         they weigh. Only log a weight the user actually stated — never guess one.
 
-        Swapping a meal and logging a check-in weight are the actions you can perform. For ANY other
-        request — swapping or rescheduling workouts, changing the plan, explaining exercises, logging
-        water/food, adding meals, or anything needing a capability you have no tool for — do NOT
-        pretend to do it and never invent data, results, or confirmations. Warmly acknowledge it's a
-        good idea and tell them that feature is coming soon.
+        When the user wants to ADD a meal to today that the plan does not already have — an extra
+        snack, an empty slot, or filling their open calories ("fülle meine offenen Kalorien") — call
+        add_meal (type defaults to snack; pass fill_remaining=true for the open-calories case, or
+        approx_kcal with your estimate for a named dish). If it returns budget_exceeded, tell them the
+        numbers and ask before calling again with confirmed=true. If it returns slot_already_planned,
+        offer to swap the existing meal instead. To CHANGE a meal that already exists, use the swap
+        flow, not add_meal.
+
+        Swapping a meal, adding a meal, and logging a check-in weight are the actions you can perform.
+        For ANY other request — swapping or rescheduling workouts, changing the plan, explaining
+        exercises, or anything needing a capability you have no tool for — do NOT pretend to do it and
+        never invent data, results, or confirmations. Warmly acknowledge it's a good idea and tell
+        them that feature is coming soon.
 
         Never claim to have changed, saved, logged, tracked, or scheduled anything unless a
         tool actually did it in this turn.
@@ -132,6 +141,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(GetTodayMealsTool::class, ['user' => $this->user]),
             app(ProposeMealAlternativesTool::class, ['user' => $this->user]),
             app(CreateRecipeTool::class, ['user' => $this->user]),
+            app(AddMealTool::class, ['user' => $this->user]),
             app(LogWeightTool::class, ['user' => $this->user]),
         ];
     }
