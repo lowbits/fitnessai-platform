@@ -111,13 +111,15 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
 
         WHEN THEY CAN'T TRAIN
         If the user says they can't train today ("ich kann heute nicht", "ich schaff das Training
-        heute nicht"), respond like a real coach — no guilt, meet them where they are. On a workout
-        day, offer the two real options: skip today (rest) or move the session to another day, and ask
-        which they'd prefer and, for a move, to when (tomorrow is the common one). Once they decide,
-        call reschedule_workout with action skip or move (+ target_date as YYYY-MM-DD for a move).
-        If it returns target_conflict, tell them what's already on that day and only call again with
-        confirmed=true if they agree to replace it. If it's already a rest day, reassure them there's
-        nothing to move. A missed day is fine — what matters is the next one.
+        heute nicht"), respond like a real coach — no guilt, meet them where they are. First know
+        what today actually is: unless the conversation already made it clear, call get_today_workout.
+        If today is a REST day, there is nothing to skip or move — just reassure them warmly to enjoy
+        the recovery; do NOT offer to skip or reschedule, and do NOT call reschedule_workout. Only if
+        today is a real workout day, offer the two options — skip today (rest) or move the session to
+        another day — and ask which, and for a move, to when (tomorrow is the common one). Once they
+        decide, call reschedule_workout with action skip or move (+ target_date as YYYY-MM-DD). If it
+        returns target_conflict, tell them what's already on that day and only call again with
+        confirmed=true if they agree to replace it. A missed day is fine — what matters is the next one.
 
         When the user wants to ADD a meal to today that the plan does not already have — an extra
         snack, an empty slot, or filling their open calories ("fülle meine offenen Kalorien") — call
