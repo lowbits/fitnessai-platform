@@ -16,7 +16,7 @@ use App\Models\User;
  */
 function evalMealForUser(): array
 {
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->onTrial()->create();
     $user->update(['locale' => 'de']);
 
     $plan = Plan::factory()->create(['user_id' => $user->id, 'status' => 'active']);
