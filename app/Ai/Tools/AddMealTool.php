@@ -2,7 +2,6 @@
 
 namespace App\Ai\Tools;
 
-use App\Ai\Support\MealDrafter;
 use App\Ai\Tools\Concerns\InteractsWithPlan;
 use App\Ai\Tools\Support\DailyBudget;
 use App\Ai\Tools\Support\ToolResult;
@@ -14,9 +13,10 @@ use Laravel\Ai\Tools\Request;
 use Stringable;
 
 /**
- * Adds a NEW suggested meal to today's plan when the day doesn't already have
- * it — an extra snack, an empty main slot, or filling the user's open calories.
- * Changing an existing meal is propose_meal_alternatives' job, not this one.
+ * Suggests meals to ADD to today when the day doesn't already have them — an
+ * extra snack, an empty main slot, or filling the user's open calories. Returns
+ * cards for the user to pick; picking one adds it. Changing an existing meal is
+ * propose_meal_alternatives' job, not this one.
  */
 class AddMealTool implements Tool
 {
@@ -31,13 +31,12 @@ class AddMealTool implements Tool
 
     public function __construct(
         private readonly User $user,
-        private readonly MealDrafter $drafter,
         private readonly MealAlternatives $alternatives,
     ) {}
 
     public function description(): Stringable|string
     {
-        return 'Adds a NEW suggested meal to today when the day does not already have it: an extra snack ("füge einen Snack hinzu"), an empty main slot, or filling the open calories ("fülle meine offenen Kalorien"). Pass type (breakfast|lunch|dinner|snack, default snack), optional request (what they want), fill_remaining=true to size it to the open calories, approx_kcal for your estimate of a named dish, and confirmed=true only after the user confirms going over their goal. To CHANGE an existing meal, use propose_meal_alternatives instead.';
+        return 'Suggests meals to ADD to today when the day does not already have them: an extra snack ("füge einen Snack hinzu"), an empty main slot, or filling the open calories ("fülle meine offenen Kalorien"). Returns cards the user picks from — the app adds the chosen one. Pass type (breakfast|lunch|dinner|snack, default snack), optional request (what they want), fill_remaining=true to size it to the open calories, approx_kcal for your estimate of a named dish, and confirmed=true only after the user confirms going over their goal. To CHANGE an existing meal, use propose_meal_alternatives instead.';
     }
 
     /**
@@ -111,24 +110,17 @@ class AddMealTool implements Tool
             }
         }
 
-        $recipe = $this->drafter->draft($this->user, $type, $targetKcal, $wish);
-        if (! $recipe) {
-            return ToolResult::error('draft_failed', 'Could not draft a meal right now — ask the user to try again.');
+        $cards = $this->alternatives->suggest($this->user, $type, $targetKcal, $wish);
+
+        if ($cards === []) {
+            return ToolResult::error('no_alternatives', 'No matching recipes were found — offer to create one for them instead.');
         }
 
-        $meal = $mealPlan->meals()->create([
-            'recipe_id' => $recipe->id,
-            'type' => $type,
-            'name' => $recipe->localizedName($this->user->locale ?? 'en'),
-            'calories' => $recipe->calories,
-            'protein_g' => $recipe->protein_g,
-            'carbs_g' => $recipe->carbs_g,
-            'fat_g' => $recipe->fat_g,
-            'ingredients' => $recipe->ingredients,
-            'servings' => 1,
-            'status' => 'generated',
+        return ToolResult::widget('meal_alternatives', [
+            'action' => 'add',
+            'slot' => $type,
+            'target_kcal' => $targetKcal,
+            'cards' => $cards,
         ]);
-
-        return ToolResult::widget('meal_alternatives', $this->alternatives->for($this->user, $meal));
     }
 }
