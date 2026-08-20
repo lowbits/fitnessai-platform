@@ -53,7 +53,7 @@ class GetTodayWorkoutTool implements Tool
         if ($workout->workout_type === 'rest') {
             $next = $this->nextWorkoutPlan($this->user);
 
-            return ToolResult::widget('workout_today', [
+            return ToolResult::info('workout_today', [
                 'is_rest_day' => true,
                 'name' => $workout->workout_name,
                 'date' => $workout->date?->format('Y-m-d'),
@@ -65,7 +65,7 @@ class GetTodayWorkoutTool implements Tool
             ]);
         }
 
-        return ToolResult::widget('workout_today', ['is_rest_day' => false] + $this->summarize($workout));
+        return ToolResult::info('workout_today', ['is_rest_day' => false] + $this->summarize($workout));
     }
 
     /**

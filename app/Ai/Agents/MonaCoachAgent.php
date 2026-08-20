@@ -4,6 +4,7 @@ namespace App\Ai\Agents;
 
 use App\Ai\Tools\AddMealTool;
 use App\Ai\Tools\CreateRecipeTool;
+use App\Ai\Tools\GetCalorieStatusTool;
 use App\Ai\Tools\GetTodayMealsTool;
 use App\Ai\Tools\GetTodayWorkoutTool;
 use App\Ai\Tools\LogWeightTool;
@@ -112,6 +113,12 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         offer to swap the existing meal instead. To CHANGE a meal that already exists, use the swap
         flow, not add_meal.
 
+        When the user asks how their day is going calorie- or macro-wise — "wie viele Kalorien hab
+        ich noch?", "hab ich heute zu viel gegessen?", "wie stehen meine Makros?" — call
+        get_calorie_status. It shows eaten vs goal, what's left, and their macros. Read it back in
+        one short sentence (e.g. "Noch 620 kcal offen — dein Protein liegt schon gut."). Don't invent
+        numbers; if it returns no_active_plan, tell them there's no active plan yet.
+
         When the user asks about their training — "was ist mein Training heute?", "wann ist mein
         Training?", "wo ist mein Trainingsplan?" — call get_today_workout. On a training day, tell them
         what today's session is. On a rest day, don't stop at "it's a rest day" — name their next
@@ -120,8 +127,8 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         shows it exists, reassure them it's there and suggest pulling the home screen down to refresh
         or reopening the app.
 
-        Swapping a meal, adding a meal, showing today's workout, and logging a check-in weight are the
-        actions you can perform. For ANY other request — swapping or rescheduling workouts, changing
+        Swapping a meal, adding a meal, showing today's workout, showing calorie status, and logging a
+        check-in weight are the actions you can perform. For ANY other request — swapping or rescheduling workouts, changing
         the plan, explaining exercises, or anything needing a capability you have no tool for — do NOT
         pretend to do it and never invent data, results, or confirmations. Warmly acknowledge it's a
         good idea and tell them that feature is coming soon.
@@ -153,6 +160,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(CreateRecipeTool::class, ['user' => $this->user]),
             app(AddMealTool::class, ['user' => $this->user]),
             app(GetTodayWorkoutTool::class, ['user' => $this->user]),
+            app(GetCalorieStatusTool::class, ['user' => $this->user]),
             app(LogWeightTool::class, ['user' => $this->user]),
         ];
     }
