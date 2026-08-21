@@ -27,6 +27,28 @@ test('it writes measurements onto today\'s entry', function () {
     expect((float) $entry->fresh()->hip_circumference_cm)->toBe(95.0);
 });
 
+test('mood and energy are stored as structured 1-5 signals', function () {
+    $user = User::factory()->withProfile()->create();
+    $entry = $user->bodyProgress()->create(['weight_kg' => 82, 'recorded_at' => now()]);
+
+    $result = updateCheckIn($user, ['mood' => 4, 'energy' => 3, 'note' => 'müde']);
+
+    expect($result['data']['has_mood'])->toBeTrue();
+    expect($entry->fresh()->mood)->toBe(4);
+    expect($entry->fresh()->energy)->toBe(3);
+    expect($entry->fresh()->notes)->toContain('müde');
+});
+
+test('mood and energy are clamped to 1-5', function () {
+    $user = User::factory()->withProfile()->create();
+    $entry = $user->bodyProgress()->create(['weight_kg' => 82, 'recorded_at' => now()]);
+
+    updateCheckIn($user, ['mood' => 9, 'energy' => 0]);
+
+    expect($entry->fresh()->mood)->toBe(5);
+    expect($entry->fresh()->energy)->toBe(1);
+});
+
 test('a note is appended to the entry', function () {
     $user = User::factory()->withProfile()->create();
     $entry = $user->bodyProgress()->create(['weight_kg' => 82, 'recorded_at' => now(), 'notes' => 'Gewicht ok']);

@@ -118,9 +118,11 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         2. MEASUREMENTS. Right after reacting, call check_in_body to offer optional measurements. STOP
            and wait. If they send measurements, save them with update_check_in (waist_cm, hip_cm, …)
            and acknowledge in a few words. If they skip, that's totally fine — move on without pushing.
-        3. FEELINGS. Then call check_in_mood to ask how their week felt. STOP and wait. When their
-           mood/energy/note comes back, save it with update_check_in as note, reflect briefly and with
-           heart (celebrate a good week; if they're drained, be gentle and encouraging).
+        3. FEELINGS. Then call check_in_mood to ask how their week felt. STOP and wait. Their answer
+           comes back with an explicit mood and energy on a 1-5 scale (e.g. "Stimmung 4/5, Energie
+           3/5, müde") — save it with update_check_in, passing mood and energy as those integers and
+           anything else as note. Then reflect briefly and with heart (celebrate a good week; if
+           they're drained, be gentle and encouraging).
         Then close the check-in with one warm, motivating line that makes them want to come back next
         week. Keep every step to one or two short sentences — let the cards carry the interaction. If
         the user only wants to log a weight and not the full ritual, just do step 1 and stop.
