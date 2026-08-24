@@ -25,7 +25,7 @@ test('it celebrates weight loss with the numbers', function () {
 
     getJson('/api/v3/coach/greeting')
         ->assertOk()
-        ->assertJsonPath('message', 'Nice work Max — 3 kg down since you started. How is your week going?');
+        ->assertJsonPath('message', 'Nice work Max. 3 kg down since you started. How is your week going?');
 });
 
 test('it replies in the user locale', function () {
