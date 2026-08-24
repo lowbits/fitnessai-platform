@@ -19,7 +19,7 @@ return new class extends Migration
             $table->timestamp('checked_in_at');
             $table->timestamps();
 
-            $table->index(['user_id', 'checked_in_at']);
+            $table->unique(['user_id', 'checked_in_at']);
         });
     }
 
