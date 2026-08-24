@@ -83,7 +83,7 @@ class RescheduleWorkout
             ];
         }
 
-        return DB::transaction(function () use ($workout, $targetDate, $targetDayNumber, $targetWorkout) {
+        return DB::transaction(function () use ($user, $workout, $targetDate, $targetDayNumber, $targetWorkout) {
             $workout->loadMissing('exercises');
 
             if ($targetWorkout) {
@@ -104,12 +104,12 @@ class RescheduleWorkout
 
             $workout->exercises()->delete();
             $workout->update([
-                'workout_name' => 'Rest Day',
+                'workout_name' => __('workouts.active_recovery', [], $user->locale),
                 'workout_type' => 'rest',
                 'estimated_duration_minutes' => 0,
                 'estimated_calories_burned' => 0,
                 'difficulty' => 'easy',
-                'description' => 'Take a rest day to recover. Stay hydrated and focus on mobility.',
+                'description' => __('workouts.rest_description', [], $user->locale),
                 'muscle_groups' => [],
                 'status' => 'generated',
             ]);
