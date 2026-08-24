@@ -33,6 +33,7 @@ class AuthController extends Controller
             ] : null,
             'subscription' => new SubscriptionResource($user),
             'settings' => [
+                'language' => $user->preferredLocale(),
                 'notifications_enabled' => true,
                 'workout_reminders' => true,
                 'meal_reminders' => true,

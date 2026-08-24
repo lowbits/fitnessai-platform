@@ -66,6 +66,20 @@ it('404s when the user has no active plan', function () {
     getJson('/api/v3/plan/day/2026-01-01')->assertNotFound();
 });
 
+it('reports the meal plan as generated even after all meals are removed', function () {
+    $user = User::factory()->create();
+    Sanctum::actingAs($user);
+    $plan = planStartingToday($user);
+    generateDay($plan, 0);
+
+    Meal::query()->delete();
+
+    getJson(dayUrl($plan, 0))
+        ->assertOk()
+        ->assertJsonPath('meal_plan_status', 'generated')
+        ->assertJsonCount(0, 'meals');
+});
+
 it('422s on a malformed date', function () {
     $user = User::factory()->create();
     planStartingToday($user);

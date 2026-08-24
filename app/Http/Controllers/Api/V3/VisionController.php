@@ -39,7 +39,9 @@ class VisionController extends Controller
     {
         $image = Image::fromUpload($request->file('image'));
 
-        $result = (new MealPhotoAgent)->prompt('Identify the foods in this meal photo.', [$image]);
+        $language = \Locale::getDisplayLanguage(app()->getLocale(), 'en');
+
+        $result = (new MealPhotoAgent)->prompt("Identify the foods in this meal photo. Name each item in {$language}.", [$image]);
 
         $items = collect($result['items'] ?? [])->map(fn (array $item): array => [
             'name' => $item['name'] ?? null,

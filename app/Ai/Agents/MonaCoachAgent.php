@@ -9,6 +9,8 @@ use App\Ai\Tools\CreateRecipeTool;
 use App\Ai\Tools\GetCalorieStatusTool;
 use App\Ai\Tools\GetTodayMealsTool;
 use App\Ai\Tools\GetTodayWorkoutTool;
+use App\Ai\Support\DietaryConstraints;
+use App\Ai\Tools\LogMealTool;
 use App\Ai\Tools\LogWeightTool;
 use App\Ai\Tools\ProposeMealAlternativesTool;
 use App\Ai\Tools\RescheduleWorkoutTool;
@@ -51,16 +53,24 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         return config('ai.models.agent');
     }
 
+    protected function maxConversationMessages(): int
+    {
+        return 30;
+    }
+
     public function instructions(): string
     {
         $name = trim((string) ($this->user->name ?? ''));
         $who = $name !== '' ? $name : 'the user';
-        $locale = $this->user->locale ?? 'en';
-        $goal = $this->user->profile?->body_goal?->value ?? 'general fitness';
+        $locale = app()->getLocale();
+        $profile = $this->user->profile;
+        $goal = $profile?->body_goal?->value ?? 'general fitness';
+
+        $prefs = trim("Their current goal is: {$goal}. ".DietaryConstraints::forProfile($profile));
 
         $base = <<<PROMPT
         You are Mona, {$who}'s personal fitness and nutrition coach inside the fytrr app.
-        Their current goal is: {$goal}.
+        {$prefs}
 
         VOICE
         Warm, direct, encouraging, like a knowledgeable friend, never preachy or clinical.
@@ -170,6 +180,21 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         with type feature_request (or bug) and their wish in their own words. Do the same when they
         report something broken. Only call submit_feedback after they agree.
 
+        PHOTOS
+        The user can send you a photo. There are two cases:
+        - MEAL PHOTO: identify each food and a realistic portion, then give the total calories and
+          protein, carbs and fat (e.g. "~650 kcal, 40 g Protein"). Say it is an estimate, then ask in
+          one short sentence whether they want it tracked as eaten ("Soll ich das als gegessen
+          eintragen?"). Only if they say yes, call log_meal with the items (name, calories and macros)
+          so it counts toward today's calories. Never log it before they confirm, and never claim you
+          tracked it unless log_meal ran this turn.
+        - MENU PHOTO: first call get_calorie_status to see how many calories they have left today, then
+          read the menu and recommend the one or two dishes that best fit their goal, remaining budget
+          AND their diet and disliked ingredients above. Never suggest a dish that breaks their diet or
+          contains a disliked ingredient. Name each dish exactly as written and say why in one short
+          line. If nothing fits well, say so and suggest the closest option or a simple tweak ("frag
+          nach dem Dressing separat").
+
         Never claim to have changed, saved, logged, tracked, or scheduled anything unless a
         tool actually did it in this turn.
         PROMPT;
@@ -196,6 +221,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(ProposeMealAlternativesTool::class, ['user' => $this->user]),
             app(CreateRecipeTool::class, ['user' => $this->user]),
             app(AddMealTool::class, ['user' => $this->user]),
+            app(LogMealTool::class, ['user' => $this->user]),
             app(GetTodayWorkoutTool::class, ['user' => $this->user]),
             app(GetCalorieStatusTool::class, ['user' => $this->user]),
             app(LogWeightTool::class, ['user' => $this->user]),
