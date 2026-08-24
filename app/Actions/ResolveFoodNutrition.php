@@ -39,6 +39,8 @@ class ResolveFoodNutrition
             'barcode' => $barcode,
             'name' => $data['product_name'],
             'brand' => $data['brands'] ?? null,
+            'image_url' => $data['image_url'] ?? null,
+            'image_thumb_url' => $data['image_thumb_url'] ?? null,
             'kcal' => $data['energy_kcal_100g'],
             'protein_g' => $data['proteins_100g'] ?? null,
             'carbs_g' => $data['carbohydrates_100g'] ?? null,
