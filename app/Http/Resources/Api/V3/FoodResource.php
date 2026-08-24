@@ -24,6 +24,8 @@ class FoodResource extends JsonResource
             'barcode' => $this->barcode,
             'name' => $this->name,
             'brand' => $this->brand,
+            'image_url' => $this->image_url,
+            'image_thumb_url' => $this->image_thumb_url,
             'kcal' => $this->kcal,
             'protein_g' => $this->protein_g,
             'carbs_g' => $this->carbs_g,

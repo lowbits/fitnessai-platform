@@ -20,6 +20,7 @@ class Food extends Model
 
     protected $fillable = [
         'source', 'user_id', 'barcode', 'name', 'brand',
+        'image_url', 'image_thumb_url',
         'kcal', 'protein_g', 'carbs_g', 'fat_g',
         'fiber_g', 'sugar_g', 'sat_fat_g', 'salt_g',
         'serving_size', 'serving_unit', 'verified',
@@ -82,6 +83,8 @@ class Food extends Model
             'barcode' => $this->barcode,
             'product_name' => $this->name,
             'brands' => $this->brand,
+            'image_url' => $this->image_url,
+            'image_thumb_url' => $this->image_thumb_url,
             'energy_kcal_100g' => $this->kcal,
             'proteins_100g' => $this->protein_g,
             'carbohydrates_100g' => $this->carbs_g,
