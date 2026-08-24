@@ -18,20 +18,20 @@ class ImportOpenFoodFacts extends Command
 
     private const INDEX_SETTINGS = [
         'searchableAttributes' => [
-            'product_name', 'brands', 'categories', 'ingredients_text',
+            'product_name', 'product_name_de', 'product_name_en', 'brands',
         ],
         'filterableAttributes' => [
-            'barcode', 'categories_tags', 'labels_tags', 'allergens_tags',
-            'nutriscore_grade', 'nova_group', 'proteins_100g',
-            'carbohydrates_100g', 'fat_100g', 'energy_kcal_100g',
+            'barcode', 'categories_tags', 'nutriscore_grade', 'nova_group', 'energy_kcal_100g',
         ],
         'sortableAttributes' => [
-            'product_name', 'nutriscore_grade', 'proteins_100g',
             'energy_kcal_100g', 'popularity_key',
         ],
         'rankingRules' => [
-            'words', 'typo', 'proximity', 'attribute',
-            'sort', 'exactness', 'popularity_key:desc',
+            'words', 'typo', 'proximity', 'attribute', 'sort', 'exactness', 'popularity_key:desc',
+        ],
+        'stopWords' => [
+            'der', 'die', 'das', 'und', 'mit', 'im', 'in', 'zum',
+            'the', 'a', 'an', 'of', 'with', 'and',
         ],
     ];
 

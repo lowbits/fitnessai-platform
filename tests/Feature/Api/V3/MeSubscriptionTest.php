@@ -23,6 +23,14 @@ function syncSubscription(User $user, array $overrides = []): void
     $subscription->save();
 }
 
+it('exposes the stored locale as settings.language so the app follows the database', function () {
+    Sanctum::actingAs(User::factory()->create(['locale' => 'de']));
+
+    getJson('/api/v3/auth/me')
+        ->assertOk()
+        ->assertJsonPath('settings.language', 'de');
+});
+
 it('reports free when the user has no subscription', function () {
     Sanctum::actingAs(User::factory()->create());
 

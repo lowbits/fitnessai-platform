@@ -27,6 +27,7 @@ class DayResource extends JsonResource
 
             'access' => $this->access->value,
             'status' => $this->status->value,
+            'meal_plan_status' => $mealPlan?->status,
 
             'meals' => DayMealResource::collection($mealPlan?->meals ?? collect()),
             'daily_totals' => $mealPlan ? [

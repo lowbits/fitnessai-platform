@@ -26,6 +26,9 @@ use App\Http\Controllers\Api\V3\Auth\LoginController;
 use App\Http\Controllers\Api\V3\Auth\SignupController;
 use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
 use App\Http\Controllers\Api\V3\CoachController;
+use App\Http\Controllers\Api\V3\CoachGreetingController;
+use App\Http\Controllers\Api\V3\FoodController;
+use App\Http\Controllers\Api\V3\VisionController;
 use App\Http\Controllers\Api\V3\MealAlternativesController;
 use App\Http\Controllers\Api\V3\MobileOnboardingController;
 use App\Http\Controllers\Api\V3\PlanDayController;
@@ -66,6 +69,20 @@ Route::prefix('v3')->group(function () {
             ->name('v3.meals.alternatives');
         Route::post('/coach/messages', CoachController::class)
             ->name('v3.coach.messages');
+        Route::get('/coach/greeting', CoachGreetingController::class)
+            ->name('v3.coach.greeting');
+        Route::post('/foods', [FoodController::class, 'store'])
+            ->name('v3.foods.store');
+        Route::get('/foods/recent', [FoodController::class, 'recent'])
+            ->name('v3.foods.recent');
+        Route::get('/foods/{barcode}', [FoodController::class, 'show'])
+            ->whereNumber('barcode')
+            ->middleware('throttle:30,1')
+            ->name('v3.foods.show');
+        Route::post('/nutrition-label', [VisionController::class, 'label'])
+            ->middleware('throttle:20,1')->name('v3.vision.label');
+        Route::post('/meal-photos', [VisionController::class, 'meal'])
+            ->middleware('throttle:20,1')->name('v3.vision.meal');
     });
 });
 

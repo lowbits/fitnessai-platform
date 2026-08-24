@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Enums\Lab;
+use Laravel\Ai\Files\Image;
 
 /**
  * Mona chat — one message in, one assistant reply out (request/response).
@@ -54,8 +55,21 @@ class CoachController extends Controller
             $agent->forUser($user);
         }
 
+        $attachments = [];
+        $message = (string) $request->string('message');
+
+        if ($request->hasFile('image')) {
+            $attachments[] = Image::fromUpload($request->file('image'));
+            $message = match ($request->string('intent')->value()) {
+                'track_meal' => 'Here is a photo of a meal I am about to eat or just ate. Identify the foods and portions and tell me the calories and macros.',
+                'menu_pick' => 'Here is a photo of a restaurant menu. Recommend the best dish for me right now, given my goal and how many calories I have left today.',
+                default => $message,
+            };
+        }
+
         $response = $agent->prompt(
-            (string) $request->string('message'),
+            $message,
+            $attachments,
             provider: [Lab::OpenAI],
             model: config('ai.models.agent'),
         );

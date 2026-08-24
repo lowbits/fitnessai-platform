@@ -6,6 +6,7 @@ use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
@@ -136,4 +137,110 @@ test('forbids a meal_replace context for a meal the user does not own', function
         'message' => 'ersetzen',
         'context' => ['type' => 'meal_replace', 'meal_id' => $meal->id],
     ])->assertForbidden();
+});
+
+test('accepts a meal photo and prompts Mona with the image', function () {
+    MonaCoachAgent::fake(['Sieht nach etwa 650 kcal aus.']);
+
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'intent' => 'track_meal',
+        'image' => UploadedFile::fake()->image('meal.jpg'),
+    ])
+        ->assertStatus(200)
+        ->assertJsonPath('message.parts.0.type', 'text');
+
+    MonaCoachAgent::assertPrompted(fn ($prompt) => $prompt->attachments->count() === 1
+        && Str::contains($prompt->prompt, 'meal'));
+});
+
+test('mona instructions reply in the active app locale', function () {
+    app()->setLocale('de');
+    expect((new MonaCoachAgent(User::factory()->withProfile()->create()))->instructions())->toContain('locale: de');
+
+    app()->setLocale('en');
+    expect((new MonaCoachAgent(User::factory()->withProfile()->create()))->instructions())->toContain('locale: en');
+});
+
+test('the coach applies the stored user locale for a de user', function () {
+    MonaCoachAgent::fake(['Klar!']);
+
+    $user = User::factory()->withProfile()->onTrial()->create(['locale' => 'de']);
+
+    $this->actingAs($user)
+        ->postJson(route('v3.coach.messages'), ['message' => 'Hallo'])
+        ->assertStatus(200);
+
+    expect($user->preferredLocale())->toBe('de');
+});
+
+test('redacts the image from the stored conversation history', function () {
+    MonaCoachAgent::fake(['Sieht gut aus.']);
+
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'intent' => 'track_meal',
+        'image' => UploadedFile::fake()->image('meal.jpg'),
+    ])->assertStatus(200);
+
+    $stored = DB::table('agent_conversation_messages')->where('role', 'user')->first();
+
+    expect($stored)->not->toBeNull()
+        ->and($stored->attachments)->toBe('[]');
+});
+
+test('accepts a menu photo with the menu_pick intent', function () {
+    MonaCoachAgent::fake(['Nimm das gegrillte Hähnchen.']);
+
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'intent' => 'menu_pick',
+        'image' => UploadedFile::fake()->image('menu.jpg'),
+    ])->assertStatus(200);
+
+    MonaCoachAgent::assertPrompted(fn ($prompt) => $prompt->attachments->count() === 1
+        && Str::contains($prompt->prompt, 'menu'));
+});
+
+test('allows an image without a text message', function () {
+    MonaCoachAgent::fake(['Klar!']);
+
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'intent' => 'track_meal',
+        'image' => UploadedFile::fake()->image('meal.jpg'),
+    ])->assertStatus(200);
+});
+
+test('requires an intent when an image is sent', function () {
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'image' => UploadedFile::fake()->image('meal.jpg'),
+    ], ['Accept' => 'application/json'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['intent']);
+});
+
+test('rejects an unknown image intent', function () {
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->post(route('v3.coach.messages'), [
+        'intent' => 'delete_everything',
+        'image' => UploadedFile::fake()->image('meal.jpg'),
+    ], ['Accept' => 'application/json'])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['intent']);
+});
+
+test('requires a message when no image is sent', function () {
+    $user = User::factory()->withProfile()->onTrial()->create();
+
+    $this->actingAs($user)->postJson(route('v3.coach.messages'), [])
+        ->assertStatus(422)
+        ->assertJsonValidationErrors(['message']);
 });
