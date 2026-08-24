@@ -13,7 +13,7 @@ uses(RefreshDatabase::class);
 
 function coachMealForUser(): array
 {
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->onTrial()->create();
     $plan = Plan::factory()->create(['user_id' => $user->id, 'status' => 'active']);
     $mealPlan = MealPlan::factory()->create(['plan_id' => $plan->id, 'status' => 'generated']);
     $meal = Meal::factory()->create([
@@ -32,7 +32,7 @@ function coachMealForUser(): array
 test('returns the message-part contract with a text part', function () {
     MonaCoachAgent::fake(['Klar, wie kann ich dir helfen?']);
 
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->onTrial()->create();
 
     $response = $this->actingAs($user)->postJson(route('v3.coach.messages'), [
         'message' => 'Hallo Mona',
@@ -53,13 +53,16 @@ test('returns the message-part contract with a text part', function () {
 test('persists a conversation for the user', function () {
     MonaCoachAgent::fake(['Hi!']);
 
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->onTrial()->create();
 
     $this->actingAs($user)->postJson(route('v3.coach.messages'), [
         'message' => 'Hallo',
     ])->assertStatus(200);
 
-    expect(DB::table('agent_conversations')->where('user_id', $user->id)->count())->toBe(1);
+    expect(DB::table('agent_conversations')
+        ->where('participant_type', $user::class)
+        ->where('participant_id', $user->id)
+        ->count())->toBe(1);
 });
 
 test('requires authentication', function () {
@@ -67,10 +70,21 @@ test('requires authentication', function () {
         ->assertUnauthorized();
 });
 
+test('answers a free user with a paywall upsell widget instead of serving Mona', function () {
+    $user = User::factory()->withProfile()->create();
+
+    $response = $this->actingAs($user)->postJson(route('v3.coach.messages'), [
+        'message' => 'Hallo',
+    ])->assertStatus(200);
+
+    $widgets = collect($response->json('message.parts'))->where('type', 'widget')->pluck('name');
+    expect($widgets)->toContain('upsell');
+});
+
 test('validates the message is present', function () {
     MonaCoachAgent::fake(['Hi!']);
 
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->onTrial()->create();
 
     $this->actingAs($user)->postJson(route('v3.coach.messages'), [])
         ->assertStatus(422)
@@ -80,13 +94,14 @@ test('validates the message is present', function () {
 test('rejects continuing another user\'s conversation', function () {
     MonaCoachAgent::fake(['Hi!']);
 
-    $owner = User::factory()->withProfile()->create();
-    $intruder = User::factory()->withProfile()->create();
+    $owner = User::factory()->withProfile()->onTrial()->create();
+    $intruder = User::factory()->withProfile()->onTrial()->create();
 
     $conversationId = (string) Str::uuid();
     DB::table('agent_conversations')->insert([
         'id' => $conversationId,
-        'user_id' => $owner->id,
+        'participant_type' => $owner::class,
+        'participant_id' => $owner->id,
         'title' => 'Owner conversation',
         'created_at' => now(),
         'updated_at' => now(),
@@ -115,7 +130,7 @@ test('forbids a meal_replace context for a meal the user does not own', function
     MonaCoachAgent::fake(['Hi!']);
 
     [, $meal] = coachMealForUser();
-    $intruder = User::factory()->withProfile()->create();
+    $intruder = User::factory()->withProfile()->onTrial()->create();
 
     $this->actingAs($intruder)->postJson(route('v3.coach.messages'), [
         'message' => 'ersetzen',

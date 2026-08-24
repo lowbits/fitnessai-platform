@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\DayAccess;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -51,6 +53,25 @@ class Plan extends Model
     public function workoutPlans(): HasMany
     {
         return $this->hasMany(WorkoutPlan::class);
+    }
+
+    /**
+     * The access level for a given date: free preview window, full (subscribed),
+     * preview-locked, expired, or before start. Single source of truth for the
+     * plan access rule.
+     */
+    public function accessOn(CarbonImmutable $date, bool $hasActiveSubscription): DayAccess
+    {
+        $start = CarbonImmutable::parse($this->start_date->toDateString());
+        $lastDay = $start->addDays((int) $this->duration_days - 1);
+
+        return DayAccess::forDate(
+            $date,
+            $start,
+            $lastDay,
+            (int) config('subscription.preview_days'),
+            $hasActiveSubscription,
+        );
     }
 
     protected function nextGenerationAt(): Attribute

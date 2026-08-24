@@ -17,6 +17,8 @@ use Stringable;
  */
 class LogWeightTool implements Tool
 {
+    private const MAX_PLAUSIBLE_JUMP_KG = 25;
+
     public function __construct(private readonly User $user) {}
 
     public function description(): Stringable|string
@@ -33,12 +35,17 @@ class LogWeightTool implements Tool
             'weight_kg' => $schema->number()
                 ->description('The user\'s bodyweight in kilograms, as they reported it.')
                 ->required(),
+            'confirmed' => $schema->boolean()
+                ->description('Set to true only after the user has confirmed an unusually large change from their last weight.'),
+            'note' => $schema->string()
+                ->description('How the user says they feel this week (mood, energy, sleep) in their own words, if they shared it. Optional.'),
         ];
     }
 
     public function handle(Request $request): Stringable|string
     {
         $weight = (float) ($request['weight_kg'] ?? 0);
+        $confirmed = (bool) ($request['confirmed'] ?? false);
 
         if ($weight < 20 || $weight > 500) {
             return json_encode([
@@ -51,10 +58,29 @@ class LogWeightTool implements Tool
             ?? $this->user->bodyProgress()->orderBy('recorded_at')->value('weight_kg');
         $previousWeight = $this->user->bodyProgress()->orderByDesc('recorded_at')->value('weight_kg');
 
-        $this->user->bodyProgress()->create([
+        $reference = $previousWeight ?? $startWeight;
+        if (! $confirmed && $reference !== null && abs($weight - (float) $reference) > self::MAX_PLAUSIBLE_JUMP_KG) {
+            return json_encode([
+                'error' => 'weight_needs_confirmation',
+                'message' => 'That is a big jump from their last known weight — ask the user to confirm the value (maybe they meant cm or lbs), then call this tool again with confirmed=true.',
+                'reported_weight' => $weight,
+                'reference_weight' => (float) $reference,
+                'delta' => round($weight - (float) $reference, 1),
+            ]);
+        }
+
+        $note = trim((string) ($request['note'] ?? ''));
+
+        $entry = $this->user->bodyProgress()->create([
             'weight_kg' => $weight,
             'recorded_at' => now(),
+            'notes' => $note !== '' ? $note : null,
         ]);
+
+        $this->user->checkIns()->updateOrCreate(
+            ['checked_in_at' => today()],
+            ['body_progress_id' => $entry->id],
+        );
 
         Log::debug('[Coach][LogWeight] Recorded', [
             'user_id' => $this->user->id,

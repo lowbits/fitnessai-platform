@@ -21,9 +21,10 @@ use App\Http\Controllers\Api\V2\Workouts\ReorderWorkoutExercisesController;
 use App\Http\Controllers\Api\V2\Workouts\ReplaceWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\Workouts\UpdateWorkoutExerciseController;
 use App\Http\Controllers\Api\V2\WorkoutTrackingController;
-use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
+use App\Http\Controllers\Api\V3\AddMealController;
 use App\Http\Controllers\Api\V3\Auth\LoginController;
 use App\Http\Controllers\Api\V3\Auth\SignupController;
+use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
 use App\Http\Controllers\Api\V3\CoachController;
 use App\Http\Controllers\Api\V3\MealAlternativesController;
 use App\Http\Controllers\Api\V3\MobileOnboardingController;
@@ -59,6 +60,8 @@ Route::prefix('v3')->group(function () {
         Route::get('/recipes/favorites', [RecipeFavoriteController::class, 'index']);
         Route::post('/recipes/{recipe:id}/favorite', [RecipeFavoriteController::class, 'store']);
         Route::delete('/recipes/{recipe:id}/favorite', [RecipeFavoriteController::class, 'destroy']);
+        Route::post('/meals', AddMealController::class)
+            ->name('v3.meals.add');
         Route::post('/meals/{meal}/alternatives', MealAlternativesController::class)
             ->name('v3.meals.alternatives');
         Route::post('/coach/messages', CoachController::class)

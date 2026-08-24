@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Database\Factories\BodyProgressFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BodyProgress extends Model
 {
-    /** @use HasFactory<\Database\Factories\BodyProgressFactory> */
+    /** @use HasFactory<BodyProgressFactory> */
     use HasFactory;
 
     protected $table = 'body_progress';
@@ -65,6 +67,11 @@ class BodyProgress extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function checkIn(): HasOne
+    {
+        return $this->hasOne(CheckIn::class);
+    }
+
     // Accessors for API (without suffix)
     public function getWeightAttribute(): ?float
     {
@@ -107,7 +114,7 @@ class BodyProgress extends Model
      */
     public function getTrendAttribute(): ?string
     {
-        if (!$this->weight_kg) {
+        if (! $this->weight_kg) {
             return null;
         }
 
@@ -117,7 +124,7 @@ class BodyProgress extends Model
             ->orderBy('recorded_at', 'desc')
             ->first();
 
-        if (!$previousEntry || !$previousEntry->weight_kg) {
+        if (! $previousEntry || ! $previousEntry->weight_kg) {
             return null;
         }
 
@@ -131,4 +138,3 @@ class BodyProgress extends Model
         return $difference > 0 ? 'up' : 'down';
     }
 }
-

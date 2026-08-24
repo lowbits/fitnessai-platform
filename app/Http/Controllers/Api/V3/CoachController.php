@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V3;
 
 use App\Ai\Agents\MonaCoachAgent;
+use App\Ai\CoachMessage;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\CoachMessageRequest;
 use App\Http\Resources\Api\V3\CoachMessageResource;
@@ -25,6 +26,10 @@ class CoachController extends Controller
     {
         $user = $request->user();
 
+        if (! $user->hasFullAccessToday()) {
+            return new CoachMessageResource(CoachMessage::upsell($user));
+        }
+
         $meal = null;
         if ($request->input('context.type') === 'meal_replace') {
             $meal = Meal::findOrFail($request->integer('context.meal_id'));
@@ -38,7 +43,8 @@ class CoachController extends Controller
         if ($conversationId) {
             $owns = DB::table('agent_conversations')
                 ->where('id', $conversationId)
-                ->where('user_id', $user->id)
+                ->where('participant_type', $user::class)
+                ->where('participant_id', $user->id)
                 ->exists();
 
             abort_unless($owns, 403);
@@ -70,6 +76,6 @@ class CoachController extends Controller
                 ->all(),
         ]);
 
-        return new CoachMessageResource($response);
+        return new CoachMessageResource(CoachMessage::fromAgent($response));
     }
 }

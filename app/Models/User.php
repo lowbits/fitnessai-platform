@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Enums\DayAccess;
 use App\Enums\UserSource;
+use Carbon\CarbonImmutable;
 use Database\Factories\UserFactory;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Translation\HasLocalePreference;
@@ -157,6 +159,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(BodyProgress::class);
     }
 
+    public function checkIns(): HasMany
+    {
+        return $this->hasMany(CheckIn::class);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);
@@ -244,6 +251,25 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function hasActiveSubscription(): bool
     {
         return $this->isOnFreeTrial() || $this->hasPaidSubscription();
+    }
+
+    /**
+     * Whether the user has full access today: within the free preview window or
+     * with an active entitlement. Mirrors the plan day-access rule so premium
+     * gates stay consistent with what the app shows.
+     */
+    public function hasFullAccessToday(): bool
+    {
+        $plan = $this->plans()->where('status', 'active')->first();
+
+        if (! $plan) {
+            return $this->hasActiveSubscription();
+        }
+
+        return $plan->accessOn(
+            CarbonImmutable::parse(today()->toDateString()),
+            $this->hasActiveSubscription(),
+        ) === DayAccess::Full;
     }
 
     public function getSubscriptionDetails(): array
