@@ -34,9 +34,10 @@ class ResolveFoodNutrition
             return null;
         }
 
-        return Food::create([
+        return Food::firstOrCreate([
             'source' => FoodSource::OpenFoodFacts,
             'barcode' => $barcode,
+        ], [
             'name' => $data['product_name'],
             'brand' => $data['brands'] ?? null,
             'image_url' => $data['image_url'] ?? null,

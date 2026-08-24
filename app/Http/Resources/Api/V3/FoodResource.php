@@ -30,6 +30,10 @@ class FoodResource extends JsonResource
             'protein_g' => $this->protein_g,
             'carbs_g' => $this->carbs_g,
             'fat_g' => $this->fat_g,
+            'fiber_g' => $this->fiber_g,
+            'sugar_g' => $this->sugar_g,
+            'sat_fat_g' => $this->sat_fat_g,
+            'salt_g' => $this->salt_g,
             'serving_size' => $this->serving_size,
             'serving_unit' => $this->serving_unit,
         ];

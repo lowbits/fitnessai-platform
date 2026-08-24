@@ -76,6 +76,8 @@ Route::prefix('v3')->group(function () {
         Route::get('/foods/recent', [FoodController::class, 'recent'])
             ->name('v3.foods.recent');
         Route::get('/foods/{barcode}', [FoodController::class, 'show'])
+            ->whereNumber('barcode')
+            ->middleware('throttle:30,1')
             ->name('v3.foods.show');
         Route::post('/nutrition-label', [VisionController::class, 'label'])
             ->middleware('throttle:20,1')->name('v3.vision.label');

@@ -50,7 +50,7 @@ class Food extends Model
 
     public function searchableAs(): string
     {
-        return config('services.openfoodfacts.index', 'products');
+        return config('services.openfoodfacts.foods_index', 'foods');
     }
 
     /**
