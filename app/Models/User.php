@@ -159,6 +159,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(BodyProgress::class);
     }
 
+    public function checkIns(): HasMany
+    {
+        return $this->hasMany(CheckIn::class);
+    }
+
     public function devices(): HasMany
     {
         return $this->hasMany(UserDevice::class);

@@ -6,6 +6,7 @@ use Database\Factories\BodyProgressFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class BodyProgress extends Model
 {
@@ -25,14 +26,10 @@ class BodyProgress extends Model
         'arm_circumference_cm',
         'thigh_circumference_cm',
         'notes',
-        'mood',
-        'energy',
         'recorded_at',
     ];
 
     protected $casts = [
-        'mood' => 'integer',
-        'energy' => 'integer',
         'weight_kg' => 'decimal:2',
         'body_fat_percentage' => 'decimal:2',
         'muscle_mass_kg' => 'decimal:2',
@@ -68,6 +65,11 @@ class BodyProgress extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function checkIn(): HasOne
+    {
+        return $this->hasOne(CheckIn::class);
     }
 
     // Accessors for API (without suffix)

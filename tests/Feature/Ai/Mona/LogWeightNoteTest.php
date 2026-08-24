@@ -5,7 +5,7 @@ use App\Models\User;
 use Laravel\Ai\Tools\Request;
 
 test('a shared feeling is stored as the entry note', function () {
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile(['weight_kg' => 82])->create();
 
     (new LogWeightTool($user))->handle(new Request([
         'weight_kg' => 82.5,
@@ -17,7 +17,7 @@ test('a shared feeling is stored as the entry note', function () {
 });
 
 test('without a feeling the note stays null', function () {
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile(['weight_kg' => 82])->create();
 
     (new LogWeightTool($user))->handle(new Request(['weight_kg' => 82.5]));
 

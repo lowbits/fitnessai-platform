@@ -10,9 +10,10 @@ use Laravel\Ai\Tools\Request;
 use Stringable;
 
 /**
- * Adds body measurements and/or a wellbeing note onto the check-in's weight
- * entry (today's most recent body_progress row, created by log_weight). Used by
- * the measurements and mood steps so the whole check-in lives on one entry.
+ * Fills in the rest of the check-in after log_weight. Measurements and the
+ * free-text note attach to today's body_progress row (the weight-chart's source
+ * of truth); mood and energy are the structured wellbeing signal and live on the
+ * check_ins event row instead, so they can be queried on their own.
  */
 class UpdateCheckInTool implements Tool
 {
@@ -57,38 +58,49 @@ class UpdateCheckInTool implements Tool
     {
         $entry = $this->user->bodyProgress()->whereDate('recorded_at', today())->orderByDesc('recorded_at')->first();
 
-        if (! $entry) {
-            return ToolResult::error('no_checkin_entry', 'Log the weight first with log_weight, then add measurements or the note.');
-        }
-
-        $changes = [];
+        $measurements = [];
         foreach (self::MEASUREMENTS as $arg => $column) {
             if (isset($request[$arg]) && is_numeric($request[$arg])) {
-                $changes[$column] = round((float) $request[$arg], 2);
-            }
-        }
-
-        foreach (['mood', 'energy'] as $pulse) {
-            if (isset($request[$pulse]) && is_numeric($request[$pulse])) {
-                $changes[$pulse] = max(1, min(5, (int) $request[$pulse]));
+                $measurements[$column] = round((float) $request[$arg], 2);
             }
         }
 
         $note = trim((string) ($request['note'] ?? ''));
-        if ($note !== '') {
-            $changes['notes'] = $entry->notes ? $entry->notes."\n".$note : $note;
+
+        $pulse = [];
+        foreach (['mood', 'energy'] as $signal) {
+            if (isset($request[$signal]) && is_numeric($request[$signal])) {
+                $pulse[$signal] = max(1, min(5, (int) $request[$signal]));
+            }
         }
 
-        if ($changes === []) {
+        if ($measurements === [] && $note === '' && $pulse === []) {
             return ToolResult::error('nothing_to_update', 'No measurements, mood or note were provided.');
         }
 
-        $entry->update($changes);
+        if (($measurements !== [] || $note !== '') && ! $entry) {
+            return ToolResult::error('no_checkin_entry', 'Log the weight first with log_weight, then add measurements or the note.');
+        }
+
+        $entryChanges = $measurements;
+        if ($note !== '') {
+            $entryChanges['notes'] = $entry->notes ? $entry->notes."\n".$note : $note;
+        }
+        if ($entryChanges !== []) {
+            $entry->update($entryChanges);
+        }
+
+        if ($pulse !== []) {
+            $this->user->checkIns()->updateOrCreate(
+                ['checked_in_at' => today()],
+                [...$pulse, 'body_progress_id' => $entry?->id],
+            );
+        }
 
         return ToolResult::info('check_in_saved', [
-            'measurements' => count(array_diff_key($changes, ['notes' => true, 'mood' => true, 'energy' => true])),
-            'has_mood' => array_key_exists('mood', $changes),
-            'has_note' => array_key_exists('notes', $changes),
+            'measurements' => count($measurements),
+            'has_mood' => array_key_exists('mood', $pulse),
+            'has_note' => $note !== '',
         ]);
     }
 }

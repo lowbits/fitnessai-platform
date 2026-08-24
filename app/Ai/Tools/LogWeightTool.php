@@ -71,11 +71,16 @@ class LogWeightTool implements Tool
 
         $note = trim((string) ($request['note'] ?? ''));
 
-        $this->user->bodyProgress()->create([
+        $entry = $this->user->bodyProgress()->create([
             'weight_kg' => $weight,
             'recorded_at' => now(),
             'notes' => $note !== '' ? $note : null,
         ]);
+
+        $this->user->checkIns()->updateOrCreate(
+            ['checked_in_at' => today()],
+            ['body_progress_id' => $entry->id],
+        );
 
         Log::debug('[Coach][LogWeight] Recorded', [
             'user_id' => $this->user->id,
