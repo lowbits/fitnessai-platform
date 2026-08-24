@@ -22,7 +22,7 @@ class RecentFoodResource extends JsonResource
             'name' => $this->meal_name,
             'external_id' => $this->external_id,
             'meal_type' => $this->meal_type?->value,
-            'calories' => (float) $this->calories,
+            'kcal' => (float) $this->calories,
             'protein_g' => $this->when(! is_null($this->protein_g), fn (): float => (float) $this->protein_g),
             'carbs_g' => $this->when(! is_null($this->carbs_g), fn (): float => (float) $this->carbs_g),
             'fat_g' => $this->when(! is_null($this->fat_g), fn (): float => (float) $this->fat_g),
