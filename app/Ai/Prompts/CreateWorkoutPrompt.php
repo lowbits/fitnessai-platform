@@ -2,6 +2,7 @@
 
 namespace App\Ai\Prompts;
 
+use App\Ai\Support\PhysicalLimitations;
 use App\Models\UserProfile;
 use Stringable;
 
@@ -42,6 +43,9 @@ class CreateWorkoutPrompt implements Stringable
         $warmupGuideline = $this->getWarmupGuideline();
         $recentWorkoutsSection = $this->getRecentWorkoutsSection();
 
+        $limitations = PhysicalLimitations::forProfile($this->profile);
+        $limitationsSection = $limitations === '' ? '' : "\n\n**INJURIES / LIMITATIONS:** {$limitations}";
+
         return <<<PROMPT
 **User Profile:**
 - Age: {$age} years
@@ -52,7 +56,7 @@ class CreateWorkoutPrompt implements Stringable
 - Activity Level: {$activityLevel}
 - Training Sessions per Week: {$sessionsPerWeek}
 - Workout Split: {$workoutSplit}
-{$genderContext}
+{$genderContext}{$limitationsSection}
 
 {$workoutDayContext}
 

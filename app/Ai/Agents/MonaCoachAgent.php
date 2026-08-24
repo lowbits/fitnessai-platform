@@ -9,7 +9,9 @@ use App\Ai\Tools\CreateRecipeTool;
 use App\Ai\Tools\GetCalorieStatusTool;
 use App\Ai\Tools\GetTodayMealsTool;
 use App\Ai\Tools\GetTodayWorkoutTool;
+use App\Ai\Support\CoachSnapshot;
 use App\Ai\Support\DietaryConstraints;
+use App\Ai\Support\PhysicalLimitations;
 use App\Ai\Tools\LogMealTool;
 use App\Ai\Tools\LogWeightTool;
 use App\Ai\Tools\ProposeMealAlternativesTool;
@@ -66,11 +68,25 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         $profile = $this->user->profile;
         $goal = $profile?->body_goal?->value ?? 'general fitness';
 
-        $prefs = trim("Their current goal is: {$goal}. ".DietaryConstraints::forProfile($profile));
+        $prefs = trim(implode(' ', array_filter([
+            "Their current goal is: {$goal}.",
+            DietaryConstraints::forProfile($profile),
+            PhysicalLimitations::forProfile($profile),
+        ])));
+
+        $snapshot = app(CoachSnapshot::class)->forUser($this->user);
+        $progress = $snapshot === '' ? '' : <<<SNAPSHOT
+
+
+        WHERE THEY ARE RIGHT NOW
+        {$snapshot}
+        Coach from this. Reference their real numbers and momentum, celebrate progress, and make every
+        piece of advice specific to where they are — never generic advice you could give anyone.
+        SNAPSHOT;
 
         $base = <<<PROMPT
         You are Mona, {$who}'s personal fitness and nutrition coach inside the fytrr app.
-        {$prefs}
+        {$prefs}{$progress}
 
         VOICE
         Warm, direct, encouraging, like a knowledgeable friend, never preachy or clinical.
