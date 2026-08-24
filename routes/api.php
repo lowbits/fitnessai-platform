@@ -67,6 +67,10 @@ Route::prefix('v3')->group(function () {
             ->name('v3.meals.alternatives');
         Route::post('/coach/messages', CoachController::class)
             ->name('v3.coach.messages');
+        Route::post('/foods', [FoodController::class, 'store'])
+            ->name('v3.foods.store');
+        Route::get('/foods/recent', [FoodController::class, 'recent'])
+            ->name('v3.foods.recent');
         Route::get('/foods/{barcode}', [FoodController::class, 'show'])
             ->name('v3.foods.show');
     });
