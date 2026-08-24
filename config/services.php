@@ -45,6 +45,9 @@ return [
     ],
     'openfoodfacts' => [
         'db_dump_url' => env('OPENFOODFACTS_URL', 'https://static.openfoodfacts.org/data/openfoodfacts-products.jsonl.gz'),
+        'api_url' => env('OPENFOODFACTS_API_URL', 'https://world.openfoodfacts.org'),
+        'index' => env('OPENFOODFACTS_INDEX', 'products'),
+        'user_agent' => env('OPENFOODFACTS_USER_AGENT', 'fytrr/1.0 (support@fytrr.com)'),
     ],
 
     'r2' => [
