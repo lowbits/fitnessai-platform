@@ -39,6 +39,15 @@ test('it detects foods and portions in a meal photo', function () {
         ->assertJsonPath('data.items.1.kcal', 250);
 });
 
+test('meal photo analysis returns a retryable 503 when the agent fails', function () {
+    MealPhotoAgent::fake([new RuntimeException('OpenAI timeout')]);
+
+    $this->actingAs(User::factory()->create())
+        ->postJson('/api/v3/meal-photos', ['image' => UploadedFile::fake()->image('meal.jpg')])
+        ->assertStatus(503)
+        ->assertJsonPath('code', 'vision_failed');
+});
+
 test('vision endpoints require an image', function () {
     $this->actingAs(User::factory()->create())
         ->postJson('/api/v3/meal-photos', [])

@@ -17,7 +17,7 @@ class AnalyzeImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image', 'mimes:jpeg,jpg,png,webp', 'max:12288'],
+            'image' => ['required', 'image', 'mimes:jpeg,jpg,png,webp', 'max:4096'],
         ];
     }
 }
