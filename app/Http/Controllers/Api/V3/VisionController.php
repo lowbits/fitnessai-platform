@@ -7,7 +7,9 @@ use App\Ai\Agents\NutritionLabelAgent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\AnalyzeImageRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 use Laravel\Ai\Files\Image;
+use Throwable;
 
 class VisionController extends Controller
 {
@@ -16,9 +18,13 @@ class VisionController extends Controller
      */
     public function label(AnalyzeImageRequest $request): JsonResponse
     {
-        $image = Image::fromUpload($request->file('image'));
+        try {
+            $image = Image::fromUpload($request->file('image'));
 
-        $result = (new NutritionLabelAgent)->prompt('Read the nutrition table in this photo.', [$image]);
+            $result = (new NutritionLabelAgent)->prompt('Read the nutrition table in this photo.', [$image]);
+        } catch (Throwable $e) {
+            return $this->failed('Label', $e);
+        }
 
         return response()->json([
             'data' => [
@@ -37,11 +43,15 @@ class VisionController extends Controller
      */
     public function meal(AnalyzeImageRequest $request): JsonResponse
     {
-        $image = Image::fromUpload($request->file('image'));
+        try {
+            $image = Image::fromUpload($request->file('image'));
 
-        $language = \Locale::getDisplayLanguage(app()->getLocale(), 'en');
+            $language = \Locale::getDisplayLanguage(app()->getLocale(), 'en');
 
-        $result = (new MealPhotoAgent)->prompt("Identify the foods in this meal photo. Name each item in {$language}.", [$image]);
+            $result = (new MealPhotoAgent)->prompt("Identify the foods in this meal photo. Name each item in {$language}.", [$image]);
+        } catch (Throwable $e) {
+            return $this->failed('Meal', $e);
+        }
 
         $items = collect($result['items'] ?? [])->map(fn (array $item): array => [
             'name' => $item['name'] ?? null,
@@ -54,5 +64,18 @@ class VisionController extends Controller
         ])->values();
 
         return response()->json(['data' => ['items' => $items]]);
+    }
+
+    /**
+     * A vision analysis failure — almost always a transient OpenAI timeout or
+     * rate limit. Report it (so it's visible) and return a retryable 503 with a
+     * stable code instead of a bare 500.
+     */
+    private function failed(string $subcomponent, Throwable $e): JsonResponse
+    {
+        report($e);
+        Log::warning("[Vision][{$subcomponent}] Analysis failed", ['error' => $e->getMessage()]);
+
+        return response()->json(['message' => 'analysis_failed', 'code' => 'vision_failed'], 503);
     }
 }
