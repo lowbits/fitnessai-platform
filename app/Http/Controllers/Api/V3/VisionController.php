@@ -66,11 +66,6 @@ class VisionController extends Controller
         return response()->json(['data' => ['items' => $items]]);
     }
 
-    /**
-     * A vision analysis failure — almost always a transient OpenAI timeout or
-     * rate limit. Report it (so it's visible) and return a retryable 503 with a
-     * stable code instead of a bare 500.
-     */
     private function failed(string $subcomponent, Throwable $e): JsonResponse
     {
         report($e);
