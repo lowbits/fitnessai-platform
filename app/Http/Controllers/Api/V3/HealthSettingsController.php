@@ -17,13 +17,9 @@ class HealthSettingsController extends Controller
     public function update(Request $request): JsonResponse
     {
         $validated = $request->validate([
-            'activity_credit_enabled' => ['sometimes', 'boolean'],
-            'workout_writeback_enabled' => ['sometimes', 'boolean'],
+            'activity_credit_enabled' => ['required_without_all:workout_writeback_enabled', 'boolean'],
+            'workout_writeback_enabled' => ['required_without_all:activity_credit_enabled', 'boolean'],
         ]);
-
-        if ($validated === []) {
-            return response()->json(['message' => 'No settings provided.'], 422);
-        }
 
         $user = $request->user();
         $user->forceFill($validated)->save();

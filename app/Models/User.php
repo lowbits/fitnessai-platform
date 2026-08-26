@@ -182,8 +182,18 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
      */
     public function markHealthConnected(): void
     {
-        if ($this->health_connected_at === null) {
-            $this->forceFill(['health_connected_at' => now()])->save();
+        if ($this->health_connected_at !== null) {
+            return;
+        }
+
+        // Atomic connect-once: only the first concurrent request sets the timestamp;
+        // a later race can't move it forward.
+        $affected = static::whereKey($this->id)
+            ->whereNull('health_connected_at')
+            ->update(['health_connected_at' => now()]);
+
+        if ($affected > 0) {
+            $this->health_connected_at = now();
         }
     }
 

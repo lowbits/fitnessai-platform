@@ -23,7 +23,7 @@ class HealthSyncResource extends JsonResource
         $enabled = (bool) $request->user()->activity_credit_enabled;
 
         return [
-            'date' => $this->date->toDateString(),
+            'date' => $this->date,
             'active_energy_kcal' => $this->active_energy_kcal,
             'steps' => $this->steps,
             'workouts' => $this->workouts ?? [],

@@ -6,6 +6,7 @@ use App\Actions\Health\CreditActiveEnergy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\HealthDailySyncRequest;
 use App\Http\Resources\Api\V3\HealthSyncResource;
+use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 
 class HealthDailySyncController extends Controller
@@ -23,16 +24,24 @@ class HealthDailySyncController extends Controller
         $user = $request->user();
         $validated = $request->validated();
 
-        $metric = $user->healthDailyMetrics()->whereDate('date', $validated['date'])->first()
-            ?? $user->healthDailyMetrics()->make(['date' => $validated['date']]);
-
-        $metric->fill([
+        $values = [
             'active_energy_kcal' => $validated['active_energy_kcal'],
             'steps' => $validated['steps'],
             'workouts' => $validated['workouts'],
             'credited_kcal' => $credit($validated['active_energy_kcal']),
             'synced_at' => now(),
-        ])->save();
+        ];
+
+        try {
+            $metric = $user->healthDailyMetrics()->updateOrCreate(
+                ['date' => $validated['date']],
+                $values,
+            );
+        } catch (UniqueConstraintViolationException) {
+            // A concurrent first sync for the same day won the insert race — update the winner.
+            $metric = $user->healthDailyMetrics()->where('date', $validated['date'])->firstOrFail();
+            $metric->update($values);
+        }
 
         $user->markHealthConnected();
 

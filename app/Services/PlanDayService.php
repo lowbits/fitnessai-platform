@@ -145,7 +145,7 @@ final class PlanDayService
     private function activity(User $user, CarbonImmutable $date): DayActivity
     {
         $metric = HealthDailyMetric::where('user_id', $user->id)
-            ->whereDate('date', $date->toDateString())
+            ->where('date', $date->toDateString())
             ->first();
 
         return DayActivity::build($user, $metric);

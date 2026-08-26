@@ -24,8 +24,9 @@ class HealthDailyMetric extends Model
 
     protected function casts(): array
     {
+        // `date` stays an uncast Y-m-d string so a plain (sargable) where('date', ...)
+        // matches on both MySQL (DATE column) and SQLite, and hits the (user_id, date) index.
         return [
-            'date' => 'date',
             'active_energy_kcal' => 'integer',
             'steps' => 'integer',
             'workouts' => 'array',

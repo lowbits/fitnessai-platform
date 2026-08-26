@@ -35,7 +35,7 @@ final class DailyBudget
         }
 
         return (int) (HealthDailyMetric::where('user_id', $user->id)
-            ->whereDate('date', today())
+            ->where('date', today()->toDateString())
             ->value('credited_kcal') ?? 0);
     }
 }
