@@ -4,11 +4,13 @@ namespace App\Services;
 
 use App\Enums\DayAccess;
 use App\Enums\DayGenerationStatus;
+use App\Models\HealthDailyMetric;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutTracking;
+use App\ValueObjects\DayActivity;
 use App\ValueObjects\DayCompletion;
 use App\ValueObjects\DayPlan;
 use Carbon\CarbonImmutable;
@@ -60,6 +62,7 @@ final class PlanDayService
             workoutTrackings: $this->workoutTrackings($user, $workoutPlan),
             weekStrip: $this->completion->strip($user, $plan, $date->toDateString()),
             completion: $this->completion->for($user, $date->toDateString(), $plan),
+            activity: $this->activity($user, $date),
         );
     }
 
@@ -81,6 +84,7 @@ final class PlanDayService
             workoutTrackings: collect(),
             weekStrip: $this->completion->strip($user, $plan, $date->toDateString()),
             completion: new DayCompletion(false, false, false),
+            activity: $this->activity($user, $date),
         );
     }
 
@@ -136,6 +140,15 @@ final class PlanDayService
             ->where('workout_plan_id', $workoutPlan->id)
             ->whereNotNull('completed_at')
             ->exists();
+    }
+
+    private function activity(User $user, CarbonImmutable $date): DayActivity
+    {
+        $metric = HealthDailyMetric::where('user_id', $user->id)
+            ->where('date', $date->toDateString())
+            ->first();
+
+        return DayActivity::build($user, $metric);
     }
 
     private function calorieTrackings(User $user, CarbonImmutable $date): Collection

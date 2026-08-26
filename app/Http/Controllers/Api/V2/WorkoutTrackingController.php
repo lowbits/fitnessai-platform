@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V2;
 
+use App\Actions\Health\EstimateWorkoutEnergy;
 use App\Http\Controllers\Controller;
 use App\Models\WorkoutTracking;
 use Illuminate\Http\JsonResponse;
@@ -21,8 +22,10 @@ class WorkoutTrackingController extends Controller
             ->orderBy('started_at', 'desc')
             ->get();
 
+        $weightKg = $request->user()->getCurrentWeight();
+
         return response()->json([
-            'data' => $trackings->map(fn ($tracking) => $this->formatTracking($tracking)),
+            'data' => $trackings->map(fn ($tracking) => $this->formatTracking($tracking, $weightKg)),
         ]);
     }
 
@@ -79,7 +82,7 @@ class WorkoutTrackingController extends Controller
         });
 
         return response()->json([
-            'data' => $this->formatTracking($tracking),
+            'data' => $this->formatTracking($tracking, $request->user()->getCurrentWeight()),
         ], 201);
     }
 
@@ -96,7 +99,7 @@ class WorkoutTrackingController extends Controller
         $workoutTracking->load(['workoutPlan', 'exercises.exercise', 'exercises.sets']);
 
         return response()->json([
-            'data' => $this->formatTracking($workoutTracking),
+            'data' => $this->formatTracking($workoutTracking, $request->user()->getCurrentWeight()),
         ]);
     }
 
@@ -157,7 +160,7 @@ class WorkoutTrackingController extends Controller
         $workoutTracking->load(['workoutPlan', 'exercises.exercise', 'exercises.sets']);
 
         return response()->json([
-            'data' => $this->formatTracking($workoutTracking),
+            'data' => $this->formatTracking($workoutTracking, $request->user()->getCurrentWeight()),
         ]);
     }
 
@@ -177,9 +180,44 @@ class WorkoutTrackingController extends Controller
     }
 
     /**
+     * The completed session length in minutes, or null if it isn't finished.
+     */
+    private function sessionMinutes(WorkoutTracking $tracking): ?int
+    {
+        if (! $tracking->started_at || ! $tracking->completed_at) {
+            return null;
+        }
+
+        $minutes = (int) round($tracking->started_at->diffInSeconds($tracking->completed_at) / 60);
+
+        return $minutes > 0 ? $minutes : null;
+    }
+
+    /**
+     * The energy to hand back for HealthKit write-back: the stored plan estimate,
+     * or a MET-based fallback from the actual session length and the user's weight.
+     */
+    private function workoutEnergyKcal(WorkoutTracking $tracking, ?float $weightKg): ?int
+    {
+        $plan = $tracking->workoutPlan;
+
+        if (! $plan) {
+            return null;
+        }
+
+        if ($plan->estimated_calories_burned !== null) {
+            return (int) $plan->estimated_calories_burned;
+        }
+
+        $minutes = $this->sessionMinutes($tracking) ?? (int) $plan->estimated_duration_minutes;
+
+        return app(EstimateWorkoutEnergy::class)($plan->workout_type, $minutes, $weightKg);
+    }
+
+    /**
      * Format tracking data for response.
      */
-    private function formatTracking(WorkoutTracking $tracking): array
+    private function formatTracking(WorkoutTracking $tracking, ?float $weightKg = null): array
     {
         return [
             'id' => $tracking->id,
@@ -209,6 +247,7 @@ class WorkoutTrackingController extends Controller
                 'workout_name' => $tracking->workoutPlan->workout_name,
                 'workout_type' => $tracking->workoutPlan->workout_type,
                 'date' => $tracking->workoutPlan->date?->format('Y-m-d'),
+                'estimated_calories_burned' => $this->workoutEnergyKcal($tracking, $weightKg),
             ] : null,
             'created_at' => $tracking->created_at?->toISOString(),
             'updated_at' => $tracking->updated_at?->toISOString(),

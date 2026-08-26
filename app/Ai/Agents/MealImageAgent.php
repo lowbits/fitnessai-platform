@@ -58,3 +58,6 @@ class MealImageAgent
             ->generate(Lab::OpenAI, config('ai.models.image'));
     }
 }
+
+
+//RAW photo, shot on Canon EOS R5 with 50mm f/1.8 lens, ISO 400. chicken tikka masalla, beautifully plated with natural food textures, visible ingredient details, and realistic imperfections — slightly uneven portions, nothing too perfect. The complete plate must be fully visible and perfectly centered in the frame with at least 20%% empty space on all sides — no cropping, no cutting off any part of the plate or food. Served on a %s. 45-degree overhead angle, soft diffused natural daylight from the left side, shallow depth of field with soft bokeh background. Warm appetizing color tones with natural shadows. Film grain, subtle chromatic aberration. Real restaurant-style plating, not AI-generated, not stock photography, not illustrated. No text, no watermark, no hands, no logos, no utensils.

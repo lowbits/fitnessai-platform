@@ -2,6 +2,7 @@
 
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutPlanExercise;
 use App\Models\WorkoutTracking;
@@ -135,6 +136,38 @@ test('user can complete a workout tracking with exercises', function () {
         'weight' => 57.5,
         'rpe' => 9,
     ]);
+});
+
+test('the tracking response exposes the estimated calories for health write-back', function () {
+    $this->workoutPlan->update(['estimated_calories_burned' => 420]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/workouts', [
+            'workout_plan_id' => $this->workoutPlan->id,
+            'started_at' => now()->toISOString(),
+        ]);
+
+    $response->assertStatus(201)
+        ->assertJsonPath('data.workout_plan.estimated_calories_burned', 420);
+});
+
+test('the tracking response falls back to a MET estimate when the plan has none', function () {
+    UserProfile::factory()->create(['user_id' => $this->user->id, 'weight_kg' => 80]);
+    $this->workoutPlan->update([
+        'workout_type' => 'strength',
+        'estimated_calories_burned' => null,
+        'estimated_duration_minutes' => 60,
+    ]);
+
+    $response = $this->actingAs($this->user, 'sanctum')
+        ->postJson('/api/v2/track/workouts', [
+            'workout_plan_id' => $this->workoutPlan->id,
+            'started_at' => now()->toISOString(),
+        ]);
+
+    // 6.0 MET * 80 kg * 1 h = 480
+    $response->assertStatus(201)
+        ->assertJsonPath('data.workout_plan.estimated_calories_burned', 480);
 });
 
 test('user can get their workout trackings', function () {
