@@ -25,5 +25,6 @@ final readonly class DayPlan
         /** @var array<int, mixed> */
         public array $weekStrip,
         public DayCompletion $completion,
+        public DayActivity $activity,
     ) {}
 }

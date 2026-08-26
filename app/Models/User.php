@@ -44,6 +44,9 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         'provider',
         'provider_id',
         'avatar',
+        'health_connected_at',
+        'activity_credit_enabled',
+        'workout_writeback_enabled',
     ];
 
     /**
@@ -59,6 +62,17 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     ];
 
     /**
+     * Default attribute values, so a freshly built (not yet reloaded) user
+     * mirrors the database defaults.
+     *
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'activity_credit_enabled' => true,
+        'workout_writeback_enabled' => true,
+    ];
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -71,6 +85,9 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             'two_factor_confirmed_at' => 'datetime',
             'source' => UserSource::class,
             'trial_ends_at' => 'datetime',
+            'health_connected_at' => 'datetime',
+            'activity_credit_enabled' => 'boolean',
+            'workout_writeback_enabled' => 'boolean',
         ];
     }
 
@@ -152,6 +169,38 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function calorieTrackings(): HasMany
     {
         return $this->hasMany(CalorieTracking::class);
+    }
+
+    public function healthDailyMetrics(): HasMany
+    {
+        return $this->hasMany(HealthDailyMetric::class);
+    }
+
+    /**
+     * Record the first successful Apple Health sync. Connect-once: a later sync
+     * never moves the timestamp.
+     */
+    public function markHealthConnected(): void
+    {
+        if ($this->health_connected_at === null) {
+            $this->forceFill(['health_connected_at' => now()])->save();
+        }
+    }
+
+    /**
+     * Detach Apple Health: drop the stored daily metrics and reset the connection
+     * flags. iOS-level read/write access can only be revoked by the user in
+     * Settings — this clears everything fytrr holds and shows the day as
+     * disconnected again.
+     */
+    public function disconnectHealth(): void
+    {
+        $this->healthDailyMetrics()->delete();
+        $this->forceFill([
+            'health_connected_at' => null,
+            'activity_credit_enabled' => true,
+            'workout_writeback_enabled' => true,
+        ])->save();
     }
 
     public function bodyProgress(): HasMany

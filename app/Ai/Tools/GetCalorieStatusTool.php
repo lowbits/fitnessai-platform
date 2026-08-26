@@ -3,6 +3,7 @@
 namespace App\Ai\Tools;
 
 use App\Ai\Tools\Concerns\InteractsWithPlan;
+use App\Ai\Tools\Support\DailyBudget;
 use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
@@ -46,10 +47,13 @@ class GetCalorieStatusTool implements Tool
             ->selectRaw('COALESCE(SUM(calories),0) as kcal, COALESCE(SUM(protein_g),0) as protein, COALESCE(SUM(carbs_g),0) as carbs, COALESCE(SUM(fat_g),0) as fat')
             ->first();
 
+        $credited = DailyBudget::for($this->user)->credited;
+
         return ToolResult::info('calorie_status', [
             'eaten' => (int) round($eaten->kcal),
             'goal' => (int) $plan->daily_calories,
-            'remaining' => (int) round($plan->daily_calories - $eaten->kcal),
+            'activity_credit' => $credited,
+            'remaining' => (int) round($plan->daily_calories + $credited - $eaten->kcal),
             'protein' => ['eaten' => (int) round($eaten->protein), 'target' => (int) $plan->daily_protein_g],
             'carbs' => ['eaten' => (int) round($eaten->carbs), 'target' => (int) $plan->daily_carbs_g],
             'fat' => ['eaten' => (int) round($eaten->fat), 'target' => (int) $plan->daily_fat_g],

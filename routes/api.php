@@ -28,7 +28,8 @@ use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
 use App\Http\Controllers\Api\V3\CoachController;
 use App\Http\Controllers\Api\V3\CoachGreetingController;
 use App\Http\Controllers\Api\V3\FoodController;
-use App\Http\Controllers\Api\V3\VisionController;
+use App\Http\Controllers\Api\V3\HealthDailySyncController;
+use App\Http\Controllers\Api\V3\HealthSettingsController;
 use App\Http\Controllers\Api\V3\MealAlternativesController;
 use App\Http\Controllers\Api\V3\MobileOnboardingController;
 use App\Http\Controllers\Api\V3\PlanDayController;
@@ -37,6 +38,7 @@ use App\Http\Controllers\Api\V3\ProfileController;
 use App\Http\Controllers\Api\V3\RecipeFavoriteController;
 use App\Http\Controllers\Api\V3\RecipeSuggestionsController;
 use App\Http\Controllers\Api\V3\StatsController;
+use App\Http\Controllers\Api\V3\VisionController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v3')->group(function () {
@@ -83,6 +85,13 @@ Route::prefix('v3')->group(function () {
             ->middleware('throttle:20,1')->name('v3.vision.label');
         Route::post('/meal-photos', [VisionController::class, 'meal'])
             ->middleware('throttle:20,1')->name('v3.vision.meal');
+
+        Route::post('/health/daily-sync', HealthDailySyncController::class)
+            ->middleware('throttle:60,1')->name('v3.health.daily-sync');
+        Route::patch('/health/settings', [HealthSettingsController::class, 'update'])
+            ->name('v3.health.settings');
+        Route::delete('/health/connection', [HealthSettingsController::class, 'destroy'])
+            ->name('v3.health.disconnect');
     });
 });
 

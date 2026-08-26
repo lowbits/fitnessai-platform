@@ -43,6 +43,16 @@ class DayResource extends JsonResource
             'completion' => new DayCompletionResource($this->completion),
             'week_strip' => $this->weekStrip,
 
+            'activity' => [
+                'connected' => $this->activity->connected,
+                'enabled' => $this->activity->enabled,
+                'measured' => $this->activity->measured,
+                'steps' => $this->activity->steps,
+                'workouts' => $this->activity->workouts,
+                'credited' => $this->activity->credited,
+                'writeback_enabled' => $this->activity->writebackEnabled,
+            ],
+
             'plan_end_date' => $this->access === DayAccess::Expired
                 ? $this->plan->end_date->format('Y-m-d')
                 : null,
