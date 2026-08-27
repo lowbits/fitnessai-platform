@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Ai\Consent\AiConsentBouncer;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\User;
@@ -23,6 +24,12 @@ class GenerateUserMealPlan implements ShouldQueue
 
     public function handle(): void
     {
+        if (! AiConsentBouncer::permits($this->user)) {
+            Log::info('[MealGen] AI consent missing, aborting', ['user_id' => $this->user->id]);
+
+            return;
+        }
+
         $this->user->load('profile');
         $profile = $this->user->profile;
 

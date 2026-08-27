@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Actions\PlanMealSlotsForDay;
 use App\Ai\Agents\NutritionPlannerAgent;
+use App\Ai\Consent\AiConsentBouncer;
 use App\Ai\Prompts\CreateMealPlanPrompt;
 use App\Models\Meal;
 use App\Models\MealPlan;
@@ -40,6 +41,12 @@ class GenerateMealPlanBatch implements ShouldQueue
 
     public function handle(PlanMealSlotsForDay $slotPlanner): void
     {
+        if (! AiConsentBouncer::permits($this->user)) {
+            Log::info('[MealGen][Batch] AI consent missing, aborting', ['user_id' => $this->user->id]);
+
+            return;
+        }
+
         $this->user->load(['profile', 'favoriteRecipes']);
         $profile = $this->user->profile;
 

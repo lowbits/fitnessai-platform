@@ -2,6 +2,7 @@
 
 use App\Ai\Tools\GetCalorieStatusTool;
 use App\Models\CalorieTracking;
+use App\Models\HealthDailyMetric;
 use App\Models\Plan;
 use App\Models\User;
 use Laravel\Ai\Tools\Request;
@@ -64,4 +65,20 @@ test('an untracked day reports zero eaten and the full goal remaining', function
 
     expect($result['data']['eaten'])->toBe(0);
     expect($result['data']['remaining'])->toBe(1800);
+});
+
+test('it folds the Apple Health activity credit into remaining without exposing it to the model', function () {
+    $user = User::factory()->withProfile()->create();
+    Plan::factory()->create(['user_id' => $user->id, 'status' => 'active', 'daily_calories' => 2000]);
+
+    HealthDailyMetric::factory()->for($user)->create([
+        'date' => today()->toDateString(),
+        'credited_kcal' => 150,
+    ]);
+    CalorieTracking::factory()->for($user)->create(['tracked_date' => today(), 'calories' => 800]);
+
+    $data = calorieStatus($user)['data'];
+
+    expect($data)->not->toHaveKey('activity_credit')
+        ->and($data['remaining'])->toBe(1350); // 2000 + 150 - 800
 });

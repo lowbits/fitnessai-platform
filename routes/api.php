@@ -27,6 +27,7 @@ use App\Http\Controllers\Api\V3\Auth\SignupController;
 use App\Http\Controllers\Api\V3\AuthController as V3AuthController;
 use App\Http\Controllers\Api\V3\CoachController;
 use App\Http\Controllers\Api\V3\CoachGreetingController;
+use App\Http\Controllers\Api\V3\ConsentController;
 use App\Http\Controllers\Api\V3\FoodController;
 use App\Http\Controllers\Api\V3\HealthDailySyncController;
 use App\Http\Controllers\Api\V3\HealthSettingsController;
@@ -92,6 +93,13 @@ Route::prefix('v3')->group(function () {
             ->name('v3.health.settings');
         Route::delete('/health/connection', [HealthSettingsController::class, 'destroy'])
             ->name('v3.health.disconnect');
+
+        Route::get('/consent/current', [ConsentController::class, 'current'])
+            ->name('v3.consent.current');
+        Route::post('/consent', [ConsentController::class, 'store'])
+            ->name('v3.consent.store');
+        Route::delete('/consent', [ConsentController::class, 'destroy'])
+            ->name('v3.consent.destroy');
     });
 });
 

@@ -176,6 +176,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         return $this->hasMany(HealthDailyMetric::class);
     }
 
+    public function consents(): HasMany
+    {
+        return $this->hasMany(UserConsent::class);
+    }
+
     /**
      * Record the first successful Apple Health sync. Connect-once: a later sync
      * never moves the timestamp.
