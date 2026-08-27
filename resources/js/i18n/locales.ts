@@ -950,9 +950,25 @@ export const locales = {
                         ai: {
                             title: 'AI Services',
                             description:
-                                'To create personalized workout and nutrition plans, we use AI-based services from third-party providers (USA/EU). Your entered data is transmitted to these services to generate the plans. Processing is based on Art. 6 (1) lit. a GDPR (your consent) and Art. 6 (1) lit. b GDPR (contract performance). For US users, this processing complies with applicable US privacy laws.',
+                                'To create personalized training and nutrition plans and to power the coaching feature in the app, we use AI services provided by OpenAI (Ireland/USA) and Mistral AI (France). We transmit the details from your profile: your training goal and target weight, age, height, weight, dietary preferences, allergies and dislikes, as well as your training level and available equipment. We do not transmit your name, email address, or account data. The results are matched to your profile exclusively on our servers.',
+                            withdrawal:
+                                'The legal basis is your consent (Art. 6(1)(a) GDPR), which we obtain in the app before the first processing. You can withdraw it at any time in the app settings under "AI & Data"; after withdrawal, we no longer create new plans, while existing plans and your tracking data remain available.',
                             contracts:
-                                'We have concluded data processing agreements (DPA) with the providers. When data is transferred to third countries outside the EU, this is done on the basis of standard contractual clauses.',
+                                'We have concluded data processing agreements pursuant to Art. 28 GDPR with both providers. The providers do not use the transmitted data to train their AI models. Transfers to the USA are safeguarded under the EU-U.S. Data Privacy Framework and EU Standard Contractual Clauses.',
+                        },
+                        apple_health: {
+                            title: 'Apple Health (App)',
+                            description:
+                                'With your permission, the fytrr app reads activity data from Apple Health to account for burned calories in your daily budget. If you choose, the app also saves completed workouts to Apple Health.',
+                            sharing:
+                                'Activity data is processed exclusively on our servers to calculate your calorie budget. It is not shared with third parties, in particular not with the AI services listed above, and is not used for advertising or analytics. You can revoke the permissions at any time in the Apple Health app.',
+                            legal: 'The legal basis is your consent (Art. 6(1)(a) GDPR, in conjunction with Art. 9(2)(a) GDPR for health data), which you grant via the Apple Health permission dialog.',
+                        },
+                        posthog: {
+                            title: 'PostHog (App Analytics)',
+                            description:
+                                'In the fytrr app, we use PostHog to understand how the app is used and to improve it. We collect usage events (e.g. features accessed) and technical information such as device type and app version. We do not transmit your name or email address to PostHog; events are associated via a randomly generated identifier. Processing takes place on servers in the EU.',
+                            legal: 'The legal basis is our legitimate interest in improving our app (Art. 6(1)(f) GDPR). More information: <a href="https://posthog.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://posthog.com/privacy</a>',
                         },
                         resend: {
                             title: 'Resend (Email Delivery)',
@@ -981,7 +997,7 @@ export const locales = {
                             'This website uses SSL/TLS encryption for security reasons and to protect the transmission of confidential content. You can recognize an encrypted connection by the browser address line changing from "http://" to "https://".',
                     },
                 },
-                last_updated: 'Last updated: January 2026',
+                last_updated: 'Last updated: August 2026',
             },
             terms: {
                 meta: {
@@ -2592,9 +2608,25 @@ export const locales = {
                         ai: {
                             title: 'KI-Dienste',
                             description:
-                                'Zur Erstellung personalisierter Trainings- und Ernährungspläne nutzen wir KI-basierte Dienste von Drittanbietern (USA/EU). Ihre eingegebenen Daten werden an diese Dienste übermittelt, um die Pläne zu generieren. Die Verarbeitung erfolgt auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO (Ihre Einwilligung) und Art. 6 Abs. 1 lit. b DSGVO (Vertragserfüllung).',
+                                'Zur Erstellung personalisierter Trainings- und Ernährungspläne sowie für die Coaching-Funktion in der App nutzen wir KI-Dienste von OpenAI (Irland/USA) und Mistral AI (Frankreich). Übermittelt werden die Angaben aus Ihrem Profil: Trainingsziel und Zielgewicht, Alter, Größe, Gewicht, Ernährungsweise, Allergien und Abneigungen sowie Trainingslevel und Equipment. Nicht übermittelt werden Ihr Name, Ihre E-Mail-Adresse und Ihre Account-Daten. Die Zuordnung der Ergebnisse zu Ihrem Profil erfolgt ausschließlich auf unseren Servern.',
+                            withdrawal:
+                                'Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO), die wir in der App vor der ersten Verarbeitung einholen. Sie können sie jederzeit in den App-Einstellungen unter „KI & Daten" widerrufen; danach erstellen wir keine neuen Pläne mehr, bereits erstellte Pläne und Ihre Tracking-Daten bleiben nutzbar.',
                             contracts:
-                                'Wir haben mit den Anbietern Auftragsverarbeitungsverträge (AVV) geschlossen. Bei Übermittlung in Drittländer außerhalb der EU erfolgt dies auf Basis von Standardvertragsklauseln.',
+                                'Mit beiden Anbietern bestehen Auftragsverarbeitungsverträge nach Art. 28 DSGVO. Die Anbieter verwenden die übermittelten Daten nicht zum Training ihrer KI-Modelle. Übermittlungen in die USA sind über das EU-U.S. Data Privacy Framework bzw. EU-Standardvertragsklauseln abgesichert.',
+                        },
+                        apple_health: {
+                            title: 'Apple Health (App)',
+                            description:
+                                'Mit Ihrer Erlaubnis liest die fytrr-App Aktivitätsdaten aus Apple Health, um verbrannte Kalorien in Ihrem Tagesbudget zu berücksichtigen. Auf Wunsch speichert die App abgeschlossene Workouts in Apple Health.',
+                            sharing:
+                                'Die Aktivitätsdaten werden ausschließlich auf unseren Servern zur Berechnung Ihres Kalorienbudgets verarbeitet. Sie werden nicht an Dritte weitergegeben, insbesondere nicht an die oben genannten KI-Dienste, und nicht für Werbung oder Analysen verwendet. Die Berechtigungen können Sie jederzeit in der Apple-Health-App entziehen.',
+                            legal: 'Rechtsgrundlage ist Ihre Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, bei Gesundheitsdaten in Verbindung mit Art. 9 Abs. 2 lit. a DSGVO), die Sie über den Berechtigungsdialog von Apple Health erteilen.',
+                        },
+                        posthog: {
+                            title: 'PostHog (App-Analyse)',
+                            description:
+                                'In der fytrr-App nutzen wir PostHog, um zu verstehen, wie die App genutzt wird und um sie zu verbessern. Erfasst werden Nutzungsereignisse (z.B. aufgerufene Funktionen) sowie technische Informationen wie Gerätetyp und App-Version. Wir übermitteln dabei weder Ihren Namen noch Ihre E-Mail-Adresse an PostHog; die Zuordnung erfolgt über eine zufällig erzeugte Kennung. Die Verarbeitung erfolgt auf Servern in der EU.',
+                            legal: 'Rechtsgrundlage ist unser berechtigtes Interesse an der Verbesserung unserer App (Art. 6 Abs. 1 lit. f DSGVO). Weitere Informationen: <a href="https://posthog.com/privacy" target="_blank" rel="noopener noreferrer" class="text-primary-500 hover:underline">https://posthog.com/privacy</a>',
                         },
                         resend: {
                             title: 'Resend (E-Mail-Versand)',
@@ -2623,7 +2655,7 @@ export const locales = {
                             'Diese Seite nutzt aus Sicherheitsgründen und zum Schutz der Übertragung vertraulicher Inhalte eine SSL- bzw. TLS-Verschlüsselung. Eine verschlüsselte Verbindung erkennen Sie daran, dass die Adresszeile des Browsers von "http://" auf "https://" wechselt.',
                     },
                 },
-                last_updated: 'Stand: Januar 2026',
+                last_updated: 'Stand: August 2026',
             },
             terms: {
                 meta: {
