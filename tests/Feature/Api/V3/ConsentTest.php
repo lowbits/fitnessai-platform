@@ -106,11 +106,13 @@ test('me exposes the active consent version and the current server version', fun
         ->assertOk()
         ->assertJsonPath('consent.current_version', config('consent.current_version'))
         ->assertJsonPath('consent.ai_processing.version', null)
-        ->assertJsonPath('consent.ai_processing.required', true);
+        ->assertJsonPath('consent.ai_processing.required', true)
+        ->assertJsonPath('consent.ai_processing.granted_at', null);
 
     UserConsent::factory()->for($user)->create();
 
     getJson('/api/v3/auth/me')
         ->assertJsonPath('consent.ai_processing.version', config('consent.current_version'))
-        ->assertJsonPath('consent.ai_processing.required', false);
+        ->assertJsonPath('consent.ai_processing.required', false)
+        ->assertJsonPath('consent.ai_processing.granted_at', fn ($value) => is_string($value));
 });

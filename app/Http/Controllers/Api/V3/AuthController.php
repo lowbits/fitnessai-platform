@@ -17,7 +17,7 @@ class AuthController extends Controller
         $user = $request->user()->load(['profile', 'plan']);
         $plan = $user->plan;
 
-        $aiConsentVersion = UserConsent::activeFor($user, ConsentType::AiProcessing)?->version;
+        $aiConsent = UserConsent::activeFor($user, ConsentType::AiProcessing);
         $currentConsentVersion = config('consent.current_version');
 
         return response()->json([
@@ -40,8 +40,9 @@ class AuthController extends Controller
             'consent' => [
                 'current_version' => $currentConsentVersion,
                 'ai_processing' => [
-                    'version' => $aiConsentVersion,
-                    'required' => $aiConsentVersion !== $currentConsentVersion,
+                    'version' => $aiConsent?->version,
+                    'required' => $aiConsent?->version !== $currentConsentVersion,
+                    'granted_at' => $aiConsent?->granted_at?->toIso8601String(),
                 ],
             ],
             'settings' => [
