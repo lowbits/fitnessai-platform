@@ -122,9 +122,11 @@ class CreateMealPlanPrompt implements Stringable
         $lines[] = '';
         $lines[] = 'HARD MACRO RULES (per-slot min/max above are boundaries, not suggestions):';
         $lines[] = '- Every "Pg (min N)" must be met or exceeded — no protein undershoot per meal.';
-        $lines[] = '- Every "kcal (max N)" and "Cg (max N)" must not be exceeded — cut carbs before touching protein.';
+        $lines[] = '- Every "kcal (min N / max N)" must land INSIDE the band — do NOT undershoot the min, do NOT exceed the max. Hitting the calorie target matters as much as the protein floor; a meal that comes in well under its kcal min is wrong.';
+        $lines[] = '- "Cg (max N)" must not be exceeded — cut carbs before touching protein when trimming down to the kcal max.';
         $lines[] = '- Every "Fg (min N)" must be met or exceeded.';
         $lines[] = '- If a dish naturally lands short on protein, add a lean source (whey, skyr, quark, cottage cheese, eggs, tofu, chicken breast, edamame). This is authentic across German, Mediterranean, Middle-Eastern and American cuisines — it does NOT break culinary coherence.';
+        $lines[] = '- If a dish lands under its kcal min, scale up the portion or add a calorie-dense component that fits the dish (nuts, seeds, olive oil, avocado, whole grains, cheese) until it reaches the band — never leave the day short of its calorie target.';
 
         return implode("\n", $lines);
     }
@@ -152,8 +154,9 @@ class CreateMealPlanPrompt implements Stringable
     }
 
     /**
-     * "Label: {target} kcal (max) | {target}g P (min) | ..." — directional per macro.
-     * Protein/fat show floors (undershoot bad), kcal/carbs show ceilings (overshoot bad).
+     * "Label: {target} kcal (min/max) | {target}g P (min) | ..." — directional per macro.
+     * kcal is a two-sided ±5% band (undershoot AND overshoot bad); protein/fat show
+     * floors, carbs a ceiling.
      */
     private function macroRange(string $label, array $metabolism, float $share): string
     {
@@ -162,9 +165,9 @@ class CreateMealPlanPrompt implements Stringable
         $high = MealSlotBudget::applyShare($metabolism, $share * 1.05);
 
         return sprintf(
-            '%s: %d kcal (max %d) | %dg P (min %d) | %dg C (max %d) | %dg F (min %d)',
+            '%s: %d kcal (min %d / max %d) | %dg P (min %d) | %dg C (max %d) | %dg F (min %d)',
             $label,
-            $target['calories'], $high['calories'],
+            $target['calories'], $low['calories'], $high['calories'],
             $target['protein_g'], $low['protein_g'],
             $target['carbs_g'], $high['carbs_g'],
             $target['fat_g'], $low['fat_g'],
