@@ -45,6 +45,7 @@ class UserProfile extends Model
         'cooking_preference',
         'cooking_frequency',
         'meal_variety',
+        'auto_fill_calories',
         'physical_limitations',
         'physical_limitations_note',
     ];
@@ -68,6 +69,7 @@ class UserProfile extends Model
             'cooking_preference' => CookingPreference::class,
             'cooking_frequency' => CookingFrequency::class,
             'meal_variety' => MealVariety::class,
+            'auto_fill_calories' => 'boolean',
             'physical_limitations' => 'array',
         ];
     }
