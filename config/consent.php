@@ -33,6 +33,12 @@ return [
 
     'enforce' => env('CONSENT_ENFORCE', false),
 
+    // TODO(consent-rollout): temporary. The first app release that collects consent.
+    // Older clients (no consent screen) keep generating the plan at signup so they
+    // are not left plan-less; consent-capable clients defer generation to the grant.
+    // Remove this gate once every client is >= this version.
+    'min_app_version' => env('CONSENT_MIN_APP_VERSION', '2.2.0'),
+
     'providers' => ['OpenAI', 'Mistral AI'],
 
     'copy' => [

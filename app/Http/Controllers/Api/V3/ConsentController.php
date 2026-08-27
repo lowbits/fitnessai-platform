@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V3;
 
 use App\Enums\ConsentType;
+use App\Events\AiConsentGranted;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\StoreConsentRequest;
 use App\Models\UserConsent;
@@ -34,6 +35,8 @@ class ConsentController extends Controller
             'source' => $validated['source'],
             'locale' => $validated['locale'],
         ]);
+
+        AiConsentGranted::dispatch($request->user());
 
         return response()->json(['version' => $consent->version], 201);
     }

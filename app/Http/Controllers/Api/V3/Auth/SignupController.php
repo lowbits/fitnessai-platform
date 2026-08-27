@@ -6,11 +6,13 @@ use App\Actions\Auth\IssueApiToken;
 use App\Actions\Auth\ProvisionOnboardingUser;
 use App\Actions\Auth\ResolveAccountFromCredential;
 use App\Actions\NotifyAdmins;
+use App\Actions\Plan\StartPlanGeneration;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\SignupRequest;
 use App\Http\Resources\Api\V3\UserResource;
 use App\Notifications\NewOnboardingStarted;
 use App\Notifications\OnboardingCompleteVerifyEmail;
+use App\Support\ConsentRollout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
@@ -21,6 +23,7 @@ class SignupController extends Controller
         private readonly ProvisionOnboardingUser $provision,
         private readonly IssueApiToken $issueToken,
         private readonly NotifyAdmins $notifyAdmins,
+        private readonly StartPlanGeneration $startPlanGeneration,
     ) {}
 
     public function __invoke(SignupRequest $request): JsonResponse
@@ -40,6 +43,12 @@ class SignupController extends Controller
         if ($user->wasRecentlyCreated) {
             if ($data['auth']['type'] === 'password') {
                 $user->notify(new OnboardingCompleteVerifyEmail($user->plan));
+            }
+
+            // TODO(consent-rollout): pre-consent clients have no consent screen, so
+            // generate at signup; consent-capable clients defer to the consent grant.
+            if (! ConsentRollout::clientCollectsConsent($request->header('X-App-Version'))) {
+                $this->startPlanGeneration->execute($user);
             }
 
             $this->notifyAdmins->send(

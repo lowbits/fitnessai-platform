@@ -117,7 +117,7 @@ test('v3 onboarding creates plan with trial duration', function () {
     ]);
 });
 
-test('v3 onboarding dispatches generation jobs', function () {
+test('v3 onboarding dispatches generation for pre-consent clients', function () {
     Bus::fake([GenerateUserWorkoutPlan::class, GenerateUserMealPlan::class]);
     Notification::fake();
 
@@ -126,6 +126,17 @@ test('v3 onboarding dispatches generation jobs', function () {
 
     Bus::assertDispatched(GenerateUserWorkoutPlan::class, 2);
     Bus::assertDispatched(GenerateUserMealPlan::class, 2);
+});
+
+test('v3 onboarding defers generation for consent-capable clients', function () {
+    Bus::fake([GenerateUserWorkoutPlan::class, GenerateUserMealPlan::class]);
+    Notification::fake();
+
+    postJson('/api/v3/onboarding', mobilePayload(), ['X-App-Version' => '2.2.0'])
+        ->assertCreated();
+
+    Bus::assertNotDispatched(GenerateUserWorkoutPlan::class);
+    Bus::assertNotDispatched(GenerateUserMealPlan::class);
 });
 
 test('v3 onboarding rejects old body_goal values', function () {

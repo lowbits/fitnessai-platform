@@ -2,9 +2,11 @@
 
 use App\Enums\ConsentSource;
 use App\Enums\ConsentType;
+use App\Events\AiConsentGranted;
 use App\Models\User;
 use App\Models\UserConsent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Event;
 use Laravel\Sanctum\Sanctum;
 
 use function Pest\Laravel\deleteJson;
@@ -56,6 +58,15 @@ test('storing consent appends a row and echoes the version', function () {
 
     expect(UserConsent::activeFor($user, ConsentType::AiProcessing)?->version)
         ->toBe(config('consent.current_version'));
+});
+
+test('granting consent dispatches the AiConsentGranted event', function () {
+    Event::fake([AiConsentGranted::class]);
+    Sanctum::actingAs(User::factory()->create());
+
+    postJson('/api/v3/consent', grantPayload())->assertCreated();
+
+    Event::assertDispatched(AiConsentGranted::class);
 });
 
 test('storing consent with a stale version is rejected', function () {
