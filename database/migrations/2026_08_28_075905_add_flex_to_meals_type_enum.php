@@ -7,7 +7,6 @@ return new class extends Migration
 {
     public function up(): void
     {
-        // SQLite (test DB) has no ENUM constraint — the column is TEXT and accepts 'flex' as-is.
         if (DB::getDriverName() === 'sqlite') {
             return;
         }

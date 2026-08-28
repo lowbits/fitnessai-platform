@@ -61,8 +61,6 @@ class PlanMealSlotsForDay
         $result = [];
 
         foreach (array_keys($slotKcal) as $slot) {
-            // Flex is a fresh no-cook booster every time it appears — no variety
-            // budget, no repeat/reuse; the AI always generates it.
             if ($slot === 'flex') {
                 $result['flex'] = ['action' => 'new', 'forbidden_meals' => collect()];
 

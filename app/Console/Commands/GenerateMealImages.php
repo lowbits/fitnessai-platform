@@ -23,7 +23,6 @@ class GenerateMealImages extends Command
 
     public function handle(): int
     {
-        // Flex meals always use the branded shaker placeholder — never an AI image.
         $query = Meal::query()->whereNull('image_full')->where('type', '!=', MealType::FLEX->value);
 
         if ($mealId = $this->option('meal-id')) {
