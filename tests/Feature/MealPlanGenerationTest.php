@@ -356,6 +356,7 @@ test('batch skips AI when all slots are REPEAT and inserts exact duplicates', fu
     $user->profile->update([
         'meal_variety' => MealVariety::LOW,
         'selected_meals' => ['breakfast', 'lunch'],
+        'auto_fill_calories' => false,
     ]);
 
     $plan = Plan::factory()->create([

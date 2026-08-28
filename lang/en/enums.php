@@ -69,6 +69,7 @@ return [
         'lunch' => 'Lunch',
         'dinner' => 'Dinner',
         'snack' => 'Snack',
+        'flex' => 'Flex',
     ],
     'equipment' => [
         'barbell' => 'Barbell',

@@ -170,7 +170,8 @@ test('macro targets for NEW slots use natural per-day share, not renormalized ov
         'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
     ];
 
-    $profile = UserProfile::factory()->create(['selected_meals' => null]);
+    // auto_fill off → no capping/flex, so the natural per-slot share is emitted verbatim.
+    $profile = UserProfile::factory()->create(['selected_meals' => null, 'auto_fill_calories' => false]);
     $profile->load('user');
 
     $prompt = (string) new CreateMealPlanPrompt(
@@ -184,15 +185,17 @@ test('macro targets for NEW slots use natural per-day share, not renormalized ov
 
     $daily = $profile->getMetabolismData()['daily_calories'];
 
-    // Lunch natural share = 0.325 → target kcal with a +5% max bound.
-    $lunchTarget = (int) round($daily * 0.325);
-    $lunchMax = (int) round($daily * 0.325 * 1.05);
-    expect($prompt)->toContain("Lunch: {$lunchTarget} kcal (max {$lunchMax})");
+    // Lunch natural share = 0.325 → target kcal with a two-sided ±5% band.
+    $lunchKcal = (int) round($daily * 0.325);
+    $lunchMin = (int) round($lunchKcal * 0.95);
+    $lunchMax = (int) round($lunchKcal * 1.05);
+    expect($prompt)->toContain("Lunch: {$lunchKcal} kcal (min {$lunchMin} / max {$lunchMax})");
 
     // Dinner natural share = 0.275.
-    $dinnerTarget = (int) round($daily * 0.275);
-    $dinnerMax = (int) round($daily * 0.275 * 1.05);
-    expect($prompt)->toContain("Dinner: {$dinnerTarget} kcal (max {$dinnerMax})");
+    $dinnerKcal = (int) round($daily * 0.275);
+    $dinnerMin = (int) round($dinnerKcal * 0.95);
+    $dinnerMax = (int) round($dinnerKcal * 1.05);
+    expect($prompt)->toContain("Dinner: {$dinnerKcal} kcal (min {$dinnerMin} / max {$dinnerMax})");
 
     // Only NEW slots should appear in the macro table.
     expect($prompt)->not->toContain('Breakfast:');
@@ -201,6 +204,41 @@ test('macro targets for NEW slots use natural per-day share, not renormalized ov
     // Sanity: prompted lunch + dinner together should be ~60% of daily total
     // (not 100% — which was the bug).
     expect($lunchMax + $dinnerMax)->toBeLessThan((int) round($daily * 0.7));
+});
+
+test('caps mains at 800 and emits a no-cook Flex booster on a high-calorie day', function () {
+    $slotPlan = [
+        'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'flex' => ['action' => 'new', 'forbidden_meals' => collect()],
+    ];
+
+    // auto_fill defaults on; a deterministically high-calorie persona forces overflow.
+    $profile = UserProfile::factory()->create([
+        'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+        'gender' => 'male',
+        'weight_kg' => 120,
+        'height_cm' => 200,
+        'birthdate' => now()->subYears(25)->format('Y-m-d'),
+        'activity_level' => 'hard_working',
+        'training_sessions_per_week' => 7,
+    ]);
+    $profile->load('user');
+    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(2700);
+
+    $prompt = (string) new CreateMealPlanPrompt(
+        profile: $profile,
+        locale: 'en',
+        dayNumber: 5,
+        date: Carbon::parse('2026-06-20'),
+        bodyGoal: $profile->body_goal->resolveCanonical()->value,
+        slotPlan: $slotPlan,
+    );
+
+    expect($prompt)->toContain('Lunch: 800 kcal (min 760 / max 840)')
+        ->toContain('Flex:')
+        ->toContain('ALWAYS a protein shake');
 });
 
 test('macro targets renormalize over user-selected slots when user skipped one', function () {
@@ -213,8 +251,10 @@ test('macro targets renormalize over user-selected slots when user skipped one',
         'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
     ];
 
+    // auto_fill off isolates the renormalization behaviour from capping/flex.
     $profile = UserProfile::factory()->create([
         'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+        'auto_fill_calories' => false,
     ]);
     $profile->load('user');
 
