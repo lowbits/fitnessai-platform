@@ -177,7 +177,7 @@ class SaveMealPlanTool implements Tool
                     ->enum(array_column(HeroVeg::cases(), 'value'))
                     ->required(),
             ])->withoutAdditionalProperties())
-                ->description('Array of meals for the day, one per requested meal type.')
+                ->description('All meals for the day: one per requested meal slot, PLUS any fill items (flex shakes, or a snack) you add to reach the daily calorie total.')
                 ->required(),
         ];
     }

@@ -45,7 +45,7 @@ class PlanMealSlotsForDay
         $tier = $profile->meal_variety ?? MealVariety::MEDIUM;
         $targets = $tier->perSlotDistinctTargets();
         $selectedSlots = $this->resolveSelectedSlots($profile);
-        $slotKcal = MealSlotBudget::slotKcal(
+        $slotKcal = MealSlotBudget::mainSlotKcal(
             $selectedSlots,
             (int) $profile->getMetabolismData()['daily_calories'],
             $profile->auto_fill_calories ?? true,
@@ -60,13 +60,7 @@ class PlanMealSlotsForDay
 
         $result = [];
 
-        foreach (array_keys($slotKcal) as $slot) {
-            if ($slot === 'flex') {
-                $result['flex'] = ['action' => 'new', 'forbidden_meals' => collect()];
-
-                continue;
-            }
-
+        foreach ($selectedSlots as $slot) {
             $slotMeals = $priorMeals->where('type', $slot);
             $distinctSoFar = $slotMeals->pluck('name')->unique()->count();
             $target = $targets[$slot];

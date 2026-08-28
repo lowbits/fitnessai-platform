@@ -101,7 +101,9 @@ class CreateMealPlanPrompt implements Stringable
     private function buildMacroTargets(array $metabolismData, array $userSelectedSlots, array $newSlots): string
     {
         $daily = max(1, (int) $metabolismData['daily_calories']);
-        $slotKcal = MealSlotBudget::slotKcal($userSelectedSlots, $daily, $this->profile->auto_fill_calories ?? true);
+        $autoFill = $this->profile->auto_fill_calories ?? true;
+        $slotKcal = MealSlotBudget::mainSlotKcal($userSelectedSlots, $daily, $autoFill);
+        $fillBudget = MealSlotBudget::fillBudget($userSelectedSlots, $daily, $autoFill);
         $hasRepeatSlots = count($newSlots) < count($slotKcal);
         $newSlotsKcal = array_sum(array_intersect_key($slotKcal, array_flip($newSlots)));
 
@@ -129,8 +131,12 @@ class CreateMealPlanPrompt implements Stringable
         $lines[] = '- If a dish naturally lands short on protein, add a lean source (whey, skyr, quark, cottage cheese, eggs, tofu, chicken breast, edamame). This is authentic across German, Mediterranean, Middle-Eastern and American cuisines — it does NOT break culinary coherence.';
         $lines[] = '- If a dish lands under its kcal min, scale up the portion or add a calorie-dense component that fits the dish (nuts, seeds, olive oil, avocado, whole grains, cheese) until it reaches the band — never leave the day short of its calorie target.';
 
-        if (in_array('flex', $newSlots, true)) {
-            $lines[] = '- The "Flex" slot is ALWAYS a protein shake — a blended drink (milk or plant milk, whey or plant protein, fruit, oats, nut butter, etc.). Never a cooked recipe, never a bar or bowl. Keep it protein-forward; it just tops the day up to its calorie target.';
+        if ($fillBudget >= MealSlotBudget::FILL_MIN_KCAL) {
+            $lines[] = '';
+            $lines[] = sprintf('FILL — the meals above are held to realistic sizes and leave %d kcal to reach the daily total of %d.', $fillBudget, $daily);
+            $lines[] = '- Add EXTRA items beyond the meals above to close this gap. Prefer "flex" protein shakes (a blended drink: milk or plant milk + whey/plant protein + optional fruit/oats/nut butter), one or two, ~250-500 kcal each.';
+            $lines[] = '- Only add a "snack" if the remainder does not fit into shakes. You decide how many fill items — keep each realistic.';
+            $lines[] = '- Give each fill item its own type ("flex" for a shake, "snack" otherwise). The whole day MUST sum to the daily total.';
         }
 
         return implode("\n", $lines);
