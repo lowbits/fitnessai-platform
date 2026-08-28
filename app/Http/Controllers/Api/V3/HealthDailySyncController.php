@@ -6,6 +6,7 @@ use App\Actions\Health\CreditActiveEnergy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\HealthDailySyncRequest;
 use App\Http\Resources\Api\V3\HealthSyncResource;
+use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 
@@ -24,11 +25,15 @@ class HealthDailySyncController extends Controller
         $user = $request->user();
         $validated = $request->validated();
 
+        // Planned fytrr training is already in the daily goal, so credit only the
+        // measured activity beyond it — the completed workout's energy is subtracted.
+        $creditableEnergy = max(0, $validated['active_energy_kcal'] - $this->completedTrainingKcal($user, $validated['date']));
+
         $values = [
             'active_energy_kcal' => $validated['active_energy_kcal'],
             'steps' => $validated['steps'],
             'workouts' => $validated['workouts'],
-            'credited_kcal' => $credit($validated['active_energy_kcal']),
+            'credited_kcal' => $credit($creditableEnergy),
             'synced_at' => now(),
         ];
 
@@ -46,5 +51,19 @@ class HealthDailySyncController extends Controller
         $user->markHealthConnected();
 
         return HealthSyncResource::make($metric)->response()->setStatusCode(200);
+    }
+
+    /**
+     * Total estimated energy of the user's completed fytrr workouts on a date —
+     * the training already priced into the daily goal, subtracted before crediting.
+     */
+    private function completedTrainingKcal(User $user, string $date): int
+    {
+        return (int) $user->workoutTrackings()
+            ->whereNotNull('completed_at')
+            ->whereDate('completed_at', $date)
+            ->with('workoutPlan:id,estimated_calories_burned')
+            ->get()
+            ->sum(fn ($tracking) => (int) ($tracking->workoutPlan?->estimated_calories_burned ?? 0));
     }
 }

@@ -3,6 +3,8 @@
 use App\Models\HealthDailyMetric;
 use App\Models\Plan;
 use App\Models\User;
+use App\Models\WorkoutPlan;
+use App\Models\WorkoutTracking;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Sanctum\Sanctum;
 
@@ -53,6 +55,38 @@ it('upserts the day metric and returns the credited calories', function () {
         ->assertJsonPath('enabled', true);
 
     expect(HealthDailyMetric::where('user_id', $user->id)->count())->toBe(1);
+});
+
+it('subtracts a completed fytrr workout before crediting so training is not double-counted', function () {
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
+    $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 300]);
+    WorkoutTracking::factory()->create([
+        'user_id' => $user->id,
+        'workout_plan_id' => $plan->id,
+        'completed_at' => today(),
+    ]);
+    Sanctum::actingAs($user);
+
+    // 640 measured − 300 training = 340 creditable, × 0.5 = 170.
+    postJson('/api/v3/health/daily-sync', syncPayload())
+        ->assertOk()
+        ->assertJsonPath('credited_kcal', 170);
+});
+
+it('does not subtract a skipped (uncompleted) workout', function () {
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
+    $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 300]);
+    WorkoutTracking::factory()->create([
+        'user_id' => $user->id,
+        'workout_plan_id' => $plan->id,
+        'completed_at' => null,
+    ]);
+    Sanctum::actingAs($user);
+
+    // No completed workout → nothing subtracted → 640 × 0.5 = 320.
+    postJson('/api/v3/health/daily-sync', syncPayload())
+        ->assertOk()
+        ->assertJsonPath('credited_kcal', 320);
 });
 
 it('is idempotent on (user, date)', function () {
