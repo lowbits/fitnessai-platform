@@ -45,9 +45,14 @@ class PlanMealSlotsForDay
         $tier = $profile->meal_variety ?? MealVariety::MEDIUM;
         $targets = $tier->perSlotDistinctTargets();
         $selectedSlots = $this->resolveSelectedSlots($profile);
+        $slotKcal = MealSlotBudget::slotKcal(
+            $selectedSlots,
+            (int) $profile->getMetabolismData()['daily_calories'],
+            $profile->auto_fill_calories ?? true,
+        );
         $priorMeals = $this->fetchPriorWeekMeals($plan, $dayNumber);
         $allWeekForbidden = $priorMeals->unique('name')->values();
-        $context = $this->finderContext($profile, $selectedSlots);
+        $context = $this->finderContext($profile, $slotKcal);
 
         $user = $profile->user;
         $cooldownIds = $this->affinity->cooldownIds($user)->all();
@@ -55,7 +60,15 @@ class PlanMealSlotsForDay
 
         $result = [];
 
-        foreach ($selectedSlots as $slot) {
+        foreach (array_keys($slotKcal) as $slot) {
+            // Flex is a fresh no-cook booster every time it appears — no variety
+            // budget, no repeat/reuse; the AI always generates it.
+            if ($slot === 'flex') {
+                $result['flex'] = ['action' => 'new', 'forbidden_meals' => collect()];
+
+                continue;
+            }
+
             $slotMeals = $priorMeals->where('type', $slot);
             $distinctSoFar = $slotMeals->pluck('name')->unique()->count();
             $target = $targets[$slot];
@@ -96,21 +109,15 @@ class PlanMealSlotsForDay
     }
 
     /**
-     * @param  list<string>  $selectedSlots
+     * @param  array<string, int>  $slotKcal  effective per-slot kcal (mains capped, includes flex)
      * @return array{locale: string, allowed_proteins: list<string>, dislikes: list<string>, slot_kcal: array<string, int>}
      */
-    private function finderContext(UserProfile $profile, array $selectedSlots): array
+    private function finderContext(UserProfile $profile, array $slotKcal): array
     {
         $diet = $profile->resolveDietaryPreference();
         $diet = $diet instanceof DietaryPreference ? $diet : DietaryPreference::OMNIVORE;
 
         $allowed = array_map(fn (PrimaryProtein $p) => $p->value, PrimaryProtein::allowedFor($diet));
-
-        $daily = (int) $profile->getMetabolismData()['daily_calories'];
-        $slotKcal = array_map(
-            fn (float $share) => (int) round($daily * $share),
-            MealSlotBudget::sharesFor($selectedSlots),
-        );
 
         return [
             'locale' => $profile->user->locale ?? 'en',

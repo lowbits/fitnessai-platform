@@ -100,22 +100,23 @@ class CreateMealPlanPrompt implements Stringable
      */
     private function buildMacroTargets(array $metabolismData, array $userSelectedSlots, array $newSlots): string
     {
-        $split = $this->slotShares($userSelectedSlots);
-        $hasRepeatSlots = count($newSlots) < count($userSelectedSlots);
-        $newSlotsShare = array_sum(array_intersect_key($split, array_flip($newSlots)));
+        $daily = max(1, (int) $metabolismData['daily_calories']);
+        $slotKcal = MealSlotBudget::slotKcal($userSelectedSlots, $daily, $this->profile->auto_fill_calories ?? true);
+        $hasRepeatSlots = count($newSlots) < count($slotKcal);
+        $newSlotsKcal = array_sum(array_intersect_key($slotKcal, array_flip($newSlots)));
 
         $lines = [$this->macroLine('Daily totals', $metabolismData, 1.0)];
 
         if ($hasRepeatSlots) {
-            $lines[] = $this->macroLine("Your budget for the NEW slots you'll generate today", $metabolismData, $newSlotsShare);
+            $lines[] = $this->macroLine("Your budget for the NEW slots you'll generate today", $metabolismData, $newSlotsKcal / $daily);
             $lines[] = '(The rest is locked in by PHP-inserted repeat slot(s) — do NOT regenerate them.)';
         }
 
         $lines[] = '';
 
-        foreach ($split as $slot => $pct) {
+        foreach ($slotKcal as $slot => $kcal) {
             if (in_array($slot, $newSlots, true)) {
-                $lines[] = $this->macroRange(ucfirst($slot), $metabolismData, $pct);
+                $lines[] = $this->macroRange(ucfirst($slot), $metabolismData, $kcal / $daily);
             }
         }
 
@@ -128,19 +129,11 @@ class CreateMealPlanPrompt implements Stringable
         $lines[] = '- If a dish naturally lands short on protein, add a lean source (whey, skyr, quark, cottage cheese, eggs, tofu, chicken breast, edamame). This is authentic across German, Mediterranean, Middle-Eastern and American cuisines — it does NOT break culinary coherence.';
         $lines[] = '- If a dish lands under its kcal min, scale up the portion or add a calorie-dense component that fits the dish (nuts, seeds, olive oil, avocado, whole grains, cheese) until it reaches the band — never leave the day short of its calorie target.';
 
-        return implode("\n", $lines);
-    }
+        if (in_array('flex', $newSlots, true)) {
+            $lines[] = '- The "Flex" slot is a NO-COOK booster — a protein shake, skyr/quark bowl, protein bar, or nuts + fruit. Never a cooked recipe, no oven or stove. Keep it protein-forward and simple; it just tops the day up to its calorie target.';
+        }
 
-    /**
-     * Renormalize MEAL_SPLIT against the user's selected slots so the shares
-     * always sum to 1.0 (a 3-slot user gets the snack share spread).
-     *
-     * @param  list<string>  $userSelectedSlots
-     * @return array<string, float>
-     */
-    private function slotShares(array $userSelectedSlots): array
-    {
-        return MealSlotBudget::sharesFor($userSelectedSlots);
+        return implode("\n", $lines);
     }
 
     /**

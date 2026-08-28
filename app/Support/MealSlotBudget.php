@@ -85,6 +85,26 @@ final class MealSlotBudget
     }
 
     /**
+     * Pipeline-facing view of compose(): effective kcal per meal type for the
+     * day, with the booster occasions merged into a single 'flex' entry (the
+     * generation pipeline is one meal per type per day). Mains are capped; flex
+     * carries the overflow. Returns e.g. ['breakfast'=>750,'lunch'=>800,'dinner'=>800,'flex'=>385].
+     *
+     * @param  list<string>  $selectedSlots
+     * @return array<string, int>
+     */
+    public static function slotKcal(array $selectedSlots, int $dailyCalories, bool $autoFill): array
+    {
+        $map = [];
+        foreach (self::compose($selectedSlots, $dailyCalories, $autoFill) as $occasion) {
+            $key = $occasion['booster'] ? 'flex' : $occasion['type'];
+            $map[$key] = ($map[$key] ?? 0) + $occasion['kcal'];
+        }
+
+        return $map;
+    }
+
+    /**
      * Slot shares renormalized to sum to 1.0 across the user's selected slots.
      * A user without snack gets the snack share redistributed across the other 3.
      *

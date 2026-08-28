@@ -87,8 +87,8 @@ class SaveMealPlanTool implements Tool
         return [
             'meals' => $schema->array()->items($schema->object([
                 'type' => $schema->string()
-                    ->description('Meal type.')
-                    ->enum(['breakfast', 'lunch', 'snack', 'dinner'])
+                    ->description('Meal type. "flex" is a no-cook booster (shake/snack) that tops the day up to its calorie target.')
+                    ->enum(['breakfast', 'lunch', 'snack', 'dinner', 'flex'])
                     ->required(),
 
                 'name' => $schema->string()

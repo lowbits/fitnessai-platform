@@ -146,11 +146,32 @@ test('variety budget resets at the start of week 2', function () {
 
 test('respects user selected_meals (no snack slot when user did not pick it)', function () {
     [$plan, $profile] = makePlanWithProfile();
-    $profile->update(['selected_meals' => ['breakfast', 'lunch', 'dinner']]);
+    $profile->update(['selected_meals' => ['breakfast', 'lunch', 'dinner'], 'auto_fill_calories' => false]);
 
     $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
 
     expect(array_keys($result))->toEqualCanonicalizing(['breakfast', 'lunch', 'dinner']);
+});
+
+test('adds a freshly generated flex slot on a high-calorie day when auto-fill is on', function () {
+    [$plan, $profile] = makePlanWithProfile();
+    $profile->update([
+        'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+        'auto_fill_calories' => true,
+        'gender' => 'male',
+        'weight_kg' => 120,
+        'height_cm' => 200,
+        'birthdate' => now()->subYears(25)->format('Y-m-d'),
+        'activity_level' => 'hard_working',
+        'training_sessions_per_week' => 7,
+    ]);
+    // Deterministically high-calorie so 3 mains overflow the cap and force a flex slot.
+    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(2700);
+
+    $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
+
+    expect($result)->toHaveKey('flex')
+        ->and($result['flex']['action'])->toBe('new');
 });
 
 test('LOW tier exhausts dinner budget by day 3', function () {

@@ -43,6 +43,23 @@ it('preserves the daily calorie total when boosters absorb the overflow', functi
     expect(abs(totalKcal($occasions) - $daily))->toBeLessThanOrEqual(2);
 })->with([2000, 2400, 2785, 3200, 3400]);
 
+it('slotKcal merges boosters into a single flex entry with capped mains', function () {
+    $map = MealSlotBudget::slotKcal(['breakfast', 'lunch', 'dinner'], 2785, autoFill: true);
+
+    expect($map)->toHaveKey('flex')
+        ->and($map['breakfast'])->toBeLessThanOrEqual(MealSlotBudget::MAIN_CAP_KCAL)
+        ->and($map['lunch'])->toBeLessThanOrEqual(MealSlotBudget::MAIN_CAP_KCAL)
+        ->and($map['dinner'])->toBeLessThanOrEqual(MealSlotBudget::MAIN_CAP_KCAL)
+        ->and(abs(array_sum($map) - 2785))->toBeLessThanOrEqual(2);
+});
+
+it('slotKcal has no flex entry on a low-calorie day', function () {
+    $map = MealSlotBudget::slotKcal(['breakfast', 'lunch', 'dinner'], 2000, autoFill: true);
+
+    expect($map)->not->toHaveKey('flex')
+        ->and(array_keys($map))->toEqual(['breakfast', 'lunch', 'dinner']);
+});
+
 it('never adds a booster when auto-fill is off, even with oversized mains', function () {
     $occasions = MealSlotBudget::compose(['breakfast', 'lunch', 'dinner'], 3200, autoFill: false);
 
