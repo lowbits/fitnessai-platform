@@ -238,7 +238,7 @@ test('caps mains at 800 and emits a no-cook Flex booster on a high-calorie day',
 
     expect($prompt)->toContain('Lunch: 800 kcal (min 760 / max 840)')
         ->toContain('Flex:')
-        ->toContain('NO-COOK booster');
+        ->toContain('ALWAYS a protein shake');
 });
 
 test('macro targets renormalize over user-selected slots when user skipped one', function () {

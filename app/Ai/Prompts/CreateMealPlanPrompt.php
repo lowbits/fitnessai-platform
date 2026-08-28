@@ -130,7 +130,7 @@ class CreateMealPlanPrompt implements Stringable
         $lines[] = '- If a dish lands under its kcal min, scale up the portion or add a calorie-dense component that fits the dish (nuts, seeds, olive oil, avocado, whole grains, cheese) until it reaches the band — never leave the day short of its calorie target.';
 
         if (in_array('flex', $newSlots, true)) {
-            $lines[] = '- The "Flex" slot is a NO-COOK booster — a protein shake, skyr/quark bowl, protein bar, or nuts + fruit. Never a cooked recipe, no oven or stove. Keep it protein-forward and simple; it just tops the day up to its calorie target.';
+            $lines[] = '- The "Flex" slot is ALWAYS a protein shake — a blended drink (milk or plant milk, whey or plant protein, fruit, oats, nut butter, etc.). Never a cooked recipe, never a bar or bowl. Keep it protein-forward; it just tops the day up to its calorie target.';
         }
 
         return implode("\n", $lines);
