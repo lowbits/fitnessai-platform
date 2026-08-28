@@ -2,11 +2,12 @@
 
 namespace App\Http\Resources\Api\V3;
 
+use App\Models\WorkoutPlan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin \App\Models\WorkoutPlan
+ * @mixin WorkoutPlan
  */
 class DayWorkoutResource extends JsonResource
 {
@@ -18,6 +19,7 @@ class DayWorkoutResource extends JsonResource
             'type' => $this->workout_type,
             'description' => $this->description,
             'duration_minutes' => $this->estimated_duration_minutes,
+            'estimated_calories_burned' => $this->estimated_calories_burned,
             'thumbnail_url' => $this->thumbnailUrl(),
             'exercises' => $this->exercises->map(fn ($e) => $e->exercise?->localizedName() ?? $e->name),
             'exercises_count' => $this->exercises->count(),
