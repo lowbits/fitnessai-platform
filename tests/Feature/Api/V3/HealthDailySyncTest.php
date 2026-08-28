@@ -58,7 +58,7 @@ it('upserts the day metric and returns the credited calories', function () {
 });
 
 it('subtracts a completed fytrr workout before crediting so training is not double-counted', function () {
-    $user = User::factory()->create(['activity_credit_enabled' => true]);
+    $user = User::factory()->create(['activity_credit_enabled' => true, 'workout_writeback_enabled' => true]);
     $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 300]);
     WorkoutTracking::factory()->create([
         'user_id' => $user->id,
@@ -71,6 +71,22 @@ it('subtracts a completed fytrr workout before crediting so training is not doub
     postJson('/api/v3/health/daily-sync', syncPayload())
         ->assertOk()
         ->assertJsonPath('credited_kcal', 170);
+});
+
+it('does not subtract training when write-back is off (the workout never reached Health)', function () {
+    $user = User::factory()->create(['activity_credit_enabled' => true, 'workout_writeback_enabled' => false]);
+    $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 300]);
+    WorkoutTracking::factory()->create([
+        'user_id' => $user->id,
+        'workout_plan_id' => $plan->id,
+        'completed_at' => today(),
+    ]);
+    Sanctum::actingAs($user);
+
+    // Write-back off → the workout is not in active energy → nothing subtracted → 640 × 0.5 = 320.
+    postJson('/api/v3/health/daily-sync', syncPayload())
+        ->assertOk()
+        ->assertJsonPath('credited_kcal', 320);
 });
 
 it('does not subtract a skipped (uncompleted) workout', function () {
