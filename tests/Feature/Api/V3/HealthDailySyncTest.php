@@ -42,7 +42,7 @@ it('validates the payload', function () {
 });
 
 it('upserts the day metric and returns the credited calories', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
     Sanctum::actingAs($user);
 
     postJson('/api/v3/health/daily-sync', syncPayload())
@@ -56,7 +56,7 @@ it('upserts the day metric and returns the credited calories', function () {
 });
 
 it('is idempotent on (user, date)', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
     Sanctum::actingAs($user);
 
     postJson('/api/v3/health/daily-sync', syncPayload(['active_energy_kcal' => 200]))->assertOk();
