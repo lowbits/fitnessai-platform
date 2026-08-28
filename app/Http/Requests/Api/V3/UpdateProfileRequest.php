@@ -55,6 +55,7 @@ class UpdateProfileRequest extends FormRequest
             'cooking_preference' => ['sometimes', new Enum(CookingPreference::class)],
             'cooking_frequency' => ['sometimes', new Enum(CookingFrequency::class)],
             'meal_variety' => ['sometimes', new Enum(MealVariety::class)],
+            'auto_fill_calories' => ['sometimes', 'boolean'],
 
             'physical_limitations' => ['sometimes', 'array'],
             'physical_limitations.*' => ['string', 'in:back,knee,shoulder,hip,wrist,neck,ankle'],
