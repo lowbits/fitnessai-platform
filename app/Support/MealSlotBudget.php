@@ -15,50 +15,37 @@ final class MealSlotBudget
         'dinner' => 0.275,
     ];
 
-    /** Cooked mains are guided to stay at or below this so no single meal is unrealistic. */
-    public const MAIN_CAP_KCAL = 800;
+    /** A single meal is held at or below this so no plate is unrealistically large. */
+    public const MAIN_CAP_KCAL = 1000;
 
-    /** A fill budget below this is left on the meals rather than prompting a booster. */
-    public const FILL_MIN_KCAL = 150;
-
-    /** @var list<string> */
-    private const MAIN_SLOTS = ['breakfast', 'lunch', 'dinner'];
+    /** Overflow below this stays on the meals rather than adding a tiny flex shake. */
+    public const FLEX_MIN_KCAL = 150;
 
     /**
-     * Per-slot kcal for the user's selected slots. When autoFill is on, cooked
-     * mains are held at MAIN_CAP_KCAL so no single meal is unrealistically large;
-     * the remainder becomes the fill budget the AI tops up with shakes/snacks.
-     * When off, slots carry their full renormalized share.
+     * Per-slot kcal for the day. With autoFill on, meals are capped so no single
+     * plate is unrealistic and whatever the capped meals leave short of the daily
+     * target becomes an explicit "flex" protein-shake slot the AI fills. With it
+     * off, each slot carries its full renormalized share (large meals, no shake).
      *
      * @param  list<string>  $selectedSlots
      * @return array<string, int>
      */
-    public static function mainSlotKcal(array $selectedSlots, int $dailyCalories, bool $autoFill): array
+    public static function slotKcal(array $selectedSlots, int $dailyCalories, bool $autoFill): array
     {
         $map = [];
         foreach (self::sharesFor($selectedSlots) as $slot => $share) {
             $kcal = (int) round($dailyCalories * $share);
-            $map[$slot] = $autoFill && in_array($slot, self::MAIN_SLOTS, true)
-                ? min($kcal, self::MAIN_CAP_KCAL)
-                : $kcal;
+            $map[$slot] = $autoFill ? min($kcal, self::MAIN_CAP_KCAL) : $kcal;
+        }
+
+        if ($autoFill) {
+            $overflow = $dailyCalories - array_sum($map);
+            if ($overflow >= self::FLEX_MIN_KCAL) {
+                $map['flex'] = $overflow;
+            }
         }
 
         return $map;
-    }
-
-    /**
-     * Calories left once the (capped) meals are placed — the amount the AI fills
-     * with flex protein shakes (preferred) or a snack. Zero when autoFill is off.
-     *
-     * @param  list<string>  $selectedSlots
-     */
-    public static function fillBudget(array $selectedSlots, int $dailyCalories, bool $autoFill): int
-    {
-        if (! $autoFill) {
-            return 0;
-        }
-
-        return max(0, $dailyCalories - array_sum(self::mainSlotKcal($selectedSlots, $dailyCalories, true)));
     }
 
     /**

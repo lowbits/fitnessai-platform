@@ -206,14 +206,15 @@ test('macro targets for NEW slots use natural per-day share, not renormalized ov
     expect($lunchMax + $dinnerMax)->toBeLessThan((int) round($daily * 0.7));
 });
 
-test('caps mains and asks the AI to fill the remainder, flex-first, on a high-calorie day', function () {
+test('caps mains and adds an explicit flex shake slot on a high-calorie day', function () {
     $slotPlan = [
         'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
         'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
         'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'flex' => ['action' => 'new', 'forbidden_meals' => collect()],
     ];
 
-    // auto_fill defaults on; a deterministically high-calorie persona forces a fill budget.
+    // auto_fill defaults on; a deterministically high-calorie persona caps the mains.
     $profile = UserProfile::factory()->create([
         'selected_meals' => ['breakfast', 'lunch', 'dinner'],
         'gender' => 'male',
@@ -224,7 +225,7 @@ test('caps mains and asks the AI to fill the remainder, flex-first, on a high-ca
         'training_sessions_per_week' => 7,
     ]);
     $profile->load('user');
-    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(2700);
+    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(3100);
 
     $prompt = (string) new CreateMealPlanPrompt(
         profile: $profile,
@@ -235,9 +236,9 @@ test('caps mains and asks the AI to fill the remainder, flex-first, on a high-ca
         slotPlan: $slotPlan,
     );
 
-    expect($prompt)->toContain('Lunch: 800 kcal (min 760 / max 840)')
-        ->toContain('FILL')
-        ->toContain('flex" protein shakes');
+    expect($prompt)->toContain('Lunch: 1000 kcal (min 950 / max 1050)')
+        ->toContain('Flex:')
+        ->toContain('protein shake');
 });
 
 test('macro targets renormalize over user-selected slots when user skipped one', function () {

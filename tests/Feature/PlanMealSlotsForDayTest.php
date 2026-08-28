@@ -153,7 +153,7 @@ test('respects user selected_meals (no snack slot when user did not pick it)', f
     expect(array_keys($result))->toEqualCanonicalizing(['breakfast', 'lunch', 'dinner']);
 });
 
-test('plans only the user slots on a high-calorie day — fill items are left to the AI', function () {
+test('adds an explicit flex shake slot on a high-calorie day when auto-fill is on', function () {
     [$plan, $profile] = makePlanWithProfile();
     $profile->update([
         'selected_meals' => ['breakfast', 'lunch', 'dinner'],
@@ -165,11 +165,13 @@ test('plans only the user slots on a high-calorie day — fill items are left to
         'activity_level' => 'hard_working',
         'training_sessions_per_week' => 7,
     ]);
-    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(2700);
+    // High enough that 3 capped meals leave a fill gap.
+    expect((int) $profile->getMetabolismData()['daily_calories'])->toBeGreaterThan(3100);
 
     $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
 
-    expect(array_keys($result))->toEqualCanonicalizing(['breakfast', 'lunch', 'dinner']);
+    expect($result)->toHaveKey('flex')
+        ->and($result['flex']['action'])->toBe('new');
 });
 
 test('LOW tier exhausts dinner budget by day 3', function () {
