@@ -25,9 +25,14 @@ class HealthDailySyncController extends Controller
         $user = $request->user();
         $validated = $request->validated();
 
-        // Planned fytrr training is already in the daily goal, so credit only the
-        // measured activity beyond it — the completed workout's energy is subtracted.
-        $creditableEnergy = max(0, $validated['active_energy_kcal'] - $this->completedTrainingKcal($user, $validated['date']));
+        // The fytrr workout only lands in the measured active energy when we write
+        // it back, so only then is it double-counted (it's already in the goal) and
+        // only then do we subtract it. Without write-back there is nothing to remove.
+        $trainingKcal = $user->workout_writeback_enabled
+            ? $this->completedTrainingKcal($user, $validated['date'])
+            : 0;
+
+        $creditableEnergy = max(0, $validated['active_energy_kcal'] - $trainingKcal);
 
         $values = [
             'active_energy_kcal' => $validated['active_energy_kcal'],
