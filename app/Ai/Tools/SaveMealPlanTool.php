@@ -6,6 +6,7 @@ use App\Enums\Allergen;
 use App\Enums\Cuisine;
 use App\Enums\HeroVeg;
 use App\Enums\MealFormat;
+use App\Enums\MealType;
 use App\Enums\PrimaryProtein;
 use App\Enums\Unit;
 use App\Models\Meal;
@@ -190,11 +191,13 @@ class SaveMealPlanTool implements Tool
 
         foreach ($meals as $meal) {
             $this->flagDislikeLeaks($meal, $dislikes, $user->id);
-            $recipe = $upserter->upsert($meal, $locale, $meal['type']);
+
+            $isFlex = ($meal['type'] ?? null) === MealType::FLEX->value;
+            $recipe = $isFlex ? null : $upserter->upsert($meal, $locale, $meal['type']);
 
             Meal::create([
                 'meal_plan_id' => $this->mealPlan->id,
-                'recipe_id' => $recipe->id,
+                'recipe_id' => $recipe?->id,
                 'type' => $meal['type'],
                 'name' => $meal['name'],
                 'description' => $meal['description'] ?? null,
@@ -204,7 +207,7 @@ class SaveMealPlanTool implements Tool
                 'fat_g' => $meal['fat_g'],
                 'fiber_g' => $meal['fiber_g'] ?? null,
                 'sugar_g' => $meal['sugar_g'] ?? null,
-                'ingredients' => $recipe->ingredients,
+                'ingredients' => $recipe?->ingredients ?? ($meal['ingredients'] ?? []),
                 'instructions' => $meal['instructions'] ?? [],
                 'prep_time_minutes' => $meal['prep_time_minutes'] ?? null,
                 'cook_time_minutes' => $meal['cook_time_minutes'] ?? null,
