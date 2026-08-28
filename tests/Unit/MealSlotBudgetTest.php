@@ -23,7 +23,7 @@ it('caps mains and adds a booster on a high-calorie day', function () {
 
     expect($mains->max('kcal'))->toBeLessThanOrEqual(MealSlotBudget::MAIN_CAP_KCAL)
         ->and($boosters)->toHaveCount(1)
-        ->and($boosters->first()['type'])->toBe('snack')
+        ->and($boosters->first()['type'])->toBe('flex')
         ->and($boosters->max('kcal'))->toBeLessThanOrEqual(MealSlotBudget::BOOSTER_MAX_KCAL);
 });
 

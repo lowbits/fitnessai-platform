@@ -78,7 +78,7 @@ final class MealSlotBudget
         for ($n = 0; $n < $boosterCount; $n++) {
             $kcal = $n === $boosterCount - 1 ? $remaining : (int) round($overflow / $boosterCount);
             $remaining -= $kcal;
-            $occasions[] = ['type' => 'snack', 'kcal' => $kcal, 'booster' => true];
+            $occasions[] = ['type' => 'flex', 'kcal' => $kcal, 'booster' => true];
         }
 
         return $occasions;

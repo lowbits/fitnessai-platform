@@ -69,6 +69,7 @@ return [
         'lunch' => 'Mittagessen',
         'dinner' => 'Abendessen',
         'snack' => 'Snack',
+        'flex' => 'Flex',
     ],
     'equipment' => [
         'barbell' => 'Langhantel',
