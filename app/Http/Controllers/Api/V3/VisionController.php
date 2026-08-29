@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V3;
 
 use App\Ai\Agents\MealPhotoAgent;
 use App\Ai\Agents\NutritionLabelAgent;
+use App\Ai\Consent\AiConsentBouncer;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\AnalyzeImageRequest;
 use Illuminate\Http\JsonResponse;
@@ -18,6 +19,8 @@ class VisionController extends Controller
      */
     public function label(AnalyzeImageRequest $request): JsonResponse
     {
+        AiConsentBouncer::ensure($request->user());
+
         try {
             $image = Image::fromUpload($request->file('image'));
 
@@ -43,6 +46,8 @@ class VisionController extends Controller
      */
     public function meal(AnalyzeImageRequest $request): JsonResponse
     {
+        AiConsentBouncer::ensure($request->user());
+
         try {
             $image = Image::fromUpload($request->file('image'));
 

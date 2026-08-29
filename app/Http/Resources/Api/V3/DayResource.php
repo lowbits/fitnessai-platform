@@ -51,6 +51,9 @@ class DayResource extends JsonResource
                 'workouts' => $this->activity->workouts,
                 'credited' => $this->activity->credited,
                 'writeback_enabled' => $this->activity->writebackEnabled,
+                'active_energy' => $this->activity->activeEnergy,
+                'workout_energy' => $this->activity->workoutEnergy,
+                'training_subtracted' => $this->activity->trainingSubtracted,
             ],
 
             'plan_end_date' => $this->access === DayAccess::Expired

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Ai\Consent\AiConsentBouncer;
 use App\Helpers\ToolCallHelper;
 use App\Models\Meal;
 use App\Models\User;
@@ -32,6 +33,13 @@ class ReplaceMealJob implements ShouldQueue
         $mealPlan = $this->meal->mealPlan;
         $plan = $mealPlan->plan;
         $user = $plan->user;
+
+        if (! AiConsentBouncer::permits($user)) {
+            Log::info('[MealReplace] AI consent missing, aborting', ['user_id' => $user->id, 'meal_id' => $this->meal->id]);
+
+            return;
+        }
+
         $profile = $user->profile;
 
         if (! $profile) {

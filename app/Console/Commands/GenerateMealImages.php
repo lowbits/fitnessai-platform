@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\DietaryPreference;
+use App\Enums\MealType;
 use App\Jobs\GenerateMealImage;
 use App\Jobs\RemoveMealImageBackground;
 use App\Models\Meal;
@@ -22,7 +23,7 @@ class GenerateMealImages extends Command
 
     public function handle(): int
     {
-        $query = Meal::query()->whereNull('image_full');
+        $query = Meal::query()->whereNull('image_full')->where('type', '!=', MealType::FLEX->value);
 
         if ($mealId = $this->option('meal-id')) {
             $query->where('id', $mealId);

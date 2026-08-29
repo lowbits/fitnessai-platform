@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use App\Ai\Consent\AiConsentBouncer;
 use App\Ai\Prompts\MealAlternativeTitlesPrompt;
 use App\Enums\DietaryPreference;
 use App\Enums\PrimaryProtein;
@@ -46,6 +47,9 @@ class MealAlternativesController extends Controller
         Gate::authorize('update', $meal);
 
         $user = $request->user();
+
+        AiConsentBouncer::ensure($user);
+
         $profile = $user->profile;
 
         $validated = Validator::validate($request->all(), [

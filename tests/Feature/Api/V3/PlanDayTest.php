@@ -56,6 +56,29 @@ function generateDay(Plan $plan, int $offset, string $status = 'generated'): voi
     ]);
 }
 
+it('computes estimated_calories_burned from MET when the workout has none stored', function () {
+    $user = User::factory()->withProfile(['weight_kg' => 80])->create();
+    Sanctum::actingAs($user);
+    $plan = planStartingToday($user);
+
+    $date = $plan->start_date->copy()->toDateString();
+    MealPlan::factory()->create(['plan_id' => $plan->id, 'date' => $date, 'status' => 'generated']);
+    WorkoutPlan::factory()->create([
+        'plan_id' => $plan->id,
+        'date' => $date,
+        'day_number' => 1,
+        'status' => 'generated',
+        'workout_type' => 'hypertrophy',
+        'estimated_duration_minutes' => 45,
+        'estimated_calories_burned' => null,
+    ]);
+
+    // 6.0 MET × 80 kg × (45/60) h = 360
+    getJson(dayUrl($plan, 0))
+        ->assertOk()
+        ->assertJsonPath('workout.estimated_calories_burned', 360);
+});
+
 it('rejects guests', function () {
     getJson('/api/v3/plan/day/2026-01-01')->assertUnauthorized();
 });

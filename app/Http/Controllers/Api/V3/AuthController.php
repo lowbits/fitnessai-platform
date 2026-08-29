@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use App\Enums\ConsentType;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V3\SubscriptionResource;
 use App\Http\Resources\Api\V3\UserResource;
+use App\Models\UserConsent;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -14,6 +16,9 @@ class AuthController extends Controller
     {
         $user = $request->user()->load(['profile', 'plan']);
         $plan = $user->plan;
+
+        $aiConsent = UserConsent::activeFor($user, ConsentType::AiProcessing);
+        $currentConsentVersion = config('consent.current_version');
 
         return response()->json([
             'user' => new UserResource($user),
@@ -32,6 +37,14 @@ class AuthController extends Controller
                 ],
             ] : null,
             'subscription' => new SubscriptionResource($user),
+            'consent' => [
+                'current_version' => $currentConsentVersion,
+                'ai_processing' => [
+                    'version' => $aiConsent?->version,
+                    'required' => $aiConsent?->version !== $currentConsentVersion,
+                    'granted_at' => $aiConsent?->granted_at?->toIso8601String(),
+                ],
+            ],
             'settings' => [
                 'language' => $user->preferredLocale(),
                 'notifications_enabled' => true,

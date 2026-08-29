@@ -52,7 +52,6 @@ class GetCalorieStatusTool implements Tool
         return ToolResult::info('calorie_status', [
             'eaten' => (int) round($eaten->kcal),
             'goal' => (int) $plan->daily_calories,
-            'activity_credit' => $credited,
             'remaining' => (int) round($plan->daily_calories + $credited - $eaten->kcal),
             'protein' => ['eaten' => (int) round($eaten->protein), 'target' => (int) $plan->daily_protein_g],
             'carbs' => ['eaten' => (int) round($eaten->carbs), 'target' => (int) $plan->daily_carbs_g],

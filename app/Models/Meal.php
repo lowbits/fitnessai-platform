@@ -65,7 +65,7 @@ class Meal extends Model
 
     public function scopeInEatOrder($query)
     {
-        return $query->orderByRaw("CASE type WHEN 'breakfast' THEN 1 WHEN 'lunch' THEN 2 WHEN 'snack' THEN 3 WHEN 'dinner' THEN 4 END");
+        return $query->orderByRaw("CASE type WHEN 'breakfast' THEN 1 WHEN 'lunch' THEN 2 WHEN 'snack' THEN 3 WHEN 'dinner' THEN 4 WHEN 'flex' THEN 5 END");
     }
 
     /**

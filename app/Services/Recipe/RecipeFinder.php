@@ -24,6 +24,7 @@ class RecipeFinder
      * @param  Collection<int, Meal>  $forbiddenAxes  Recipes matching any (protein, format) tuple are rejected
      * @param  list<int>  $excludeIds  Recipe IDs to skip
      * @param  array<int, int>  $affinityScores  Optional recipe_id => score map for ranking
+     * @param  int|null  $targetProtein  When set, rank by combined closeness to targetKcal + this protein instead of highest protein
      */
     public function findCandidate(
         string $mealType,
@@ -34,12 +35,14 @@ class RecipeFinder
         Collection $forbiddenAxes,
         array $excludeIds = [],
         array $affinityScores = [],
+        ?int $targetProtein = null,
     ): ?Recipe {
         return $this->findCandidates(
             $mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes,
             excludeIds: $excludeIds,
             affinityScores: $affinityScores,
             limit: 1,
+            targetProtein: $targetProtein,
         )->first();
     }
 
@@ -69,6 +72,7 @@ class RecipeFinder
         int $limit = 5,
         ?string $query = null,
         bool $constrainToMeal = true,
+        ?int $targetProtein = null,
     ): Collection {
         $filter = $this->buildFilter($mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes, $constrainToMeal);
         $hits = $this->search($filter, $query);
@@ -89,9 +93,14 @@ class RecipeFinder
                 ->values();
         }
 
-        return $candidates
-            ->shuffle()
-            ->sortByDesc(fn (Recipe $r) => (int) $r->protein_g)
+        $ranked = $candidates->shuffle();
+
+        $ranked = $targetProtein !== null
+            ? $ranked->sortBy(fn (Recipe $r) => abs((int) $r->calories - $targetKcal) / max(1, $targetKcal)
+                + abs((int) $r->protein_g - $targetProtein) / max(1, $targetProtein))
+            : $ranked->sortByDesc(fn (Recipe $r) => (int) $r->protein_g);
+
+        return $ranked
             ->sortByDesc(fn (Recipe $r) => $affinityScores[$r->id] ?? 0)
             ->take($limit)
             ->values();

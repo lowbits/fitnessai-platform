@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use App\Actions\Health\CompletedTrainingKcal;
 use App\Actions\Health\CreditActiveEnergy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\HealthDailySyncRequest;
@@ -19,16 +20,28 @@ class HealthDailySyncController extends Controller
      * "freezes" structurally without any scheduled job. Always 200 — a sync is
      * an upsert, not a creation, from the client's point of view.
      */
-    public function __invoke(HealthDailySyncRequest $request, CreditActiveEnergy $credit): JsonResponse
+    public function __invoke(HealthDailySyncRequest $request, CreditActiveEnergy $credit, CompletedTrainingKcal $completedTraining): JsonResponse
     {
         $user = $request->user();
         $validated = $request->validated();
+
+        // The fytrr workout is already priced into the daily goal, so subtract it
+        // from the active energy before crediting to avoid double-counting.
+        $trainingKcal = $user->workout_writeback_enabled
+            ? $completedTraining($user, $validated['date'])
+            : 0;
+
+        // Workout energy sits outside HealthKit's active-energy total, so add it back
+        // for the true active energy, then subtract the planned fytrr training that is
+        // already priced into the daily goal.
+        $workoutKcal = collect($validated['workouts'])->sum(fn (array $w) => (int) ($w['energy_kcal'] ?? 0));
+        $creditableEnergy = max(0, $validated['active_energy_kcal'] + $workoutKcal - $trainingKcal);
 
         $values = [
             'active_energy_kcal' => $validated['active_energy_kcal'],
             'steps' => $validated['steps'],
             'workouts' => $validated['workouts'],
-            'credited_kcal' => $credit($validated['active_energy_kcal']),
+            'credited_kcal' => $credit($creditableEnergy),
             'synced_at' => now(),
         ];
 

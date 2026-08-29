@@ -417,10 +417,69 @@ const { t } = useI18n();
                     <p class="mb-4">
                         {{
                             t(
+                                'legal.data_privacy.sections.external_services.ai.withdrawal',
+                            )
+                        }}
+                    </p>
+                    <p class="mb-4">
+                        {{
+                            t(
                                 'legal.data_privacy.sections.external_services.ai.contracts',
                             )
                         }}
                     </p>
+
+                    <h3 class="mb-2 text-lg font-semibold">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.apple_health.title',
+                            )
+                        }}
+                    </h3>
+                    <p class="mb-4">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.apple_health.description',
+                            )
+                        }}
+                    </p>
+                    <p class="mb-4">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.apple_health.sharing',
+                            )
+                        }}
+                    </p>
+                    <p class="mb-4">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.apple_health.legal',
+                            )
+                        }}
+                    </p>
+
+                    <h3 class="mb-2 text-lg font-semibold">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.posthog.title',
+                            )
+                        }}
+                    </h3>
+                    <p class="mb-4">
+                        {{
+                            t(
+                                'legal.data_privacy.sections.external_services.posthog.description',
+                            )
+                        }}
+                    </p>
+                    <p
+                        class="mb-4"
+                        v-html="
+                            t(
+                                'legal.data_privacy.sections.external_services.posthog.legal',
+                            )
+                        "
+                    ></p>
 
                     <h3 class="mb-2 text-lg font-semibold">
                         {{

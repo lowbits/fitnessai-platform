@@ -2,6 +2,9 @@
 
 namespace App\Ai\Agents;
 
+use App\Ai\Support\CoachSnapshot;
+use App\Ai\Support\DietaryConstraints;
+use App\Ai\Support\PhysicalLimitations;
 use App\Ai\Tools\AddMealTool;
 use App\Ai\Tools\CheckInBodyTool;
 use App\Ai\Tools\CheckInMoodTool;
@@ -9,9 +12,6 @@ use App\Ai\Tools\CreateRecipeTool;
 use App\Ai\Tools\GetCalorieStatusTool;
 use App\Ai\Tools\GetTodayMealsTool;
 use App\Ai\Tools\GetTodayWorkoutTool;
-use App\Ai\Support\CoachSnapshot;
-use App\Ai\Support\DietaryConstraints;
-use App\Ai\Support\PhysicalLimitations;
 use App\Ai\Tools\LogMealTool;
 use App\Ai\Tools\LogWeightTool;
 use App\Ai\Tools\ProposeMealAlternativesTool;
@@ -62,8 +62,6 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
 
     public function instructions(): string
     {
-        $name = trim((string) ($this->user->name ?? ''));
-        $who = $name !== '' ? $name : 'the user';
         $locale = app()->getLocale();
         $profile = $this->user->profile;
         $goal = $profile?->body_goal?->value ?? 'general fitness';
@@ -85,7 +83,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         SNAPSHOT;
 
         $base = <<<PROMPT
-        You are Mona, {$who}'s personal fitness and nutrition coach inside the fytrr app.
+        You are Mona, the user's personal fitness and nutrition coach inside the fytrr app.
         {$prefs}{$progress}
 
         VOICE

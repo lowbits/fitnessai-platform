@@ -2,8 +2,6 @@
 
 namespace App\Actions\Auth;
 
-use App\Jobs\GenerateUserMealPlan;
-use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\Plan;
 use App\Models\User;
 use Carbon\Carbon;
@@ -57,12 +55,6 @@ class ProvisionOnboardingUser
         if (! empty($data['favorite_recipes'])) {
             $user->favoriteRecipes()->attach(array_values(array_unique($data['favorite_recipes'])));
         }
-
-        GenerateUserWorkoutPlan::dispatch($user, $plan, maxDays: 1);
-        GenerateUserMealPlan::dispatch($user, $plan, maxDays: 1);
-
-        GenerateUserWorkoutPlan::dispatch($user, $plan);
-        GenerateUserMealPlan::dispatch($user, $plan);
 
         return $plan;
     }

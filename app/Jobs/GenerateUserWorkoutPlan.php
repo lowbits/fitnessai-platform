@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Ai\Agents\WorkoutProgrammerAgent;
+use App\Ai\Consent\AiConsentBouncer;
 use App\Ai\Prompts\CreateWorkoutPrompt;
 use App\Models\Plan;
 use App\Models\User;
@@ -31,6 +32,12 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
     public function handle(): void
     {
+        if (! AiConsentBouncer::permits($this->user)) {
+            Log::info('[WorkoutGen] AI consent missing, aborting', ['user_id' => $this->user->id]);
+
+            return;
+        }
+
         $profile = $this->user->profile;
 
         if (! $profile) {

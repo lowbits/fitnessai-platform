@@ -100,45 +100,40 @@ class CreateMealPlanPrompt implements Stringable
      */
     private function buildMacroTargets(array $metabolismData, array $userSelectedSlots, array $newSlots): string
     {
-        $split = $this->slotShares($userSelectedSlots);
-        $hasRepeatSlots = count($newSlots) < count($userSelectedSlots);
-        $newSlotsShare = array_sum(array_intersect_key($split, array_flip($newSlots)));
+        $daily = max(1, (int) $metabolismData['daily_calories']);
+        $slotKcal = MealSlotBudget::slotKcal($userSelectedSlots, $daily, $this->profile->auto_fill_calories ?? true);
+        $hasRepeatSlots = count($newSlots) < count($slotKcal);
+        $newSlotsKcal = array_sum(array_intersect_key($slotKcal, array_flip($newSlots)));
 
         $lines = [$this->macroLine('Daily totals', $metabolismData, 1.0)];
 
         if ($hasRepeatSlots) {
-            $lines[] = $this->macroLine("Your budget for the NEW slots you'll generate today", $metabolismData, $newSlotsShare);
+            $lines[] = $this->macroLine("Your budget for the NEW slots you'll generate today", $metabolismData, $newSlotsKcal / $daily);
             $lines[] = '(The rest is locked in by PHP-inserted repeat slot(s) — do NOT regenerate them.)';
         }
 
         $lines[] = '';
 
-        foreach ($split as $slot => $pct) {
+        foreach ($slotKcal as $slot => $kcal) {
             if (in_array($slot, $newSlots, true)) {
-                $lines[] = $this->macroRange(ucfirst($slot), $metabolismData, $pct);
+                $lines[] = $this->macroRange(ucfirst($slot), $metabolismData, $kcal / $daily);
             }
         }
 
         $lines[] = '';
         $lines[] = 'HARD MACRO RULES (per-slot min/max above are boundaries, not suggestions):';
-        $lines[] = '- Every "Pg (min N)" must be met or exceeded — no protein undershoot per meal.';
-        $lines[] = '- Every "kcal (max N)" and "Cg (max N)" must not be exceeded — cut carbs before touching protein.';
+        $lines[] = '- Every "Pg (min N / max N)" must land INSIDE the band — meet the min, but do NOT pile protein above the max. Overshooting protein every meal stacks up and blows past the daily target and calories.';
+        $lines[] = '- Every "kcal (min N / max N)" must land INSIDE the band — do NOT undershoot the min, do NOT exceed the max. Hitting the calorie target matters as much as the protein floor; a meal that comes in well under its kcal min is wrong.';
+        $lines[] = '- "Cg (max N)" must not be exceeded — cut carbs before touching protein when trimming down to the kcal max.';
         $lines[] = '- Every "Fg (min N)" must be met or exceeded.';
         $lines[] = '- If a dish naturally lands short on protein, add a lean source (whey, skyr, quark, cottage cheese, eggs, tofu, chicken breast, edamame). This is authentic across German, Mediterranean, Middle-Eastern and American cuisines — it does NOT break culinary coherence.';
+        $lines[] = '- If a dish lands under its kcal min, scale up the portion or add a calorie-dense component that fits the dish (nuts, seeds, olive oil, avocado, whole grains, cheese) until it reaches the band — never leave the day short of its calorie target.';
+
+        if (in_array('flex', $newSlots, true)) {
+            $lines[] = '- The "Flex" slot is a protein shake — a blended drink (milk or plant milk + whey/plant protein + optional fruit, oats, nut butter). Never a cooked recipe, never a bar or bowl. Hit its kcal band exactly; it exists to reach the daily total.';
+        }
 
         return implode("\n", $lines);
-    }
-
-    /**
-     * Renormalize MEAL_SPLIT against the user's selected slots so the shares
-     * always sum to 1.0 (a 3-slot user gets the snack share spread).
-     *
-     * @param  list<string>  $userSelectedSlots
-     * @return array<string, float>
-     */
-    private function slotShares(array $userSelectedSlots): array
-    {
-        return MealSlotBudget::sharesFor($userSelectedSlots);
     }
 
     /**
@@ -152,8 +147,10 @@ class CreateMealPlanPrompt implements Stringable
     }
 
     /**
-     * "Label: {target} kcal (max) | {target}g P (min) | ..." — directional per macro.
-     * Protein/fat show floors (undershoot bad), kcal/carbs show ceilings (overshoot bad).
+     * "Label: {target} kcal (min/max) | {target}g P (min/max) | ..." — directional per macro.
+     * kcal and protein are two-sided ±5% bands (per-slot protein floors otherwise
+     * stack across meals and inflate both protein and calories); fat shows a floor,
+     * carbs a ceiling.
      */
     private function macroRange(string $label, array $metabolism, float $share): string
     {
@@ -162,10 +159,10 @@ class CreateMealPlanPrompt implements Stringable
         $high = MealSlotBudget::applyShare($metabolism, $share * 1.05);
 
         return sprintf(
-            '%s: %d kcal (max %d) | %dg P (min %d) | %dg C (max %d) | %dg F (min %d)',
+            '%s: %d kcal (min %d / max %d) | %dg P (min %d / max %d) | %dg C (max %d) | %dg F (min %d)',
             $label,
-            $target['calories'], $high['calories'],
-            $target['protein_g'], $low['protein_g'],
+            $target['calories'], $low['calories'], $high['calories'],
+            $target['protein_g'], $low['protein_g'], $high['protein_g'],
             $target['carbs_g'], $high['carbs_g'],
             $target['fat_g'], $low['fat_g'],
         );

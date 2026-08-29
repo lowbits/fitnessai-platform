@@ -43,6 +43,7 @@ class UserProfileResource extends JsonResource
             'cooking_preference' => $this->cooking_preference?->value,
             'cooking_frequency' => $this->cooking_frequency?->value,
             'meal_variety' => $this->meal_variety?->value,
+            'auto_fill_calories' => (bool) $this->auto_fill_calories,
 
             // Limitations
             'physical_limitations' => $this->physical_limitations ?? [],
