@@ -31,7 +31,7 @@ class PersonaDefinitions
                 'activity_level' => ActivityLevel::MAINLY_SITTING, 'training_place' => TrainingPlace::GYM,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::OMNIVORE,
                 'cooking_preference' => CookingPreference::QUICK, 'meal_variety' => MealVariety::LOW,
-                'meal_prep_enabled' => true, 'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
+                'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
                 'food_dislikes' => ['pilze', 'rosenkohl', 'leber'], 'locale' => 'de',
             ],
             'anna' => [
@@ -40,7 +40,7 @@ class PersonaDefinitions
                 'activity_level' => ActivityLevel::MAINLY_WALKING, 'training_place' => TrainingPlace::HOME,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::PESCATARIAN,
                 'cooking_preference' => CookingPreference::NORMAL, 'meal_variety' => MealVariety::MEDIUM,
-                'meal_prep_enabled' => false, 'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+                'selected_meals' => ['breakfast', 'lunch', 'dinner'],
                 'food_dislikes' => ['tofu', 'kichererbsen'], 'locale' => 'de',
             ],
             'thomas' => [
@@ -49,7 +49,7 @@ class PersonaDefinitions
                 'activity_level' => ActivityLevel::MAINLY_SITTING, 'training_place' => TrainingPlace::GYM,
                 'training_sessions_per_week' => 3, 'dietary_preference' => DietaryPreference::VEGETARIAN,
                 'cooking_preference' => CookingPreference::ELABORATE, 'meal_variety' => MealVariety::HIGH,
-                'meal_prep_enabled' => false, 'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
+                'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
                 'food_dislikes' => ['sellerie', 'fenchel', 'aubergine'], 'locale' => 'de',
             ],
         ];
