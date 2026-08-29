@@ -129,6 +129,37 @@ test('transfer adjusts active plan for new owner', function () {
         ->toBe($expiresAt->startOfDay()->toDateString());
 });
 
+test('transfer adjusts the plan using the subscription with the latest period end', function () {
+    $fromUser = User::factory()->create();
+    $toUser = User::factory()->create();
+    config(['revenue-cat.webhook.secret' => 'test_secret']);
+
+    // Target already has a short sub first, then a long one — the long one must win.
+    createSubscriptionForUser($toUser, ['current_period_ended_at' => now()->addDays(5)]);
+    $longEnd = now()->addDays(400);
+    createSubscriptionForUser($toUser, ['current_period_ended_at' => $longEnd]);
+
+    // The transferred sub is also short, so it must not decide the plan length.
+    createSubscriptionForUser($fromUser, ['current_period_ended_at' => now()->addDays(5)]);
+
+    Plan::factory()->active()->create([
+        'user_id' => $toUser->id,
+        'start_date' => now()->subWeek(),
+        'end_date' => now()->addDays(3),
+        'duration_days' => 10,
+    ]);
+
+    $this->postJson(
+        route('revenue-cat.webhook'),
+        transferPayload((string) $fromUser->id, (string) $toUser->id),
+        ['Authorization' => 'Bearer test_secret']
+    )->assertStatus(200);
+
+    $plan = $toUser->plans()->where('status', 'active')->first();
+    expect($plan->end_date->startOfDay()->toDateString())
+        ->toBe($longEnd->startOfDay()->toDateString());
+});
+
 test('transfer handles missing source user gracefully', function () {
     $toUser = User::factory()->create();
     $secret = 'test_secret';
