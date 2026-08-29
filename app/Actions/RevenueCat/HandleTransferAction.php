@@ -114,6 +114,7 @@ class HandleTransferAction
     {
         $subscription = $toUser->subscriptions()
             ->whereIn('status', ['active', 'trial'])
+            ->latest('current_period_ended_at')
             ->first();
 
         if (! $subscription) {
