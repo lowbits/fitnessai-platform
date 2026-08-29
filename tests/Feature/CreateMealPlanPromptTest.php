@@ -210,6 +210,7 @@ test('caps mains and adds an explicit flex shake slot on a high-calorie day', fu
     $slotPlan = [
         'breakfast' => ['action' => 'new', 'forbidden_meals' => collect()],
         'lunch' => ['action' => 'new', 'forbidden_meals' => collect()],
+        'snack' => ['action' => 'new', 'forbidden_meals' => collect()],
         'dinner' => ['action' => 'new', 'forbidden_meals' => collect()],
         'flex' => ['action' => 'new', 'forbidden_meals' => collect()],
     ];

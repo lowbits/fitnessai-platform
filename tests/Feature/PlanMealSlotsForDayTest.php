@@ -171,6 +171,7 @@ test('adds an explicit flex shake slot on a high-calorie day when auto-fill is o
     $result = app(PlanMealSlotsForDay::class)->handle($plan, dayNumber: 1, profile: $profile);
 
     expect($result)->toHaveKey('flex')
+        ->toHaveKey('snack')
         ->and($result['flex']['action'])->toBe('new');
 });
 
