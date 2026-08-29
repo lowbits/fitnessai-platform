@@ -89,6 +89,7 @@ class PlanMealSlotsForDay
                 forbiddenAxes: $allWeekForbidden,
                 excludeIds: $cooldownIds,
                 affinityScores: $affinityScores,
+                targetProtein: $context['slot_protein'][$slot] ?? null,
             );
 
             if ($recipe !== null) {
@@ -108,7 +109,7 @@ class PlanMealSlotsForDay
 
     /**
      * @param  array<string, int>  $slotKcal  effective per-slot kcal (mains capped, includes flex)
-     * @return array{locale: string, allowed_proteins: list<string>, dislikes: list<string>, slot_kcal: array<string, int>}
+     * @return array{locale: string, allowed_proteins: list<string>, dislikes: list<string>, slot_kcal: array<string, int>, slot_protein: array<string, int>}
      */
     private function finderContext(UserProfile $profile, array $slotKcal): array
     {
@@ -117,11 +118,17 @@ class PlanMealSlotsForDay
 
         $allowed = array_map(fn (PrimaryProtein $p) => $p->value, PrimaryProtein::allowedFor($diet));
 
+        $metabolism = $profile->getMetabolismData();
+        $dailyKcal = max(1, (int) $metabolism['daily_calories']);
+        $dailyProtein = (int) $metabolism['protein_g'];
+        $slotProtein = array_map(fn (int $kcal) => (int) round($dailyProtein * $kcal / $dailyKcal), $slotKcal);
+
         return [
             'locale' => $profile->user->locale ?? 'en',
             'allowed_proteins' => $allowed,
             'dislikes' => array_map(fn (string $d) => mb_strtolower(trim($d)), $profile->food_dislikes ?? []),
             'slot_kcal' => $slotKcal,
+            'slot_protein' => $slotProtein,
         ];
     }
 
