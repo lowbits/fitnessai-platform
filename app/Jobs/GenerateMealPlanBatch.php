@@ -6,11 +6,14 @@ use App\Actions\PlanMealSlotsForDay;
 use App\Ai\Agents\NutritionPlannerAgent;
 use App\Ai\Consent\AiConsentBouncer;
 use App\Ai\Prompts\CreateMealPlanPrompt;
+use App\Enums\MealType;
 use App\Models\Meal;
 use App\Models\MealPlan;
 use App\Models\Plan;
 use App\Models\Recipe;
 use App\Models\User;
+use App\Support\FlexShake;
+use App\Support\MealSlotBudget;
 use Carbon\Carbon;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -185,7 +188,42 @@ class GenerateMealPlanBatch implements ShouldQueue
 
         $this->insertReusedMeals($mealPlan, $slotPlan);
         $this->insertRepeatedMeals($mealPlan, $slotPlan);
+        $this->topUpWithFlexShake($mealPlan, $day);
         $this->finalizeMealPlan($mealPlan, $day);
+    }
+
+    /**
+     * Safety net for auto-fill: the AI is told per-slot kcal bands but can still
+     * undershoot them, leaving the day short of the calorie target. When it lands
+     * more than 5% under (and there is no flex slot already), add a protein-shake
+     * flex sized to the gap so the day still reaches the target.
+     */
+    private function topUpWithFlexShake(MealPlan $mealPlan, int $day): void
+    {
+        $profile = $this->user->profile;
+
+        if (! ($profile->auto_fill_calories ?? true)) {
+            return;
+        }
+
+        if ($mealPlan->meals()->where('type', MealType::FLEX->value)->exists()) {
+            return;
+        }
+
+        $goal = (int) $profile->getMetabolismData()['daily_calories'];
+        $gap = $goal - (int) $mealPlan->meals()->sum('calories');
+
+        if ($gap < MealSlotBudget::FLEX_MIN_KCAL || $gap <= $goal * 0.05) {
+            return;
+        }
+
+        $mealPlan->meals()->create(FlexShake::build($gap, $this->user->locale ?? 'en'));
+
+        Log::info("[MealGen] Flex shake topped up day {$day}", [
+            'meal_plan_id' => $mealPlan->id,
+            'gap_kcal' => $gap,
+            'goal_kcal' => $goal,
+        ]);
     }
 
     /**
