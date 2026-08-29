@@ -73,6 +73,51 @@ it('subtracts a completed fytrr workout before crediting so training is not doub
         ->assertJsonPath('credited_kcal', 170);
 });
 
+it('subtracts the computed MET estimate when the workout has no stored calories', function () {
+    $user = User::factory()->withProfile(['weight_kg' => 80])->create([
+        'activity_credit_enabled' => true,
+        'workout_writeback_enabled' => true,
+    ]);
+    $plan = WorkoutPlan::factory()->create([
+        'workout_type' => 'hypertrophy',
+        'estimated_duration_minutes' => 45,
+        'estimated_calories_burned' => null,
+    ]);
+    WorkoutTracking::factory()->create([
+        'user_id' => $user->id,
+        'workout_plan_id' => $plan->id,
+        'completed_at' => today(),
+    ]);
+    Sanctum::actingAs($user);
+
+    // 6.0 MET × 80 kg × 45/60 = 360 estimated; 640 − 360 = 280 creditable, × 0.5 = 140.
+    postJson('/api/v3/health/daily-sync', syncPayload())
+        ->assertOk()
+        ->assertJsonPath('credited_kcal', 140);
+});
+
+it('adds workout energy to the active total before crediting, since HealthKit keeps it separate', function () {
+    $user = User::factory()->create(['activity_credit_enabled' => true, 'workout_writeback_enabled' => true]);
+    $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 314]);
+    WorkoutTracking::factory()->create([
+        'user_id' => $user->id,
+        'workout_plan_id' => $plan->id,
+        'completed_at' => today(),
+    ]);
+    Sanctum::actingAs($user);
+
+    // active 5 + workouts (314 fytrr + 5 run) = 324 total; − 314 fytrr training = 10; × 0.5 = 5.
+    postJson('/api/v3/health/daily-sync', syncPayload([
+        'active_energy_kcal' => 5,
+        'workouts' => [
+            ['type' => 'strength', 'start' => now()->toIso8601String(), 'end' => now()->toIso8601String(), 'energy_kcal' => 314, 'source' => null],
+            ['type' => 'running', 'start' => now()->toIso8601String(), 'end' => now()->toIso8601String(), 'energy_kcal' => 5, 'source' => null],
+        ],
+    ]))
+        ->assertOk()
+        ->assertJsonPath('credited_kcal', 5);
+});
+
 it('does not subtract training when write-back is off (the workout never reached Health)', function () {
     $user = User::factory()->create(['activity_credit_enabled' => true, 'workout_writeback_enabled' => false]);
     $plan = WorkoutPlan::factory()->create(['estimated_calories_burned' => 300]);
@@ -191,14 +236,14 @@ it('disconnects apple health, clearing metrics and the connection', function () 
 
     $fresh = $user->fresh();
     expect($fresh->health_connected_at)->toBeNull()
-        ->and($fresh->activity_credit_enabled)->toBeTrue()
+        ->and($fresh->activity_credit_enabled)->toBeFalse()
         ->and(HealthDailyMetric::where('user_id', $user->id)->count())->toBe(0);
 });
 
 /* --------------------------- day payload block -------------------------- */
 
 it('exposes the activity block with the credited budget on the day payload', function () {
-    $user = User::factory()->create();
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
     $start = now()->startOfDay();
     Plan::factory()->active()->create([
         'user_id' => $user->id,
@@ -219,6 +264,33 @@ it('exposes the activity block with the credited budget on the day payload', fun
         ->assertJsonPath('activity.steps', 8000)
         ->assertJsonPath('activity.credited', 320)
         ->assertJsonPath('activity.writeback_enabled', true);
+});
+
+it('folds workout energy into the day payload measured, since HealthKit keeps it separate', function () {
+    $user = User::factory()->create(['activity_credit_enabled' => true]);
+    $start = now()->startOfDay();
+    Plan::factory()->active()->create([
+        'user_id' => $user->id,
+        'start_date' => $start,
+        'duration_days' => 3,
+        'end_date' => $start->copy()->addDays(2),
+        'generation_completed_at' => now(),
+    ]);
+    Sanctum::actingAs($user);
+
+    postJson('/api/v3/health/daily-sync', syncPayload([
+        'active_energy_kcal' => 5,
+        'workouts' => [
+            ['type' => 'strength', 'start' => now()->toIso8601String(), 'end' => now()->toIso8601String(), 'energy_kcal' => 314, 'source' => null],
+        ],
+    ]))->assertOk();
+
+    getJson('/api/v3/plan/day/'.today()->toDateString())
+        ->assertOk()
+        ->assertJsonPath('activity.measured', 319) // 5 active + 314 workout
+        ->assertJsonPath('activity.active_energy', 5)
+        ->assertJsonPath('activity.workout_energy', 314)
+        ->assertJsonPath('activity.training_subtracted', 0);
 });
 
 it('reports a disconnected empty activity block before any sync', function () {

@@ -68,7 +68,7 @@ test('an untracked day reports zero eaten and the full goal remaining', function
 });
 
 test('it folds the Apple Health activity credit into remaining without exposing it to the model', function () {
-    $user = User::factory()->withProfile()->create();
+    $user = User::factory()->withProfile()->create(['activity_credit_enabled' => true]);
     Plan::factory()->create(['user_id' => $user->id, 'status' => 'active', 'daily_calories' => 2000]);
 
     HealthDailyMetric::factory()->for($user)->create([

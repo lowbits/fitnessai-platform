@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Equipment;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -85,7 +86,7 @@ class WorkoutPlan extends Model
             ->unique()
             ->values()
             ->map(function (string $value) use ($baseUrl) {
-                $enum = \App\Enums\Equipment::tryFrom($value);
+                $enum = Equipment::tryFrom($value);
 
                 return [
                     'name' => $value,

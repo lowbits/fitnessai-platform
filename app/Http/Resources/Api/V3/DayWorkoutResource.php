@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Api\V3;
 
+use App\Actions\Health\EstimateWorkoutEnergy;
 use App\Models\WorkoutPlan;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -19,7 +20,8 @@ class DayWorkoutResource extends JsonResource
             'type' => $this->workout_type,
             'description' => $this->description,
             'duration_minutes' => $this->estimated_duration_minutes,
-            'estimated_calories_burned' => $this->estimated_calories_burned,
+            'estimated_calories_burned' => $this->estimated_calories_burned
+                ?? app(EstimateWorkoutEnergy::class)($this->workout_type, (int) $this->estimated_duration_minutes, $request->user()?->getCurrentWeight()),
             'thumbnail_url' => $this->thumbnailUrl(),
             'exercises' => $this->exercises->map(fn ($e) => $e->exercise?->localizedName() ?? $e->name),
             'exercises_count' => $this->exercises->count(),

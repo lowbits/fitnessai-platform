@@ -68,7 +68,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
      * @var array<string, mixed>
      */
     protected $attributes = [
-        'activity_credit_enabled' => true,
+        'activity_credit_enabled' => false,
         'workout_writeback_enabled' => true,
     ];
 
@@ -213,7 +213,7 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
         $this->healthDailyMetrics()->delete();
         $this->forceFill([
             'health_connected_at' => null,
-            'activity_credit_enabled' => true,
+            'activity_credit_enabled' => false,
             'workout_writeback_enabled' => true,
         ])->save();
     }

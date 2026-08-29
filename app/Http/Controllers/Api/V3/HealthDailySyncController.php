@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Api\V3;
 
+use App\Actions\Health\CompletedTrainingKcal;
 use App\Actions\Health\CreditActiveEnergy;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V3\HealthDailySyncRequest;
 use App\Http\Resources\Api\V3\HealthSyncResource;
-use App\Models\User;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\JsonResponse;
 
@@ -20,19 +20,22 @@ class HealthDailySyncController extends Controller
      * "freezes" structurally without any scheduled job. Always 200 — a sync is
      * an upsert, not a creation, from the client's point of view.
      */
-    public function __invoke(HealthDailySyncRequest $request, CreditActiveEnergy $credit): JsonResponse
+    public function __invoke(HealthDailySyncRequest $request, CreditActiveEnergy $credit, CompletedTrainingKcal $completedTraining): JsonResponse
     {
         $user = $request->user();
         $validated = $request->validated();
 
-        // The fytrr workout only lands in the measured active energy when we write
-        // it back, so only then is it double-counted (it's already in the goal) and
-        // only then do we subtract it. Without write-back there is nothing to remove.
+        // The fytrr workout is already priced into the daily goal, so subtract it
+        // from the active energy before crediting to avoid double-counting.
         $trainingKcal = $user->workout_writeback_enabled
-            ? $this->completedTrainingKcal($user, $validated['date'])
+            ? $completedTraining($user, $validated['date'])
             : 0;
 
-        $creditableEnergy = max(0, $validated['active_energy_kcal'] - $trainingKcal);
+        // Workout energy sits outside HealthKit's active-energy total, so add it back
+        // for the true active energy, then subtract the planned fytrr training that is
+        // already priced into the daily goal.
+        $workoutKcal = collect($validated['workouts'])->sum(fn (array $w) => (int) ($w['energy_kcal'] ?? 0));
+        $creditableEnergy = max(0, $validated['active_energy_kcal'] + $workoutKcal - $trainingKcal);
 
         $values = [
             'active_energy_kcal' => $validated['active_energy_kcal'],
@@ -56,19 +59,5 @@ class HealthDailySyncController extends Controller
         $user->markHealthConnected();
 
         return HealthSyncResource::make($metric)->response()->setStatusCode(200);
-    }
-
-    /**
-     * Total estimated energy of the user's completed fytrr workouts on a date —
-     * the training already priced into the daily goal, subtracted before crediting.
-     */
-    private function completedTrainingKcal(User $user, string $date): int
-    {
-        return (int) $user->workoutTrackings()
-            ->whereNotNull('completed_at')
-            ->whereDate('completed_at', $date)
-            ->with('workoutPlan:id,estimated_calories_burned')
-            ->get()
-            ->sum(fn ($tracking) => (int) ($tracking->workoutPlan?->estimated_calories_burned ?? 0));
     }
 }
