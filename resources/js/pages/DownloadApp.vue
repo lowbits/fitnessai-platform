@@ -397,7 +397,7 @@ onMounted(() => {
                     <div class="relative flex justify-center lg:justify-end">
                         <div
                             aria-hidden="true"
-                            class="pointer-events-none absolute inset-0 -z-10 m-auto h-[420px] w-[420px] rounded-full bg-brand/15 blur-3xl"
+                            class="pointer-events-none absolute inset-0 -z-10 m-auto h-[420px] w-[420px] max-w-full rounded-full bg-brand/15 blur-3xl"
                         />
                         <img
                             :src="appScreenshot"
