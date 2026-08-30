@@ -1361,126 +1361,152 @@ export const locales = {
         },
         calorieCalculator: {
             hero: {
-                h1: 'Calorie Calculator — How Many Calories Do You Need?',
-                subtitle:
-                    'Calculate your daily calorie needs in 30 seconds — for weight loss, muscle gain or maintenance. Free, instant, science-based.',
+                h1: 'Calorie Calculator: Work Out Your Daily Calorie Needs',
+                accent: 'In 30 seconds.',
+                answer: 'Your daily calorie needs are your basal metabolic rate multiplied by your activity factor, adjusted for your goal. For most adults that lands between 1,800 and 2,800 kcal per day.',
+                annotation: 'no sign-up, your result instantly ✓',
             },
             form: {
-                gender: 'Gender',
-                male: 'Male',
-                female: 'Female',
-                age: 'Age',
-                agePlaceholder: '25',
-                weight: 'Weight',
-                weightPlaceholder: '75',
-                height: 'Height',
-                heightPlaceholder: '178',
-                activity: 'Activity Level',
-                sedentary: 'Sedentary (office job, little exercise)',
-                light: 'Lightly active (1\u20132 workouts/week)',
-                moderate: 'Moderately active (3\u20135 workouts/week)',
-                active: 'Very active (6\u20137 workouts/week)',
-                veryActive: 'Extremely active (physical job + daily training)',
                 goal: 'Goal',
-                lose: 'Lose weight',
-                maintain: 'Maintain',
-                gain: 'Build muscle',
-                calculate: 'Calculate calories',
-                trust: 'Developed by a fitness expert with 8+ years of experience. Uses the Mifflin-St Jeor equation.',
+                goal_lose: 'Lose weight',
+                goal_maintain: 'Maintain',
+                goal_gain: 'Build muscle',
+                gender: 'Gender',
+                gender_male: 'Male',
+                gender_female: 'Female',
+                age: 'Age',
+                weight: 'Weight',
+                height: 'Height',
+                activity: 'Activity level',
+                activityOptions: {
+                    sedentary: {
+                        title: 'Sedentary',
+                        hint: 'Office job, little movement',
+                    },
+                    light: {
+                        title: 'Lightly active',
+                        hint: '1 to 2 workouts per week',
+                    },
+                    moderate: {
+                        title: 'Moderately active',
+                        hint: '3 to 5 workouts per week',
+                    },
+                    active: {
+                        title: 'Very active',
+                        hint: '6 to 7 workouts per week',
+                    },
+                    veryActive: {
+                        title: 'Extremely active',
+                        hint: 'Physical job and daily training',
+                    },
+                },
             },
             result: {
                 dailyNeeds: 'Your daily calorie needs',
-                kcalPerDay: 'kcal per day',
+                kcalPerDay: 'kcal / day',
+                deficit: 'Deficit',
+                surplus: 'Surplus',
+                maintenance: 'Maintenance',
+                vsTdee: 'vs. total expenditure',
                 bmr: 'Basal metabolic rate',
                 tdee: 'Total expenditure',
-                goalLabel: 'Your target',
-                macros: 'Recommended macronutrient split',
                 protein: 'Protein',
                 carbs: 'Carbs',
                 fat: 'Fat',
-                ctaHeadline: 'You know how much to eat. But what exactly?',
-                ctaText:
-                    'fytrr creates a personalised nutrition plan for exactly {calories} kcal \u2014 with recipes, shopping list and swappable meals.',
-                ctaButton: '7 days free \u2014 create my plan',
-                ctaSubline: 'Cancel anytime. No risk.',
+                mealSplit: 'Your day, roughly split',
+                breakfast: 'Breakfast',
+                lunch: 'Lunch',
+                dinner: 'Dinner',
             },
-            comparison: {
-                feature: 'What you get',
-                calculator: 'Calculator',
-                features: {
-                    dailyCalories: 'Daily calorie needs',
-                    macroSplit: 'Macro split',
-                    mealPlan: 'Meal plan with recipes',
-                    swapMeals: 'Swap meals',
-                    shoppingList: 'Shopping list',
-                    workoutPlan: 'Workout plan',
-                    progressAdapt: 'Adapts to progress',
+            resultCta: {
+                needLine: 'Hit your {calories} kcal without the math.',
+                headline: 'Never type calories again. Just snap a photo.',
+                cta: 'Get the app free',
+                trust: '7 days free, cancel anytime.',
+                planHint: 'Or create a plan on the web',
+            },
+            method: {
+                eyebrow: 'The method',
+                h2: 'How do I calculate my calorie needs?',
+                subtitle:
+                    'No black box. The calculator above runs exactly these three steps for you.',
+                formula:
+                    'BMR = 10 × kg + 6.25 × cm − 5 × age + s   (s = +5 male, −161 female)',
+                steps: {
+                    bmr: {
+                        title: 'Calculate your basal metabolic rate',
+                        body: 'Your BMR from the Mifflin-St Jeor equation: the energy your body needs at rest, from gender, age, weight and height.',
+                    },
+                    activity: {
+                        title: 'Multiply by your activity factor',
+                        body: 'The BMR times your activity factor (1.2 sedentary to 1.9 very active) gives your total daily energy expenditure, your actual daily need.',
+                    },
+                    goal: {
+                        title: 'Adjust for your goal',
+                        body: 'Subtract about 300 to 500 kcal to lose weight, or add 200 to 400 kcal to build muscle.',
+                    },
                 },
             },
-            objections: {
-                needApp: {
-                    q: 'Do I need the app?',
-                    a: 'If you just want your calorie number, the calculator is enough. If you want a plan that puts it into practice \u2014 try fytrr.',
-                },
-                cost: {
-                    q: 'What does it cost?',
-                    a: '7 days completely free. After that \u20ac3.99/month \u2014 less than a coffee per week.',
-                },
-                cancel: {
-                    q: 'Can I cancel anytime?',
-                    a: 'Yes. Anytime. No fine print.',
-                },
+            table: {
+                eyebrow: 'Activity levels',
+                h2: 'Activity factor and example calories',
+                subtitle:
+                    'The factor reflects your whole day, not just exercise. The example values show total expenditure at a typical BMR.',
+                level: 'Activity level',
+                factor: 'Factor',
+                man: 'Example man',
+                woman: 'Example woman',
+                note: 'Example values based on a BMR of roughly 1,780 kcal (man) and 1,400 kcal (woman). Your personal number comes from the calculator above.',
             },
             content: {
-                h2_1: 'How does the calorie calculator work?',
-                p1: 'Our calorie calculator uses the Mifflin-St Jeor equation \u2014 the formula recommended by most nutritional scientists as the most accurate method for calculating basal metabolic rate (BMR). It calculates your BMR using this formula:',
-                formula_male:
-                    'Men: BMR = 10 \u00d7 weight (kg) + 6.25 \u00d7 height (cm) \u2212 5 \u00d7 age \u2212 5',
-                formula_female:
-                    'Women: BMR = 10 \u00d7 weight (kg) + 6.25 \u00d7 height (cm) \u2212 5 \u00d7 age \u2212 161',
-                p1b: 'The BMR is then multiplied by an activity factor (PAL value) to obtain your total daily energy expenditure (TDEE). Based on your goal, we add or subtract calories to give you a practical daily target.',
-                h2_2: 'What is the basal metabolic rate?',
-                p2: 'Your basal metabolic rate (BMR) is the energy your body needs at complete rest \u2014 for breathing, heart function, cell repair and maintaining body temperature. It typically accounts for 60\u201375% of your total daily energy expenditure. The BMR is influenced primarily by muscle mass, age, gender and body size. More muscle means a higher BMR, which is why strength training is valuable even for weight loss \u2014 it raises your baseline calorie burn.',
-                h2_3: 'How many calories for weight loss?',
-                p3: 'For weight loss, you need a calorie deficit \u2014 consuming less energy than you burn. We recommend a moderate deficit of 300\u2013500 kcal below your TDEE. This allows steady fat loss of approximately 0.4\u20130.5 kg per week while preserving muscle mass. A deficit larger than 1,000 kcal is counterproductive: it promotes muscle loss, slows your metabolism, increases hunger and makes the diet harder to sustain. Slow and steady wins \u2014 and keeps the weight off long-term.',
-                h2_4: 'How many calories for muscle gain?',
-                p4: 'For muscle gain, you need a calorie surplus \u2014 consuming more energy than you burn. We recommend a moderate surplus of 200\u2013400 kcal above your TDEE. Combined with progressive strength training and adequate protein (1.6\u20132.0 g per kg bodyweight), this supports lean mass gains of approximately 0.5\u20131 kg per month. A larger surplus leads primarily to fat gain, not faster muscle growth \u2014 your body can only build muscle at a limited rate.',
-                h2_5: 'Calorie needs for women vs. men',
-                p5: "Men typically need 2,000\u20133,000 kcal per day, women 1,600\u20132,400 kcal \u2014 but these are rough averages. The difference comes from men generally having more muscle mass (which burns more energy at rest) and larger body frames. However, individual variation is huge: an active woman who trains 5 times per week will need significantly more calories than a sedentary man. That's why a personalised calculation based on your data is far more useful than generic guidelines.",
-                h2_6: 'Activity levels explained',
-                p6: 'The activity factor accounts for all physical activity throughout your day \u2014 not just exercise, but also your job, daily movement and household tasks:',
-                levels: {
-                    sedentary: {
-                        label: 'Sedentary (factor 1.2)',
-                        desc: 'Office job, minimal movement, no regular exercise.',
-                    },
-                    light: {
-                        label: 'Lightly active (factor 1.375)',
-                        desc: 'Light exercise 1\u20132 times per week or an active commute.',
-                    },
-                    moderate: {
-                        label: 'Moderately active (factor 1.55)',
-                        desc: '3\u20135 workouts per week. The most common level for regular gym-goers.',
-                    },
-                    active: {
-                        label: 'Very active (factor 1.725)',
-                        desc: 'Daily intense exercise or a physically demanding job combined with regular training.',
-                    },
-                    veryActive: {
-                        label: 'Extremely active (factor 1.9)',
-                        desc: 'Physical labour combined with daily intense training. Typical for professional athletes or tradespeople who also train.',
-                    },
+                grundumsatz: {
+                    h2: 'What is the difference between BMR and TDEE?',
+                    body: 'The basal metabolic rate (BMR) is the energy your body uses at complete rest, for breathing, heart function and cell processes. The total daily energy expenditure (TDEE) is your BMR plus all movement in daily life and exercise. TDEE is the number that matters for planning your nutrition.',
                 },
-                h2_7: 'Next step: from calorie number to nutrition plan',
-                p7: 'A calorie calculator gives you a solid starting point, but real results come from consistency and a structured plan. fytrr uses AI to build a personalised nutrition plan based on your calorie target, dietary preferences and fitness goals. Every meal is calculated, every macro is accounted for \u2014 and you can swap meals anytime. Try it free for 7 days.',
-            },
-            furtherReading: {
-                heading: 'Further Reading',
-                appStoreText: 'Or download the fytrr app directly:',
-                appStoreBadge: 'Download on the App Store',
+                losing: {
+                    h2: 'How many calories do I need to lose weight?',
+                    body: 'To lose weight you eat less than your total expenditure. A deficit of 300 to 500 kcal per day is considered sustainable and equals about 0.25 to 0.5 kg of weight loss per week. Larger deficits are harder to sustain and tend to cost muscle mass.',
+                },
+                muscle: {
+                    h2: 'How many calories do I need to build muscle?',
+                    body: 'To build muscle you eat slightly above your total expenditure, usually a 200 to 400 kcal surplus, combined with enough protein and strength training. Too large a surplus mainly adds fat, not more muscle.',
+                },
+                menWomen: {
+                    h2: 'How many calories does a man or a woman need?',
+                    body: 'As rough guides, an adult man needs around 2,400 to 2,800 kcal per day and an adult woman around 1,900 to 2,200 kcal, depending on age, weight and activity. Work out your personal value more precisely above.',
+                },
+                disclaimer:
+                    'The results are science-based estimates for healthy adults and a starting point, not individual medical or dietary advice. If you are pregnant, have a medical condition or special dietary needs, please consult a doctor or a qualified nutrition professional.',
+                sourcesTitle: 'Sources',
+                sources: {
+                    mifflin:
+                        'A new predictive equation for resting energy expenditure in healthy individuals.',
+                    dge: 'Reference values of the German Nutrition Society for energy intake.',
+                },
+                reviewed: 'Last reviewed: August 2026.',
             },
             faq: {
+                eyebrow: 'FAQ',
                 heading: 'Frequently Asked Questions',
+            },
+            relatedTools: {
+                heading: 'Related free tools',
+                macro: 'Macro calculator: work out protein, carbs and fat',
+                mealPlan:
+                    'Free workout and meal plan: turn your calorie target into meals',
+                workoutPlans:
+                    'Free workout plans: training matched to your goal',
+            },
+            furtherReading: {
+                heading: 'Further reading',
+            },
+            upsell: {
+                eyebrow: 'Next step',
+                h2: 'From a calorie number to meals on the plate',
+                subtitle:
+                    "Knowing your number is the easy part. Hitting it every day is fytrr's job. Get a personal nutrition plan with recipes, a shopping list and swappable meals.",
+                cta: 'Create my free plan',
+                subline: '7 days free, cancel anytime.',
             },
         },
         downloadApp: {
@@ -3022,128 +3048,152 @@ export const locales = {
         },
         calorieCalculator: {
             hero: {
-                h1: 'Kalorienrechner \u2014 Wie viele Kalorien brauchst du?',
-                subtitle:
-                    'Berechne in 30 Sekunden deinen t\u00e4glichen Kalorienbedarf \u2014 zum Abnehmen, Zunehmen oder Gewicht halten. Kostenlos, sofort, wissenschaftlich fundiert.',
+                h1: 'Kalorienrechner: Täglichen Kalorienbedarf berechnen',
+                accent: 'In 30 Sekunden.',
+                answer: 'Dein täglicher Kalorienbedarf ist dein Grundumsatz multipliziert mit deinem Aktivitätsfaktor, angepasst an dein Ziel. Für die meisten Erwachsenen liegt er zwischen 1.800 und 2.800 kcal pro Tag.',
+                annotation: 'ohne Anmeldung, sofort dein Ergebnis ✓',
             },
             form: {
-                gender: 'Geschlecht',
-                male: 'M\u00e4nnlich',
-                female: 'Weiblich',
-                age: 'Alter',
-                agePlaceholder: '25',
-                weight: 'Gewicht',
-                weightPlaceholder: '75',
-                height: 'Gr\u00f6\u00dfe',
-                heightPlaceholder: '178',
-                activity: 'Aktivit\u00e4tslevel',
-                sedentary: 'Kaum aktiv (B\u00fcrojob, wenig Bewegung)',
-                light: 'Leicht aktiv (1\u20132 Trainings/Woche)',
-                moderate: 'Moderat aktiv (3\u20135 Trainings/Woche)',
-                active: 'Sehr aktiv (6\u20137 Trainings/Woche)',
-                veryActive:
-                    'Extrem aktiv (k\u00f6rperliche Arbeit + t\u00e4gliches Training)',
                 goal: 'Ziel',
-                lose: 'Abnehmen',
-                maintain: 'Halten',
-                gain: 'Muskelaufbau',
-                calculate: 'Kalorien berechnen',
-                trust: 'Entwickelt von einem Fitness-Experten mit \u00fcber 8 Jahren Erfahrung. Nutzt die Mifflin-St-Jeor-Formel.',
+                goal_lose: 'Abnehmen',
+                goal_maintain: 'Halten',
+                goal_gain: 'Muskelaufbau',
+                gender: 'Geschlecht',
+                gender_male: 'Männlich',
+                gender_female: 'Weiblich',
+                age: 'Alter',
+                weight: 'Gewicht',
+                height: 'Größe',
+                activity: 'Aktivitätslevel',
+                activityOptions: {
+                    sedentary: {
+                        title: 'Kaum aktiv',
+                        hint: 'Bürojob, wenig Bewegung',
+                    },
+                    light: {
+                        title: 'Leicht aktiv',
+                        hint: '1 bis 2 Trainings pro Woche',
+                    },
+                    moderate: {
+                        title: 'Moderat aktiv',
+                        hint: '3 bis 5 Trainings pro Woche',
+                    },
+                    active: {
+                        title: 'Sehr aktiv',
+                        hint: '6 bis 7 Trainings pro Woche',
+                    },
+                    veryActive: {
+                        title: 'Extrem aktiv',
+                        hint: 'Körperliche Arbeit und tägliches Training',
+                    },
+                },
             },
             result: {
-                dailyNeeds: 'Dein t\u00e4glicher Kalorienbedarf',
-                kcalPerDay: 'kcal pro Tag',
+                dailyNeeds: 'Dein täglicher Kalorienbedarf',
+                kcalPerDay: 'kcal / Tag',
+                deficit: 'Defizit',
+                surplus: 'Überschuss',
+                maintenance: 'Erhalt',
+                vsTdee: 'ggü. Gesamtumsatz',
                 bmr: 'Grundumsatz',
                 tdee: 'Gesamtumsatz',
-                goalLabel: 'Dein Ziel',
-                macros: 'Empfohlene Makron\u00e4hrstoffverteilung',
                 protein: 'Protein',
                 carbs: 'Kohlenhydrate',
                 fat: 'Fett',
-                ctaHeadline:
-                    'Du wei\u00dft jetzt, wie viel du essen sollst. Aber was genau?',
-                ctaText:
-                    'fytrr erstellt dir einen personalisierten Ern\u00e4hrungsplan f\u00fcr genau {calories} kcal \u2014 mit Rezepten, Einkaufsliste und Mahlzeiten, die du tauschen kannst.',
-                ctaButton: '7 Tage kostenlos \u2014 meinen Plan erstellen',
-                ctaSubline: 'Jederzeit k\u00fcndbar. Kein Risiko.',
+                mealSplit: 'Dein Tag, grob verteilt',
+                breakfast: 'Frühstück',
+                lunch: 'Mittag',
+                dinner: 'Abend',
             },
-            comparison: {
-                feature: 'Was du bekommst',
-                calculator: 'Rechner',
-                features: {
-                    dailyCalories: 'T\u00e4glicher Kalorienbedarf',
-                    macroSplit: 'Makro-Verteilung',
-                    mealPlan: 'Ern\u00e4hrungsplan mit Rezepten',
-                    swapMeals: 'Mahlzeiten tauschen',
-                    shoppingList: 'Einkaufsliste',
-                    workoutPlan: 'Trainingsplan',
-                    progressAdapt: 'Passt sich an Fortschritt an',
+            resultCta: {
+                needLine: 'Triff deine {calories} kcal, ganz ohne Rechnen.',
+                headline: 'Nie wieder Kalorien tippen. Ein Foto genügt.',
+                cta: 'App kostenlos laden',
+                trust: '7 Tage kostenlos, jederzeit kündbar.',
+                planHint: 'Oder Plan im Web erstellen',
+            },
+            method: {
+                eyebrow: 'Die Methode',
+                h2: 'Wie berechne ich meinen Kalorienbedarf?',
+                subtitle:
+                    'Keine Blackbox. Genau diese drei Schritte macht der Rechner oben automatisch.',
+                formula:
+                    'GU = 10 × kg + 6,25 × cm − 5 × Alter + s   (s = +5 männlich, −161 weiblich)',
+                steps: {
+                    bmr: {
+                        title: 'Grundumsatz berechnen',
+                        body: 'Der Grundumsatz nach der Mifflin-St-Jeor-Formel: die Energie, die dein Körper in Ruhe braucht, aus Geschlecht, Alter, Gewicht und Größe.',
+                    },
+                    activity: {
+                        title: 'Mit dem Aktivitätsfaktor multiplizieren',
+                        body: 'Der Grundumsatz mal deinem Aktivitätsfaktor (1,2 sitzend bis 1,9 sehr aktiv) ergibt den Gesamtumsatz, also deinen tatsächlichen Tagesbedarf.',
+                    },
+                    goal: {
+                        title: 'An dein Ziel anpassen',
+                        body: 'Für dein Ziel etwa 300 bis 500 kcal abziehen zum Abnehmen oder 200 bis 400 kcal addieren für den Muskelaufbau.',
+                    },
                 },
             },
-            objections: {
-                needApp: {
-                    q: 'Brauche ich die App?',
-                    a: 'Wenn du nur deinen Kalorienbedarf wissen willst, reicht der Rechner. Wenn du einen Plan willst, der das f\u00fcr dich umsetzt \u2014 probier fytrr.',
-                },
-                cost: {
-                    q: 'Was kostet das?',
-                    a: '7 Tage komplett kostenlos. Danach 3,99\u20ac/Monat \u2014 weniger als ein Kaffee pro Woche.',
-                },
-                cancel: {
-                    q: 'Kann ich jederzeit k\u00fcndigen?',
-                    a: 'Ja. Jederzeit. Kein Kleingedrucktes.',
-                },
+            table: {
+                eyebrow: 'Aktivitätslevel',
+                h2: 'Aktivitätsfaktor und Beispiel-Kalorien',
+                subtitle:
+                    'Der Faktor bildet deinen gesamten Alltag ab, nicht nur Sport. Die Beispielwerte zeigen den Gesamtumsatz bei einem typischen Grundumsatz.',
+                level: 'Aktivitätslevel',
+                factor: 'Faktor',
+                man: 'Beispiel Mann',
+                woman: 'Beispiel Frau',
+                note: 'Beispielwerte auf Basis eines Grundumsatzes von rund 1.780 kcal (Mann) und 1.400 kcal (Frau). Deinen persönlichen Wert liefert der Rechner oben.',
             },
             content: {
-                h2_1: 'So funktioniert der Kalorienrechner',
-                p1: 'Unser Kalorienrechner nutzt die Mifflin-St-Jeor-Formel \u2014 die von den meisten Ern\u00e4hrungswissenschaftlern empfohlene Methode zur Berechnung des Grundumsatzes (BMR). Die Formel lautet:',
-                formula_male:
-                    'M\u00e4nner: BMR = 10 \u00d7 Gewicht (kg) + 6,25 \u00d7 Gr\u00f6\u00dfe (cm) \u2212 5 \u00d7 Alter \u2212 5',
-                formula_female:
-                    'Frauen: BMR = 10 \u00d7 Gewicht (kg) + 6,25 \u00d7 Gr\u00f6\u00dfe (cm) \u2212 5 \u00d7 Alter \u2212 161',
-                p1b: 'Der Grundumsatz wird dann mit einem Aktivit\u00e4tsfaktor (PAL-Wert) multipliziert, um deinen Gesamtumsatz (TDEE) zu erhalten. Je nach Ziel addieren oder subtrahieren wir Kalorien, um dir ein praktisches Tagesziel zu geben.',
-                h2_2: 'Was ist der Grundumsatz?',
-                p2: 'Der Grundumsatz (BMR) ist die Energie, die dein K\u00f6rper in v\u00f6lliger Ruhe ben\u00f6tigt \u2014 f\u00fcr Atmung, Herzschlag, Zellreparatur und K\u00f6rpertemperatur. Er macht typischerweise 60\u201375% deines t\u00e4glichen Gesamtverbrauchs aus. Der Grundumsatz wird vor allem durch Muskelmasse, Alter, Geschlecht und K\u00f6rpergr\u00f6\u00dfe beeinflusst. Mehr Muskeln bedeuten einen h\u00f6heren Grundumsatz \u2014 weshalb Krafttraining auch beim Abnehmen wertvoll ist: Es erh\u00f6ht deinen Basis-Kalorienverbrauch.',
-                h2_3: 'Wie viele Kalorien zum Abnehmen?',
-                p3: 'Zum Abnehmen brauchst du ein Kaloriendefizit \u2014 weniger Energie aufnehmen als du verbrauchst. Wir empfehlen ein moderates Defizit von 300\u2013500 kcal unter deinem Gesamtumsatz. Das erm\u00f6glicht einen stetigen Fettverlust von etwa 0,4\u20130,5 kg pro Woche bei Erhalt der Muskelmasse. Ein Defizit \u00fcber 1.000 kcal ist kontraproduktiv: Es f\u00f6rdert Muskelabbau, verlangsamt den Stoffwechsel, verst\u00e4rkt den Hunger und macht die Di\u00e4t schwerer durchzuhalten. Langsam und stetig gewinnt \u2014 und h\u00e4lt das Gewicht langfristig.',
-                h2_4: 'Wie viele Kalorien zum Zunehmen?',
-                p4: 'F\u00fcr Muskelaufbau brauchst du einen Kalorien\u00fcberschuss \u2014 mehr Energie aufnehmen als du verbrauchst. Wir empfehlen einen moderaten \u00dcberschuss von 200\u2013400 kcal \u00fcber deinem Gesamtumsatz. Kombiniert mit progressivem Krafttraining und ausreichend Protein (1,6\u20132,0 g pro kg K\u00f6rpergewicht) erm\u00f6glicht das einen Muskelzuwachs von etwa 0,5\u20131 kg pro Monat. Ein gr\u00f6\u00dferer \u00dcberschuss f\u00fchrt haupts\u00e4chlich zu Fettanstieg, nicht zu schnellerem Muskelaufbau \u2014 dein K\u00f6rper kann nur begrenzt schnell Muskeln aufbauen.',
-                h2_5: 'Kalorienbedarf f\u00fcr Frauen vs. M\u00e4nner',
-                p5: 'M\u00e4nner ben\u00f6tigen typischerweise 2.000\u20133.000 kcal pro Tag, Frauen 1.600\u20132.400 kcal \u2014 das sind aber nur grobe Durchschnittswerte. Der Unterschied liegt daran, dass M\u00e4nner in der Regel mehr Muskelmasse haben (die in Ruhe mehr Energie verbrennt) und gr\u00f6\u00dfere K\u00f6rper. Aber die individuelle Variation ist enorm: Eine aktive Frau, die 5 Mal pro Woche trainiert, braucht deutlich mehr Kalorien als ein sitzender Mann. Deshalb ist eine personalisierte Berechnung basierend auf deinen Daten viel n\u00fctzlicher als generische Richtwerte.',
-                h2_6: 'Aktivit\u00e4tslevel erkl\u00e4rt',
-                p6: 'Der Aktivit\u00e4tsfaktor ber\u00fccksichtigt deine gesamte k\u00f6rperliche Aktivit\u00e4t \u2014 nicht nur Sport, sondern auch Beruf, Alltagsbewegung und Hausarbeit:',
-                levels: {
-                    sedentary: {
-                        label: 'Kaum aktiv (Faktor 1,2)',
-                        desc: 'B\u00fcrojob, wenig Bewegung, kein regelm\u00e4\u00dfiges Training.',
-                    },
-                    light: {
-                        label: 'Leicht aktiv (Faktor 1,375)',
-                        desc: 'Leichtes Training 1\u20132 Mal pro Woche oder aktiver Arbeitsweg.',
-                    },
-                    moderate: {
-                        label: 'Moderat aktiv (Faktor 1,55)',
-                        desc: '3\u20135 Trainingseinheiten pro Woche. Das h\u00e4ufigste Level f\u00fcr regelm\u00e4\u00dfige Fitnessstudiog\u00e4nger.',
-                    },
-                    active: {
-                        label: 'Sehr aktiv (Faktor 1,725)',
-                        desc: 'T\u00e4gliches intensives Training oder ein k\u00f6rperlich fordernder Beruf kombiniert mit regelm\u00e4\u00dfigem Training.',
-                    },
-                    veryActive: {
-                        label: 'Extrem aktiv (Faktor 1,9)',
-                        desc: 'K\u00f6rperliche Arbeit kombiniert mit t\u00e4glichem intensiven Training. Typisch f\u00fcr Leistungssportler oder Handwerker, die zus\u00e4tzlich trainieren.',
-                    },
+                grundumsatz: {
+                    h2: 'Was ist der Unterschied zwischen Grundumsatz und Gesamtumsatz?',
+                    body: 'Der Grundumsatz (BMR) ist die Energie, die dein Körper in völliger Ruhe verbraucht, etwa für Atmung, Herzschlag und Zellprozesse. Der Gesamtumsatz (TDEE) ist der Grundumsatz plus alle Bewegung im Alltag und beim Sport. Zum Planen deiner Ernährung zählt der Gesamtumsatz.',
                 },
-                h2_7: 'N\u00e4chster Schritt: Vom Kalorienwert zum Ern\u00e4hrungsplan',
-                p7: 'Ein Kalorienrechner gibt dir einen soliden Startwert, aber echte Ergebnisse kommen durch Konsequenz und einen strukturierten Plan. fytrr nutzt KI, um einen personalisierten Ern\u00e4hrungsplan basierend auf deinem Kalorienziel, deinen Ern\u00e4hrungsvorlieben und Fitnesszielen zu erstellen. Jede Mahlzeit ist berechnet, jedes Makro ber\u00fccksichtigt \u2014 und du kannst Mahlzeiten jederzeit tauschen. Teste es 7 Tage kostenlos.',
+                losing: {
+                    h2: 'Wie viele Kalorien brauche ich zum Abnehmen?',
+                    body: 'Zum Abnehmen isst du weniger als deinen Gesamtumsatz. Ein Defizit von 300 bis 500 kcal pro Tag gilt als nachhaltig und entspricht etwa 0,25 bis 0,5 kg Gewichtsverlust pro Woche. Größere Defizite sind schwerer durchzuhalten und kosten eher Muskelmasse.',
+                },
+                muscle: {
+                    h2: 'Wie viele Kalorien brauche ich für den Muskelaufbau?',
+                    body: 'Für den Muskelaufbau isst du leicht über deinem Gesamtumsatz, meist 200 bis 400 kcal Überschuss, kombiniert mit ausreichend Protein und Krafttraining. Ein zu großer Überschuss führt vor allem zu Fettzunahme, nicht zu mehr Muskeln.',
+                },
+                menWomen: {
+                    h2: 'Wie viele Kalorien braucht ein Mann bzw. eine Frau?',
+                    body: 'Als grobe Richtwerte braucht ein erwachsener Mann rund 2.400 bis 2.800 kcal pro Tag, eine erwachsene Frau rund 1.900 bis 2.200 kcal, je nach Alter, Gewicht und Aktivität. Deinen persönlichen Wert berechnest du oben genauer.',
+                },
+                disclaimer:
+                    'Die Ergebnisse sind wissenschaftlich fundierte Schätzwerte für gesunde Erwachsene und ein Ausgangspunkt, keine individuelle medizinische oder ernährungsmedizinische Beratung. Bei Schwangerschaft, Vorerkrankungen oder besonderen Ernährungsbedürfnissen wende dich an eine Ärztin oder eine qualifizierte Ernährungsfachkraft.',
+                sourcesTitle: 'Quellen',
+                sources: {
+                    mifflin:
+                        'Eine neue Vorhersagegleichung für den Ruheenergieumsatz bei gesunden Menschen.',
+                    dge: 'Referenzwerte der Deutschen Gesellschaft für Ernährung für die Energiezufuhr.',
+                },
+                reviewed: 'Zuletzt geprüft: August 2026.',
+            },
+            faq: {
+                eyebrow: 'FAQ',
+                heading: 'Häufige Fragen',
+            },
+            relatedTools: {
+                heading: 'Verwandte kostenlose Tools',
+                macro: 'Makronährstoff-Rechner: Protein, Kohlenhydrate und Fett berechnen',
+                mealPlan:
+                    'Persönlicher Ernährungsplan: aus deinem Kalorienziel werden Mahlzeiten',
+                workoutPlans:
+                    'Kostenlose Trainingspläne: Training passend zu deinem Ziel',
             },
             furtherReading: {
                 heading: 'Weiterlesen',
-                appStoreText: 'Oder lade die fytrr App direkt herunter:',
-                appStoreBadge: 'Im App Store laden',
             },
-            faq: {
-                heading: 'H\u00e4ufig gestellte Fragen',
+            upsell: {
+                eyebrow: 'Nächster Schritt',
+                h2: 'Vom Kalorienwert zu Mahlzeiten auf dem Teller',
+                subtitle:
+                    'Deinen Bedarf zu kennen ist der einfache Teil. Ihn jeden Tag zu treffen, ist der Job von fytrr. Hol dir einen persönlichen Ernährungsplan mit Rezepten, Einkaufsliste und austauschbaren Mahlzeiten.',
+                cta: 'Meinen kostenlosen Plan erstellen',
+                subline: '7 Tage kostenlos testen, jederzeit kündbar.',
             },
         },
         downloadApp: {

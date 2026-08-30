@@ -24,6 +24,7 @@ class MacroCalculatorController extends Controller
         $locale = app()->getLocale();
 
         return Inertia::render('MacroCalculator', [
+            'preloadFonts' => ['SpaceGrotesk-latin.woff2'],
             // Wrapped in closures so a partial reload for `result` skips them.
             'meta' => fn () => $this->meta($locale),
             'schema' => fn () => $this->buildSchema($locale),

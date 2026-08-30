@@ -2,11 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogController extends Controller
 {
+    /**
+     * Standalone guides that were consolidated into a tool page. Their earned
+     * equity is preserved with a 301 to the canonical calculator.
+     *
+     * @var array<string, string>
+     */
+    private const CONSOLIDATED = [
+        'kalorienbedarf-berechnen' => 'routes.free_tools_calorie_calculator',
+        'calorie-needs' => 'routes.free_tools_calorie_calculator',
+    ];
+
     public function index(): Response
     {
         $locale = app()->getLocale();
@@ -66,9 +78,16 @@ class BlogController extends Controller
         ]);
     }
 
-    public function show(string $slug): Response
+    public function show(string $slug): Response|RedirectResponse
     {
         $locale = app()->getLocale();
+
+        if (isset(self::CONSOLIDATED[$slug])) {
+            $target = "/{$locale}/".trans(self::CONSOLIDATED[$slug], [], $locale);
+
+            return redirect($target, 301);
+        }
+
         $articles = config("blog.{$locale}", []);
 
         if (! isset($articles[$slug])) {

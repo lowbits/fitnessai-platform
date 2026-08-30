@@ -23,12 +23,17 @@ const displayValue = computed(() =>
         : String(model.value),
 );
 
+const clamp = (value: number) => {
+    if (props.min !== undefined && value < props.min) return props.min;
+    if (props.max !== undefined && value > props.max) return props.max;
+    return value;
+};
+
 const onInput = (event: Event) => {
     const raw = (event.target as HTMLInputElement).value;
     model.value = raw === '' ? null : Number(raw);
 };
 
-// Clamp on blur, not while typing, so intermediate values are not fought.
 const onBlur = () => {
     if (
         model.value === null ||
@@ -37,10 +42,14 @@ const onBlur = () => {
     ) {
         return;
     }
-    if (props.min !== undefined && model.value < props.min)
-        model.value = props.min;
-    if (props.max !== undefined && model.value > props.max)
-        model.value = props.max;
+    model.value = clamp(model.value);
+};
+
+const stepBy = (direction: 1 | -1) => {
+    const base = model.value ?? props.min ?? 0;
+    model.value = clamp(
+        Math.round((base + direction * props.step) * 100) / 100,
+    );
 };
 </script>
 
@@ -58,15 +67,60 @@ const onBlur = () => {
                 :min="min"
                 :max="max"
                 :step="step"
-                class="h-12 w-full rounded-[16px] border border-stroke bg-surface-raised px-4 text-ink tabular-nums transition-colors outline-none focus:border-brand"
-                :class="{ 'pr-20': suffix }"
+                class="h-12 w-full [appearance:textfield] rounded-[16px] border border-stroke bg-surface-raised px-4 text-ink tabular-nums transition-colors outline-none focus:border-brand [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                :class="suffix ? 'pr-20' : 'pr-12'"
                 @input="onInput"
                 @blur="onBlur"
             />
-            <!-- Sits left of the native number spinners so they don't overlap. -->
+
+            <div
+                class="absolute inset-y-0 right-2.5 flex flex-col justify-center"
+            >
+                <button
+                    type="button"
+                    tabindex="-1"
+                    aria-hidden="true"
+                    class="flex h-4 w-5 items-center justify-center text-ink-muted transition-colors hover:text-brand"
+                    @click="stepBy(1)"
+                >
+                    <svg
+                        width="10"
+                        height="7"
+                        viewBox="0 0 10 7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M1 5.5 5 1.5l4 4" />
+                    </svg>
+                </button>
+                <button
+                    type="button"
+                    tabindex="-1"
+                    aria-hidden="true"
+                    class="flex h-4 w-5 items-center justify-center text-ink-muted transition-colors hover:text-brand"
+                    @click="stepBy(-1)"
+                >
+                    <svg
+                        width="10"
+                        height="7"
+                        viewBox="0 0 10 7"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.6"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    >
+                        <path d="M1 1.5 5 5.5l4-4" />
+                    </svg>
+                </button>
+            </div>
+
             <span
                 v-if="suffix"
-                class="pointer-events-none absolute inset-y-0 right-7 flex items-center text-sm font-medium text-ink-muted"
+                class="pointer-events-none absolute inset-y-0 right-10 flex items-center text-sm font-medium text-ink-muted"
             >
                 {{ suffix }}
             </span>
