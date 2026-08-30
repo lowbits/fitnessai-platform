@@ -82,7 +82,9 @@ const toolLinks = computed(() => [
     { label: t('downloadApp.tools.blog'), url: page.props.footerLinks.blogUrl },
 ]);
 const canonicalUrl = computed(() => `https://fytrr.com/${locale.value}/app`);
-const ogImage = 'https://fytrr.com/assets/images/og/fytrr-app.webp';
+const ogImage = computed(
+    () => `https://fytrr.com/assets/images/og/fytrr-app-${locale.value}.webp`,
+);
 const appScreenshot = computed(
     () => `/assets/images/app/fytrr-ki-fitness-app-${locale.value}.webp`,
 );

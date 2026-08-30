@@ -73,7 +73,7 @@ class DownloadAppController extends Controller
             'applicationSubCategory' => 'Fitness',
             'url' => $appStoreUrl,
             'downloadUrl' => $appStoreUrl,
-            'image' => config('app.url').'/assets/images/og/fytrr-app.webp',
+            'image' => config('app.url')."/assets/images/og/fytrr-app-{$locale}.webp",
             'screenshot' => $screenshots,
             'featureList' => [
                 'AI workout plan with progressive overload',
