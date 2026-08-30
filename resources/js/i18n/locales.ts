@@ -1485,36 +1485,89 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'fytrr App — AI Personal Trainer for Workouts & Nutrition',
+                title: 'Fitness App: AI Workout Plan, Meal Plan & Calorie Tracker | fytrr',
                 description:
-                    'fytrr App: Your AI personal trainer for workout plans, meal plans & tracking. Try 7 days free. Download now on the App Store.',
+                    'fytrr is the AI fitness app for iPhone: a personalised workout plan, a meal plan with recipes and calorie tracking by photo. Try it 7 days free.',
             },
             hero: {
-                heading: 'The fytrr app: your AI personal trainer for iPhone',
+                eyebrow: 'Fitness app for iPhone',
+                heading: 'Your fitness app with an AI workout and meal plan',
                 subheading:
-                    'Get personalized workout and meal plans, macro tracking, and an AI coach that adapts to you. Free to start, no credit card required.',
+                    'fytrr builds personalised workout and meal plans, tracks calories and macros and adapts everything to your progress. Your AI coach Mona is always there.',
+                trust: '7 days free, then €3.99/month. Cancel anytime.',
+                ctaSub: 'Download free on the App Store.',
+                rating: '5.0 · 11 App Store ratings',
+                imageAlt:
+                    'fytrr fitness app: home screen with calorie budget, macros and daily plan',
             },
-            about: {
-                heading: 'What you get with the fytrr app',
-                intro: 'fytrr is an AI fitness app for iPhone that builds a complete workout and nutrition plan around your goal, experience level, and available equipment. Your plan adapts as you progress, so it stays right for you week after week.',
-                features: [
+            features: {
+                heading: 'Everything you need for your goal',
+                intro: 'fytrr combines a workout plan, a meal plan and tracking in one app. Your plan adapts to your progress, so it stays right for you week after week.',
+                items: [
                     {
-                        title: 'AI workout plans',
-                        text: 'Structured training programs with progressive overload, built for the gym, home, or outdoors based on the equipment you have.',
+                        title: 'AI workout plan',
+                        text: 'Structured programs with progressive overload, for the gym, home or outdoors, matched to the equipment you have.',
                     },
                     {
-                        title: 'Meal plans with grocery lists',
-                        text: 'Nutrition matched to your calorie and macro targets, with a ready shopping list and one-tap meal swaps that keep your macros on track.',
+                        title: 'AI meal plan with recipes',
+                        text: 'Meals matched to your calorie and macro targets, with recipes and a ready shopping list.',
                     },
                     {
-                        title: 'Progress and macro tracking',
-                        text: 'Log workouts, track calories and macros, and follow your body progress over time, all in one place.',
+                        title: 'Track calories and macros',
+                        text: 'Log calories and macros in seconds, by photo too: snap your food and the AI recognises the values.',
+                    },
+                    {
+                        title: 'Swap meals and exercises',
+                        text: 'Swap any meal or exercise for an alternative that fits your macros and your goal.',
+                    },
+                    {
+                        title: 'Progress and Apple Health',
+                        text: 'Follow weight, workouts and body progress over time, synced with Apple Health.',
                     },
                     {
                         title: 'Mona, your AI coach',
-                        text: 'An in-app AI coach that adjusts your plan when you are short on time, tired, or want a change. Just ask.',
+                        text: 'An in-app AI coach that adjusts your plan when you are short on time, tired or want a change.',
                     },
                 ],
+            },
+            how: {
+                heading: 'How fytrr works',
+                steps: [
+                    {
+                        title: 'Set your goal and level',
+                        text: 'Answer a few questions about your goal, experience, equipment and diet.',
+                    },
+                    {
+                        title: 'AI builds your plan',
+                        text: 'In a few minutes your personal workout and meal plan is ready.',
+                    },
+                    {
+                        title: 'Track and adapt',
+                        text: 'Track your progress, swap freely and let Mona adjust your plan.',
+                    },
+                ],
+            },
+            gallery: {
+                heading: 'A look inside the app',
+                tracking: 'Track calories, by photo too',
+                workout: 'Your training, set by set',
+                progress: 'See your progress, stay on track',
+            },
+            reviews: {
+                heading: 'What our users say',
+                subheading: '5.0 out of 5 stars on the App Store',
+            },
+            tools: {
+                heading: 'Free tools and more',
+                calorie: 'Calorie calculator',
+                macro: 'Macro calculator',
+                workout: 'Free workout plans',
+                blog: 'Fitness & nutrition blog',
+            },
+            pricing: {
+                heading: 'What does fytrr cost?',
+                text: 'Try fytrr free for 7 days. After that €3.99 per month, cancel anytime. No risk.',
+                cta: 'Start 7 days free',
             },
             greeting: 'Hey {name}!',
             mobile: {
@@ -1539,30 +1592,33 @@ export const locales = {
             },
             openApp: 'Open fytrr',
             alreadyInstalled: 'Already installed?',
-            trustLine: 'Free \u00b7 No credit card required.',
             faq: {
                 heading: 'Frequently Asked Questions',
                 items: [
                     {
-                        question: 'Is fytrr really free?',
-                        answer: 'Yes! You get a complete, personalized workout and nutrition plan for free. The app offers optional premium features, but the core plan is completely free.',
+                        question: 'What does fytrr cost?',
+                        answer: 'You try fytrr free for 7 days. After that the app costs €3.99 per month, cancel anytime. No risk.',
                     },
                     {
                         question:
                             'What makes fytrr different from other fitness apps?',
-                        answer: "fytrr uses AI to create a truly personalized plan based on your goals, fitness level, and preferences. Your AI coach Mona adapts your workouts in real time — something a static PDF or generic app can't do.",
+                        answer: 'fytrr uses AI for a truly personal plan from your goals, level and preferences. Your AI coach Mona adjusts workouts in real time, something a static PDF or a generic app cannot do.',
+                    },
+                    {
+                        question: 'Can I track calories by photo?',
+                        answer: 'Yes. Photograph your food and the AI recognises calories and macros automatically, with no manual typing.',
                     },
                     {
                         question: 'Can I swap exercises or meals?',
-                        answer: 'Absolutely! You can swap any exercise or meal with smart alternatives that match your macros and training goals. Mona suggests the best replacements for you.',
+                        answer: 'Yes. You swap any exercise or meal for smart alternatives that fit your macros and your goal.',
                     },
                     {
                         question: 'Do I need gym equipment?',
-                        answer: 'Not necessarily. During onboarding you choose your training location — gym, home, or outdoor. Your plan is tailored to the equipment you have available.',
+                        answer: 'No. During onboarding you pick your training place (gym, home or outdoors). Your plan is matched to the equipment you have.',
                     },
                     {
-                        question: 'How does the AI coach Mona work?',
-                        answer: 'Mona is your personal AI fitness coach inside the app. She adapts your plan when life gets in the way — short on time, feeling tired, or want to change things up. Just ask her.',
+                        question: 'Which devices does fytrr run on?',
+                        answer: 'fytrr is available for iPhone on the App Store and syncs your progress with Apple Health.',
                     },
                 ],
             },
@@ -3148,37 +3204,90 @@ export const locales = {
         },
         downloadApp: {
             meta: {
-                title: 'fytrr App \u2014 KI Personal Trainer f\u00fcr Training & Ern\u00e4hrung',
+                title: 'Fitness App: KI-Trainingsplan, Ernährungsplan & Kalorien-Tracker | fytrr',
                 description:
-                    'fytrr App: Dein KI Personal Trainer f\u00fcr Ern\u00e4hrungsplan, Trainingsplan & Tracking. 7 Tage kostenlos testen. Jetzt im App Store.',
+                    'fytrr ist die KI-Fitness-App fürs iPhone: personalisierter Trainingsplan, Ernährungsplan mit Rezepten und Kalorien-Tracking per Foto. 7 Tage kostenlos testen.',
             },
             hero: {
+                eyebrow: 'Fitness App für iPhone',
                 heading:
-                    'Die fytrr App: dein KI Personal Trainer f\u00fcrs iPhone',
+                    'Deine Fitness-App mit KI-Trainingsplan und Ernährungsplan',
                 subheading:
-                    'Personalisierte Trainings- und Ern\u00e4hrungspl\u00e4ne, Makro-Tracking und ein KI-Coach, der sich dir anpasst. Kostenlos starten, ohne Kreditkarte.',
+                    'fytrr erstellt dir personalisierte Trainings- und Ernährungspläne, trackt Kalorien und Makros und passt alles an deinen Fortschritt an. Dein KI-Coach Mona ist immer dabei.',
+                trust: '7 Tage kostenlos testen, dann 3,99 €/Monat. Jederzeit kündbar.',
+                ctaSub: 'Gratis im App Store laden.',
+                rating: '5,0 · 11 Bewertungen im App Store',
+                imageAlt:
+                    'fytrr Fitness-App: Home-Screen mit Kalorienbedarf, Makros und Tagesplan',
             },
-            about: {
-                heading: 'Was du mit der fytrr App bekommst',
-                intro: 'fytrr ist eine KI-Fitness-App f\u00fcrs iPhone, die einen kompletten Trainings- und Ern\u00e4hrungsplan rund um dein Ziel, dein Level und deine Ausr\u00fcstung erstellt. Dein Plan passt sich deinem Fortschritt an und bleibt so Woche f\u00fcr Woche stimmig.',
-                features: [
+            features: {
+                heading: 'Alles, was du für dein Ziel brauchst',
+                intro: 'fytrr vereint Trainingsplan, Ernährungsplan und Tracking in einer App. Dein Plan passt sich deinem Fortschritt an und bleibt so Woche für Woche stimmig.',
+                items: [
                     {
-                        title: 'KI-Trainingspl\u00e4ne',
-                        text: 'Strukturierte Programme mit progressiver Belastungssteigerung, f\u00fcr Gym, Zuhause oder drau\u00dfen, je nach verf\u00fcgbarer Ausr\u00fcstung.',
+                        title: 'KI-Trainingsplan',
+                        text: 'Strukturierte Programme mit progressiver Belastungssteigerung, für Gym, Zuhause oder draußen, angepasst an deine Ausrüstung.',
                     },
                     {
-                        title: 'Ern\u00e4hrungspl\u00e4ne mit Einkaufsliste',
-                        text: 'Ern\u00e4hrung passend zu deinen Kalorien- und Makrozielen, mit fertiger Einkaufsliste und Gericht-Tausch per Tipp, der deine Makros h\u00e4lt.',
+                        title: 'KI-Ernährungsplan mit Rezepten',
+                        text: 'Mahlzeiten passend zu deinen Kalorien- und Makrozielen, mit Rezepten und fertiger Einkaufsliste.',
                     },
                     {
-                        title: 'Fortschritt und Makro-Tracking',
-                        text: 'Tracke Workouts, Kalorien und Makros und verfolge deinen K\u00f6rperfortschritt \u00fcber die Zeit, alles an einem Ort.',
+                        title: 'Kalorien und Makros tracken',
+                        text: 'Tracke Kalorien und Makros in Sekunden, auch per Foto: fotografiere dein Essen und die KI erkennt die Werte.',
+                    },
+                    {
+                        title: 'Mahlzeiten und Übungen tauschen',
+                        text: 'Tausche jede Mahlzeit oder Übung gegen eine Alternative, die zu deinen Makros und deinem Ziel passt.',
+                    },
+                    {
+                        title: 'Fortschritt und Apple Health',
+                        text: 'Verfolge Gewicht, Workouts und Körperfortschritt über die Zeit, synchronisiert mit Apple Health.',
                     },
                     {
                         title: 'Mona, dein KI-Coach',
-                        text: 'Ein KI-Coach in der App, der deinen Plan anpasst, wenn du wenig Zeit hast, m\u00fcde bist oder Abwechslung willst. Frag sie einfach.',
+                        text: 'Ein KI-Coach in der App, der deinen Plan anpasst, wenn du wenig Zeit hast, müde bist oder Abwechslung willst.',
                     },
                 ],
+            },
+            how: {
+                heading: 'So funktioniert fytrr',
+                steps: [
+                    {
+                        title: 'Ziel und Level angeben',
+                        text: 'Beantworte ein paar Fragen zu Ziel, Erfahrung, Ausrüstung und Ernährung.',
+                    },
+                    {
+                        title: 'KI erstellt deinen Plan',
+                        text: 'In wenigen Minuten steht dein persönlicher Trainings- und Ernährungsplan.',
+                    },
+                    {
+                        title: 'Tracken und anpassen',
+                        text: 'Tracke deinen Fortschritt, tausche flexibel und lass Mona deinen Plan anpassen.',
+                    },
+                ],
+            },
+            gallery: {
+                heading: 'Ein Blick in die App',
+                tracking: 'Kalorien tracken, auch per Foto',
+                workout: 'Dein Training, Satz für Satz',
+                progress: 'Fortschritt sehen, dranbleiben',
+            },
+            reviews: {
+                heading: 'Das sagen unsere Nutzer',
+                subheading: '5,0 von 5 Sternen im App Store',
+            },
+            tools: {
+                heading: 'Kostenlose Tools und mehr',
+                calorie: 'Kalorienrechner',
+                macro: 'Makronährstoff-Rechner',
+                workout: 'Kostenlose Trainingspläne',
+                blog: 'Fitness- und Ernährungs-Blog',
+            },
+            pricing: {
+                heading: 'Was kostet fytrr?',
+                text: 'Teste fytrr 7 Tage kostenlos. Danach 3,99 € pro Monat, jederzeit kündbar. Kein Risiko.',
+                cta: '7 Tage kostenlos testen',
             },
             greeting: 'Hey {name}!',
             mobile: {
@@ -3190,7 +3299,7 @@ export const locales = {
                 or: 'oder',
                 copyLink: 'Link kopieren',
                 copied: 'Kopiert!',
-                copyHint: '\u00d6ffne den Link auf deinem Handy',
+                copyHint: 'Öffne den Link auf deinem Handy',
             },
             step1: {
                 label: 'Schritt 1',
@@ -3201,33 +3310,35 @@ export const locales = {
                 text: 'Konto aktivieren',
                 cta: 'Jetzt kostenlos starten',
             },
-            openApp: 'fytrr \u00f6ffnen',
+            openApp: 'fytrr öffnen',
             alreadyInstalled: 'Bereits installiert?',
-            trustLine: 'Kostenlos \u00b7 Keine Kreditkarte n\u00f6tig.',
             faq: {
-                heading: 'H\u00e4ufig gestellte Fragen',
+                heading: 'Häufig gestellte Fragen',
                 items: [
                     {
-                        question: 'Ist fytrr wirklich kostenlos?',
-                        answer: 'Ja! Du bekommst einen kompletten, personalisierten Trainings- und Ern\u00e4hrungsplan kostenlos. Die App bietet optionale Premium-Features, aber der Kernplan ist komplett gratis.',
+                        question: 'Was kostet fytrr?',
+                        answer: 'Du testest fytrr 7 Tage kostenlos. Danach kostet die App 3,99 € pro Monat, jederzeit kündbar. Ohne Risiko.',
                     },
                     {
                         question:
                             'Was unterscheidet fytrr von anderen Fitness-Apps?',
-                        answer: 'fytrr nutzt KI, um einen wirklich personalisierten Plan basierend auf deinen Zielen, deinem Fitnesslevel und deinen Vorlieben zu erstellen. Dein KI-Coach Mona passt deine Workouts in Echtzeit an \u2014 das kann kein statisches PDF oder eine generische App.',
+                        answer: 'fytrr nutzt KI für einen wirklich persönlichen Plan aus Zielen, Level und Vorlieben. Dein KI-Coach Mona passt Workouts in Echtzeit an, das kann kein statisches PDF oder eine generische App.',
                     },
                     {
-                        question:
-                            'Kann ich \u00dcbungen oder Mahlzeiten tauschen?',
-                        answer: 'Auf jeden Fall! Du kannst jede \u00dcbung oder Mahlzeit gegen smarte Alternativen tauschen, die zu deinen Makros und Trainingszielen passen. Mona schl\u00e4gt dir die besten Ersatz\u00fcbungen vor.',
+                        question: 'Kann ich Kalorien per Foto tracken?',
+                        answer: 'Ja. Fotografiere dein Essen und die KI erkennt Kalorien und Makros automatisch, ohne manuelles Tippen.',
                     },
                     {
-                        question: 'Brauche ich Fitnessger\u00e4te?',
-                        answer: 'Nicht unbedingt. Beim Onboarding w\u00e4hlst du deinen Trainingsort \u2014 Fitnessstudio, Zuhause oder Outdoor. Dein Plan wird an die Ger\u00e4te angepasst, die dir zur Verf\u00fcgung stehen.',
+                        question: 'Kann ich Übungen oder Mahlzeiten tauschen?',
+                        answer: 'Ja. Du tauschst jede Übung oder Mahlzeit gegen smarte Alternativen, die zu deinen Makros und deinem Ziel passen.',
                     },
                     {
-                        question: 'Wie funktioniert der KI-Coach Mona?',
-                        answer: 'Mona ist dein pers\u00f6nlicher KI-Fitness-Coach in der App. Sie passt deinen Plan an, wenn das Leben dazwischenkommt \u2014 wenig Zeit, m\u00fcde oder Lust auf Abwechslung. Frag sie einfach.',
+                        question: 'Brauche ich Fitnessgeräte?',
+                        answer: 'Nein. Beim Onboarding wählst du deinen Trainingsort (Gym, Zuhause oder Outdoor). Dein Plan wird an deine Geräte angepasst.',
+                    },
+                    {
+                        question: 'Auf welchen Geräten läuft fytrr?',
+                        answer: 'fytrr gibt es für iPhone im App Store und synchronisiert deinen Fortschritt mit Apple Health.',
                     },
                 ],
             },
