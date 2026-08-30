@@ -4,32 +4,50 @@ return [
     'meta' => [
         'title' => 'Kalorienrechner: Täglichen Kalorienbedarf berechnen',
         'description' => 'Berechne deinen täglichen Kalorienbedarf in 30 Sekunden — zum Abnehmen, Zunehmen oder Gewicht halten. Kostenloser Kalorienrechner, wissenschaftlich fundiert.',
+        'og_image_alt' => 'Ausgewogene Mahlzeit mit Hähnchen, Reis und Gemüse neben einem Smartphone mit Kalorien-App und einer Küchenwaage',
     ],
 
     'schema' => [
         'name' => 'fytrr Kalorienrechner',
     ],
 
+    'reviewed_date' => '2026-08-30',
+
+    'howto' => [
+        'name' => 'Kalorienbedarf berechnen',
+        'description' => 'In drei Schritten vom Grundumsatz zum persönlichen Tagesziel.',
+        'steps' => [
+            [
+                'name' => 'Grundumsatz berechnen',
+                'text' => 'Berechne deinen Grundumsatz nach der Mifflin-St-Jeor-Formel aus Geschlecht, Alter, Gewicht und Größe.',
+            ],
+            [
+                'name' => 'Mit dem Aktivitätsfaktor multiplizieren',
+                'text' => 'Multipliziere den Grundumsatz mit deinem Aktivitätsfaktor (1,2 sitzend bis 1,9 sehr aktiv). Das ergibt deinen Gesamtumsatz.',
+            ],
+            [
+                'name' => 'An dein Ziel anpassen',
+                'text' => 'Ziehe etwa 300 bis 500 kcal ab zum Abnehmen oder addiere 200 bis 400 kcal für den Muskelaufbau.',
+            ],
+        ],
+    ],
+
     'faqs' => [
         [
-            'question' => 'Wie genau ist der Kalorienrechner?',
-            'answer' => 'Unser Kalorienrechner nutzt die Mifflin-St-Jeor-Formel, die in Studien als genaueste Methode zur Berechnung des Grundumsatzes bestätigt wurde. Die Genauigkeit liegt bei ±10% des tatsächlichen Werts. Für noch präzisere Ergebnisse kannst du deinen Kalorienbedarf über 2–3 Wochen mit der fytrr-App tracken.',
+            'question' => 'Wie viele Kalorien soll ich am Tag zu mir nehmen?',
+            'answer' => 'So viele, wie dein Gesamtumsatz vorgibt, angepasst an dein Ziel. Für die meisten Erwachsenen liegt der Wert zwischen 1.800 und 2.800 kcal pro Tag. Nutze den Rechner oben für deinen persönlichen Wert.',
         ],
         [
-            'question' => 'Wie viele Kalorien brauche ich zum Abnehmen?',
-            'answer' => 'Zum Abnehmen benötigst du ein moderates Kaloriendefizit von 300–500 kcal unter deinem Gesamtbedarf. Unser Rechner zeigt dir den exakten Wert. Ein zu großes Defizit (über 1.000 kcal) ist kontraproduktiv, da es Muskelabbau fördert und den Stoffwechsel verlangsamt.',
+            'question' => 'Wie genau ist ein Kalorienrechner?',
+            'answer' => 'Die Mifflin-St-Jeor-Formel liefert eine gute Schätzung mit etwa 5 bis 10 Prozent Abweichung. Für die Praxis reicht das: Beobachte dein Gewicht über zwei bis drei Wochen und passe die Kalorien bei Bedarf an.',
         ],
         [
-            'question' => 'Wie berechne ich meinen Grundumsatz?',
-            'answer' => 'Der Grundumsatz (BMR) ist die Energiemenge, die dein Körper im Ruhezustand benötigt. Er wird nach der Mifflin-St-Jeor-Formel berechnet: Für Männer: 10 × Gewicht(kg) + 6,25 × Größe(cm) − 5 × Alter − 5. Für Frauen: 10 × Gewicht(kg) + 6,25 × Größe(cm) − 5 × Alter − 161. Gib deine Daten oben ein, der Rechner berechnet alles automatisch.',
+            'question' => 'Muss ich jeden Tag Kalorien zählen?',
+            'answer' => 'Nein. Am Anfang hilft es, ein Gefühl für Portionsgrößen zu bekommen. Mit fytrr fotografierst du dein Essen und die KI übernimmt das Zählen — das spart den manuellen Aufwand.',
         ],
         [
             'question' => 'Was ist der Unterschied zwischen Grundumsatz und Gesamtumsatz?',
-            'answer' => 'Der Grundumsatz (BMR) ist die Energie, die dein Körper in völliger Ruhe verbraucht — für Atmung, Herzschlag und Zellprozesse. Der Gesamtumsatz (TDEE) ist der Grundumsatz multipliziert mit einem Aktivitätsfaktor, der deine tägliche Bewegung und Sport berücksichtigt. Der Gesamtumsatz ist die relevante Zahl für deine Ernährungsplanung.',
-        ],
-        [
-            'question' => 'Soll ich Kalorien tracken oder reicht der Rechner?',
-            'answer' => 'Der Rechner liefert einen guten Startwert. Für langfristigen Erfolg empfehlen wir, die ersten 2–3 Wochen die Kalorien zu tracken, um ein Gefühl für Portionsgrößen zu entwickeln. Die fytrr-App erstellt dir automatisch einen personalisierten Ernährungsplan mit den richtigen Kalorienmengen.',
+            'answer' => 'Der Grundumsatz (BMR) ist die Energie, die dein Körper in völliger Ruhe verbraucht. Der Gesamtumsatz (TDEE) ist der Grundumsatz plus alle Bewegung im Alltag und beim Sport. Zum Planen deiner Ernährung zählt der Gesamtumsatz.',
         ],
     ],
 ];
