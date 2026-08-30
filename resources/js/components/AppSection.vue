@@ -31,10 +31,10 @@ const { language } = useSelectedLanguage();
             class="relative mx-auto h-[200px] w-[180px] overflow-hidden pt-6 md:hidden"
         >
             <img
-                :src="`/assets/images/mocks/iphone/dashboard_${language}.avif`"
+                :src="`/assets/images/app/fytrr-ki-fitness-app-${language}.webp`"
                 :alt="t('welcome.app_section.title')"
-                width="1177"
-                height="2408"
+                width="900"
+                height="1862"
                 class="absolute top-6 left-0 w-[180px] drop-shadow-2xl"
                 loading="lazy"
                 decoding="async"
@@ -48,10 +48,10 @@ const { language } = useSelectedLanguage();
             <!-- Desktop: phone mock side by side -->
             <div class="hidden shrink-0 justify-center md:flex md:w-1/3">
                 <img
-                    :src="`/assets/images/mocks/iphone/dashboard_${language}.avif`"
+                    :src="`/assets/images/app/fytrr-ki-fitness-app-${language}.webp`"
                     :alt="t('welcome.app_section.title')"
-                    width="1177"
-                    height="2408"
+                    width="900"
+                    height="1862"
                     class="h-auto w-[300px] drop-shadow-2xl"
                     loading="lazy"
                     decoding="async"
