@@ -79,6 +79,13 @@
     </script>
 
 
+    @foreach ($page['props']['preloadFonts'] ?? [] as $preloadFont)
+        <link rel="preload" href="/assets/fonts/{{ $preloadFont }}" as="font" type="font/woff2" crossorigin>
+    @endforeach
+    @foreach ($page['props']['preloadImages'] ?? [] as $preloadImage)
+        <link rel="preload" href="{{ $preloadImage }}" as="image" fetchpriority="high">
+    @endforeach
+
     {{-- Inertia will inject page-specific meta tags here --}}
     @vite(['resources/js/app.ts', "resources/js/pages/{$page['component']}.vue"])
     @inertiaHead

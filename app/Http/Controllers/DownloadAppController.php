@@ -112,6 +112,8 @@ class DownloadAppController extends Controller
         ];
 
         return Inertia::render('DownloadApp', [
+            'preloadFonts' => ['SpaceGrotesk-latin.woff2'],
+            'preloadImages' => ["/assets/images/app/fytrr-ki-fitness-app-{$locale}.webp"],
             'userName' => $user?->name,
             'schema' => $schema,
             'reviews' => $reviews,
