@@ -33,8 +33,8 @@ const { language } = useSelectedLanguage();
             <img
                 :src="`/assets/images/app/fytrr-ki-fitness-app-${language}.webp`"
                 :alt="t('welcome.app_section.title')"
-                width="900"
-                height="1862"
+                width="640"
+                height="1324"
                 class="absolute top-6 left-0 w-[180px] drop-shadow-2xl"
                 loading="lazy"
                 decoding="async"
@@ -50,8 +50,8 @@ const { language } = useSelectedLanguage();
                 <img
                     :src="`/assets/images/app/fytrr-ki-fitness-app-${language}.webp`"
                     :alt="t('welcome.app_section.title')"
-                    width="900"
-                    height="1862"
+                    width="640"
+                    height="1324"
                     class="h-auto w-[300px] drop-shadow-2xl"
                     loading="lazy"
                     decoding="async"
