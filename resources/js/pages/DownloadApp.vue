@@ -400,8 +400,8 @@ onMounted(() => {
                         <img
                             :src="appScreenshot"
                             :alt="t('downloadApp.hero.imageAlt')"
-                            width="900"
-                            height="1862"
+                            width="640"
+                            height="1324"
                             class="w-[260px] drop-shadow-2xl sm:w-[300px] lg:w-[360px]"
                             fetchpriority="high"
                         />
@@ -453,8 +453,8 @@ onMounted(() => {
                             <img
                                 :src="screen.src"
                                 :alt="screen.caption"
-                                width="900"
-                                height="1862"
+                                width="500"
+                                height="1034"
                                 class="w-[220px] drop-shadow-2xl sm:w-full sm:max-w-[260px]"
                                 loading="lazy"
                             />
