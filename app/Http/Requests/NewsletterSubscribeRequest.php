@@ -14,6 +14,13 @@ class NewsletterSubscribeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        // This endpoint is not locale-prefixed; honour the submitted locale so
+        // validation messages match the form the user saw.
+        $locale = $this->input('locale');
+        if (in_array($locale, ['en', 'de'], true)) {
+            app()->setLocale($locale);
+        }
+
         if ($this->has('email')) {
             $this->merge(['email' => mb_strtolower(trim((string) $this->email))]);
         }
@@ -43,9 +50,7 @@ class NewsletterSubscribeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'consent.accepted' => app()->getLocale() === 'de'
-                ? 'Bitte bestätige, dass du den Newsletter erhalten möchtest.'
-                : 'Please confirm you would like to receive the newsletter.',
+            'consent.accepted' => __('newsletter.consent_required'),
         ];
     }
 }

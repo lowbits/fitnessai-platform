@@ -10,7 +10,26 @@ class NewsletterSubscriber extends Model
 {
     use Notifiable;
 
-    protected $guarded = [];
+    /** @var list<string> */
+    protected $fillable = [
+        'email',
+        'name',
+        'locale',
+        'country',
+        'platform',
+        'source',
+        'consent_text',
+        'consented_at',
+        'consent_ip',
+        'status',
+        'confirmed_at',
+        'unsubscribed_at',
+        'resend_contact_id',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
+        'utm_content',
+    ];
 
     /**
      * @return array<string, string>

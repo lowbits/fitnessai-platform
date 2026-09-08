@@ -12,10 +12,15 @@ const { t, locale } = useI18n();
 
 const isConfirmed = computed(() => props.status === 'confirmed');
 const homeUrl = computed(() => `/${locale.value}`);
+const pageTitle = computed(() =>
+    isConfirmed.value
+        ? t('newsletterConfirm.confirmedHeading')
+        : t('newsletterConfirm.expiredHeading'),
+);
 </script>
 
 <template>
-    <Head :title="t('newsletterConfirm.confirmedHeading')">
+    <Head :title="pageTitle">
         <meta name="robots" content="noindex" />
     </Head>
 

@@ -40,9 +40,7 @@ class NewsletterController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => $locale === 'de'
-                ? 'Fast geschafft! Bitte bestätige deine Anmeldung über den Link in der E-Mail.'
-                : 'Almost there! Please confirm your subscription via the link in the email.',
+            'message' => __('newsletter.subscribed', [], $locale),
         ], 202);
     }
 

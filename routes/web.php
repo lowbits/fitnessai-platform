@@ -120,6 +120,7 @@ Route::get('/{locale}/app', DownloadAppController::class)
 
 // Newsletter (double opt-in). Subscribe from public forms; confirm via signed link.
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->middleware('throttle:10,1')
     ->name('newsletter.subscribe');
 Route::get('/newsletter/confirm/{subscriber}', [NewsletterController::class, 'confirm'])
     ->name('newsletter.confirm');

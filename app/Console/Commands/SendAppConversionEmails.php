@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\UserSource;
 use App\Models\User;
 use App\Notifications\Onboarding\Email02CoachCheckin;
 use Illuminate\Console\Command;
@@ -22,33 +21,29 @@ class SendAppConversionEmails extends Command
         $windowStart = now()->subDays(self::DAYS_AFTER_PDF)->startOfDay();
         $windowEnd = now()->subDays(self::DAYS_AFTER_PDF)->endOfDay();
 
-        // Web users who got their PDF ~2 days ago and have not converted to the
-        // app yet (no password set, no registered device).
-        $users = User::query()
-            ->where('source', UserSource::WEB)
-            ->whereNull('password')
-            ->whereNotNull('email_verified_at')
-            ->whereBetween('email_verified_at', [$windowStart, $windowEnd])
-            ->whereDoesntHave('devices')
-            ->get();
-
         $sent = 0;
 
-        foreach ($users as $user) {
-            $plan = $user->plans()->latest()->first();
+        // Web users who got their PDF ~2 days ago and have not converted to the app.
+        User::query()
+            ->notConverted()
+            ->whereNotNull('email_verified_at')
+            ->whereBetween('email_verified_at', [$windowStart, $windowEnd])
+            ->with('latestPlan')
+            ->chunkById(200, function ($users) use (&$sent): void {
+                foreach ($users as $user) {
+                    if (! $user->latestPlan) {
+                        continue;
+                    }
 
-            if (! $plan) {
-                continue;
-            }
+                    // Idempotent: at most one conversion email per user.
+                    if (! Cache::add("app_conversion_sent:{$user->id}", true, now()->addDays(30))) {
+                        continue;
+                    }
 
-            // Idempotent: at most one conversion email per user.
-            if (! Cache::add("app_conversion_sent:{$user->id}", true, now()->addDays(30))) {
-                continue;
-            }
-
-            $user->notify(new Email02CoachCheckin($plan));
-            $sent++;
-        }
+                    $user->notify(new Email02CoachCheckin($user->latestPlan));
+                    $sent++;
+                }
+            });
 
         $this->info("✅ App conversion emails sent: {$sent}");
 

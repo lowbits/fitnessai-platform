@@ -22,7 +22,7 @@ class NewsletterConfirmation extends Notification
 
     public function toMail(NewsletterSubscriber $notifiable): MailMessage
     {
-        $locale = $notifiable->locale === 'de' ? 'de' : 'en';
+        $locale = $notifiable->locale ?: app()->getLocale();
 
         $url = URL::temporarySignedRoute(
             'newsletter.confirm',
@@ -30,20 +30,11 @@ class NewsletterConfirmation extends Notification
             ['subscriber' => $notifiable->getKey(), 'locale' => $locale],
         );
 
-        if ($locale === 'de') {
-            return (new MailMessage)
-                ->subject('Bitte bestätige deine Newsletter-Anmeldung')
-                ->greeting('Fast geschafft!')
-                ->line('Bitte bestätige, dass du den fytrr Newsletter mit Fitness-Tipps, Trainingsideen und exklusiven Inhalten erhalten möchtest.')
-                ->action('Anmeldung bestätigen', $url)
-                ->line('Wenn du dich nicht angemeldet hast, kannst du diese E-Mail einfach ignorieren.');
-        }
-
         return (new MailMessage)
-            ->subject('Please confirm your newsletter subscription')
-            ->greeting('Almost there!')
-            ->line('Please confirm that you would like to receive the fytrr newsletter with fitness tips, workout ideas, and exclusive content.')
-            ->action('Confirm subscription', $url)
-            ->line('If you did not sign up, you can simply ignore this email.');
+            ->subject(__('newsletter.confirm_email.subject', [], $locale))
+            ->greeting(__('newsletter.confirm_email.greeting', [], $locale))
+            ->line(__('newsletter.confirm_email.intro', [], $locale))
+            ->action(__('newsletter.confirm_email.action', [], $locale), $url)
+            ->line(__('newsletter.confirm_email.ignore', [], $locale));
     }
 }

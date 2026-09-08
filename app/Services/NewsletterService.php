@@ -99,6 +99,9 @@ class NewsletterService
 
         try {
             $response = Http::withToken($key)
+                ->connectTimeout(3)
+                ->timeout(8)
+                ->retry(2, 200, throw: false)
                 ->asJson()
                 ->post("https://api.resend.com/audiences/{$audienceId}/contacts", [
                     'email' => $subscriber->email,

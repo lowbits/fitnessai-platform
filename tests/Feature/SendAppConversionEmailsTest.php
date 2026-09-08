@@ -33,12 +33,9 @@ it('emails unconverted web users two days after their free PDF', function () {
     Notification::assertSentTo($user, Email02CoachCheckin::class);
 });
 
-it('does not email users who already converted (password set)', function () {
-    $user = User::factory()->create([
-        'source' => UserSource::WEB,
-        'email_verified_at' => now()->subDays(2),
-    ]);
-    Plan::factory()->for($user)->create();
+it('does not email users who already converted to the app', function () {
+    $user = webPdfUser();
+    $user->createToken('mobile'); // a live mobile token marks the user converted
 
     $this->artisan('notifications:app-conversion');
 
