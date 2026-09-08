@@ -87,7 +87,8 @@ class NewsletterService
     public function syncToResendAudience(NewsletterSubscriber $subscriber): void
     {
         $key = config('services.resend.key');
-        $audienceId = config('services.resend.audience_id');
+        $audienceId = config("services.resend.audiences.{$subscriber->source}")
+            ?: config('services.resend.audience_id');
 
         if (! $key || ! $audienceId) {
             Log::info('[Newsletter][Resend] Skipped sync, Resend not configured', [

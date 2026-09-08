@@ -25,7 +25,12 @@ class RequestMeta
     }
 
     /**
-     * Two-letter country code from the Cloudflare edge header, if available.
+     * Best-effort two-letter country code.
+     *
+     * Prefers the Cloudflare edge header (only present when proxied); otherwise
+     * falls back to the region subtag of the browser's Accept-Language header
+     * (e.g. "de-DE" -> "DE"). The fallback is a language-region proxy, not true
+     * geolocation.
      */
     public static function country(Request $request): ?string
     {
@@ -33,6 +38,14 @@ class RequestMeta
 
         if ($country && strlen($country) === 2 && ! in_array($country, ['XX', 'T1'], true)) {
             return strtoupper($country);
+        }
+
+        foreach (explode(',', (string) $request->header('Accept-Language')) as $part) {
+            $tag = trim(explode(';', $part)[0]);
+
+            if (preg_match('/-([A-Za-z]{2})$/', $tag, $matches)) {
+                return strtoupper($matches[1]);
+            }
         }
 
         return null;

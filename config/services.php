@@ -20,7 +20,14 @@ return [
 
     'resend' => [
         'key' => env('RESEND_API_KEY'),
+        // Default audience for confirmed subscribers.
         'audience_id' => env('RESEND_AUDIENCE_ID'),
+        // Optional per-source overrides so distinct lists (e.g. the Android
+        // launch waitlist) can be targeted separately in Resend. Falls back to
+        // audience_id when a source has no dedicated audience.
+        'audiences' => [
+            'android_waitlist' => env('RESEND_AUDIENCE_ANDROID_WAITLIST'),
+        ],
     ],
 
     'ses' => [
