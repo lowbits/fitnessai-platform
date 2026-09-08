@@ -118,10 +118,7 @@ Route::get('/verify-email', [EmailVerificationController::class, 'verify'])
 Route::get('/{locale}/app', DownloadAppController::class)
     ->name('download-app');
 
-// Newsletter (double opt-in). Subscribe from public forms; confirm via signed link.
-Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
-    ->middleware('throttle:10,1')
-    ->name('newsletter.subscribe');
+// Newsletter double opt-in confirmation (signed link). Subscribe is POST /api/newsletter/subscribe.
 Route::get('/newsletter/confirm/{subscriber}', [NewsletterController::class, 'confirm'])
     ->name('newsletter.confirm');
 

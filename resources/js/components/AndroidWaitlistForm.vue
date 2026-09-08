@@ -10,10 +10,6 @@ const processing = ref(false);
 const done = ref(false);
 const error = ref('');
 
-const csrfToken = () =>
-    document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') ??
-    '';
-
 const submit = async () => {
     error.value = '';
 
@@ -25,12 +21,11 @@ const submit = async () => {
     processing.value = true;
 
     try {
-        const response = await fetch('/newsletter/subscribe', {
+        const response = await fetch('/api/newsletter/subscribe', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 Accept: 'application/json',
-                'X-CSRF-TOKEN': csrfToken(),
             },
             body: JSON.stringify({
                 email: email.value,
