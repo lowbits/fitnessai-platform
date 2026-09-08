@@ -102,8 +102,6 @@ class OnboardingController extends Controller
         // Send verification email
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
 
-        // Newsletter opt-in: store as pending now, confirmed by the same
-        // email-verification click that unlocks the plan (no extra email).
         if ($validated['signup_newsletter'] ?? false) {
             try {
                 $this->newsletter->capture([

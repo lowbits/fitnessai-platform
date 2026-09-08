@@ -6,9 +6,6 @@ use Illuminate\Http\Request;
 
 class RequestMeta
 {
-    /**
-     * Coarse platform bucket derived from the User-Agent: ios, android or web.
-     */
     public static function platform(?string $userAgent): string
     {
         $userAgent ??= '';
@@ -24,14 +21,6 @@ class RequestMeta
         return 'web';
     }
 
-    /**
-     * Best-effort two-letter country code.
-     *
-     * Prefers the Cloudflare edge header (only present when proxied); otherwise
-     * falls back to the region subtag of the browser's Accept-Language header
-     * (e.g. "de-DE" -> "DE"). The fallback is a language-region proxy, not true
-     * geolocation.
-     */
     public static function country(Request $request): ?string
     {
         $country = $request->header('CF-IPCountry');

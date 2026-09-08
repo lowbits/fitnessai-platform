@@ -20,10 +20,6 @@ return [
 
     'resend' => [
         'key' => env('RESEND_API_KEY'),
-        // Single audience for confirmed subscribers. Target subsets (newsletter
-        // vs. Android waitlist, locale, etc.) with Resend Segments that filter
-        // on the contact properties we send (source/locale/platform/country).
-        'audience_id' => env('RESEND_AUDIENCE_ID'),
     ],
 
     'ses' => [

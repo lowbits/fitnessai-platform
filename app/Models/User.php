@@ -134,8 +134,6 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     }
 
     /**
-     * Web-origin users who have not (yet) converted to the mobile app.
-     *
      * @param  Builder<User>  $query
      */
     public function scopeNotConverted(Builder $query): void

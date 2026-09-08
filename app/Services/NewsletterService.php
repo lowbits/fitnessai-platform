@@ -11,13 +11,7 @@ use Illuminate\Support\Facades\Log;
 class NewsletterService
 {
     /**
-     * Capture a newsletter opt-in and start the double opt-in flow.
-     *
-     * Idempotent: an already confirmed subscriber is left untouched; a pending
-     * one gets a fresh confirmation email so the link never dead-ends.
-     *
      * @param  array{email: string, name?: ?string, locale?: ?string, country?: ?string, platform?: ?string, source?: ?string, consent_text?: ?string, consent_ip?: ?string, utm_source?: ?string, utm_medium?: ?string, utm_campaign?: ?string, utm_content?: ?string}  $data
-     * @param  bool  $sendConfirmation  When false, the caller confirms opt-in through another proven channel (e.g. the plan email-verification click) instead of a separate confirmation email.
      */
     public function capture(array $data, bool $sendConfirmation = true): NewsletterSubscriber
     {
@@ -59,9 +53,6 @@ class NewsletterService
         return $subscriber;
     }
 
-    /**
-     * Confirm a subscriber (double opt-in) and sync to the Resend audience.
-     */
     public function confirm(NewsletterSubscriber $subscriber): void
     {
         if (! $subscriber->isConfirmed()) {
@@ -75,21 +66,14 @@ class NewsletterService
             ]);
         }
 
-        $this->syncToResendAudience($subscriber);
+        $this->syncToResend($subscriber);
     }
 
-    /**
-     * Push a confirmed subscriber into the Resend audience.
-     *
-     * No-ops (with a log line) when the Resend key or audience id is not
-     * configured, so the opt-in flow works before Resend is wired up.
-     */
-    public function syncToResendAudience(NewsletterSubscriber $subscriber): void
+    public function syncToResend(NewsletterSubscriber $subscriber): void
     {
         $key = config('services.resend.key');
-        $audienceId = config('services.resend.audience_id');
 
-        if (! $key || ! $audienceId) {
+        if (! $key) {
             Log::info('[Newsletter][Resend] Skipped sync, Resend not configured', [
                 'email' => $subscriber->email,
             ]);
@@ -103,12 +87,10 @@ class NewsletterService
                 ->timeout(8)
                 ->retry(2, 200, throw: false)
                 ->asJson()
-                ->post("https://api.resend.com/audiences/{$audienceId}/contacts", [
+                ->post('https://api.resend.com/contacts', [
                     'email' => $subscriber->email,
                     'first_name' => $subscriber->name,
                     'unsubscribed' => false,
-                    // Custom properties so Resend Segments can target subsets
-                    // (source, locale, platform, country) within one audience.
                     'properties' => array_filter([
                         'source' => $subscriber->source,
                         'locale' => $subscriber->locale,

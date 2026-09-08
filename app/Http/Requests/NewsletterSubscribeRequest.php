@@ -14,8 +14,6 @@ class NewsletterSubscribeRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
-        // This endpoint is not locale-prefixed; honour the submitted locale so
-        // validation messages match the form the user saw.
         $locale = $this->input('locale');
         if (in_array($locale, ['en', 'de'], true)) {
             app()->setLocale($locale);

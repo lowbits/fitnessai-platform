@@ -13,7 +13,6 @@ class SendAppConversionEmails extends Command
 
     protected $description = 'Nudge web PDF users to try the app a couple of days after their free plan';
 
-    /** Fire this many days after the user got their free PDF (email verified). */
     private const DAYS_AFTER_PDF = 2;
 
     public function handle(): int
@@ -23,7 +22,6 @@ class SendAppConversionEmails extends Command
 
         $sent = 0;
 
-        // Web users who got their PDF ~2 days ago and have not converted to the app.
         User::query()
             ->notConverted()
             ->whereNotNull('email_verified_at')
@@ -35,7 +33,6 @@ class SendAppConversionEmails extends Command
                         continue;
                     }
 
-                    // Idempotent: at most one conversion email per user.
                     if (! Cache::add("app_conversion_sent:{$user->id}", true, now()->addDays(30))) {
                         continue;
                     }

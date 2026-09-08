@@ -16,9 +16,6 @@ class NewsletterController extends Controller
 {
     public function __construct(private readonly NewsletterService $newsletter) {}
 
-    /**
-     * Public subscribe endpoint (Android waitlist / standalone forms).
-     */
     public function subscribe(NewsletterSubscribeRequest $request): JsonResponse
     {
         $locale = $request->validated('locale') ?? app()->getLocale();
@@ -44,9 +41,6 @@ class NewsletterController extends Controller
         ], 202);
     }
 
-    /**
-     * Double opt-in confirmation landing (signed link from the email).
-     */
     public function confirm(Request $request, NewsletterSubscriber $subscriber): Response
     {
         app()->setLocale($request->query('locale', $subscriber->locale ?? 'en'));
