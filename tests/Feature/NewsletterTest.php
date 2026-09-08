@@ -18,7 +18,7 @@ beforeEach(function () {
 });
 
 it('captures an android waitlist signup as pending and sends a confirmation email', function () {
-    $this->postJson('/newsletter/subscribe', [
+    $this->postJson('/api/newsletter/subscribe', [
         'email' => 'android@example.com',
         'locale' => 'de',
         'consent' => true,
@@ -36,7 +36,7 @@ it('captures an android waitlist signup as pending and sends a confirmation emai
 });
 
 it('rejects a subscribe without consent', function () {
-    $this->postJson('/newsletter/subscribe', [
+    $this->postJson('/api/newsletter/subscribe', [
         'email' => 'noconsent@example.com',
         'consent' => false,
     ])->assertStatus(422)->assertJsonValidationErrors('consent');
