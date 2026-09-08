@@ -20,6 +20,7 @@ class DownloadAppController extends Controller
         }
 
         $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $request->userAgent() ?? '');
+        $isAndroid = (bool) preg_match('/Android/i', $request->userAgent() ?? '');
 
         $locale = app()->getLocale();
         $appStoreUrl = config('app.app_store.ios.url');
@@ -122,6 +123,7 @@ class DownloadAppController extends Controller
             'setPasswordDeepLink' => $setPasswordDeepLink,
             'appStoreUrl' => $appStoreUrl,
             'isMobile' => $isMobile,
+            'isAndroid' => $isAndroid,
             'appStoreQrCode' => $appStoreQrCode,
             'setPasswordQrCode' => $setPasswordQrCode,
             'openAppQrCode' => $openAppQrCode,

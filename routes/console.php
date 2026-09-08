@@ -47,6 +47,13 @@ Schedule::command('notifications:trial-reminders')
     ->withoutOverlapping()
     ->runInBackground();
 
+// ===== APP CONVERSION (POST-PDF) =====
+// Two days after a web user gets their free PDF, nudge them to try the app.
+Schedule::command('notifications:app-conversion')
+    ->dailyAt('11:00')
+    ->withoutOverlapping()
+    ->runInBackground();
+
 // ===== STREAK REMINDER =====
 // Evening last-chance nudge when a user's streak is at risk (nothing tracked today).
 // Runs hourly; the command matches each user's local 20:00.

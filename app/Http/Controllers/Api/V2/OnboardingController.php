@@ -11,13 +11,19 @@ use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\User;
 use App\Notifications\NewOnboardingStarted;
 use App\Notifications\OnboardingCompleteVerifyEmail;
+use App\Services\NewsletterService;
+use App\Support\RequestMeta;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class OnboardingController extends Controller
 {
-    public function __construct(private readonly NotifyAdmins $notifyAdmins) {}
+    public function __construct(
+        private readonly NotifyAdmins $notifyAdmins,
+        private readonly NewsletterService $newsletter,
+    ) {}
 
     public function store(OnboardingRequest $request): JsonResponse
     {
@@ -95,6 +101,28 @@ class OnboardingController extends Controller
 
         // Send verification email
         $result['user']->notify(new OnboardingCompleteVerifyEmail($result['plan']));
+
+        // Newsletter opt-in: store as pending now, confirmed by the same
+        // email-verification click that unlocks the plan (no extra email).
+        if ($validated['signup_newsletter'] ?? false) {
+            try {
+                $this->newsletter->capture([
+                    'email' => $result['user']->email,
+                    'name' => $result['user']->name,
+                    'locale' => $result['user']->locale,
+                    'country' => RequestMeta::country($request),
+                    'platform' => RequestMeta::platform($request->userAgent()),
+                    'source' => 'plan_form',
+                    'consent_text' => trans('newsletter.consent', [], $result['user']->locale),
+                    'consent_ip' => $request->ip(),
+                ], sendConfirmation: false);
+            } catch (\Throwable $e) {
+                Log::error('[Newsletter][PlanForm] Capture failed', [
+                    'email' => $result['user']->email,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
 
         // Notify admin(s) about new onboarding
         $this->notifyAdmins->send(
