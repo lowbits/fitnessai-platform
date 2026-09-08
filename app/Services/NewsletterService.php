@@ -87,8 +87,7 @@ class NewsletterService
     public function syncToResendAudience(NewsletterSubscriber $subscriber): void
     {
         $key = config('services.resend.key');
-        $audienceId = config("services.resend.audiences.{$subscriber->source}")
-            ?: config('services.resend.audience_id');
+        $audienceId = config('services.resend.audience_id');
 
         if (! $key || ! $audienceId) {
             Log::info('[Newsletter][Resend] Skipped sync, Resend not configured', [
@@ -108,6 +107,14 @@ class NewsletterService
                     'email' => $subscriber->email,
                     'first_name' => $subscriber->name,
                     'unsubscribed' => false,
+                    // Custom properties so Resend Segments can target subsets
+                    // (source, locale, platform, country) within one audience.
+                    'properties' => array_filter([
+                        'source' => $subscriber->source,
+                        'locale' => $subscriber->locale,
+                        'platform' => $subscriber->platform,
+                        'country' => $subscriber->country,
+                    ], fn ($value) => $value !== null && $value !== ''),
                 ]);
 
             if ($response->successful()) {
