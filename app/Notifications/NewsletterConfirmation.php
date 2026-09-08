@@ -4,11 +4,12 @@ namespace App\Notifications;
 
 use App\Models\NewsletterSubscriber;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\URL;
 
-class NewsletterConfirmation extends Notification
+class NewsletterConfirmation extends Notification implements ShouldQueue
 {
     use Queueable;
 

@@ -43,7 +43,8 @@ class NewsletterController extends Controller
 
     public function confirm(Request $request, NewsletterSubscriber $subscriber): Response
     {
-        app()->setLocale($request->query('locale', $subscriber->locale ?? 'en'));
+        $locale = $request->query('locale', $subscriber->locale ?? 'en');
+        app()->setLocale(in_array($locale, ['en', 'de'], true) ? $locale : 'en');
 
         if (! $request->hasValidSignature()) {
             Log::info('[Newsletter][Confirm] Invalid or expired signature', [

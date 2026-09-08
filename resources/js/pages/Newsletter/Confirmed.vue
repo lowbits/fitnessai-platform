@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import GuestLayout from '@/layouts/GuestLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3';
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 
@@ -82,12 +82,12 @@ const pageTitle = computed(() =>
                     }}
                 </p>
 
-                <a
+                <Link
                     :href="homeUrl"
                     class="mt-8 inline-flex items-center justify-center rounded-xl bg-brand px-7 py-3.5 text-base font-semibold text-on-brand transition-colors hover:bg-brand/90"
                 >
                     {{ t('newsletterConfirm.cta') }}
-                </a>
+                </Link>
             </div>
         </div>
     </GuestLayout>
