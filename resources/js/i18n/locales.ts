@@ -1509,6 +1509,36 @@ export const locales = {
                 subline: '7 days free, cancel anytime.',
             },
         },
+        appUpsellBanner: {
+            eyebrow: 'In the app',
+            heading: 'Better results with the fytrr app',
+            subheading:
+                'Your free plan is just the start. In the app it adapts to you week after week, so you keep seeing progress.',
+            benefits: [
+                'Swap any meal or exercise with one tap',
+                'Track calories by photo, no manual logging',
+                'Coach Mona adjusts your plan when life gets busy',
+            ],
+            cta: 'Get the app',
+            imageAlt: 'fytrr app home screen with calories, meals and workout',
+        },
+        newsletterConfirm: {
+            confirmedHeading: 'You are subscribed!',
+            confirmedText:
+                'Thanks for confirming. You will now receive fitness tips, workout ideas and exclusive content from fytrr.',
+            expiredHeading: 'Link expired',
+            expiredText:
+                'This confirmation link is invalid or has expired. Please sign up again.',
+            cta: 'Back to fytrr',
+        },
+        androidWaitlist: {
+            heading: 'Android? Join the waitlist',
+            text: 'fytrr is on iOS today. Drop your email and we will let you know the moment the Android app is ready.',
+            emailPlaceholder: 'Your email',
+            submit: 'Join the waitlist',
+            success: 'Almost there! Check your inbox to confirm your spot.',
+            error: 'Something went wrong. Please try again.',
+        },
         downloadApp: {
             meta: {
                 title: 'Fitness App: AI Workout Plan, Meal Plan & Calorie Tracker | fytrr',
@@ -3252,6 +3282,37 @@ export const locales = {
                 subline: '7 Tage kostenlos testen, jederzeit kündbar.',
             },
         },
+        appUpsellBanner: {
+            eyebrow: 'In der App',
+            heading: 'Bessere Ergebnisse mit der fytrr App',
+            subheading:
+                'Dein kostenloser Plan ist nur der Anfang. In der App passt er sich Woche für Woche an dich an, damit du dranbleibst und Fortschritte siehst.',
+            benefits: [
+                'Mahlzeiten und Übungen mit einem Tap tauschen',
+                'Kalorien per Foto tracken, ohne manuelles Eintragen',
+                'Coach Mona passt deinen Plan an, wenn es stressig wird',
+            ],
+            cta: 'App laden',
+            imageAlt:
+                'fytrr App Startbildschirm mit Kalorien, Mahlzeiten und Workout',
+        },
+        newsletterConfirm: {
+            confirmedHeading: 'Anmeldung bestätigt!',
+            confirmedText:
+                'Danke für deine Bestätigung. Du erhältst ab jetzt Fitness-Tipps, Trainingsideen und exklusive Inhalte von fytrr.',
+            expiredHeading: 'Link abgelaufen',
+            expiredText:
+                'Dieser Bestätigungslink ist ungültig oder abgelaufen. Bitte melde dich erneut an.',
+            cta: 'Zurück zu fytrr',
+        },
+        androidWaitlist: {
+            heading: 'Android? Trag dich in die Warteliste ein',
+            text: 'fytrr gibt es aktuell für iOS. Hinterlass deine E-Mail und wir sagen dir Bescheid, sobald die Android-App da ist.',
+            emailPlaceholder: 'Deine E-Mail',
+            submit: 'Auf die Warteliste',
+            success: 'Fast geschafft! Bestätige deine Anmeldung in deinem Postfach.',
+            error: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
+        },
         downloadApp: {
             meta: {
                 title: 'Fitness App: KI-Trainingsplan, Ernährungsplan & Kalorien-Tracker | fytrr',
@@ -3281,6 +3342,10 @@ export const locales = {
                     {
                         title: 'KI-Ernährungsplan mit Rezepten',
                         text: 'Mahlzeiten passend zu deinen Kalorien- und Makrozielen, mit Rezepten und fertiger Einkaufsliste.',
+                        link: {
+                            text: 'KI-Ernährungsplan kostenlos erstellen',
+                            href: '/de/persoenlicher-ernaehrungsplan',
+                        },
                     },
                     {
                         title: 'Kalorien und Makros tracken',

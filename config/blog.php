@@ -115,6 +115,11 @@ return [
                 [
                     'heading' => 'Warum die meisten Ernährungspläne scheitern',
                     'content' => 'Bevor wir anfangen: Lass uns kurz darüber reden, warum Ernährungspläne nicht funktionieren. Nicht die Pläne selbst — sondern wie Leute sie umsetzen. Aus den Nutzungsdaten von fytrr sehen wir drei Muster: Erstens, zu viel Abwechslung von Tag 1. Wer sich 7 verschiedene Frühstücke, 7 Mittagessen und 7 Abendessen vornimmt, hat 21 Mahlzeiten pro Woche — 21 Rezepte, 21 Zutatenlisten. Das macht niemand länger als eine Woche. Zweitens, unrealistische Kalorienvorgaben. Wer normal 2.400 kcal isst und sich einen 1.200-kcal-Plan erstellt, wird nach 3 Tagen aufgeben. Ein gesundes Defizit liegt bei 300–500 kcal — das empfiehlt auch die Deutsche Gesellschaft für Ernährung (DGE). Drittens, kein Plan für den Notfall. Dienstag Abend, langer Tag, keine Lust zu kochen — wer keine einfache Backup-Mahlzeit eingeplant hat, bestellt Pizza. Die Lösung für alle drei Probleme: Weniger planen, aber das Richtige planen.',
+                    'cta' => [
+                        'text' => 'Keine Lust auf die manuelle Rechnerei? Lass unsere KI die Arbeit machen.',
+                        'url' => '/de/persoenlicher-ernaehrungsplan',
+                        'label' => 'KI-Ernährungsplan kostenlos erstellen',
+                    ],
                 ],
                 [
                     'heading' => 'Die 3-3-1-Methode: Ernährungsplanung, die funktioniert',

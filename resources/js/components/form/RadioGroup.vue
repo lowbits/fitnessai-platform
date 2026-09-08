@@ -55,7 +55,7 @@ const isRadioOption = (item: string | RadioOption): item is RadioOption => {
 
 <template>
     <RadioGroup v-model="model" :name="name">
-        <RadioGroupLabel v-if="label" class="text-primary-25">
+        <RadioGroupLabel v-if="label" as="div" class="text-primary-25">
             {{ label }}
         </RadioGroupLabel>
 
