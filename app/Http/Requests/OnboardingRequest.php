@@ -10,6 +10,7 @@ use App\Enums\Gender;
 use App\Enums\SkillLevel;
 use App\Enums\TrainingPlace;
 use App\Enums\UserSource;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -36,7 +37,7 @@ class OnboardingRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * @return array<string, ValidationRule|array<mixed>|string>
      */
     public function rules(): array
     {
@@ -64,6 +65,7 @@ class OnboardingRequest extends FormRequest
             'training_days' => ['nullable', 'array'],
             'language' => ['nullable', 'string', 'in:en,de'],
             'source' => ['nullable', new Enum(UserSource::class)],
+            'signup_newsletter' => ['nullable', 'boolean'],
         ];
     }
 

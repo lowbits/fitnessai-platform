@@ -310,6 +310,7 @@ const submit = async () => {
                 training_sessions: parseInt(form.training_sessions),
                 activity_level: form.activity_level,
                 language: locale.value,
+                signup_newsletter: form.signup_newsletter,
             }),
         });
 

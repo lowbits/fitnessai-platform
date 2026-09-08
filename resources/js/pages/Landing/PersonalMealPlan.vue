@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import FormCard from '@/components/FormCard.vue';
+import AppUpsellBanner from '@/components/AppUpsellBanner.vue';
 import GenerateFitnessPlanForm from '@/components/GenerateFitnessPlanForm.vue';
 import GenerateFitnessPlanModal from '@/components/modals/GenerateFitnessPlanModal.vue';
 import { Button } from '@/components/ui/button';
@@ -16,10 +16,28 @@ defineProps<{
 const baseUrl = 'https://fytrr.com';
 const canonical = `${baseUrl}/de/persoenlicher-ernaehrungsplan`;
 
+const heroBenefits = [
+    'Kostenlos und ohne Anmeldung',
+    'Kompletter 7-Tage-Plan als PDF mit Einkaufsliste',
+    'Individuell per KI, abgestimmt auf dein Ziel',
+];
+
 const faqs = [
     {
-        question: 'Ist der Ernährungsplan wirklich kostenlos?',
-        answer: 'Ja, komplett kostenlos. Du bekommst einen vollständigen Ernährungsplan als PDF. Keine Kreditkarte, kein Account, keine versteckten Kosten.',
+        question: 'Ist der KI-Ernährungsplan wirklich kostenlos?',
+        answer: 'Ja. Du erstellst deinen Plan kostenlos und lädst ihn als PDF herunter. Ohne Konto, ohne Anmeldung, ohne versteckte Kosten.',
+    },
+    {
+        question: 'Bekomme ich den Ernährungsplan als PDF?',
+        answer: 'Ja. Nach der Auswahl deiner Ziele und Vorlieben lädst du deinen kompletten 7-Tage-Plan mit Einkaufsliste direkt als PDF herunter.',
+    },
+    {
+        question: 'Brauche ich eine Anmeldung?',
+        answer: 'Nein. Der KI-Ernährungsplan lässt sich ohne Anmeldung erstellen. Für laufende Anpassung, Foto-Tracking und Coach Mona nutzt du die fytrr App.',
+    },
+    {
+        question: 'Eignet sich der Plan zum Abnehmen und für Muskelaufbau?',
+        answer: 'Ja. Du wählst dein Ziel (Abnehmen, Muskeln aufbauen oder fitter werden) und der Plan wird auf deinen Kalorienbedarf und deine Makros abgestimmt.',
     },
     {
         question: 'Kann ich Allergien und Unverträglichkeiten angeben?',
@@ -30,16 +48,8 @@ const faqs = [
         answer: 'Die Kalorien werden individuell berechnet. Basierend auf deinem Gewicht, deiner Größe, deinem Alter und deinem Aktivitätslevel berechnet die KI deinen Tagesbedarf und passt den Plan an dein Ziel an.',
     },
     {
-        question: 'Kann ich den Plan als PDF herunterladen?',
-        answer: 'Ja. Nach der Erstellung bekommst du deinen Ernährungsplan als PDF. Drucke ihn aus oder speichere ihn auf deinem Smartphone.',
-    },
-    {
         question: 'Erstellt die KI auch einen Trainingsplan dazu?',
-        answer: 'Ja. Bei der Erstellung kannst du wählen, ob du einen kombinierten Trainings- und Ernährungsplan möchtest. Beides wird aufeinander abgestimmt.',
-    },
-    {
-        question: 'Muss ich mich registrieren?',
-        answer: 'Nein. Du brauchst nur eine E-Mail-Adresse, an die wir deinen fertigen Plan senden. Kein Passwort, kein Account, keine Registrierung.',
+        answer: 'Ja. Passend zu deinem Ernährungsplan bekommst du automatisch auch einen Trainingsplan dazu. Beides wird von der KI aufeinander abgestimmt.',
     },
     {
         question: 'Wie oft sollte ich meinen Ernährungsplan aktualisieren?',
@@ -51,9 +61,9 @@ const webAppSchema = computed(() =>
     JSON.stringify({
         '@context': 'https://schema.org',
         '@type': 'WebApplication',
-        name: 'fytrr Persönlicher Ernährungsplan Generator',
+        name: 'fytrr KI-Ernährungsplan',
         description:
-            'Erstelle deinen persönlichen Ernährungsplan kostenlos mit KI.',
+            'Erstelle deinen KI-Ernährungsplan kostenlos: für Abnehmen, Muskelaufbau oder Sport. Persönlich, als PDF mit Einkaufsliste, ohne Anmeldung.',
         applicationCategory: 'HealthApplication',
         url: canonical,
         inLanguage: 'de',
@@ -82,19 +92,19 @@ const faqSchema = computed(() =>
 </script>
 
 <template>
-    <Head title="Persönlicher Ernährungsplan kostenlos erstellen">
+    <Head title="Persönlicher KI-Ernährungsplan kostenlos erstellen">
         <meta
             name="description"
-            content="Erstelle deinen persönlichen Ernährungsplan kostenlos mit KI. Für Abnehmen, Muskelaufbau oder Sport. Als PDF mit Einkaufsliste, ohne Anmeldung."
+            content="Erstelle deinen KI-Ernährungsplan kostenlos: für Abnehmen, Muskelaufbau oder Sport. Persönlich, als PDF mit Einkaufsliste, ohne Anmeldung."
         />
         <link rel="canonical" :href="canonical" />
         <meta
             property="og:title"
-            content="Persönlicher Ernährungsplan kostenlos erstellen"
+            content="Persönlicher KI-Ernährungsplan kostenlos erstellen"
         />
         <meta
             property="og:description"
-            content="Erstelle deinen persönlichen Ernährungsplan kostenlos mit KI. Für Abnehmen, Muskelaufbau oder Sport."
+            content="Erstelle deinen KI-Ernährungsplan kostenlos: für Abnehmen, Muskelaufbau oder Sport. Persönlich, als PDF mit Einkaufsliste, ohne Anmeldung."
         />
         <meta property="og:url" :content="canonical" />
         <meta property="og:type" content="website" />
@@ -114,54 +124,99 @@ const faqSchema = computed(() =>
     </Head>
 
     <GuestLayout>
-        <div class="bg-dark-surfaces-900">
+        <div class="theme-v2 bg-canvas text-ink">
             <!-- Hero with Generator Form -->
-            <section class="px-4 pt-12 pb-8 sm:px-6 lg:px-8">
+            <section
+                class="mx-auto max-w-[1200px] px-6 py-14 sm:px-8 lg:px-[80px] lg:py-20"
+            >
                 <div
-                    class="mx-auto flex max-w-6xl flex-col gap-10 lg:flex-row lg:items-start"
+                    class="grid grid-cols-1 items-center gap-12 lg:grid-cols-[1fr_500px] lg:gap-16"
                 >
-                    <div class="lg:w-1/2 lg:pt-8">
-                        <h1
-                            class="font-display text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
+                    <div class="text-center lg:text-left">
+                        <p
+                            class="font-grotesk text-sm font-bold tracking-[0.06em] text-brand uppercase"
                         >
-                            Persönlicher Ernährungsplan
-                            <span
-                                class="bg-linear-to-r from-primary-400 to-primary-500 bg-clip-text text-transparent"
-                                >kostenlos erstellen in 60 Sekunden</span
+                            Kostenlos · Ohne Anmeldung
+                        </p>
+                        <h1
+                            class="mt-4 text-4xl font-extrabold tracking-tight text-balance text-ink sm:text-5xl lg:leading-[1.05]"
+                        >
+                            KI-Ernährungsplan
+                            <span class="text-brand"
+                                >kostenlos erstellen, in 60 Sekunden</span
                             >
                         </h1>
-                        <p class="mt-4 text-lg text-gray-300">
+                        <p
+                            class="mx-auto mt-6 max-w-xl text-lg leading-relaxed text-ink-muted lg:mx-0"
+                        >
                             Gib dein Ziel an, wähle deine Vorlieben und lade
                             deinen individuellen Ernährungsplan als PDF
                             herunter. KI-basiert, mit Einkaufsliste, ohne
                             Anmeldung.
                         </p>
+
+                        <ul
+                            class="mx-auto mt-8 flex max-w-md flex-col gap-3 text-left lg:mx-0"
+                        >
+                            <li
+                                v-for="benefit in heroBenefits"
+                                :key="benefit"
+                                class="flex items-center gap-3"
+                            >
+                                <span
+                                    class="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand/10 text-brand"
+                                >
+                                    <svg
+                                        class="size-3.5"
+                                        viewBox="0 0 20 20"
+                                        fill="currentColor"
+                                        aria-hidden="true"
+                                    >
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M16.7 5.3a1 1 0 0 1 0 1.4l-7.5 7.5a1 1 0 0 1-1.4 0l-3.5-3.5a1 1 0 1 1 1.4-1.4l2.8 2.79 6.8-6.79a1 1 0 0 1 1.4 0z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </span>
+                                <span class="text-ink-muted">{{ benefit }}</span>
+                            </li>
+                        </ul>
                     </div>
-                    <div class="lg:w-1/2">
-                        <FormCard>
+
+                    <div class="relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none">
+                        <div
+                            aria-hidden="true"
+                            class="pointer-events-none absolute -inset-6 -z-10 rounded-[40px] bg-brand/10 blur-3xl"
+                        />
+                        <div
+                            class="rounded-[24px] border border-stroke bg-surface p-5 shadow-2xl shadow-black/40 sm:p-6 md:p-8"
+                        >
                             <GenerateFitnessPlanForm
                                 :total-days="durationDays"
                                 utm-content="landing_personal_meal_plan"
                                 utm-campaign="landing_pages"
                             />
-                        </FormCard>
+                        </div>
                     </div>
                 </div>
             </section>
 
             <!-- Warum -->
-            <section class="px-4 py-16 sm:px-6 lg:px-8">
+            <section
+                class="border-t border-stroke px-4 py-16 sm:px-6 lg:px-8"
+            >
                 <div class="mx-auto max-w-3xl">
-                    <h2 class="font-display text-2xl font-bold text-white">
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
                         Warum ein persönlicher Ernährungsplan?
                     </h2>
-                    <p class="mt-4 leading-relaxed text-gray-300">
+                    <p class="mt-4 leading-relaxed text-ink-muted">
                         Allgemeine Ernährungspläne passen selten zu deinen
                         Zielen, Vorlieben und Alltag. Ein personalisierter Plan
                         berücksichtigt deinen individuellen Kalorienbedarf,
                         deine Makronährstoffverteilung, Allergien und Diätform.
                     </p>
-                    <p class="mt-4 leading-relaxed text-gray-300">
+                    <p class="mt-4 leading-relaxed text-ink-muted">
                         fytrr erstellt deinen personalisierten Ernährungsplan
                         mit KI basierend auf deinen Angaben. Kein Raten, kein
                         stundenlanges Recherchieren. In 60 Sekunden hast du
@@ -170,24 +225,62 @@ const faqSchema = computed(() =>
                 </div>
             </section>
 
-            <!-- Was enthalten -->
+            <!-- Ernährungsplan mit KI -->
             <section
-                class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8"
+                class="border-t border-stroke px-4 py-16 sm:px-6 lg:px-8"
             >
                 <div class="mx-auto max-w-3xl">
-                    <h2 class="font-display text-2xl font-bold text-white">
-                        Was dein Ernährungsplan enthält
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
+                        Ernährungsplan mit KI erstellen: so funktioniert es
+                    </h2>
+                    <p class="mt-4 leading-relaxed text-ink-muted">
+                        Ein KI-Ernährungsplan nimmt dir die Rechnerei ab. Statt
+                        selbst Kalorien und Makros zusammenzusuchen, gibst du
+                        dein Ziel, deine Vorlieben und deinen Alltag an. Die KI
+                        berechnet daraus deinen Bedarf und stellt einen
+                        7-Tage-Plan zusammen, der zu dir passt.
+                    </p>
+                    <p class="mt-4 leading-relaxed text-ink-muted">
+                        Der Unterschied zu einem Chatbot: Du bekommst keinen
+                        Text zum Kopieren, sondern einen fertigen Plan als PDF,
+                        inklusive Einkaufsliste. Kein Konto, keine Anmeldung,
+                        keine versteckten Kosten.
+                    </p>
+                    <p class="mt-4 leading-relaxed text-ink-muted">
+                        Und der Plan bleibt nicht statisch. In der fytrr App
+                        passt sich dein KI-Ernährungsplan an deinen Fortschritt
+                        an. Du kannst Mahlzeiten tauschen und Kalorien per Foto
+                        tracken. So bleibt dein Plan Woche für Woche stimmig,
+                        auch wenn sich dein Ziel oder dein Alltag ändert.
+                    </p>
+                    <p class="mt-4 leading-relaxed text-ink-muted">
+                        Du willst zusätzlich trainieren? Erstell dir passend
+                        dazu deinen
+                        <a
+                            href="/de/kostenloser-trainingsplan"
+                            class="text-brand hover:underline"
+                            >KI-Trainingsplan kostenlos</a
+                        >.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Was enthalten -->
+            <section
+                class="border-t border-stroke px-4 py-16 sm:px-6 lg:px-8"
+            >
+                <div class="mx-auto max-w-3xl">
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
+                        Was dein KI-Ernährungsplan enthält
                     </h2>
 
                     <div class="mt-8 space-y-8">
                         <div>
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 7-Tage Mahlzeitenplan
                             </h3>
                             <ul
-                                class="mt-3 list-inside list-disc space-y-2 text-gray-300"
+                                class="mt-3 list-inside list-disc space-y-2 text-ink-muted"
                             >
                                 <li>
                                     Frühstück, Mittagessen, Abendessen und
@@ -204,13 +297,11 @@ const faqSchema = computed(() =>
                         </div>
 
                         <div>
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 Einkaufsliste
                             </h3>
                             <ul
-                                class="mt-3 list-inside list-disc space-y-2 text-gray-300"
+                                class="mt-3 list-inside list-disc space-y-2 text-ink-muted"
                             >
                                 <li>
                                     Automatisch generiert aus deinem
@@ -228,13 +319,11 @@ const faqSchema = computed(() =>
                         </div>
 
                         <div>
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 PDF Download
                             </h3>
                             <ul
-                                class="mt-3 list-inside list-disc space-y-2 text-gray-300"
+                                class="mt-3 list-inside list-disc space-y-2 text-ink-muted"
                             >
                                 <li>
                                     Alles in einem Dokument: Mahlzeiten,
@@ -252,25 +341,25 @@ const faqSchema = computed(() =>
             </section>
 
             <!-- So funktioniert's -->
-            <section class="px-4 py-16 sm:px-6 lg:px-8">
+            <section
+                class="border-t border-stroke px-4 py-16 sm:px-6 lg:px-8"
+            >
                 <div class="mx-auto max-w-3xl">
-                    <h2 class="font-display text-2xl font-bold text-white">
-                        So erstellst du deinen Ernährungsplan
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
+                        So erstellst du deinen KI-Ernährungsplan
                     </h2>
                     <div class="mt-8 space-y-6">
                         <div class="flex gap-4">
                             <div
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-500 font-bold text-dark-surfaces-900"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-grotesk font-bold text-on-brand"
                             >
                                 1
                             </div>
                             <div>
-                                <h3
-                                    class="text-lg font-semibold text-white"
-                                >
+                                <h3 class="text-lg font-semibold text-ink">
                                     Ziel angeben
                                 </h3>
-                                <p class="mt-1 text-gray-300">
+                                <p class="mt-1 text-ink-muted">
                                     Abnehmen, Muskelaufbau oder Gewicht halten.
                                     Wähle, was zu dir passt.
                                 </p>
@@ -278,17 +367,15 @@ const faqSchema = computed(() =>
                         </div>
                         <div class="flex gap-4">
                             <div
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-500 font-bold text-dark-surfaces-900"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-grotesk font-bold text-on-brand"
                             >
                                 2
                             </div>
                             <div>
-                                <h3
-                                    class="text-lg font-semibold text-white"
-                                >
+                                <h3 class="text-lg font-semibold text-ink">
                                     Vorlieben wählen
                                 </h3>
-                                <p class="mt-1 text-gray-300">
+                                <p class="mt-1 text-ink-muted">
                                     Diätform, Allergien, Budget. Die KI passt
                                     den Plan an deine Bedürfnisse an.
                                 </p>
@@ -296,17 +383,15 @@ const faqSchema = computed(() =>
                         </div>
                         <div class="flex gap-4">
                             <div
-                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary-500 font-bold text-dark-surfaces-900"
+                                class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand font-grotesk font-bold text-on-brand"
                             >
                                 3
                             </div>
                             <div>
-                                <h3
-                                    class="text-lg font-semibold text-white"
-                                >
+                                <h3 class="text-lg font-semibold text-ink">
                                     Ernährungsplan als PDF laden
                                 </h3>
-                                <p class="mt-1 text-gray-300">
+                                <p class="mt-1 text-ink-muted">
                                     Dein persönlicher Ernährungsplan ist in 60
                                     Sekunden fertig. Kostenlos herunterladen.
                                 </p>
@@ -318,76 +403,68 @@ const faqSchema = computed(() =>
 
             <!-- Für wen -->
             <section
-                class="bg-dark-surfaces-800 px-4 py-16 sm:px-6 lg:px-8"
+                class="border-t border-stroke px-4 py-16 sm:px-6 lg:px-8"
             >
                 <div class="mx-auto max-w-3xl">
-                    <h2 class="font-display text-2xl font-bold text-white">
-                        Für wen ist der Ernährungsplan?
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
+                        Für wen ist der KI-Ernährungsplan?
                     </h2>
                     <div class="mt-8 grid gap-6 sm:grid-cols-2">
                         <div
-                            class="rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-900 p-6"
+                            class="rounded-[20px] border border-stroke bg-surface p-6"
                         >
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 Ernährungsplan zum Abnehmen
                             </h3>
-                            <p class="mt-2 text-gray-300">
+                            <p class="mt-2 text-ink-muted">
                                 Kaloriendefizit berechnet, sättigende
                                 Mahlzeiten. Kombiniere mit einem
                                 <a
                                     href="/de/kostenloser-trainingsplan/abnehmen"
-                                    class="text-primary-400 hover:underline"
+                                    class="text-brand hover:underline"
                                     >Trainingsplan zum Abnehmen</a
                                 >.
                             </p>
                         </div>
                         <div
-                            class="rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-900 p-6"
+                            class="rounded-[20px] border border-stroke bg-surface p-6"
                         >
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 Ernährungsplan für Muskelaufbau
                             </h3>
-                            <p class="mt-2 text-gray-300">
+                            <p class="mt-2 text-ink-muted">
                                 Kalorienüberschuss und Proteinziele. Passend
                                 zum
                                 <a
                                     href="/de/kostenloser-trainingsplan/muskelaufbau"
-                                    class="text-primary-400 hover:underline"
+                                    class="text-brand hover:underline"
                                     >Trainingsplan Muskelaufbau</a
                                 >.
                             </p>
                         </div>
                         <div
-                            class="rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-900 p-6"
+                            class="rounded-[20px] border border-stroke bg-surface p-6"
                         >
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 Ernährungsplan für Sportler
                             </h3>
-                            <p class="mt-2 text-gray-300">
+                            <p class="mt-2 text-ink-muted">
                                 Angepasst an Trainingsintensität.
                                 Mahlzeiten-Timing rund ums Training.
                             </p>
                         </div>
                         <div
-                            class="rounded-xl border border-dark-surfaces-500 bg-dark-surfaces-900 p-6"
+                            class="rounded-[20px] border border-stroke bg-surface p-6"
                         >
-                            <h3
-                                class="text-lg font-semibold text-primary-300"
-                            >
+                            <h3 class="text-lg font-semibold text-brand">
                                 Ernährungsplan für Anfänger
                             </h3>
-                            <p class="mt-2 text-gray-300">
+                            <p class="mt-2 text-ink-muted">
                                 Einfache Rezepte, keine exotischen Zutaten.
                                 Schau dir auch unseren
                                 <a
                                     href="/de/kostenloser-trainingsplan/anfaenger"
-                                    class="text-primary-400 hover:underline"
+                                    class="text-brand hover:underline"
                                     >Trainingsplan für Anfänger</a
                                 >
                                 an.
@@ -397,18 +474,25 @@ const faqSchema = computed(() =>
                 </div>
             </section>
 
+            <!-- App upsell banner -->
+            <AppUpsellBanner class="border-t border-stroke" />
+
             <!-- FAQ -->
-            <FAQSection :faqs="faqs" heading="Häufige Fragen zum Ernährungsplan" />
+            <FAQSection
+                :faqs="faqs"
+                heading="Häufige Fragen zum KI-Ernährungsplan"
+                class="border-t border-stroke"
+            />
 
             <!-- Final CTA -->
-            <section class="px-4 py-20 sm:px-6 lg:px-8">
+            <section
+                class="border-t border-stroke px-4 py-20 sm:px-6 lg:px-8"
+            >
                 <div class="mx-auto max-w-3xl text-center">
-                    <h2
-                        class="font-display text-3xl font-bold text-white"
-                    >
+                    <h2 class="text-3xl font-bold text-balance text-ink sm:text-4xl">
                         Bereit loszulegen?
                     </h2>
-                    <p class="mt-4 text-lg text-gray-300">
+                    <p class="mt-4 text-lg text-ink-muted">
                         Erstelle jetzt deinen persönlichen Ernährungsplan. 60
                         Sekunden, kostenlos, sofort als PDF.
                     </p>
@@ -419,7 +503,7 @@ const faqSchema = computed(() =>
                     >
                         <Button
                             @click="open"
-                            class="mt-8 rounded-xl bg-primary-500 px-8 py-4 text-lg font-semibold text-dark-surfaces-900 hover:bg-primary-400"
+                            class="mt-8 rounded-xl bg-brand px-8 py-4 text-lg font-semibold text-on-brand hover:bg-brand/90"
                         >
                             Jetzt Ernährungsplan erstellen
                         </Button>
@@ -429,41 +513,39 @@ const faqSchema = computed(() =>
 
             <!-- Related Links -->
             <section
-                class="border-t border-dark-surfaces-500 px-4 py-12 sm:px-6 lg:px-8"
+                class="border-t border-stroke px-4 py-12 sm:px-6 lg:px-8"
             >
                 <div class="mx-auto max-w-3xl">
-                    <h2
-                        class="font-display text-xl font-bold text-white"
-                    >
+                    <h2 class="text-xl font-bold text-ink">
                         Weitere kostenlose Tools
                     </h2>
-                    <ul class="mt-4 space-y-2 text-gray-300">
+                    <ul class="mt-4 space-y-2 text-ink-muted">
                         <li>
                             <a
                                 href="/de/kostenlose-tools/kalorienrechner"
-                                class="text-primary-400 hover:underline"
+                                class="text-brand hover:underline"
                                 >Kalorienrechner</a
                             >
-                            -- Berechne deinen Kalorienbedarf
+                            · Berechne deinen Kalorienbedarf
                         </li>
                         <li>
                             <a
                                 href="/de/kostenloser-trainingsplan"
-                                class="text-primary-400 hover:underline"
+                                class="text-brand hover:underline"
                                 >Alle kostenlosen Trainingspläne</a
                             >
                         </li>
                         <li>
                             <a
                                 href="/de/blog/ernaehrungsplan-erstellen"
-                                class="text-primary-400 hover:underline"
+                                class="text-brand hover:underline"
                                 >Ernährungsplan erstellen: Die Anleitung</a
                             >
                         </li>
                         <li>
                             <a
                                 href="/de/blog/kalorienbedarf-berechnen"
-                                class="text-primary-400 hover:underline"
+                                class="text-brand hover:underline"
                                 >Kalorienbedarf berechnen</a
                             >
                         </li>

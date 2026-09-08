@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AndroidWaitlistForm from '@/components/AndroidWaitlistForm.vue';
 import AppStoreDownload from '@/components/AppStoreDownload.vue';
 import { Button } from '@/components/ui/button';
 import FAQSection from '@/components/workoutPlan/FAQSection.vue';
@@ -25,6 +26,8 @@ interface Props {
     setPasswordDeepLink: string | null;
     appStoreUrl: string;
     isMobile: boolean;
+    platform: 'ios' | 'android' | 'web';
+    country: string | null;
     appStoreQrCode: string | null;
     setPasswordQrCode: string | null;
     openAppQrCode: string | null;
@@ -145,9 +148,18 @@ const featureIcons: Component[] = [
 
 const features = computed(() => {
     const items = tm('downloadApp.features.items');
-    return (items as { title: string; text: string }[]).map((item, i) => ({
+    return (
+        items as {
+            title: string;
+            text: string;
+            link?: { text: string; href: string };
+        }[]
+    ).map((item, i) => ({
         title: rt(item.title),
         text: rt(item.text),
+        link: item.link
+            ? { text: rt(item.link.text), href: rt(item.link.href) }
+            : null,
         icon: featureIcons[i] ?? Dumbbell,
     }));
 });
@@ -268,14 +280,17 @@ onMounted(() => {
                         <div
                             class="mt-8 flex flex-col items-center gap-3 lg:items-start"
                         >
-                            <AppStoreDownload
-                                :app-store-url="appStoreUrl"
-                                :qr-code="appStoreQrCode"
-                                @click="handleAppStoreClick"
-                            />
-                            <p class="text-sm text-ink-muted">
-                                {{ t('downloadApp.hero.trust') }}
-                            </p>
+                            <AndroidWaitlistForm v-if="platform === 'android'" />
+                            <template v-else>
+                                <AppStoreDownload
+                                    :app-store-url="appStoreUrl"
+                                    :qr-code="appStoreQrCode"
+                                    @click="handleAppStoreClick"
+                                />
+                                <p class="text-sm text-ink-muted">
+                                    {{ t('downloadApp.hero.trust') }}
+                                </p>
+                            </template>
                         </div>
 
                         <!-- Activation: already installed -->
@@ -437,6 +452,14 @@ onMounted(() => {
                             <p class="mt-2 leading-relaxed text-ink-muted">
                                 {{ feature.text }}
                             </p>
+                            <a
+                                v-if="feature.link"
+                                :href="feature.link.href"
+                                class="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand transition-colors hover:underline"
+                            >
+                                {{ feature.link.text }}
+                                &rarr;
+                            </a>
                         </div>
                     </div>
                 </section>

@@ -6,6 +6,7 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalorieCalculatorController;
 use App\Http\Controllers\DownloadAppController;
 use App\Http\Controllers\MacroCalculatorController;
+use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\WorkoutPlanController;
 use App\Models\Plan;
 use App\Models\User;
@@ -116,6 +117,13 @@ Route::get('/verify-email', [EmailVerificationController::class, 'verify'])
 // Download app landing page (signed URL when user-specific, plain when generic)
 Route::get('/{locale}/app', DownloadAppController::class)
     ->name('download-app');
+
+// Newsletter (double opt-in). Subscribe from public forms; confirm via signed link.
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
+    ->middleware('throttle:10,1')
+    ->name('newsletter.subscribe');
+Route::get('/newsletter/confirm/{subscriber}', [NewsletterController::class, 'confirm'])
+    ->name('newsletter.confirm');
 
 // Set password landing page (for email links + universal links)
 Route::get('/set-password', function () {

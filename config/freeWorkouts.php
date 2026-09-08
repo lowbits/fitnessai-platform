@@ -17,17 +17,17 @@ return [
     ],
     'index_labels' => [
         'de' => [
-            'meta_title' => 'Kostenloser Trainingsplan erstellen - Für jedes Ziel',
-            'meta_description' => 'Trainingsplan kostenlos erstellen mit Ernährungsplan. Für Abnehmen, Muskelaufbau, Anfänger, Zuhause ohne Geräte. KI-basiert, sofort als PDF.',
-            'heading' => 'Kostenlose Trainingspläne',
+            'meta_title' => 'KI-Trainingsplan kostenlos erstellen - Für jedes Ziel',
+            'meta_description' => 'KI-Trainingsplan kostenlos erstellen, mit Ernährungsplan. Für Abnehmen, Muskelaufbau, Anfänger, Zuhause ohne Geräte. KI-basiert, sofort als PDF.',
+            'heading' => 'KI-Trainingsplan kostenlos erstellen',
             'intro' => 'Entdecke unsere wissenschaftlich fundierten Trainingspläne für jedes Ziel. Kostenlos, personalisiert und sofort verfügbar.',
             'viewPlan' => 'Plan ansehen',
-            'ctaHeading' => 'Bereit für dein Training?',
+            'ctaHeading' => 'Bereit für deinen KI-Trainingsplan?',
             'ctaText' => 'Wähle den passenden Plan für dein Ziel und starte noch heute mit deinem kostenlosen, wissenschaftlich fundierten Trainingsprogramm.',
             'ctaButton' => 'Personalisierten Plan erstellen',
-            'crossLinkText' => 'Ernährungsplan dazu erstellen?',
+            'crossLinkText' => 'Passend dazu deinen KI-Ernährungsplan?',
             'crossLinkUrl' => '/de/persoenlicher-ernaehrungsplan',
-            'crossLinkLabel' => 'Persönlichen Ernährungsplan erstellen',
+            'crossLinkLabel' => 'KI-Ernährungsplan kostenlos erstellen',
         ],
         'en' => [
             'meta_title' => 'Free Personalized Workout Plans for Every Goal',

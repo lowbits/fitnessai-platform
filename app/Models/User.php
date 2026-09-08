@@ -133,6 +133,16 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
             });
     }
 
+    /**
+     * @param  Builder<User>  $query
+     */
+    public function scopeNotConverted(Builder $query): void
+    {
+        $query->where('source', UserSource::WEB)
+            ->whereNull('provider')
+            ->whereDoesntHave('tokens');
+    }
+
     public function isMobileUser(): bool
     {
         return $this->source->isNativeMobile()
@@ -159,6 +169,11 @@ class User extends Authenticatable implements HasLocalePreference, MustVerifyEma
     public function plans(): HasMany
     {
         return $this->hasMany(Plan::class);
+    }
+
+    public function latestPlan(): HasOne
+    {
+        return $this->hasOne(Plan::class)->latestOfMany();
     }
 
     public function workoutTrackings(): HasMany
