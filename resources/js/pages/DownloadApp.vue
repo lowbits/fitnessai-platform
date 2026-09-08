@@ -26,7 +26,8 @@ interface Props {
     setPasswordDeepLink: string | null;
     appStoreUrl: string;
     isMobile: boolean;
-    isAndroid: boolean;
+    platform: 'ios' | 'android' | 'web';
+    country: string | null;
     appStoreQrCode: string | null;
     setPasswordQrCode: string | null;
     openAppQrCode: string | null;
@@ -279,7 +280,7 @@ onMounted(() => {
                         <div
                             class="mt-8 flex flex-col items-center gap-3 lg:items-start"
                         >
-                            <AndroidWaitlistForm v-if="isAndroid" />
+                            <AndroidWaitlistForm v-if="platform === 'android'" />
                             <template v-else>
                                 <AppStoreDownload
                                     :app-store-url="appStoreUrl"

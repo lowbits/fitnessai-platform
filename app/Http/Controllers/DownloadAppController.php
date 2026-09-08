@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\QrCodeService;
+use App\Support\RequestMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
@@ -20,7 +21,8 @@ class DownloadAppController extends Controller
         }
 
         $isMobile = (bool) preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $request->userAgent() ?? '');
-        $isAndroid = (bool) preg_match('/Android/i', $request->userAgent() ?? '');
+        $platform = RequestMeta::platform($request->userAgent());
+        $country = RequestMeta::country($request);
 
         $locale = app()->getLocale();
         $appStoreUrl = config('app.app_store.ios.url');
@@ -123,7 +125,8 @@ class DownloadAppController extends Controller
             'setPasswordDeepLink' => $setPasswordDeepLink,
             'appStoreUrl' => $appStoreUrl,
             'isMobile' => $isMobile,
-            'isAndroid' => $isAndroid,
+            'platform' => $platform,
+            'country' => $country,
             'appStoreQrCode' => $appStoreQrCode,
             'setPasswordQrCode' => $setPasswordQrCode,
             'openAppQrCode' => $openAppQrCode,
