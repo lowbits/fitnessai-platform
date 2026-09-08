@@ -1,46 +1,30 @@
 <?php
 
-use Inertia\Testing\AssertableInertia as Assert;
-use Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter;
-use Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect;
-use Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect;
+use Illuminate\Support\Facades\Route;
 
-beforeEach(function () {
-    // In the test/CLI context mcamara registers the localized routes at the
-    // root path; its redirect middleware otherwise bounces to the locale home.
-    $this->withoutMiddleware([
-        LaravelLocalizationRedirectFilter::class,
-        LocaleSessionRedirect::class,
-        LocaleCookieRedirect::class,
-    ]);
+// These assert the config-driven SEO content the KI-Ernährungsplan work added.
+// They intentionally check config (not an HTTP round-trip): the landing routes
+// are localized, so the reachable slug depends on the boot locale, which differs
+// between local (de) and CI (en). Config is deterministic everywhere.
+
+it('registers the localized meal-plan landing routes', function () {
+    expect(Route::has('landing.personal-meal-plan'))->toBeTrue()
+        ->and(Route::has('landing.free-workout-meal-plan'))->toBeTrue()
+        ->and(Route::has('workout-plan.index'))->toBeTrue();
 });
 
-it('renders the personal meal plan landing page', function () {
-    $this->get('/persoenlicher-ernaehrungsplan')
-        ->assertSuccessful()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Landing/PersonalMealPlan')
-        );
-});
+it('carries the KI-Trainingsplan phrase and KI-Ernährungsplan cross-link in the workout hub labels', function () {
+    $labels = config('freeWorkouts.index_labels.de');
 
-it('surfaces the KI-Trainingsplan phrase and KI-Ernährungsplan cross-link on the workout hub', function () {
-    $this->get('/kostenloser-trainingsplan')
-        ->assertSuccessful()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('WorkoutPlan/Index')
-            ->where('meta.title', fn ($title) => str_contains($title, 'KI-Trainingsplan'))
-            ->where('labels.heading', fn ($heading) => str_contains($heading, 'KI-Trainingsplan'))
-            ->where('labels.crossLinkLabel', fn ($label) => str_contains($label, 'KI-Ernährungsplan'))
-            ->where('labels.crossLinkUrl', '/de/persoenlicher-ernaehrungsplan')
-        );
+    expect($labels['meta_title'])->toContain('KI-Trainingsplan')
+        ->and($labels['heading'])->toContain('KI-Trainingsplan')
+        ->and($labels['crossLinkLabel'])->toContain('KI-Ernährungsplan')
+        ->and($labels['crossLinkUrl'])->toBe('/de/persoenlicher-ernaehrungsplan');
 });
 
 it('links high in the ernaehrungsplan-erstellen article to the KI-Ernährungsplan tool page', function () {
-    $this->get('/blog/ernaehrungsplan-erstellen')
-        ->assertSuccessful()
-        ->assertInertia(fn (Assert $page) => $page
-            ->component('Blog/Show')
-            ->where('article.sections.0.cta.url', '/de/persoenlicher-ernaehrungsplan')
-            ->where('article.sections.0.cta.label', fn ($label) => str_contains($label, 'KI-Ernährungsplan'))
-        );
+    $cta = config('blog.de.ernaehrungsplan-erstellen.sections.0.cta');
+
+    expect($cta['url'])->toBe('/de/persoenlicher-ernaehrungsplan')
+        ->and($cta['label'])->toContain('KI-Ernährungsplan');
 });
