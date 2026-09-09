@@ -125,13 +125,16 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                     ]);
 
                     $trainingDayIndices = self::trainingDayIndices($workoutsPerWeek, $profile->training_days);
+                    // The split cycle length is the number of actual weekly training days, so a
+                    // custom schedule with fewer days than workouts_per_week still resets cleanly.
+                    $effectiveFrequency = count($trainingDayIndices);
 
                     $prompt = new CreateWorkoutPrompt(
                         profile: $profile,
                         locale: $this->user->locale,
                         dayNumber: $day,
-                        workoutsPerWeek: $workoutsPerWeek,
-                        workoutNumberInCycle: self::workoutNumberInCycle($day, $workoutsPerWeek, $trainingDayIndices),
+                        workoutsPerWeek: $effectiveFrequency,
+                        workoutNumberInCycle: self::workoutNumberInCycle($day, $effectiveFrequency, $trainingDayIndices),
                         recentWorkouts: array_slice($generatedWorkoutsSummary, -5),
                     );
 
@@ -246,7 +249,7 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                 'thursday' => 3, 'friday' => 4, 'saturday' => 5, 'sunday' => 6,
             ];
 
-            return array_values(array_map(fn ($d) => $dayMap[strtolower($d)], $customDays));
+            return array_values(array_unique(array_map(fn ($d) => $dayMap[strtolower($d)], $customDays)));
         }
 
         return match ($workoutsPerWeek) {

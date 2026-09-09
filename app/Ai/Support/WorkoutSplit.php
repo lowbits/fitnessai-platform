@@ -50,6 +50,15 @@ class WorkoutSplit
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
                 ['label' => 'Legs', 'muscles' => 'hamstrings, glutes, calves'],
             ],
+            7 => [
+                ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
+                ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
+                ['label' => 'Legs', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
+                ['label' => 'Push', 'muscles' => 'shoulders, chest, triceps'],
+                ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
+                ['label' => 'Legs', 'muscles' => 'hamstrings, glutes, calves'],
+                ['label' => 'Arms & Core', 'muscles' => 'biceps, triceps, core'],
+            ],
             default => [
                 ['label' => 'Full Body', 'muscles' => 'full_body'],
             ],

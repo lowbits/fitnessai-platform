@@ -31,7 +31,7 @@ class CreateWorkoutPrompt implements Stringable
         $skillLevel = $this->profile->skill_level->value;
         $trainingPlace = $this->profile->training_place->value;
         $activityLevel = $this->profile->activity_level->value;
-        $sessionsPerWeek = $this->profile->training_sessions_per_week;
+        $sessionsPerWeek = $this->workoutsPerWeek;
         $workoutSplit = $this->getWorkoutSplit();
         $language = $this->getLanguageInstruction();
         $exerciseCount = $this->getExerciseCount();
