@@ -3,6 +3,7 @@
 namespace App\Ai\Tools;
 
 use App\Ai\Tools\Concerns\NormalizesTerms;
+use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -52,7 +53,7 @@ class UpdatePhysicalLimitationsTool implements Tool
         $profile = $this->user->profile;
 
         if ($profile === null) {
-            return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
+            return ToolResult::error('no_profile', 'The user has not completed onboarding yet.');
         }
 
         $add = $this->normalizeTerms($request['add_areas'] ?? [], self::AREAS);
@@ -60,7 +61,7 @@ class UpdatePhysicalLimitationsTool implements Tool
         $hasNote = isset($request['note']);
 
         if ($add === [] && $remove === [] && ! $hasNote) {
-            return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which limitation to add, remove or describe.']);
+            return ToolResult::error('nothing_to_change', 'Ask the user which limitation to add, remove or describe.');
         }
 
         $current = $this->normalizeTerms($profile->physical_limitations ?? [], self::AREAS);
@@ -75,7 +76,7 @@ class UpdatePhysicalLimitationsTool implements Tool
         $noteUnchanged = ! $hasNote || $newNote === $profile->physical_limitations_note;
 
         if ($this->sameTerms($areas, $current) && $noteUnchanged) {
-            return json_encode(['updated' => false, 'areas' => $current, 'note' => $profile->physical_limitations_note, 'message' => 'Already up to date — nothing changed.']);
+            return ToolResult::data(['updated' => false, 'areas' => $current, 'note' => $profile->physical_limitations_note, 'message' => 'Already up to date — nothing changed.']);
         }
 
         $payload = ['physical_limitations' => $areas];
@@ -85,7 +86,7 @@ class UpdatePhysicalLimitationsTool implements Tool
 
         $profile->update($payload);
 
-        return json_encode([
+        return ToolResult::data([
             'updated' => true,
             'areas' => $areas,
             'note' => $profile->physical_limitations_note,
