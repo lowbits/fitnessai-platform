@@ -1359,6 +1359,126 @@ export const locales = {
                 subline: 'Cancel anytime. No risk.',
             },
         },
+        planRoast: {
+            hero: {
+                eyebrow: 'Free workout plan check',
+                h1: 'Is your training plan actually any good?',
+                subtitle:
+                    'Drop in your plan and get an honest, evidence-based verdict in seconds, held to the same standard as our own coaching plans.',
+            },
+            composer: {
+                placeholder:
+                    'Describe or paste your plan. You can attach images.',
+                attach: 'Attach files',
+                send: 'Check plan',
+                remove: 'Remove',
+                hint: 'txt, PDF or images · up to {maxFiles} files, {maxSize} MB each',
+            },
+            tone: {
+                label: 'Tone',
+                roast: 'Roast',
+                neutral: 'Straight',
+            },
+            states: {
+                analyzing: 'Reading your plan',
+                writing: 'Writing the verdict',
+                error: 'Something went wrong. Try again.',
+                tooLarge: 'Too big. Max {maxFiles} files, {maxSize} MB each.',
+                uploadTooLarge:
+                    'Those files are too large to upload. Try fewer or smaller images.',
+                rateLimit:
+                    'Too many checks in a row. Wait a moment and try again.',
+                notWorkout:
+                    'That does not look like a workout plan. Try another.',
+            },
+            result: {
+                scoreLabel: 'Overall score',
+                evidenceLabel: 'What we check',
+                verdictLabel: 'The verdict',
+                ranking: 'Better than {percent}% of the plans we have checked',
+            },
+            ratings: {
+                good: 'Strong',
+                ok: 'Okay',
+                poor: 'Weak',
+            },
+            resultCta: {
+                headline: 'Want a plan that scores?',
+                cta: 'Get the fytrr app',
+                trust: 'Free to start. iPhone and Android.',
+                planHint: 'or let fytrr build you a personal plan',
+            },
+            howItWorks: {
+                eyebrow: 'How it works',
+                h2: 'From plan to verdict in three steps',
+                subtitle:
+                    'No sign-up, no waiting. Add your plan and read the verdict.',
+            },
+            measure: {
+                eyebrow: 'The method',
+                h2: 'What we measure, and why it matters',
+                subtitle:
+                    'Every score comes from the same evidence-based rules, not an opinion. The same plan always gets the same verdict.',
+                trust: 'These are the thresholds strength-training research points to, and the bar our own coaching plans have to clear.',
+                items: {
+                    coverage: {
+                        title: 'Muscle coverage',
+                        what: 'We map every exercise to a major muscle group (legs, back, chest, shoulders, arms and core) and check nothing is skipped.',
+                        why: 'Plans that quietly drop legs or back build imbalances and raise injury risk. A good plan trains the whole body across the week.',
+                    },
+                    volume: {
+                        title: 'Weekly volume',
+                        what: 'We add up the hard working sets each muscle gets per week.',
+                        why: 'Growth scales with volume up to a point, roughly 10 to 20 hard sets per muscle per week. Far below barely moves the needle; far above just piles on fatigue.',
+                    },
+                    balance: {
+                        title: 'Muscle balance',
+                        what: 'We compare how much volume each trained group gets against the others.',
+                        why: 'Even with everything covered, hammering chest while legs run on scraps builds strength and physique imbalances that catch up with you.',
+                    },
+                    intensity: {
+                        title: 'Intensity',
+                        what: 'We read any effort cues you give: reps in reserve, RPE, percentages of your 1RM, or "to failure".',
+                        why: 'Hard sets near failure drive growth. Light, submaximal work like 5x10 at half your 1RM barely counts, no matter how many sets. No effort cues means we cannot fully judge it.',
+                    },
+                    progression: {
+                        title: 'Progressive overload',
+                        what: 'We look for a progression scheme, adding weight, reps or RPE over time.',
+                        why: 'Without progressive overload your body has no reason to adapt, and results stall within a few weeks.',
+                    },
+                    frequency: {
+                        title: 'Training frequency',
+                        what: 'We check how often each muscle is trained per week.',
+                        why: 'For the same weekly volume, hitting a muscle about twice a week beats once.',
+                    },
+                    recovery: {
+                        title: 'Recovery',
+                        what: 'We check the week leaves real room to recover.',
+                        why: 'Muscle is built during recovery. Training every day with no rest raises injury and burnout risk without extra gains.',
+                    },
+                },
+            },
+            faq: {
+                eyebrow: 'FAQ',
+                heading: 'Questions, answered',
+            },
+            content: {
+                sourcesTitle: 'Sources',
+                reviewed:
+                    'Reviewed by the fytrr coaching team, September 2026.',
+                disclaimer:
+                    'This tool gives general, evidence-based feedback on training structure. It is not medical advice. If you have injuries or health conditions, talk to a qualified professional.',
+            },
+            relatedTools: {
+                heading: 'Related free tools',
+                calorie: 'Calorie calculator',
+                macro: 'Macro calculator',
+                workoutPlans: 'Free workout plans',
+            },
+            furtherReading: {
+                heading: 'Further reading',
+            },
+        },
         calorieCalculator: {
             hero: {
                 h1: 'Calorie Calculator: Work Out Your Daily Calorie Needs',
@@ -3132,6 +3252,126 @@ export const locales = {
                 subline: 'Jederzeit kündbar. Ohne Risiko.',
             },
         },
+        planRoast: {
+            hero: {
+                eyebrow: 'Kostenloser Trainingsplan-Check',
+                h1: 'Ist dein Trainingsplan wirklich gut?',
+                subtitle:
+                    'Wirf deinen Plan rein und bekomm in Sekunden ein ehrliches, evidenzbasiertes Urteil, nach demselben Maßstab, den wir an unsere eigenen Coaching-Pläne anlegen.',
+            },
+            composer: {
+                placeholder:
+                    'Beschreib deinen Plan oder füg ihn ein. Bilder kannst du anhängen.',
+                attach: 'Dateien anhängen',
+                send: 'Plan prüfen',
+                remove: 'Entfernen',
+                hint: 'txt, PDF oder Bilder · bis zu {maxFiles} Dateien, je {maxSize} MB',
+            },
+            tone: {
+                label: 'Ton',
+                roast: 'Roast',
+                neutral: 'Sachlich',
+            },
+            states: {
+                analyzing: 'Lese deinen Plan',
+                writing: 'Schreibe das Urteil',
+                error: 'Da ging etwas schief. Versuch es nochmal.',
+                tooLarge: 'Zu groß. Max. {maxFiles} Dateien, je {maxSize} MB.',
+                uploadTooLarge:
+                    'Die Dateien sind zu groß zum Hochladen. Nimm weniger oder kleinere Bilder.',
+                rateLimit:
+                    'Zu viele Checks hintereinander. Warte kurz und versuch es nochmal.',
+                notWorkout:
+                    'Das sieht nicht nach einem Trainingsplan aus. Probier einen anderen.',
+            },
+            result: {
+                scoreLabel: 'Gesamt-Score',
+                evidenceLabel: 'Worauf wir prüfen',
+                verdictLabel: 'Das Urteil',
+                ranking: 'Besser als {percent}% der geprüften Pläne',
+            },
+            ratings: {
+                good: 'Stark',
+                ok: 'Okay',
+                poor: 'Schwach',
+            },
+            resultCta: {
+                headline: 'Willst du einen Plan, der punktet?',
+                cta: 'Hol dir die fytrr App',
+                trust: 'Kostenlos starten. iPhone und Android.',
+                planHint:
+                    'oder lass dir von fytrr einen persönlichen Plan bauen',
+            },
+            howItWorks: {
+                eyebrow: 'So funktioniert es',
+                h2: 'Vom Plan zum Urteil in drei Schritten',
+                subtitle:
+                    'Keine Anmeldung, kein Warten. Plan hinzufügen und Urteil lesen.',
+            },
+            measure: {
+                eyebrow: 'Die Methode',
+                h2: 'Was wir messen, und warum es zählt',
+                subtitle:
+                    'Jeder Score kommt aus denselben evidenzbasierten Regeln, nicht aus einer Meinung. Derselbe Plan bekommt immer dasselbe Urteil.',
+                trust: 'Das sind die Schwellen, auf die die Trainingswissenschaft zeigt, und die Latte, die unsere eigenen Coaching-Pläne überspringen müssen.',
+                items: {
+                    coverage: {
+                        title: 'Muskelabdeckung',
+                        what: 'Wir ordnen jede Übung einer großen Muskelgruppe zu (Beine, Rücken, Brust, Schultern, Arme, Core) und prüfen, dass nichts fehlt.',
+                        why: 'Pläne, die heimlich Beine oder Rücken weglassen, bauen Dysbalancen auf und erhöhen das Verletzungsrisiko. Ein guter Plan trainiert über die Woche den ganzen Körper.',
+                    },
+                    volume: {
+                        title: 'Wochenvolumen',
+                        what: 'Wir zählen die harten Arbeitssätze, die jeder Muskel pro Woche bekommt.',
+                        why: 'Wachstum skaliert mit dem Volumen bis zu einem Punkt, rund 10 bis 20 harte Sätze pro Muskel und Woche. Deutlich weniger bringt kaum etwas, deutlich mehr nur Ermüdung.',
+                    },
+                    balance: {
+                        title: 'Muskel-Balance',
+                        what: 'Wir vergleichen, wie viel Volumen jede trainierte Gruppe im Verhältnis zu den anderen bekommt.',
+                        why: 'Selbst wenn alles abgedeckt ist: Brust überladen, während die Beine auf Sparflamme laufen, baut Kraft- und Optik-Dysbalancen auf, die dich einholen.',
+                    },
+                    intensity: {
+                        title: 'Intensität',
+                        what: 'Wir lesen deine Aufwands-Hinweise: Wiederholungen in Reserve, RPE, Prozent vom 1RM oder "bis zum Versagen".',
+                        why: 'Harte Sätze nahe am Versagen treiben das Wachstum. Leichte, submaximale Arbeit wie 5×10 bei der Hälfte deines 1RM zählt kaum, egal wie viele Sätze. Ohne Aufwands-Hinweise können wir es nicht voll bewerten.',
+                    },
+                    progression: {
+                        title: 'Progressive Belastung',
+                        what: 'Wir suchen nach einem Progressions-Schema, mehr Gewicht, Wiederholungen oder RPE über die Zeit.',
+                        why: 'Ohne progressive Belastung hat dein Körper keinen Grund, sich anzupassen, und die Fortschritte stagnieren nach wenigen Wochen.',
+                    },
+                    frequency: {
+                        title: 'Trainingsfrequenz',
+                        what: 'Wir prüfen, wie oft jeder Muskel pro Woche trainiert wird.',
+                        why: 'Bei gleichem Wochenvolumen schlägt es, einen Muskel etwa zweimal pro Woche zu treffen, statt nur einmal.',
+                    },
+                    recovery: {
+                        title: 'Regeneration',
+                        what: 'Wir prüfen, dass die Woche echten Raum zur Erholung lässt.',
+                        why: 'Muskeln werden in der Erholung gebaut. Jeden Tag ohne Ruhetag zu trainieren erhöht Verletzungs- und Burnout-Risiko, ohne mehr Ertrag.',
+                    },
+                },
+            },
+            faq: {
+                eyebrow: 'FAQ',
+                heading: 'Fragen, beantwortet',
+            },
+            content: {
+                sourcesTitle: 'Quellen',
+                reviewed: 'Geprüft vom fytrr Coaching-Team, September 2026.',
+                disclaimer:
+                    'Dieses Tool gibt allgemeines, evidenzbasiertes Feedback zur Trainingsstruktur. Es ist keine medizinische Beratung. Bei Verletzungen oder Erkrankungen sprich mit einer qualifizierten Fachperson.',
+            },
+            relatedTools: {
+                heading: 'Verwandte kostenlose Tools',
+                calorie: 'Kalorienrechner',
+                macro: 'Makronährstoff-Rechner',
+                workoutPlans: 'Kostenlose Trainingspläne',
+            },
+            furtherReading: {
+                heading: 'Weiterlesen',
+            },
+        },
         calorieCalculator: {
             hero: {
                 h1: 'Kalorienrechner: Täglichen Kalorienbedarf berechnen',
@@ -3310,7 +3550,8 @@ export const locales = {
             text: 'fytrr gibt es aktuell für iOS. Hinterlass deine E-Mail und wir sagen dir Bescheid, sobald die Android-App da ist.',
             emailPlaceholder: 'Deine E-Mail',
             submit: 'Auf die Warteliste',
-            success: 'Fast geschafft! Bestätige deine Anmeldung in deinem Postfach.',
+            success:
+                'Fast geschafft! Bestätige deine Anmeldung in deinem Postfach.',
             error: 'Etwas ist schiefgelaufen. Bitte versuche es erneut.',
         },
         downloadApp: {

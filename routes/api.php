@@ -41,11 +41,22 @@ use App\Http\Controllers\Api\V3\RecipeSuggestionsController;
 use App\Http\Controllers\Api\V3\StatsController;
 use App\Http\Controllers\Api\V3\VisionController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PlanRoastController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])
     ->middleware('throttle:10,1')
     ->name('newsletter.subscribe');
+
+Route::prefix('plan-roast')->name('plan-roast.')->group(function () {
+    Route::post('/evaluate', [PlanRoastController::class, 'evaluate'])
+        ->middleware('throttle:8,1')
+        ->name('evaluate');
+
+    Route::get('/stream/{token}', [PlanRoastController::class, 'stream'])
+        ->middleware('throttle:20,1')
+        ->name('stream');
+});
 
 Route::prefix('v3')->group(function () {
     Route::post('/onboarding', [MobileOnboardingController::class, 'store'])

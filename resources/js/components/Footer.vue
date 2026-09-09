@@ -8,6 +8,7 @@ const page = usePage();
 
 interface FooterLinks {
     workoutPlans: Record<string, { url: string; label: string }>;
+    freeTools: { url: string; label: string }[];
     indexUrl: string;
     legalLinks: Record<string, { url: string; label: string }>;
     languages: Record<
@@ -17,6 +18,7 @@ interface FooterLinks {
     labels: {
         heading: string;
         all: string;
+        freeTools: string;
         product: string;
         home: string;
         app: string;
@@ -74,7 +76,7 @@ watch(selectedLanguage, (newLocale) => {
     >
         <div class="container mx-auto max-w-7xl">
             <div
-                class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+                class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
             >
                 <!-- Brand -->
                 <div>
@@ -126,6 +128,37 @@ watch(selectedLanguage, (newLocale) => {
                                 class="font-semibold text-primary-300 transition hover:text-primary-200"
                             >
                                 {{ footerLinks.labels.all }}
+                            </Link>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Kostenlose Tools -->
+                <div>
+                    <h3
+                        class="mb-4 text-sm font-semibold tracking-wider text-white uppercase"
+                    >
+                        {{ footerLinks.labels.freeTools }}
+                    </h3>
+                    <ul class="space-y-2 text-sm">
+                        <li
+                            v-for="tool in footerLinks.freeTools"
+                            :key="tool.url"
+                        >
+                            <Link
+                                :href="tool.url"
+                                :class="{
+                                    'font-semibold text-secondary-200':
+                                        $page.url.startsWith(
+                                            getPathFromUrl(tool.url),
+                                        ),
+                                    'text-gray-300 transition hover:text-secondary-100':
+                                        !$page.url.startsWith(
+                                            getPathFromUrl(tool.url),
+                                        ),
+                                }"
+                            >
+                                {{ tool.label }}
                             </Link>
                         </li>
                     </ul>
@@ -208,48 +241,6 @@ watch(selectedLanguage, (newLocale) => {
                                 }"
                             >
                                 {{ footerLinks.labels.heading }}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                :href="footerLinks.calorieCalculatorUrl"
-                                :class="{
-                                    'font-semibold text-secondary-200':
-                                        $page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.calorieCalculatorUrl,
-                                            ),
-                                        ),
-                                    'text-gray-300 transition hover:text-secondary-100':
-                                        !$page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.calorieCalculatorUrl,
-                                            ),
-                                        ),
-                                }"
-                            >
-                                {{ footerLinks.labels.calorieCalculator }}
-                            </Link>
-                        </li>
-                        <li>
-                            <Link
-                                :href="footerLinks.macroCalculatorUrl"
-                                :class="{
-                                    'font-semibold text-secondary-200':
-                                        $page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.macroCalculatorUrl,
-                                            ),
-                                        ),
-                                    'text-gray-300 transition hover:text-secondary-100':
-                                        !$page.url.startsWith(
-                                            getPathFromUrl(
-                                                footerLinks.macroCalculatorUrl,
-                                            ),
-                                        ),
-                                }"
-                            >
-                                {{ footerLinks.labels.macroCalculator }}
                             </Link>
                         </li>
                         <li>

@@ -17,6 +17,10 @@ return [
         'over_40' => 'Trainingsplan ab 40',
         'all' => 'Alle Trainingspläne →',
     ],
+    'free_tools' => [
+        'heading' => 'Kostenlose Tools',
+        'plan_roast' => 'Trainingsplan-Check',
+    ],
     'product' => [
         'heading' => 'Produkt',
         'home' => 'Home',

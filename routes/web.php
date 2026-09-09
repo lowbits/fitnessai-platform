@@ -7,6 +7,7 @@ use App\Http\Controllers\CalorieCalculatorController;
 use App\Http\Controllers\DownloadAppController;
 use App\Http\Controllers\MacroCalculatorController;
 use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\PlanRoastController;
 use App\Http\Controllers\WorkoutPlanController;
 use App\Models\Plan;
 use App\Models\User;
@@ -62,6 +63,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Macro Calculator (SEO tool page)
     Route::get(LaravelLocalization::transRoute('routes.free_tools_macro_calculator'), [MacroCalculatorController::class, 'index'])
         ->name('macro-calculator');
+
+    // Plan Roast (free SEO tool: rate/roast a training plan)
+    Route::get(LaravelLocalization::transRoute('routes.free_tools_plan_roast'), [PlanRoastController::class, 'index'])
+        ->name('plan-roast');
 
     // Blog
     Route::get(LaravelLocalization::transRoute('routes.blog_index'), [BlogController::class, 'index'])
