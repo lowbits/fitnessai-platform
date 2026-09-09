@@ -42,14 +42,15 @@ class TestPersonas extends Command
         );
 
         $planIds = array_column($runs, 'plan_id');
+        $expectedDays = count($planIds) * 7;
 
-        $this->info('⏳ Waiting for queue to process 21 meal_plans…');
+        $this->info("⏳ Waiting for queue to process {$expectedDays} day-plans…");
         $ok = $this->waitForGeneration($planIds, (int) $this->option('timeout'));
 
         if (! $ok) {
             $this->warn('Timed out or some days failed. Continuing with whatever generated.');
         } else {
-            $this->info('✓ All 21 days generated.');
+            $this->info("✓ All {$expectedDays} days generated.");
         }
 
         if ($this->option('analyze')) {
