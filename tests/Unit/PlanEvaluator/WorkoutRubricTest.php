@@ -53,6 +53,17 @@ it('flags a plan with no leg or back training', function () {
         ->and(rubric()->score($facts)['score'])->toBeLessThan(80);
 });
 
+it('treats a muscle group with zero weekly sets as not trained', function () {
+    $facts = goodPlanFacts();
+    $facts['muscle_groups'] = collect($facts['muscle_groups'])
+        ->map(fn (array $group) => in_array($group['group'], ['legs', 'back'], true)
+            ? [...$group, 'weekly_sets' => 0]
+            : $group)
+        ->all();
+
+    expect(ratingFor('coverage', $facts))->toBe(Rating::Poor);
+});
+
 it('marks a single missing group as ok, not poor', function () {
     $facts = goodPlanFacts();
     $facts['muscle_groups'] = collect($facts['muscle_groups'])

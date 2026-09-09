@@ -59,11 +59,18 @@ interface Props {
 const props = defineProps<Props>();
 const { t, locale } = useI18n();
 const page = usePage<{
-    footerLinks: { appStoreUrl: string; aboutUrl?: string };
+    footerLinks: {
+        appStoreUrl: string;
+        aboutUrl?: string;
+        legalLinks?: Record<string, { url: string }>;
+    };
 }>();
 
 const appStoreUrl = computed(() => page.props.footerLinks?.appStoreUrl ?? '#');
 const aboutUrl = computed(() => page.props.footerLinks?.aboutUrl);
+const privacyUrl = computed(
+    () => page.props.footerLinks?.legalLinks?.data_privacy?.url ?? '#',
+);
 const schemaJson = computed(() => props.schema.map((s) => JSON.stringify(s)));
 
 const measureKeys = [
@@ -230,7 +237,10 @@ function startStream(token: string): void {
         }
     };
 
-    source.onerror = () => closeStream();
+    source.onerror = () => {
+        if (streaming.value) errorKey.value = 'error';
+        closeStream();
+    };
 }
 
 function closeStream(): void {
@@ -327,6 +337,17 @@ onBeforeUnmount(closeStream);
                         >
                             {{ status }}
                         </p>
+                        <p
+                            v-else
+                            class="mt-3 text-center text-xs text-ink-muted/70"
+                        >
+                            {{ t('planRoast.consent.text') }}
+                            <a
+                                :href="privacyUrl"
+                                class="underline underline-offset-2 hover:text-ink"
+                                >{{ t('planRoast.consent.privacy') }}</a
+                            >
+                        </p>
                     </div>
                 </section>
 
@@ -413,6 +434,7 @@ onBeforeUnmount(closeStream);
                             </h2>
                             <BaseCard tone="surface" class="mt-3">
                                 <p
+                                    aria-live="polite"
                                     class="min-h-[6rem] leading-relaxed whitespace-pre-line text-ink"
                                 >
                                     {{ verdict

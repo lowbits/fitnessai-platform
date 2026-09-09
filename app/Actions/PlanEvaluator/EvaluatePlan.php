@@ -63,6 +63,12 @@ class EvaluatePlan
             return ['plan_type' => $planType, 'facts' => $facts];
         }
 
+        // Extraction found a workout but no trackable muscle groups: treat as
+        // unreadable rather than floor-scoring a real plan we failed to parse.
+        if (empty($facts['muscle_groups'])) {
+            return ['plan_type' => 'unknown', 'facts' => $facts];
+        }
+
         return ['plan_type' => 'workout', 'facts' => $facts, ...$this->workoutRubric->score($facts)];
     }
 }

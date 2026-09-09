@@ -228,6 +228,7 @@ onBeforeUnmount(() => {
                 v-model="text"
                 rows="3"
                 :placeholder="t('planRoast.composer.placeholder')"
+                :aria-label="t('planRoast.composer.placeholder')"
                 class="max-h-56 w-full resize-none bg-transparent px-2 py-1.5 text-ink placeholder:text-ink-muted/70 focus:outline-none"
                 @paste="onPaste"
                 @keydown.enter.exact.prevent="submit"

@@ -68,7 +68,7 @@ class VerdictPrompt
         $evidence = trans("plan_roast.dimensions.{$dimension->key}.evidence", [], $locale);
         $details = self::details($dimension);
 
-        return "- {$label} [{$dimension->rating->value}] — {$evidence}".($details === '' ? '' : " (details — {$details})");
+        return "- {$label} [{$dimension->rating->value}]: {$evidence}".($details === '' ? '' : " (details: {$details})");
     }
 
     /**

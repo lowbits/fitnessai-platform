@@ -22,6 +22,8 @@ class PlanRoastController extends Controller
 {
     private const CACHE_TTL_MINUTES = 15;
 
+    private const MAX_TEXT = 20000;
+
     public function __construct(
         private readonly EvaluatePlan $evaluatePlan,
         private readonly PlanTextExtractor $planText,
@@ -105,17 +107,33 @@ class PlanRoastController extends Controller
             return ['evaluation' => $this->evaluatePlan->forText($message), 'source' => 'paste', 'plan_text' => $message, 'context' => $message];
         }
 
-        $images = array_values(array_filter($files, fn (UploadedFile $file) => str_starts_with((string) $file->getMimeType(), 'image/')));
+        $isImage = fn (UploadedFile $file) => str_starts_with((string) $file->getMimeType(), 'image/');
+        $images = array_values(array_filter($files, $isImage));
+        $documents = array_values(array_filter($files, fn (UploadedFile $file) => ! $isImage($file)));
+
+        $text = $this->combinedPlanText($message, $documents);
 
         if ($images !== []) {
-            return ['evaluation' => $this->evaluatePlan->forImages($images, $message), 'source' => 'image', 'plan_text' => $message ?: null, 'context' => $message];
+            return ['evaluation' => $this->evaluatePlan->forImages($images, $text), 'source' => 'image', 'plan_text' => $text ?: null, 'context' => $message];
         }
 
-        $documentText = collect($files)->map(fn (UploadedFile $file) => $this->planText->fromUpload($file))->implode("\n\n");
-        $text = trim($message === '' ? $documentText : $message."\n\n".$documentText);
-        $source = strtolower((string) $files[0]->getClientOriginalExtension()) === 'pdf' ? 'pdf' : 'txt';
+        $source = strtolower((string) $documents[0]->getClientOriginalExtension()) === 'pdf' ? 'pdf' : 'txt';
 
         return ['evaluation' => $this->evaluatePlan->forText($text), 'source' => $source, 'plan_text' => $text, 'context' => $message];
+    }
+
+    /**
+     * The typed note plus any extracted document text, trimmed and capped.
+     *
+     * @param  list<UploadedFile>  $documents
+     */
+    private function combinedPlanText(string $message, array $documents): string
+    {
+        $documentText = collect($documents)
+            ->map(fn (UploadedFile $file) => $this->planText->fromUpload($file))
+            ->implode("\n\n");
+
+        return Str::limit(trim($message."\n\n".$documentText), self::MAX_TEXT, '');
     }
 
     /**

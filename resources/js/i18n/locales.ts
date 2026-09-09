@@ -1374,6 +1374,10 @@ export const locales = {
                 remove: 'Remove',
                 hint: 'txt, PDF or images · up to {maxFiles} files, {maxSize} MB each',
             },
+            consent: {
+                text: 'By submitting you agree that your plan is processed and stored anonymously to improve the tool. No account, no IP, not traceable.',
+                privacy: 'Privacy policy',
+            },
             tone: {
                 label: 'Tone',
                 roast: 'Roast',
@@ -3266,6 +3270,10 @@ export const locales = {
                 send: 'Plan prüfen',
                 remove: 'Entfernen',
                 hint: 'txt, PDF oder Bilder · bis zu {maxFiles} Dateien, je {maxSize} MB',
+            },
+            consent: {
+                text: 'Mit dem Absenden stimmst du zu, dass dein Plan anonym verarbeitet und gespeichert wird, um das Tool zu verbessern. Kein Account, keine IP, nicht rückverfolgbar.',
+                privacy: 'Datenschutz',
             },
             tone: {
                 label: 'Ton',

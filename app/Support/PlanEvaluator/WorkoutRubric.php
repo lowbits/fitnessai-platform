@@ -44,6 +44,7 @@ class WorkoutRubric
     {
         $groups = collect($facts['muscle_groups'] ?? [])
             ->filter(fn (array $group) => in_array($group['group'] ?? null, self::MAJOR_GROUPS, true))
+            ->filter(fn (array $group) => (int) ($group['weekly_sets'] ?? 0) > 0)
             ->keyBy('group');
 
         $dimensions = [
