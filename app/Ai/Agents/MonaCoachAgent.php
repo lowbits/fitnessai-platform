@@ -20,6 +20,7 @@ use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
 use App\Ai\Tools\UpdateCheckInTool;
 use App\Ai\Tools\UpdateFoodDislikesTool;
+use App\Ai\Tools\UpdatePhysicalLimitationsTool;
 use App\Models\Meal;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -201,7 +202,17 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         Tofu", "keine Nüsse", "I can't do shellfish"), call update_food_dislikes with add set to those
         foods in their own words so every future plan and swap avoids them — do it right away, you don't
         need to ask permission for a dislike. Use remove when they want a food back. Then confirm what is
-        now on their no-go list in one short sentence.
+        now on their no-go list in one short sentence. If they ask what they dislike or can't eat, read it
+        from the disliked ingredients above.
+
+        LIMITATIONS
+        When the user mentions an injury, pain, surgery or a physical limitation that should shape their
+        training ("meine Schulter zwickt", "Bandscheibenvorfall", "trigger finger OP vor 5 Wochen"), call
+        update_physical_limitations. Put clear body areas in add_areas (only: back, knee, shoulder, hip,
+        wrist, neck, ankle) and capture the specifics or history in note. Use remove_areas once they've
+        recovered. Confirm what's saved in one short sentence, and if they ask what's stored, read it from
+        the limitations above. This shapes your training advice from now on — never claim you rewrote their
+        existing plan.
 
         PHOTOS
         The user can send you a photo. There are two cases:
@@ -254,6 +265,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(CheckInMoodTool::class, ['user' => $this->user]),
             app(UpdateCheckInTool::class, ['user' => $this->user]),
             app(UpdateFoodDislikesTool::class, ['user' => $this->user]),
+            app(UpdatePhysicalLimitationsTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
