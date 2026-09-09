@@ -2,6 +2,7 @@
 
 namespace App\Ai\Tools;
 
+use App\Ai\Tools\Concerns\NormalizesTerms;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -17,6 +18,8 @@ use Stringable;
  */
 class UpdatePhysicalLimitationsTool implements Tool
 {
+    use NormalizesTerms;
+
     /** Areas the app models as structured limitations. Anything else goes in the note. */
     private const AREAS = ['back', 'knee', 'shoulder', 'hip', 'wrist', 'neck', 'ankle'];
 
@@ -52,22 +55,32 @@ class UpdatePhysicalLimitationsTool implements Tool
             return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
         }
 
-        $add = $this->normalizeAreas($request['add_areas'] ?? []);
-        $remove = $this->normalizeAreas($request['remove_areas'] ?? []);
+        $add = $this->normalizeTerms($request['add_areas'] ?? [], self::AREAS);
+        $remove = $this->normalizeTerms($request['remove_areas'] ?? [], self::AREAS);
         $hasNote = isset($request['note']);
 
         if ($add === [] && $remove === [] && ! $hasNote) {
             return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which limitation to add, remove or describe.']);
         }
 
-        $current = $this->normalizeAreas($profile->physical_limitations ?? []);
+        $current = $this->normalizeTerms($profile->physical_limitations ?? [], self::AREAS);
         $areas = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
 
-        $payload = ['physical_limitations' => $areas];
-
+        $newNote = null;
         if ($hasNote) {
             $note = mb_substr(trim((string) $request['note']), 0, 2000);
-            $payload['physical_limitations_note'] = $note === '' ? null : $note;
+            $newNote = $note === '' ? null : $note;
+        }
+
+        $noteUnchanged = ! $hasNote || $newNote === $profile->physical_limitations_note;
+
+        if ($this->sameTerms($areas, $current) && $noteUnchanged) {
+            return json_encode(['updated' => false, 'areas' => $current, 'note' => $profile->physical_limitations_note, 'message' => 'Already up to date — nothing changed.']);
+        }
+
+        $payload = ['physical_limitations' => $areas];
+        if ($hasNote) {
+            $payload['physical_limitations_note'] = $newNote;
         }
 
         $profile->update($payload);
@@ -77,19 +90,5 @@ class UpdatePhysicalLimitationsTool implements Tool
             'areas' => $areas,
             'note' => $profile->physical_limitations_note,
         ]);
-    }
-
-    /**
-     * @param  mixed  $areas
-     * @return list<string>
-     */
-    private function normalizeAreas($areas): array
-    {
-        return collect(is_array($areas) ? $areas : [])
-            ->map(fn ($area) => mb_strtolower(trim((string) $area)))
-            ->filter(fn (string $area) => in_array($area, self::AREAS, true))
-            ->unique()
-            ->values()
-            ->all();
     }
 }

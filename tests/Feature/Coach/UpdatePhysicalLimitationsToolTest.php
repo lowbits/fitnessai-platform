@@ -56,3 +56,10 @@ it('keeps the note when omitted and clears it on empty string', function () {
 it('reports nothing to change when no input is given', function () {
     expect(updateLimitations(userWithLimitations(), [])['error'])->toBe('nothing_to_change');
 });
+
+it('is a no-op when removing an area that is not set and no note changes', function () {
+    $result = updateLimitations(userWithLimitations(['shoulder']), ['remove_areas' => ['knee']]);
+
+    expect($result['updated'])->toBeFalse()
+        ->and($result['areas'])->toBe(['shoulder']);
+});

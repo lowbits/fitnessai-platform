@@ -2,6 +2,7 @@
 
 namespace App\Ai\Tools;
 
+use App\Ai\Tools\Concerns\NormalizesTerms;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -16,6 +17,8 @@ use Stringable;
  */
 class UpdateFocusAreasTool implements Tool
 {
+    use NormalizesTerms;
+
     /** Coarse, user-facing muscle groups — kept simple on purpose. */
     private const AREAS = ['chest', 'back', 'shoulders', 'arms', 'legs', 'glutes', 'core'];
 
@@ -49,32 +52,22 @@ class UpdateFocusAreasTool implements Tool
             return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
         }
 
-        $add = $this->normalize($request['add'] ?? []);
-        $remove = $this->normalize($request['remove'] ?? []);
+        $add = $this->normalizeTerms($request['add'] ?? [], self::AREAS);
+        $remove = $this->normalizeTerms($request['remove'] ?? [], self::AREAS);
 
         if ($add === [] && $remove === []) {
             return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which muscle group to focus on.']);
         }
 
-        $current = $this->normalize($profile->focus_areas ?? []);
-        $focusAreas = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
+        $current = $this->normalizeTerms($profile->focus_areas ?? [], self::AREAS);
+        $updated = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
 
-        $profile->update(['focus_areas' => $focusAreas]);
+        if ($this->sameTerms($updated, $current)) {
+            return json_encode(['updated' => false, 'focus_areas' => $current, 'message' => 'Already up to date — nothing changed.']);
+        }
 
-        return json_encode(['updated' => true, 'focus_areas' => $focusAreas]);
-    }
+        $profile->update(['focus_areas' => $updated]);
 
-    /**
-     * @param  mixed  $areas
-     * @return list<string>
-     */
-    private function normalize($areas): array
-    {
-        return collect(is_array($areas) ? $areas : [])
-            ->map(fn ($area) => mb_strtolower(trim((string) $area)))
-            ->filter(fn (string $area) => in_array($area, self::AREAS, true))
-            ->unique()
-            ->values()
-            ->all();
+        return json_encode(['updated' => true, 'focus_areas' => $updated]);
     }
 }

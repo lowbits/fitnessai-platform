@@ -42,3 +42,10 @@ it('removes a focus area', function () {
 it('reports nothing to change when no valid area is given', function () {
     expect(updateFocusAreas(userWithFocusAreas(), ['add' => ['biceps']])['error'])->toBe('nothing_to_change');
 });
+
+it('is a no-op when the focus is already set', function () {
+    $result = updateFocusAreas(userWithFocusAreas(['arms']), ['add' => ['arms'], 'remove' => ['legs']]);
+
+    expect($result['updated'])->toBeFalse()
+        ->and($result['focus_areas'])->toBe(['arms']);
+});

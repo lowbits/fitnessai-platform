@@ -50,3 +50,20 @@ it('reports nothing to change when no foods are given', function () {
 
     expect($result['error'])->toBe('nothing_to_change');
 });
+
+it('is a no-op when the food is already on the list', function () {
+    $user = userWithDislikes(['tofu']);
+
+    $result = updateDislikes($user, ['add' => ['Tofu'], 'remove' => ['nuts']]);
+
+    expect($result['updated'])->toBeFalse()
+        ->and($result['dislikes'])->toBe(['tofu']);
+});
+
+it('caps each dislike at 100 characters', function () {
+    $long = str_repeat('a', 150);
+
+    $result = updateDislikes(userWithDislikes(), ['add' => [$long]]);
+
+    expect($result['dislikes'][0])->toHaveLength(100);
+});

@@ -2,6 +2,7 @@
 
 namespace App\Ai\Tools;
 
+use App\Ai\Tools\Concerns\NormalizesTerms;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -17,6 +18,8 @@ use Stringable;
  */
 class UpdateFoodDislikesTool implements Tool
 {
+    use NormalizesTerms;
+
     public function __construct(private readonly User $user) {}
 
     public function description(): Stringable|string
@@ -47,37 +50,27 @@ class UpdateFoodDislikesTool implements Tool
             return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
         }
 
-        $add = $this->normalize($request['add'] ?? []);
-        $remove = $this->normalize($request['remove'] ?? []);
+        $add = $this->normalizeTerms($request['add'] ?? []);
+        $remove = $this->normalizeTerms($request['remove'] ?? []);
 
         if ($add === [] && $remove === []) {
             return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which food to add or remove.']);
         }
 
-        $current = $this->normalize($profile->food_dislikes ?? []);
+        $current = $this->normalizeTerms($profile->food_dislikes ?? []);
         $updated = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
+
+        if ($this->sameTerms($updated, $current)) {
+            return json_encode(['updated' => false, 'dislikes' => $current, 'message' => 'Already up to date — nothing changed.']);
+        }
 
         $profile->update(['food_dislikes' => $updated]);
 
         return json_encode([
             'updated' => true,
-            'added' => array_values(array_intersect($add, $updated)),
-            'removed' => array_values(array_intersect($remove, $current)),
+            'added' => array_values(array_diff($updated, $current)),
+            'removed' => array_values(array_diff($current, $updated)),
             'dislikes' => $updated,
         ]);
-    }
-
-    /**
-     * @param  mixed  $terms
-     * @return list<string>
-     */
-    private function normalize($terms): array
-    {
-        return collect(is_array($terms) ? $terms : [])
-            ->map(fn ($term) => mb_strtolower(trim((string) $term)))
-            ->filter()
-            ->unique()
-            ->values()
-            ->all();
     }
 }
