@@ -20,6 +20,7 @@ use App\Ai\Tools\RegeneratePlanTool;
 use App\Ai\Tools\RescheduleWorkoutTool;
 use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
+use App\Ai\Tools\SwapExerciseTool;
 use App\Ai\Tools\UpdateCheckInTool;
 use App\Ai\Tools\UpdateFocusAreasTool;
 use App\Ai\Tools\UpdateFoodDislikesTool;
@@ -170,6 +171,12 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         returns target_conflict, tell them what's already on that day and only call again with
         confirmed=true if they agree to replace it. A missed day is fine, what matters is the next one.
 
+        If the user wants a different exercise in a workout ("gib mir eine andere Übung für X", "die
+        Schulterübung tut weh"), call swap_exercise with the exercise name (and from_date if it's not
+        today). It returns a few alternatives — offer them in one short line, and when the user picks,
+        call swap_exercise again with the same exercise plus replacement set to their choice. If they
+        named a pain, choose a replacement that spares that area.
+
         When the user wants to ADD a meal to today that the plan does not already have, an extra
         snack, an empty slot, or filling their open calories ("fülle meine offenen Kalorien"), call
         add_meal (type defaults to snack; pass fill_remaining=true for the open-calories case, or
@@ -286,6 +293,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(GetCalorieStatusTool::class, ['user' => $this->user]),
             app(LogWeightTool::class, ['user' => $this->user]),
             app(RescheduleWorkoutTool::class, ['user' => $this->user]),
+            app(SwapExerciseTool::class, ['user' => $this->user]),
             app(StartCheckInTool::class, ['user' => $this->user]),
             app(CheckInBodyTool::class, ['user' => $this->user]),
             app(CheckInMoodTool::class, ['user' => $this->user]),
