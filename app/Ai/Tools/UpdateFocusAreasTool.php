@@ -3,6 +3,7 @@
 namespace App\Ai\Tools;
 
 use App\Ai\Tools\Concerns\NormalizesTerms;
+use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -49,25 +50,25 @@ class UpdateFocusAreasTool implements Tool
         $profile = $this->user->profile;
 
         if ($profile === null) {
-            return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
+            return ToolResult::error('no_profile', 'The user has not completed onboarding yet.');
         }
 
         $add = $this->normalizeTerms($request['add'] ?? [], self::AREAS);
         $remove = $this->normalizeTerms($request['remove'] ?? [], self::AREAS);
 
         if ($add === [] && $remove === []) {
-            return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which muscle group to focus on.']);
+            return ToolResult::error('nothing_to_change', 'Ask the user which muscle group to focus on.');
         }
 
         $current = $this->normalizeTerms($profile->focus_areas ?? [], self::AREAS);
         $updated = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
 
         if ($this->sameTerms($updated, $current)) {
-            return json_encode(['updated' => false, 'focus_areas' => $current, 'message' => 'Already up to date — nothing changed.']);
+            return ToolResult::data(['updated' => false, 'focus_areas' => $current, 'message' => 'Already up to date — nothing changed.']);
         }
 
         $profile->update(['focus_areas' => $updated]);
 
-        return json_encode(['updated' => true, 'focus_areas' => $updated]);
+        return ToolResult::data(['updated' => true, 'focus_areas' => $updated]);
     }
 }

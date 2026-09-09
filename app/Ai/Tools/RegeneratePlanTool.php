@@ -4,6 +4,7 @@ namespace App\Ai\Tools;
 
 use App\Actions\RegenerateRemainingPlan;
 use App\Ai\Tools\Concerns\InteractsWithPlan;
+use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Illuminate\Support\Facades\Cache;
@@ -48,11 +49,11 @@ class RegeneratePlanTool implements Tool
         $plan = $this->activePlan($this->user);
 
         if (! $plan) {
-            return json_encode(['error' => 'no_active_plan', 'message' => 'The user has no active plan to rebuild.']);
+            return ToolResult::error('no_active_plan', 'The user has no active plan to rebuild.');
         }
 
         if (! ($request['confirmed'] ?? false)) {
-            return json_encode([
+            return ToolResult::data([
                 'requires_confirmation' => true,
                 'message' => 'This rebuilds their upcoming meals and workouts to match the new settings. Past days and anything already eaten stay. Ask them to confirm before rebuilding.',
             ]);
@@ -62,26 +63,19 @@ class RegeneratePlanTool implements Tool
         $lock = "coach:plan_regen:{$plan->id}";
 
         if (! Cache::add($lock, true, now()->addMinutes($cooldown))) {
-            return json_encode([
-                'error' => 'throttled',
-                'message' => 'The plan was just rebuilt and is still updating. Tell them to give it a few minutes before changing it again.',
-            ]);
+            return ToolResult::error('throttled', 'The plan was just rebuilt and is still updating. Tell them to give it a few minutes before changing it again.');
         }
 
         try {
             $summary = $this->regenerate->execute($this->user, $plan);
         } catch (Throwable $e) {
-            // A failed rebuild must not lock the user out for the whole cooldown.
             Cache::forget($lock);
             report($e);
 
-            return json_encode([
-                'error' => 'regen_failed',
-                'message' => 'Something went wrong rebuilding the plan. Ask them to try again in a moment.',
-            ]);
+            return ToolResult::error('regen_failed', 'Something went wrong rebuilding the plan. Ask them to try again in a moment.');
         }
 
-        return json_encode([
+        return ToolResult::data([
             'regenerating' => true,
             ...$summary,
             'message' => 'The plan is rebuilding from tomorrow — it will be ready in a few minutes.',

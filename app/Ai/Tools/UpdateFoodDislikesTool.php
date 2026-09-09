@@ -3,6 +3,7 @@
 namespace App\Ai\Tools;
 
 use App\Ai\Tools\Concerns\NormalizesTerms;
+use App\Ai\Tools\Support\ToolResult;
 use App\Models\User;
 use Illuminate\Contracts\JsonSchema\JsonSchema;
 use Laravel\Ai\Contracts\Tool;
@@ -47,26 +48,26 @@ class UpdateFoodDislikesTool implements Tool
         $profile = $this->user->profile;
 
         if ($profile === null) {
-            return json_encode(['error' => 'no_profile', 'message' => 'The user has not completed onboarding yet.']);
+            return ToolResult::error('no_profile', 'The user has not completed onboarding yet.');
         }
 
         $add = $this->normalizeTerms($request['add'] ?? []);
         $remove = $this->normalizeTerms($request['remove'] ?? []);
 
         if ($add === [] && $remove === []) {
-            return json_encode(['error' => 'nothing_to_change', 'message' => 'Ask the user which food to add or remove.']);
+            return ToolResult::error('nothing_to_change', 'Ask the user which food to add or remove.');
         }
 
         $current = $this->normalizeTerms($profile->food_dislikes ?? []);
         $updated = array_values(array_diff(array_unique([...$current, ...$add]), $remove));
 
         if ($this->sameTerms($updated, $current)) {
-            return json_encode(['updated' => false, 'dislikes' => $current, 'message' => 'Already up to date — nothing changed.']);
+            return ToolResult::data(['updated' => false, 'dislikes' => $current, 'message' => 'Already up to date — nothing changed.']);
         }
 
         $profile->update(['food_dislikes' => $updated]);
 
-        return json_encode([
+        return ToolResult::data([
             'updated' => true,
             'added' => array_values(array_diff($updated, $current)),
             'removed' => array_values(array_diff($current, $updated)),
