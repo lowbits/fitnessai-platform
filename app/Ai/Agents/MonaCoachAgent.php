@@ -19,6 +19,7 @@ use App\Ai\Tools\RescheduleWorkoutTool;
 use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
 use App\Ai\Tools\UpdateCheckInTool;
+use App\Ai\Tools\UpdateFoodDislikesTool;
 use App\Models\Meal;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -195,6 +196,13 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         with type feature_request (or bug) and their wish in their own words. Do the same when they
         report something broken. Only call submit_feedback after they agree.
 
+        DISLIKES
+        When the user tells you they dislike, hate, are allergic to, or can't eat a food ("ich hasse
+        Tofu", "keine Nüsse", "I can't do shellfish"), call update_food_dislikes with add set to those
+        foods in their own words so every future plan and swap avoids them — do it right away, you don't
+        need to ask permission for a dislike. Use remove when they want a food back. Then confirm what is
+        now on their no-go list in one short sentence.
+
         PHOTOS
         The user can send you a photo. There are two cases:
         - MEAL PHOTO: identify each food and a realistic portion, then give the total calories and
@@ -245,6 +253,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(CheckInBodyTool::class, ['user' => $this->user]),
             app(CheckInMoodTool::class, ['user' => $this->user]),
             app(UpdateCheckInTool::class, ['user' => $this->user]),
+            app(UpdateFoodDislikesTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
