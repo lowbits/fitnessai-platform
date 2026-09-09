@@ -2,6 +2,7 @@
 
 namespace App\Ai\Prompts;
 
+use App\Ai\Support\FocusAreas;
 use App\Ai\Support\PhysicalLimitations;
 use App\Models\UserProfile;
 use Stringable;
@@ -46,6 +47,9 @@ class CreateWorkoutPrompt implements Stringable
         $limitations = PhysicalLimitations::forProfile($this->profile);
         $limitationsSection = $limitations === '' ? '' : "\n\n**INJURIES / LIMITATIONS:** {$limitations}";
 
+        $focus = FocusAreas::forProfile($this->profile);
+        $focusSection = $focus === '' ? '' : "\n\n**FOCUS AREAS:** {$focus} Emphasize these when the day's split allows (e.g. an added accessory), without derailing the planned focus.";
+
         return <<<PROMPT
 **User Profile:**
 - Age: {$age} years
@@ -56,7 +60,7 @@ class CreateWorkoutPrompt implements Stringable
 - Activity Level: {$activityLevel}
 - Training Sessions per Week: {$sessionsPerWeek}
 - Workout Split: {$workoutSplit}
-{$genderContext}{$limitationsSection}
+{$genderContext}{$limitationsSection}{$focusSection}
 
 {$workoutDayContext}
 

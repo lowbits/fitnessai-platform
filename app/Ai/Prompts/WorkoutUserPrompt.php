@@ -36,7 +36,6 @@ class WorkoutUserPrompt implements Stringable
             $this->buildWeightRec(),
             $this->buildTrainingEnvironment(),
             $this->buildGenderNote(),
-            $this->buildFocusAreas(),
             "Language: {$language}",
             $this->buildRecentWorkouts(),
             'Create this workout now. Use MeilisearchSimilaritySearch for all exercises, then call saveWorkoutPlan.',
@@ -65,18 +64,6 @@ class WorkoutUserPrompt implements Stringable
             "Day {$this->dayNumber}/{$this->totalDays} | Workout {$workoutNumber}/{$this->workoutsPerWeek}",
             "Split: {$split} | Today: {$focus}",
         ]);
-    }
-
-    private function buildFocusAreas(): string
-    {
-        $areas = $this->profile->focus_areas ?? [];
-
-        if (empty($areas)) {
-            return '';
-        }
-
-        return 'User focus areas — give these extra emphasis when today\'s split allows '
-            .'(e.g. an added accessory), without derailing the planned focus: '.implode(', ', $areas).'.';
     }
 
     private function buildGenderNote(): string
