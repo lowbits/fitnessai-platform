@@ -17,6 +17,10 @@ return [
         'over_40' => 'Over-40 Workout',
         'all' => 'All Workout Plans →',
     ],
+    'free_tools' => [
+        'heading' => 'Free Tools',
+        'plan_roast' => 'Workout Plan Check',
+    ],
     'product' => [
         'heading' => 'Product',
         'home' => 'Home',

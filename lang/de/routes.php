@@ -7,6 +7,7 @@ return [
     'disclaimer' => 'haftungsausschluss',
     'free_tools_calorie_calculator' => 'kostenlose-tools/kalorienrechner',
     'free_tools_macro_calculator' => 'kostenlose-tools/makronaehrstoff-rechner',
+    'free_tools_plan_roast' => 'kostenlose-tools/trainingsplan-check',
     'blog_index' => 'blog',
     'blog_article' => 'blog/{slug}',
     'about' => 'ueber-uns',

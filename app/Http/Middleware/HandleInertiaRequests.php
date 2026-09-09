@@ -86,6 +86,12 @@ class HandleInertiaRequests extends Middleware
             'landingPages' => $this->getLandingPageLinks($locale),
         ];
 
+        $links['freeTools'] = [
+            ['url' => $links['calorieCalculatorUrl'], 'label' => trans('footer.product.calorie_calculator', [], $locale)],
+            ['url' => $links['macroCalculatorUrl'], 'label' => trans('footer.product.macro_calculator', [], $locale)],
+            ['url' => LaravelLocalization::localizeURL('/'.trans('routes.free_tools_plan_roast', [], $locale), $locale), 'label' => trans('footer.free_tools.plan_roast', [], $locale)],
+        ];
+
         foreach ($workoutPlanTypes as $internalType) {
             $translatedSlug = trans("routes.type.{$internalType}", [], $locale);
 
@@ -102,6 +108,7 @@ class HandleInertiaRequests extends Middleware
         $links['labels'] = [
             'heading' => trans('footer.workout_plans.heading', [], $locale),
             'all' => trans('footer.workout_plans.all', [], $locale),
+            'freeTools' => trans('footer.free_tools.heading', [], $locale),
             'product' => trans('footer.product.heading', [], $locale),
             'home' => trans('footer.product.home', [], $locale),
             'app' => trans('footer.product.app', [], $locale),
