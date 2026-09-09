@@ -48,6 +48,7 @@ class UserProfile extends Model
         'auto_fill_calories',
         'physical_limitations',
         'physical_limitations_note',
+        'focus_areas',
     ];
 
     protected function casts(): array
@@ -71,6 +72,7 @@ class UserProfile extends Model
             'meal_variety' => MealVariety::class,
             'auto_fill_calories' => 'boolean',
             'physical_limitations' => 'array',
+            'focus_areas' => 'array',
         ];
     }
 

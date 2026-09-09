@@ -4,6 +4,7 @@ namespace App\Ai\Agents;
 
 use App\Ai\Support\CoachSnapshot;
 use App\Ai\Support\DietaryConstraints;
+use App\Ai\Support\FocusAreas;
 use App\Ai\Support\PhysicalLimitations;
 use App\Ai\Tools\AddMealTool;
 use App\Ai\Tools\CheckInBodyTool;
@@ -19,6 +20,9 @@ use App\Ai\Tools\RescheduleWorkoutTool;
 use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
 use App\Ai\Tools\UpdateCheckInTool;
+use App\Ai\Tools\UpdateFocusAreasTool;
+use App\Ai\Tools\UpdateFoodDislikesTool;
+use App\Ai\Tools\UpdatePhysicalLimitationsTool;
 use App\Models\Meal;
 use App\Models\User;
 use Laravel\Ai\Attributes\Provider;
@@ -70,6 +74,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             "Their current goal is: {$goal}.",
             DietaryConstraints::forProfile($profile),
             PhysicalLimitations::forProfile($profile),
+            FocusAreas::forProfile($profile),
         ])));
 
         $snapshot = app(CoachSnapshot::class)->forUser($this->user);
@@ -195,6 +200,37 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         with type feature_request (or bug) and their wish in their own words. Do the same when they
         report something broken. Only call submit_feedback after they agree.
 
+        DISLIKES
+        When the user tells you they dislike, hate, are allergic to, or can't eat a food ("ich hasse
+        Tofu", "keine Nüsse", "I can't do shellfish"), call update_food_dislikes with add set to those
+        foods in their own words so every future plan and swap avoids them — do it right away, you don't
+        need to ask permission for a dislike. Use remove when they want a food back. Then confirm what is
+        now on their no-go list in one short sentence. If they ask what they dislike or can't eat, read it
+        from the disliked ingredients above.
+
+        LIMITATIONS
+        When the user mentions an injury, pain, surgery or a physical limitation that should shape their
+        training ("meine Schulter zwickt", "Bandscheibenvorfall", "trigger finger OP vor 5 Wochen"), call
+        update_physical_limitations. Put clear body areas in add_areas (only: back, knee, shoulder, hip,
+        wrist, neck, ankle) and capture the specifics or history in note. Use remove_areas once they've
+        recovered. Confirm what's saved in one short sentence, and if they ask what's stored, read it from
+        the limitations above. This shapes your training advice from now on — never claim you rewrote their
+        existing plan.
+
+        FOCUS AREAS
+        When the user says which muscles they want to prioritize ("ich will mehr Arme", "focus on glutes",
+        "stärkerer Rücken"), call update_focus_areas with add (only: chest, back, shoulders, arms, legs,
+        glutes, core); use remove to drop one. Confirm the focus in one short sentence. This shapes their
+        upcoming workouts but does not rewrite the plan they already have — if they want it applied now,
+        tell them you can update the plan and only do so once they confirm.
+
+        REVIEW AT CHECK-IN
+        At the end of a weekly check-in, briefly re-confirm the things that change over time: if they have
+        focus areas saved, ask whether those are still right; if a saved limitation is one that can heal (a
+        strain, a post-op recovery), ask whether it still bothers them and use remove_areas if it's gone.
+        Never re-ask about a permanent condition, and never re-ask facts that can't change such as height
+        or age. Keep it to one short question, and skip it entirely when nothing is saved.
+
         PHOTOS
         The user can send you a photo. There are two cases:
         - MEAL PHOTO: identify each food and a realistic portion, then give the total calories and
@@ -245,6 +281,9 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(CheckInBodyTool::class, ['user' => $this->user]),
             app(CheckInMoodTool::class, ['user' => $this->user]),
             app(UpdateCheckInTool::class, ['user' => $this->user]),
+            app(UpdateFoodDislikesTool::class, ['user' => $this->user]),
+            app(UpdatePhysicalLimitationsTool::class, ['user' => $this->user]),
+            app(UpdateFocusAreasTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
