@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Ai\Agents\WorkoutProgrammerAgent;
 use App\Ai\Prompts\CreateWorkoutPrompt;
+use App\Jobs\GenerateUserWorkoutPlan;
 use App\Models\User;
 use App\Models\WorkoutPlan;
 use Illuminate\Console\Command;
@@ -36,11 +37,18 @@ class CreateWorkoutCommand extends Command
             ]
         );
 
+        $workoutsPerWeek = 2;
+
         $prompt = new CreateWorkoutPrompt(
             profile: $user->profile,
             locale: $user->preferredLocale(),
             dayNumber: $dayNumber,
-            workoutsPerWeek: 2
+            workoutsPerWeek: $workoutsPerWeek,
+            workoutNumberInCycle: GenerateUserWorkoutPlan::workoutNumberInCycle(
+                $dayNumber,
+                $workoutsPerWeek,
+                GenerateUserWorkoutPlan::trainingDayIndices($workoutsPerWeek),
+            ),
         );
 
         (new WorkoutProgrammerAgent($workoutPlan))
