@@ -97,3 +97,22 @@ test('move without a target day asks for one', function () {
 
     expect(reschedule($user, ['action' => 'move'])['error'])->toBe('need_target_date');
 });
+
+test('pulls a future workout onto today when today is free', function () {
+    $user = User::factory()->withProfile()->create();
+    $plan = Plan::factory()->create(['user_id' => $user->id, 'status' => 'active', 'start_date' => today(), 'duration_days' => 30]);
+    WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'date' => today(), 'day_number' => 1, 'status' => 'generated', 'workout_type' => 'rest', 'workout_name' => 'Rest']);
+    $future = WorkoutPlan::factory()->create(['plan_id' => $plan->id, 'date' => today()->addDay(), 'day_number' => 2, 'status' => 'generated', 'workout_type' => 'strength', 'workout_name' => 'Leg Day']);
+    $exercise = Exercise::factory()->create();
+    WorkoutPlanExercise::factory()->for($future, 'workoutPlan')->create(['exercise_id' => $exercise->id, 'order' => 1]);
+
+    $result = reschedule($user, [
+        'action' => 'move',
+        'from_date' => today()->addDay()->format('Y-m-d'),
+        'target_date' => today()->format('Y-m-d'),
+    ]);
+
+    expect($result['data']['outcome'])->toBe('moved')
+        ->and(WorkoutPlan::whereDate('date', today())->where('workout_name', 'Leg Day')->exists())->toBeTrue()
+        ->and($future->fresh()->workout_type)->toBe('rest');
+});
