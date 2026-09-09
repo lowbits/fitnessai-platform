@@ -61,3 +61,52 @@ it('resets the cycle to the real training-day count for a mismatched custom sche
 it('dedupes duplicate custom training days', function () {
     expect(GenerateUserWorkoutPlan::trainingDayIndices(2, ['monday', 'monday', 'friday']))->toBe([0, 4]);
 });
+
+/**
+ * Map the split's granular muscles to our six major groups and count how many
+ * days per week train each. This lets us prove a split is balanced without
+ * generating a single AI workout.
+ *
+ * @return array<string, int>
+ */
+function groupFrequency(int $frequency): array
+{
+    $map = [
+        'quadriceps' => 'legs', 'hamstrings' => 'legs', 'glutes' => 'legs', 'calves' => 'legs',
+        'chest' => 'chest',
+        'back' => 'back', 'upper_back' => 'back', 'lower_back' => 'back', 'lats' => 'back',
+        'shoulders' => 'shoulders', 'rear_delts' => 'shoulders', 'rotator_cuff' => 'shoulders',
+        'biceps' => 'arms', 'triceps' => 'arms', 'forearms' => 'arms',
+        'core' => 'core',
+    ];
+
+    $counts = [];
+
+    foreach (WorkoutSplit::forFrequency($frequency) as $day) {
+        $groups = collect(explode(',', $day['muscles']))
+            ->map(fn (string $muscle) => $map[trim($muscle)] ?? null)
+            ->filter()
+            ->unique();
+
+        foreach ($groups as $group) {
+            $counts[$group] = ($counts[$group] ?? 0) + 1;
+        }
+    }
+
+    return $counts;
+}
+
+it('covers every major muscle group at each frequency', function (int $frequency) {
+    $counts = groupFrequency($frequency);
+
+    expect(array_keys($counts))->toContain('legs', 'back', 'chest', 'shoulders', 'arms', 'core');
+})->with([2, 3, 4, 5, 6, 7]);
+
+it('trains every major group at least twice a week', function (int $frequency) {
+    $counts = groupFrequency($frequency);
+    $min = collect(['legs', 'back', 'chest', 'shoulders', 'arms', 'core'])
+        ->map(fn (string $group) => $counts[$group] ?? 0)
+        ->min();
+
+    expect($min)->toBeGreaterThanOrEqual(2);
+})->with([2, 3, 4, 5, 6]);

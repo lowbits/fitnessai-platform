@@ -20,35 +20,37 @@ class WorkoutSplit
     public static function forFrequency(int $workoutsPerWeek): array
     {
         return match ($workoutsPerWeek) {
+            // Low frequency: full body so every muscle is trained 2-3x/week. A
+            // split here would only hit each muscle once, which is suboptimal.
             2 => [
-                ['label' => 'Upper Body', 'muscles' => 'chest, back, shoulders, biceps, triceps'],
-                ['label' => 'Lower Body', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
+                ['label' => 'Full Body A', 'muscles' => 'quadriceps, glutes, chest, back, shoulders, triceps, core'],
+                ['label' => 'Full Body B', 'muscles' => 'hamstrings, glutes, back, chest, shoulders, biceps, core'],
             ],
             3 => [
-                ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
-                ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs & Core', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
+                ['label' => 'Full Body A', 'muscles' => 'quadriceps, chest, back, shoulders, triceps, core'],
+                ['label' => 'Full Body B', 'muscles' => 'hamstrings, glutes, back, chest, biceps, core'],
+                ['label' => 'Full Body C', 'muscles' => 'quadriceps, glutes, shoulders, back, chest, triceps, biceps, core'],
             ],
             4 => [
-                ['label' => 'Upper Body A', 'muscles' => 'chest, back, shoulders'],
-                ['label' => 'Lower Body A', 'muscles' => 'quadriceps, hamstrings, glutes'],
-                ['label' => 'Upper Body B', 'muscles' => 'back, biceps, triceps, rear_delts'],
-                ['label' => 'Lower Body B', 'muscles' => 'glutes, hamstrings, calves'],
+                ['label' => 'Upper Body A', 'muscles' => 'chest, shoulders, triceps, back, biceps'],
+                ['label' => 'Lower Body A', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
+                ['label' => 'Upper Body B', 'muscles' => 'back, biceps, rear_delts, chest, shoulders, triceps'],
+                ['label' => 'Lower Body B', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
             ],
             5 => [
                 ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
-                ['label' => 'Upper Body', 'muscles' => 'chest, back, shoulders'],
-                ['label' => 'Lower Body', 'muscles' => 'glutes, hamstrings, calves'],
+                ['label' => 'Legs & Core', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
+                ['label' => 'Upper Body', 'muscles' => 'chest, back, shoulders, biceps, triceps'],
+                ['label' => 'Lower Body', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
             ],
             6 => [
                 ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
+                ['label' => 'Legs & Core', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
                 ['label' => 'Push', 'muscles' => 'shoulders, chest, triceps'],
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs', 'muscles' => 'hamstrings, glutes, calves'],
+                ['label' => 'Legs & Core', 'muscles' => 'hamstrings, glutes, calves, core'],
             ],
             7 => [
                 ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
