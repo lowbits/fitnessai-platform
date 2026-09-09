@@ -16,6 +16,7 @@ use App\Ai\Tools\GetTodayWorkoutTool;
 use App\Ai\Tools\LogMealTool;
 use App\Ai\Tools\LogWeightTool;
 use App\Ai\Tools\ProposeMealAlternativesTool;
+use App\Ai\Tools\RegeneratePlanTool;
 use App\Ai\Tools\RescheduleWorkoutTool;
 use App\Ai\Tools\StartCheckInTool;
 use App\Ai\Tools\SubmitFeedbackTool;
@@ -224,6 +225,14 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
         upcoming workouts but does not rewrite the plan they already have — if they want it applied now,
         tell them you can update the plan and only do so once they confirm.
 
+        APPLY TO PLAN
+        When a change you just saved would reshape their plan — a new goal or calorie target, focus areas,
+        or a fresh limitation — offer to update it ("Soll ich deinen Plan daran anpassen?"). Only call
+        regenerate_plan with confirmed=true after they clearly say yes; it rebuilds the coming days and
+        keeps everything they've already eaten or trained. Batch several changes into one offer instead of
+        rebuilding after each. If it returns throttled, tell them the plan is still updating from the last
+        rebuild and to try again in a bit.
+
         REVIEW AT CHECK-IN
         At the end of a weekly check-in, briefly re-confirm the things that change over time: if they have
         focus areas saved, ask whether those are still right; if a saved limitation is one that can heal (a
@@ -284,6 +293,7 @@ class MonaCoachAgent implements Agent, Conversational, HasTools
             app(UpdateFoodDislikesTool::class, ['user' => $this->user]),
             app(UpdatePhysicalLimitationsTool::class, ['user' => $this->user]),
             app(UpdateFocusAreasTool::class, ['user' => $this->user]),
+            app(RegeneratePlanTool::class, ['user' => $this->user]),
             app(SubmitFeedbackTool::class, ['user' => $this->user]),
         ];
     }
