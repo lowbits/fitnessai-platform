@@ -61,6 +61,24 @@ it('rebuilds future untouched days and preserves past, eaten and tracked days', 
         ->and((int) $plan->daily_calories)->not->toBe(9999)
         ->and($plan->generation_completed_at)->toBeNull();
 
-    Bus::assertDispatched(GenerateUserMealPlan::class);
-    Bus::assertDispatched(GenerateUserWorkoutPlan::class);
+    // only reset days are regenerated: day 4 was the furthest reset, today is 3 → window of 1
+    Bus::assertDispatched(GenerateUserMealPlan::class, fn ($job) => $job->maxDays === 1);
+    Bus::assertDispatched(GenerateUserWorkoutPlan::class, fn ($job) => $job->maxDays === 1);
+});
+
+it('dispatches nothing when there are no future days to rebuild', function () {
+    Bus::fake();
+
+    $user = User::factory()->create();
+    UserProfile::factory()->create(['user_id' => $user->id, 'weight_kg' => 80, 'height_cm' => 180]);
+    $plan = Plan::factory()->create([
+        'user_id' => $user->id, 'status' => 'active',
+        'start_date' => today(), 'duration_days' => 28,
+    ]);
+
+    $summary = app(RegenerateRemainingPlan::class)->execute($user, $plan);
+
+    expect($summary)->toMatchArray(['meal_days' => 0, 'workout_days' => 0]);
+    Bus::assertNotDispatched(GenerateUserMealPlan::class);
+    Bus::assertNotDispatched(GenerateUserWorkoutPlan::class);
 });
