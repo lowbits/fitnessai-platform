@@ -393,7 +393,7 @@ WARMUP;
         return match ($this->profile->body_goal->resolveCanonical()->value) {
             'build_muscle' => <<<'GOAL'
 **Build Muscle (Hypertrophy) Protocol:**
-- Volume: 3-4 sets per exercise
+- Volume: 4 working sets per compound exercise, 3 for isolation. Trained ~2x/week across the split, this puts each muscle around 8-10 hard sets/week — the productive floor for growth without lengthening the session.
 - Rep range: 8-12 reps (hypertrophy zone) — vary across exercises (e.g. 8, 10, 12)
 - Rest periods: 60-90 seconds between sets
 - Tempo: 3-0-1-0 for compound lifts (slow eccentric for time under tension), 2-0-1-0 for isolation
