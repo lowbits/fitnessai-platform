@@ -34,3 +34,19 @@ it('rebuilds once confirmed, then throttles an immediate repeat', function () {
     expect(regeneratePlan($user, ['confirmed' => true], $action)['regenerating'])->toBeTrue()
         ->and(regeneratePlan($user, ['confirmed' => true], $action)['error'])->toBe('throttled');
 });
+
+it('releases the throttle and reports failure when the rebuild throws', function () {
+    $user = User::factory()->create();
+    Plan::factory()->create(['user_id' => $user->id, 'status' => 'active']);
+
+    $failing = Mockery::mock(RegenerateRemainingPlan::class);
+    $failing->shouldReceive('execute')->once()->andThrow(new RuntimeException('boom'));
+
+    expect(regeneratePlan($user, ['confirmed' => true], $failing)['error'])->toBe('regen_failed');
+
+    // lock was released, so a follow-up rebuild is not throttled
+    $ok = Mockery::mock(RegenerateRemainingPlan::class);
+    $ok->shouldReceive('execute')->once()->andReturn(['from_day' => 4, 'meal_days' => 1, 'workout_days' => 1]);
+
+    expect(regeneratePlan($user, ['confirmed' => true], $ok)['regenerating'])->toBeTrue();
+});

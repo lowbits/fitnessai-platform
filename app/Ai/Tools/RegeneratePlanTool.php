@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Cache;
 use Laravel\Ai\Contracts\Tool;
 use Laravel\Ai\Tools\Request;
 use Stringable;
+use Throwable;
 
 /**
  * Applies a preference the user just changed (goal, calorie target, focus
@@ -58,15 +59,27 @@ class RegeneratePlanTool implements Tool
         }
 
         $cooldown = (int) config('plans.regenerate_cooldown_minutes', 30);
+        $lock = "coach:plan_regen:{$plan->id}";
 
-        if (! Cache::add("coach:plan_regen:{$plan->id}", true, now()->addMinutes($cooldown))) {
+        if (! Cache::add($lock, true, now()->addMinutes($cooldown))) {
             return json_encode([
                 'error' => 'throttled',
                 'message' => 'The plan was just rebuilt and is still updating. Tell them to give it a few minutes before changing it again.',
             ]);
         }
 
-        $summary = $this->regenerate->execute($this->user, $plan);
+        try {
+            $summary = $this->regenerate->execute($this->user, $plan);
+        } catch (Throwable $e) {
+            // A failed rebuild must not lock the user out for the whole cooldown.
+            Cache::forget($lock);
+            report($e);
+
+            return json_encode([
+                'error' => 'regen_failed',
+                'message' => 'Something went wrong rebuilding the plan. Ask them to try again in a moment.',
+            ]);
+        }
 
         return json_encode([
             'regenerating' => true,
