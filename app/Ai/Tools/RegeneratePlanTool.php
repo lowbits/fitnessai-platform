@@ -1,0 +1,84 @@
+<?php
+
+namespace App\Ai\Tools;
+
+use App\Actions\RegenerateRemainingPlan;
+use App\Ai\Tools\Concerns\InteractsWithPlan;
+use App\Ai\Tools\Support\ToolResult;
+use App\Models\User;
+use Illuminate\Contracts\JsonSchema\JsonSchema;
+use Illuminate\Support\Facades\Cache;
+use Laravel\Ai\Contracts\Tool;
+use Laravel\Ai\Tools\Request;
+use Stringable;
+use Throwable;
+
+/**
+ * Applies a preference the user just changed (goal, calorie target, focus
+ * areas, a new limitation) to their existing plan by rebuilding the remaining
+ * days. Confirmation-gated so it never fires by accident, and throttled per
+ * plan so repeated changes don't spin up costly generation over and over.
+ */
+class RegeneratePlanTool implements Tool
+{
+    use InteractsWithPlan;
+
+    public function __construct(
+        private readonly User $user,
+        private readonly RegenerateRemainingPlan $regenerate,
+    ) {}
+
+    public function description(): Stringable|string
+    {
+        return 'Rebuilds the user\'s upcoming meals and workouts so their existing plan reflects a change they just made (goal, calorie target, focus areas, or a new limitation). Past days and anything already eaten or trained are kept. Because this is a bigger action, ALWAYS confirm first: call it with confirmed=false to preview, then only call it with confirmed=true after the user clearly says yes. Only use it when a plan-affecting setting actually changed this conversation.';
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function schema(JsonSchema $schema): array
+    {
+        return [
+            'confirmed' => $schema->boolean()
+                ->description('False to preview and ask; true only after the user has explicitly agreed to rebuild the plan.'),
+        ];
+    }
+
+    public function handle(Request $request): Stringable|string
+    {
+        $plan = $this->activePlan($this->user);
+
+        if (! $plan) {
+            return ToolResult::error('no_active_plan', 'The user has no active plan to rebuild.');
+        }
+
+        if (! ($request['confirmed'] ?? false)) {
+            return ToolResult::data([
+                'requires_confirmation' => true,
+                'message' => 'This rebuilds their upcoming meals and workouts to match the new settings. Past days and anything already eaten stay. Ask them to confirm before rebuilding.',
+            ]);
+        }
+
+        $cooldown = (int) config('plans.regenerate_cooldown_minutes', 30);
+        $lock = "coach:plan_regen:{$plan->id}";
+
+        if (! Cache::add($lock, true, now()->addMinutes($cooldown))) {
+            return ToolResult::error('throttled', 'The plan was just rebuilt and is still updating. Tell them to give it a few minutes before changing it again.');
+        }
+
+        try {
+            $summary = $this->regenerate->execute($this->user, $plan);
+        } catch (Throwable $e) {
+            Cache::forget($lock);
+            report($e);
+
+            return ToolResult::error('regen_failed', 'Something went wrong rebuilding the plan. Ask them to try again in a moment.');
+        }
+
+        return ToolResult::data([
+            'regenerating' => true,
+            ...$summary,
+            'message' => 'The plan is rebuilding from tomorrow — it will be ready in a few minutes.',
+        ]);
+    }
+}

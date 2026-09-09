@@ -27,6 +27,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Regenerate Cooldown
+    |--------------------------------------------------------------------------
+    |
+    | Minimum minutes between coach-triggered plan rebuilds for a single plan.
+    | Rebuilds fan out AI generation jobs, so this caps the cost of a user
+    | repeatedly changing plan-affecting settings.
+    |
+    */
+
+    'regenerate_cooldown_minutes' => env('PLAN_REGENERATE_COOLDOWN_MINUTES', 30),
+
+    /*
+    |--------------------------------------------------------------------------
     | Generation Settings
     |--------------------------------------------------------------------------
     |

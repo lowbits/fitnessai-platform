@@ -7,10 +7,22 @@ namespace App\Ai\Tools\Support;
  * consistent across tools and the contract lives in one place:
  *  - widget: an interactive card the user acts on (requires_input)
  *  - info:   a read-only card that just shows state (no input expected)
+ *  - data:   plain result with no card — Mona reads it and replies in text
  *  - error:  a typed signal Mona surfaces as text (never rendered)
  */
 final class ToolResult
 {
+    /**
+     * A backend action with no card (saving a preference, rebuilding a plan).
+     * Has no `widget` key, so it is never rendered — Mona verbalizes the result.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public static function data(array $data): string
+    {
+        return json_encode($data);
+    }
+
     /**
      * An interactive widget the user is expected to act on (pick a meal, swap,
      * add). The client renders it keyed by name.
