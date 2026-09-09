@@ -97,7 +97,8 @@ class MealAlternatives
             affinityScores: $this->affinity->scoresFor($user)->all(),
             limit: self::TARGET,
             query: $wish,
-            constrainToMeal: $wish === null,
+            constrainSlot: true,
+            constrainCalories: blank($wish),
         );
     }
 }

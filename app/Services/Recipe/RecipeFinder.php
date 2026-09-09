@@ -13,7 +13,7 @@ class RecipeFinder
 {
     public function __construct(
         private readonly Client $client,
-        private readonly FoodTermTranslator $translator,
+        private readonly DislikeFilter $dislikeFilter,
     ) {}
 
     /**
@@ -71,10 +71,11 @@ class RecipeFinder
         array $affinityScores = [],
         int $limit = 5,
         ?string $query = null,
-        bool $constrainToMeal = true,
+        bool $constrainSlot = true,
+        bool $constrainCalories = true,
         ?int $targetProtein = null,
     ): Collection {
-        $filter = $this->buildFilter($mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes, $constrainToMeal);
+        $filter = $this->buildFilter($mealType, $targetKcal, $locale, $allowedProteins, $dislikes, $forbiddenAxes, $constrainSlot, $constrainCalories);
         $hits = $this->search($filter, $query);
         $hitIds = $hits->pluck('id')->diff($excludeIds);
 
@@ -118,14 +119,16 @@ class RecipeFinder
         array $allowedProteins,
         array $dislikes,
         Collection $forbiddenAxes,
-        bool $constrainToMeal = true,
+        bool $constrainSlot = true,
+        bool $constrainCalories = true,
     ): string {
         $filters = ['source_locale = '.json_encode($locale)];
 
-        // A named-dish wish drops the slot/calorie fit so the requested dish can
-        // surface; diet and dislikes stay enforced either way.
-        if ($constrainToMeal) {
+        if ($constrainSlot) {
             $filters[] = 'meal_types = '.json_encode($mealType);
+        }
+
+        if ($constrainCalories) {
             $filters[] = sprintf('calories %d TO %d', (int) round($targetKcal * 0.85), (int) round($targetKcal * 1.15));
         }
 
@@ -133,8 +136,8 @@ class RecipeFinder
             $filters[] = 'primary_protein IN ['.collect($allowedProteins)->map(fn ($p) => json_encode($p))->implode(',').']';
         }
 
-        foreach ($this->translator->toEnglishMany($dislikes) as $dislike) {
-            $filters[] = 'ingredient_names != '.json_encode($dislike);
+        foreach ($this->dislikeFilter->clauses($dislikes) as $clause) {
+            $filters[] = $clause;
         }
 
         $forbiddenAxes

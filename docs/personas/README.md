@@ -1,6 +1,6 @@
 # fytrr personas
 
-These are the three product personas fytrr designs for. Use them when:
+These are the product personas fytrr designs for. Use them when:
 
 - evaluating whether a new feature actually serves the people we built the app for,
 - auditing the quality of generated meal/workout plans against real-user expectations (not abstract metrics),
@@ -11,6 +11,7 @@ These are the three product personas fytrr designs for. Use them when:
 | [Lukas](lukas.md) | 23m meal-prep beginner who doesn't want to cook | Build muscle | Omnivore | LOW + meal prep |
 | [Anna](anna.md) | 30f busy pescatarian losing weight at home, no snack, no tofu | Lose weight | Pescatarian | MEDIUM |
 | [Thomas](thomas.md) | 38m vegetarian foodie wanting every meal different | Build muscle | Vegetarian | HIGH |
+| [Marco](marco.md) | 29m protein-focused omnivore who got served tofu (regression baseline) | Build muscle | Omnivore | LOW |
 
 Each persona file has:
 

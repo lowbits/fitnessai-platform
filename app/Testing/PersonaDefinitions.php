@@ -52,6 +52,15 @@ class PersonaDefinitions
                 'selected_meals' => ['breakfast', 'lunch', 'snack', 'dinner'],
                 'food_dislikes' => ['sellerie', 'fenchel', 'aubergine'], 'locale' => 'de',
             ],
+            'marco' => [
+                'birthdate' => now()->subYears(29)->subMonths(6)->toDateString(), 'gender' => Gender::MALE, 'weight_kg' => 88.0, 'height_cm' => 182,
+                'body_goal' => BodyGoal::BUILD_MUSCLE, 'skill_level' => SkillLevel::INTERMEDIATE,
+                'activity_level' => ActivityLevel::MAINLY_SITTING, 'training_place' => TrainingPlace::GYM,
+                'training_sessions_per_week' => 4, 'dietary_preference' => DietaryPreference::OMNIVORE,
+                'cooking_preference' => CookingPreference::QUICK, 'meal_variety' => MealVariety::LOW,
+                'selected_meals' => ['breakfast', 'lunch', 'dinner'],
+                'food_dislikes' => ['soy', 'nuts', 'crustaceans', 'molluscs'], 'locale' => 'de',
+            ],
         ];
     }
 }

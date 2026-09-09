@@ -20,15 +20,18 @@ enum PrimaryProtein: string
     case MIXED = 'mixed';
 
     /**
-     * Proteins permitted for a given dietary preference.
-     * Used at search/filter time to exclude incompatible recipes.
+     * Proteins permitted for a given dietary preference. Omnivores exclude the
+     * vegan meat substitutes (tofu, tempeh, seitan); legumes stay in.
      *
      * @return list<self>
      */
     public static function allowedFor(DietaryPreference $preference): array
     {
         return match ($preference) {
-            DietaryPreference::OMNIVORE => self::cases(),
+            DietaryPreference::OMNIVORE => [
+                self::CHICKEN, self::TURKEY, self::BEEF, self::PORK, self::LAMB,
+                self::FISH, self::SEAFOOD, self::EGGS, self::DAIRY, self::LEGUMES, self::MIXED,
+            ],
 
             DietaryPreference::PESCATARIAN => [
                 self::FISH, self::SEAFOOD, self::EGGS, self::DAIRY,

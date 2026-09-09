@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Recipe;
-use App\Services\Recipe\FoodTermTranslator;
+use App\Services\Recipe\DislikeFilter;
 use App\Services\Recipe\RecipeFinder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Meilisearch\Client;
@@ -23,7 +23,7 @@ function finderReturning(array $hitIds): RecipeFinder
     $client = Mockery::mock(Client::class);
     $client->shouldReceive('index')->with('recipes')->andReturn($index);
 
-    return new RecipeFinder($client, app(FoodTermTranslator::class));
+    return new RecipeFinder($client, app(DislikeFilter::class));
 }
 
 it('ranks by protein closest to target when calories are equal', function () {
