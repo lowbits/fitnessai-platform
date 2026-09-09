@@ -4,6 +4,7 @@ namespace App\Ai\Prompts;
 
 use App\Ai\Support\FocusAreas;
 use App\Ai\Support\PhysicalLimitations;
+use App\Ai\Support\WorkoutSplit;
 use App\Models\UserProfile;
 use Stringable;
 
@@ -16,6 +17,7 @@ class CreateWorkoutPrompt implements Stringable
         private string $locale,
         private int $dayNumber,
         private int $workoutsPerWeek,
+        private int $workoutNumberInCycle,
         private array $recentWorkouts = [],
     ) {
         $this->totalDays = config('plans.duration_days');
@@ -29,7 +31,7 @@ class CreateWorkoutPrompt implements Stringable
         $skillLevel = $this->profile->skill_level->value;
         $trainingPlace = $this->profile->training_place->value;
         $activityLevel = $this->profile->activity_level->value;
-        $sessionsPerWeek = $this->profile->training_sessions_per_week;
+        $sessionsPerWeek = $this->workoutsPerWeek;
         $workoutSplit = $this->getWorkoutSplit();
         $language = $this->getLanguageInstruction();
         $exerciseCount = $this->getExerciseCount();
@@ -136,15 +138,7 @@ PROMPT;
 
     private function getWorkoutSplit(): string
     {
-        return match ($this->profile->training_sessions_per_week) {
-            2 => 'Upper/Lower Split',
-            3 => 'Push/Pull/Legs',
-            4 => 'Upper/Lower/Upper/Lower',
-            5 => 'Push/Pull/Legs/Upper/Lower',
-            6 => 'Push/Pull/Legs/Push/Pull/Legs',
-            7 => 'Daily Specialization',
-            default => 'Full Body',
-        };
+        return WorkoutSplit::name($this->workoutsPerWeek);
     }
 
     // =========================================================================
@@ -186,49 +180,14 @@ CONTEXT;
 
     private function getWorkoutNumberInCycle(): int
     {
-        return (($this->dayNumber - 1) % $this->workoutsPerWeek) + 1;
+        return $this->workoutNumberInCycle;
     }
 
     private function getTargetMuscleGroups(int $workoutNumber): string
     {
-        return match ($this->workoutsPerWeek) {
-            2 => match ($workoutNumber) {
-                1 => 'Upper Body (chest, back, shoulders, biceps, triceps)',
-                2 => 'Lower Body (quadriceps, hamstrings, glutes, calves)',
-                default => 'Full Body (full_body)',
-            },
-            3 => match ($workoutNumber) {
-                1 => 'Push (chest, shoulders, triceps)',
-                2 => 'Pull (back, biceps, rear_delts)',
-                3 => 'Legs & Core (quadriceps, hamstrings, glutes, calves, core)',
-                default => 'Full Body (full_body)',
-            },
-            4 => match ($workoutNumber) {
-                1 => 'Upper Body A (chest, back, shoulders)',
-                2 => 'Lower Body A (quadriceps, hamstrings, glutes)',
-                3 => 'Upper Body B (back, biceps, triceps, rear_delts)',
-                4 => 'Lower Body B (glutes, hamstrings, calves)',
-                default => 'Full Body (full_body)',
-            },
-            5 => match ($workoutNumber) {
-                1 => 'Push (chest, shoulders, triceps)',
-                2 => 'Pull (back, biceps, rear_delts)',
-                3 => 'Legs (quadriceps, hamstrings, glutes, calves)',
-                4 => 'Upper Body (chest, back, shoulders)',
-                5 => 'Lower Body (glutes, hamstrings, calves)',
-                default => 'Full Body (full_body)',
-            },
-            6 => match ($workoutNumber) {
-                1 => 'Push (chest, shoulders, triceps)',
-                2 => 'Pull (back, biceps, rear_delts)',
-                3 => 'Legs (quadriceps, hamstrings, glutes, calves)',
-                4 => 'Push (shoulders, chest, triceps)',
-                5 => 'Pull (back, biceps, rear_delts)',
-                6 => 'Legs (hamstrings, glutes, calves)',
-                default => 'Full Body (full_body)',
-            },
-            default => 'Full Body (full_body)',
-        };
+        $focus = WorkoutSplit::focus($this->workoutsPerWeek, $workoutNumber);
+
+        return "{$focus['label']} ({$focus['muscles']})";
     }
 
     // =========================================================================

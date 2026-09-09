@@ -43,7 +43,7 @@ test('workout generation prompt carries the limitations', function () {
         'physical_limitations_note' => 'meniscus',
     ]);
 
-    $prompt = (string) new CreateWorkoutPrompt($user->profile->fresh(), 'en', 1, 3);
+    $prompt = (string) new CreateWorkoutPrompt($user->profile->fresh(), 'en', 1, 3, 1);
 
     expect($prompt)->toContain('knee')->toContain('meniscus')->toContain('LIMITATIONS');
 });

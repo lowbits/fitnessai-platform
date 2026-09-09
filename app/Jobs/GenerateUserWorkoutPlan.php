@@ -124,11 +124,17 @@ class GenerateUserWorkoutPlan implements ShouldQueue
                         'workout_plan_id' => $workoutPlan->id,
                     ]);
 
+                    $trainingDayIndices = self::trainingDayIndices($workoutsPerWeek, $profile->training_days);
+                    // The split cycle length is the number of actual weekly training days, so a
+                    // custom schedule with fewer days than workouts_per_week still resets cleanly.
+                    $effectiveFrequency = count($trainingDayIndices);
+
                     $prompt = new CreateWorkoutPrompt(
                         profile: $profile,
                         locale: $this->user->locale,
                         dayNumber: $day,
-                        workoutsPerWeek: $workoutsPerWeek,
+                        workoutsPerWeek: $effectiveFrequency,
+                        workoutNumberInCycle: self::workoutNumberInCycle($day, $effectiveFrequency, $trainingDayIndices),
                         recentWorkouts: array_slice($generatedWorkoutsSummary, -5),
                     );
 
@@ -223,20 +229,30 @@ class GenerateUserWorkoutPlan implements ShouldQueue
 
     private function isRestDay(int $day, int $workoutsPerWeek): bool
     {
-        $profile = $this->user->profile;
+        $indices = self::trainingDayIndices($workoutsPerWeek, $this->user->profile?->training_days);
 
-        if ($profile && ! empty($profile->training_days)) {
+        return ! in_array(($day - 1) % 7, $indices, true);
+    }
+
+    /**
+     * Weekday indices (0 = Monday) that are training days for a given weekly volume,
+     * or from the user's explicit training_days if set.
+     *
+     * @param  list<string>|null  $customDays
+     * @return list<int>
+     */
+    public static function trainingDayIndices(int $workoutsPerWeek, ?array $customDays = null): array
+    {
+        if (! empty($customDays)) {
             $dayMap = [
                 'monday' => 0, 'tuesday' => 1, 'wednesday' => 2,
                 'thursday' => 3, 'friday' => 4, 'saturday' => 5, 'sunday' => 6,
             ];
 
-            $workoutDays = array_map(fn ($d) => $dayMap[strtolower($d)], $profile->training_days);
-
-            return ! in_array(($day - 1) % 7, $workoutDays);
+            return array_values(array_unique(array_map(fn ($d) => $dayMap[strtolower($d)], $customDays)));
         }
 
-        $workoutDays = match ($workoutsPerWeek) {
+        return match ($workoutsPerWeek) {
             1 => [0],
             2 => [0, 3],
             4 => [0, 2, 4, 6],
@@ -245,8 +261,27 @@ class GenerateUserWorkoutPlan implements ShouldQueue
             7 => [0, 1, 2, 3, 4, 5, 6],
             default => [0, 2, 4],
         };
+    }
 
-        return ! in_array(($day - 1) % 7, $workoutDays);
+    /**
+     * The workout's position in the weekly split (1..workoutsPerWeek), counted by
+     * actual training sessions since day 1, not by raw calendar day. This is what
+     * keeps a 4x/week plan cycling Upper/Lower/Upper/Lower instead of collapsing to
+     * all-upper weeks when sessions fall on non-consecutive days.
+     *
+     * @param  list<int>  $trainingDayIndices
+     */
+    public static function workoutNumberInCycle(int $day, int $workoutsPerWeek, array $trainingDayIndices): int
+    {
+        $sessions = 0;
+
+        for ($d = 1; $d <= $day; $d++) {
+            if (in_array(($d - 1) % 7, $trainingDayIndices, true)) {
+                $sessions++;
+            }
+        }
+
+        return (($sessions - 1) % $workoutsPerWeek) + 1;
     }
 
     public function failed(Throwable $exception): void

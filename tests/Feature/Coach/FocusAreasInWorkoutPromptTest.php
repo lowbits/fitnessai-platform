@@ -9,7 +9,7 @@ function workoutPromptFor(array $focusAreas): string
     $user = User::factory()->create();
     $profile = UserProfile::factory()->create(['user_id' => $user->id, 'focus_areas' => $focusAreas]);
 
-    return (string) new CreateWorkoutPrompt($profile, 'en', dayNumber: 1, workoutsPerWeek: 3);
+    return (string) new CreateWorkoutPrompt($profile, 'en', dayNumber: 1, workoutsPerWeek: 3, workoutNumberInCycle: 1);
 }
 
 it('injects saved focus areas into the live workout prompt', function () {
