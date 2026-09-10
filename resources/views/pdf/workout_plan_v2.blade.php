@@ -44,30 +44,31 @@
         .page-head td { font-size: 10.5px; color: #5c6b62; }
         .header__brand { font-family: 'Space Grotesk', sans-serif; font-weight: bold; color: #0c1310; }
         .header__plan { color: #5c6b62; }
-        .header__brand, .header__plan, .mark { vertical-align: middle; }
+        .header__brand, .header__plan { vertical-align: middle; }
         .header__right { text-align: right; }
         .header__rule { border-bottom: 1px solid #e6eae8; height: 10px; }
 
-        .mark { width: 16px; height: 16px; }
+        .mark { width: 15px; height: 15px; vertical-align: -3px; }
 
         /* ---------- Page-1 cover ---------- */
         .cover td { vertical-align: middle; }
-        .cover__logo { width: 24px; height: 24px; vertical-align: middle; }
+        .cover__logo { width: 22px; height: 22px; vertical-align: -6px; }
         .cover__brand {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: bold;
             font-size: 22px;
+            line-height: 1;
             color: #0c1310;
             vertical-align: middle;
         }
         .cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; }
         .cover__cal { width: 13px; height: 13px; vertical-align: -2px; margin-right: 3px; }
-        .cover__sub { font-size: 12px; color: #5c6b62; margin: 4px 0 0 32px; }
-        .meta { width: auto; margin-top: 16px; }
+        .cover__sub { font-size: 12px; color: #5c6b62; margin: 1px 0 0 30px; }
+        .meta { width: auto; margin-top: 9px; }
         .meta td { padding-right: 26px; white-space: nowrap; }
         .meta__icon { width: 14px; height: 14px; vertical-align: -3px; margin-right: 6px; }
         .meta__text { font-size: 11px; color: #33403a; }
-        .cover__rule { border-bottom: 1px solid #e6eae8; margin-top: 16px; }
+        .cover__rule { border-bottom: 1px solid #e6eae8; margin-top: 11px; }
 
         /* ---------- Day ---------- */
         .day { page-break-before: always; }
@@ -192,6 +193,7 @@
         }
 
         .notes .note-line { border-bottom: 1px solid #e6eae8; height: 26px; }
+        .notes-page { page-break-before: always; }
 
         /* ---------- Rest-day app promo ---------- */
         .promo {
@@ -297,17 +299,16 @@
         $mains = $workoutPlan->mainExercises();
         $n = 0;
 
-        // Fill the leftover space on the day's last page with note lines (max 3),
-        // so notes never create a page of their own but do use a real second page.
-        $pageHeight = 940;
-        $used = 76
-            + ($workoutPlan->description ? 58 : 0)
-            + ($warmups->isNotEmpty() ? 32 + $warmups->count() * 26 : 0)
-            + ($mains->isNotEmpty() ? 56 + $mains->count() * 66 : 0)
-            + ($cooldowns->isNotEmpty() ? 32 + $cooldowns->count() * 26 : 0)
-            + ($mains->isNotEmpty() ? 18 : 0);
+        // Notes only fill leftover space on the page the workout ends on; if the
+        // workout fills the page, no notes are added and no extra page is created.
+        $pageHeight = 1000;
+        $used = ($loop->first ? 220 : 116)
+            + ($workoutPlan->description ? 60 : 0)
+            + ($warmups->isNotEmpty() ? 30 + $warmups->count() * 30 : 0)
+            + ($mains->isNotEmpty() ? 80 + $mains->count() * 40 : 0)
+            + ($cooldowns->isNotEmpty() ? 30 + $cooldowns->count() * 30 : 0);
         $pages = max(1, (int) ceil($used / $pageHeight));
-        $noteLines = max(0, min(3, intdiv($pages * $pageHeight - $used - 34, 30)));
+        $noteLines = max(0, min(3, intdiv($pages * $pageHeight - $used - 120, 32)));
     @endphp
 
     <div class="day @if($loop->first) first @endif">
