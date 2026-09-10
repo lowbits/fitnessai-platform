@@ -1,8 +1,9 @@
 <?php
 
+use App\Contracts\NewsletterContactSync;
 use App\Enums\NewsletterStatus;
 use App\Events\EmailVerified;
-use App\Jobs\SyncSubscriberToResend;
+use App\Jobs\SyncNewsletterContact;
 use App\Models\NewsletterSubscriber;
 use App\Models\Plan;
 use App\Models\User;
@@ -79,7 +80,7 @@ it('queues the resend sync instead of syncing during the request', function () {
     app(NewsletterService::class)->confirm($subscriber);
 
     Bus::assertDispatched(
-        SyncSubscriberToResend::class,
+        SyncNewsletterContact::class,
         fn ($job) => $job->subscriber->is($subscriber),
     );
 });
@@ -100,7 +101,7 @@ it('syncs an android waitlist subscriber into the android segment', function () 
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->syncToResend($subscriber);
+    app(NewsletterContactSync::class)->sync($subscriber);
 
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.resend.com/contacts'
@@ -126,7 +127,7 @@ it('syncs a newsletter subscriber into the general segment', function () {
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->syncToResend($subscriber);
+    app(NewsletterContactSync::class)->sync($subscriber);
 
     Http::assertSent(fn ($request) => $request['segments'] === [['id' => 'seg_general']]);
 });
@@ -141,7 +142,7 @@ it('does not sync to resend outside production', function () {
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->syncToResend($subscriber);
+    app(NewsletterContactSync::class)->sync($subscriber);
 
     Http::assertNothingSent();
     expect($subscriber->fresh()->resend_contact_id)->toBeNull();
