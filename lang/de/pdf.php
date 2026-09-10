@@ -114,7 +114,7 @@ return [
         'promo_head' => 'Papier trackt nichts.',
         'promo_sub' => 'Dein Plan wartet in der App:',
         'promo_list' => [
-            'Workouts und Mahlzeiten abhaken',
+            'Workouts & Mahlzeiten abhaken',
             'Videos zu jeder Übung',
             'KI-Coach Mona passt deinen Plan an',
             'Jede Woche neue Pläne',

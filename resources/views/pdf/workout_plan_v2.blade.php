@@ -216,9 +216,9 @@
         .promo td.promo__text { width: 66.66%; padding-left: 30px; }
         .promo td.promo__phone { width: 33.34%; text-align: center; }
         .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; }
-        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 7px 0 12px 0; }
-        .promo__list { width: auto; margin: 0 0 20px 0; }
-        .promo__list td { padding: 3px 0; vertical-align: middle; }
+        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 6px 0 10px 0; }
+        .promo__list { width: auto; margin: 0 0 16px 0; }
+        .promo__list td { padding: 1px 0; vertical-align: middle; }
         .promo__list td.li__c { width: 20px; }
         .li__check { width: 13px; height: 13px; vertical-align: middle; }
         .promo__list td.li__t { font-size: 12px; color: #33403a; padding-left: 8px; }

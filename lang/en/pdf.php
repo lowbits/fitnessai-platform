@@ -114,7 +114,7 @@ return [
         'promo_head' => 'Paper tracks nothing.',
         'promo_sub' => 'Your plan is waiting in the app:',
         'promo_list' => [
-            'Check off workouts and meals',
+            'Check off workouts & meals',
             'A video for every exercise',
             'AI coach Mona adapts your plan',
             'New plans every week',
