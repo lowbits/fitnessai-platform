@@ -149,7 +149,7 @@
         .ex__alt { font-size: 9.5px; color: #8a968f; line-height: 1.1; margin-top: -3px; }
         .cell-muted { color: #5c6b62; }
         .metric { font-weight: bold; color: #0c1310; }
-        .time { color: #33403a; }
+        .time { color: #0c1310; font-weight: bold; }
 
         .box {
             border: 1px solid #d5dbd8;
