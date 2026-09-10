@@ -2,12 +2,14 @@
 
 use App\Enums\NewsletterStatus;
 use App\Events\EmailVerified;
+use App\Jobs\SyncSubscriberToResend;
 use App\Models\NewsletterSubscriber;
 use App\Models\Plan;
 use App\Models\User;
 use App\Notifications\NewsletterConfirmation;
 use App\Services\NewsletterService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
@@ -66,6 +68,22 @@ it('confirms a subscriber via a valid signed link', function () {
     expect($subscriber->fresh()->status)->toBe(NewsletterStatus::Confirmed);
 });
 
+it('queues the resend sync instead of syncing during the request', function () {
+    Bus::fake();
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'queued@example.com',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterService::class)->confirm($subscriber);
+
+    Bus::assertDispatched(
+        SyncSubscriberToResend::class,
+        fn ($job) => $job->subscriber->is($subscriber),
+    );
+});
+
 it('syncs an android waitlist subscriber into the android segment', function () {
     $this->app->detectEnvironment(fn () => 'production');
     config([
@@ -82,7 +100,7 @@ it('syncs an android waitlist subscriber into the android segment', function () 
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->confirm($subscriber);
+    app(NewsletterService::class)->syncToResend($subscriber);
 
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.resend.com/contacts'
@@ -108,7 +126,7 @@ it('syncs a newsletter subscriber into the general segment', function () {
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->confirm($subscriber);
+    app(NewsletterService::class)->syncToResend($subscriber);
 
     Http::assertSent(fn ($request) => $request['segments'] === [['id' => 'seg_general']]);
 });
@@ -123,7 +141,7 @@ it('does not sync to resend outside production', function () {
         'status' => NewsletterStatus::Pending,
     ]);
 
-    app(NewsletterService::class)->confirm($subscriber);
+    app(NewsletterService::class)->syncToResend($subscriber);
 
     Http::assertNothingSent();
     expect($subscriber->fresh()->resend_contact_id)->toBeNull();

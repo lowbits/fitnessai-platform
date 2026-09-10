@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\NewsletterStatus;
+use App\Jobs\SyncSubscriberToResend;
 use App\Models\NewsletterSubscriber;
 use App\Notifications\NewsletterConfirmation;
 use Illuminate\Support\Facades\Http;
@@ -66,7 +67,7 @@ class NewsletterService
             ]);
         }
 
-        $this->syncToResend($subscriber);
+        SyncSubscriberToResend::dispatch($subscriber);
     }
 
     public function syncToResend(NewsletterSubscriber $subscriber): void
