@@ -41,7 +41,8 @@
         };
 
         $appUrl = \App\Support\AppDownloadQr::url($user);
-        $qrDataUri = \App\Support\AppDownloadQr::dataUri(\App\Support\AppDownloadQr::scanUrl(), 6);
+        $downloadQr = \App\Support\AppDownloadQr::dataUri(\App\Support\AppDownloadQr::scanUrl(), 6);
+        $claimQr = \App\Support\AppDownloadQr::dataUri($appUrl, 6);
         $locale = app()->getLocale();
         $badgePath = public_path('assets/badges/'.($locale === 'de' ? 'App_Store_Badge_DE.png' : 'App_Store_Badge_EN.png'));
         $phonePath = public_path('assets/images/app/fytrr-app-home-'.($locale === 'de' ? 'de' : 'en').'.png');
@@ -207,28 +208,24 @@
 
         /* ---------- Rest-day app promo ---------- */
         .promo {
-            margin-top: 34px;
+            margin-top: 30px;
             border: 1px solid #d8e6dd;
             border-radius: 16px;
             background: #f4faf6;
         }
-        .promo td { padding: 30px 34px; vertical-align: middle; }
-        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; line-height: 1.25; }
-        .promo__sub { font-size: 13px; color: #5c6b62; line-height: 1.5; margin: 12px 0 20px 0; }
-        .promo__badge { height: 40px; }
-        .promo__scanrow { margin-top: 20px; }
-        .promo__qrimg { width: 62px; height: 62px; border: 1px solid #e6eae8; border-radius: 8px; background: #ffffff; padding: 5px; vertical-align: middle; }
-        .promo__scan {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 8.5px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #8a968f;
-            padding-left: 12px;
-            vertical-align: middle;
-        }
-        .promo__phone { width: 140px; text-align: right; vertical-align: middle; }
-        .promo__phone img { width: 124px; }
+        .promo td { padding: 26px 30px; vertical-align: middle; }
+        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 22px; color: #0c1310; line-height: 1.2; }
+        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.4; margin: 8px 0 0 0; }
+
+        .step { margin-top: 15px; }
+        .step__n { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 14px; color: #17a45b; }
+        .step__t { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #0c1310; padding-left: 6px; }
+        .step__media { padding: 7px 0 0 19px; }
+        .promo__qrimg { width: 68px; height: 68px; border: 1px solid #e6eae8; border-radius: 8px; background: #ffffff; padding: 5px; vertical-align: middle; }
+        .promo__badge { height: 36px; vertical-align: middle; padding-left: 14px; }
+        .promo__scan { font-family: 'Space Grotesk', sans-serif; font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #8a968f; vertical-align: middle; padding-left: 14px; }
+        .promo__phone { width: 176px; text-align: right; vertical-align: middle; }
+        .promo__phone img { width: 162px; }
     </style>
 </head>
 <body>
@@ -280,10 +277,20 @@
                     <td class="promo__text">
                         <div class="promo__head">{{ $t('promo_head') }}</div>
                         <div class="promo__sub">{{ $t('promo_sub') }}</div>
-                        <a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a>
-                        <div class="promo__scanrow">
-                            <img class="promo__qrimg" src="{{ $qrDataUri }}" alt="">
-                            <span class="promo__scan">{{ $t('promo_scan') }}</span>
+
+                        <div class="step">
+                            <div class="step__label"><span class="step__n">1.</span><span class="step__t">{{ $t('promo_step1') }}</span></div>
+                            <div class="step__media">
+                                <img class="promo__qrimg" src="{{ $downloadQr }}" alt="">
+                                <a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a>
+                            </div>
+                        </div>
+                        <div class="step">
+                            <div class="step__label"><span class="step__n">2.</span><span class="step__t">{{ $t('promo_step2') }}</span></div>
+                            <div class="step__media">
+                                <img class="promo__qrimg" src="{{ $claimQr }}" alt="">
+                                <span class="promo__scan">{{ $t('promo_scan') }}</span>
+                            </div>
                         </div>
                     </td>
                     <td class="promo__phone"><img src="{{ $phonePath }}" alt=""></td>
