@@ -214,10 +214,10 @@
             background: #f4faf6;
         }
         .promo td { padding: 26px 30px; vertical-align: middle; }
-        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 22px; color: #0c1310; line-height: 1.2; }
-        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.4; margin: 8px 0 0 0; }
+        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 22px; color: #0c1310; line-height: 1.1; }
+        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 6px 0 0 0; }
 
-        .step { margin-top: 15px; }
+        .step { margin-top: 16px; }
         .step__n { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 14px; color: #17a45b; }
         .step__t { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #0c1310; padding-left: 6px; }
         .step__media { padding: 7px 0 0 19px; }
