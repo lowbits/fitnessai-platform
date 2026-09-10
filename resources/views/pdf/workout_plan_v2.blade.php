@@ -21,6 +21,19 @@
                 ->take(2)
                 ->join(', ');
         };
+        // The metric column: reps-based shows "sets × reps", time-based shows
+        // "sets × mm:ss" (or just the time when there are no sets).
+        $metric = function ($ex) use ($clock): string {
+            if ($ex->reps) {
+                return $ex->sets.' × '.$ex->reps;
+            }
+            if ($ex->duration_seconds) {
+                return $ex->sets ? $ex->sets.' × '.$clock($ex->duration_seconds) : $clock($ex->duration_seconds);
+            }
+            return (string) $ex->sets;
+        };
+        // Shared column widths so warm-up, main and cool-down rows align.
+        $cols = '<colgroup><col style="width:26px"><col><col style="width:13%"><col style="width:10%"><col style="width:7%"><col style="width:12%"><col style="width:12%"><col style="width:12%"></colgroup>';
     @endphp
 
     <style type="text/css">
@@ -74,9 +87,9 @@
         .title {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: bold;
-            font-size: 27px;
+            font-size: 25px;
             color: #0c1310;
-            margin: 4px 0 3px 0;
+            margin: 3px 0 2px 0;
         }
 
         .muscles { font-size: 12px; color: #5c6b62; }
@@ -94,8 +107,8 @@
 
         .coach {
             border-left: 3px solid #17a45b;
-            padding: 2px 0 2px 14px;
-            margin: 16px 0 4px 0;
+            padding: 1px 0 1px 13px;
+            margin: 12px 0 2px 0;
         }
         .coach__name {
             font-family: 'Space Grotesk', sans-serif;
@@ -105,10 +118,10 @@
             text-transform: uppercase;
             color: #17a45b;
         }
-        .coach__text { font-size: 11.5px; color: #33403a; line-height: 1.5; }
+        .coach__text { font-size: 11px; color: #33403a; line-height: 1.35; margin-top: 2px; }
 
         /* ---------- Sections ---------- */
-        .section { margin-top: 26px; }
+        .section { margin-top: 18px; }
         .section__title {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 500;
@@ -116,7 +129,7 @@
             letter-spacing: 1.4px;
             text-transform: uppercase;
             color: #17a45b;
-            padding-bottom: 8px;
+            padding-bottom: 6px;
             border-bottom: 1px solid #e6eae8;
         }
 
@@ -126,11 +139,11 @@
             letter-spacing: 0.8px;
             text-transform: uppercase;
             color: #8a968f;
-            padding: 9px 0 7px 0;
+            padding: 7px 0 6px 0;
         }
 
         .row td {
-            padding: 9px 8px 9px 0;
+            padding: 6px 8px 6px 0;
             border-bottom: 1px solid #eef1f0;
             font-size: 11.5px;
         }
@@ -149,13 +162,13 @@
         .box {
             border: 1px solid #d5dbd8;
             border-radius: 6px;
-            height: 24px;
+            height: 22px;
             width: 92%;
         }
 
-        .set-hint { font-size: 9px; color: #8a968f; text-align: right; padding-top: 8px; }
+        .set-hint { font-size: 9px; color: #8a968f; text-align: right; padding-top: 6px; }
 
-        .notes .note-line { border-bottom: 1px solid #e6eae8; height: 30px; }
+        .notes .note-line { border-bottom: 1px solid #e6eae8; height: 26px; }
     </style>
 </head>
 <body>
@@ -228,13 +241,14 @@
         @if ($warmups->isNotEmpty())
             <div class="section">
                 <div class="section__title">{{ $t('warmup') }}</div>
-                <table>
+                <table>{!! $cols !!}
                     @foreach ($warmups as $ex)
                         @php $n++; @endphp
                         <tr class="row">
                             <td class="num">{{ $n }}</td>
                             <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time" style="width:24%;">{{ $clock($ex->duration_seconds) }}</td>
+                            <td class="time">{{ $clock($ex->duration_seconds) }}</td>
+                            <td></td><td></td><td></td><td></td><td></td>
                         </tr>
                     @endforeach
                 </table>
@@ -244,16 +258,16 @@
         @if ($mains->isNotEmpty())
             <div class="section">
                 <div class="section__title">{{ $t('main') }}</div>
-                <table>
+                <table>{!! $cols !!}
                     <tr class="col-head">
                         <td class="num">#</td>
                         <td>{{ $t('col_exercise') }}</td>
-                        <td style="width:12%;">{{ $t('col_sets') }}</td>
-                        <td style="width:10%;">{{ $t('col_rest') }}</td>
-                        <td style="width:7%;">{{ $t('col_rpe') }}</td>
-                        <td style="width:12%;">{{ $t('col_set') }} 1</td>
-                        <td style="width:12%;">{{ $t('col_set') }} 2</td>
-                        <td style="width:12%;">{{ $t('col_set') }} 3</td>
+                        <td>{{ $t('col_sets') }}</td>
+                        <td>{{ $t('col_rest') }}</td>
+                        <td>{{ $t('col_rpe') }}</td>
+                        <td>{{ $t('col_set') }} 1</td>
+                        <td>{{ $t('col_set') }} 2</td>
+                        <td>{{ $t('col_set') }} 3</td>
                     </tr>
                     @foreach ($mains as $ex)
                         @php $n++; $alt = $altNames($ex->alternatives); @endphp
@@ -265,7 +279,7 @@
                                     <div class="ex__alt">{{ $alt }}</div>
                                 @endif
                             </td>
-                            <td class="cell-muted">{{ $ex->sets }} &times; {{ $ex->reps }}</td>
+                            <td class="cell-muted">{{ $metric($ex) }}</td>
                             <td class="cell-muted">{{ $ex->rest_seconds }}@if($ex->rest_seconds) s @endif</td>
                             <td class="cell-muted">{{ $ex->rpe }}</td>
                             <td><div class="box"></div></td>
@@ -281,13 +295,14 @@
         @if ($cooldowns->isNotEmpty())
             <div class="section">
                 <div class="section__title">{{ $t('cooldown') }}</div>
-                <table>
+                <table>{!! $cols !!}
                     @foreach ($cooldowns as $ex)
                         @php $n++; @endphp
                         <tr class="row">
                             <td class="num">{{ $n }}</td>
                             <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time" style="width:24%;">{{ $clock($ex->duration_seconds) }}</td>
+                            <td class="time">{{ $clock($ex->duration_seconds) }}</td>
+                            <td></td><td></td><td></td><td></td><td></td>
                         </tr>
                     @endforeach
                 </table>
