@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Meal;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutPlanExercise;
 
@@ -29,4 +30,22 @@ it('translates muscle group labels for the current locale', function () {
     $plan = new WorkoutPlan(['muscle_groups' => ['chest', 'shoulders', 'cardio']]);
 
     expect($plan->muscleGroupLabels())->toBe(['Brust', 'Schultern', 'Cardio']);
+});
+
+it('formats meal ingredients with amount, unit and to-taste', function () {
+    app()->setLocale('de');
+
+    $meal = new Meal([
+        'ingredients' => [
+            ['name' => 'Schweinefilet', 'unit' => 'g', 'amount' => '220'],
+            ['name' => 'Knoblauch', 'unit' => 'clove', 'amount' => '1'],
+            ['name' => 'Salz', 'unit' => 'to_taste', 'amount' => ''],
+        ],
+    ]);
+
+    expect($meal->formattedIngredients())->toBe([
+        ['name' => 'Schweinefilet', 'detail' => '220 '.__('units.g')],
+        ['name' => 'Knoblauch', 'detail' => '1 '.__('units.clove')],
+        ['name' => 'Salz', 'detail' => 'nach Geschmack'],
+    ]);
 });

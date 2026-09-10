@@ -186,4 +186,17 @@ if (app()->environment('local')) {
             'workoutPlans' => $plan->workoutPlans()->with('exercises.exercise.translations')->orderBy('day_number')->get(),
         ])->stream('Workout_Plan_v2.pdf');
     })->name('dev.pdf.workout-v2');
+
+    // Preview the v2 nutrition PDF for the most recent plan that has meals.
+    Route::get('/dev/pdf/nutrition-v2', function () {
+        app()->setLocale(request()->query('locale', 'de'));
+
+        $plan = Plan::whereHas('mealPlans.meals')->latest()->firstOrFail();
+
+        return Pdf::loadView('pdf.nutrition_plan_v2', [
+            'user' => $plan->user,
+            'plan' => $plan,
+            'mealPlans' => $plan->mealPlans()->with('meals')->orderBy('day_number')->get(),
+        ])->stream('Meal_Plan_v2.pdf');
+    })->name('dev.pdf.nutrition-v2');
 }
