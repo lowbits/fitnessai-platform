@@ -30,6 +30,9 @@
         table { border-collapse: collapse; width: 100%; }
         td, th { vertical-align: top; }
 
+        /* ---------- Watermark (every page, bottom-right) ---------- */
+        .watermark { position: fixed; right: -46px; bottom: -34px; width: 240px; height: 240px; }
+
         /* ---------- Running footer ---------- */
         .runner { position: fixed; left: 0; right: 0; }
         .footer { bottom: -34px; }
@@ -127,6 +130,8 @@
 </head>
 <body>
 
+<img class="watermark" src="{{ public_path('assets/images/watermark.png') }}" alt="">
+
 <div class="runner footer">
     <a class="footer__brand" href="{{ $appUrl }}" style="text-decoration:none;">FYTRR.COM</a>
     <span class="footer__page" style="font-family:'Space Grotesk',sans-serif; color:#8a968f;"></span>
@@ -174,6 +179,23 @@
 <div class="cover__rule"></div>
 
 @foreach ($mealPlans as $mealPlan)
+    @php
+        // Estimate the day's content height to decide whether the app promo fits
+        // in the trailing space on the day's last page (avoids a promo-only page).
+        $pageHeight = 1000;
+        $used = ($loop->first ? 210 : 116) + 66;
+        foreach ($mealPlan->meals as $dayMeal) {
+            $ingCount = count($dayMeal->formattedIngredients());
+            $stepCount = is_array($dayMeal->instructions) ? count($dayMeal->instructions) : 0;
+            $used += 20 + 52
+                + ($dayMeal->description ? 32 : 0)
+                + ($ingCount ? 26 + (int) ceil($ingCount / 2) * 20 : 0)
+                + ($stepCount ? 26 + $stepCount * 30 : 0)
+                + (is_array($dayMeal->allergens) && count($dayMeal->allergens) ? 16 : 0);
+        }
+        $leftover = max(1, (int) ceil($used / $pageHeight)) * $pageHeight - $used;
+        $showPromo = $loop->last || $leftover >= 280;
+    @endphp
     <div class="day @if($loop->first) first @endif">
         @unless ($loop->first)
             <table class="page-head">
@@ -266,7 +288,7 @@
             </div>
         @endforeach
 
-        @if ($loop->last)
+        @if ($showPromo)
             <table class="promo">
                 <tr>
                     <td class="promo__text">

@@ -30,6 +30,9 @@
         table { border-collapse: collapse; width: 100%; }
         td, th { vertical-align: top; }
 
+        /* ---------- Watermark (every page, bottom-right) ---------- */
+        .watermark { position: fixed; right: -46px; bottom: -34px; width: 240px; height: 240px; }
+
         /* ---------- Running footer ---------- */
         .runner { position: fixed; left: 0; right: 0; }
         .footer { bottom: -34px; }
@@ -242,6 +245,8 @@
     </style>
 </head>
 <body>
+
+<img class="watermark" src="{{ public_path('assets/images/watermark.png') }}" alt="">
 
 <div class="runner footer">
     <a class="footer__brand" href="{{ $appUrl }}" style="text-decoration:none;">FYTRR.COM</a>
