@@ -52,18 +52,18 @@
 
         /* ---------- Page-1 cover ---------- */
         .cover td { vertical-align: middle; }
-        .cover__logo { width: 22px; height: 22px; vertical-align: -6px; }
+        .cover__logocell { width: 30px; vertical-align: top; }
+        .cover__logo { width: 22px; height: 22px; margin-top: 1px; }
         .cover__brand {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: bold;
             font-size: 22px;
             line-height: 1;
             color: #0c1310;
-            vertical-align: middle;
         }
-        .cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; }
+        .cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; vertical-align: top; }
         .cover__cal { width: 13px; height: 13px; vertical-align: -2px; margin-right: 3px; }
-        .cover__sub { font-size: 12px; color: #5c6b62; margin: -5px 0 0 30px; }
+        .cover__sub { font-size: 12px; color: #5c6b62; margin-top: 2px; }
         .meta { width: auto; margin-top: 9px; }
         .meta td { padding-right: 26px; white-space: nowrap; }
         .meta__icon { width: 14px; height: 14px; vertical-align: -3px; margin-right: 6px; }
@@ -265,9 +265,12 @@
 
 <table class="cover">
     <tr>
+        <td class="cover__logocell"><img class="cover__logo" src="{{ public_path('favicon.svg') }}" alt=""></td>
         <td>
-            <img class="cover__logo" src="{{ public_path('favicon.svg') }}" alt="">
-            <span class="cover__brand">&nbsp;{{ $t('header_title') }}</span>
+            <div class="cover__brand">{{ $t('header_title') }}</div>
+            @if ($plan->plan_name)
+                <div class="cover__sub">{{ $plan->plan_name }}</div>
+            @endif
         </td>
         @if ($firstDay && $lastDay)
             <td class="cover__date">
@@ -277,9 +280,6 @@
         @endif
     </tr>
 </table>
-@if ($plan->plan_name)
-    <div class="cover__sub">{{ $plan->plan_name }}</div>
-@endif
 <table class="meta">
     <tr>
         @foreach ($meta as $item)
