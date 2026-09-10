@@ -174,6 +174,19 @@
             color: #9EC2E6;
         }
 
+        .progression-note {
+            margin: 16px 0 0 0;
+            padding-top: 14px;
+            border-top: 1px solid #E3EAF2;
+            font-size: 11px;
+            color: #3A4A5A;
+            line-height: 1.6;
+        }
+
+        .progression-note strong {
+            color: #08233E;
+        }
+
         /* ---------- Day / workout card ---------- */
         .workout-day {
             margin-bottom: 26px;
@@ -465,6 +478,12 @@
                 </td>
             </tr>
         </table>
+
+        @php($goalKey = $user->profile->body_goal?->resolveCanonical()->value ?? 'get_fit')
+        <p class="progression-note">
+            <strong>{{ __('pdf.workout_plan.progression_heading') }}:</strong>
+            {{ __('pdf.workout_plan.progression.'.$goalKey) }}
+        </p>
     </div>
 
     @foreach($workoutPlans as $workoutPlan)
@@ -518,12 +537,13 @@
                                         </tr>
                                     </table>
 
-                                    @if($exercise->sets || $exercise->reps || $exercise->duration_seconds || $exercise->rest_seconds)
+                                    @if($exercise->sets || $exercise->reps || $exercise->duration_seconds || $exercise->rest_seconds || $exercise->rpe)
                                         <div class="ex__stats">
                                             @if($exercise->sets)<span class="ex__pill"><strong>{{ $exercise->sets }}</strong> {{ __('pdf.workout_plan.sets') }}</span>@endif
                                             @if($exercise->reps)<span class="ex__pill"><strong>{{ $exercise->reps }}</strong> {{ __('pdf.workout_plan.reps') }}</span>@endif
                                             @if($exercise->duration_seconds)<span class="ex__pill"><strong>{{ $exercise->duration_seconds }}s</strong> {{ __('pdf.workout_plan.duration') }}</span>@endif
                                             @if($exercise->rest_seconds)<span class="ex__pill"><strong>{{ $exercise->rest_seconds }}s</strong> {{ __('pdf.workout_plan.rest') }}</span>@endif
+                                            @if($exercise->rpe)<span class="ex__pill"><strong>{{ __('pdf.workout_plan.rpe') }} {{ $exercise->rpe }}</strong></span>@endif
                                         </div>
                                     @endif
 

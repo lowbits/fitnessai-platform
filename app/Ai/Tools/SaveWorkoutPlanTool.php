@@ -135,7 +135,7 @@ class SaveWorkoutPlanTool implements Tool
                     ->nullable(),
 
                 'rpe' => $schema->string()
-                    ->description('Target RPE range (e.g. "7-8"). Per goal protocol. Null for warmup/cooldown/stretches.')
+                    ->description('Target RPE as a bare number or range only, e.g. "8" or "7-9". No "RPE" prefix, no "/10" suffix, no extra words. Per goal protocol. Null for warmup/cooldown/stretches.')
                     ->nullable(),
 
                 'weight_recommendation' => $schema->string()

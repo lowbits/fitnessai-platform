@@ -76,6 +76,12 @@ return [
         'generating' => 'Generating workout plan...',
         'help' => 'Need help or have questions?',
         'contact' => 'Contact us at',
+        'progression_heading' => 'Progressive overload',
+        'progression' => [
+            'build_muscle' => 'Add reps within your target range each session. Once you hit the top of the range on every set, increase the weight and drop back to the bottom of the range. Aim to add weight or reps every 1-2 weeks.',
+            'lose_weight' => 'Keep rest short and add reps or a little weight each week as the circuits get easier, so the training stays challenging as you lean out.',
+            'get_fit' => 'Each week, add a rep or a little weight once a workout feels comfortable, so your body keeps adapting.',
+        ],
     ],
 
     'footer' => [
