@@ -11,15 +11,34 @@ use App\Notifications\NewsletterConfirmation;
 use App\Services\NewsletterService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
+use Resend\Client;
+use Resend\Contracts\Transporter;
+use Resend\ValueObjects\Transporter\Payload;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
     Notification::fake();
 });
+
+function fakeResendClient(object $captor, string $id): Client
+{
+    $transporter = new class($captor, $id) implements Transporter
+    {
+        public function __construct(private object $captor, private string $id) {}
+
+        public function request(Payload $payload): array
+        {
+            $this->captor->params = (new ReflectionProperty($payload, 'parameters'))->getValue($payload);
+
+            return ['id' => $this->id];
+        }
+    };
+
+    return new Client($transporter);
+}
 
 it('captures an android waitlist signup as pending and sends a confirmation email', function () {
     $this->postJson('/api/newsletter/subscribe', [
@@ -92,7 +111,9 @@ it('syncs an android waitlist subscriber into the android segment', function () 
         'services.resend.segments.android_waitlist' => 'seg_android',
         'services.resend.segments.default' => 'seg_general',
     ]);
-    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_123'], 200)]);
+    $captor = new stdClass;
+    $captor->params = [];
+    $this->app->instance(Client::class, fakeResendClient($captor, 'contact_123'));
 
     $subscriber = NewsletterSubscriber::create([
         'email' => 'sync@example.com',
@@ -103,13 +124,9 @@ it('syncs an android waitlist subscriber into the android segment', function () 
 
     app(NewsletterContactSync::class)->sync($subscriber);
 
-    Http::assertSent(function ($request) {
-        return $request->url() === 'https://api.resend.com/contacts'
-            && $request['email'] === 'sync@example.com'
-            && $request['segments'] === [['id' => 'seg_android']];
-    });
-
-    expect($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
+    expect($captor->params['email'])->toBe('sync@example.com')
+        ->and($captor->params['segments'])->toBe([['id' => 'seg_android']])
+        ->and($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
 });
 
 it('syncs a newsletter subscriber into the general segment', function () {
@@ -119,7 +136,9 @@ it('syncs a newsletter subscriber into the general segment', function () {
         'services.resend.segments.android_waitlist' => 'seg_android',
         'services.resend.segments.default' => 'seg_general',
     ]);
-    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_456'], 200)]);
+    $captor = new stdClass;
+    $captor->params = [];
+    $this->app->instance(Client::class, fakeResendClient($captor, 'contact_456'));
 
     $subscriber = NewsletterSubscriber::create([
         'email' => 'news@example.com',
@@ -129,12 +148,14 @@ it('syncs a newsletter subscriber into the general segment', function () {
 
     app(NewsletterContactSync::class)->sync($subscriber);
 
-    Http::assertSent(fn ($request) => $request['segments'] === [['id' => 'seg_general']]);
+    expect($captor->params['segments'])->toBe([['id' => 'seg_general']]);
 });
 
 it('does not sync to resend outside production', function () {
     config(['services.resend.key' => 'test-key']);
-    Http::fake();
+    $captor = new stdClass;
+    $captor->params = [];
+    $this->app->instance(Client::class, fakeResendClient($captor, 'contact_x'));
 
     $subscriber = NewsletterSubscriber::create([
         'email' => 'dev@example.com',
@@ -144,8 +165,8 @@ it('does not sync to resend outside production', function () {
 
     app(NewsletterContactSync::class)->sync($subscriber);
 
-    Http::assertNothingSent();
-    expect($subscriber->fresh()->resend_contact_id)->toBeNull();
+    expect($captor->params)->toBe([])
+        ->and($subscriber->fresh()->resend_contact_id)->toBeNull();
 });
 
 it('does not confirm on an invalid signature', function () {

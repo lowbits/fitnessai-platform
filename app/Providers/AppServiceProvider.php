@@ -8,6 +8,7 @@ use App\Services\Newsletter\ResendContactSync;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Ai\Contracts\ConversationStore;
 use Meilisearch\Client as MeilisearchClient;
+use Resend\Client;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -24,6 +25,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ConversationStore::class, fn (): RedactingConversationStore => new RedactingConversationStore(
             config('ai.conversations.connection'),
         ));
+
+        $this->app->singleton(
+            Client::class,
+            fn () => \Resend::client((string) config('services.resend.key')),
+        );
 
         $this->app->bind(NewsletterContactSync::class, ResendContactSync::class);
     }

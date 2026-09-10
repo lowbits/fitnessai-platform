@@ -11,6 +11,10 @@ class SyncNewsletterContact implements ShouldQueue
 {
     use Queueable;
 
+    public int $tries = 3;
+
+    public int $timeout = 15;
+
     public function __construct(public NewsletterSubscriber $subscriber) {}
 
     public function handle(NewsletterContactSync $sync): void
