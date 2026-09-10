@@ -19,6 +19,7 @@ return [
         'all' => 'All',
         'example' => 'Example',
         'related_heading' => 'Related free tools',
+        'filter_label' => 'Filter by category',
     ],
 
     'categories' => [

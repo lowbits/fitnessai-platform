@@ -38,6 +38,7 @@ interface Props {
         all: string;
         example: string;
         related_heading: string;
+        filter_label: string;
     };
     categories: Category[];
     terms: Term[];
@@ -181,12 +182,12 @@ function countFor(id: string): number {
 
                     <div
                         class="mt-4 flex flex-wrap justify-center gap-2"
-                        role="tablist"
+                        role="group"
+                        :aria-label="ui.filter_label"
                     >
                         <button
                             type="button"
-                            role="tab"
-                            :aria-selected="activeCategory === 'all'"
+                            :aria-pressed="activeCategory === 'all'"
                             class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
                             :class="
                                 activeCategory === 'all'
@@ -202,8 +203,7 @@ function countFor(id: string): number {
                             v-for="category in categories"
                             :key="category.id"
                             type="button"
-                            role="tab"
-                            :aria-selected="activeCategory === category.id"
+                            :aria-pressed="activeCategory === category.id"
                             class="rounded-full border px-4 py-1.5 text-sm font-medium transition-colors"
                             :class="
                                 activeCategory === category.id
