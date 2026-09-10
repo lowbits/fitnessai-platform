@@ -41,15 +41,6 @@
         .footer td { font-size: 10.5px; color: #5c6b62; }
         .footer__brand { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: 1px; color: #8a968f; }
 
-        /* ---------- Per-page header (days 2+) ---------- */
-        .page-head { margin-bottom: 26px; }
-        .page-head td { font-size: 10.5px; color: #5c6b62; }
-        .header__brand { font-family: 'Space Grotesk', sans-serif; font-weight: bold; color: #0c1310; vertical-align: middle; }
-        .header__plan { color: #5c6b62; vertical-align: middle; }
-        .header__right { text-align: right; }
-        .header__rule { border-bottom: 1px solid #e6eae8; height: 10px; }
-        .mark { width: 15px; height: 15px; vertical-align: -3px; }
-
         /* ---------- Page-1 cover ---------- */
         .cover td { vertical-align: middle; }
         .cover td.cover__logocell { width: 32px; vertical-align: top; }
@@ -65,8 +56,9 @@
         .cover__rule { border-bottom: 1px solid #e6eae8; margin-top: 11px; }
 
         /* ---------- Day ---------- */
-        .day { page-break-before: always; }
-        .day.first { page-break-before: avoid; margin-top: 22px; }
+        .day.first { margin-top: 22px; }
+        .day-sep { border-top: 1px solid #e6eae8; margin-top: 30px; padding-top: 22px; }
+        .day-head { page-break-after: avoid; }
         .eyebrow { font-family: 'Space Grotesk', sans-serif; font-weight: 500; font-size: 10px; letter-spacing: 1.4px; text-transform: uppercase; color: #17a45b; }
         .title { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 25px; color: #0c1310; margin: 3px 0 2px 0; }
         .stats { width: auto; }
@@ -179,23 +171,13 @@
 <div class="cover__rule"></div>
 
 @foreach ($mealPlans as $mealPlan)
-    @php $showPromo = $loop->last; @endphp
+    @php $showPromo = $loop->last || $loop->iteration % 2 === 0; @endphp
     <div class="day @if($loop->first) first @endif">
         @unless ($loop->first)
-            <table class="page-head">
-                <tr>
-                    <td>
-                        <img class="mark" src="{{ public_path('favicon.svg') }}" alt="">
-                        <span class="header__brand">&nbsp;{{ $t('header_title') }}</span>
-                        <span class="header__plan">&nbsp;&middot; {{ $plan->plan_name }}</span>
-                    </td>
-                    <td class="header__right">{{ $user->name }}</td>
-                </tr>
-                <tr><td colspan="2" class="header__rule"></td></tr>
-            </table>
+            <div class="day-sep"></div>
         @endunless
 
-        <table>
+        <table class="day-head">
             <tr>
                 <td style="width:52%;">
                     <div class="eyebrow">{{ $mealPlan->date->translatedFormat('l, d.m.Y') }}</div>
