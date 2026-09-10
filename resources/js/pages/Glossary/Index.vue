@@ -6,7 +6,7 @@ import SectionHeader from '@/components/Base/SectionHeader.vue';
 import GuestLayout from '@/layouts/GuestLayout.vue';
 import { Head, usePage } from '@inertiajs/vue3';
 import { Search } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 interface Term {
     slug: string;
@@ -54,6 +54,28 @@ const schemaJson = computed(() => props.schema.map((s) => JSON.stringify(s)));
 
 const query = ref('');
 const activeCategory = ref<'all' | string>('all');
+
+const categoryIds = computed(() => props.categories.map((c) => c.id));
+
+// Keep the active category in the URL (?tab=) so a filtered view is shareable
+// and survives a reload. Query, not hash, since #slug is reserved for deep
+// links to a single term.
+onMounted(() => {
+    const tab = new URLSearchParams(window.location.search).get('tab');
+    if (tab && categoryIds.value.includes(tab)) {
+        activeCategory.value = tab;
+    }
+});
+
+watch(activeCategory, (value) => {
+    const url = new URL(window.location.href);
+    if (value === 'all') {
+        url.searchParams.delete('tab');
+    } else {
+        url.searchParams.set('tab', value);
+    }
+    window.history.replaceState(window.history.state, '', url);
+});
 
 const normalized = (value: string): string =>
     value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
