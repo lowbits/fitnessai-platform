@@ -52,7 +52,7 @@
 
         /* ---------- Page-1 cover ---------- */
         .cover td { vertical-align: middle; }
-        .cover__logocell { width: 30px; vertical-align: top; }
+        .cover td.cover__logocell { width: 30px; vertical-align: top; }
         .cover__logo { width: 22px; height: 22px; margin-top: 1px; }
         .cover__brand {
             font-family: 'Space Grotesk', sans-serif;
@@ -61,7 +61,7 @@
             line-height: 1;
             color: #0c1310;
         }
-        .cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; vertical-align: top; }
+        .cover td.cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; vertical-align: top; }
         .cover__cal { width: 13px; height: 13px; vertical-align: -2px; margin-right: 3px; }
         .cover__sub { font-size: 12px; color: #5c6b62; margin-top: 2px; }
         .meta { width: auto; margin-top: 9px; }
