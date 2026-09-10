@@ -20,10 +20,6 @@ class WorkoutSplit
     public static function forFrequency(int $workoutsPerWeek): array
     {
         return match ($workoutsPerWeek) {
-            // Low frequency: full body. Every session targets all major muscles,
-            // so each one is trained on every training day (2x/week at 2 days,
-            // 3x at 3). Variation lives in exercise choice, never in omitting a
-            // muscle from the target, which is what once left calves untrained.
             2 => [
                 ['label' => 'Full Body A', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
                 ['label' => 'Full Body B', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],

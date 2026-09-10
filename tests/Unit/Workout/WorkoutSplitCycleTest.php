@@ -63,11 +63,7 @@ it('dedupes duplicate custom training days', function () {
 });
 
 /**
- * Map the split's granular muscles to our six major groups and count how many
- * days per week train each. This lets us prove a split is balanced without
- * generating a single AI workout.
- *
- * @return array<string, int>
+ * @return array<string, int> sessions per major group per week
  */
 function groupFrequency(int $frequency): array
 {
@@ -112,11 +108,7 @@ it('trains every major group at least twice a week', function (int $frequency) {
 })->with([2, 3, 4, 5, 6]);
 
 /**
- * Count weekly sessions per individual muscle, without collapsing legs into one
- * "legs" group. This is what proves the ≥2x/muscle claim the broad-group test
- * cannot: it would catch calves being omitted or quads landing on only one day.
- *
- * @return array<string, int>
+ * @return array<string, int> sessions per individual muscle per week
  */
 function muscleFrequency(int $frequency): array
 {
