@@ -79,6 +79,11 @@
         .macros { margin-top: 5px; font-size: 10.5px; color: #5c6b62; }
         .macros__kcal { font-weight: bold; color: #0c1310; }
         .macros__sep { color: #cdd9d2; }
+
+        /* macro colors, matching the app (--v2-macro-*) */
+        .m-protein { color: #288b8b; font-weight: bold; }
+        .m-carbs { color: #b47e1c; font-weight: bold; }
+        .m-fat { color: #c15f2d; font-weight: bold; }
         .meal__desc { font-size: 11px; color: #33403a; line-height: 1.3; margin-top: 7px; }
 
         .block { margin-top: 12px; }
@@ -194,9 +199,9 @@
                     <table class="stats" align="right">
                         <tr>
                             <td><div class="stat__value">{{ number_format((int) $mealPlan->total_calories, 0, ',', '.') }}</div><div class="stat__label">{{ $t('calories') }}</div></td>
-                            <td><div class="stat__value">{{ (int) $mealPlan->total_protein_g }} g</div><div class="stat__label">{{ $t('protein') }}</div></td>
-                            <td><div class="stat__value">{{ (int) $mealPlan->total_carbs_g }} g</div><div class="stat__label">{{ $t('carbs') }}</div></td>
-                            <td><div class="stat__value">{{ (int) $mealPlan->total_fat_g }} g</div><div class="stat__label">{{ $t('fat') }}</div></td>
+                            <td><div class="stat__value m-protein">{{ (int) $mealPlan->total_protein_g }} g</div><div class="stat__label">{{ $t('protein') }}</div></td>
+                            <td><div class="stat__value m-carbs">{{ (int) $mealPlan->total_carbs_g }} g</div><div class="stat__label">{{ $t('carbs') }}</div></td>
+                            <td><div class="stat__value m-fat">{{ (int) $mealPlan->total_fat_g }} g</div><div class="stat__label">{{ $t('fat') }}</div></td>
                         </tr>
                     </table>
                 </td>
@@ -211,9 +216,9 @@
                     <div class="meal__name">{{ $meal->name }}</div>
                     <div class="macros">
                         <span class="macros__kcal">{{ (int) $meal->calories }} {{ $t('calories') }}</span>
-                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span>{{ (int) $meal->protein_g }} g {{ $t('protein') }}
-                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span>{{ (int) $meal->carbs_g }} g {{ $t('carbs') }}
-                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span>{{ (int) $meal->fat_g }} g {{ $t('fat') }}
+                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span><span class="m-protein">{{ (int) $meal->protein_g }} g {{ $t('protein') }}</span>
+                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span><span class="m-carbs">{{ (int) $meal->carbs_g }} g {{ $t('carbs') }}</span>
+                        <span class="macros__sep">&nbsp;&middot;&nbsp;</span><span class="m-fat">{{ (int) $meal->fat_g }} g {{ $t('fat') }}</span>
                         @if ($meal->totalTimeMinutes() > 0)
                             <span class="macros__sep">&nbsp;&middot;&nbsp;</span>{{ $meal->totalTimeMinutes() }} {{ $t('min') }}
                         @endif
