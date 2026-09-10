@@ -37,6 +37,7 @@ class GenerateSitemapCommand extends Command
             ['route_key' => 'routes.free_tools_calorie_calculator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly'],
             ['route_key' => 'routes.free_tools_macro_calculator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly'],
             ['route_key' => 'routes.free_tools_plan_roast', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly'],
+            ['route_key' => 'routes.glossary', 'path' => '', 'priority' => 0.8, 'changeFrequency' => 'monthly'],
             ['route_key' => 'routes.landing_free_workout_meal_plan', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['en']],
             ['route_key' => 'routes.landing_personal_meal_plan', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['de']],
             ['route_key' => 'routes.landing_ai_workout_plan_generator', 'path' => '', 'priority' => 0.9, 'changeFrequency' => 'monthly', 'locales' => ['en']],

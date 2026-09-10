@@ -20,6 +20,7 @@ return [
     'free_tools' => [
         'heading' => 'Kostenlose Tools',
         'plan_roast' => 'Trainingsplan-Check',
+        'glossary' => 'Fitness-Glossar',
     ],
     'product' => [
         'heading' => 'Produkt',

@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V2\EmailVerificationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\CalorieCalculatorController;
 use App\Http\Controllers\DownloadAppController;
+use App\Http\Controllers\GlossaryController;
 use App\Http\Controllers\MacroCalculatorController;
 use App\Http\Controllers\NewsletterController;
 use App\Http\Controllers\PlanRoastController;
@@ -67,6 +68,10 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
     // Plan Roast (free SEO tool: rate/roast a training plan)
     Route::get(LaravelLocalization::transRoute('routes.free_tools_plan_roast'), [PlanRoastController::class, 'index'])
         ->name('plan-roast');
+
+    // Fitness Glossary (SEO hub: explains the terms our plans use)
+    Route::get(LaravelLocalization::transRoute('routes.glossary'), [GlossaryController::class, 'index'])
+        ->name('glossary');
 
     // Blog
     Route::get(LaravelLocalization::transRoute('routes.blog_index'), [BlogController::class, 'index'])
