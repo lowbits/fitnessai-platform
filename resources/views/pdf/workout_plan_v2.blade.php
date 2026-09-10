@@ -40,6 +40,10 @@
             return (string) $ex->sets;
         };
 
+        $muscleLabels = fn ($groups) => collect(is_array($groups) ? $groups : [])
+            ->map(fn (string $m) => \App\Enums\MuscleGroup::tryFrom($m)?->label() ?? ucfirst($m))
+            ->join(', ');
+
         $appUrl = \App\Support\AppDownloadQr::url($user);
         $appQr = \App\Support\AppDownloadQr::dataUri($appUrl, 6);
         $locale = app()->getLocale();
@@ -233,7 +237,8 @@
             font-family: 'Space Grotesk', sans-serif;
             font-weight: bold;
             font-size: 13px;
-            padding: 12px 22px;
+            line-height: 1;
+            padding: 13px 22px 12px 22px;
             border-radius: 10px;
             text-decoration: none;
         }
@@ -327,7 +332,7 @@
                     <div class="eyebrow">{{ $t('day') }} {{ $workoutPlan->day_number }} &middot; {{ $workoutPlan->date->translatedFormat('l, d.m.Y') }}</div>
                     <div class="title">{{ $workoutPlan->workout_name }}</div>
                     @if ($workoutPlan->muscle_groups && is_array($workoutPlan->muscle_groups))
-                        <div class="muscles">{{ implode(', ', array_map('ucfirst', $workoutPlan->muscle_groups)) }}</div>
+                        <div class="muscles">{{ $muscleLabels($workoutPlan->muscle_groups) }}</div>
                     @endif
                 </td>
                 <td style="width:42%; text-align:right;">
