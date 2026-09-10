@@ -7,9 +7,18 @@
     @php
         $t = fn (string $key, array $r = []) => __('pdf.workout_plan_v2.'.$key, $r);
         $typeLabel = fn (?string $type) => \Illuminate\Support\Arr::get($t('types'), $type, ucfirst((string) $type));
-        $clock = function (?int $seconds): string {
+        $duration = function (?int $seconds): string {
             $seconds = (int) $seconds;
-            return floor($seconds / 60).':'.str_pad($seconds % 60, 2, '0', STR_PAD_LEFT);
+            if ($seconds <= 0) {
+                return '';
+            }
+            $minutes = intdiv($seconds, 60);
+            $rest = $seconds % 60;
+            return match (true) {
+                $minutes === 0 => $rest.'s',
+                $rest === 0 => $minutes.'min',
+                default => $minutes.'min '.$rest.'s',
+            };
         };
         $altNames = function ($alternatives): string {
             if (! is_array($alternatives)) {
@@ -21,18 +30,15 @@
                 ->take(2)
                 ->join(', ');
         };
-        // The metric column: reps-based shows "sets × reps", time-based shows
-        // "sets × mm:ss" (or just the time when there are no sets).
-        $metric = function ($ex) use ($clock): string {
+        $metric = function ($ex) use ($duration): string {
             if ($ex->reps) {
                 return $ex->sets.' × '.$ex->reps;
             }
             if ($ex->duration_seconds) {
-                return $ex->sets ? $ex->sets.' × '.$clock($ex->duration_seconds) : $clock($ex->duration_seconds);
+                return $ex->sets ? $ex->sets.' × '.$duration($ex->duration_seconds) : $duration($ex->duration_seconds);
             }
             return (string) $ex->sets;
         };
-        // Shared column widths so warm-up, main and cool-down rows align.
         $cols = '<colgroup><col style="width:26px"><col><col style="width:13%"><col style="width:10%"><col style="width:7%"><col style="width:12%"><col style="width:12%"><col style="width:12%"></colgroup>';
     @endphp
 
@@ -54,8 +60,6 @@
         td, th { vertical-align: top; }
 
         /* ---------- Running header / footer ---------- */
-        /* Fixed `top`/`bottom` are relative to the content box, so negative
-           values place the runners into the reserved page margins. */
         .runner { position: fixed; left: 0; right: 0; }
         .header { top: -66px; }
         .footer { bottom: -34px; }
@@ -149,6 +153,8 @@
         }
         .num {
             width: 26px;
+            text-align: right;
+            padding-right: 12px;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 500;
             color: #17a45b;
@@ -247,7 +253,7 @@
                         <tr class="row">
                             <td class="num">{{ $n }}</td>
                             <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time">{{ $clock($ex->duration_seconds) }}</td>
+                            <td class="time">{{ $duration($ex->duration_seconds) }}</td>
                             <td></td><td></td><td></td><td></td><td></td>
                         </tr>
                     @endforeach
@@ -301,7 +307,7 @@
                         <tr class="row">
                             <td class="num">{{ $n }}</td>
                             <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time">{{ $clock($ex->duration_seconds) }}</td>
+                            <td class="time">{{ $duration($ex->duration_seconds) }}</td>
                             <td></td><td></td><td></td><td></td><td></td>
                         </tr>
                     @endforeach
