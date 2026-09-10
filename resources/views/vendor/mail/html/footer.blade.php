@@ -5,12 +5,18 @@
             <tr>
                 <td class="content-cell" align="center" style="padding-top: 24px;">
                     <table cellpadding="0" cellspacing="0" role="presentation" align="center">
+                        @php $badgeLocale = app()->getLocale() === 'de' ? 'DE' : 'EN'; @endphp
                         <tr>
                             <td align="center" style="padding-bottom: 18px;">
                                 <a href="{{ \App\Support\AppStore::url('email') }}"
-                                   style="text-decoration: none; display: inline-block;">
-                                    <img src="{{ asset('/assets/badges/App_Store_Badge_'.(app()->getLocale() === 'de' ? 'DE' : 'EN').'.png') }}"
-                                         alt="Download on the App Store" width="120" style="display: block;">
+                                   style="text-decoration: none; display: inline-block; margin: 0 4px;">
+                                    <img src="{{ asset('/assets/badges/App_Store_Badge_'.$badgeLocale.'.png') }}"
+                                         alt="Download on the App Store" width="120" style="display: inline-block;">
+                                </a>
+                                <a href="{{ route('download-app', ['locale' => app()->getLocale(), 'utm_source' => 'email', 'utm_medium' => 'notification', 'utm_campaign' => 'android_waitlist']) }}"
+                                   style="text-decoration: none; display: inline-block; margin: 0 4px;">
+                                    <img src="{{ asset('/assets/badges/Android_Waitlist_'.$badgeLocale.'.png') }}"
+                                         alt="Android waitlist" width="120" style="display: inline-block;">
                                 </a>
                             </td>
                         </tr>
