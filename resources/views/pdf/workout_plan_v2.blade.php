@@ -39,7 +39,6 @@
             }
             return (string) $ex->sets;
         };
-        $cols = '<colgroup><col style="width:26px"><col><col style="width:13%"><col style="width:10%"><col style="width:7%"><col style="width:12%"><col style="width:12%"><col style="width:12%"></colgroup>';
     @endphp
 
     <style type="text/css">
@@ -137,6 +136,19 @@
             border-bottom: 1px solid #e6eae8;
         }
 
+        .plan { margin-top: 6px; }
+        .section-head td {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 500;
+            font-size: 10.5px;
+            letter-spacing: 1.4px;
+            text-transform: uppercase;
+            color: #17a45b;
+            padding: 22px 0 6px 0;
+            border-bottom: 1px solid #e6eae8;
+        }
+        .section-head.first td { padding-top: 4px; }
+
         .col-head td {
             font-family: 'Space Grotesk', sans-serif;
             font-size: 8.5px;
@@ -152,9 +164,9 @@
             font-size: 11.5px;
         }
         .num {
-            width: 26px;
+            width: 22px;
             text-align: right;
-            padding-right: 12px;
+            padding-right: 10px;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 500;
             color: #17a45b;
@@ -173,6 +185,15 @@
         }
 
         .set-hint { font-size: 9px; color: #8a968f; text-align: right; padding-top: 6px; }
+
+        .check-cell { text-align: right; }
+        .check {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 1px solid #cfd6d2;
+            border-radius: 5px;
+        }
 
         .notes .note-line { border-bottom: 1px solid #e6eae8; height: 26px; }
     </style>
@@ -244,75 +265,69 @@
             </div>
         @endif
 
-        @if ($warmups->isNotEmpty())
-            <div class="section">
-                <div class="section__title">{{ $t('warmup') }}</div>
-                <table>{!! $cols !!}
-                    @foreach ($warmups as $ex)
-                        @php $n++; @endphp
-                        <tr class="row">
-                            <td class="num">{{ $n }}</td>
-                            <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time">{{ $duration($ex->duration_seconds) }}</td>
-                            <td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endforeach
-                </table>
-            </div>
-        @endif
-
-        @if ($mains->isNotEmpty())
-            <div class="section">
-                <div class="section__title">{{ $t('main') }}</div>
-                <table>{!! $cols !!}
-                    <tr class="col-head">
-                        <td class="num">#</td>
-                        <td>{{ $t('col_exercise') }}</td>
-                        <td>{{ $t('col_sets') }}</td>
-                        <td>{{ $t('col_rest') }}</td>
-                        <td>{{ $t('col_rpe') }}</td>
-                        <td>{{ $t('col_set') }} 1</td>
-                        <td>{{ $t('col_set') }} 2</td>
-                        <td>{{ $t('col_set') }} 3</td>
+        <table class="plan">
+            @if ($warmups->isNotEmpty())
+                <tr class="section-head first"><td colspan="8">{{ $t('warmup') }}</td></tr>
+                @foreach ($warmups as $ex)
+                    @php $n++; @endphp
+                    <tr class="row">
+                        <td class="num">{{ $n }}</td>
+                        <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
+                        <td class="time">{{ $duration($ex->duration_seconds) }}</td>
+                        <td></td><td></td><td></td><td></td>
+                        <td class="check-cell"><span class="check"></span></td>
                     </tr>
-                    @foreach ($mains as $ex)
-                        @php $n++; $alt = $altNames($ex->alternatives); @endphp
-                        <tr class="row">
-                            <td class="num">{{ $n }}</td>
-                            <td>
-                                <div class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</div>
-                                @if ($alt !== '')
-                                    <div class="ex__alt">{{ $alt }}</div>
-                                @endif
-                            </td>
-                            <td class="cell-muted">{{ $metric($ex) }}</td>
-                            <td class="cell-muted">{{ $ex->rest_seconds }}@if($ex->rest_seconds) s @endif</td>
-                            <td class="cell-muted">{{ $ex->rpe }}</td>
-                            <td><div class="box"></div></td>
-                            <td><div class="box"></div></td>
-                            <td><div class="box"></div></td>
-                        </tr>
-                    @endforeach
-                </table>
-                <div class="set-hint">{{ $t('set_hint') }}</div>
-            </div>
-        @endif
+                @endforeach
+            @endif
 
-        @if ($cooldowns->isNotEmpty())
-            <div class="section">
-                <div class="section__title">{{ $t('cooldown') }}</div>
-                <table>{!! $cols !!}
-                    @foreach ($cooldowns as $ex)
-                        @php $n++; @endphp
-                        <tr class="row">
-                            <td class="num">{{ $n }}</td>
-                            <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                            <td class="time">{{ $duration($ex->duration_seconds) }}</td>
-                            <td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                    @endforeach
-                </table>
-            </div>
+            @if ($mains->isNotEmpty())
+                <tr class="section-head @if($warmups->isEmpty()) first @endif"><td colspan="8">{{ $t('main') }}</td></tr>
+                <tr class="col-head">
+                    <td class="num">#</td>
+                    <td>{{ $t('col_exercise') }}</td>
+                    <td style="width:11%;">{{ $t('col_sets') }}</td>
+                    <td style="width:10%;">{{ $t('col_rest') }}</td>
+                    <td style="width:7%;">{{ $t('col_rpe') }}</td>
+                    <td style="width:9%;">{{ $t('col_set') }} 1</td>
+                    <td style="width:9%;">{{ $t('col_set') }} 2</td>
+                    <td style="width:9%;">{{ $t('col_set') }} 3</td>
+                </tr>
+                @foreach ($mains as $ex)
+                    @php $n++; $alt = $altNames($ex->alternatives); @endphp
+                    <tr class="row">
+                        <td class="num">{{ $n }}</td>
+                        <td>
+                            <div class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</div>
+                            @if ($alt !== '')
+                                <div class="ex__alt">{{ $alt }}</div>
+                            @endif
+                        </td>
+                        <td class="cell-muted">{{ $metric($ex) }}</td>
+                        <td class="cell-muted">{{ $ex->rest_seconds }}@if($ex->rest_seconds) s @endif</td>
+                        <td class="cell-muted">{{ $ex->rpe }}</td>
+                        <td><div class="box"></div></td>
+                        <td><div class="box"></div></td>
+                        <td><div class="box"></div></td>
+                    </tr>
+                @endforeach
+            @endif
+
+            @if ($cooldowns->isNotEmpty())
+                <tr class="section-head @if($warmups->isEmpty() && $mains->isEmpty()) first @endif"><td colspan="8">{{ $t('cooldown') }}</td></tr>
+                @foreach ($cooldowns as $ex)
+                    @php $n++; @endphp
+                    <tr class="row">
+                        <td class="num">{{ $n }}</td>
+                        <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
+                        <td class="time">{{ $duration($ex->duration_seconds) }}</td>
+                        <td></td><td></td><td></td><td></td>
+                        <td class="check-cell"><span class="check"></span></td>
+                    </tr>
+                @endforeach
+            @endif
+        </table>
+        @if ($mains->isNotEmpty())
+            <div class="set-hint">{{ $t('set_hint') }}</div>
         @endif
 
         <div class="section notes">
