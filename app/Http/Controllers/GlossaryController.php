@@ -91,9 +91,7 @@ class GlossaryController extends Controller
             'hasDefinedTerm' => collect(trans('glossary.terms'))
                 ->map(fn (array $term, string $slug) => [
                     '@type' => 'DefinedTerm',
-                    'name' => $term['expansion'] !== '' && ($term['expansion'] ?? '') !== $term['term']
-                        ? "{$term['term']} ({$term['expansion']})"
-                        : $term['term'],
+                    'name' => $this->definedTermName($term),
                     'description' => $term['definition'],
                     'url' => "{$url}#{$slug}",
                 ])
@@ -112,6 +110,23 @@ class GlossaryController extends Controller
         ];
 
         return [$definedTermSet, $faqSchema];
+    }
+
+    /**
+     * The DefinedTerm name, appending the expansion only when it adds something
+     * (e.g. "RPE (Rate of Perceived Exertion)", but just "Mobility").
+     *
+     * @param  array<string, mixed>  $term
+     */
+    private function definedTermName(array $term): string
+    {
+        $expansion = $term['expansion'] ?? '';
+
+        if ($expansion === '' || $expansion === $term['term']) {
+            return $term['term'];
+        }
+
+        return "{$term['term']} ({$expansion})";
     }
 
     /**
