@@ -68,6 +68,7 @@
         .header td, .footer td { font-size: 10.5px; color: #5c6b62; }
         .header__brand { font-family: 'Space Grotesk', sans-serif; font-weight: bold; color: #0c1310; }
         .header__plan { color: #5c6b62; }
+        .header__brand, .header__plan, .mark { vertical-align: middle; }
         .header__right, .footer__right { text-align: right; }
         .header__rule { border-bottom: 1px solid #e6eae8; height: 10px; }
         .footer__brand { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: 1px; color: #8a968f; }
@@ -175,6 +176,7 @@
         .ex__name { font-weight: bold; color: #0c1310; }
         .ex__alt { font-size: 9.5px; color: #8a968f; padding-top: 2px; }
         .cell-muted { color: #5c6b62; }
+        .metric { font-weight: bold; color: #0c1310; }
         .time { color: #33403a; }
 
         .box {
@@ -302,7 +304,7 @@
                                 <div class="ex__alt">{{ $alt }}</div>
                             @endif
                         </td>
-                        <td class="cell-muted">{{ $metric($ex) }}</td>
+                        <td class="metric">{{ $metric($ex) }}</td>
                         <td class="cell-muted">{{ $ex->rest_seconds }}@if($ex->rest_seconds) s @endif</td>
                         <td class="cell-muted">{{ $ex->rpe }}</td>
                         <td><div class="box"></div></td>
