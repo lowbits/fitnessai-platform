@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Enums\NewsletterStatus;
+use App\Jobs\SyncNewsletterContact;
 use App\Models\NewsletterSubscriber;
 use App\Notifications\NewsletterConfirmation;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class NewsletterService
@@ -66,52 +66,6 @@ class NewsletterService
             ]);
         }
 
-        $this->syncToResend($subscriber);
-    }
-
-    public function syncToResend(NewsletterSubscriber $subscriber): void
-    {
-        $key = config('services.resend.key');
-
-        if (! $key) {
-            Log::info('[Newsletter][Resend] Skipped sync, Resend not configured', [
-                'email' => $subscriber->email,
-            ]);
-
-            return;
-        }
-
-        try {
-            $response = Http::withToken($key)
-                ->connectTimeout(3)
-                ->timeout(8)
-                ->retry(2, 200, throw: false)
-                ->asJson()
-                ->post('https://api.resend.com/contacts', [
-                    'email' => $subscriber->email,
-                    'first_name' => $subscriber->name,
-                    'unsubscribed' => false,
-                ]);
-
-            if ($response->successful()) {
-                $subscriber->update([
-                    'resend_contact_id' => $response->json('id'),
-                ]);
-                Log::info('[Newsletter][Resend] Contact synced', [
-                    'email' => $subscriber->email,
-                ]);
-            } else {
-                Log::warning('[Newsletter][Resend] Sync failed', [
-                    'email' => $subscriber->email,
-                    'status' => $response->status(),
-                    'body' => $response->body(),
-                ]);
-            }
-        } catch (\Throwable $e) {
-            Log::error('[Newsletter][Resend] Sync threw', [
-                'email' => $subscriber->email,
-                'error' => $e->getMessage(),
-            ]);
-        }
+        SyncNewsletterContact::dispatch($subscriber);
     }
 }

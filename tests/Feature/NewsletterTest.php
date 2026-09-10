@@ -1,13 +1,16 @@
 <?php
 
+use App\Contracts\NewsletterContactSync;
 use App\Enums\NewsletterStatus;
 use App\Events\EmailVerified;
+use App\Jobs\SyncNewsletterContact;
 use App\Models\NewsletterSubscriber;
 use App\Models\Plan;
 use App\Models\User;
 use App\Notifications\NewsletterConfirmation;
 use App\Services\NewsletterService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
@@ -66,31 +69,83 @@ it('confirms a subscriber via a valid signed link', function () {
     expect($subscriber->fresh()->status)->toBe(NewsletterStatus::Confirmed);
 });
 
-it('syncs a confirmed subscriber to resend without an unsupported properties field', function () {
-    config(['services.resend.key' => 'test-key']);
-    Http::fake([
-        'api.resend.com/*' => Http::response(['id' => 'contact_123'], 200),
-    ]);
+it('queues the resend sync instead of syncing during the request', function () {
+    Bus::fake();
 
     $subscriber = NewsletterSubscriber::create([
-        'email' => 'sync@example.com',
-        'name' => 'Sync User',
-        'locale' => 'de',
-        'source' => 'android_waitlist',
+        'email' => 'queued@example.com',
         'status' => NewsletterStatus::Pending,
     ]);
 
     app(NewsletterService::class)->confirm($subscriber);
 
+    Bus::assertDispatched(
+        SyncNewsletterContact::class,
+        fn ($job) => $job->subscriber->is($subscriber),
+    );
+});
+
+it('syncs an android waitlist subscriber into the android segment', function () {
+    $this->app->detectEnvironment(fn () => 'production');
+    config([
+        'services.resend.key' => 'test-key',
+        'services.resend.segments.android_waitlist' => 'seg_android',
+        'services.resend.segments.default' => 'seg_general',
+    ]);
+    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_123'], 200)]);
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'sync@example.com',
+        'name' => 'Sync User',
+        'source' => 'android_waitlist',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterContactSync::class)->sync($subscriber);
+
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.resend.com/contacts'
-            && ! array_key_exists('properties', $request->data())
             && $request['email'] === 'sync@example.com'
-            && $request['first_name'] === 'Sync User'
-            && $request['unsubscribed'] === false;
+            && $request['segments'] === [['id' => 'seg_android']];
     });
 
     expect($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
+});
+
+it('syncs a newsletter subscriber into the general segment', function () {
+    $this->app->detectEnvironment(fn () => 'production');
+    config([
+        'services.resend.key' => 'test-key',
+        'services.resend.segments.android_waitlist' => 'seg_android',
+        'services.resend.segments.default' => 'seg_general',
+    ]);
+    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_456'], 200)]);
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'news@example.com',
+        'source' => 'waitlist',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterContactSync::class)->sync($subscriber);
+
+    Http::assertSent(fn ($request) => $request['segments'] === [['id' => 'seg_general']]);
+});
+
+it('does not sync to resend outside production', function () {
+    config(['services.resend.key' => 'test-key']);
+    Http::fake();
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'dev@example.com',
+        'source' => 'android_waitlist',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterContactSync::class)->sync($subscriber);
+
+    Http::assertNothingSent();
+    expect($subscriber->fresh()->resend_contact_id)->toBeNull();
 });
 
 it('does not confirm on an invalid signature', function () {
