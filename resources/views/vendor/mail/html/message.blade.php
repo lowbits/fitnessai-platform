@@ -1,7 +1,8 @@
+@props(['emailCampaign' => 'email'])
 <x-mail::layout :previewText="$previewText ?? ''">
 {{-- Header --}}
 <x-slot:header>
-<x-mail::header :url="config('app.url')">
+<x-mail::header :url="\App\Support\EmailLink::withUtm(config('app.url'), $emailCampaign, 'logo')">
 {{ config('app.name') }}
 </x-mail::header>
 </x-slot:header>
@@ -20,7 +21,7 @@
 
 {{-- Footer --}}
 <x-slot:footer>
-<x-mail::footer>
+<x-mail::footer :campaign="$emailCampaign">
 © {{ date('Y') }} {{ config('app.name') }}. {{ __('All rights reserved.') }}
 </x-mail::footer>
 </x-slot:footer>

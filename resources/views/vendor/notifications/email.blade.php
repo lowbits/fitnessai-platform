@@ -1,4 +1,4 @@
-<x-mail::message>
+<x-mail::message :emailCampaign="$emailCampaign ?? 'email'">
 {{-- Greeting --}}
 @if (! empty($greeting))
 # {{ $greeting }}

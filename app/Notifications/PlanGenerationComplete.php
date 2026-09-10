@@ -68,6 +68,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         $mail = (new AppMailMessage)
             ->subject(__('emails.plan_ready.subject', ['goal' => $goalLabel]))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
+            ->campaign('plan_ready')
             ->previewText(__('emails.plan_ready.preview'));
 
         $mail
