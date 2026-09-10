@@ -14,7 +14,7 @@
     @endphp
 
     <style type="text/css">
-        @page { margin: 96px 48px 58px 48px; }
+        @page { margin: 50px 48px 58px 48px; }
 
         * { box-sizing: border-box; }
 
@@ -30,20 +30,23 @@
         table { border-collapse: collapse; width: 100%; }
         td, th { vertical-align: top; }
 
-        /* ---------- Running header / footer ---------- */
+        /* ---------- Running footer ---------- */
         .runner { position: fixed; left: 0; right: 0; }
-        .header { top: -66px; }
         .footer { bottom: -34px; }
         .footer__page { float: right; }
         .footer__page:after { content: counter(page); }
 
-        .header td, .footer td { font-size: 10.5px; color: #5c6b62; }
+        .footer td { font-size: 10.5px; color: #5c6b62; }
+        .footer__brand { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: 1px; color: #8a968f; }
+
+        /* ---------- Per-page header (days 2+) ---------- */
+        .page-head { margin-bottom: 26px; }
+        .page-head td { font-size: 10.5px; color: #5c6b62; }
         .header__brand { font-family: 'Space Grotesk', sans-serif; font-weight: bold; color: #0c1310; }
         .header__plan { color: #5c6b62; }
         .header__brand, .header__plan, .mark { vertical-align: middle; }
-        .header__right, .footer__right { text-align: right; }
+        .header__right { text-align: right; }
         .header__rule { border-bottom: 1px solid #e6eae8; height: 10px; }
-        .footer__brand { font-family: 'Space Grotesk', sans-serif; font-weight: 500; letter-spacing: 1px; color: #8a968f; }
 
         .mark { width: 16px; height: 16px; }
 
@@ -238,18 +241,6 @@
 </head>
 <body>
 
-<table class="runner header">
-    <tr>
-        <td>
-            <img class="mark" src="{{ public_path('favicon.svg') }}" alt="">
-            <span class="header__brand">&nbsp;{{ $t('header_title') }}</span>
-            <span class="header__plan">&nbsp;&middot; {{ $plan->plan_name }}</span>
-        </td>
-        <td class="header__right">{{ $user->name }}</td>
-    </tr>
-    <tr><td colspan="2" class="header__rule"></td></tr>
-</table>
-
 <div class="runner footer">
     <a class="footer__brand" href="{{ $appUrl }}" style="text-decoration:none;">FYTRR.COM</a>
     <span class="footer__page" style="font-family:'Space Grotesk',sans-serif; color:#8a968f;"></span>
@@ -320,6 +311,19 @@
     @endphp
 
     <div class="day @if($loop->first) first @endif">
+        @unless ($loop->first)
+            <table class="page-head">
+                <tr>
+                    <td>
+                        <img class="mark" src="{{ public_path('favicon.svg') }}" alt="">
+                        <span class="header__brand">&nbsp;{{ $t('header_title') }}</span>
+                        <span class="header__plan">&nbsp;&middot; {{ $plan->plan_name }}</span>
+                    </td>
+                    <td class="header__right">{{ $user->name }}</td>
+                </tr>
+                <tr><td colspan="2" class="header__rule"></td></tr>
+            </table>
+        @endunless
         @if ($workoutPlan->workout_type === 'rest')
             <div class="eyebrow">{{ $t('day') }} {{ $workoutPlan->day_number }} &middot; {{ $workoutPlan->date->translatedFormat('l, d.m.Y') }}</div>
             <div class="title">{{ $t('rest_day') }}</div>
