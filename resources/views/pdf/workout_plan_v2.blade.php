@@ -39,6 +39,12 @@
             }
             return (string) $ex->sets;
         };
+
+        $appUrl = \App\Support\AppDownloadQr::url($user);
+        $qrDataUri = \App\Support\AppDownloadQr::dataUri(\App\Support\AppDownloadQr::scanUrl(), 6);
+        $locale = app()->getLocale();
+        $badgePath = public_path('assets/badges/'.($locale === 'de' ? 'App_Store_Badge_DE.png' : 'App_Store_Badge_EN.png'));
+        $phonePath = public_path('assets/images/app/fytrr-app-home-'.($locale === 'de' ? 'de' : 'en').'.png');
     @endphp
 
     <style type="text/css">
@@ -122,7 +128,7 @@
             text-transform: uppercase;
             color: #17a45b;
         }
-        .coach__text { font-size: 11px; color: #33403a; line-height: 1.35; margin-top: 2px; }
+        .coach__text { font-size: 11px; color: #33403a; line-height: 1.25; margin-top: 1px; }
 
         /* ---------- Sections ---------- */
         .section { margin-top: 18px; }
@@ -198,6 +204,31 @@
         }
 
         .notes .note-line { border-bottom: 1px solid #e6eae8; height: 26px; }
+
+        /* ---------- Rest-day app promo ---------- */
+        .promo {
+            margin-top: 34px;
+            border: 1px solid #d8e6dd;
+            border-radius: 16px;
+            background: #f4faf6;
+        }
+        .promo td { padding: 30px 34px; vertical-align: middle; }
+        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; line-height: 1.25; }
+        .promo__sub { font-size: 13px; color: #5c6b62; line-height: 1.5; margin: 12px 0 20px 0; }
+        .promo__badge { height: 40px; }
+        .promo__scanrow { margin-top: 20px; }
+        .promo__qrimg { width: 62px; height: 62px; border: 1px solid #e6eae8; border-radius: 8px; background: #ffffff; padding: 5px; vertical-align: middle; }
+        .promo__scan {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 8.5px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #8a968f;
+            padding-left: 12px;
+            vertical-align: middle;
+        }
+        .promo__phone { width: 140px; text-align: right; vertical-align: middle; }
+        .promo__phone img { width: 124px; }
     </style>
 </head>
 <body>
@@ -215,7 +246,7 @@
 </table>
 
 <div class="runner footer">
-    <span class="footer__brand">FYTRR.COM</span>
+    <a class="footer__brand" href="https://fytrr.com" style="text-decoration:none;">FYTRR.COM</a>
     <span class="footer__page" style="font-family:'Space Grotesk',sans-serif; color:#8a968f;"></span>
 </div>
 
@@ -225,9 +256,40 @@
         $cooldowns = $workoutPlan->exercises->whereIn('type', ['cooldown', 'stretch'])->values();
         $mains = $workoutPlan->exercises->whereNotIn('type', ['warmup', 'cooldown', 'stretch'])->values();
         $n = 0;
+
+        // Fill the leftover space on the day's last page with note lines (max 3),
+        // so notes never create a page of their own but do use a real second page.
+        $pageHeight = 940;
+        $used = 76
+            + ($workoutPlan->description ? 58 : 0)
+            + ($warmups->isNotEmpty() ? 32 + $warmups->count() * 26 : 0)
+            + ($mains->isNotEmpty() ? 56 + $mains->count() * 66 : 0)
+            + ($cooldowns->isNotEmpty() ? 32 + $cooldowns->count() * 26 : 0)
+            + ($mains->isNotEmpty() ? 18 : 0);
+        $pages = max(1, (int) ceil($used / $pageHeight));
+        $noteLines = max(0, min(3, intdiv($pages * $pageHeight - $used - 34, 30)));
     @endphp
 
     <div class="day @if($loop->first) first @endif">
+        @if ($workoutPlan->workout_type === 'rest')
+            <div class="eyebrow">{{ $t('day') }} {{ $workoutPlan->day_number }} &middot; {{ $workoutPlan->date->translatedFormat('l, d.m.Y') }}</div>
+            <div class="title">{{ $t('rest_day') }}</div>
+            <div class="muscles">{{ $t('rest_description') }}</div>
+            <table class="promo">
+                <tr>
+                    <td class="promo__text">
+                        <div class="promo__head">{{ $t('promo_head') }}</div>
+                        <div class="promo__sub">{{ $t('promo_sub') }}</div>
+                        <a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a>
+                        <div class="promo__scanrow">
+                            <img class="promo__qrimg" src="{{ $qrDataUri }}" alt="">
+                            <span class="promo__scan">{{ $t('promo_scan') }}</span>
+                        </div>
+                    </td>
+                    <td class="promo__phone"><img src="{{ $phonePath }}" alt=""></td>
+                </tr>
+            </table>
+        @else
         <table>
             <tr>
                 <td style="width:58%;">
@@ -332,14 +394,17 @@
             <div class="set-hint">{{ $t('set_hint') }}</div>
         @endif
 
-        <div class="section notes">
-            <div class="section__title">{{ $t('notes') }}</div>
-            <table>
-                <tr><td class="note-line"></td></tr>
-                <tr><td class="note-line"></td></tr>
-                <tr><td class="note-line"></td></tr>
-            </table>
-        </div>
+        @if ($noteLines > 0)
+            <div class="section notes">
+                <div class="section__title">{{ $t('notes') }}</div>
+                <table>
+                    @for ($i = 0; $i < $noteLines; $i++)
+                        <tr><td class="note-line"></td></tr>
+                    @endfor
+                </table>
+            </div>
+        @endif
+        @endif
     </div>
 @endforeach
 
