@@ -401,6 +401,7 @@ WARMUP;
 - Progressive overload: increase weight when RPE drops below 7
 - Focus on mind-muscle connection and controlled eccentric phase
 - Last set of each exercise can push to RPE 9 for additional stimulus
+- IMPORTANT: these are hard working sets. Working loads must be genuinely challenging, taken to 1-2 reps in reserve (RPE 8-9). Label the weight_recommendation "Challenging", never "Moderate" or "Light" for the main lifts — a weight that feels moderate is too light to drive growth.
 GOAL,
             'lose_weight' => <<<'GOAL'
 **Lose Weight (Fat Loss) Protocol:**
