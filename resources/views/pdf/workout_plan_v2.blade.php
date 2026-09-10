@@ -52,8 +52,8 @@
 
         /* ---------- Page-1 cover ---------- */
         .cover td { vertical-align: middle; }
-        .cover td.cover__logocell { width: 30px; vertical-align: top; }
-        .cover__logo { width: 22px; height: 22px; margin-top: 4px; }
+        .cover td.cover__logocell { width: 32px; vertical-align: top; }
+        .cover__logo { width: 24px; height: 24px; margin-top: 3px; }
         .cover__brand {
             font-family: 'Space Grotesk', sans-serif;
             font-weight: bold;
