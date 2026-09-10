@@ -23,8 +23,13 @@
     <rect width="1200" height="630" fill="url(#bg)"/>
     <rect width="1200" height="630" fill="url(#glow)"/>
 
-    {{-- Hero brand mark, right --}}
-    <use href="#mark" transform="translate(792 132) scale(2.9)"/>
+    {{-- Right motif: a topic icon in a tile, or the brand mark as fallback --}}
+    @if ($iconSvg !== '')
+        <rect x="785" y="145" width="340" height="340" rx="44" fill="#0E2418" stroke="#3EE07F" stroke-opacity="0.28" stroke-width="2"/>
+        <g transform="translate(867 227) scale(7.33)" fill="none" stroke="#3EE07F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">{!! $iconSvg !!}</g>
+    @else
+        <use href="#mark" transform="translate(792 132) scale(2.9)"/>
+    @endif
 
     {{-- Wordmark: mark + name + dot --}}
     <use href="#mark" transform="translate(80 62) scale(0.4)"/>
