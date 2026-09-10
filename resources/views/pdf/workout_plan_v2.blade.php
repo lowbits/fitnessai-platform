@@ -221,9 +221,21 @@
         .step__n { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 14px; color: #17a45b; }
         .step__t { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #0c1310; padding-left: 6px; }
         .step__media { padding: 7px 0 0 19px; }
+        .dl { width: auto; }
+        .dl td { padding: 0; vertical-align: middle; }
+        .dl td.vordiv { padding: 0 14px; text-align: center; }
         .promo__qrimg { width: 68px; height: 68px; border: 1px solid #e6eae8; border-radius: 8px; background: #ffffff; padding: 5px; vertical-align: middle; }
-        .promo__badge { height: 36px; vertical-align: middle; padding-left: 14px; }
+        .promo__badge { height: 36px; vertical-align: middle; }
         .promo__scan { font-family: 'Space Grotesk', sans-serif; font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #8a968f; vertical-align: middle; padding-left: 14px; }
+        .vordiv__line { width: 1px; height: 16px; background: #cdd9d2; margin: 0 auto; }
+        .vordiv__txt {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #8a968f;
+            padding: 5px 0;
+        }
         .promo__phone { width: 176px; text-align: right; vertical-align: middle; }
         .promo__phone img { width: 162px; }
     </style>
@@ -243,7 +255,7 @@
 </table>
 
 <div class="runner footer">
-    <a class="footer__brand" href="https://fytrr.com" style="text-decoration:none;">FYTRR.COM</a>
+    <a class="footer__brand" href="{{ $appUrl }}" style="text-decoration:none;">FYTRR.COM</a>
     <span class="footer__page" style="font-family:'Space Grotesk',sans-serif; color:#8a968f;"></span>
 </div>
 
@@ -281,8 +293,17 @@
                         <div class="step">
                             <div class="step__label"><span class="step__n">1.</span><span class="step__t">{{ $t('promo_step1') }}</span></div>
                             <div class="step__media">
-                                <img class="promo__qrimg" src="{{ $downloadQr }}" alt="">
-                                <a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a>
+                                <table class="dl">
+                                    <tr>
+                                        <td><img class="promo__qrimg" src="{{ $downloadQr }}" alt=""></td>
+                                        <td class="vordiv">
+                                            <div class="vordiv__line"></div>
+                                            <div class="vordiv__txt">{{ $t('promo_or') }}</div>
+                                            <div class="vordiv__line"></div>
+                                        </td>
+                                        <td><a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a></td>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
                         <div class="step">

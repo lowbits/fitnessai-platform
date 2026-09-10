@@ -116,6 +116,7 @@ return [
         'promo_step1' => 'Herunterladen',
         'promo_step2' => 'Konto aktivieren',
         'promo_scan' => 'QR scannen',
+        'promo_or' => 'oder',
         'rest_day' => 'Ruhetag',
         'rest_description' => 'Gönn deinem Körper heute Erholung. Leichte Bewegung oder Dehnen tun gut.',
         'generating' => 'Trainingsplan wird erstellt …',

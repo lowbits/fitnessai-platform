@@ -116,6 +116,7 @@ return [
         'promo_step1' => 'Download',
         'promo_step2' => 'Claim account',
         'promo_scan' => 'Scan QR',
+        'promo_or' => 'or',
         'rest_day' => 'Rest day',
         'rest_description' => 'Give your body a real break today. Light movement or stretching helps.',
         'generating' => 'Generating workout plan …',
