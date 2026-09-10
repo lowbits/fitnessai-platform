@@ -7,47 +7,10 @@
     @php
         $t = fn (string $key, array $r = []) => __('pdf.workout_plan_v2.'.$key, $r);
         $typeLabel = fn (?string $type) => \Illuminate\Support\Arr::get($t('types'), $type, ucfirst((string) $type));
-        $duration = function (?int $seconds): string {
-            $seconds = (int) $seconds;
-            if ($seconds <= 0) {
-                return '';
-            }
-            $minutes = intdiv($seconds, 60);
-            $rest = $seconds % 60;
-            return match (true) {
-                $minutes === 0 => $rest.'s',
-                $rest === 0 => $minutes.'min',
-                default => $minutes.'min '.$rest.'s',
-            };
-        };
-        $altNames = function ($alternatives): string {
-            if (! is_array($alternatives)) {
-                return '';
-            }
-            return collect($alternatives)
-                ->map(fn ($alt) => is_string($alt) ? $alt : ($alt['name'] ?? null))
-                ->filter()
-                ->take(2)
-                ->join(', ');
-        };
-        $metric = function ($ex) use ($duration): string {
-            if ($ex->reps) {
-                return $ex->sets.' × '.$ex->reps;
-            }
-            if ($ex->duration_seconds) {
-                return $ex->sets ? $ex->sets.' × '.$duration($ex->duration_seconds) : $duration($ex->duration_seconds);
-            }
-            return (string) $ex->sets;
-        };
-
-        $muscleLabels = fn ($groups) => collect(is_array($groups) ? $groups : [])
-            ->map(fn (string $m) => \App\Enums\MuscleGroup::tryFrom($m)?->label() ?? ucfirst($m))
-            ->join(', ');
 
         $appUrl = \App\Support\AppDownloadQr::url($user);
         $appQr = \App\Support\AppDownloadQr::dataUri($appUrl, 6);
-        $locale = app()->getLocale();
-        $phonePath = public_path('assets/images/app/fytrr-app-home-'.($locale === 'de' ? 'de' : 'en').'.png');
+        $phonePath = public_path('assets/images/app/fytrr-app-home-'.(app()->getLocale() === 'de' ? 'de' : 'en').'.png');
     @endphp
 
     <style type="text/css">
@@ -182,8 +145,8 @@
             color: #17a45b;
             font-size: 11.5px;
         }
-        .ex__name { font-weight: bold; color: #0c1310; }
-        .ex__alt { font-size: 9.5px; color: #8a968f; padding-top: 2px; }
+        .ex__name { font-weight: bold; color: #0c1310; line-height: 1.1; }
+        .ex__alt { font-size: 9.5px; color: #8a968f; line-height: 1.1; margin-top: -3px; }
         .cell-muted { color: #5c6b62; }
         .metric { font-weight: bold; color: #0c1310; }
         .time { color: #33403a; }
@@ -275,9 +238,9 @@
 
 @foreach ($workoutPlans as $workoutPlan)
     @php
-        $warmups = $workoutPlan->exercises->where('type', 'warmup')->values();
-        $cooldowns = $workoutPlan->exercises->whereIn('type', ['cooldown', 'stretch'])->values();
-        $mains = $workoutPlan->exercises->whereNotIn('type', ['warmup', 'cooldown', 'stretch'])->values();
+        $warmups = $workoutPlan->warmupExercises();
+        $cooldowns = $workoutPlan->cooldownExercises();
+        $mains = $workoutPlan->mainExercises();
         $n = 0;
 
         // Fill the leftover space on the day's last page with note lines (max 3),
@@ -332,7 +295,7 @@
                     <div class="eyebrow">{{ $t('day') }} {{ $workoutPlan->day_number }} &middot; {{ $workoutPlan->date->translatedFormat('l, d.m.Y') }}</div>
                     <div class="title">{{ $workoutPlan->workout_name }}</div>
                     @if ($workoutPlan->muscle_groups && is_array($workoutPlan->muscle_groups))
-                        <div class="muscles">{{ $muscleLabels($workoutPlan->muscle_groups) }}</div>
+                        <div class="muscles">{{ implode(', ', $workoutPlan->muscleGroupLabels()) }}</div>
                     @endif
                 </td>
                 <td style="width:42%; text-align:right;">
@@ -373,7 +336,7 @@
                     <tr class="row">
                         <td class="num">{{ $n }}</td>
                         <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                        <td class="time">{{ $duration($ex->duration_seconds) }}</td>
+                        <td class="time">{{ $ex->durationLabel() }}</td>
                         <td></td><td></td><td></td><td></td>
                         <td class="check-cell"><span class="check"></span></td>
                     </tr>
@@ -393,7 +356,7 @@
                     <td style="width:9%;">{{ $t('col_set') }} 3</td>
                 </tr>
                 @foreach ($mains as $ex)
-                    @php $n++; $alt = $altNames($ex->alternatives); @endphp
+                    @php $n++; $alt = $ex->alternativeNames(); @endphp
                     <tr class="row">
                         <td class="num">{{ $n }}</td>
                         <td>
@@ -402,7 +365,7 @@
                                 <div class="ex__alt">{{ $alt }}</div>
                             @endif
                         </td>
-                        <td class="metric">{{ $metric($ex) }}</td>
+                        <td class="metric">{{ $ex->metricLabel() }}</td>
                         <td class="cell-muted">{{ $ex->rest_seconds }}@if($ex->rest_seconds) s @endif</td>
                         <td class="cell-muted">{{ $ex->rpe }}</td>
                         <td><div class="box"></div></td>
@@ -420,7 +383,7 @@
                     <tr class="row">
                         <td class="num">{{ $n }}</td>
                         <td class="ex__name">{{ $ex->exercise?->localizedName() ?? $ex->name }}</td>
-                        <td class="time">{{ $duration($ex->duration_seconds) }}</td>
+                        <td class="time">{{ $ex->durationLabel() }}</td>
                         <td></td><td></td><td></td><td></td>
                         <td class="check-cell"><span class="check"></span></td>
                     </tr>

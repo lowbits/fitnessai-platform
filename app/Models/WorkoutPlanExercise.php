@@ -51,4 +51,44 @@ class WorkoutPlanExercise extends Model
     {
         return $this->hasMany(WorkoutTrackingExercise::class, 'workout_plan_exercise_id');
     }
+
+    public function durationLabel(): string
+    {
+        $seconds = (int) $this->duration_seconds;
+
+        if ($seconds <= 0) {
+            return '';
+        }
+
+        $minutes = intdiv($seconds, 60);
+        $rest = $seconds % 60;
+
+        return match (true) {
+            $minutes === 0 => $rest.'s',
+            $rest === 0 => $minutes.'min',
+            default => $minutes.'min '.$rest.'s',
+        };
+    }
+
+    public function metricLabel(): string
+    {
+        if ($this->reps) {
+            return $this->sets.' × '.$this->reps;
+        }
+
+        if ($this->duration_seconds) {
+            return $this->sets ? $this->sets.' × '.$this->durationLabel() : $this->durationLabel();
+        }
+
+        return (string) $this->sets;
+    }
+
+    public function alternativeNames(int $limit = 2): string
+    {
+        return collect($this->alternatives ?? [])
+            ->map(fn ($alt) => is_string($alt) ? $alt : ($alt['name'] ?? null))
+            ->filter()
+            ->take($limit)
+            ->join(', ');
+    }
 }
