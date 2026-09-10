@@ -90,12 +90,8 @@ class WorkoutRubric
     }
 
     /**
-     * Whether any muscle group is neglected relative to the rest of the plan.
-     * Measured as the weakest group's volume against the plan average, not
-     * against the busiest group: a large region like legs legitimately carries
-     * more sets (it spans quads, hamstrings, glutes and calves), so comparing
-     * everything to that peak would flag a well-distributed plan as imbalanced.
-     * A starved group still drops well below the average and gets caught.
+     * Whether any group is starved relative to the plan average (weakest vs
+     * mean, not vs the busiest, so a large region is not a false imbalance).
      *
      * @param  Collection<string, array<string, mixed>>  $groups
      */
