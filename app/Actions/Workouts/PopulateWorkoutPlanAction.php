@@ -3,6 +3,7 @@
 namespace App\Actions\Workouts;
 
 use App\Ai\DataTransferObjects\WorkoutPlanResult;
+use App\Ai\Support\WorkoutIntensity;
 use App\Models\WorkoutPlan;
 use App\Models\WorkoutPlanExercise;
 
@@ -11,6 +12,9 @@ class PopulateWorkoutPlanAction
     public function execute(WorkoutPlan $workoutPlan, WorkoutPlanResult $workoutPlanResult): void
     {
         $workoutPlan->exercises()->delete();
+
+        $goal = $workoutPlan->plan?->user?->profile?->body_goal;
+        $defaultRpe = $goal ? WorkoutIntensity::defaultRpe($goal) : null;
 
         $workoutPlan->update([
             'workout_name' => $workoutPlanResult->workoutName,
@@ -35,10 +39,21 @@ class PopulateWorkoutPlanAction
                 'tempo' => $exercise['tempo'] ?? null,
                 'execution_style' => $exercise['execution_style'] ?? null,
                 'weight_recommendation' => $exercise['weight_recommendation'] ?? null,
-                'rpe' => $exercise['rpe'] ?? null,
+                'rpe' => $this->resolveRpe($exercise, $defaultRpe),
                 'alternatives' => $exercise['alternatives'] ?? [],
             ]);
         }
+    }
 
+    /**
+     * @param  array<string, mixed>  $exercise
+     */
+    private function resolveRpe(array $exercise, ?string $defaultRpe): ?string
+    {
+        if (($exercise['type'] ?? null) !== 'strength') {
+            return null;
+        }
+
+        return WorkoutIntensity::normalizeRpe($exercise['rpe'] ?? null) ?? $defaultRpe;
     }
 }

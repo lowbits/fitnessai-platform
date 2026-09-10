@@ -76,6 +76,12 @@ return [
         'generating' => 'Trainingsplan wird erstellt …',
         'help' => 'Fragen oder Unterstützung?',
         'contact' => 'Kontaktiere uns unter',
+        'progression_heading' => 'Progressive Steigerung',
+        'progression' => [
+            'build_muscle' => 'Steigere die Wiederholungen in jeder Einheit innerhalb deines Zielbereichs. Schaffst du alle Sätze am oberen Ende, erhöhe das Gewicht und starte wieder am unteren Ende. Ziel: alle 1-2 Wochen mehr Gewicht oder Wiederholungen.',
+            'lose_weight' => 'Halte die Pausen kurz und steigere Woche für Woche die Wiederholungen oder ein wenig Gewicht, sobald die Zirkel leichter fallen, damit das Training fordernd bleibt.',
+            'get_fit' => 'Füge jede Woche eine Wiederholung oder etwas Gewicht hinzu, sobald sich ein Workout leicht anfühlt, damit dein Körper sich weiter anpasst.',
+        ],
     ],
 
     'footer' => [
