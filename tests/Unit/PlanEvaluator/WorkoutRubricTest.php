@@ -96,6 +96,20 @@ it('rates even volume across groups as balanced', function () {
     expect(ratingFor('balance', goodPlanFacts()))->toBe(Rating::Good);
 });
 
+it('does not flag a large region carrying more sets as imbalanced', function () {
+    $facts = goodPlanFacts();
+    $facts['muscle_groups'] = collect([
+        ['group' => 'chest', 'weekly_sets' => 6],
+        ['group' => 'back', 'weekly_sets' => 12],
+        ['group' => 'shoulders', 'weekly_sets' => 6],
+        ['group' => 'arms', 'weekly_sets' => 12],
+        ['group' => 'legs', 'weekly_sets' => 24],
+        ['group' => 'core', 'weekly_sets' => 6],
+    ])->map(fn (array $group) => [...$group, 'sessions_per_week' => 2])->all();
+
+    expect(ratingFor('balance', $facts))->toBe(Rating::Ok);
+});
+
 it('rates hard intensity good, light poor, and unspecified neutral', function () {
     expect(ratingFor('intensity', [...goodPlanFacts(), 'intensity' => 'hard']))->toBe(Rating::Good)
         ->and(ratingFor('intensity', [...goodPlanFacts(), 'intensity' => 'light']))->toBe(Rating::Poor)

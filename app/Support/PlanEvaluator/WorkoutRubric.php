@@ -29,9 +29,9 @@ class WorkoutRubric
 
     private const MIN_FREQUENCY = 2;
 
-    private const BALANCE_GOOD = 0.5;
+    private const BALANCE_GOOD = 0.6;
 
-    private const BALANCE_POOR = 0.34;
+    private const BALANCE_POOR = 0.45;
 
     /** @var array<string, float> weights, summing to 1.0 */
     private const WEIGHTS = ['coverage' => 0.22, 'volume' => 0.18, 'balance' => 0.12, 'intensity' => 0.11, 'progression' => 0.15, 'frequency' => 0.14, 'recovery' => 0.08];
@@ -90,8 +90,8 @@ class WorkoutRubric
     }
 
     /**
-     * How evenly volume is spread across the trained groups. A plan that hammers
-     * chest but barely touches legs is imbalanced even if every group appears.
+     * Whether any group is starved relative to the plan average (weakest vs
+     * mean, not vs the busiest, so a large region is not a false imbalance).
      *
      * @param  Collection<string, array<string, mixed>>  $groups
      */
@@ -102,8 +102,8 @@ class WorkoutRubric
         }
 
         $sets = $groups->map(fn (array $group) => (int) $group['weekly_sets']);
-        $max = (int) $sets->max();
-        $ratio = $max > 0 ? (int) $sets->min() / $max : 0.0;
+        $mean = $sets->avg();
+        $ratio = $mean > 0 ? (int) $sets->min() / $mean : 0.0;
 
         return new Dimension('balance', $this->rate(
             good: $ratio >= self::BALANCE_GOOD,
