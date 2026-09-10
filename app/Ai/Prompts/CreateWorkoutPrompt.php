@@ -71,7 +71,7 @@ class CreateWorkoutPrompt implements Stringable
 **Constraints:**
 - Main workout: {$exerciseCount} strength/main exercises
 - Order: compound movements first, isolation exercises last
-- Set distribution: give every muscle listed in today's target groups adequate direct volume — roughly 3-4 hard sets each. Trained ~2x/week across the split, this lands each muscle in the productive 10-20 sets/week range. Do not spend most of the session on one or two muscles while another listed target gets only a single token exercise (e.g. do not give chest and back two exercises each and leave shoulders and arms with one each).
+- Set distribution: give every muscle listed in today's target groups adequate direct volume — about 4 hard sets each per session, so across its ~2x/week frequency it accumulates roughly 8 hard working sets per week. Do not spend most of the session on one or two muscles while another listed target gets only a single token exercise (e.g. do not give chest and back two exercises each and leave shoulders and arms with one each).
 - Target total duration: {$durationGuideline}
 - IMPORTANT: Be conservative with duration estimates. Account for transitions between exercises, water breaks, equipment setup, and reading instructions. A workout with 6 exercises × 3 sets × 12 reps with 60s rest realistically takes 45-50 min, not 30 min.
 

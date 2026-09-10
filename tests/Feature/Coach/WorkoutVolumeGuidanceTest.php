@@ -15,6 +15,6 @@ function volumeWorkoutPrompt(): string
 it('tells the model to spread sets across every target muscle', function () {
     expect(volumeWorkoutPrompt())
         ->toContain('Set distribution')
-        ->toContain('10-20 sets/week')
+        ->toContain('8 hard working sets per week')
         ->toContain('single token exercise');
 });
