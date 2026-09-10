@@ -107,7 +107,7 @@ it('does not flag a large region carrying more sets as imbalanced', function () 
         ['group' => 'core', 'weekly_sets' => 6],
     ])->map(fn (array $group) => [...$group, 'sessions_per_week' => 2])->all();
 
-    expect(ratingFor('balance', $facts))->not->toBe(Rating::Poor);
+    expect(ratingFor('balance', $facts))->toBe(Rating::Ok);
 });
 
 it('rates hard intensity good, light poor, and unspecified neutral', function () {
