@@ -110,3 +110,46 @@ it('trains every major group at least twice a week', function (int $frequency) {
 
     expect($min)->toBeGreaterThanOrEqual(2);
 })->with([2, 3, 4, 5, 6]);
+
+/**
+ * Count weekly sessions per individual muscle, without collapsing legs into one
+ * "legs" group. This is what proves the ≥2x/muscle claim the broad-group test
+ * cannot: it would catch calves being omitted or quads landing on only one day.
+ *
+ * @return array<string, int>
+ */
+function muscleFrequency(int $frequency): array
+{
+    $canonical = [
+        'quadriceps' => 'quadriceps', 'hamstrings' => 'hamstrings', 'glutes' => 'glutes', 'calves' => 'calves',
+        'chest' => 'chest',
+        'back' => 'back', 'upper_back' => 'back', 'lower_back' => 'back', 'lats' => 'back',
+        'shoulders' => 'shoulders', 'rear_delts' => 'shoulders', 'rotator_cuff' => 'shoulders',
+        'biceps' => 'biceps', 'triceps' => 'triceps',
+        'core' => 'core',
+    ];
+
+    $counts = [];
+
+    foreach (WorkoutSplit::forFrequency($frequency) as $day) {
+        $muscles = collect(explode(',', $day['muscles']))
+            ->map(fn (string $muscle) => $canonical[trim($muscle)] ?? null)
+            ->filter()
+            ->unique();
+
+        foreach ($muscles as $muscle) {
+            $counts[$muscle] = ($counts[$muscle] ?? 0) + 1;
+        }
+    }
+
+    return $counts;
+}
+
+it('trains every individual major muscle at least twice a week', function (int $frequency) {
+    $counts = muscleFrequency($frequency);
+    $min = collect(['quadriceps', 'hamstrings', 'glutes', 'calves', 'chest', 'back', 'shoulders', 'biceps', 'triceps', 'core'])
+        ->map(fn (string $muscle) => $counts[$muscle] ?? 0)
+        ->min();
+
+    expect($min)->toBeGreaterThanOrEqual(2);
+})->with([2, 3, 4, 5, 6]);

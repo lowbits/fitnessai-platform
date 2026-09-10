@@ -20,16 +20,18 @@ class WorkoutSplit
     public static function forFrequency(int $workoutsPerWeek): array
     {
         return match ($workoutsPerWeek) {
-            // Low frequency: full body so every muscle is trained 2-3x/week. A
-            // split here would only hit each muscle once, which is suboptimal.
+            // Low frequency: full body. Every session targets all major muscles,
+            // so each one is trained on every training day (2x/week at 2 days,
+            // 3x at 3). Variation lives in exercise choice, never in omitting a
+            // muscle from the target, which is what once left calves untrained.
             2 => [
-                ['label' => 'Full Body A', 'muscles' => 'quadriceps, glutes, chest, back, shoulders, triceps, core'],
-                ['label' => 'Full Body B', 'muscles' => 'hamstrings, glutes, back, chest, shoulders, biceps, core'],
+                ['label' => 'Full Body A', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
+                ['label' => 'Full Body B', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
             ],
             3 => [
-                ['label' => 'Full Body A', 'muscles' => 'quadriceps, chest, back, shoulders, triceps, core'],
-                ['label' => 'Full Body B', 'muscles' => 'hamstrings, glutes, back, chest, biceps, core'],
-                ['label' => 'Full Body C', 'muscles' => 'quadriceps, glutes, shoulders, back, chest, triceps, biceps, core'],
+                ['label' => 'Full Body A', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
+                ['label' => 'Full Body B', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
+                ['label' => 'Full Body C', 'muscles' => 'quadriceps, hamstrings, glutes, calves, chest, back, shoulders, biceps, triceps, core'],
             ],
             4 => [
                 ['label' => 'Upper Body A', 'muscles' => 'chest, shoulders, triceps, back, biceps'],
@@ -50,7 +52,7 @@ class WorkoutSplit
                 ['label' => 'Legs & Core', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
                 ['label' => 'Push', 'muscles' => 'shoulders, chest, triceps'],
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs & Core', 'muscles' => 'hamstrings, glutes, calves, core'],
+                ['label' => 'Legs & Core', 'muscles' => 'quadriceps, hamstrings, glutes, calves, core'],
             ],
             7 => [
                 ['label' => 'Push', 'muscles' => 'chest, shoulders, triceps'],
@@ -58,7 +60,7 @@ class WorkoutSplit
                 ['label' => 'Legs', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
                 ['label' => 'Push', 'muscles' => 'shoulders, chest, triceps'],
                 ['label' => 'Pull', 'muscles' => 'back, biceps, rear_delts'],
-                ['label' => 'Legs', 'muscles' => 'hamstrings, glutes, calves'],
+                ['label' => 'Legs', 'muscles' => 'quadriceps, hamstrings, glutes, calves'],
                 ['label' => 'Arms & Core', 'muscles' => 'biceps, triceps, core'],
             ],
             default => [
