@@ -61,3 +61,87 @@ it('resets the cycle to the real training-day count for a mismatched custom sche
 it('dedupes duplicate custom training days', function () {
     expect(GenerateUserWorkoutPlan::trainingDayIndices(2, ['monday', 'monday', 'friday']))->toBe([0, 4]);
 });
+
+/**
+ * @return array<string, int> sessions per major group per week
+ */
+function groupFrequency(int $frequency): array
+{
+    $map = [
+        'quadriceps' => 'legs', 'hamstrings' => 'legs', 'glutes' => 'legs', 'calves' => 'legs',
+        'chest' => 'chest',
+        'back' => 'back', 'upper_back' => 'back', 'lower_back' => 'back', 'lats' => 'back',
+        'shoulders' => 'shoulders', 'rear_delts' => 'shoulders', 'rotator_cuff' => 'shoulders',
+        'biceps' => 'arms', 'triceps' => 'arms', 'forearms' => 'arms',
+        'core' => 'core',
+    ];
+
+    $counts = [];
+
+    foreach (WorkoutSplit::forFrequency($frequency) as $day) {
+        $groups = collect(explode(',', $day['muscles']))
+            ->map(fn (string $muscle) => $map[trim($muscle)] ?? null)
+            ->filter()
+            ->unique();
+
+        foreach ($groups as $group) {
+            $counts[$group] = ($counts[$group] ?? 0) + 1;
+        }
+    }
+
+    return $counts;
+}
+
+it('covers every major muscle group at each frequency', function (int $frequency) {
+    $counts = groupFrequency($frequency);
+
+    expect(array_keys($counts))->toContain('legs', 'back', 'chest', 'shoulders', 'arms', 'core');
+})->with([2, 3, 4, 5, 6, 7]);
+
+it('trains every major group at least twice a week', function (int $frequency) {
+    $counts = groupFrequency($frequency);
+    $min = collect(['legs', 'back', 'chest', 'shoulders', 'arms', 'core'])
+        ->map(fn (string $group) => $counts[$group] ?? 0)
+        ->min();
+
+    expect($min)->toBeGreaterThanOrEqual(2);
+})->with([2, 3, 4, 5, 6]);
+
+/**
+ * @return array<string, int> sessions per individual muscle per week
+ */
+function muscleFrequency(int $frequency): array
+{
+    $canonical = [
+        'quadriceps' => 'quadriceps', 'hamstrings' => 'hamstrings', 'glutes' => 'glutes', 'calves' => 'calves',
+        'chest' => 'chest',
+        'back' => 'back', 'upper_back' => 'back', 'lower_back' => 'back', 'lats' => 'back',
+        'shoulders' => 'shoulders', 'rear_delts' => 'shoulders', 'rotator_cuff' => 'shoulders',
+        'biceps' => 'biceps', 'triceps' => 'triceps',
+        'core' => 'core',
+    ];
+
+    $counts = [];
+
+    foreach (WorkoutSplit::forFrequency($frequency) as $day) {
+        $muscles = collect(explode(',', $day['muscles']))
+            ->map(fn (string $muscle) => $canonical[trim($muscle)] ?? null)
+            ->filter()
+            ->unique();
+
+        foreach ($muscles as $muscle) {
+            $counts[$muscle] = ($counts[$muscle] ?? 0) + 1;
+        }
+    }
+
+    return $counts;
+}
+
+it('trains every individual major muscle at least twice a week', function (int $frequency) {
+    $counts = muscleFrequency($frequency);
+    $min = collect(['quadriceps', 'hamstrings', 'glutes', 'calves', 'chest', 'back', 'shoulders', 'biceps', 'triceps', 'core'])
+        ->map(fn (string $muscle) => $counts[$muscle] ?? 0)
+        ->min();
+
+    expect($min)->toBeGreaterThanOrEqual(2);
+})->with([2, 3, 4, 5, 6]);
