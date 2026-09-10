@@ -74,3 +74,33 @@ it('leaves warmups without an rpe', function () {
 
     expect($workoutPlan->exercises()->first()->rpe)->toBeNull();
 });
+
+it('drops an rpe the model set on a warmup', function () {
+    $workoutPlan = workoutPlanForGoal('buildMuscle');
+
+    (new PopulateWorkoutPlanAction)->execute($workoutPlan, resultWith([
+        strengthExercise(['type' => 'warmup', 'rpe' => 'RPE 5']),
+    ]));
+
+    expect($workoutPlan->exercises()->first()->rpe)->toBeNull();
+});
+
+it('falls back to the goal default for an out-of-range rpe', function () {
+    $workoutPlan = workoutPlanForGoal('buildMuscle');
+
+    (new PopulateWorkoutPlanAction)->execute($workoutPlan, resultWith([
+        strengthExercise(['rpe' => 'RPE 12']),
+    ]));
+
+    expect($workoutPlan->exercises()->first()->rpe)->toBe('7-9');
+});
+
+it('rejects a reversed rpe range and uses the default', function () {
+    $workoutPlan = workoutPlanForGoal('buildMuscle');
+
+    (new PopulateWorkoutPlanAction)->execute($workoutPlan, resultWith([
+        strengthExercise(['rpe' => '9-7']),
+    ]));
+
+    expect($workoutPlan->exercises()->first()->rpe)->toBe('7-9');
+});

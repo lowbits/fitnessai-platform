@@ -22,8 +22,9 @@ class WorkoutIntensity
 
     /**
      * Reduce whatever the model returns to a bare number or range ("8", "7-9"),
-     * stripping any "RPE" prefix or "/10" suffix. Returns null when no usable
-     * number is present, so the caller can fall back to the goal default.
+     * stripping any "RPE" prefix or "/10" suffix. Returns null when no valid
+     * value on the 1-10 scale is present, so the caller falls back to the goal
+     * default rather than storing nonsense like "12" or a reversed "9-7".
      */
     public static function normalizeRpe(?string $rpe): ?string
     {
@@ -32,13 +33,25 @@ class WorkoutIntensity
         }
 
         if (preg_match('/(\d{1,2})\s*-\s*(\d{1,2})/', $rpe, $match)) {
-            return $match[1].'-'.$match[2];
+            $low = (int) $match[1];
+            $high = (int) $match[2];
+
+            return self::isValidRpe($low) && self::isValidRpe($high) && $low <= $high
+                ? "{$low}-{$high}"
+                : null;
         }
 
         if (preg_match('/\d{1,2}/', $rpe, $match)) {
-            return $match[0];
+            $value = (int) $match[0];
+
+            return self::isValidRpe($value) ? (string) $value : null;
         }
 
         return null;
+    }
+
+    private static function isValidRpe(int $value): bool
+    {
+        return $value >= 1 && $value <= 10;
     }
 }

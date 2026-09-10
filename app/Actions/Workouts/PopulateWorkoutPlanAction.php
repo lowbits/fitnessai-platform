@@ -39,11 +39,25 @@ class PopulateWorkoutPlanAction
                 'tempo' => $exercise['tempo'] ?? null,
                 'execution_style' => $exercise['execution_style'] ?? null,
                 'weight_recommendation' => $exercise['weight_recommendation'] ?? null,
-                'rpe' => WorkoutIntensity::normalizeRpe($exercise['rpe'] ?? null)
-                    ?? ($exercise['type'] === 'strength' ? $defaultRpe : null),
+                'rpe' => $this->resolveRpe($exercise, $defaultRpe),
                 'alternatives' => $exercise['alternatives'] ?? [],
             ]);
         }
+    }
 
+    /**
+     * Only strength exercises carry an RPE. For those, normalize the model's
+     * value and fall back to the goal default; warmups, cooldowns and stretches
+     * always stay null regardless of what the model returned.
+     *
+     * @param  array<string, mixed>  $exercise
+     */
+    private function resolveRpe(array $exercise, ?string $defaultRpe): ?string
+    {
+        if (($exercise['type'] ?? null) !== 'strength') {
+            return null;
+        }
+
+        return WorkoutIntensity::normalizeRpe($exercise['rpe'] ?? null) ?? $defaultRpe;
     }
 }
