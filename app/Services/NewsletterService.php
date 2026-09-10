@@ -96,7 +96,7 @@ class NewsletterService
                     'email' => $subscriber->email,
                     'first_name' => $subscriber->name,
                     'unsubscribed' => false,
-                    'segments' => $segmentId ? [$segmentId] : null,
+                    'segments' => $segmentId ? [['id' => $segmentId]] : null,
                 ], fn ($value) => $value !== null));
 
             if ($response->successful()) {

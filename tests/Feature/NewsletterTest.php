@@ -87,7 +87,7 @@ it('syncs an android waitlist subscriber into the android segment', function () 
     Http::assertSent(function ($request) {
         return $request->url() === 'https://api.resend.com/contacts'
             && $request['email'] === 'sync@example.com'
-            && $request['segments'] === ['seg_android'];
+            && $request['segments'] === [['id' => 'seg_android']];
     });
 
     expect($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
@@ -110,7 +110,7 @@ it('syncs a newsletter subscriber into the general segment', function () {
 
     app(NewsletterService::class)->confirm($subscriber);
 
-    Http::assertSent(fn ($request) => $request['segments'] === ['seg_general']);
+    Http::assertSent(fn ($request) => $request['segments'] === [['id' => 'seg_general']]);
 });
 
 it('does not sync to resend outside production', function () {
