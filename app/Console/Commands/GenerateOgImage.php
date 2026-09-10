@@ -30,7 +30,7 @@ class GenerateOgImage extends Command
 
         $svg = view('og.card', [
             'eyebrow' => Str::upper((string) $this->option('eyebrow')),
-            'titleLines' => explode("\n", wordwrap((string) $this->option('title'), 20, "\n")),
+            'titleLines' => explode("\n", wordwrap((string) $this->option('title'), 16, "\n")),
             'subtitle' => (string) $this->option('subtitle'),
         ])->render();
 
