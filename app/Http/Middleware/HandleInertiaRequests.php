@@ -90,6 +90,7 @@ class HandleInertiaRequests extends Middleware
             ['url' => $links['calorieCalculatorUrl'], 'label' => trans('footer.product.calorie_calculator', [], $locale)],
             ['url' => $links['macroCalculatorUrl'], 'label' => trans('footer.product.macro_calculator', [], $locale)],
             ['url' => LaravelLocalization::localizeURL('/'.trans('routes.free_tools_plan_roast', [], $locale), $locale), 'label' => trans('footer.free_tools.plan_roast', [], $locale)],
+            ['url' => LaravelLocalization::localizeURL('/'.trans('routes.glossary', [], $locale), $locale), 'label' => trans('footer.free_tools.glossary', [], $locale)],
         ];
 
         foreach ($workoutPlanTypes as $internalType) {
