@@ -41,10 +41,8 @@
         };
 
         $appUrl = \App\Support\AppDownloadQr::url($user);
-        $downloadQr = \App\Support\AppDownloadQr::dataUri(\App\Support\AppDownloadQr::scanUrl(), 6);
-        $claimQr = \App\Support\AppDownloadQr::dataUri($appUrl, 6);
+        $appQr = \App\Support\AppDownloadQr::dataUri($appUrl, 6);
         $locale = app()->getLocale();
-        $badgePath = public_path('assets/badges/'.($locale === 'de' ? 'App_Store_Badge_DE.png' : 'App_Store_Badge_EN.png'));
         $phonePath = public_path('assets/images/app/fytrr-app-home-'.($locale === 'de' ? 'de' : 'en').'.png');
     @endphp
 
@@ -214,19 +212,24 @@
             background: #f4faf6;
         }
         .promo td { padding: 26px 30px; vertical-align: middle; }
-        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 22px; color: #0c1310; line-height: 1.1; }
-        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 6px 0 0 0; }
+        .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; }
+        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 7px 0 18px 0; }
 
-        .step { margin-top: 16px; }
-        .step__n { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 14px; color: #17a45b; }
-        .step__t { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 11px; letter-spacing: 0.6px; text-transform: uppercase; color: #0c1310; padding-left: 6px; }
-        .step__media { padding: 7px 0 0 19px; }
         .dl { width: auto; }
         .dl td { padding: 0; vertical-align: middle; }
         .dl td.vordiv { padding: 0 14px; text-align: center; }
         .promo__qrimg { width: 68px; height: 68px; border: 1px solid #e6eae8; border-radius: 8px; background: #ffffff; padding: 5px; vertical-align: middle; }
-        .promo__badge { height: 36px; vertical-align: middle; }
-        .promo__scan { font-family: 'Space Grotesk', sans-serif; font-size: 9px; letter-spacing: 0.5px; text-transform: uppercase; color: #8a968f; vertical-align: middle; padding-left: 14px; }
+        .promo__btn {
+            display: inline-block;
+            background: #0c1310;
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: bold;
+            font-size: 13px;
+            padding: 12px 22px;
+            border-radius: 10px;
+            text-decoration: none;
+        }
         .vordiv__line { width: 1px; height: 16px; background: #cdd9d2; margin: 0 auto; }
         .vordiv__txt {
             font-family: 'Space Grotesk', sans-serif;
@@ -289,30 +292,17 @@
                     <td class="promo__text">
                         <div class="promo__head">{{ $t('promo_head') }}</div>
                         <div class="promo__sub">{{ $t('promo_sub') }}</div>
-
-                        <div class="step">
-                            <div class="step__label"><span class="step__n">1.</span><span class="step__t">{{ $t('promo_step1') }}</span></div>
-                            <div class="step__media">
-                                <table class="dl">
-                                    <tr>
-                                        <td><img class="promo__qrimg" src="{{ $downloadQr }}" alt=""></td>
-                                        <td class="vordiv">
-                                            <div class="vordiv__line"></div>
-                                            <div class="vordiv__txt">{{ $t('promo_or') }}</div>
-                                            <div class="vordiv__line"></div>
-                                        </td>
-                                        <td><a href="{{ $appUrl }}"><img class="promo__badge" src="{{ $badgePath }}" alt=""></a></td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="step">
-                            <div class="step__label"><span class="step__n">2.</span><span class="step__t">{{ $t('promo_step2') }}</span></div>
-                            <div class="step__media">
-                                <img class="promo__qrimg" src="{{ $claimQr }}" alt="">
-                                <span class="promo__scan">{{ $t('promo_scan') }}</span>
-                            </div>
-                        </div>
+                        <table class="dl">
+                            <tr>
+                                <td><img class="promo__qrimg" src="{{ $appQr }}" alt=""></td>
+                                <td class="vordiv">
+                                    <div class="vordiv__line"></div>
+                                    <div class="vordiv__txt">{{ $t('promo_or') }}</div>
+                                    <div class="vordiv__line"></div>
+                                </td>
+                                <td><a class="promo__btn" href="{{ $appUrl }}">{{ $t('promo_cta') }}</a></td>
+                            </tr>
+                        </table>
                     </td>
                     <td class="promo__phone"><img src="{{ $phonePath }}" alt=""></td>
                 </tr>
