@@ -5,10 +5,8 @@ namespace App\Ai\Support;
 use App\Enums\BodyGoal;
 
 /**
- * The training intensity a plan should prescribe, derived from the body goal.
- * Kept deterministic so every generated exercise carries an effort target even
- * when the model omits one, which is what left plans reading as "unspecified".
- * Values mirror the RPE ranges in the goal protocol of CreateWorkoutPrompt.
+ * RPE targets derived from the body goal, mirroring the goal protocol in
+ * CreateWorkoutPrompt.
  */
 class WorkoutIntensity
 {
@@ -21,10 +19,8 @@ class WorkoutIntensity
     }
 
     /**
-     * Reduce whatever the model returns to a bare number or range ("8", "7-9"),
-     * stripping any "RPE" prefix or "/10" suffix. Returns null when no valid
-     * value on the 1-10 scale is present, so the caller falls back to the goal
-     * default rather than storing nonsense like "12" or a reversed "9-7".
+     * A bare number or range ("8", "7-9") on the 1-10 scale, or null if the
+     * input holds no valid RPE.
      */
     public static function normalizeRpe(?string $rpe): ?string
     {

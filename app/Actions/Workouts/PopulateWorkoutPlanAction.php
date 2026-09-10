@@ -46,10 +46,6 @@ class PopulateWorkoutPlanAction
     }
 
     /**
-     * Only strength exercises carry an RPE. For those, normalize the model's
-     * value and fall back to the goal default; warmups, cooldowns and stretches
-     * always stay null regardless of what the model returned.
-     *
      * @param  array<string, mixed>  $exercise
      */
     private function resolveRpe(array $exercise, ?string $defaultRpe): ?string
