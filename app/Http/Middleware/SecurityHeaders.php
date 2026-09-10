@@ -35,7 +35,7 @@ class SecurityHeaders
             "default-src 'self'",
             "script-src 'self' 'unsafe-inline' https://plausible.io",
             "style-src 'self' 'unsafe-inline'",
-            "img-src 'self' data: https://fytrr.com",
+            "img-src 'self' data: blob: https://fytrr.com",
             "font-src 'self' data:",
             "connect-src 'self' https://plausible.io",
             "frame-src 'none'",
