@@ -191,7 +191,7 @@
             width: 92%;
         }
 
-        .set-hint { font-size: 9px; color: #8a968f; text-align: right; padding-top: 6px; }
+        .set-hint-row td { font-size: 9px; color: #8a968f; text-align: right; padding: 4px 0 2px 0; }
 
         .check-cell { text-align: right; }
         .check {
@@ -405,6 +405,7 @@
                         <td><div class="box"></div></td>
                     </tr>
                 @endforeach
+                <tr class="set-hint-row"><td colspan="8">{{ $t('set_hint') }}</td></tr>
             @endif
 
             @if ($cooldowns->isNotEmpty())
@@ -421,9 +422,6 @@
                 @endforeach
             @endif
         </table>
-        @if ($mains->isNotEmpty())
-            <div class="set-hint">{{ $t('set_hint') }}</div>
-        @endif
 
         @if ($noteLines > 0)
             <div class="section notes">
