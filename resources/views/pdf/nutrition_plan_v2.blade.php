@@ -179,23 +179,7 @@
 <div class="cover__rule"></div>
 
 @foreach ($mealPlans as $mealPlan)
-    @php
-        // Estimate the day's content height to decide whether the app promo fits
-        // in the trailing space on the day's last page (avoids a promo-only page).
-        $pageHeight = 1000;
-        $used = ($loop->first ? 210 : 116) + 66;
-        foreach ($mealPlan->meals as $dayMeal) {
-            $ingCount = count($dayMeal->formattedIngredients());
-            $stepCount = is_array($dayMeal->instructions) ? count($dayMeal->instructions) : 0;
-            $used += 20 + 52
-                + ($dayMeal->description ? 32 : 0)
-                + ($ingCount ? 26 + (int) ceil($ingCount / 2) * 20 : 0)
-                + ($stepCount ? 26 + $stepCount * 30 : 0)
-                + (is_array($dayMeal->allergens) && count($dayMeal->allergens) ? 16 : 0);
-        }
-        $leftover = max(1, (int) ceil($used / $pageHeight)) * $pageHeight - $used;
-        $showPromo = $loop->last || $leftover >= 280;
-    @endphp
+    @php $showPromo = $loop->last; @endphp
     <div class="day @if($loop->first) first @endif">
         @unless ($loop->first)
             <table class="page-head">
