@@ -86,6 +86,7 @@ return [
 
     'workout_plan_v2' => [
         'header_title' => 'Training plan',
+        'sessions_per_week' => 'per week',
         'day' => 'Day',
         'type' => 'Type',
         'duration' => 'Duration',

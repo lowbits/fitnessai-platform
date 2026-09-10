@@ -47,9 +47,28 @@
 
         .mark { width: 16px; height: 16px; }
 
+        /* ---------- Page-1 cover ---------- */
+        .cover td { vertical-align: middle; }
+        .cover__logo { width: 24px; height: 24px; vertical-align: middle; }
+        .cover__brand {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: bold;
+            font-size: 22px;
+            color: #0c1310;
+            vertical-align: middle;
+        }
+        .cover__date { text-align: right; font-size: 11px; color: #5c6b62; white-space: nowrap; }
+        .cover__cal { width: 13px; height: 13px; vertical-align: -2px; margin-right: 3px; }
+        .cover__sub { font-size: 12px; color: #5c6b62; margin: 4px 0 0 32px; }
+        .meta { width: auto; margin-top: 16px; }
+        .meta td { padding-right: 26px; white-space: nowrap; }
+        .meta__icon { width: 14px; height: 14px; vertical-align: -3px; margin-right: 6px; }
+        .meta__text { font-size: 11px; color: #33403a; }
+        .cover__rule { border-bottom: 1px solid #e6eae8; margin-top: 16px; }
+
         /* ---------- Day ---------- */
         .day { page-break-before: always; }
-        .day.first { page-break-before: avoid; }
+        .day.first { page-break-before: avoid; margin-top: 22px; }
 
         .eyebrow {
             font-family: 'Space Grotesk', sans-serif;
@@ -235,6 +254,50 @@
     <a class="footer__brand" href="{{ $appUrl }}" style="text-decoration:none;">FYTRR.COM</a>
     <span class="footer__page" style="font-family:'Space Grotesk',sans-serif; color:#8a968f;"></span>
 </div>
+
+@php
+    $profile = $user->profile;
+    $meta = array_filter([
+        ['icon' => 'user', 'text' => $user->name],
+        ['icon' => 'target', 'text' => $profile?->body_goal?->label()],
+        ['icon' => 'map-pin', 'text' => $profile?->training_place?->label()],
+        ['icon' => 'trending-up', 'text' => $profile?->skill_level?->label()],
+        $plan->workouts_per_week
+            ? ['icon' => 'repeat', 'text' => $plan->workouts_per_week.'× '.$t('sessions_per_week')]
+            : null,
+    ]);
+    $firstDay = $workoutPlans->first()?->date;
+    $lastDay = $workoutPlans->last()?->date;
+@endphp
+
+<table class="cover">
+    <tr>
+        <td>
+            <img class="cover__logo" src="{{ public_path('favicon.svg') }}" alt="">
+            <span class="cover__brand">&nbsp;{{ $t('header_title') }}</span>
+        </td>
+        @if ($firstDay && $lastDay)
+            <td class="cover__date">
+                <img class="cover__cal" src="{{ public_path('assets/icons/calendar.svg') }}" alt="">
+                {{ $firstDay->translatedFormat('d.m.') }} &ndash; {{ $lastDay->translatedFormat('d.m.Y') }}
+            </td>
+        @endif
+    </tr>
+</table>
+@if ($plan->plan_name)
+    <div class="cover__sub">{{ $plan->plan_name }}</div>
+@endif
+<table class="meta">
+    <tr>
+        @foreach ($meta as $item)
+            <td>
+                <img class="meta__icon" src="{{ public_path('assets/icons/'.$item['icon'].'.svg') }}" alt="">
+                <span class="meta__text">{{ $item['text'] }}</span>
+            </td>
+        @endforeach
+    </tr>
+</table>
+<div class="cover__rule"></div>
 
 @foreach ($workoutPlans as $workoutPlan)
     @php
