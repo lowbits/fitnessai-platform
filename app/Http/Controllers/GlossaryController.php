@@ -36,9 +36,6 @@ class GlossaryController extends Controller
     }
 
     /**
-     * Flat, ordered list of terms. The slug is the anchor id and the JSON-LD
-     * DefinedTerm identifier, so deep links and structured data stay in sync.
-     *
      * @return array<int, array{slug: string, term: string, expansion: string, definition: string, example: string, category: string}>
      */
     private function terms(): array
@@ -113,9 +110,6 @@ class GlossaryController extends Controller
     }
 
     /**
-     * The DefinedTerm name, appending the expansion only when it adds something
-     * (e.g. "RPE (Rate of Perceived Exertion)", but just "Mobility").
-     *
      * @param  array<string, mixed>  $term
      */
     private function definedTermName(array $term): string

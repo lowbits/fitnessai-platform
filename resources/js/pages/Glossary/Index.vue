@@ -58,9 +58,6 @@ const activeCategory = ref<'all' | string>('all');
 
 const categoryIds = computed(() => props.categories.map((c) => c.id));
 
-// Keep the active category in the URL (?tab=) so a filtered view is shareable
-// and survives a reload. Query, not hash, since #slug is reserved for deep
-// links to a single term.
 onMounted(() => {
     const tab = new URLSearchParams(window.location.search).get('tab');
     if (tab && categoryIds.value.includes(tab)) {
