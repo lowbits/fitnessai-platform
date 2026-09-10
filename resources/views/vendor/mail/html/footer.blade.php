@@ -16,7 +16,7 @@
                         </tr>
                         <tr>
                             <td align="center">
-                                <a href="{{ config('app.app_store.ios.url') }}"
+                                <a href="{{ \App\Support\AppStore::url('email') }}"
                                    style="text-decoration: none; display: inline-block;">
                                     <img src="{{asset("/assets/badges/App_Store_Badge_EN.png")}}"
                                          alt="Download on the App Store" width="120" style="display: block;">
