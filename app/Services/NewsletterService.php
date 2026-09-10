@@ -72,17 +72,19 @@ class NewsletterService
     public function syncToResend(NewsletterSubscriber $subscriber): void
     {
         $key = config('services.resend.key');
-        $audienceId = config('services.resend.audience_id');
 
-        if (! $key || ! $audienceId) {
-            Log::info('[Newsletter][Resend] Skipped sync, Resend not configured', [
+        if (! $key || ! app()->isProduction()) {
+            Log::info('[Newsletter][Resend] Skipped sync', [
                 'email' => $subscriber->email,
                 'has_key' => (bool) $key,
-                'has_audience' => (bool) $audienceId,
+                'production' => app()->isProduction(),
             ]);
 
             return;
         }
+
+        $segmentId = config("services.resend.segments.{$subscriber->source}")
+            ?? config('services.resend.segments.default');
 
         try {
             $response = Http::withToken($key)
@@ -90,11 +92,12 @@ class NewsletterService
                 ->timeout(8)
                 ->retry(2, 200, throw: false)
                 ->asJson()
-                ->post("https://api.resend.com/audiences/{$audienceId}/contacts", [
+                ->post('https://api.resend.com/contacts', array_filter([
                     'email' => $subscriber->email,
                     'first_name' => $subscriber->name,
                     'unsubscribed' => false,
-                ]);
+                    'segments' => $segmentId ? [$segmentId] : null,
+                ], fn ($value) => $value !== null));
 
             if ($response->successful()) {
                 $subscriber->update([

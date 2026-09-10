@@ -66,19 +66,18 @@ it('confirms a subscriber via a valid signed link', function () {
     expect($subscriber->fresh()->status)->toBe(NewsletterStatus::Confirmed);
 });
 
-it('syncs a confirmed subscriber into the resend audience without unsupported fields', function () {
+it('syncs an android waitlist subscriber into the android segment', function () {
+    $this->app->detectEnvironment(fn () => 'production');
     config([
         'services.resend.key' => 'test-key',
-        'services.resend.audience_id' => 'aud_123',
+        'services.resend.segments.android_waitlist' => 'seg_android',
+        'services.resend.segments.default' => 'seg_general',
     ]);
-    Http::fake([
-        'api.resend.com/*' => Http::response(['id' => 'contact_123'], 200),
-    ]);
+    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_123'], 200)]);
 
     $subscriber = NewsletterSubscriber::create([
         'email' => 'sync@example.com',
         'name' => 'Sync User',
-        'locale' => 'de',
         'source' => 'android_waitlist',
         'status' => NewsletterStatus::Pending,
     ]);
@@ -86,22 +85,41 @@ it('syncs a confirmed subscriber into the resend audience without unsupported fi
     app(NewsletterService::class)->confirm($subscriber);
 
     Http::assertSent(function ($request) {
-        return $request->url() === 'https://api.resend.com/audiences/aud_123/contacts'
-            && ! array_key_exists('properties', $request->data())
+        return $request->url() === 'https://api.resend.com/contacts'
             && $request['email'] === 'sync@example.com'
-            && $request['first_name'] === 'Sync User'
-            && $request['unsubscribed'] === false;
+            && $request['segments'] === ['seg_android'];
     });
 
     expect($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
 });
 
-it('skips resend sync when no audience is configured', function () {
-    config(['services.resend.key' => 'test-key', 'services.resend.audience_id' => null]);
+it('syncs a newsletter subscriber into the general segment', function () {
+    $this->app->detectEnvironment(fn () => 'production');
+    config([
+        'services.resend.key' => 'test-key',
+        'services.resend.segments.android_waitlist' => 'seg_android',
+        'services.resend.segments.default' => 'seg_general',
+    ]);
+    Http::fake(['api.resend.com/*' => Http::response(['id' => 'contact_456'], 200)]);
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'news@example.com',
+        'source' => 'waitlist',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterService::class)->confirm($subscriber);
+
+    Http::assertSent(fn ($request) => $request['segments'] === ['seg_general']);
+});
+
+it('does not sync to resend outside production', function () {
+    config(['services.resend.key' => 'test-key']);
     Http::fake();
 
     $subscriber = NewsletterSubscriber::create([
-        'email' => 'noaud@example.com',
+        'email' => 'dev@example.com',
+        'source' => 'android_waitlist',
         'status' => NewsletterStatus::Pending,
     ]);
 
