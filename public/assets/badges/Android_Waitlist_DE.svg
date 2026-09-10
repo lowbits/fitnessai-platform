@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 80">
+  <rect x="1" y="1" width="238" height="78" rx="15" fill="#0c1310"/>
+  <g transform="translate(24,20) scale(1.68)" fill="#3ee07f"><path d="M9.5 5.6a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm5 0a.8.8 0 1 1 0-1.6.8.8 0 0 1 0 1.6zm3.1-2.3 1.3-1.3a.3.3 0 0 0-.4-.4l-1.5 1.5A6.9 6.9 0 0 0 12 2c-1.8 0-3.4.5-4.6 1.4L5.9 1.9a.3.3 0 1 0-.4.4l1.3 1.3A5.9 5.9 0 0 0 6 8h12a5.9 5.9 0 0 0-.4-4.7zM6 18a1 1 0 0 0 1 1h1v3.5a1.5 1.5 0 0 0 3 0V19h2v3.5a1.5 1.5 0 0 0 3 0V19h1a1 1 0 0 0 1-1V9H6v9zM3.5 9A1.5 1.5 0 0 0 2 10.5v6a1.5 1.5 0 0 0 3 0v-6A1.5 1.5 0 0 0 3.5 9zm17 0a1.5 1.5 0 0 0-1.5 1.5v6a1.5 1.5 0 0 0 3 0v-6A1.5 1.5 0 0 0 20.5 9z"/></g>
+  <text x="94" y="35" fill="#ffffff" font-family="Helvetica, Arial, sans-serif" font-size="13">Bald verfügbar</text>
+  <text x="93" y="60" fill="#ffffff" font-family="Helvetica, Arial, sans-serif" font-weight="bold" font-size="25">Android</text>
+</svg>

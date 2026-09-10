@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Enums\Equipment;
+use App\Enums\MuscleGroup;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 
 class WorkoutPlan extends Model
 {
@@ -95,5 +97,35 @@ class WorkoutPlan extends Model
                 ];
             })
             ->all();
+    }
+
+    /**
+     * @return string[]
+     */
+    public function muscleGroupLabels(): array
+    {
+        return collect($this->muscle_groups ?? [])
+            ->map(fn (string $value) => MuscleGroup::tryFrom($value)?->label() ?? ucfirst($value))
+            ->all();
+    }
+
+    public function warmupExercises(): Collection
+    {
+        return $this->exercises->where('type', 'warmup')->values();
+    }
+
+    public function mainExercises(): Collection
+    {
+        return $this->exercises->whereNotIn('type', ['warmup', 'cooldown', 'stretch'])->values();
+    }
+
+    public function cooldownExercises(): Collection
+    {
+        return $this->exercises->whereIn('type', ['cooldown', 'stretch'])->values();
+    }
+
+    public function isRestDay(): bool
+    {
+        return $this->workout_type === 'rest';
     }
 }

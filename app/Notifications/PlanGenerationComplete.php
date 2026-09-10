@@ -68,6 +68,7 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         $mail = (new AppMailMessage)
             ->subject(__('emails.plan_ready.subject', ['goal' => $goalLabel]))
             ->greeting(__('emails.plan_ready.greeting', ['name' => $notifiable->name]))
+            ->campaign('plan_ready')
             ->previewText(__('emails.plan_ready.preview'));
 
         $mail
@@ -76,13 +77,13 @@ class PlanGenerationComplete extends Notification implements ShouldQueue
         if ($isMobileAppOnboarding) {
             $mail->action(__('emails.plan_ready.cta_app'), route('home', ['locale' => $locale]));
         } else {
-            $mealPlanPdf = PDF::loadView('pdf.nutrition_plan', [
+            $mealPlanPdf = PDF::loadView('pdf.nutrition_plan_v2', [
                 'user' => $notifiable,
                 'plan' => $this->plan,
                 'mealPlans' => $this->plan->mealPlans()->with('meals')->orderBy('day_number')->get(),
             ]);
 
-            $workoutPlanPdf = PDF::loadView('pdf.workout_plan', [
+            $workoutPlanPdf = PDF::loadView('pdf.workout_plan_v2', [
                 'user' => $notifiable,
                 'plan' => $this->plan,
                 'workoutPlans' => $this->plan->workoutPlans()->with('exercises.exercise.translations')->orderBy('day_number')->get(),

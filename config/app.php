@@ -141,6 +141,8 @@ return [
         'ios' => [
             'url' => env('IOS_APP_STORE_URL', 'https://apps.apple.com/app/fytrr-ki-personal-trainer/id6757151695'),
             'testflight_url' => env('IOS_APP_STORE_TESTFLIGHT_URL', 'https://testflight.apple.com/join/q62vmKeD'),
+            // App Analytics campaign provider token (App Store Connect). Enables ct/pt attribution.
+            'provider_token' => env('IOS_APP_STORE_PROVIDER_TOKEN'),
         ],
         'smart_link' => env('APP_SMART_LINK', 'https://fytrr.de/app'),
     ],

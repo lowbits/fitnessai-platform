@@ -135,4 +135,35 @@ class Meal extends Model
     {
         return rtrim((string) config('services.r2.public_url'), '/').'/'.ltrim($path, '/');
     }
+
+    /**
+     * @return array<int, array{name: string, detail: string}>
+     */
+    public function formattedIngredients(): array
+    {
+        return collect($this->ingredients ?? [])
+            ->map(function ($ingredient): array {
+                $ingredient = (array) $ingredient;
+                $name = trim((string) ($ingredient['name'] ?? ''));
+                $unit = $ingredient['unit'] ?? null;
+                $amount = $ingredient['amount'] ?? null;
+
+                $detail = match (true) {
+                    $unit === 'to_taste' => __('units.to_taste'),
+                    filled($amount) && $unit => trim($amount.' '.__('units.'.$unit)),
+                    filled($amount) => (string) $amount,
+                    default => '',
+                };
+
+                return ['name' => $name, 'detail' => $detail];
+            })
+            ->filter(fn (array $ingredient): bool => $ingredient['name'] !== '')
+            ->values()
+            ->all();
+    }
+
+    public function totalTimeMinutes(): int
+    {
+        return (int) $this->prep_time_minutes + (int) $this->cook_time_minutes;
+    }
 }

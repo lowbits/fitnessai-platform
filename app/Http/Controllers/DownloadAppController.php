@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Services\QrCodeService;
+use App\Support\AppStore;
 use App\Support\RequestMeta;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -25,7 +26,10 @@ class DownloadAppController extends Controller
         $country = RequestMeta::country($request);
 
         $locale = app()->getLocale();
-        $appStoreUrl = config('app.app_store.ios.url');
+        $campaign = collect([$request->query('utm_source'), $request->query('utm_campaign')])
+            ->filter()
+            ->implode('-');
+        $appStoreUrl = AppStore::url($campaign ?: null);
 
         $setPasswordUrl = null;
         $setPasswordDeepLink = null;
