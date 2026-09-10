@@ -213,7 +213,7 @@
             table-layout: fixed;
         }
         .promo td { padding: 26px 30px; vertical-align: middle; }
-        .promo__text { width: 67%; }
+        .promo__text { width: 64%; }
         .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; }
         .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 7px 0 26px 0; }
 
@@ -241,7 +241,7 @@
             color: #8a968f;
             padding: 5px 0;
         }
-        .promo__phone { width: 33%; text-align: center; vertical-align: middle; }
+        .promo__phone { width: 36%; text-align: center; vertical-align: middle; }
         .promo__phone img { width: 150px; }
     </style>
 </head>
