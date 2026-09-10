@@ -91,12 +91,6 @@ class NewsletterService
                     'email' => $subscriber->email,
                     'first_name' => $subscriber->name,
                     'unsubscribed' => false,
-                    'properties' => array_filter([
-                        'source' => $subscriber->source,
-                        'locale' => $subscriber->locale,
-                        'platform' => $subscriber->platform,
-                        'country' => $subscriber->country,
-                    ], fn ($value) => $value !== null && $value !== ''),
                 ]);
 
             if ($response->successful()) {
