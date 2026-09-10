@@ -5,10 +5,8 @@ namespace App\Ai\Support;
 use Illuminate\Support\Collection;
 
 /**
- * Single source of truth for the weekly training split. The per-day focus, the
- * split name and muscle coverage all derive from one ordered list per weekly
- * frequency, so they can never drift apart (which is what once produced an
- * all-upper, no-legs four day plan).
+ * Single source of truth for the weekly training split: one ordered list of
+ * day focuses per weekly frequency.
  */
 class WorkoutSplit
 {
