@@ -212,10 +212,16 @@
             background: #f4faf6;
             table-layout: fixed;
         }
-        .promo td { padding: 26px 30px; vertical-align: middle; }
-        .promo__text { width: 64%; }
+        .promo td { padding: 26px 0; vertical-align: middle; }
+        .promo td.promo__text { width: 66.66%; padding-left: 30px; }
+        .promo td.promo__phone { width: 33.34%; text-align: center; }
         .promo__head { font-family: 'Space Grotesk', sans-serif; font-weight: bold; font-size: 23px; color: #0c1310; }
-        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 7px 0 26px 0; }
+        .promo__sub { font-size: 12.5px; color: #5c6b62; line-height: 1.3; margin: 7px 0 12px 0; }
+        .promo__list { width: auto; margin: 0 0 20px 0; }
+        .promo__list td { padding: 3px 0; vertical-align: middle; }
+        .promo__list td.li__c { width: 20px; }
+        .li__check { width: 13px; height: 13px; vertical-align: middle; }
+        .promo__list td.li__t { font-size: 12px; color: #33403a; padding-left: 8px; }
 
         .dl { width: auto; }
         .dl td { padding: 0; vertical-align: middle; }
@@ -241,7 +247,6 @@
             color: #8a968f;
             padding: 5px 0;
         }
-        .promo__phone { width: 36%; text-align: center; vertical-align: middle; }
         .promo__phone img { width: 150px; }
     </style>
 </head>
@@ -294,6 +299,14 @@
                     <td class="promo__text">
                         <div class="promo__head">{{ $t('promo_head') }}</div>
                         <div class="promo__sub">{{ $t('promo_sub') }}</div>
+                        <table class="promo__list">
+                            @foreach ($t('promo_list') as $item)
+                                <tr>
+                                    <td class="li__c"><img class="li__check" src="{{ public_path('assets/icons/check.svg') }}" alt=""></td>
+                                    <td class="li__t">{{ $item }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
                         <table class="dl">
                             <tr>
                                 <td><img class="promo__qrimg" src="{{ $appQr }}" alt=""></td>
