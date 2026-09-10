@@ -66,8 +66,11 @@ it('confirms a subscriber via a valid signed link', function () {
     expect($subscriber->fresh()->status)->toBe(NewsletterStatus::Confirmed);
 });
 
-it('syncs a confirmed subscriber to resend without an unsupported properties field', function () {
-    config(['services.resend.key' => 'test-key']);
+it('syncs a confirmed subscriber into the resend audience without unsupported fields', function () {
+    config([
+        'services.resend.key' => 'test-key',
+        'services.resend.audience_id' => 'aud_123',
+    ]);
     Http::fake([
         'api.resend.com/*' => Http::response(['id' => 'contact_123'], 200),
     ]);
@@ -83,7 +86,7 @@ it('syncs a confirmed subscriber to resend without an unsupported properties fie
     app(NewsletterService::class)->confirm($subscriber);
 
     Http::assertSent(function ($request) {
-        return $request->url() === 'https://api.resend.com/contacts'
+        return $request->url() === 'https://api.resend.com/audiences/aud_123/contacts'
             && ! array_key_exists('properties', $request->data())
             && $request['email'] === 'sync@example.com'
             && $request['first_name'] === 'Sync User'
@@ -91,6 +94,21 @@ it('syncs a confirmed subscriber to resend without an unsupported properties fie
     });
 
     expect($subscriber->fresh()->resend_contact_id)->toBe('contact_123');
+});
+
+it('skips resend sync when no audience is configured', function () {
+    config(['services.resend.key' => 'test-key', 'services.resend.audience_id' => null]);
+    Http::fake();
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'noaud@example.com',
+        'status' => NewsletterStatus::Pending,
+    ]);
+
+    app(NewsletterService::class)->confirm($subscriber);
+
+    Http::assertNothingSent();
+    expect($subscriber->fresh()->resend_contact_id)->toBeNull();
 });
 
 it('does not confirm on an invalid signature', function () {
