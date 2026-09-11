@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use Resend\Client;
 use Resend\Contracts\Transporter;
+use Resend\ValueObjects\ApiKey;
+use Resend\ValueObjects\Transporter\BaseUri;
+use Resend\ValueObjects\Transporter\Headers;
 use Resend\ValueObjects\Transporter\Payload;
 
 uses(RefreshDatabase::class);
@@ -31,7 +34,12 @@ function fakeResendClient(object $captor, string $id): Client
 
         public function request(Payload $payload): array
         {
-            $this->captor->params = (new ReflectionProperty($payload, 'parameters'))->getValue($payload);
+            $request = $payload->toRequest(
+                BaseUri::from('api.resend.com'),
+                Headers::withAuthorization(ApiKey::from('test-key')),
+            );
+
+            $this->captor->params = json_decode((string) $request->getBody(), true) ?? [];
 
             return ['id' => $this->id];
         }
@@ -149,6 +157,26 @@ it('syncs a newsletter subscriber into the general segment', function () {
     app(NewsletterContactSync::class)->sync($subscriber);
 
     expect($captor->params['segments'])->toBe([['id' => 'seg_general']]);
+});
+
+it('does not re-sync a subscriber that already has a resend contact id', function () {
+    $this->app->detectEnvironment(fn () => 'production');
+    config(['services.resend.key' => 'test-key']);
+    $captor = new stdClass;
+    $captor->params = [];
+    $this->app->instance(Client::class, fakeResendClient($captor, 'contact_new'));
+
+    $subscriber = NewsletterSubscriber::create([
+        'email' => 'existing@example.com',
+        'source' => 'android_waitlist',
+        'status' => NewsletterStatus::Pending,
+        'resend_contact_id' => 'contact_existing',
+    ]);
+
+    app(NewsletterContactSync::class)->sync($subscriber);
+
+    expect($captor->params)->toBe([])
+        ->and($subscriber->fresh()->resend_contact_id)->toBe('contact_existing');
 });
 
 it('does not sync to resend outside production', function () {

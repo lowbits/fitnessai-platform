@@ -13,6 +13,8 @@ class SyncNewsletterContact implements ShouldQueue
 
     public int $tries = 3;
 
+    public int $backoff = 30;
+
     public int $timeout = 15;
 
     public function __construct(public NewsletterSubscriber $subscriber) {}

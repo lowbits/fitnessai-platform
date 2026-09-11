@@ -23,6 +23,10 @@ class ResendContactSync implements NewsletterContactSync
             return;
         }
 
+        if ($subscriber->resend_contact_id) {
+            return;
+        }
+
         $segmentId = config("services.resend.segments.{$subscriber->source}")
             ?? config('services.resend.segments.default');
 
@@ -44,6 +48,8 @@ class ResendContactSync implements NewsletterContactSync
                 'email' => $subscriber->email,
                 'error' => $e->getMessage(),
             ]);
+
+            throw $e;
         }
     }
 }
