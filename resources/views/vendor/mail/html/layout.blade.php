@@ -9,12 +9,47 @@
 <meta name="supported-color-schemes" content="light">
 <style>
 @media only screen and (max-width: 600px) {
+.header {
+padding: 22px 16px 0 16px !important;
+}
+
+.header-card {
+width: 100% !important;
+}
+
+.body {
+padding-left: 16px !important;
+padding-right: 16px !important;
+}
+
 .inner-body {
 width: 100% !important;
 }
 
+.content-cell {
+padding: 28px 22px 26px 22px !important;
+}
+
 .footer {
 width: 100% !important;
+padding-left: 16px !important;
+padding-right: 16px !important;
+}
+
+.app-text,
+.app-phone {
+display: block !important;
+width: 100% !important;
+box-sizing: border-box !important;
+}
+
+.app-text {
+padding: 24px 24px 4px 24px !important;
+}
+
+.app-phone {
+padding: 8px 0 0 0 !important;
+text-align: center !important;
 }
 }
 
