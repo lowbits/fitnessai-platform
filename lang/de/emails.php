@@ -101,14 +101,21 @@ return [
     'onboarding' => [
         'email_02' => [
             'subject' => 'Kurz zu deinem ersten Workout 🏋️',
-            'preview' => 'Nicht zu schwer starten — hier ist warum.',
+            'preview' => 'Nicht zu schwer starten. Hier ist warum.',
             'greeting' => 'Hey :name,',
             'intro' => 'Heute steht :workout an. Ein kurzer Tipp:',
-            'tip' => 'Nimm dir die ersten 2-3 Sätze, um das Gewicht zu finden. Nicht zu schwer starten — das Gefühl für die Übung ist wichtiger als die Zahl auf der Hantel.',
-            'mona_pitch' => 'Und wenn eine Übung nicht passt? In der App kann Mona sie sofort austauschen — gleiche Muskelgruppe, andere Bewegung.',
+            'tip' => 'Nimm dir die ersten 2-3 Sätze, um das Gewicht zu finden. Starte nicht zu schwer. Das Gefühl für die Übung ist wichtiger als die Zahl auf der Hantel.',
+            'banner_alt' => 'Die fytrr App',
+            'app_heading' => 'Nur in der App:',
+            'feature_swap' => 'Übungen sofort tauschen',
+            'feature_checkin' => 'Plan passt sich an',
+            'feature_tracking' => 'Fortschritt tracken',
             'closing' => 'Du packst das.',
-            'soft_cta' => 'Mona kann dir dabei helfen → [:label](:url)',
-            'team' => 'Dein fytrr Team',
+            'cta' => 'Jetzt kostenlos starten',
+            'blog_heading' => 'Zum Weiterlesen:',
+            'blog_read' => 'Artikel lesen →',
+            'signature_name' => 'Mona',
+            'signature_role' => 'KI-Coach von fytrr',
         ],
 
         'email_03' => [

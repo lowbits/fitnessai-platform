@@ -92,14 +92,21 @@ return [
     'onboarding' => [
         'email_02' => [
             'subject' => 'Quick tip for your first workout 🏋️',
-            'preview' => 'Don\'t go too heavy on your first session — here\'s why.',
+            'preview' => 'Don\'t go too heavy on your first session. Here\'s why.',
             'greeting' => 'Hey :name,',
             'intro' => ':workout is on the schedule today. Quick tip:',
-            'tip' => 'Use the first 2-3 sets to find your weight. Don\'t go too heavy — getting the movement right matters more than the number on the bar.',
-            'mona_pitch' => 'And if an exercise doesn\'t work for you? In the app, Mona can swap it instantly — same muscle group, different movement.',
+            'tip' => 'Use the first 2-3 sets to find your weight. Don\'t go too heavy. Getting the movement right matters more than the number on the bar.',
+            'banner_alt' => 'The fytrr app',
+            'app_heading' => 'Only in the app:',
+            'feature_swap' => 'Swap exercises instantly',
+            'feature_checkin' => 'Plan adapts to you',
+            'feature_tracking' => 'Track your progress',
             'closing' => 'You got this.',
-            'soft_cta' => 'Mona can help with that → [:label](:url)',
-            'team' => 'The fytrr Team',
+            'cta' => 'Start for free',
+            'blog_heading' => 'Keep reading:',
+            'blog_read' => 'Read article →',
+            'signature_name' => 'Mona',
+            'signature_role' => 'AI Coach at fytrr',
         ],
 
         'email_03' => [

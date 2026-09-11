@@ -12,6 +12,7 @@ use App\Http\Controllers\PlanRoastController;
 use App\Http\Controllers\WorkoutPlanController;
 use App\Models\Plan;
 use App\Models\User;
+use App\Notifications\Onboarding\Email02CoachCheckin;
 use App\Notifications\PlanGenerationComplete;
 use App\Services\QrCodeService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -173,6 +174,25 @@ if (app()->environment('local')) {
 
         return $notification->toMail($user)->render();
     })->name('dev.test-email.plan-ready');
+
+    // Preview the day-2 app-conversion email. Pass ?locale=de|en to switch language.
+    Route::get('/dev/test-email/onboarding-02', function () {
+        $user = User::first();
+
+        if (! $user) {
+            return 'No user found in database. Please create a user first.';
+        }
+
+        $plan = Plan::where('user_id', $user->id)->first();
+
+        if (! $plan) {
+            return 'No plan found for user. Please create a plan first.';
+        }
+
+        $user->locale = request()->query('locale', $user->locale ?? 'de');
+
+        return (new Email02CoachCheckin($plan))->toMail($user)->render();
+    })->name('dev.test-email.onboarding-02');
 
     // Preview the v2 workout PDF for the most recent plan that has workouts.
     Route::get('/dev/pdf/workout-v2', function () {
