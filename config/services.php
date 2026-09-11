@@ -20,6 +20,10 @@ return [
 
     'resend' => [
         'key' => env('RESEND_API_KEY'),
+        'segments' => [
+            'android_waitlist' => env('RESEND_SEGMENT_ANDROID', '922fdb07-406e-435b-839b-7148182ba380'),
+            'default' => env('RESEND_SEGMENT_NEWSLETTER', 'fe0d4933-42b5-4ef1-815f-5d847074d008'),
+        ],
     ],
 
     'ses' => [
