@@ -29,7 +29,8 @@ class Email02CoachCheckin extends Notification implements ShouldQueue
         app()->setLocale($locale);
 
         $firstWorkout = $this->plan->workoutPlans()->orderBy('day_number')->first();
-        $workoutName = $firstWorkout?->workout_name ?? '';
+        $workoutName = $firstWorkout?->workout_name
+            ?: __('emails.onboarding.email_02.workout_fallback');
 
         $bannerLocale = $locale === 'de' ? 'de' : 'en';
         $bannerUrl = asset("assets/images/app/fytrr-app-home-{$bannerLocale}-top.png");
@@ -50,10 +51,13 @@ class Email02CoachCheckin extends Notification implements ShouldQueue
             ->line(__('emails.onboarding.email_02.intro', ['workout' => $workoutName]))
             ->line(__('emails.onboarding.email_02.tip'))
             ->line('')
+            ->line(__('emails.onboarding.email_02.pdf_gap'))
+            ->line('')
             ->line(new HtmlString($this->appCard($bannerUrl, $appUrl)))
             ->line('')
-            ->line(__('emails.onboarding.email_02.closing'))
-            ->action(__('emails.onboarding.email_02.cta'), $appUrl);
+            ->line(__('emails.onboarding.email_02.app_reassure'))
+            ->action(__('emails.onboarding.email_02.cta', ['workout' => $workoutName]), $appUrl)
+            ->line(__('emails.onboarding.email_02.closing'));
 
         $blogLinks = $this->blogLinks($locale);
 
@@ -66,26 +70,28 @@ class Email02CoachCheckin extends Notification implements ShouldQueue
 
     private function appCard(string $bannerUrl, string $appUrl): string
     {
-        $heading = e(__('emails.onboarding.email_02.app_heading'));
+        $bridge = e(__('emails.onboarding.email_02.app_bridge'));
         $alt = e(__('emails.onboarding.email_02.banner_alt'));
 
         $bullets = collect([
             __('emails.onboarding.email_02.feature_swap'),
             __('emails.onboarding.email_02.feature_checkin'),
             __('emails.onboarding.email_02.feature_tracking'),
-        ])->map(fn (string $b): string => '<div style="white-space:nowrap;font-size:14px;line-height:1.3;color:#2c3a33;margin:0 0 7px 0;">'
-            .'<span style="color:#16a34a;font-weight:bold;">✓</span>&nbsp;&nbsp;'.e($b).'</div>')->implode('');
+        ])->map(fn (string $b): string => '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:0 0 11px 0;"><tr>'
+            .'<td width="20" valign="top" style="font-family:sans-serif;font-size:14px;line-height:1.4;color:#16a34a;font-weight:bold;">✓</td>'
+            .'<td valign="top" style="font-family:sans-serif;font-size:14px;line-height:1.4;color:#2c3a33;">'.e($b).'</td>'
+            .'</tr></table>')->implode('');
 
         return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td align="center" style="padding:6px 0;">'
             .'<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="max-width:520px;background:#f4faf6;border:1px solid #dce9e1;border-radius:18px;">'
             .'<tr>'
-            .'<td width="56%" valign="middle" style="padding:26px 4px 26px 28px;font-family:sans-serif;">'
-            .'<div style="font-weight:bold;font-size:15px;line-height:1.25;color:#0c1310;margin:0 0 15px 0;letter-spacing:-0.2px;">'.$heading.'</div>'
+            .'<td class="app-text" width="60%" valign="top" style="padding:26px 8px 26px 28px;">'
+            .'<div style="font-family:sans-serif;font-weight:bold;font-size:14px;line-height:1.35;color:#0c1310;margin:0 0 16px 0;">'.$bridge.'</div>'
             .$bullets
             .'</td>'
-            .'<td width="44%" valign="bottom" align="center" style="padding:24px 0 0 0;">'
+            .'<td class="app-phone" width="40%" valign="bottom" align="center" style="padding:24px 0 0 0;">'
             .'<a href="'.$appUrl.'" style="text-decoration:none;">'
-            .'<img src="'.$bannerUrl.'" width="150" style="width:150px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;" alt="'.$alt.'">'
+            .'<img src="'.$bannerUrl.'" width="140" style="width:140px;max-width:100%;height:auto;display:block;margin:0 auto;border:0;" alt="'.$alt.'">'
             .'</a>'
             .'</td>'
             .'</tr></table></td></tr></table>';

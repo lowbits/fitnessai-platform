@@ -76,7 +76,9 @@ it('renders the app banner, install button and blog links', function () {
     $intro = collect($mail->introLines)->map(fn ($line) => (string) $line)->implode("\n");
     $outro = collect($mail->outroLines)->map(fn ($line) => (string) $line)->implode("\n");
 
-    expect($mail->actionText)->toBe(__('emails.onboarding.email_02.cta'))
+    expect($mail->actionText)->toBe(__('emails.onboarding.email_02.cta', [
+        'workout' => __('emails.onboarding.email_02.workout_fallback'),
+    ]))
         ->and($mail->actionUrl)->toContain('utm_campaign=onboarding_02')
         ->and($intro)->toContain('assets/images/app/fytrr-app-home-en-top.png')
         ->and($intro)->toContain('utm_campaign=onboarding_02')
